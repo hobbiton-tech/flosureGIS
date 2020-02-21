@@ -1,0 +1,69 @@
+<div style="margin-bottom: 20px; background: #f4f4f4;">
+  <nz-page-header>
+    <nz-page-header-title>Clients</nz-page-header-title>
+    <nz-page-header-subtitle>List of all clients</nz-page-header-subtitle>
+    <nz-page-header-extra>
+      <button nz-button>View Summary</button>
+      <button nz-button nzType="primary">Add New Client</button>
+    </nz-page-header-extra>
+    <nz-page-header-content>
+      <nz-descriptions [nzColumn]="3">
+        <nz-descriptions-item nzTitle="All clients" [nzSpan]="1">350</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Association" [nzSpan]="1"><a>421421</a></nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Last Update" [nzSpan]="1">2017-01-10</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Corporate Clients" [nzSpan]="1">231</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Confirmed Quotes" [nzSpan]="1">101</nz-description
+      </nz-descriptions>
+    </nz-page-header-content>
+  </nz-page-header>
+</div>
+
+<div style="margin: 20px;">
+  <div style="margin-bottom: 20px; width: 50%">
+    <nz-input-group [nzSuffix]="suffixIconSearch">
+      <input type="text" nz-input placeholder="Search by client, First Name, Last Name" />
+    </nz-input-group>
+    <ng-template #suffixIconSearch>
+      <i nz-icon nzType="search"></i>
+    </ng-template>
+  </div>
+
+  <div style="margin: 20px;">
+    <nz-radio-group>
+      <label nz-radio nzValue="A">View All</label>
+      <label nz-radio nzValue="B">Corporate Clients</label>
+      <label nz-radio nzValue="C">Individual Clients</label>
+    </nz-radio-group>
+  </div>
+
+
+
+  <nz-table #clientsTable [nzData]="clientList" [nzSize]="'small'" [nzBordered]="true">
+    <thead>
+      <tr>
+        <th>Client ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Client Type</th>
+        <th>Client Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let client of clientsTable.data">
+        <td>{{ client.clientID }}</td>
+        <td>{{ client.firstName }}</td>
+        <td>{{ client.lastName }}</td>
+        <td>{{ client.email }}</td>
+        <td>{{ client.phone }}</td>
+        <td>{{ client.type }}</td>
+        <td>
+          <nz-badge [nzStatus]="client.status === 'Inactive' ? 'error' : 'success'" [nzText]="client.status">
+          </nz-badge>
+        </td>
+
+      </tr>
+    </tbody>
+  </nz-table>
+</div>
