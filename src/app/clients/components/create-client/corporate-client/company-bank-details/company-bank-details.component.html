@@ -1,0 +1,96 @@
+<div style="margin: 20px;">
+  <div style="margin-bottom: 20px; background: #f4f4f4;">
+    <nz-page-header>
+      <nz-page-header-title>Clients</nz-page-header-title>
+      <nz-page-header-subtitle>List of all clients</nz-page-header-subtitle>
+      <nz-page-header-extra>
+        <button nz-button>View Summary</button>
+        <!-- <button nz-button nzType="primary">Add New Client</button> -->
+      </nz-page-header-extra>
+      <nz-page-header-content>
+        <nz-descriptions [nzColumn]="3">
+          <nz-descriptions-item nzTitle="All Clients" [nzSpan]="1">350</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Individual Clients" [nzSpan]="1">120</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Last Update" [nzSpan]="1">2017-01-10</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Corporate Clients" [nzSpan]="1">50</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Active Clients" [nzSpan]="1">79</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Inactive Clients" [nzSpan]="1">101</nz-descriptions-item>
+        </nz-descriptions>
+      </nz-page-header-content>
+    </nz-page-header>
+  </div>
+</div>
+
+<div style="margin: 20px;">
+  <nz-steps [nzCurrent]="3">
+    <nz-step ></nz-step>
+    <nz-step> </nz-step>
+    <nz-step></nz-step>
+    <nz-step></nz-step>
+  </nz-steps>
+</div>
+<div style="margin: 20px;">
+  <nz-card style="width:80%; margin: 0 auto;" [nzBordered]="true" nzTitle="Company Bank Details">
+    <form nz-form [formGroup]="bankDetailsForm" novalidate (ngSubmit)="onSubmit()">
+      <div nz-row>
+        <div nz-col [nzSpan]="12">
+        <nz-form-item >
+            <nz-form-label [nzSpan]="6" nzFor="account_name">Account Name</nz-form-label>
+        <nz-form-control [nzSpan]="18">
+          <input nz-input formControlName="account_name" name="account_name" type="text" id="account_name" placeholder="Account Name">
+          </nz-form-control>
+        </nz-form-item >
+        </div>
+
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="6" nzFor="account_number">Account No.</nz-form-label>
+          <nz-form-control [nzSpan]="18">
+              <input nz-input formControlName="account_number" name="account_number" type="number" id="account_number" placeholder="Account Number">
+            </nz-form-control>
+          </nz-form-item >
+        </div>
+      </div>
+
+      <div nz-row>
+        <div nz-col [nzSpan]="12">
+          <nz-form-item >
+            <nz-form-label [nzSpan]="6" nzFor="account_type">Account Type</nz-form-label>
+        <nz-form-control [nzSpan]="18">
+          <nz-select formControlName="account_type" nzShowSearch nzAllowClear placeholder="Account Type">
+            <nz-option nzLabel="ZMW" nzValue="zmw"></nz-option>
+            <nz-option nzLabel="Dollar" nzValue="dollar"></nz-option>
+          </nz-select>
+          </nz-form-control>
+        </nz-form-item >
+        </div>
+
+        <div nz-col [nzSpan]="12">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6" nzFor="bank">Bank</nz-form-label>
+          <nz-form-control [nzSpan]="18">
+              <input nz-input formControlName="bank" name="bank" type="text" id="bank" placeholder="Bank">
+            </nz-form-control>
+          </nz-form-item >
+        </div>
+      </div>
+
+      <div nz-row>
+        <div nz-col [nzSpan]="12">
+          <nz-form-item >
+            <nz-form-label [nzSpan]="6" nzFor="branch">Branch</nz-form-label>
+        <nz-form-control [nzSpan]="18">
+          <input nz-input formControlName="branch" name="branch"  id="branch" placeholder="Branch">
+          </nz-form-control>
+        </nz-form-item >
+        </div>
+      </div>
+
+      <nz-form-item nz-row>
+        <nz-form-control [nzSpan]="14" [nzOffset]="10" >
+          <button nz-button nzType="primary" style="float: right;">Submit</button>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </nz-card>
+</div>
