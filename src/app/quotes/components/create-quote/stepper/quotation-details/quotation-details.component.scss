@@ -12,6 +12,10 @@
     margin-top: 24px;
   }
 
-  button {
+  .steps-content button {
     margin-right: 8px;
+  }
+
+  [nz-form] {
+    max-width: 600px;
   }

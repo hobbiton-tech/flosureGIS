@@ -1,0 +1,62 @@
+<!-- <p>quotation details form</p>
+<button nz-button routerLink="/create-quote/quotation-product-details">Proceed</button> -->
+
+<nz-steps [nzCurrent]="0" >
+    <nz-step nzTitle="Quotation Details"></nz-step>
+    <nz-step nzTitle="Quotation Product Details"></nz-step>
+    <nz-step nzTitle="Risk Details"></nz-step>
+  </nz-steps>
+  
+  <div class="steps-content">
+      <form nz-form [formGroup]="quotationDetailsForm">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="5" nzFor="client_type">Client Type</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzErrorTip="Please select client type">
+              <nz-select id="client_type" >
+                <nz-option nzValue="individual" nzLabel="Individual"></nz-option>
+                <nz-option nzValue="corporate" nzLabel="Corporate"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSpan]="5" nzFor="currency">Currency</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzErrorTip="Please select currency">
+              <nz-select id="currency" >
+                <nz-option nzValue="zambian_kwacha" nzLabel="Zambia Kwacha"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSpan]="5" nzFor="client_id">Client ID</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzErrorTip="Please select Client ID">
+              <nz-select id="client_id" >
+                <nz-option nzLabel="Daniel"></nz-option>
+                <nz-option nzLabel="Changa"></nz-option>
+                <nz-option nzLabel="Changa"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSpan]="5" >Date</nz-form-label>
+            <nz-form-control [nzSpan]="12">
+              <nz-range-picker ></nz-range-picker>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSpan]="5" nzFor="payment_mode">Payment Mode</nz-form-label>
+              <nz-form-control [nzSpan]="12" nzErrorTip="Please select payment mode">
+                <nz-select id="payment_mode" >
+                  <nz-option nzValue="cash" nzLabel="CASH"></nz-option>
+                  <nz-option nzValue="eft" nzLabel="EFT"></nz-option>
+                  <nz-option nzValue="cheque" nzLabel="CHAQUE"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-control [nzSpan]="12" [nzOffset]="5">
+              <button nz-button routerLink="/create-quote/quotation-product-details">Proceed</button>
+            </nz-form-control>
+          </nz-form-item>
+        </form>
+  </div>
+  

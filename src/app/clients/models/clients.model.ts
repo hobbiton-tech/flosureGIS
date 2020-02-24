@@ -6,6 +6,7 @@ export class Client {
     phone: string;
     type: ClientType;
     status: ClientStatus;
+    createdBy: string;
 }
 
 export type ClientType = 'Individual' | 'Corporate';

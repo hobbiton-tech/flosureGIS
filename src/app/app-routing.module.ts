@@ -14,6 +14,14 @@ import { CompanyDetailsComponent } from './clients/components/create-client/corp
 import { ContactPersonComponent } from './clients/components/create-client/corporate-client/contact-person/contact-person.component';
 import { CompanyBankDetailsComponent } from './clients/components/create-client/corporate-client/company-bank-details/company-bank-details.component';
 
+import { QuotationDetailsComponent } from './quotes/components/create-quote/stepper/quotation-details/quotation-details.component';
+import { QuotationProductDetailsComponent } from './quotes/components/create-quote/stepper/quotation-product-details/quotation-product-details.component';
+import { RiskDetailsComponent } from './quotes/components/create-quote/stepper/risk-details/risk-details.component';
+import { SettingsComponent } from './settings/settings.component';
+import { SettingsModule } from './settings/settings.module';
+import { OrganizationalSetupsComponent } from './settings/components/organizational-setups/organizational-setups.component';
+import { UnderwritingSetupsComponent } from './settings/components/underwriting-setups/underwriting-setups.component';
+
 const routes: Routes = [
     {
         path: '',
@@ -26,6 +34,18 @@ const routes: Routes = [
             {
                 path: 'clients',
                 component: ClientsComponent
+            },
+            {
+                path: 'settings',
+                component: SettingsComponent
+            },
+            {
+                path: 'organizational-setups',
+                component: OrganizationalSetupsComponent,
+            },
+            {
+                path: 'underwriting-setups',
+                component: UnderwritingSetupsComponent,
             },
             {
                 path: 'create-quote',
@@ -59,12 +79,19 @@ const routes: Routes = [
                 path: 'company-bank-details',
                 component: CompanyBankDetailsComponent
             }
+                component: CreateQuoteComponent,
+                children: [
+                   { path:'quotation-details', pathMatch: "full", component: QuotationDetailsComponent},
+                   { path:'quotation-product-details', pathMatch: "full", component: QuotationProductDetailsComponent},
+                   { path:'risk-details', pathMatch: "full", component: RiskDetailsComponent}
+                ]
+            },
         ]
     }
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes), QuotesModule, ClientsModule],
+    imports: [RouterModule.forRoot(routes), QuotesModule, ClientsModule, SettingsModule],
     exports: [RouterModule]
 })
 export class AppRoutingModule {}
