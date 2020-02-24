@@ -11,6 +11,7 @@ import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { NavigationComponent } from './navigation/navigation.component';
 
+
 registerLocaleData(en);
 
 @NgModule({

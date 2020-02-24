@@ -9,7 +9,8 @@ const createClient = () => {
         email: faker.internet.email(),
         phone: faker.phone.phoneNumber('+260 9## ### ###'),
         type: faker.random.arrayElement(['Individual', 'Corporate']),
-        status: faker.random.arrayElement(['Active', 'Inactive'])
+        status: faker.random.arrayElement(['Active', 'Inactive']),
+        createdBy: `${faker.name.firstName()} ${faker.name.lastName()}`
     };
     return client;
 };
