@@ -33,15 +33,15 @@
 
   <div style="margin: 20px;">
     <nz-radio-group>
-      <label nz-radio nzValue="A">View All</label>
-      <label nz-radio nzValue="B">Corporate Clients</label>
-      <label nz-radio nzValue="C">Individual Clients</label>
+      <label nz-radio nzValue="all">View All</label>
+      <label nz-radio nzValue="corporate">Corporate Clients</label>
+      <label nz-radio nzValue="individual">Individual Clients</label>
     </nz-radio-group>
   </div>
 
 
 
-  <nz-table #clientsTable [nzData]="clientList" [nzSize]="'small'" [nzBordered]="true">
+  <nz-table #clientsTable [nzData]="clientList" [nzSize]="'small'" [nzBordered]="true" style="background-color: white;">
     <thead>
       <tr>
         <th>Client ID</th>

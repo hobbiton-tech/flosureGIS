@@ -1,5 +1,5 @@
 <nz-layout style="height: 100%;">
-  <nz-sider [nzTheme]="'light'" style="height: 100%;" [nzWidth]="250">
+  <nz-sider [nzTheme]="'light'" [nzWidth]="250">
     <div class="flosure-header">
       <div>
         <nz-avatar [nzSize]="64" [nzIcon]="'user'"></nz-avatar>
@@ -14,7 +14,7 @@
         <button nz-button nzType="default" nzSize="small">Logout</button>
       </div>
     </div>
-    <ul nz-menu nzMode="inline" style="height: 100%;">
+    <ul nz-menu nzMode="inline">
       <li nz-menu-item nz-tooltip nzPlacement="right" [nzTitle]="isCollapsed ? 'Dashboard' : ''" nzSelected>
         <i nz-icon nzType="dashboard"></i>
         <span>Dashboard</span>
@@ -79,7 +79,7 @@
       </li>
     </ul>
   </nz-sider>
-  <nz-content style="background: white;">
+  <nz-content style="background: #ececec;">
     <router-outlet></router-outlet>
   </nz-content>
 </nz-layout>

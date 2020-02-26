@@ -1,5 +1,4 @@
-<!-- <p>quotation details form</p>
-<button nz-button routerLink="/create-quote/quotation-product-details">Proceed</button> -->
+
 
 <nz-steps [nzCurrent]="0" >
     <nz-step nzTitle="Quotation Details"></nz-step>
@@ -8,7 +7,7 @@
   </nz-steps>
   
   <div class="steps-content">
-      <form nz-form [formGroup]="quotationDetailsForm">
+      <form nz-form [formGroup]="quotationDetailsForm" style="margin: 0 auto;">
           <nz-form-item>
             <nz-form-label [nzSpan]="5" nzFor="client_type">Client Type</nz-form-label>
             <nz-form-control [nzSpan]="12" nzErrorTip="Please select client type">
@@ -32,7 +31,7 @@
               <nz-select id="client_id" >
                 <nz-option nzLabel="Daniel"></nz-option>
                 <nz-option nzLabel="Changa"></nz-option>
-                <nz-option nzLabel="Changa"></nz-option>
+                <nz-option nzLabel="Joshua"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -53,8 +52,8 @@
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
-            <nz-form-control [nzSpan]="12" [nzOffset]="5">
-              <button nz-button routerLink="/create-quote/quotation-product-details">Proceed</button>
+            <nz-form-control [nzSpan]="12" [nzOffset]="5" style="text-align: center">
+              <button nz-button nzType="primary" routerLink="/create-quote/quotation-product-details">Proceed</button>
             </nz-form-control>
           </nz-form-item>
         </form>

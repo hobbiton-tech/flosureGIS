@@ -1,1 +1,50 @@
-<p>underwriting-setups works!</p>
+
+<div >tyle="margin: 20px"
+
+
+<nz-card>
+
+<nz-tabset>
+    <nz-tab nzTitle="Products">
+        <nz-table #productTable [nzData]="productsList">
+            <thead>
+              <tr>
+                <th>Product Name</th>
+                <th>Policy Prefix</th>
+                <th>Claim Prefix</th>
+                <th>Min Premium</th>
+                <th>Renewable</th>
+                <th>Risk Note</th>
+                <th>Interface Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let product of productTable.data">
+                <td>{{product.productName}}</td>
+                <td>{{product.policyPrefix}}</td>
+                <td>{{product.claimPrefix}}</td>
+                <td>{{product.minPremium}}</td>
+                <td>{{product.isRenewable}}</td>
+                <td>{{product.riskNote}}</td>
+                <td>{{product.interfaceType}}</td>
+              </tr>
+            </tbody>
+          </nz-table>
+    </nz-tab>
+    <nz-tab nzTitle="Covers">
+      Content of Tab Pane 2
+    </nz-tab>
+    <nz-tab nzTitle="Perils">
+      Content of Tab Pane 3
+    </nz-tab>
+    <nz-tab nzTitle="Endorsements">
+      Content of Tab Pane 3
+    </nz-tab>
+    <nz-tab nzTitle="Clauses">
+      Content of Tab Pane 3
+    </nz-tab>
+    <nz-tab nzTitle="Taxes">
+      Content of Tab Pane 3
+    </nz-tab>
+  </nz-tabset>
+</nz-card></div>

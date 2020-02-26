@@ -1,4 +1,4 @@
-export interface IRelationShipType {
+export interface IRelationshipType {
     type: string;
     description: string;
 }

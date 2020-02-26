@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 })
 export class QuotationDetailsComponent implements OnInit {
 
-  quotationDetailsForm;
+  quotationDetailsForm: FormGroup;
 
   QuotationProductDetailsStepper() {
     this.stepperService.changeIndex(2);

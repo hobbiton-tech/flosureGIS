@@ -1,4 +1,201 @@
-<div style="margin: 20px;">
+<!-- <h1>Create Quotation</h1> -->
+<div style="height: 100%">
+  <div style="margin: 20px">
+    <nz-card [nzBordered]="false" nzTitle="Quotation Details">
+        <form nz-form  style="margin: 0 auto;">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="5" nzFor="client_type">Client Type</nz-form-label>
+              <nz-form-control [nzSpan]="7" nzErrorTip="Please select client type">
+                <nz-select id="client_type" >
+                  <nz-option nzValue="individual" nzLabel="Individual"></nz-option>
+                  <nz-option nzValue="corporate" nzLabel="Corporate"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSpan]="5" nzFor="currency">Currency</nz-form-label>
+              <nz-form-control [nzSpan]="7" nzErrorTip="Please select currency">
+                <nz-select id="currency" >
+                  <nz-option nzValue="zambian_kwacha" nzLabel="Zambia Kwacha"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSpan]="5" nzFor="client_id">Client ID</nz-form-label>
+              <nz-form-control [nzSpan]="7" nzErrorTip="Please select Client ID">
+                <nz-select id="client_id" >
+                  <nz-option nzLabel="Daniel"></nz-option>
+                  <nz-option nzLabel="Changa"></nz-option>
+                  <nz-option nzLabel="Joshua"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSpan]="5" >Date</nz-form-label>
+              <nz-form-control [nzSpan]="7">
+                <nz-range-picker ></nz-range-picker>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzFor="payment_mode">Payment Mode</nz-form-label>
+                <nz-form-control [nzSpan]="7" nzErrorTip="Please select payment mode">
+                  <nz-select id="payment_mode" >
+                    <nz-option nzValue="cash" nzLabel="CASH"></nz-option>
+                    <nz-option nzValue="eft" nzLabel="EFT"></nz-option>
+                    <nz-option nzValue="cheque" nzLabel="CHAQUE"></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </nz-form-item>
+          </form>
+    </nz-card>
+    <br>
+    <nz-card [nzBordered]="false" nzTitle="Quotation Product Details">
+        <form nz-form>
+            <nz-form-item>
+              <nz-form-label [nzSpan]="5" nzFor="binder_type">Binder Type</nz-form-label>
+              <nz-form-control [nzSpan]="7" nzErrorTip="Please select binder type">
+                <nz-select id="binder_type" >
+                  <nz-option nzValue="binder" nzLabel="Binder"></nz-option>
+                  <nz-option nzValue="open_market" nzLabel="Open Market"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSpan]="5" nzFor="binder">Binder</nz-form-label>
+              <nz-form-control [nzSpan]="7" nzErrorTip="Please select binder">
+                <nz-select id="binder" >
+                  <nz-option nzLabel="APA PSV MOTOR ASSET"></nz-option>
+                  <nz-option nzLabel="Britum Commercial Tractor"></nz-option>
+                  <nz-option nzLabel="Britam Credit Life"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </form>
+    </nz-card>
+    <br>
+    <nz-card [nzBordered]="false" nzTitle="Risk Details">
+        <form nz-form>
+            <div class="row">
+                <div class="column">
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="10" nzFor="insured_type">Insured Type</nz-form-label>
+                        <nz-form-control [nzSpan]="10" nzErrorTip="Please select insured type">
+                            <nz-select id="insured_type">
+                                <nz-option nzValue="individual" nzLabel="Individual"></nz-option>
+                                <nz-option nzValue="corporate" nzLabel="Corporate"></nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div class="column">
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="5" nzFor="insured">Insured</nz-form-label>
+                        <nz-form-control [nzSpan]="10" nzErrorTip="Please select insured">
+                            <nz-select id="insured">
+                                <nz-option nzLabel="Daniel"></nz-option>
+                                <nz-option nzLabel="Chanaga"></nz-option>
+                                <nz-option nzLabel="Joshua"></nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="column">
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="10" nzFor="subclass">Subclass</nz-form-label>
+                        <nz-form-control [nzSpan]="10" nzErrorTip="Please select subclass">
+                            <nz-select id="subclass">
+                                <nz-option nzValue="credit_life_assurance" nzLabel="Credit Life Assurance"></nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+
+                <div class="column">
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="5" nzFor="risk_id">Risk ID</nz-form-label>
+                        <nz-form-control [nzSpan]="10" nzErrorTip="Please input your risk ID!">
+                            <nz-input-group id="risk_id">
+                                <input type="text" nz-input/>
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="column">
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="10" nzFor="period_rates">Period Rates</nz-form-label>
+                        <nz-form-control [nzSpan]="10" nzErrorTip="Please select Period rates">
+                            <nz-select id="period_rates">
+                                <nz-option nzValue="prorated" nzLabel="Prorated"></nz-option>
+                                <nz-option nzValue="short_period_rates" nzLabel="Short Period Rates"></nz-option>
+                                <nz-option nzValue="full" nzLabel="Full"></nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+
+                <div class="column">
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="5" nzFor="negotiated_premium">Premium</nz-form-label>
+                        <nz-form-control [nzSpan]="10" nzErrorTip="Please input Negotiated Premium">
+                            <nz-input-group id="negotiated_premium">
+                                <input type="text" nz-input />
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="column">
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="10" nzFor="cover_type">Cover Type</nz-form-label>
+                        <nz-form-control [nzSpan]="10" nzErrorTip="Please select Cover Type">
+                            <nz-select id="cover_type">
+                                <nz-option nzValue="standard" nzLabel="Standard"></nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+
+                <div class="column">
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="5" nzFor="risk_description">Risk Desc</nz-form-label>
+                        <nz-form-control [nzSpan]="10">
+                            <nz-input-group id="risk_description">
+                                <input type="text" nz-input />
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="column">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="5" nzFor="commission_rate">Commission Rate</nz-form-label>
+                    <nz-form-control [nzSpan]="5">
+                        <nz-input-group id="commission_rate">
+                            <input type="text" nz-input />
+                        </nz-input-group>
+                    </nz-form-control>
+                </nz-form-item>
+                </div>
+            </div>
+    </form>
+    </nz-card>
+  </div>
+</div>
+
+
+<!-- <div style="margin: 20px;">
 <div style="margin-bottom: 20px; background: #f4f4f4;">
   <nz-page-header>
     <nz-page-header-title>Quotes</nz-page-header-title>
@@ -21,4 +218,4 @@
 </div>
 
 <router-outlet></router-outlet>
-</div>
+</div> -->
