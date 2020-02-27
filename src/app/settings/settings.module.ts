@@ -12,16 +12,46 @@ import { CreatePaymentModeComponent } from './components/organizational-setups/o
 import { CreateRelationshipTypeComponent } from './components/organizational-setups/organizational-components/create-relationship-type/create-relationship-type.component';
 import { CreateSectorComponent } from './components/organizational-setups/organizational-components/create-sector/create-sector.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Routes, RouterModule } from '@angular/router';
+import { AccountsComponent } from './components/accounts/accounts.component';
 
+const routes: Routes = [
+    {
+        path: 'underwriting',
+        component: UnderwritingSetupsComponent
+    },
+    {
+        path: 'accounts',
+        component: AccountsComponent
+    },
+    {
+        path: 'organization-setups',
+        component: OrganizationalSetupsComponent
+    }
+];
 
 @NgModule({
-  declarations: [SettingsComponent, OrganizationalSetupsComponent, UnderwritingSetupsComponent, CreateAccountTypeComponent, CreateAccountComponent, CreateClientTypeComponent, CreateCurrencyComponent, CreatePaymentModeComponent, CreateRelationshipTypeComponent, CreateSectorComponent],
-  imports: [
-    CommonModule,
-    NgZorroAntdModule,
-    FormsModule,
-    ReactiveFormsModule
-  ],
-  exports: [SettingsComponent]
+    declarations: [
+        AccountsComponent,
+        SettingsComponent,
+        OrganizationalSetupsComponent,
+        UnderwritingSetupsComponent,
+        CreateAccountTypeComponent,
+        CreateAccountComponent,
+        CreateClientTypeComponent,
+        CreateCurrencyComponent,
+        CreatePaymentModeComponent,
+        CreateRelationshipTypeComponent,
+        CreateSectorComponent,
+        AccountsComponent
+    ],
+    imports: [
+        CommonModule,
+        NgZorroAntdModule,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterModule.forChild(routes)
+    ],
+    exports: [SettingsComponent]
 })
-export class SettingsModule { }
+export class SettingsModule {}

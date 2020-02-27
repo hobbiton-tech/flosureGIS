@@ -3,22 +3,26 @@ import { CommonModule } from '@angular/common';
 import { UnderwritingComponent } from './underwriting.component';
 import { Routes, RouterModule } from '@angular/router';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
-
+import { EndorsementsComponent } from './components/endorsements/endorsements.component';
+import { PoliciesComponent } from './components/policies/policies.component';
 const routes: Routes = [
-  {
-      path: 'endorsments',
-  },
-  {
-      path: 'policies',
-  }
-]
+    {
+        path: 'endorsements',
+        component: EndorsementsComponent,
+    },
+    {
+        path: 'policies',
+        component: PoliciesComponent
+    }
+];
 
 @NgModule({
-  declarations: [UnderwritingComponent],
-  imports: [
-    CommonModule,
-    NgZorroAntdModule,
-     RouterModule.forChild(routes)
-  ]
+    declarations: [
+        UnderwritingComponent,
+        EndorsementsComponent,
+        PoliciesComponent
+    ],
+    imports: [CommonModule, NgZorroAntdModule, RouterModule.forChild(routes)]
 })
-export class UnderwritingModule { }
+export class UnderWritingModule{}
+

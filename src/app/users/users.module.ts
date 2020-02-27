@@ -1,13 +1,30 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UsersComponent } from './users.component';
+import { Routes, RouterModule } from '@angular/router';
+import { NgZorroAntdModule } from 'ng-zorro-antd';
+import { UsersRolesComponent } from './components/users-roles/users-roles.component';
+import { UsersPermissionsComponent } from './components/users-permissions/users-permissions.component';
+
+const routes: Routes = [
+  {
+      path: 'users-roles',
+      component: UsersRolesComponent,
+  },
+  {
+      path: 'roles-permissions',
+      component: UsersPermissionsComponent,
+  }
+]
 
 
 
 @NgModule({
-  declarations: [UsersComponent],
+  declarations: [UsersComponent, UsersRolesComponent, UsersPermissionsComponent],
   imports: [
-    CommonModule
+    CommonModule,
+    NgZorroAntdModule,
+    RouterModule.forChild(routes)
   ]
 })
 export class UsersModule { }

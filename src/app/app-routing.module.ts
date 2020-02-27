@@ -2,17 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { NavigationComponent } from './navigation/navigation.component';
 import { QuotesComponent } from './quotes/quotes.component';
-import { QuotesModule } from './quotes/quotes.module';
-import { ClientsComponent } from './clients/clients.component';
-import { ClientsModule } from './clients/clients.module';
-import { CreateQuoteComponent } from './quotes/components/create-quote/create-quote.component';
-import { QuotationDetailsComponent } from './quotes/components/create-quote/stepper/quotation-details/quotation-details.component';
-import { QuotationProductDetailsComponent } from './quotes/components/create-quote/stepper/quotation-product-details/quotation-product-details.component';
-import { RiskDetailsComponent } from './quotes/components/create-quote/stepper/risk-details/risk-details.component';
 import { SettingsComponent } from './settings/settings.component';
-import { SettingsModule } from './settings/settings.module';
 import { OrganizationalSetupsComponent } from './settings/components/organizational-setups/organizational-setups.component';
-import { UnderwritingSetupsComponent } from './settings/components/underwriting-setups/underwriting-setups.component';
 
 
 const routes: Routes = [
@@ -38,18 +29,38 @@ const routes: Routes = [
             },
             {
                 path: 'underwriting',
-                loadChildren: () => import('./underwriting/underwriting.module')
+                loadChildren: () => import('./underwriting/underwriting.module').then(m => m.UnderWritingModule)
             },
             {
                 path: 'quotes',
                 loadChildren: () => import('./quotes/quotes.module').then(m => m.QuotesModule)
+            },
+            {
+                path: 'claims',
+                loadChildren: () => import('./claims/claims.module').then(m => m.ClaimsModule)
+            },
+            {
+                path: 'accounts',
+                loadChildren: () => import('./accounts/accounts.module').then(m => m.AccountsModule)
+            },
+            {
+                path: 'reports',
+                loadChildren: () => import('./reports/reports.module').then(m => m.ReportsModule)
+            },
+            {
+                path: 'user-management',
+                loadChildren: () => import('./users/users.module').then(m => m.UsersModule)
+            },
+            {
+                path: 'settings',
+                loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule)
             }
         ]
     }
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes), QuotesModule, SettingsModule],
+    imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule]
 })
 export class AppRoutingModule {}
