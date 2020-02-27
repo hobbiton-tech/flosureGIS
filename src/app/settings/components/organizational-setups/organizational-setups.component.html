@@ -74,7 +74,7 @@
               </div>
               <div nz-col nzSpan=12>
 
-                <button nz-button nzType="primary" style="float: right">Add New Account</button>
+                <button nz-button nzType="primary" style="float: right" (click)="openAccountFormDrawer()">Add New Account</button>
               </div>
 
             </div>
@@ -141,7 +141,7 @@
               </div>
               <div nz-col nzSpan=12>
 
-                <button nz-button nzType="primary" style="float: right">Add New Client Type</button>
+                <button nz-button nzType="primary" style="float: right" (click)="openClientTypeFormDrawer()">Add New Client Type</button>
               </div>
 
             </div>
@@ -183,7 +183,7 @@
               </div>
               <div nz-col nzSpan=12>
 
-                <button nz-button nzType="primary" style="float: right">Add New Currency</button>
+                <button nz-button nzType="primary" style="float: right" (click)="openCurrencyFormDrawer()">Add New Currency</button>
               </div>
 
             </div>
@@ -225,7 +225,7 @@
               </div>
               <div nz-col nzSpan=12>
 
-                <button nz-button nzType="primary" style="float: right">Add New Payment Mode</button>
+                <button nz-button nzType="primary" style="float: right" (click)="openPaymentModeFormDrawer()">Add New Payment Mode</button>
               </div>
 
             </div>
@@ -269,7 +269,7 @@
               </div>
               <div nz-col nzSpan=12>
 
-                <button nz-button nzType="primary" style="float: right">Add New Relationship Type</button>
+                <button nz-button nzType="primary" style="float: right" (click)="openRelationshipTypeFormDrawer()">Add New Relationship Type</button>
               </div>
 
             </div>
@@ -311,7 +311,7 @@
               </div>
               <div nz-col nzSpan=12>
 
-                <button nz-button nzType="primary" style="float: right">Add New Sector</button>
+                <button nz-button nzType="primary" style="float: right" (click)="openSectorFormDrawer()">Add New Sector</button>
               </div>
 
             </div>
@@ -339,4 +339,10 @@
 </div>
 
 
-<app-create-account-type [isDrawerVisible]="newAccountTypeFormDrawerVisible" (closeAccountTypeDrawer)="newAccountTypeFormDrawerVisible = false"></app-create-account-type> 
+<app-create-account-type [isDrawerVisible]="newAccountTypeFormDrawerVisible" (closeAccountTypeDrawer)="newAccountTypeFormDrawerVisible = false"></app-create-account-type>
+<app-create-account [isDrawerVisible]="newAccountFormDrawerVisible" (closeAccountDrawer)="newAccountFormDrawerVisible = false"></app-create-account> 
+<app-create-client-type [isDrawerVisible]="newClientTypeFormDrawerVisible" (closeClientTypeDrawer)="newClientTypeFormDrawerVisible = false"></app-create-client-type>
+<app-create-currency [isDrawerVisible]="newCurrencyFormDrawerVisible" (closeCurrencyDrawer)="newCurrencyFormDrawerVisible = false"></app-create-currency>
+<app-create-payment-mode [isDrawerVisible]="newPaymentModeFormDrawerVisible" (closePaymentModeDrawer)="newPaymentModeFormDrawerVisible = false"></app-create-payment-mode>
+<app-create-relationship-type [isDrawerVisible]="newRelationshipTypeFormDrawerVisible" (closeRelationshipTypeDrawer)="newRelationshipTypeFormDrawerVisible = false"></app-create-relationship-type>
+<app-create-sector [isDrawerVisible]="newSectorFormDrawerVisible" (closeSectorDrawer)="newSectorFormDrawerVisible = false"></app-create-sector>

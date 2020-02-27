@@ -26,7 +26,7 @@ const routes: Routes = [
             },
             {
                 path: 'clients',
-                component: ClientsComponent
+                loadChildren: () => import('./clients/clients.module').then(m => m.ClientsModule)
             },
             {
                 path: 'settings',
@@ -37,24 +37,19 @@ const routes: Routes = [
                 component: OrganizationalSetupsComponent,
             },
             {
-                path: 'underwriting-setups',
-                component: UnderwritingSetupsComponent,
+                path: 'underwriting',
+                loadChildren: () => import('./underwriting/underwriting.module')
             },
             {
-                path: 'create-quote',
-                component: CreateQuoteComponent,
-                children: [
-                   { path:'quotation-details', pathMatch: "full", component: QuotationDetailsComponent},
-                   { path:'quotation-product-details', pathMatch: "full", component: QuotationProductDetailsComponent},
-                   { path:'risk-details', pathMatch: "full", component: RiskDetailsComponent}
-                ]
-            },
+                path: 'quotes',
+                loadChildren: () => import('./quotes/quotes.module').then(m => m.QuotesModule)
+            }
         ]
     }
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes), QuotesModule, ClientsModule, SettingsModule],
+    imports: [RouterModule.forRoot(routes), QuotesModule, SettingsModule],
     exports: [RouterModule]
 })
 export class AppRoutingModule {}

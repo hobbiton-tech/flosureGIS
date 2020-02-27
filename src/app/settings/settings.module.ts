@@ -11,7 +11,7 @@ import { CreateCurrencyComponent } from './components/organizational-setups/orga
 import { CreatePaymentModeComponent } from './components/organizational-setups/organizational-components/create-payment-mode/create-payment-mode.component';
 import { CreateRelationshipTypeComponent } from './components/organizational-setups/organizational-components/create-relationship-type/create-relationship-type.component';
 import { CreateSectorComponent } from './components/organizational-setups/organizational-components/create-sector/create-sector.component';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -19,6 +19,8 @@ import { CreateSectorComponent } from './components/organizational-setups/organi
   imports: [
     CommonModule,
     NgZorroAntdModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   exports: [SettingsComponent]
 })

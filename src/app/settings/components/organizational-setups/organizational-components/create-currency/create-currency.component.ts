@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 
 @Component({
   selector: 'app-create-currency',
@@ -7,9 +8,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreateCurrencyComponent implements OnInit {
 
-  constructor() { }
+  createCurrencyForm: FormGroup;
+
+  @Input()
+  isDrawerVisible: boolean;
+
+  @Output()
+  closeCurrencyDrawer: EventEmitter<any> = new EventEmitter();
+
+  constructor(private _formBuilder: FormBuilder) {
+    this.createCurrencyForm = this._formBuilder.group({
+      name: '',
+      symbol: ''
+    })
+   }
 
   ngOnInit(): void {
+  }
+
+  closeDrawer(): void {
+    this.closeCurrencyDrawer.emit();
   }
 
 }

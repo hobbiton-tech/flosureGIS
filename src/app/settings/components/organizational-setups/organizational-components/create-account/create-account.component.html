@@ -1,1 +1,98 @@
-<p>create-account works!</p>
+<nz-drawer [nzClosable]="false" [nzVisible]="isDrawerVisible" nzPlacement="left"
+  nzTitle="New Account" (nzOnClose)="closeDrawer()" [nzWidth]="650">
+  
+  <div style="margin: 20px">
+  <form nz-form [formGroup]="createAccountForm" style="margin: 0 auto;">
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24">Account ID</nz-form-label>
+      <nz-form-control [nzSm]="10" [nzXs]="24">
+        <input nz-input formControlName="account_id" id="account_id" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24">Account Name</nz-form-label>
+      <nz-form-control [nzSm]="10" [nzXs]="24">
+        <input nz-input formControlName="account_name" id="account_name" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24">Email</nz-form-label>
+      <nz-form-control [nzSm]="10" [nzXs]="24">
+        <input nz-input formControlName="email" id="email" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24">Phone</nz-form-label>
+      <nz-form-control [nzSm]="10" [nzXs]="24">
+        <input nz-input formControlName="phone" id="phone" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24">Pin Number</nz-form-label>
+      <nz-form-control [nzSm]="10" [nzXs]="24">
+        <input nz-input formControlName="pin_number" id="pin_number" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24">Bank</nz-form-label>
+      <nz-form-control [nzSm]="10" [nzXs]="24">
+        <input nz-input formControlName="bank" id="bank" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24">Bank Branch</nz-form-label>
+      <nz-form-control [nzSm]="10" [nzXs]="24">
+        <input nz-input formControlName="bank_branch" id="bank_branch" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzFor="payment_mode">Payment Mode</nz-form-label>
+      <nz-form-control [nzSpan]="10" nzErrorTip="Please select payment mode">
+        <nz-select id="payment_mode" >
+          <nz-option nzValue="cash" nzLabel="Cash"></nz-option>
+          <nz-option nzValue="chaque" nzLabel="Chaque"></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24">Contact Title</nz-form-label>
+      <nz-form-control [nzSm]="10" [nzXs]="24">
+        <input nz-input formControlName="contact_title" id="contact_title" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24">Account Short Desc</nz-form-label>
+      <nz-form-control [nzSm]="10" [nzXs]="24">
+        <input nz-input formControlName="account_short_description" id="account_short_description" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzFor="status">Status</nz-form-label>
+      <nz-form-control [nzSpan]="10" nzErrorTip="Please select Status">
+        <nz-select id="client_type" >
+          <nz-option nzValue="active" nzLabel="Active"></nz-option>
+          <nz-option nzValue="inactive" nzLabel="Inactive"></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control [nzSpan]="12" [nzOffset]="5" style="text-align: center">
+        <button nz-button nzType="primary">Submit</button>
+      </nz-form-control>
+    </nz-form-item>
+  
+  </form>
+</div>
+
+</nz-drawer>

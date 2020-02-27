@@ -1,4 +1,58 @@
 <nz-drawer [nzClosable]="false" [nzVisible]="isDrawerVisible" nzPlacement="left"
-  nzTitle="New Account Type" (nzOnClose)="closeDrawer()">
-  <p>new account type form</p>
+  nzTitle="New Account Type" (nzOnClose)="closeDrawer()" [nzWidth]="650">
+  
+  <form nz-form [formGroup]="createAccountTypeForm" style="margin: 0 auto;">
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24">Type</nz-form-label>
+      <nz-form-control [nzSm]="10" [nzXs]="24">
+        <input nz-input formControlName="type" id="type" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24">Short Description</nz-form-label>
+      <nz-form-control [nzSm]="10" [nzXs]="24">
+        <input nz-input formControlName="short_description" id="short_description" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzFor="account_type">Account Type</nz-form-label>
+      <nz-form-control [nzSpan]="10" nzErrorTip="Please select payment mode">
+        <nz-select id="payment_mode" >
+          <nz-option nzValue="" nzLabel=""></nz-option>
+          <nz-option nzValue="" nzLabel=""></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24">Commission Rate</nz-form-label>
+      <nz-form-control [nzSm]="10" [nzXs]="24">
+        <input nz-input formControlName="commission_rate" id="commission_rate" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24">VAT Rate</nz-form-label>
+      <nz-form-control [nzSm]="10" [nzXs]="24">
+        <input nz-input formControlName="vat_rate" id="vat_rate" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24">Withholding Tax Rate</nz-form-label>
+      <nz-form-control [nzSm]="10" [nzXs]="24">
+        <input nz-input formControlName="withholding_tax_rate" id="withholding_tax_rate" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control [nzSpan]="12" [nzOffset]="5" style="text-align: center">
+        <button nz-button nzType="primary">Submit</button>
+      </nz-form-control>
+    </nz-form-item>
+  
+  </form>
+
 </nz-drawer>

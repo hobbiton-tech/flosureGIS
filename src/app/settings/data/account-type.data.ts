@@ -7,8 +7,8 @@ const createAccountType = () => {
         shortDescription: faker.random.words(3),
         accountType: faker.finance.accountName(),
         commissionRate: faker.random.number(10),
-        vatRate: faker.random.number(10),
-        withholdingTaxRate: faker.random.number(10)
+        vatRate: faker.random.number(5),
+        withholdingTaxRate: faker.random.number(15)
     };
     return accountType;
 }

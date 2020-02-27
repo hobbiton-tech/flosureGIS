@@ -1,1 +1,26 @@
-<p>create-sector works!</p>
+<nz-drawer [nzClosable]="false" [nzVisible]="isDrawerVisible" nzPlacement="left"
+  nzTitle="New Sector" (nzOnClose)="closeDrawer()" [nzWidth]="650">
+  
+  <form nz-form [formGroup]="createSectorForm" style="margin: 0 auto;">
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24">Sector ID</nz-form-label>
+      <nz-form-control [nzSm]="10" [nzXs]="24">
+        <input nz-input formControlName="sector_id" id="sector_id" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24">Sector Name</nz-form-label>
+      <nz-form-control [nzSm]="10" [nzXs]="24">
+        <input nz-input formControlName="sector_name" id="sector_name" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control [nzSpan]="12" [nzOffset]="5" style="text-align: center">
+        <button nz-button nzType="primary">Submit</button>
+      </nz-form-control>
+    </nz-form-item>
+  
+  </form>
+</nz-drawer>

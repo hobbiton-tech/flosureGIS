@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 
 @Component({
   selector: 'app-create-payment-mode',
@@ -7,9 +8,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreatePaymentModeComponent implements OnInit {
 
-  constructor() { }
+  createPaymentModeForm: FormGroup;
+
+  @Input()
+  isDrawerVisible: boolean;
+
+  @Output()
+  closePaymentModeDrawer: EventEmitter<any> = new EventEmitter();
+
+  constructor(private _formBuilder: FormBuilder) { 
+    this.createPaymentModeForm = this._formBuilder.group({
+      short_description: '',
+      min_amount: '',
+      max_amount: ''
+    })
+  }
 
   ngOnInit(): void {
+  }
+
+  closeDrawer(): void {
+    this.closePaymentModeDrawer.emit();
   }
 
 }

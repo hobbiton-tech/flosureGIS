@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 
 @Component({
   selector: 'app-create-client-type',
@@ -7,9 +8,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreateClientTypeComponent implements OnInit {
 
-  constructor() { }
+  createClientTypeForm: FormGroup;
+
+  @Input()
+  isDrawerVisible: boolean;
+
+  @Output()
+  closeClientTypeDrawer: EventEmitter<any> = new EventEmitter();
+
+  constructor(private _formBuilder: FormBuilder) {
+    this.createClientTypeForm = this._formBuilder.group({
+      type: '',
+      description: ''
+    })
+   }
 
   ngOnInit(): void {
+  }
+
+  closeDrawer(): void {
+    this.closeClientTypeDrawer.emit();
   }
 
 }

@@ -1,1 +1,27 @@
-<p>create-client-type works!</p>
+<nz-drawer [nzClosable]="false" [nzVisible]="isDrawerVisible" nzPlacement="left"
+  nzTitle="New Client Type" (nzOnClose)="closeDrawer()" [nzWidth]="650">
+  
+  <form nz-form [formGroup]="createClientTypeForm" style="margin: 0 auto;">
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24">Type</nz-form-label>
+      <nz-form-control [nzSm]="10" [nzXs]="24">
+        <input nz-input formControlName="type" id="type" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24">Short Description</nz-form-label>
+      <nz-form-control [nzSm]="10" [nzXs]="24">
+        <input nz-input formControlName="short_description" id="short_description" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control [nzSpan]="12" [nzOffset]="5" style="text-align: center">
+        <button nz-button nzType="primary">Submit</button>
+      </nz-form-control>
+    </nz-form-item>
+  
+  </form>
+
+</nz-drawer>

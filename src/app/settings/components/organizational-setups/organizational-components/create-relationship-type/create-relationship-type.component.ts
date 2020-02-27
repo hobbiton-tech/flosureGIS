@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 
 @Component({
   selector: 'app-create-relationship-type',
@@ -7,9 +8,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreateRelationshipTypeComponent implements OnInit {
 
-  constructor() { }
+  createRelationshipTypeForm: FormGroup;
+
+  @Input()
+  isDrawerVisible: boolean;
+
+  @Output()
+  closeRelationshipTypeDrawer: EventEmitter<any> = new EventEmitter();
+
+  constructor(private _formBuilder: FormBuilder) {
+    this.createRelationshipTypeForm = this._formBuilder.group({
+      type: '',
+      description: ''
+    })
+
+   }
 
   ngOnInit(): void {
+  }
+
+  closeDrawer(): void {
+    this.closeRelationshipTypeDrawer.emit();
   }
 
 }

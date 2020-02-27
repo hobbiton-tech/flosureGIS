@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 
 @Component({
   selector: 'app-create-account-type',
@@ -7,6 +8,8 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 })
 export class CreateAccountTypeComponent implements OnInit {
 
+  createAccountTypeForm: FormGroup;
+
   @Input()
   isDrawerVisible: boolean;
 
@@ -14,7 +17,16 @@ export class CreateAccountTypeComponent implements OnInit {
   closeAccountTypeDrawer: EventEmitter<any> = new EventEmitter(); 
 
 
-  constructor() { }
+  constructor(private _formBuilder: FormBuilder) {
+    this.createAccountTypeForm = this._formBuilder.group({
+      type: '',
+      short_description: '',
+      account_type: '',
+      commission_rate: '',
+      vat_rate: '',
+      withholding_tax_rate: ''
+    })
+   }
 
   ngOnInit(): void {
   }
@@ -22,7 +34,6 @@ export class CreateAccountTypeComponent implements OnInit {
 
   closeDrawer(): void {
     this.closeAccountTypeDrawer.emit();
-    // this.isDrawerVisible = false;
   }
 
 }
