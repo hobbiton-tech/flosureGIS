@@ -91,14 +91,14 @@ const routes: Routes = [
             {
                 path: 'users',
                 component: UsersComponent
-            }
-                component: CreateQuoteComponent,
-                children: [
-                   { path:'quotation-details', pathMatch: "full", component: QuotationDetailsComponent},
-                   { path:'quotation-product-details', pathMatch: "full", component: QuotationProductDetailsComponent},
-                   { path:'risk-details', pathMatch: "full", component: RiskDetailsComponent}
-                ]
             },
+            //  {   component: CreateQuoteComponent,
+            //     children: [
+            //        { path: 'quotation-details', pathMatch: 'full', component: QuotationDetailsComponent},
+            //        { path: 'quotation-product-details', pathMatch: 'full', component: QuotationProductDetailsComponent},
+            //        { path: 'risk-details', pathMatch: 'full', component: RiskDetailsComponent}
+            //     ]
+            // },
         ]
     }
 ];
