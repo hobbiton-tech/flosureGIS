@@ -8,28 +8,27 @@ import { ClaimTransactionsComponent } from './components/claim-transactions/clai
 import { ClaimantsComponent } from './components/claimants/claimants.component';
 
 const routes: Routes = [
-  {
-      path: 'intimate-claims',
-      component: IntimateClaimComponent,
-  },
-  {
-      path: 'claim-transactions',
-      component: ClaimTransactionsComponent,
-  },
-  {
-      path: 'claimants',
-      component: ClaimantsComponent
-  }
-]
-
-
+    {
+        path: 'intimate-claims',
+        component: IntimateClaimComponent
+    },
+    {
+        path: 'claim-transactions',
+        component: ClaimTransactionsComponent
+    },
+    {
+        path: 'claimants',
+        component: ClaimantsComponent
+    }
+];
 
 @NgModule({
-  declarations: [ClaimsComponent, IntimateClaimComponent, ClaimTransactionsComponent, ClaimantsComponent],
-  imports: [
-    CommonModule,
-    NgZorroAntdModule,
-    RouterModule.forChild(routes)
-  ]
+    declarations: [
+        ClaimsComponent,
+        IntimateClaimComponent,
+        ClaimTransactionsComponent,
+        ClaimantsComponent
+    ],
+    imports: [CommonModule, NgZorroAntdModule, RouterModule.forChild(routes)]
 })
-export class ClaimsModule { }
+export class ClaimsModule {}

@@ -13,25 +13,24 @@ export interface IClaim {
 
 export type ClaimStatus = '' | '' | '';
 
-
 const createClaim = () => {
     const claim: IClaim = {
         claimId: faker.random.number(100),
         riskId: faker.random.number(100),
-        policyNumber: faker.vehicle.vin(),
+        policyNumber: faker.internet.ipv6(),
         clientName: `${faker.name.firstName()} ${faker.name.lastName()}`,
         lossDate: faker.date.past(),
         status: faker.random.arrayElement(['', '', '']),
         notificationDate: faker.date.past(),
         bookedBy: `${faker.name.firstName()} ${faker.name.lastName()}`
-    }
+    };
     return claim;
-}
+};
 
 export const generateClaimsList = () => {
-    let claims: IClaim[] = [];
-    for (let i = 0; i <= 122; i++){
+    const claims: IClaim[] = [];
+    for (let i = 0; i <= 122; i++) {
         claims.push(createClaim());
     }
     return claims;
-}
+};
