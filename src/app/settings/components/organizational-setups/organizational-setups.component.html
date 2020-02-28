@@ -38,6 +38,7 @@
                 <th>Commission Rate</th>
                 <th>VAT Rate</th>
                 <th>Withholding Tax Rate</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -48,6 +49,13 @@
                 <td>{{ accountType.commissionRate }}</td>
                 <td>{{ accountType.vatRate | percent}}</td>
                 <td>{{ accountType.withholdingTaxRate }}</td>
+                <td style="width: 70px">
+                  <div class="icons-list" style="text-align: center;width: 65px">
+                    <i nz-icon [nzType]="'edit'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#b3cde8'"></i>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <i nz-icon [nzType]="'delete'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#eb2f32'"></i>
+                  </div>
+                </td>
               </tr>
             </tbody>
           </nz-table>
@@ -153,12 +161,20 @@
               <tr>
                 <th>Type</th>
                 <th>Description</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let client of clientTable.data">
                 <td>{{ client.type }}</td>
                 <td>{{ client.description }}</td>
+                <td style="width: 70px">
+                  <div class="icons-list" style="text-align: center;width: 65px">
+                    <i nz-icon [nzType]="'edit'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#b3cde8'"></i>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <i nz-icon [nzType]="'delete'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#eb2f32'"></i>
+                  </div>
+                </td>
               </tr>
             </tbody>
           </nz-table>
@@ -195,12 +211,20 @@
               <tr>
                 <th>Name</th>
                 <th>Symbol</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let currency of currencyTable.data">
                 <td>{{ currency.name }}</td>
                 <td>{{ currency.symbol }}</td>
+                <td style="width: 70px">
+                  <div class="icons-list" style="text-align: center;width: 65px">
+                    <i nz-icon [nzType]="'edit'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#b3cde8'"></i>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <i nz-icon [nzType]="'delete'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#eb2f32'"></i>
+                  </div>
+                </td>
               </tr>
             </tbody>
           </nz-table>
@@ -238,6 +262,7 @@
                 <th>Short Description</th>
                 <th>Min Amount</th>
                 <th>Max Amount</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -245,6 +270,13 @@
                 <td>{{ paymentMode.shortDescription }}</td>
                 <td>{{ paymentMode.minAmount }}</td>
                 <td>{{ paymentMode.maxAmount }}</td>
+                <td style="width: 70px">
+                  <div class="icons-list" style="text-align: center;width: 65px">
+                    <i nz-icon [nzType]="'edit'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#b3cde8'"></i>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <i nz-icon [nzType]="'delete'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#eb2f32'"></i>
+                  </div>
+                </td>
               </tr>
             </tbody>
           </nz-table>
@@ -281,12 +313,20 @@
               <tr>
                 <th>Type</th>
                 <th>Description</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let relationshipType of relationshipTypeTable.data">
                 <td>{{ relationshipType.type }}</td>
                 <td>{{ relationshipType.description }}</td>
+                <td style="width: 70px">
+                  <div class="icons-list" style="text-align: center;width: 65px">
+                    <i nz-icon [nzType]="'edit'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#b3cde8'" class="icon-hover"></i>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <i nz-icon [nzType]="'delete'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#eb2f32'" class="icon-hover"></i>
+                  </div>
+                </td>
               </tr>
             </tbody>
           </nz-table>
@@ -323,12 +363,20 @@
               <tr>
                 <th>Sector ID</th>
                 <th>Sector Name</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let sector of sectorTable.data">
                 <td>{{ sector.sectorId }}</td>
                 <td>{{ sector.sectorName }}</td>
+                <td style="width: 70px">
+                  <div class="icons-list" style="text-align: center;width: 65px">
+                    <i nz-icon [nzType]="'edit'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#b3cde8'"></i>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <i nz-icon [nzType]="'delete'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#eb2f32'"></i>
+                  </div>
+                </td>
               </tr>
             </tbody>
           </nz-table>

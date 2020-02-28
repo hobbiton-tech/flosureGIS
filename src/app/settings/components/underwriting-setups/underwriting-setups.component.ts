@@ -11,6 +11,7 @@ import { generateProductGroups } from '../../models/underwriting/product-group.m
 import { generateProductSubclasses } from '../../models/underwriting/product-subclass.model';
 import { generateTaxRates } from '../../models/underwriting/tax-rate.model';
 import { generateRevenueItems } from '../../models/underwriting/revenue-item.model';
+import { generateEndorsementRemarks } from '../../models/underwriting/endorsement-remark.model';
 
 @Component({
   selector: 'app-underwriting-setups',
@@ -36,6 +37,8 @@ export class UnderwritingSetupsComponent implements OnInit {
   revenuesList = generateRevenueItems();
 
   taxRatesList = generateTaxRates();
+
+  endorsementRemarksList = generateEndorsementRemarks();
 
   constructor() { }
 

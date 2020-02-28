@@ -26,4 +26,5 @@ export const generateClauses = () => {
     for (let i = 0; i <= 7; i++) {
         clauses.push(createClause());
     }
+    return clauses;
 }

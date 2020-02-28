@@ -24,7 +24,7 @@ export class OrganizationalSetupsComponent implements OnInit {
   relationshipTypes = generateRelationshipTypes();
   sectorsList = generateSectors();
 
-  visible = false;
+  
   newAccountTypeFormDrawerVisible = false;
   newAccountFormDrawerVisible = false;
   newClientTypeFormDrawerVisible = false;
