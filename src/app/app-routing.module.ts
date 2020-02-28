@@ -13,6 +13,11 @@ import { BankDetailsComponent } from './clients/components/create-client/individ
 import { CompanyDetailsComponent } from './clients/components/create-client/corporate-client/company-details/company-details.component';
 import { ContactPersonComponent } from './clients/components/create-client/corporate-client/contact-person/contact-person.component';
 import { CompanyBankDetailsComponent } from './clients/components/create-client/corporate-client/company-bank-details/company-bank-details.component';
+import { PoliciesComponent } from './underwriting/components/policies/policies.component';
+import { UnderwritingModule } from './underwriting/underwriting.module';
+import { UsersComponent } from './users/users.component';
+import { UsersModule } from './users/users.module';
+
 
 const routes: Routes = [
     {
@@ -58,13 +63,27 @@ const routes: Routes = [
             {
                 path: 'company-bank-details',
                 component: CompanyBankDetailsComponent
+            },
+            {
+                path: 'policies',
+                component: PoliciesComponent
+            },
+            {
+                path: 'users',
+                component: UsersComponent
             }
         ]
     }
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes), QuotesModule, ClientsModule],
+    imports: [
+        RouterModule.forRoot(routes),
+        QuotesModule,
+        ClientsModule,
+        UnderwritingModule,
+        UsersModule
+    ],
     exports: [RouterModule]
 })
 export class AppRoutingModule {}
