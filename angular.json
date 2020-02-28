@@ -133,6 +133,6 @@
   },
   "defaultProject": "flosure-broker-ui",
   "cli": {
-    "analytics": "25aa3605-b180-4445-8a16-a85404cff93e"
+    "analytics": false
   }
 }

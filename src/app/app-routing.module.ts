@@ -19,6 +19,14 @@ import { UsersComponent } from './users/users.component';
 import { UsersModule } from './users/users.module';
 
 
+import { QuotationDetailsComponent } from './quotes/components/create-quote/stepper/quotation-details/quotation-details.component';
+import { QuotationProductDetailsComponent } from './quotes/components/create-quote/stepper/quotation-product-details/quotation-product-details.component';
+import { RiskDetailsComponent } from './quotes/components/create-quote/stepper/risk-details/risk-details.component';
+import { SettingsComponent } from './settings/settings.component';
+import { SettingsModule } from './settings/settings.module';
+import { OrganizationalSetupsComponent } from './settings/components/organizational-setups/organizational-setups.component';
+import { UnderwritingSetupsComponent } from './settings/components/underwriting-setups/underwriting-setups.component';
+
 const routes: Routes = [
     {
         path: '',
@@ -31,6 +39,18 @@ const routes: Routes = [
             {
                 path: 'clients',
                 component: ClientsComponent
+            },
+            {
+                path: 'settings',
+                component: SettingsComponent
+            },
+            {
+                path: 'organizational-setups',
+                component: OrganizationalSetupsComponent,
+            },
+            {
+                path: 'underwriting-setups',
+                component: UnderwritingSetupsComponent,
             },
             {
                 path: 'create-quote',
@@ -72,6 +92,13 @@ const routes: Routes = [
                 path: 'users',
                 component: UsersComponent
             }
+                component: CreateQuoteComponent,
+                children: [
+                   { path:'quotation-details', pathMatch: "full", component: QuotationDetailsComponent},
+                   { path:'quotation-product-details', pathMatch: "full", component: QuotationProductDetailsComponent},
+                   { path:'risk-details', pathMatch: "full", component: RiskDetailsComponent}
+                ]
+            },
         ]
     }
 ];
@@ -82,7 +109,8 @@ const routes: Routes = [
         QuotesModule,
         ClientsModule,
         UnderwritingModule,
-        UsersModule
+        UsersModule,
+        SettingsModule
     ],
     exports: [RouterModule]
 })
