@@ -17,11 +17,24 @@ export class RiskDetailsComponent implements OnInit {
 
   riskDetailsForm: FormGroup;
   constructor( 
-    private _formBuilder: FormBuilder, private stepperService: StepperService, private readonly router: Router
+    private _formBuilder: FormBuilder,
+    private stepperService: StepperService,
+    private readonly router: Router,
+    private formBuilder: FormBuilder
   ) { 
-    /* this.quotationDetailsForm = this._formBuilder.group(
-      name: ['', Validators.required]
-    ) */
+    this.riskDetailsForm = this.formBuilder.group({
+      insured_type: '',
+      insured: '',
+      sub_class: '',
+      risk_id: '',
+      period_rates: '',
+      negotiated_premium: '',
+      binder: '',
+      cover_type: '',
+      risk_description: '',
+      commission_rate: ''
+    })
+   
   }
 
   ngOnInit(): void {

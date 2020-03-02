@@ -1,0 +1,32 @@
+<div style="margin: 20px;">
+    <nz-card>
+        <nz-card nzTitle="Claim Transactions">
+        	<nz-table #claimsTable [nzData]="claimsList" nzSize="small">
+        	    <thead>
+        	        <tr>
+        	            <th>Claim Id</th>
+        	            <th>Risk Id</th>
+        	            <th>Policy Number</th>
+        	            <th>Client Name</th>
+        	            <th>Loss Date</th>
+        	            <th>Status</th>
+        	            <th>Notification Date</th>
+        	            <th>Booked By</th>
+        	        </tr>
+        	    </thead>
+        	    <tbody>
+        	        <tr *ngFor="let data of claimsTable.data">
+        	            <td>{{data.claimId}}</td>
+        	            <td>{{data.ristId}}</td>
+        	            <td>{{data.policyNumber }}</td>
+        	            <td>{{data.lossDate | date }}</td>
+        	            <td>{{data.clientName }}</td>
+        	            <td>{{data.status }}</td>
+        	            <td>{{data.notificationDate | date }}</td>
+        	            <td>{{data.bookedBy}}</td>
+        	        </tr>
+        	    </tbody>
+        	</nz-table>
+        </nz-card>
+    </nz-card>
+</div>

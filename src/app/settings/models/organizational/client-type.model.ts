@@ -1,4 +1,6 @@
 export interface IClientType {
-    type: string;
+    type: ClientType;
     description: string;
 }
+
+export type ClientType = 'Individual' | 'Corporate';

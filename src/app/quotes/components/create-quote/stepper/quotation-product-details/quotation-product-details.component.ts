@@ -20,10 +20,17 @@ export class QuotationProductDetailsComponent implements OnInit {
     this.router.navigateByUrl('create-quote/risk-details')
   }
 
-  productDetailsForm: FormGroup;
+  quotationProductDetailsForm: FormGroup;
   constructor( 
-    private _formBuilder: FormBuilder, private stepperService: StepperService, private readonly router: Router
+    private _formBuilder: FormBuilder,
+    private stepperService: StepperService,
+    private readonly router: Router,
+    private formBuilder: FormBuilder
   ) { 
+    this.quotationProductDetailsForm = this.formBuilder.group({
+      binder_type: '',
+      binder: ''
+    })
     
   }
 

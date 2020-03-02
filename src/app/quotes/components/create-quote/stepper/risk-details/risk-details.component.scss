@@ -4,8 +4,10 @@
     border-radius: 6px;
     background-color: #fafafa;
     min-height: 200px;
-    text-align: center;
     padding-top: 80px;
+    // padding-left: 25%;
+    // padding-right: 25%;
+    
   }
 
   .steps-action {
@@ -15,3 +17,21 @@
   button {
     margin-right: 8px;
   }
+
+  [nz-form] {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .row {
+    display: flex;
+  }
+  
+  .column {
+    float: left;
+    flex: 50%;
+    margin-left: 30px;
+    margin-right: 20px;
+  }
+   
+ 

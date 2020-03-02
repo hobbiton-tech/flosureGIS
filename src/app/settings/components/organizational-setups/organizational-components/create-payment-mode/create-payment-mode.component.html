@@ -1,0 +1,35 @@
+<nz-drawer [nzClosable]="false" [nzVisible]="isDrawerVisible" nzPlacement="left"
+  nzTitle="New Payment Mode" (nzOnClose)="closeDrawer()" [nzWidth]="650">
+  
+  <form nz-form [formGroup]="createPaymentModeForm" style="margin: 0 auto;">
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24">Short Description</nz-form-label>
+      <nz-form-control [nzSm]="10" [nzXs]="24">
+        <input nz-input formControlName="short_description" id="short_description" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24">Minimum Amount</nz-form-label>
+      <nz-form-control [nzSm]="10" [nzXs]="24">
+        <input nz-input formControlName="minimum_amount" id="minimum_amount" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24">Maximum Amount</nz-form-label>
+      <nz-form-control [nzSm]="10" [nzXs]="24">
+        <input nz-input formControlName="maximum_amount" id="maximum_amount" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control [nzSpan]="12" [nzOffset]="5" style="text-align: center">
+        <button nz-button nzType="primary">Submit</button>
+      </nz-form-control>
+    </nz-form-item>
+  
+  </form>
+
+
+</nz-drawer>
