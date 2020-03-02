@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UsersComponent } from './users.component';
+import { NgZorroAntdModule } from 'ng-zorro-antd';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { UsersRolesComponent } from './components/users-roles/users-roles.component';
@@ -24,7 +26,9 @@ const routes: Routes = [
   imports: [
     CommonModule,
     NgZorroAntdModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    FormsModule, 
+    ReactiveFormsModule
   ]
 })
-export class UsersModule { }
+export class UsersModule {}
