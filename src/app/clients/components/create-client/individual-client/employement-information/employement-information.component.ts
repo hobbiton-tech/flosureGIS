@@ -37,7 +37,7 @@ export class EmployementInformationComponent implements OnInit {
 
     onSubmit() {
         this.stepperService.changeIndex(3);
-        this.router.navigateByUrl('/bank-details');
+        this.router.navigateByUrl('/clients/bank-details');
     }
 
     ngOnInit(): void {

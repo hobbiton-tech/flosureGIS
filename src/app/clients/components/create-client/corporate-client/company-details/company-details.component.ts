@@ -41,7 +41,7 @@ export class CompanyDetailsComponent implements OnInit {
 
     onSubmit() {
         this.stepperService.changeIndex(2);
-        this.router.navigateByUrl('/contact-person');
+        this.router.navigateByUrl('/clients/contact-person');
     }
 
     ngOnInit(): void {

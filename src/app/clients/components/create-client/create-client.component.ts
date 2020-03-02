@@ -28,9 +28,9 @@ export class CreateClientComponent implements OnInit {
   next() {
       this.stepperService.changeIndex(1);
       if (this.f.type.value === 'ind') {
-        this.router.navigateByUrl('/personal-details');
+        this.router.navigateByUrl('/clients/personal-details');
       } else if (this.f.type.value === 'cor') {
-        this.router.navigateByUrl('/company-details');
+        this.router.navigateByUrl('/clients/company-details');
       }
     }
 

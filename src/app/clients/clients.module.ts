@@ -22,8 +22,32 @@ const routes: Routes = [
     {
         path: 'clients-list',
         component: ClientsListComponent
+    },
+    {
+        path: 'personal-details',
+        component: PersonalDetailsComponent
+    },
+    {
+        path: 'employement-information',
+        component: EmployementInformationComponent
+    },
+    {
+        path: 'bank-details',
+        component: BankDetailsComponent
+    },
+    {
+        path: 'company-details',
+        component: CompanyDetailsComponent
+    },
+    {
+        path: 'contact-person',
+        component: ContactPersonComponent
+    },
+    {
+        path: 'company-bank-details',
+        component: CompanyBankDetailsComponent
     }
-]
+];
 
 
 @NgModule({

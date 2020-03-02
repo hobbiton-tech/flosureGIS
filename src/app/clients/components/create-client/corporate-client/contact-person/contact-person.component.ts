@@ -31,7 +31,7 @@ export class ContactPersonComponent implements OnInit {
 
     onSubmit() {
         this.stepperService.changeIndex(3);
-        this.router.navigateByUrl('/company-bank-details');
+        this.router.navigateByUrl('/clients/company-bank-details');
     }
 
     ngOnInit(): void {

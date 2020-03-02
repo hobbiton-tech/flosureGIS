@@ -7,7 +7,7 @@ import { QuotationDetailsComponent } from './components/create-quote/stepper/quo
 import { QuotationProductDetailsComponent } from './components/create-quote/stepper/quotation-product-details/quotation-product-details.component';
 import { RiskDetailsComponent } from './components/create-quote/stepper/risk-details/risk-details.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { StepperService } from 'src/app/quotes/services/stepper.service'
+import { StepperService } from 'src/app/quotes/services/stepper.service';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
@@ -19,10 +19,16 @@ const routes: Routes = [
         path: 'quotes-list',
         component: QuotesComponent
     }
-]
+];
 
 @NgModule({
-    declarations: [QuotesComponent, CreateQuoteComponent, QuotationDetailsComponent, QuotationProductDetailsComponent, RiskDetailsComponent],
+  declarations: [
+    QuotesComponent,
+    CreateQuoteComponent,
+    QuotationDetailsComponent,
+    QuotationProductDetailsComponent,
+    RiskDetailsComponent
+  ],
     imports: [CommonModule, NgZorroAntdModule, FormsModule, ReactiveFormsModule, RouterModule.forChild(routes)],
     exports: [QuotesComponent, CreateQuoteComponent],
     providers: [StepperService]

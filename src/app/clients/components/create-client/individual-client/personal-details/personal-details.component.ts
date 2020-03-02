@@ -42,7 +42,7 @@ export class PersonalDetailsComponent implements OnInit {
 
     onSubmit() {
         this.stepperService.changeIndex(2);
-        this.router.navigateByUrl('/employement-information');
+        this.router.navigateByUrl('/clients/employement-information');
     }
 
     ngOnInit(): void {
