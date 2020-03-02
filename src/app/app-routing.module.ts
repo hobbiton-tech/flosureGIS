@@ -5,7 +5,6 @@ import { QuotesComponent } from './quotes/quotes.component';
 import { SettingsComponent } from './settings/settings.component';
 import { OrganizationalSetupsComponent } from './settings/components/organizational-setups/organizational-setups.component';
 
-
 const routes: Routes = [
     {
         path: '',
