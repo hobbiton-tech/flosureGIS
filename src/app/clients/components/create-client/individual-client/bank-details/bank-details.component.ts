@@ -32,7 +32,7 @@ export class BankDetailsComponent implements OnInit {
 
     onSubmit() {
         this.stepperService.changeIndex(0);
-        this.router.navigateByUrl('/create-client');
+        this.router.navigateByUrl('/clients/create-client');
     }
 
     ngOnInit(): void {

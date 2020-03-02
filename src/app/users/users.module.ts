@@ -4,20 +4,23 @@ import { UsersComponent } from './users.component';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
-import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { UsersRolesComponent } from './components/users-roles/users-roles.component';
 import { UsersPermissionsComponent } from './components/users-permissions/users-permissions.component';
 
 const routes: Routes = [
-  {
-      path: 'users-roles',
-      component: UsersRolesComponent,
-  },
-  {
-      path: 'roles-permissions',
-      component: UsersPermissionsComponent,
-  }
-]
+    {
+        path: 'users-roles',
+        component: UsersRolesComponent
+    },
+    {
+        path: 'roles-permissions',
+        component: UsersPermissionsComponent
+    },
+    {
+        path: 'users',
+        component: UsersComponent
+    }
+];
 
 
 
@@ -27,7 +30,7 @@ const routes: Routes = [
     CommonModule,
     NgZorroAntdModule,
     RouterModule.forChild(routes),
-    FormsModule, 
+    FormsModule,
     ReactiveFormsModule
   ]
 })

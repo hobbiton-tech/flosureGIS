@@ -7,7 +7,7 @@
           <nz-page-header-subtitle>List of all clients</nz-page-header-subtitle>
           <nz-page-header-extra>
             <button nz-button>View Summary</button>
-            <button nz-button nzType="primary">Add New Client</button>
+            <button nz-button routerLink="/clients/create-client" nzType="primary">Add New Client</button>
           </nz-page-header-extra>
           <nz-page-header-content>
             <nz-descriptions [nzColumn]="3">
@@ -22,7 +22,7 @@
         </nz-page-header>
       </div>
     </div>
-  
+
     <nz-card>
       <div style="margin-bottom: 20px;">
         <div style="margin-bottom: 20px; width: 50%">
@@ -33,7 +33,7 @@
             <i nz-icon nzType="search"></i>
           </ng-template>
         </div>
-  
+
         <div style="margin: 20px;">
           <nz-radio-group>
             <label nz-radio nzValue="all">View All</label>
@@ -41,9 +41,9 @@
             <label nz-radio nzValue="individual">Individual Clients</label>
           </nz-radio-group>
         </div>
-  
-  
-  
+
+
+
         <nz-table #clientsTable [nzData]="clientList" [nzSize]="'small'" [nzBordered]="true"
           style="background-color: white;">
           <thead>
@@ -69,7 +69,7 @@
                 </nz-badge>
               </td>
               <td>{{ client.createdBy }}</td>
-  
+
             </tr>
           </tbody>
         </nz-table>
