@@ -11,7 +11,7 @@ export interface IClaim {
     bookedBy: string;
 }
 
-export type ClaimStatus = '' | '' | '';
+export type ClaimStatus = 'Pending' | 'Resolved' | 'Cancelled';
 
 const createClaim = () => {
     const claim: IClaim = {
@@ -20,7 +20,7 @@ const createClaim = () => {
         policyNumber: faker.internet.ipv6(),
         clientName: `${faker.name.firstName()} ${faker.name.lastName()}`,
         lossDate: faker.date.past(),
-        status: faker.random.arrayElement(['', '', '']),
+        status: faker.random.arrayElement(['Pending', 'Resolved', 'Cancelled']),
         notificationDate: faker.date.past(),
         bookedBy: `${faker.name.firstName()} ${faker.name.lastName()}`
     };

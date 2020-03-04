@@ -8,6 +8,8 @@ export class Policy {
     insuranceCompany: string;
     currency: Currency;
     preparedBy: string;
+    status: PolicyStatus;
 }
 
 export type Currency = 'ZMW' | 'Dollar';
+export type PolicyStatus = 'Lapsed' | 'Active' | 'Cancelled' | 'Expired';

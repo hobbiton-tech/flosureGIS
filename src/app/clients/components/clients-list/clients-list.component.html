@@ -1,29 +1,36 @@
-<div style="margin: 20px;">
-  <nz-card>
+<div style="margin: 15px;">
+  <nz-breadcrumb>
+    <nz-breadcrumb-item>
+      Clients
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      Clients List
+    </nz-breadcrumb-item>
+  </nz-breadcrumb>
     <div >
-      <div style="margin-bottom: 20px; background: #f4f4f4;">
+      <div style="margin-bottom: 20px; margin-top: 20px; background: #fff;">
         <nz-page-header>
-          <nz-page-header-title>Clients</nz-page-header-title>
-          <nz-page-header-subtitle>List of all clients</nz-page-header-subtitle>
+          <nz-page-header-title>Registered Clients</nz-page-header-title>
           <nz-page-header-extra>
-            <button nz-button>View Summary</button>
             <button nz-button routerLink="/clients/create-client" nzType="primary">Add New Client</button>
           </nz-page-header-extra>
           <nz-page-header-content>
-            <nz-descriptions [nzColumn]="3">
-              <nz-descriptions-item nzTitle="All Clients" [nzSpan]="1">350</nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Individual Clients" [nzSpan]="1">120</nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Last Update" [nzSpan]="1">2017-01-10</nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Corporate Clients" [nzSpan]="1">50</nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Active Clients" [nzSpan]="1">79</nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Inactive Clients" [nzSpan]="1">101</nz-descriptions-item>
-            </nz-descriptions>
+            <nz-row [nzGutter]="1">
+              <nz-col [nzSpan]="6">
+                <nz-statistic [nzValue]="1941 | number" [nzTitle]="'Total Clients'"></nz-statistic>
+              </nz-col>
+              <nz-col [nzSpan]="6">
+                <nz-statistic [nzValue]="2019 | number " [nzTitle]="'Individual Clients'"></nz-statistic>
+              </nz-col>
+              <nz-col [nzSpan]="6">
+                <nz-statistic [nzValue]="941 | number" [nzTitle]="'Corporate Clients'"></nz-statistic>
+              </nz-col>
+            </nz-row>
           </nz-page-header-content>
         </nz-page-header>
       </div>
     </div>
-
-    <nz-card>
+  <nz-card>
       <div style="margin-bottom: 20px;">
         <div style="margin-bottom: 20px; width: 50%">
           <nz-input-group [nzSuffix]="suffixIconSearch">
@@ -33,7 +40,6 @@
             <i nz-icon nzType="search"></i>
           </ng-template>
         </div>
-
         <div style="margin: 20px;">
           <nz-radio-group>
             <label nz-radio nzValue="all">View All</label>
@@ -41,9 +47,6 @@
             <label nz-radio nzValue="individual">Individual Clients</label>
           </nz-radio-group>
         </div>
-
-
-
         <nz-table #clientsTable [nzData]="clientList" [nzSize]="'small'" [nzBordered]="true"
           style="background-color: white;">
           <thead>
@@ -54,11 +57,10 @@
               <th>Phone</th>
               <th>Client Type</th>
               <th>Client Status</th>
-              <th>Created By</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let client of clientsTable.data">
+            <tr *ngFor="let client of clientsTable.data" (click)="viewDetails(client)">
               <td>{{ client.clientID }}</td>
               <td>{{ client.firstName + ' ' + client.lastName }}</td>
               <td>{{ client.email }}</td>
@@ -68,12 +70,9 @@
                 <nz-badge [nzStatus]="client.status === 'Inactive' ? 'error' : 'success'" [nzText]="client.status">
                 </nz-badge>
               </td>
-              <td>{{ client.createdBy }}</td>
-
             </tr>
           </tbody>
         </nz-table>
       </div>
     </nz-card>
-  </nz-card>
 </div>

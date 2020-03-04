@@ -5,6 +5,7 @@ import { PoliciesComponent } from './components/policies/policies.component';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { Routes, RouterModule } from '@angular/router';
 import { EndorsementsComponent } from './components/endorsements/endorsements.component';
+import { PolicyDetailsComponent } from './components/policy-details/policy-details.component';
 
 
 const routes: Routes = [
@@ -22,7 +23,8 @@ const routes: Routes = [
     declarations: [
         UnderwritingComponent,
         EndorsementsComponent,
-        PoliciesComponent
+        PoliciesComponent,
+        PolicyDetailsComponent
     ],
     imports: [CommonModule, NgZorroAntdModule, RouterModule.forChild(routes)]
 })
