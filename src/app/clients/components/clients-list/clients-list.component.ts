@@ -16,7 +16,8 @@ export class ClientsListComponent implements OnInit {
   }
 
   viewDetails(client: Client): void {
-    this.router.navigate(['/clients/client-details', client]);
+    this.router.navigateByUrl('/clients/client-details');
   }
+
 
 }

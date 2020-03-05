@@ -11,21 +11,22 @@
     </nz-breadcrumb-item>
   </nz-breadcrumb>
     <div class="client-personal-details" style="margin-top: 20px">
+      <div *ngIf="client.type == 'Individual'">
         <nz-card>
           <nz-divider nzText="Personal Details" nzOrientation="left"></nz-divider>
         <form nz-form>
         <div nz-row nzGutter="0">
             <div nz-col nzSpan="12">
             <nz-form-item>
-              <nz-form-label nzSpan="6" nzRequired>First Name</nz-form-label>
-              <nz-form-control nzSpan="18">
+              <nz-form-label nzSpan="7" nzRequired>First Name</nz-form-label>
+              <nz-form-control nzSpan="17">
                 <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
                 <input nz-input [(placeholder)]="client.firstName" [disabled]="!isEditmode"/>
               </nz-form-control>
             </nz-form-item>
             <nz-form-item>
-              <nz-form-label nzSpan="6" nzRequired>Last Name</nz-form-label>
-              <nz-form-control nzSpan="18">
+              <nz-form-label nzSpan="7" nzRequired>Last Name</nz-form-label>
+              <nz-form-control nzSpan="17">
                 <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
                 <input nz-input [(placeholder)]="client.lastName" [disabled]="!isEditmode"/>
               </nz-form-control>
@@ -96,6 +97,7 @@
         </div>
         </form>
         </nz-card>
+      
 
         <nz-card>
           <nz-divider nzText="Occupation Details" nzOrientation="left"></nz-divider>
@@ -121,6 +123,104 @@
         </div>
         </form>
         </nz-card>
+        </div>
+
+        <div *ngIf="client.type == 'Corporate'">
+        <nz-card>
+          <nz-divider nzText="Company Details" nzOrientation="left"></nz-divider>
+        <form nz-form>
+        <div nz-row nzGutter="0">
+            <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzSpan="7" nzRequired>Company Name</nz-form-label>
+              <nz-form-control nzSpan="17">
+                <input nz-input [(placeholder)]="client.firstName" [disabled]="!isEditmode"/>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label nzSpan="7" nzRequired>Registration Number</nz-form-label>
+              <nz-form-control nzSpan="17">
+                <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
+                <input nz-input [(placeholder)]="client.lastName" [disabled]="!isEditmode"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzSpan="7" nzRequired>Sector</nz-form-label>
+              <nz-form-control nzSpan="17">
+                <nz-select nzPlaceHolder="{{client.idType}}" readonly></nz-select>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label nzSpan="7" nzRequired>Tpin Number</nz-form-label>
+              <nz-form-control nzSpan="17">
+                <input nz-input [(placeholder)]="client.email" [disabled]="!isEditmode"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzSpan="7" nzRequired>Phone</nz-form-label>
+              <nz-form-control nzSpan="17">
+                <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
+                <input nz-input [(placeholder)]="client.phone" [disabled]="!isEditmode"/>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label nzSpan="7" nzRequired>Address</nz-form-label>
+              <nz-form-control nzSpan="17">
+                <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
+                <input nz-input [(placeholder)]="client.address" [disabled]="!isEditmode"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzSpan="7" nzRequired>Email</nz-form-label>
+              <nz-form-control nzSpan="17">
+                <input nz-input [(placeholder)]="client.email" [disabled]="!isEditmode"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+        </form>
+        </nz-card>
+      
+
+        <nz-card>
+          <nz-divider nzText="Contact Person Details" nzOrientation="left"></nz-divider>
+        <form nz-form>
+        <div nz-row nzGutter="0">
+            <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzSpan="7" nzRequired>First Name</nz-form-label>
+              <nz-form-control nzSpan="17">
+                <input nz-input [(placeholder)]="client.firstName" [disabled]="!isEditmode"/>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label nzSpan="7" nzRequired>Email</nz-form-label>
+              <nz-form-control nzSpan="17">
+                <input nz-input [(placeholder)]="client.email" [disabled]="!isEditmode"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzSpan="7" nzRequired>Last Name</nz-form-label>
+              <nz-form-control nzSpan="17">
+                <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
+                <nz-select nzPlaceHolder="{{client.lastName}}" readonly></nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+        </form>
+        </nz-card>
+        </div>
+
+
 
         <nz-card>
           <nz-divider nzText="Bank Details" nzOrientation="left"></nz-divider>
@@ -134,23 +234,23 @@
               </nz-form-control>
             </nz-form-item>
             <nz-form-item>
-              <nz-form-label nzSpan="6" nzRequired>Client Type</nz-form-label>
+              <nz-form-label nzSpan="6" nzRequired>Account Number</nz-form-label>
               <nz-form-control nzSpan="18">
-                <nz-select nzPlaceHolder="Select client type"></nz-select>
+                <input nz-input [(placeholder)]="client.occupation" [disabled]="!isEditmode"/>
               </nz-form-control>
             </nz-form-item>
           </div>
           <div nz-col nzSpan="12">
             <nz-form-item>
-              <nz-form-label nzSpan="7" nzRequired>Payment Mode</nz-form-label>
+              <nz-form-label nzSpan="7" nzRequired>Bank</nz-form-label>
               <nz-form-control nzSpan="16">
-                <nz-select nzPlaceHolder="Select payment mode"></nz-select>
+                <nz-select nzPlaceHolder="Select Bank"></nz-select>
               </nz-form-control>
             </nz-form-item>
             <nz-form-item>
-              <nz-form-label nzSpan="7" nzRequired>Currency</nz-form-label>
+              <nz-form-label nzSpan="7" nzRequired>Branch</nz-form-label>
               <nz-form-control nzSpan="16">
-                <nz-select nzPlaceHolder="Select currency"></nz-select>
+                <nz-select nzPlaceHolder="Select Branch"></nz-select>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -183,7 +283,7 @@
                 <td>{{data.endDate | date }}</td>
                 <td>{{data.insuranceCompany}}</td>
                 <td>{{data.status}}</td>
-                <td><button nz-button nzSize="small">Details</button></td>
+                <td><button nz-button nzSize="small" (click)="viewPolicyDetails()">Details</button></td>
               </tr>
             </tbody>
           </nz-table>

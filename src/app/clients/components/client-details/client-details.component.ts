@@ -4,6 +4,7 @@ import { generateClients } from '../../data/client.data';
 import { Router } from '@angular/router';
 import {generatePolicies} from 'src/app/underwriting/data/policy.data';
 import { generateClaimsList } from 'src/app/claims/models/claim.model';
+import { AccountDetails } from '../../models/account-details.model';
 
 @Component({
   selector: 'app-client-details',
@@ -14,6 +15,9 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
 
   isEditmode = false;
   client: Client;
+  account: AccountDetails;
+
+
 
   clientPolicies = generatePolicies();
   clientsClaims = generateClaimsList();
@@ -43,6 +47,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.client = generateClients()[9];
+    console.log(this.client.type)
   }
 
   ngAfterViewInit(): void {
@@ -53,4 +58,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
     this.route.navigateByUrl('/clients/clients-list');
   }
 
+  viewPolicyDetails(): void {
+    this.route.navigateByUrl('/underwriting/policy-details');
+  }
 }

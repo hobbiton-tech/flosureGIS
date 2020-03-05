@@ -16,6 +16,10 @@ const routes: Routes = [
     {
         path: 'policies',
         component: PoliciesComponent
+    },
+    {
+        path: 'policy-details',
+        component: PolicyDetailsComponent
     }
 ];
 

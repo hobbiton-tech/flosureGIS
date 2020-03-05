@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { generatePolicies } from '../../data/policy.data';
 
 @Component({
   selector: 'app-policy-details',
@@ -7,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PolicyDetailsComponent implements OnInit {
 
-  constructor() { }
+  selectedPolicy = generatePolicies()[8];
+  isEditmode = false;
+   
+  constructor(private readonly router: Router) { }
 
   ngOnInit(): void {
+  }
+
+  goToPoliciesList(): void {
+    this.router.navigateByUrl('/underwriting/policies');
   }
 
 }

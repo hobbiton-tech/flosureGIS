@@ -1,1 +1,104 @@
-<p>policy-details works!</p>
+<div style="margin: 15px;">
+  <nz-breadcrumb>
+    <nz-breadcrumb-item (click)="goToPoliciesList()" style="cursor: pointer">
+      Policies
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item (click)="goToPoliciesList()" style="cursor: pointer">
+      Policies List
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      Policy Details
+    </nz-breadcrumb-item>
+  </nz-breadcrumb>
+  <nz-card style="margin-top: 20px;">
+    <nz-divider nzText="Policy Details" nzOrientation="left"></nz-divider>
+  </nz-card>
+  <nz-card style="margin-top: 20px;">
+    <nz-divider nzText="Coverage Details" nzOrientation="left"></nz-divider>
+  </nz-card>
+  <nz-card style="margin-top: 20px;">
+    <nz-divider nzText="Policy Schedule" nzOrientation="left"></nz-divider>
+        <form nz-form>
+        <div nz-row nzGutter="0">
+            <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzSpan="7" nzRequired>First Name</nz-form-label>
+              <nz-form-control nzSpan="17">
+                <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
+                <input nz-input [(placeholder)]="" [disabled]="!isEditmode"/>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label nzSpan="7" nzRequired>Last Name</nz-form-label>
+              <nz-form-control nzSpan="17">
+                <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
+                <input nz-input [(placeholder)]="" [disabled]="!isEditmode"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzSpan="7" nzRequired>Title</nz-form-label>
+              <nz-form-control nzSpan="17">
+                <nz-select nzPlaceHolder="" readonly></nz-select>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label nzSpan="7" nzRequired>Email</nz-form-label>
+              <nz-form-control nzSpan="17">
+                <input nz-input [(placeholder)]="'Some'" [disabled]="!isEditmode"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzSpan="7" nzRequired>Date of Birth</nz-form-label>
+              <nz-form-control nzSpan="17">
+                <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
+                <input nz-input [(placeholder)]=""  nzFormat="dd.MM.yyyy" [disabled]="!isEditmode"/>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label nzSpan="7" nzRequired>Address</nz-form-label>
+              <nz-form-control nzSpan="17">
+                <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
+                <input nz-input [(placeholder)]="" [disabled]="!isEditmode"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzSpan="7" nzRequired>Phone</nz-form-label>
+              <nz-form-control nzSpan="17">
+                <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
+                <input nz-input [(placeholder)]="" [disabled]="!isEditmode"/>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label nzSpan="7" nzRequired>Gender</nz-form-label>
+              <nz-form-control nzSpan="17">
+                <nz-select nzPlaceHolder="" readonly></nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzSpan="7" nzRequired>Identfication Type</nz-form-label>
+              <nz-form-control nzSpan="17">
+                <nz-select nzPlaceHolder="" readonly></nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzSpan="7" nzRequired>Identfication No.</nz-form-label>
+              <nz-form-control nzSpan="17">
+                <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
+                <input nz-input [(placeholder)]="" [disabled]="!isEditmode"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+        </form>
+  </nz-card>
+</div>
