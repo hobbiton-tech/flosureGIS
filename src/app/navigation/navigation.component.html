@@ -1,6 +1,29 @@
 <nz-layout style="height: 100%;">
+  <nz-header style="display: flex; justify-content: space-between;">
+    <div class="logo" style="font-size: 18px;">
+      Flosure Insurance Brokerage
+    </div>
+    <div style="display: flex">
+      <div>
+        charlesmalama86@gmail.com
+      </div>
+      <div style="margin-left: 20px; font-size: 18px;">
+        <i nz-icon nzType="bell"></i>
+      </div>
+      <div style="margin-left: 20px; font-size: 18px;">
+        <i nz-icon nzType="setting"></i>
+      </div>
+    </div>
+    <!-- <ul nz-menu nzTheme="dark" nzMode="horizontal" class="header-menu">
+      <li nz-menu-item nzSelected>nav 1</li>
+      <li nz-menu-item>nav 2</li>
+      <li nz-menu-item>nav 3</li>
+    </ul> -->
+  </nz-header>
+<nz-layout>
+
   <nz-sider [nzTheme]="'light'" [nzWidth]="250">
-    <div class="flosure-header">
+    <!-- <div class="flosure-header">
       <div>
         <nz-avatar [nzSize]="64" [nzIcon]="'user'"></nz-avatar>
       </div>
@@ -13,19 +36,26 @@
       <div style="margin-top: 15px;">
         <button nz-button nzType="default" nzSize="small">Logout</button>
       </div>
-    </div>
-    <ul nz-menu nzMode="inline">
+    </div> -->
+    <ul nz-menu nzMode="inline" style="padding-top: 30px">
       <li nz-menu-item nz-tooltip nzPlacement="right" [nzTitle]="isCollapsed ? 'Dashboard' : ''" nzSelected>
         <i nz-icon nzType="dashboard"></i>
         <span>Dashboard</span>
       </li>
 
-      <li nz-submenu nzTitle="Clients" nzIcon="usergroup-add" nzOpen>
+      <li nz-menu-item nzPlacement="right">
+        <a routerLink="/clients/clients-list">
+          <i nz-icon nzType="usergroup-add"></i>
+        <span>Clients</span>
+        </a>
+      </li>
+
+      <!-- <li nz-submenu nzTitle="Clients" nzIcon="usergroup-add" nzOpen>
         <ul>
           <li nz-menu-item><a routerLink="/clients/create-client">Create Clients</a></li>
           <li nz-menu-item><a routerLink="/clients/clients-list">View Clients</a></li>
         </ul>
-      </li>
+      </li> -->
       <li nz-submenu nzTitle="Quotes" nzIcon="mail">
         <ul>
           <li nz-menu-item><a routerLink="/quotes/create-quote">Create Quotes</a></li>
@@ -85,4 +115,5 @@
     <router-outlet></router-outlet>
   </nz-content>
   </nz-layout>
+</nz-layout>
 </nz-layout>

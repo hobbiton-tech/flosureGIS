@@ -11,6 +11,7 @@ const createQuote = () => {
         client: `${faker.name.firstName()} ${faker.name.lastName()}`,
         insuranceCompany: faker.company.companyName(),
         currency: faker.random.arrayElement(['ZMW', 'Dollar']),
+        status: faker.random.arrayElement(['Lapsed', 'Active', 'Cancelled', 'Expired']),
         preparedBy: `${faker.name.firstName()} ${faker.name.lastName()}`
     };
 

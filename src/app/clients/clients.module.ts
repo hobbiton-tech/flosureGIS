@@ -12,12 +12,17 @@ import { BankDetailsComponent } from './components/create-client/individual-clie
 import { CompanyDetailsComponent } from './components/create-client/corporate-client/company-details/company-details.component';
 import { ContactPersonComponent } from './components/create-client/corporate-client/contact-person/contact-person.component';
 import { CompanyBankDetailsComponent } from './components/create-client/corporate-client/company-bank-details/company-bank-details.component';
+import { ClientDetailsComponent } from './components/client-details/client-details.component';
 
 
 const routes: Routes = [
     {
         path: 'create-client',
         component: CreateClientComponent
+    },
+    {
+        path: 'client-details',
+        component: ClientDetailsComponent
     },
     {
         path: 'clients-list',
@@ -60,7 +65,8 @@ const routes: Routes = [
         CompanyDetailsComponent,
         ContactPersonComponent,
         CompanyBankDetailsComponent,
-        ClientsListComponent
+        ClientsListComponent,
+        ClientDetailsComponent
     ],
     imports: [
         CommonModule,
