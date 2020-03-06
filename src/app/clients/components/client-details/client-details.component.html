@@ -13,7 +13,7 @@
             [nzSubtitle]="client.firstName + ' ' + client.lastName">
             <nz-page-header-extra>
                 <button *ngIf="isEditmode" nz-button nzType="primary" (click)="isEditmode = false">Save Changes</button>
-                <button nz-button nzType="primary" (click)="isEditmode = true">Edit Client</button>
+                <button *ngIf="!isEditmode" nz-button nzType="primary" (click)="isEditmode = true">Edit Client</button>
                 <button nz-button nzType="danger">Delete Client</button>
             </nz-page-header-extra>
         </nz-page-header>
