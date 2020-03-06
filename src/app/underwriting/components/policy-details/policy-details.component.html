@@ -14,7 +14,7 @@
         [nzSubtitle]="selectedPolicy.client">
         <nz-page-header-extra>
             <button *ngIf="isEditmode" nz-button nzType="primary" (click)="isEditmode = false">Save Changes</button>
-            <button nz-button nzType="primary" (click)="isEditmode = true">Edit Policy</button>
+            <button *ngIf="!isEditmode"nz-button nzType="primary" (click)="isEditmode = true">Edit Policy</button>
             <button nz-button nzType="danger">Delete Policy</button>
         </nz-page-header-extra>
     </nz-page-header>
