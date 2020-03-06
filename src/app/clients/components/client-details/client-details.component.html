@@ -285,7 +285,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let data of policiesTable.data">
+                    <tr *ngFor="let data of policiesTable.data" (click)="viewPolicyDetails()" style="cursor: pointer;">
                         <td>{{data.policyNumber}}</td>
                         <!-- <td>{{data.endorsementNumber}}</td> -->
                         <td>{{data.product}}</td>
@@ -315,7 +315,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let data of claimsData.data">
+                    <tr *ngFor="let data of claimsData.data" (click)="viewPolicyDetails()" style="cursor: pointer;">
                         <td>{{data.claimId}}</td>
                         <td>{{data.riskId}}</td>
                         <td>{{data.policyNumber}}</td>

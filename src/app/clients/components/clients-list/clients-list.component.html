@@ -60,7 +60,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let client of clientsTable.data" (click)="viewDetails(client)">
+            <tr *ngFor="let client of clientsTable.data" (click)="viewDetails(client)" style="cursor: pointer;">
               <td>{{ client.clientID }}</td>
               <td>{{ client.firstName + ' ' + client.lastName }}</td>
               <td>{{ client.email }}</td>
