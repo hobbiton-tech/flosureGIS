@@ -14,58 +14,32 @@
         <i nz-icon nzType="setting"></i>
       </div>
     </div>
-    <!-- <ul nz-menu nzTheme="dark" nzMode="horizontal" class="header-menu">
-      <li nz-menu-item nzSelected>nav 1</li>
-      <li nz-menu-item>nav 2</li>
-      <li nz-menu-item>nav 3</li>
-    </ul> -->
   </nz-header>
 <nz-layout>
 
   <nz-sider [nzTheme]="'light'" [nzWidth]="250">
-    <!-- <div class="flosure-header">
-      <div>
-        <nz-avatar [nzSize]="64" [nzIcon]="'user'"></nz-avatar>
-      </div>
-      <div style="margin-top: 5px;">
-        Charles Malama
-      </div>
-      <div>
-        charlesmalam@gamil.com
-      </div>
-      <div style="margin-top: 15px;">
-        <button nz-button nzType="default" nzSize="small">Logout</button>
-      </div>
-    </div> -->
-    <ul nz-menu nzMode="inline" style="padding-top: 30px">
-      <li nz-menu-item nz-tooltip nzPlacement="right" [nzTitle]="isCollapsed ? 'Dashboard' : ''" nzSelected>
+    <ul nz-menu nzMode="inline" style="padding-top: 30px" nzMatchRouter>
+      <li nz-menu-item nz-tooltip nzPlacement="right" [nzTitle]="isCollapsed ? 'Dashboard' : ''">
         <i nz-icon nzType="dashboard"></i>
         <span>Dashboard</span>
       </li>
 
-      <li nz-menu-item nzPlacement="right">
+      <li nz-menu-item nzPlacement="right" nzMatchRouter>
         <a routerLink="/clients/clients-list">
           <i nz-icon nzType="usergroup-add"></i>
         <span>Clients</span>
         </a>
       </li>
-
-      <!-- <li nz-submenu nzTitle="Clients" nzIcon="usergroup-add" nzOpen>
-        <ul>
-          <li nz-menu-item><a routerLink="/clients/create-client">Create Clients</a></li>
-          <li nz-menu-item><a routerLink="/clients/clients-list">View Clients</a></li>
-        </ul>
-      </li> -->
       <li nz-submenu nzTitle="Quotes" nzIcon="mail">
         <ul>
-          <li nz-menu-item><a routerLink="/quotes/create-quote">Create Quotes</a></li>
-          <li nz-menu-item><a routerLink="/quotes/quotes-list">View Quotes</a></li>
+          <li nz-menu-item nzMatchRouter><a routerLink="/quotes/create-quote">Create Quotes</a></li>
+          <li nz-menu-item nzMatchRouter><a routerLink="/quotes/quotes-list">View Quotes</a></li>
         </ul>
       </li>
       <li nz-submenu nzTitle="Underwriting" nzIcon="edit">
         <ul>
-          <li nz-menu-item><a routerLink="/underwriting/endorsements">Endorsements</a></li>
-          <li nz-menu-item><a routerLink="/underwriting/policies">Policies</a></li>
+          <li nz-menu-item nzMatchRouter><a routerLink="/underwriting/endorsements">Endorsements</a></li>
+          <li nz-menu-item nzMatchRouter><a routerLink="/underwriting/policies">Policies</a></li>
         </ul>
       </li>
       <!-- <li nz-submenu nzTitle="Certificates" nzIcon="bars">
@@ -76,35 +50,35 @@
 
       <li nz-submenu nzTitle="Claims" nzIcon="question-circle">
         <ul>
-          <li nz-menu-item><a routerLink="/claims/intimate-claims">Intimate Claims</a></li>
-          <li nz-menu-item><a routerLink="/claims/claim-transactions">Claim Transactions</a></li>
-          <li nz-menu-item><a routerLink="/claims/claimants">Claimants</a></li>
+          <li nz-menu-item nzMatchRouter><a routerLink="/claims/intimate-claims">Intimate Claims</a></li>
+          <li nz-menu-item nzMatchRouter><a routerLink="/claims/claim-transactions">Claim Transactions</a></li>
+          <li nz-menu-item nzMatchRouter><a routerLink="/claims/claimants">Claimants</a></li>
         </ul>
       </li>
       <li nz-submenu nzTitle="Accounts" nzIcon="dollar">
         <ul>
-          <li nz-menu-item><a routerLink="/accounts/generate-receipts">Generate Reciepts</a></li>
-          <li nz-menu-item><a routerLink="/accounts/view-receipts">View Reciepts</a></li>
-          <li nz-menu-item><a routerLink="/accounts/payments">Payments</a></li>
+          <li nz-menu-item nzMatchRouter><a routerLink="/accounts/generate-receipts">Generate Reciepts</a></li>
+          <li nz-menu-item nzMatchRouter><a routerLink="/accounts/view-receipts">View Reciepts</a></li>
+          <li nz-menu-item nzMatchRouter><a routerLink="/accounts/payments">Payments</a></li>
         </ul>
       </li>
       <li nz-submenu nzTitle="Reports" nzIcon="reconciliation">
         <ul>
-          <li nz-menu-item><a routerLink="/reports/claims">Claims</a></li>
-          <li nz-menu-item><a routerLink="/reports/policies">Policies</a></li>
+          <li nz-menu-item nzMatchRouter><a routerLink="/reports/claims">Claims</a></li>
+          <li nz-menu-item nzMatchRouter><a routerLink="/reports/policies">Policies</a></li>
         </ul>
       </li>
       <li nz-submenu nzTitle="User Managenent" nzIcon="user">
         <ul>
-          <li nz-menu-item><a routerLink="/user-management/users">Users and Roles</a></li>
-          <li nz-menu-item><a routerLink="/user-management/roles-permissions">Roles and Permisions</a></li>
+          <li nz-menu-item nzMatchRouter><a routerLink="/user-management/users">Users and Roles</a></li>
+          <li nz-menu-item nzMatchRouter><a routerLink="/user-management/roles-permissions">Roles and Permisions</a></li>
         </ul>
       </li>
       <li nz-submenu nzTitle="Settings" nzIcon="setting" style="padding-bottom: 50px">
         <ul>
-          <li nz-menu-item><a routerLink="/settings/organization-setups">Organization Setups</a></li>
-          <li nz-menu-item><a routerLink="/settings/underwriting">Underwriting Setups</a></li>
-          <li nz-menu-item><a routerLink="/settings/accounts">Accounts Setups</a></li>
+          <li nz-menu-item nzMatchRouter><a routerLink="/settings/organization-setups">Organization Setups</a></li>
+          <li nz-menu-item nzMatchRouter><a routerLink="/settings/underwriting">Underwriting Setups</a></li>
+          <li nz-menu-item nzMatchRouter><a routerLink="/settings/accounts">Accounts Setups</a></li>
         </ul>
       </li>
     </ul>
