@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { generateClaimsList } from '../../models/claim.model';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-claim-transactions',
@@ -8,7 +9,15 @@ import { generateClaimsList } from '../../models/claim.model';
 })
 export class ClaimTransactionsComponent implements OnInit {
     claimsList = generateClaimsList();
-    constructor() {}
+
+    constructor(
+        private readonly route: Router,
+        private cdr: ChangeDetectorRef
+    ) {}
+
+    viewClaimDetails(): void {
+        this.route.navigateByUrl('/claims/claim-details');
+    }
 
     ngOnInit(): void {}
 }
