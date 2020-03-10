@@ -4,9 +4,14 @@
         Claims
     </nz-breadcrumb-item>
     <nz-breadcrumb-item>
-      Intimate Claim
+      Claim Details
     </nz-breadcrumb-item>
   </nz-breadcrumb>
+   <nz-page-header (nzBack)="intimateClaim()" nzBackIcon nzTitle="Claim Number: HFB-489384">
+        <nz-page-header-extra>
+            <button *ngIf="isEditmode" nz-button nzType="primary" (click)="isEditmode = false">Save Changes</button>
+        </nz-page-header-extra>
+    </nz-page-header>
     <!-- <nz-card style="padding: 20px"> -->
         <form nz-form style="margin-top: 20px;">
             <nz-card style="margin-bottom: 5px;">
@@ -75,10 +80,65 @@
                     </div>
                 </div>
             </nz-card>
+            <nz-card style="margin-bottom: 5px;">
+          <nz-divider nzText="Perils" nzOrientation="left"></nz-divider>
+                    <div style="margin-bottom: 10px;">
+                        <div nz-row [nzGutter]="24">
+                            <div nz-col nzSpan="12">
+                                <div style="width: 75%">
+                                    <!-- <nz-input-group [nzSuffix]="suffixIconSearch"> -->
+                                    <!--     <input type="text" nz-input placeholder="Search by type, account type" /> -->
+                                    <!-- </nz-input-group> -->
+                                    <ng-template #suffixIconSearch>
+                                        <i nz-icon nzType="search"></i>
+                                    </ng-template>
+                                </div>
+                            </div>
+                            <div nz-col nzSpan=12>
+                                <button nz-button nzType="primary" style="float: right">Add Peril</button>
+                            </div>
+
+                        </div>
+                    </div>
+                <nz-table #basicTable [nzData]="perilsList" nzSize="small">
+                    <thead>
+                        <tr>
+                            <th>Claimant</th>
+                            <th>Peril</th>
+                            <th>Estimate Amount</th>
+                            <th>Expired Section</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of basicTable.data">
+                            <td>{{data.name}}</td>
+                            <td>{{data.age}}</td>
+                            <td>{{data.address}}</td>
+                            <td>
+                                <a>Action 一 {{data.name}}</a>
+                                <nz-divider nzType="vertical"></nz-divider>
+                                <a>Delete</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </nz-card>
+            <nz-card style="margin-bottom: 5px;">
+          <nz-divider nzText="Document Uploads" nzOrientation="left"></nz-divider>
+                <nz-upload nzType="drag" [nzMultiple]="true" [nzLimit]="2" nzAction="https://jsonplaceholder.typicode.com/posts/">
+                    <p class="ant-upload-drag-icon">
+                        <i nz-icon nzType="inbox"></i>
+                    </p>
+                    <p class="ant-upload-text">Upload claim files</p>
+                    <p class="ant-upload-hint">
+                        Drag or click this area to upload claim pictures.
+                    </p>
+                </nz-upload>
+            </nz-card>
         </form>
         <div style="text-align: center; margin-top: 10px">
 
-            <button nz-button nzType="primary" style="margin-right: 8px">Intimate Claim</button>
+            <button nz-button nzType="primary" style="margin-right: 8px">Update Claim</button>
             <button nz-button nzType="default">Reset Form</button>
         </div>
     <!-- </nz-card> -->
