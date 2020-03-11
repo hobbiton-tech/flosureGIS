@@ -1,4 +1,35 @@
 <div style="margin: 20px;">
+   <nz-breadcrumb>
+    <nz-breadcrumb-item>
+      Claims
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      Claims Transactions
+    </nz-breadcrumb-item>
+  </nz-breadcrumb>
+    <div >
+      <div style="margin-bottom: 20px; margin-top: 20px; background: #fff;">
+        <nz-page-header>
+          <nz-page-header-title>Registered Clients</nz-page-header-title>
+          <nz-page-header-extra>
+            <button nz-button routerLink="/claims/intimate-claims" nzType="primary">Intimate Claim</button>
+          </nz-page-header-extra>
+          <nz-page-header-content>
+            <nz-row [nzGutter]="1">
+              <nz-col [nzSpan]="9">
+                <nz-statistic [nzValue]="1941 | number" [nzTitle]="'Total Claims'"></nz-statistic>
+              </nz-col>
+              <!-- <nz-col [nzSpan]="6">
+                <nz-statistic [nzValue]="2019 | number " [nzTitle]="'Individual Clients'"></nz-statistic>
+              </nz-col> -->
+              <nz-col [nzSpan]="9">
+                <nz-statistic [nzValue]="941 | number" [nzTitle]="'Claimants'"></nz-statistic>
+              </nz-col>
+            </nz-row>
+          </nz-page-header-content>
+        </nz-page-header>
+      </div>
+    </div>
     <nz-card>
         <nz-card nzTitle="Claim Transactions">
         	<nz-table #claimsTable [nzData]="claimsList" nzSize="small">
@@ -15,7 +46,7 @@
         	        </tr>
         	    </thead>
         	    <tbody>
-        	        <tr *ngFor="let data of claimsTable.data">
+        	        <tr *ngFor="let data of claimsTable.data" (click)="viewClaimDetails()" style="cursor: pointer;">
         	            <td>{{data.claimId}}</td>
         	            <td>{{data.ristId}}</td>
         	            <td>{{data.policyNumber }}</td>

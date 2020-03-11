@@ -281,11 +281,11 @@
                         <th>End Date</th>
                         <th>Insurer</th>
                         <th>Status</th>
-                        <th></th>
+                        <!-- <th></th> -->
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let data of policiesTable.data">
+                    <tr *ngFor="let data of policiesTable.data" (click)="viewPolicyDetails()" style="cursor: pointer;">
                         <td>{{data.policyNumber}}</td>
                         <!-- <td>{{data.endorsementNumber}}</td> -->
                         <td>{{data.product}}</td>
@@ -293,7 +293,7 @@
                         <td>{{data.endDate | date }}</td>
                         <td>{{data.insuranceCompany}}</td>
                         <td>{{data.status}}</td>
-                        <td><button nz-button nzSize="small" (click)="viewPolicyDetails()">Details</button></td>
+                        <!-- <td><button nz-button nzSize="small" (click)="viewPolicyDetails()">Details</button></td> -->
                     </tr>
                 </tbody>
             </nz-table>
@@ -311,17 +311,17 @@
                         <th>Policy Number</th>
                         <th>Loss Date</th>
                         <th>Status</th>
-                        <th></th>
+                        <!-- <th></th> -->
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let data of claimsData.data">
+                    <tr *ngFor="let data of claimsData.data" (click)="viewClaimDetails()" style="cursor: pointer;">
                         <td>{{data.claimId}}</td>
                         <td>{{data.riskId}}</td>
                         <td>{{data.policyNumber}}</td>
                         <td>{{data.lossDate | date }}</td>
                         <td>{{data.status}}</td>
-                        <td><button nz-button nzSize="small">Details</button></td>
+                        <!-- <td><button nz-button nzSize="small">Details</button></td> -->
                     </tr>
                 </tbody>
             </nz-table>
