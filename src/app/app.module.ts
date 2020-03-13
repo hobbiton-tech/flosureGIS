@@ -10,9 +10,22 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { NavigationComponent } from './navigation/navigation.component';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
 
 
 registerLocaleData(en);
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDzwhgLq4-nMHpJ1xldhHwPwpjOHc4sZV0",
+  authDomain: "flosure-backend.firebaseapp.com",
+  databaseURL: "https://flosure-backend.firebaseio.com",
+  projectId: "flosure-backend",
+  storageBucket: "flosure-backend.appspot.com",
+  messagingSenderId: "167483416678",
+  appId: "1:167483416678:web:dcd089c936275ee33f4da7",
+  measurementId: "G-4565Y5EHD4"
+};
 
 @NgModule({
   declarations: [
@@ -25,7 +38,10 @@ registerLocaleData(en);
     NgZorroAntdModule,
     FormsModule,
     HttpClientModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireDatabaseModule,
+
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent]

@@ -1,0 +1,19 @@
+{
+  "hosting": [
+    {
+      "target": "flosure-broker-ui",
+      "public": "dist/flosure-broker-ui",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    }
+  ]
+}
