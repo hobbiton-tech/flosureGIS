@@ -9,17 +9,17 @@
         <nz-breadcrumb-item>
             Client Details
         </nz-breadcrumb-item>
-        <nz-page-header (nzBack)="goToClientsList()" nzBackIcon nzTitle="Client ID: HFB-489384"
-            [nzSubtitle]="client.firstName + ' ' + client.lastName">
+        <nz-page-header (nzBack)="goToClientsList()" nzBackIcon nzTitle="Client ID: {{clientData.clientID}}"
+            [nzSubtitle]="clientData.firstName + ' ' + clientData.lastName">
             <nz-page-header-extra>
                 <button *ngIf="isEditmode" nz-button nzType="primary" (click)="isEditmode = false">Save Changes</button>
-                <button *ngIf="!isEditmode" nz-button nzType="primary" (click)="isEditmode = true">Edit Client</button>
-                <button nz-button nzType="danger">Delete Client</button>
+                <button *ngIf="!isEditmode" nz-button nzType="primary" (click)="isEditmode = true">Edit clientData</button>
+                <!-- <button nz-button nzType="danger">Delete clientData</button> -->
             </nz-page-header-extra>
         </nz-page-header>
     </nz-breadcrumb>
     <div class="client-personal-details" style="margin-top: 20px">
-        <div *ngIf="client.type == 'Individual'">
+        <div *ngIf="clientData.type == 'Individual'">
             <nz-card>
                 <nz-divider nzText="Personal Details" nzOrientation="left"></nz-divider>
                 <form nz-form>
@@ -29,14 +29,14 @@
                                 <nz-form-label nzSpan="7" nzRequired>First Name</nz-form-label>
                                 <nz-form-control nzSpan="17">
                                     <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
-                                    <input nz-input [(placeholder)]="client.firstName" [disabled]="!isEditmode" />
+                                    <input nz-input [(placeholder)]="clientData.firstName" [disabled]="!isEditmode" />
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
                                 <nz-form-label nzSpan="7" nzRequired>Last Name</nz-form-label>
                                 <nz-form-control nzSpan="17">
                                     <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
-                                    <input nz-input [(placeholder)]="client.lastName" [disabled]="!isEditmode" />
+                                    <input nz-input [(placeholder)]="clientData.lastName" [disabled]="!isEditmode" />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -44,13 +44,13 @@
                             <nz-form-item>
                                 <nz-form-label nzSpan="7" nzRequired>Title</nz-form-label>
                                 <nz-form-control nzSpan="17">
-                                    <nz-select nzPlaceHolder="{{client.idType}}" [nzDisabled]="!isEditmode"></nz-select>
+                                    <nz-select nzPlaceHolder="{{clientData.idType}}" [nzDisabled]="!isEditmode"></nz-select>
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
                                 <nz-form-label nzSpan="7" nzRequired>email</nz-form-label>
                                 <nz-form-control nzSpan="17">
-                                    <input nz-input [(placeholder)]="client.email" [disabled]="!isEditmode" />
+                                    <input nz-input [(placeholder)]="clientData.email" [disabled]="!isEditmode" />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -59,7 +59,7 @@
                                 <nz-form-label nzSpan="7" nzRequired>Date of Birth</nz-form-label>
                                 <nz-form-control nzSpan="17">
                                     <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
-                                    <input nz-input [(placeholder)]="client.dob" nzFormat="dd.MM.yyyy" [disabled]="!isEditmode"
+                                    <input nz-input [(placeholder)]="clientData.dob" nzFormat="dd.MM.yyyy" [disabled]="!isEditmode"
                                     />
                                 </nz-form-control>
                             </nz-form-item>
@@ -67,7 +67,7 @@
                                 <nz-form-label nzSpan="7" nzRequired>Address</nz-form-label>
                                 <nz-form-control nzSpan="17">
                                     <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
-                                    <input nz-input [(placeholder)]="client.address" [disabled]="!isEditmode" />
+                                    <input nz-input [(placeholder)]="clientData.address" [disabled]="!isEditmode" />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -76,13 +76,13 @@
                                 <nz-form-label nzSpan="7" nzRequired>Phone</nz-form-label>
                                 <nz-form-control nzSpan="17">
                                     <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
-                                    <input nz-input [(placeholder)]="client.phone" [disabled]="!isEditmode" />
+                                    <input nz-input [(placeholder)]="clientData.phone" [disabled]="!isEditmode" />
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
                                 <nz-form-label nzSpan="7" nzRequired>Gender</nz-form-label>
                                 <nz-form-control nzSpan="17">
-                                    <nz-select nzPlaceHolder="{{client.gender}}" [nzDisabled]="!isEditmode"></nz-select>
+                                    <nz-select nzPlaceHolder="{{clientData.gender}}" [nzDisabled]="!isEditmode"></nz-select>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -90,7 +90,7 @@
                             <nz-form-item>
                                 <nz-form-label nzSpan="7" nzRequired>Identfication Type</nz-form-label>
                                 <nz-form-control nzSpan="17">
-                                    <nz-select nzPlaceHolder="{{client.idType}}" [nzDisabled]="!isEditmode"></nz-select>
+                                    <nz-select nzPlaceHolder="{{clientData.idType}}" [nzDisabled]="!isEditmode"></nz-select>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -99,7 +99,7 @@
                                 <nz-form-label nzSpan="7" nzRequired>Identfication No.</nz-form-label>
                                 <nz-form-control nzSpan="17">
                                     <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
-                                    <input nz-input [(placeholder)]="client.phone" [disabled]="!isEditmode" />
+                                    <input nz-input [(placeholder)]="clientData.phone" [disabled]="!isEditmode" />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -116,7 +116,7 @@
                             <nz-form-item>
                                 <nz-form-label nzSpan="7" nzRequired>Occupation</nz-form-label>
                                 <nz-form-control nzSpan="17">
-                                    <input nz-input [(placeholder)]="client.occupation" [disabled]="!isEditmode" />
+                                    <input nz-input [(placeholder)]="clientData.occupation" [disabled]="!isEditmode" />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -125,7 +125,7 @@
                                 <nz-form-label nzSpan="7" nzRequired>Sector</nz-form-label>
                                 <nz-form-control nzSpan="17">
                                     <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
-                                    <nz-select nzPlaceHolder="{{client.sectorID}}" [nzDisabled]="!isEditmode"></nz-select>
+                                    <nz-select nzPlaceHolder="{{clientData.sectorID}}" [nzDisabled]="!isEditmode"></nz-select>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -134,7 +134,7 @@
             </nz-card>
         </div>
 
-        <div *ngIf="client.type == 'Corporate'">
+        <div *ngIf="clientData.type == 'Corporate'">
             <nz-card>
                 <nz-divider nzText="Company Details" nzOrientation="left"></nz-divider>
                 <form nz-form>
@@ -143,14 +143,14 @@
                             <nz-form-item>
                                 <nz-form-label nzSpan="7" nzRequired>Company Name</nz-form-label>
                                 <nz-form-control nzSpan="17">
-                                    <input nz-input [(placeholder)]="client.firstName" [disabled]="!isEditmode" />
+                                    <input nz-input [(placeholder)]="clientData.firstName" [disabled]="!isEditmode" />
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
                                 <nz-form-label nzSpan="7" nzRequired>Registration Number</nz-form-label>
                                 <nz-form-control nzSpan="17">
                                     <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
-                                    <input nz-input [(placeholder)]="client.lastName" [disabled]="!isEditmode" />
+                                    <input nz-input [(placeholder)]="clientData.lastName" [disabled]="!isEditmode" />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -158,13 +158,13 @@
                             <nz-form-item>
                                 <nz-form-label nzSpan="7" nzRequired>Sector</nz-form-label>
                                 <nz-form-control nzSpan="17">
-                                    <nz-select nzPlaceHolder="{{client.idType}}" [nzDisabled]="!isEditmode"></nz-select>
+                                    <nz-select nzPlaceHolder="{{clientData.idType}}" [nzDisabled]="!isEditmode"></nz-select>
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
                                 <nz-form-label nzSpan="7" nzRequired>Tpin Number</nz-form-label>
                                 <nz-form-control nzSpan="17">
-                                    <input nz-input [(placeholder)]="client.email" [disabled]="!isEditmode" />
+                                    <input nz-input [(placeholder)]="clientData.email" [disabled]="!isEditmode" />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -173,14 +173,14 @@
                                 <nz-form-label nzSpan="7" nzRequired>Phone</nz-form-label>
                                 <nz-form-control nzSpan="17">
                                     <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
-                                    <input nz-input [(placeholder)]="client.phone" [disabled]="!isEditmode" />
+                                    <input nz-input [(placeholder)]="clientData.phone" [disabled]="!isEditmode" />
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
                                 <nz-form-label nzSpan="7" nzRequired>Address</nz-form-label>
                                 <nz-form-control nzSpan="17">
                                     <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
-                                    <input nz-input [(placeholder)]="client.address" [disabled]="!isEditmode" />
+                                    <input nz-input [(placeholder)]="clientData.address" [disabled]="!isEditmode" />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -188,7 +188,7 @@
                             <nz-form-item>
                                 <nz-form-label nzSpan="7" nzRequired>Email</nz-form-label>
                                 <nz-form-control nzSpan="17">
-                                    <input nz-input [(placeholder)]="client.email" [disabled]="!isEditmode" />
+                                    <input nz-input [(placeholder)]="clientData.email" [disabled]="!isEditmode" />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -205,13 +205,13 @@
                             <nz-form-item>
                                 <nz-form-label nzSpan="7" nzRequired>First Name</nz-form-label>
                                 <nz-form-control nzSpan="17">
-                                    <input nz-input [(placeholder)]="client.firstName" [disabled]="!isEditmode" />
+                                    <input nz-input [(placeholder)]="clientData.firstName" [disabled]="!isEditmode" />
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
                                 <nz-form-label nzSpan="7" nzRequired>Email</nz-form-label>
                                 <nz-form-control nzSpan="17">
-                                    <input nz-input [(placeholder)]="client.email" [disabled]="!isEditmode" />
+                                    <input nz-input [(placeholder)]="clientData.email" [disabled]="!isEditmode" />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -220,7 +220,7 @@
                                 <nz-form-label nzSpan="7" nzRequired>Last Name</nz-form-label>
                                 <nz-form-control nzSpan="17">
                                     <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
-                                    <nz-select nzPlaceHolder="{{client.lastName}}" [nzDisabled]="!isEditmode"></nz-select>
+                                    <nz-select nzPlaceHolder="{{clientData.lastName}}" [nzDisabled]="!isEditmode"></nz-select>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -239,13 +239,13 @@
                         <nz-form-item>
                             <nz-form-label nzSpan="6" nzRequired>Account Name</nz-form-label>
                             <nz-form-control nzSpan="18">
-                                <input nz-input [(placeholder)]="client.occupation" [disabled]="!isEditmode" />
+                                <input nz-input [(placeholder)]="clientData.occupation" [disabled]="!isEditmode" />
                             </nz-form-control>
                         </nz-form-item>
                         <nz-form-item>
                             <nz-form-label nzSpan="6" nzRequired>Account Number</nz-form-label>
                             <nz-form-control nzSpan="18">
-                                <input nz-input [(placeholder)]="client.occupation" [disabled]="!isEditmode" />
+                                <input nz-input [(placeholder)]="clientData.occupation" [disabled]="!isEditmode" />
                             </nz-form-control>
                         </nz-form-item>
                     </div>
