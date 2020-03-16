@@ -11,7 +11,10 @@ import { ClientsService } from '../../services/clients.service';
 })
 export class ClientsListComponent implements OnInit {
     Clients: Client[];
-    clientList: any;
+  clientList: any;
+  individualC = true;
+    // corporate = 'Corporate';
+    // individual = 'Individual';
     // clientList = generateClients();
     preLoader = true;
     constructor(
@@ -19,19 +22,19 @@ export class ClientsListComponent implements OnInit {
         private readonly clientsService: ClientsService
     ) {}
 
-  ngOnInit(): void {
-      this.clientsService.getClients().subscribe(clients => {
-          this.Clients = [];
-          clients.forEach(client => {
-              const a = client;
-              this.Clients.push(a as Client);
-          });
-          console.log(this.Clients);
-      });
+    ngOnInit(): void {
+        this.clientsService.getClients().subscribe(clients => {
+            this.Clients = [];
+            clients.forEach(client => {
+                const a = client;
+                this.Clients.push(a as Client);
+            });
+            console.log(this.Clients);
+        });
     }
 
-  viewDetails(client: Client): void {
-    this.router.navigateByUrl('/clients/client-details/' + client.id);
+    viewDetails(client: Client): void {
+        this.router.navigateByUrl('/clients/client-details/' + client.id);
     }
 
     addClient(client: Client): void {
