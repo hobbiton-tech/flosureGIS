@@ -20,8 +20,10 @@
   <nz-sider [nzTheme]="'light'" [nzWidth]="250">
     <ul nz-menu nzMode="inline" style="padding-top: 30px" nzMatchRouter>
       <li nz-menu-item nz-tooltip nzPlacement="right" [nzTitle]="isCollapsed ? 'Dashboard' : ''">
+        <a routerLink="/dashboard">
         <i nz-icon nzType="dashboard"></i>
         <span>Dashboard</span>
+      </a>
       </li>
 
       <li nz-menu-item nzPlacement="right" nzMatchRouter>

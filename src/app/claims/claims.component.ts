@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ClaimsService } from './services/claims-service.service';
+import { Claim } from './models/claim.model'
 
 @Component({
   selector: 'app-claims',
@@ -7,9 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ClaimsComponent implements OnInit {
 
-  constructor() { }
+  constructor(private readonly claimsService: ClaimsService) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  addClaim(claim: Claim): void {
+    this.claimsService.addClaim(claim);
   }
 
 }

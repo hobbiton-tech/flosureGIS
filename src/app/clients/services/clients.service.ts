@@ -9,13 +9,12 @@ import 'firebase/firestore';
 })
 export class ClientsService {
   private clientsCollection: AngularFirestoreCollection<Client>;
-clients: Observable<Client[]>;
+  clients: Observable<Client[]>;
 
   constructor(private firebase: AngularFirestore) {
     this.clientsCollection = firebase.collection<Client>('clients');
     this.clients = this.clientsCollection.valueChanges();
    }
-
 
    addClient(client: Client): void {
      // this.clients.

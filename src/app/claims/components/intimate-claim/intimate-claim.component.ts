@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ClaimsService } from '../../services/claims-service.service';
 
 @Component({
   selector: 'app-intimate-claim',
@@ -7,10 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class IntimateClaimComponent implements OnInit {
 
+  
+
   perilsList: any[] = [];
-  constructor() { }
+  constructor(
+    private readonly claimService: ClaimsService
+  ) { }
 
   ngOnInit(): void {
+  }
+
+  addClaim(): void {
+
   }
 
 }
