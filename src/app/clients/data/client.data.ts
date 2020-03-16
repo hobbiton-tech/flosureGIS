@@ -13,7 +13,7 @@ const createClient = () => {
         idType: faker.random.arrayElement(['NRC', 'Passport', 'License']),
         idNumber: faker.random.alphaNumeric(10),
         address: faker.address.secondaryAddress(),
-        occupation:faker.random.arrayElement(['Employed', 'Unemployed', 'Student']),
+        occupation: faker.random.arrayElement(['Employed', 'Unemployed', 'Student']),
         phone: faker.phone.phoneNumber('+260 9## ### ###'),
         type: faker.random.arrayElement(['Individual', 'Corporate']),
         gender: faker.random.arrayElement(['Male', 'Female']),
@@ -24,7 +24,7 @@ const createClient = () => {
 };
 
 export const generateClients = () => {
-    let clients: Client[] = [];
+    const clients: Client[] = [];
     for (let i = 0; i <= 230; i++) {
         clients.push(createClient());
     }

@@ -5,24 +5,40 @@ import { Router } from '@angular/router';
 import { ClientsService } from '../../services/clients.service';
 
 @Component({
-  selector: 'app-clients-list',
-  templateUrl: './clients-list.component.html',
-  styleUrls: ['./clients-list.component.scss']
+    selector: 'app-clients-list',
+    templateUrl: './clients-list.component.html',
+    styleUrls: ['./clients-list.component.scss']
 })
 export class ClientsListComponent implements OnInit {
-  clientList = generateClients();
-  constructor(private router: Router, private readonly clientsService: ClientsService) { }
+    Clients: Client[];
+    clientList: any;
+    // clientList = generateClients();
+    preLoader = true;
+    constructor(
+        private router: Router,
+        private readonly clientsService: ClientsService
+    ) {}
 
   ngOnInit(): void {
-  }
+      this.clientsService.getClients().subscribe(clients => {
+          this.Clients = [];
+          clients.forEach(client => {
+              const a = client;
+              this.Clients.push(a as Client);
+          });
+          console.log(this.Clients);
+      });
+    }
 
   viewDetails(client: Client): void {
-    this.router.navigateByUrl('/clients/client-details');
-  }
+    this.router.navigateByUrl('/clients/client-details/' + client.id);
+    }
 
-  addClient(client: Client): void {
-    this.clientsService.addClient(client);
-}
+    addClient(client: Client): void {
+        this.clientsService.addClient(client);
+    }
 
+    // getClients() {
 
+    // }
 }

@@ -1,4 +1,4 @@
-<div style="margin: 10px;">
+ <div style="margin: 10px;">
   <div style="margin-bottom: 20px; background: #fff;">
     <nz-page-header>
       <nz-page-header-title>Policies</nz-page-header-title>
@@ -40,11 +40,11 @@
         <th>Insurance Company</th>
         <th>Currency</th>
         <th>Agent</th>
-        <th></th>
+        <!-- <th></th> -->
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let policy of policiesTable.data">
+      <tr *ngFor="let policy of policiesTable.data" (click)="viewPolicyDetails()" style="cursor:pointer;">
         <td>{{ policy.policyNumber }}</td>
         <td>{{ policy.endorsementNumber }}</td>
         <td>{{ policy.product }}</td>
@@ -53,14 +53,15 @@
         <td>{{ policy.client }}</td>
         <td>{{ policy.insuranceCompany}}</td>
         <td>{{ policy.currency}}</td>
+        <td>{{ policy.status}}</td>
 
         <!-- <td>
           <nz-badge [nzStatus]="policy.status === 'Draft' ? 'warning' : 'success'" [nzText]="policy.status"></nz-badge>
         </td> -->
         <td>{{ policy.preparedBy }}</td>
-        <td>
+        <!-- <td>
           <button nz-button nzType="default" nzSize="small">Download</button>
-        </td>
+        </td> -->
       </tr>
     </tbody>
   </nz-table>

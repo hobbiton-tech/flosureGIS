@@ -1,6 +1,8 @@
 export class AccountDetails {
-	accountName: string;
-	accountNumber: number;
-	bank: string;
-	branch: string;
+    id?: string;
+    accountName: string;
+    accountNumber: number;
+    bank: string;
+    branch: string;
+    clientID?: number;
 }

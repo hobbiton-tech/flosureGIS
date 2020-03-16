@@ -9,7 +9,7 @@
 </div>
 <div style="margin: 20px;">
   <nz-card style="width:80%; margin: 0 auto;" [nzBordered]="true" nzTitle="Personal Details">
-    <form nz-form [formGroup]="personalDetailsForm" novalidate (ngSubmit)="onSubmit()">
+    <form nz-form [formGroup]="personalDetailsForm" novalidate>
       <div nz-row>
         <div nz-col [nzSpan]="12">
         <nz-form-item >
@@ -29,9 +29,9 @@
 
         <div nz-col [nzSpan]="12">
           <nz-form-item>
-            <nz-form-label [nzSpan]="6" nzFor="first_name">First Name</nz-form-label>
+            <nz-form-label [nzSpan]="6" nzFor="firstName">First Name</nz-form-label>
           <nz-form-control [nzSpan]="18">
-              <input nz-input formControlName="first_name" name="first_name" type="text" id="first_name" placeholder="First Name">
+              <input nz-input formControlName="firstName" name="firstName" type="text" id="firstName" placeholder="First Name">
             </nz-form-control>
           </nz-form-item >
         </div>
@@ -40,9 +40,9 @@
       <div nz-row>
         <div nz-col [nzSpan]="12">
           <nz-form-item >
-            <nz-form-label [nzSpan]="6" nzFor="last_name">Last Name</nz-form-label>
+            <nz-form-label [nzSpan]="6" nzFor="lastName">Last Name</nz-form-label>
         <nz-form-control [nzSpan]="18">
-          <input nz-input formControlName="last_name" name="last_name" id="last_name" placeholder="Last Name">
+          <input nz-input formControlName="lastName" name="lastName" id="lastName" placeholder="Last Name">
           </nz-form-control>
         </nz-form-item >
         </div>
@@ -69,9 +69,9 @@
 
         <div nz-col [nzSpan]="12">
             <nz-form-item>
-              <nz-form-label [nzSpan]="6" nzFor="phone_number">Phone</nz-form-label>
+              <nz-form-label [nzSpan]="6" nzFor="phone">Phone</nz-form-label>
           <nz-form-control [nzSpan]="18">
-              <input nz-input formControlName="phone_number" name="phone_number"  id="phone_number" placeholder="Phone Number">
+              <input nz-input formControlName="phone" name="phone"  id="phone" placeholder="Phone Number">
             </nz-form-control>
           </nz-form-item >
         </div>
@@ -102,7 +102,7 @@
 
       <nz-form-item nz-row>
         <nz-form-control [nzSpan]="14" [nzOffset]="10" >
-          <button nz-button nzType="primary" style="float: right;">Submit</button>
+          <button nz-button nzType="primary" style="float: right;" (click)="onSubmit()">Submit</button>
         </nz-form-control>
       </nz-form-item>
     </form>
