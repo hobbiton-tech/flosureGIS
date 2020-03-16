@@ -4,5 +4,6 @@ export class AccountDetails {
     accountNumber: number;
     bank: string;
     branch: string;
+    accountType?: string;
     clientID?: number;
 }

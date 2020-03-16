@@ -64,7 +64,12 @@
 
             <tr *ngFor="let client of clientsTable.data" (click)="viewDetails(client)" style="cursor: pointer;">
               <td>{{ client.id }}</td>
-              <td>{{ client.firstName + ' ' + client.lastName }}</td>
+              <div *ngIf="individual; else corporate">
+                <td>{{ client.firstName + ' ' + client.lastName }}</td>
+              </div>
+              <ng-template #corporate>
+                <td>{{ client.companyName }}</td>
+              </ng-template>
               <td>{{ client.email }}</td>
               <td>{{ client.phone }}</td>
               <td>{{ client.type }}</td>

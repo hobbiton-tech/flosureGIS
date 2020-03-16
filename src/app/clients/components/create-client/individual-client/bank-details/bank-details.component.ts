@@ -40,7 +40,7 @@ export class BankDetailsComponent implements OnInit {
             accountType: ['', Validators.required],
             bank: ['', Validators.required],
             branch: ['', Validators.required],
-            clientID: [this.id]
+            clientID: [this.id.clientID]
         });
         this.stepperService.toggleStepper(true);
         this.stepperService.changeIndex(3);
