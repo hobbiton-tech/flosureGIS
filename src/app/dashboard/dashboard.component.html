@@ -2,7 +2,7 @@
     <div nz-row [nzGutter]="8">
         <div nz-col [nzSpan]="8">
             <nz-card>
-                <nz-statistic [nzValue]="clientsCount | number" [nzTitle]="'Total Clients'"></nz-statistic>
+                <nz-statistic [nzValueTemplate]="clientStats" [nzTitle]="'Total Clients'"></nz-statistic>
             </nz-card>
         </div>
         <div nz-col [nzSpan]="8">
@@ -24,7 +24,7 @@
         </div>
         <div nz-col [nzSpan]="8">
             <nz-card>
-                <nz-statistic [nzValue]="commissionEarned | number" [nzTitle]="'Commission Earned'"></nz-statistic>
+                <nz-statistic [nzValue]="commissionEarned | number"  [nzPrefix]="'ZMW'" [nzTitle]="'Commission Earned'"></nz-statistic>
             </nz-card>
         </div>
     </div>
@@ -35,3 +35,12 @@
     </nz-card>
     </div>
 </div>
+
+<ng-template #clientStats>
+    <div *ngIf="clientsLoading">
+        <nz-spin nzSimple></nz-spin>
+    </div>
+    <div *ngIf="!clientsLoading">
+        {{clientsCount | number}}
+    </div>
+</ng-template>
