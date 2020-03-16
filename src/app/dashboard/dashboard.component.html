@@ -1,1 +1,37 @@
-<p>dashboard works!</p>
+<div style="background: #ECECEC;padding:30px;">
+    <div nz-row [nzGutter]="8">
+        <div nz-col [nzSpan]="8">
+            <nz-card>
+                <nz-statistic [nzValue]="clientsCount | number" [nzTitle]="'Total Clients'"></nz-statistic>
+            </nz-card>
+        </div>
+        <div nz-col [nzSpan]="8">
+            <nz-card>
+                <nz-statistic [nzValue]="claimsCount | number" [nzTitle]="'Pending Claims'"></nz-statistic>
+            </nz-card>
+        </div>
+        <div nz-col [nzSpan]="8">
+            <nz-card>
+                <nz-statistic [nzValue]="policiesCount | number" [nzTitle]="'Active Policies'"></nz-statistic>
+            </nz-card>
+        </div>
+    </div>
+    <div nz-row [nzGutter]="8" style="padding-top: 10px">
+        <div nz-col [nzSpan]="8">
+            <nz-card>
+                <nz-statistic [nzValue]="policiesCount | number" [nzTitle]="'Cancelled Policies'"></nz-statistic>
+            </nz-card>
+        </div>
+        <div nz-col [nzSpan]="8">
+            <nz-card>
+                <nz-statistic [nzValue]="commissionEarned | number" [nzTitle]="'Commission Earned'"></nz-statistic>
+            </nz-card>
+        </div>
+    </div>
+
+    <div style="margin-top: 20px">
+    <nz-card nzTitle="Expiring Policies">
+        <nz-table></nz-table>
+    </nz-card>
+    </div>
+</div>

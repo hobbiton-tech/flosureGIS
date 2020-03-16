@@ -4,6 +4,7 @@ import { NavigationComponent } from './navigation/navigation.component';
 import { QuotesComponent } from './quotes/quotes.component';
 import { SettingsComponent } from './settings/settings.component';
 import { OrganizationalSetupsComponent } from './settings/components/organizational-setups/organizational-setups.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 const routes: Routes = [
     {
@@ -12,7 +13,12 @@ const routes: Routes = [
         children: [
             {
                 path: '',
-                component: QuotesComponent
+                component: DashboardComponent
+               
+            },
+            {
+                path: 'dashboard',
+                loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)
             },
             {
                 path: 'clients',

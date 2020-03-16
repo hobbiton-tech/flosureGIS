@@ -1,6 +1,6 @@
 import * as faker from 'faker';
 
-export interface IClaim {
+export class Claim {
     claimId: number;
     riskId: number;
     policyNumber: string;
@@ -14,7 +14,7 @@ export interface IClaim {
 export type ClaimStatus = 'Pending' | 'Resolved' | 'Cancelled';
 
 const createClaim = () => {
-    const claim: IClaim = {
+    const claim: Claim = {
         claimId: faker.random.number(100),
         riskId: faker.random.number(100),
         policyNumber: faker.internet.ipv6(),
@@ -28,7 +28,7 @@ const createClaim = () => {
 };
 
 export const generateClaimsList = () => {
-    const claims: IClaim[] = [];
+    const claims: Claim[] = [];
     for (let i = 0; i <= 122; i++) {
         claims.push(createClaim());
     }

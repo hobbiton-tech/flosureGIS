@@ -14,6 +14,7 @@ import { AccountDetails } from '../models/account-details.model';
     providedIn: 'root'
 })
 export class ClientsService {
+
     private clientsCollection: AngularFirestoreCollection<Client>;
     private accountDetailsCollection: AngularFirestoreCollection<
         AccountDetails
