@@ -11,9 +11,10 @@ import { ClientsService } from '../../services/clients.service';
 })
 export class ClientsListComponent implements OnInit {
     Clients: Client[];
-    clientList: any;
-    corporate = 'Corporate';
-    individual = 'Individual';
+  clientList: any;
+  individualC = true;
+    // corporate = 'Corporate';
+    // individual = 'Individual';
     // clientList = generateClients();
     preLoader = true;
     constructor(
