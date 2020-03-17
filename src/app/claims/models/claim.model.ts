@@ -9,12 +9,22 @@ export class Claim {
     status: ClaimStatus;
     notificationDate: Date;
     bookedBy: string;
+    serviceProvider: string;
+    serviceType: string;
+    claimDescription: string;
+    //risk: string;
+    activity: string;
+    
 }
 
 export type ClaimStatus = 'Pending' | 'Resolved' | 'Cancelled';
 
 const createClaim = () => {
     const claim: Claim = {
+        serviceProvider: faker.random.words(2),
+        serviceType: faker.random.word(),
+        claimDescription: faker.random.words(2),
+        activity: faker.random.word(),
         claimId: faker.random.number(100),
         riskId: faker.random.number(100),
         policyNumber: faker.internet.ipv6(),

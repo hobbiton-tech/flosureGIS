@@ -2,29 +2,29 @@
     <div nz-row [nzGutter]="8">
         <div nz-col [nzSpan]="8">
             <nz-card>
-                <nz-statistic [nzValue]="clientsCount | number" [nzTitle]="'Total Clients'"></nz-statistic>
+                <nz-statistic [nzValueTemplate]="clientStats" [nzTitle]="'Total Clients'"></nz-statistic>
             </nz-card>
         </div>
         <div nz-col [nzSpan]="8">
             <nz-card>
-                <nz-statistic [nzValue]="claimsCount | number" [nzTitle]="'Pending Claims'"></nz-statistic>
+                <nz-statistic [nzValueTemplate]="claimsStats" [nzTitle]="'Pending Claims'"></nz-statistic>
             </nz-card>
         </div>
         <div nz-col [nzSpan]="8">
             <nz-card>
-                <nz-statistic [nzValue]="policiesCount | number" [nzTitle]="'Active Policies'"></nz-statistic>
+                <nz-statistic [nzValueTemplate]="policiesStats" [nzTitle]="'Active Policies'"></nz-statistic>
             </nz-card>
         </div>
     </div>
     <div nz-row [nzGutter]="8" style="padding-top: 10px">
         <div nz-col [nzSpan]="8">
             <nz-card>
-                <nz-statistic [nzValue]="policiesCount | number" [nzTitle]="'Cancelled Policies'"></nz-statistic>
+                <nz-statistic [nzValueTemplate]="policiesStats" [nzTitle]="'Cancelled Policies'"></nz-statistic>
             </nz-card>
         </div>
         <div nz-col [nzSpan]="8">
             <nz-card>
-                <nz-statistic [nzValue]="commissionEarned | number" [nzTitle]="'Commission Earned'"></nz-statistic>
+                <nz-statistic [nzValue]="commissionEarned | number"  [nzPrefix]="'ZMW'" [nzTitle]="'Commission Earned'"></nz-statistic>
             </nz-card>
         </div>
     </div>
@@ -35,3 +35,33 @@
     </nz-card>
     </div>
 </div>
+
+<ng-template #clientStats>
+    <div *ngIf="clientsLoading">
+        <nz-spin nzSimple></nz-spin>
+    </div>
+    <div *ngIf="!clientsLoading">
+        {{clientsCount | number}}
+    </div>
+</ng-template>
+<<<<<<< HEAD
+
+<ng-template #claimsStats>
+    <div *ngIf="claimsLoading">
+        <nz-spin nzSimple></nz-spin>
+    </div>
+    <div *ngIf="!claimsLoading">
+        {{claimsCount | number}}
+    </div>
+</ng-template>
+
+<ng-template #policiesStats>
+    <div *ngIf="policiesLoading">
+        <nz-spin nzSimple></nz-spin>
+    </div>
+    <div *ngIf="!policiesLoading">
+        {{policiesCount | number}}
+    </div>
+</ng-template>
+=======
+>>>>>>> b6021bc93485f138fdeef44b4267ceadfb5634a0
