@@ -11,11 +11,15 @@ import { PoliciesService } from '../underwriting/services/policies.service';
 })
 export class DashboardComponent implements OnInit {
 
-  clientsCount: number;
-  claimsCount: number;
-  policiesCount: number;
+  clientsCount: number = 0;
+  claimsCount: number = 0;
+  policiesCount: number = 0;
   cancelledPoliciesCount : number;
   commissionEarned: number = 0;
+
+  clientsLoading: boolean = true;
+  claimsLoading: boolean = true;
+  policiesLoading: boolean = true;
 
   constructor(
     private readonly dashboardService: DashboardService,
@@ -26,18 +30,18 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.clientsService.getClients().subscribe((clients) => {
       this.clientsCount = clients.length;
+      this.clientsLoading = false;
     })
 
     this.claimsService.getClaims().subscribe((claims) => {
       this.claimsCount = claims.length;
+      this.claimsLoading = false;
     })
 
     this.policiesService.getPolicies().subscribe((policies) => {
-      this.policiesCount = policies.length
+      this.policiesCount = policies.length;
+      this.policiesLoading = false
     })
   }
-  
-
-  // clientsCount = this.dashboardService.getClientsCount();
 
 }
