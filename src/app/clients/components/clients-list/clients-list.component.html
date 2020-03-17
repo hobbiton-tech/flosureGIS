@@ -47,7 +47,7 @@
             <label nz-radio nzValue="individual">Individual Clients</label>
           </nz-radio-group>
         </div>
-        <nz-table #clientsTable [nzData]="clientList" [nzSize]="'small'" [nzBordered]="true"
+        <nz-table #clientsTable [nzData]="Clients" [nzSize]="'small'" [nzBordered]="true"
           style="background-color: white;">
           <thead>
             <tr>
@@ -60,9 +60,19 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let client of clientsTable.data" (click)="addClient(client)">
-              <td>{{ client.clientID }}</td>
-              <td>{{ client.firstName + ' ' + client.lastName }}</td>
+            <!-- <tr *ngFor="let client of clientsTable.data" (click)="addClient(client)"> -->
+
+            <tr *ngFor="let client of clientsTable.data" (click)="viewDetails(client)" style="cursor: pointer;">
+              <td>{{ client.id }}</td>
+              <ng-container *ngIf="client.type === 'Individual'">
+                <td>{{ client.firstName + ' ' + client.lastName }}</td>
+              </ng-container>
+              <!-- <div *ngIf="individual; else corporate">
+                <td>{{ client.firstName + ' ' + client.lastName }}</td>
+              </div> -->
+              <ng-container *ngIf="client.type === 'Corporate'">
+                <td>{{ client.companyName }}</td>
+              </ng-container>
               <td>{{ client.email }}</td>
               <td>{{ client.phone }}</td>
               <td>{{ client.type }}</td>

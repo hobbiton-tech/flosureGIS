@@ -13,7 +13,7 @@ import { CompanyDetailsComponent } from './components/create-client/corporate-cl
 import { ContactPersonComponent } from './components/create-client/corporate-client/contact-person/contact-person.component';
 import { CompanyBankDetailsComponent } from './components/create-client/corporate-client/company-bank-details/company-bank-details.component';
 import { ClientDetailsComponent } from './components/client-details/client-details.component';
-import { ClientsService } from './services/clients.service'
+import { ClientsService } from './services/clients.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 
 
@@ -23,7 +23,7 @@ const routes: Routes = [
         component: CreateClientComponent
     },
     {
-        path: 'client-details',
+        path: 'client-details/:id',
         component: ClientDetailsComponent
     },
     {

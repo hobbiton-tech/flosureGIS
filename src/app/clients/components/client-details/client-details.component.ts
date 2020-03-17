@@ -7,10 +7,12 @@ import {
 } from '@angular/core';
 import { Client } from '../../models/clients.model';
 import { generateClients } from '../../data/client.data';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { generatePolicies } from 'src/app/underwriting/data/policy.data';
 import { generateClaimsList } from 'src/app/claims/models/claim.model';
 import { AccountDetails } from '../../models/account-details.model';
+import { ClientsService } from '../../services/clients.service';
+import { tap } from 'rxjs/operators';
 
 @Component({
     selector: 'app-client-details',
@@ -45,14 +47,29 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
             address: 'Sidney No. 1 Lake Park'
         }
     ];
+  id: any;
+  clientData: any;
     constructor(
         private readonly route: Router,
-        private cdr: ChangeDetectorRef
+        private cdr: ChangeDetectorRef,
+        private router: ActivatedRoute,
+        private readonly clientsService: ClientsService
     ) {}
 
     ngOnInit(): void {
         this.client = generateClients()[9];
-        console.log(this.client.type);
+        this.router.params.subscribe(param => {
+          this.id = param.id;
+
+        });
+
+        this.clientsService.getClient(this.id).subscribe(cli => {
+            this.clientData = cli;
+            console.log('<======ID=====>');
+            console.log(this.id);
+            console.log('<======CLIENT=====>');
+            console.log(this.clientData);
+        });
     }
 
     ngAfterViewInit(): void {

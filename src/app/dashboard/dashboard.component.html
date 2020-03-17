@@ -24,7 +24,7 @@
         </div>
         <div nz-col [nzSpan]="8">
             <nz-card>
-                <nz-statistic [nzValue]="commissionEarned | number" [nzTitle]="'Commission Earned'"></nz-statistic>
+                <nz-statistic [nzValue]="commissionEarned | number"  [nzPrefix]="'ZMW'" [nzTitle]="'Commission Earned'"></nz-statistic>
             </nz-card>
         </div>
     </div>
@@ -44,6 +44,7 @@
         {{clientsCount | number}}
     </div>
 </ng-template>
+<<<<<<< HEAD
 
 <ng-template #claimsStats>
     <div *ngIf="claimsLoading">
@@ -62,3 +63,5 @@
         {{policiesCount | number}}
     </div>
 </ng-template>
+=======
+>>>>>>> b6021bc93485f138fdeef44b4267ceadfb5634a0
