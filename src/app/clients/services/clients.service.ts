@@ -1,105 +1,60 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Client } from '../models/clients.model';
+import {
+    IIndividualClient,
+    ICorporateClient,
+    IClient
+} from '../models/clients.model';
 import {
     AngularFirestore,
     AngularFirestoreCollection,
-    AngularFirestoreDocument
+    DocumentReference
 } from '@angular/fire/firestore';
-import 'firebase/firestore';
-import { map } from 'rxjs/operators';
 import { AccountDetails } from '../models/account-details.model';
+import { map } from 'rxjs/operators';
+import { v4 } from 'uuid';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ClientsService {
-
-    private clientsCollection: AngularFirestoreCollection<Client>;
+    private clientsCollection: AngularFirestoreCollection<IClient>;
     private accountDetailsCollection: AngularFirestoreCollection<
         AccountDetails
     >;
-    private clientObject: AngularFirestoreDocument<Client>;
-    clients: Observable<Client[]>;
-    client: Observable<Client>;
+
+    clients: Observable<IClient[]>;
+
     accountDetails: Observable<AccountDetails[]>;
     accountDetail: Observable<AccountDetails>;
 
     constructor(private firebase: AngularFirestore) {
-        this.clientsCollection = firebase.collection<Client>('clients');
-        this.accountDetailsCollection = firebase.collection<AccountDetails>(
-            'account_details'
-        );
-        // this.clients = this.clientsCollection.valueChanges();
-        this.clients = this.clientsCollection.snapshotChanges().pipe(
-            map(changes => {
-                return changes.map(a => {
-                    const data = a.payload.doc.data() as Client;
-                    data.id = a.payload.doc.id;
-                    return data;
-                });
-            })
-        );
-
-        this.accountDetails = this.accountDetailsCollection
-            .snapshotChanges()
-            .pipe(
-                map(changes => {
-                    return changes.map(a => {
-                        const data = a.payload.doc.data() as AccountDetails;
-                        data.id = a.payload.doc.id;
-                        return data;
-                    });
-                })
-            );
+        this.clientsCollection = this.firebase.collection<IClient>('clients');
     }
 
-    addClient(client: Client): void {
-        // this.clients.
-        this.clientsCollection
-            .add(client)
-            .then(mess => {
-                // Do something
-                console.log(client);
-            })
-            .catch(err => {
-                console.log(err);
-            });
+    addIndividualClient(client: IIndividualClient): Promise<DocumentReference> {
+        client.id = v4();
+        client.clientType = 'Individual';
+        return this.clientsCollection.add(client);
     }
 
-    addAccountDetails(accountDetail: AccountDetails): void {
-        // this.clients.
-        this.accountDetailsCollection
-            .add(accountDetail)
-            .then(mess => {
-                // Do something
-                console.log(accountDetail);
-            })
-            .catch(err => {
-                console.log(err);
-            });
+    addCorporateClient(client: ICorporateClient): Promise<DocumentReference> {
+        client.id = v4();
+        client.clientType = 'Corporate';
+        return this.clientsCollection.add(client);
     }
 
-    getClients(): Observable<Client[]> {
+    addAccountDetails(
+        accountDetail: AccountDetails
+    ): Promise<DocumentReference> {
+        return this.accountDetailsCollection.add(accountDetail);
+    }
+
+    getClient(id: string): Observable<IClient> {
+        return this.clients.pipe(map(x => x.find(y => y.id === id)));
+    }
+
+    getClients(): Observable<IClient[]> {
         return this.clients;
-    }
-
-    getClient(id: string): Observable<Client> {
-        this.clientObject = this.firebase.doc<Client>(`clients/${id}`);
-        // this.clientObject = this.firebase.collection<Client>('clients', ref => ref.where('clientID', '==', id));
-
-        this.client = this.clientObject.snapshotChanges().pipe(
-            map(changes => {
-                console.log('<========Data========>');
-                console.log(changes);
-
-                const data = changes.payload.data() as Client;
-                return data;
-            })
-        );
-
-        console.log(id);
-
-        return this.client;
     }
 }
