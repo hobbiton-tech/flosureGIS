@@ -13,6 +13,7 @@ import { Client } from 'src/app/clients/models/clients.model';
     styleUrls: ['./create-quote.component.scss']
 })
 export class CreateQuoteComponent implements OnInit {
+  motor: any;
     constructor(
         private formBuilder: FormBuilder,
         private stepperService: StepperService,
@@ -72,6 +73,8 @@ export class CreateQuoteComponent implements OnInit {
             controlInstance: `passenger${id}`
         };
         const index = this.listOfControl.push(control);
+        console.log('<=============Check=============>');
+
         console.log(this.listOfControl[this.listOfControl.length - 1]);
     }
 
@@ -86,6 +89,12 @@ export class CreateQuoteComponent implements OnInit {
             console.log(this.listOfControl);
         }
     }
+
+    // getting data from local storage
+  public getFromLocalStrorage() {
+    const quotes = JSON.parse(localStorage.getItem('motor'));
+    return quotes;
+  }
 
     ngOnInit(): void {
         this.quoteForm = this.formBuilder.group({
@@ -118,25 +127,34 @@ export class CreateQuoteComponent implements OnInit {
             chasisNumber: ['', Validators.required],
             color: ['', Validators.required],
             estimatedValue: ['', Validators.required],
-            productType: ['', Validators.required],
+            productType: ['', Validators.required]
         });
+
+        this.motor = this.getFromLocalStrorage();
     }
 
     ResetForm() {
         this.quoteForm.value.reset();
     }
 
+
     onSubmit() {
         const some = this.quoteForm.value;
         console.log('<============Quote Form Data=============>');
         console.log(some);
         this.quoteService.addMotorQuotation(some);
+        localStorage.setItem('motor', JSON.stringify(some));
         this.ResetForm();
-  }
+    }
 
-  onAdd() {
-    const risk = this.riskForm.value;
-    console.log('<============Risk Form Data=============>');
-    console.log(risk);
-  }
+    onAdd() {
+        const risk = this.riskForm.value;
+        console.log('<============Risk Form Data=============>');
+        console.log(risk);
+        console.log('<============Client Code Data=============>');
+        console.log(this.motor.clientCode);
+        this.quoteService.getMotorQuote();
+        console.log('<============Quote Data=============>');
+        console.log(this.quoteService.getMotorQuote());
+    }
 }
