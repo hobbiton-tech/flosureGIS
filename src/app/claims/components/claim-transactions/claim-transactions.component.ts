@@ -10,7 +10,8 @@ import { Claim } from '../../models/claim.model'
     styleUrls: ['./claim-transactions.component.scss']
 })
 export class ClaimTransactionsComponent implements OnInit {
-    claimsList = generateClaimsList();
+    claimsList: Claim[];
+    //claimsList = generateClaimsList();
 
     constructor(
         private readonly route: Router,
@@ -23,9 +24,15 @@ export class ClaimTransactionsComponent implements OnInit {
         this.route.navigateByUrl('/claims/claim-details');
     }
 
-    addClaim(claim: Claim): void {
-        this.claimsService.addClaim(claim);
+    async addClaim(claim: Claim): Promise<void> {
+        await this.claimsService.addClaim(claim);
       }
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.claimsService.getClaims().subscribe(claims => {
+            this.claimsList = claims;
+            console.log(claims);
+        })
+        
+    }
 }

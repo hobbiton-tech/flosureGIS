@@ -19,4 +19,19 @@ export class PoliciesService {
    getPolicies(): Observable<Policy[]> {
      return this.policies
    }
+
+   countGenerator(number) {
+    if (number<=9999) { number = ("0000"+number).slice(-5); }
+    return number;
+  }
+  
+  //Generating Policy Number
+  generatePolicyNumber(brokerName: string, totalPolicies: number) {
+      const broker_name = brokerName.substring(0,2).toLocaleUpperCase();
+      const count = this.countGenerator(totalPolicies);
+      const today = new Date();
+      const dateString: string = today.getFullYear().toString().substr(-2) + ("0"+(today.getMonth()+1)).slice(-2) +  + ("0" + today.getDate()).slice(-2);
+  
+      return ("PO" + broker_name + dateString + count);
+  }
 }

@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { Claim } from '../models/claim.model'
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import 'firebase/firestore';
+import { first } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +17,13 @@ export class ClaimsService {
     this.claims = this.claimsCollection.valueChanges();
    }
 
-   addClaim(claim: Claim): void {
-     this.claimsCollection.add(claim)
+   async addClaim(claim: Claim): Promise<void> {
+     this.claims
+        .pipe(first())
+        .subscribe(async claims => {
+            claim.claimId = this.generateCliamID('BR20200012', claims.length)
+            await this.claimsCollection.add(claim)
+        })
    }
 
   //  getPendingClaims(): Observable<Claim[]> {
@@ -27,4 +33,20 @@ export class ClaimsService {
    getClaims(): Observable<Claim[]> {
      return this.claims;
    }
+
+   countGenerator(number) {
+    if (number<=9999) { number = ("0000"+number).slice(-5); }
+    return number;
+  }
+  
+  //generate cliam ID
+  generateCliamID(brokerName: string, totalClaims: number): string {
+      const broker_name = brokerName.substring(0,2).toLocaleUpperCase();
+      const count = this.countGenerator(totalClaims);
+      const today = new Date();
+      const dateString: string = today.getFullYear().toString().substr(-2) + ("0"+(today.getMonth()+1)).slice(-2) +  + ("0" + today.getDate()).slice(-2);
+  
+      return ("CL" + broker_name + dateString + count);
+  }
+
 }
