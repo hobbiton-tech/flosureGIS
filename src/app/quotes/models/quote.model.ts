@@ -16,7 +16,7 @@ export class MotorQuotationModel {
     messageCode: string;
     coverCode: string;
     currency: string;
-    risks: RiskModel[];
+    risks?: RiskModel[];
     startDate: Date;
     endDate: Date;
 }
