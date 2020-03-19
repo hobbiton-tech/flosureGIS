@@ -5,9 +5,9 @@ import { ClaimsService } from '../claims/services/claims-service.service';
 import { PoliciesService } from '../underwriting/services/policies.service';
 
 @Component({
-    selector: 'app-dashboard',
-    templateUrl: './dashboard.component.html',
-    styleUrls: ['./dashboard.component.scss']
+  selector: 'app-dashboard',
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
     clientsCount: number = 0;
@@ -42,4 +42,6 @@ export class DashboardComponent implements OnInit {
             this.policiesLoading;
         });
     }
+
 }
+
