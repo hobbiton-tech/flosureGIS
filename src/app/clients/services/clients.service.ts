@@ -11,7 +11,7 @@ import {
     DocumentReference
 } from '@angular/fire/firestore';
 import { AccountDetails } from '../models/account-details.model';
-import { map } from 'rxjs/operators';
+import { map, first } from 'rxjs/operators';
 import { v4 } from 'uuid';
 
 @Injectable({
@@ -30,18 +30,33 @@ export class ClientsService {
 
     constructor(private firebase: AngularFirestore) {
         this.clientsCollection = this.firebase.collection<IClient>('clients');
+        this.clients = this.clientsCollection.valueChanges();
     }
 
-    addIndividualClient(client: IIndividualClient): Promise<DocumentReference> {
-        client.id = v4();
-        client.clientType = 'Individual';
-        return this.clientsCollection.add(client);
+    async addIndividualClient(client: IIndividualClient): Promise<void> {
+        this.clients.pipe(first()).subscribe(async clients => {
+            client.id = v4();
+            client.clientType = 'Individual';
+            client.clientID = this.generateClientID(
+                'Individual',
+                'BR202000030',
+                clients.length
+            );
+            await this.clientsCollection.add(client);
+        });
     }
 
-    addCorporateClient(client: ICorporateClient): Promise<DocumentReference> {
-        client.id = v4();
-        client.clientType = 'Corporate';
-        return this.clientsCollection.add(client);
+    async addCorporateClient(client: ICorporateClient): Promise<void> {
+        this.clients.pipe(first()).subscribe(async clients => {
+            client.id = v4();
+            client.clientID = this.generateClientID(
+                'Corporate',
+                'BR20200020',
+                clients.length
+            );
+            client.clientType = 'Corporate';
+            await this.clientsCollection.add(client);
+        });
     }
 
     addAccountDetails(
@@ -55,19 +70,26 @@ export class ClientsService {
     }
 
     getClients(): Observable<IClient[]> {
+        console.log('HERE', this.clients);
         return this.clients;
     }
 
-    countGenerator(number) {
-        if (number<=99999) { number = ("0000"+number).slice(-5); }
+    countGenerator(number: string | number) {
+        if (number <= 99999) {
+            number = ('0000' + number).slice(-5);
+        }
         return number;
-      }
-      
-      generateClientID(clientType: string, brokerName: string, totalClients: number) {
-          const client_type = clientType.substring(0,3).toLocaleUpperCase();
-          const broker_name = brokerName.substring(0,2).toLocaleUpperCase();
-          const count = this.countGenerator(totalClients);
-      
-          return (client_type + broker_name + count);
-      }
+    }
+
+    generateClientID(
+        clientType: string,
+        brokerName: string,
+        totalClients: number
+    ) {
+        const client_type = clientType.substring(0, 3).toLocaleUpperCase();
+        const broker_name = brokerName.substring(0, 2).toLocaleUpperCase();
+        const count = this.countGenerator(totalClients);
+
+        return client_type + broker_name + count;
+    }
 }

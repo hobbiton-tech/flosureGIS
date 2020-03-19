@@ -5,7 +5,9 @@ import {
     AngularFirestore,
     AngularFirestoreCollection
 } from '@angular/fire/firestore';
-import { filter } from 'rxjs/operators';
+import { filter, first } from 'rxjs/operators';
+
+import { v4 } from 'uuid';
 
 @Injectable({
     providedIn: 'root'
@@ -21,6 +23,7 @@ export class ClaimsService {
 
     async addClaim(claim: Claim): Promise<void> {
         this.claims.pipe(first()).subscribe(async claims => {
+            claim.id = v4();
             claim.claimId = this.generateCliamID('BR20200012', claims.length);
             await this.claimsCollection.add(claim);
         });
@@ -33,7 +36,7 @@ export class ClaimsService {
         return this.claims;
     }
 
-    countGenerator(number) {
+    countGenerator(number: string | number): string | number {
         if (number <= 9999) {
             number = ('0000' + number).slice(-5);
         }

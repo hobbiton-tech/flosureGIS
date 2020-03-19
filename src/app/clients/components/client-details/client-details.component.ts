@@ -4,11 +4,19 @@ import {
     ChangeDetectorRef,
     AfterViewInit
 } from '@angular/core';
-import { IClient } from '../../models/clients.model';
+import {
+    IClient,
+    IIndividualClient,
+    ICorporateClient,
+    CombinedClients
+} from '../../models/clients.model';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AccountDetails } from '../../models/account-details.model';
 import { ClientsService } from '../../services/clients.service';
-import { filter, first } from 'rxjs/operators';
+import { Policy } from 'src/app/underwriting/models/policy.model';
+import { Claim } from 'src/app/claims/models/claim.model';
+import { PoliciesService } from 'src/app/underwriting/services/policies.service';
+import { ClaimsService } from 'src/app/claims/services/claims-service.service';
 
 @Component({
     selector: 'app-client-details',
@@ -17,20 +25,38 @@ import { filter, first } from 'rxjs/operators';
 })
 export class ClientDetailsComponent implements OnInit, AfterViewInit {
     isEditmode = false;
-    client: IClient;
+
+    client: CombinedClients;
+    clientPolicies: Policy[];
+    clientClaims: Claim[];
+
     account: AccountDetails;
-    clientId: string;
+    id: string;
 
     constructor(
         private readonly route: Router,
         private cdr: ChangeDetectorRef,
         private router: ActivatedRoute,
-        private clientsService: ClientsService
+        private clientsService: ClientsService,
+        private policyService: PoliciesService,
+        private claimsService: ClaimsService
     ) {}
 
     ngOnInit(): void {
         this.router.params.subscribe(param => {
-            this.clientId = param.id;
+            this.id = param.id;
+        });
+
+        this.clientsService.getClient(this.id).subscribe(client => {
+            this.client = client as CombinedClients;
+        });
+
+        this.policyService.getClientsPolicies(this.id).subscribe(policies => {
+            this.clientPolicies = policies;
+        });
+
+        this.claimsService.getClientsClaims(this.id).subscribe(claims => {
+            this.clientClaims = claims;
         });
     }
 

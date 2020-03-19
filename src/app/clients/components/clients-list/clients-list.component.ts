@@ -1,8 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { generateClients } from 'src/app/clients/data/client.data';
-import { Client } from '../../models/clients.model';
+import {
+    IClient,
+    IIndividualClient,
+    ICorporateClient,
+    ClientType
+} from '../../models/clients.model';
 import { Router } from '@angular/router';
 import { ClientsService } from '../../services/clients.service';
+
+import * as _ from 'lodash';
 
 @Component({
     selector: 'app-clients-list',
@@ -10,13 +16,18 @@ import { ClientsService } from '../../services/clients.service';
     styleUrls: ['./clients-list.component.scss']
 })
 export class ClientsListComponent implements OnInit {
-    Clients: Client[];
-  clientList: any;
-  individualC = true;
-    // corporate = 'Corporate';
-    // individual = 'Individual';
-    // clientList = generateClients();
-    preLoader = true;
+    clientList: IClient[];
+    isAddClientDrawerOpen: boolean = false;
+    selectedClientType: ClientType = 'Individual';
+
+    totalClients: number = 0;
+    individualClients: IIndividualClient[];
+    totalIndividualClients: number = 0;
+    corporateClients: ICorporateClient[];
+    totalCorporateClients: number = 0;
+
+    clientsLoading: boolean = true;
+
     constructor(
         private router: Router,
         private readonly clientsService: ClientsService
@@ -24,24 +35,35 @@ export class ClientsListComponent implements OnInit {
 
     ngOnInit(): void {
         this.clientsService.getClients().subscribe(clients => {
-            this.Clients = [];
-            clients.forEach(client => {
-                const a = client;
-                this.Clients.push(a as Client);
-            });
-            console.log(this.Clients);
+            this.clientList = clients;
+            this.totalClients = clients.length;
+
+            this.individualClients = _.filter(
+                clients,
+                x => x.clientType === 'Individual'
+            ) as IIndividualClient[];
+
+            this.corporateClients = _.filter(
+                clients,
+                x => x.clientType === 'Corporate'
+            ) as ICorporateClient[];
+
+            this.totalIndividualClients = this.individualClients.length;
+            this.totalCorporateClients = this.corporateClients.length;
+
+            this.clientsLoading = false;
         });
     }
 
-    viewDetails(client: Client): void {
+    viewDetails(client: IClient): void {
         this.router.navigateByUrl('/clients/client-details/' + client.id);
     }
 
-    addClient(client: Client): void {
-        this.clientsService.addClient(client);
+    addIndividualClient(client: IIndividualClient): void {
+        this.clientsService.addIndividualClient(client);
     }
 
-    // getClients() {
-
-    // }
+    addCorporateClient(client: ICorporateClient): void {
+        this.clientsService.addCorporateClient(client);
+    }
 }

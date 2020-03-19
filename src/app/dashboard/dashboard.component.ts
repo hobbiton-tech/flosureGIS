@@ -21,7 +21,6 @@ export class DashboardComponent implements OnInit {
     policiesLoading: boolean = true;
 
     constructor(
-        private readonly dashboardService: DashboardService,
         private clientsService: ClientsService,
         private claimsService: ClaimsService,
         private policiesService: PoliciesService
@@ -43,6 +42,4 @@ export class DashboardComponent implements OnInit {
             this.policiesLoading;
         });
     }
-
-    // clientsCount = this.dashboardService.getClientsCount();
 }

@@ -1,8 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { generateClaimsList } from '../../models/claim.model';
 import { Router } from '@angular/router';
 import { ClaimsService } from '../../services/claims-service.service';
-import { Claim } from '../../models/claim.model'
+import { Claim } from '../../models/claim.model';
 
 @Component({
     selector: 'app-claim-transactions',
@@ -11,13 +10,10 @@ import { Claim } from '../../models/claim.model'
 })
 export class ClaimTransactionsComponent implements OnInit {
     claimsList: Claim[];
-    //claimsList = generateClaimsList();
 
     constructor(
         private readonly route: Router,
-        private cdr: ChangeDetectorRef,
         private readonly claimsService: ClaimsService
-
     ) {}
 
     viewClaimDetails(): void {
@@ -26,13 +22,12 @@ export class ClaimTransactionsComponent implements OnInit {
 
     async addClaim(claim: Claim): Promise<void> {
         await this.claimsService.addClaim(claim);
-      }
+    }
 
     ngOnInit(): void {
         this.claimsService.getClaims().subscribe(claims => {
             this.claimsList = claims;
             console.log(claims);
-        })
-        
+        });
     }
 }
