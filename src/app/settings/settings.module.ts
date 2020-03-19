@@ -14,8 +14,18 @@ import { CreateSectorComponent } from './components/organizational-setups/organi
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { AccountsComponent } from './components/accounts/accounts.component';
+import { InsuranceCompaniesComponent } from './components/insurance-companies/insurance-companies.component';
+import { AddInsuranceCompanyComponent } from './components/insurance-companies/components/add-insurance-company/add-insurance-company.component';
 
 const routes: Routes = [
+    {
+        path: 'insurance-companies',
+        component: InsuranceCompaniesComponent
+    },
+    {
+        path: 'add-insurance-company',
+        component: AddInsuranceCompanyComponent
+    },
     {
         path: 'underwriting',
         component: UnderwritingSetupsComponent
@@ -43,7 +53,9 @@ const routes: Routes = [
         CreatePaymentModeComponent,
         CreateRelationshipTypeComponent,
         CreateSectorComponent,
-        AccountsComponent
+        AccountsComponent,
+        InsuranceCompaniesComponent,
+        AddInsuranceCompanyComponent
     ],
     imports: [
         CommonModule,

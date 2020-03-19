@@ -1,18 +1,22 @@
 import {
     Component,
     OnInit,
-    Input,
     ChangeDetectorRef,
     AfterViewInit
 } from '@angular/core';
-import { Client } from '../../models/clients.model';
-import { generateClients } from '../../data/client.data';
+import {
+    IClient,
+    IIndividualClient,
+    ICorporateClient,
+    CombinedClients
+} from '../../models/clients.model';
 import { Router, ActivatedRoute } from '@angular/router';
-import { generatePolicies } from 'src/app/underwriting/data/policy.data';
-import { generateClaimsList } from 'src/app/claims/models/claim.model';
 import { AccountDetails } from '../../models/account-details.model';
 import { ClientsService } from '../../services/clients.service';
-import { tap } from 'rxjs/operators';
+import { Policy } from 'src/app/underwriting/models/policy.model';
+import { Claim } from 'src/app/claims/models/claim.model';
+import { PoliciesService } from 'src/app/underwriting/services/policies.service';
+import { ClaimsService } from 'src/app/claims/services/claims-service.service';
 
 @Component({
     selector: 'app-client-details',
@@ -21,54 +25,38 @@ import { tap } from 'rxjs/operators';
 })
 export class ClientDetailsComponent implements OnInit, AfterViewInit {
     isEditmode = false;
-    client: Client;
+
+    client: CombinedClients;
+    clientPolicies: Policy[];
+    clientClaims: Claim[];
+
     account: AccountDetails;
+    id: string;
 
-    clientPolicies = generatePolicies();
-    clientsClaims = generateClaimsList();
-
-    listOfData = [
-        {
-            key: '1',
-            name: 'John Brown',
-            age: 32,
-            address: 'New York No. 1 Lake Park'
-        },
-        {
-            key: '2',
-            name: 'Jim Green',
-            age: 42,
-            address: 'London No. 1 Lake Park'
-        },
-        {
-            key: '3',
-            name: 'Joe Black',
-            age: 32,
-            address: 'Sidney No. 1 Lake Park'
-        }
-    ];
-  id: any;
-  clientData: any;
     constructor(
         private readonly route: Router,
         private cdr: ChangeDetectorRef,
         private router: ActivatedRoute,
-        private readonly clientsService: ClientsService
+        private clientsService: ClientsService,
+        private policyService: PoliciesService,
+        private claimsService: ClaimsService
     ) {}
 
     ngOnInit(): void {
-        this.client = generateClients()[9];
         this.router.params.subscribe(param => {
-          this.id = param.id;
-
+            this.id = param.id;
         });
 
-        this.clientsService.getClient(this.id).subscribe(cli => {
-            this.clientData = cli;
-            console.log('<======ID=====>');
-            console.log(this.id);
-            console.log('<======CLIENT=====>');
-            console.log(this.clientData);
+        this.clientsService.getClient(this.id).subscribe(client => {
+            this.client = client as CombinedClients;
+        });
+
+        this.policyService.getClientsPolicies(this.id).subscribe(policies => {
+            this.clientPolicies = policies;
+        });
+
+        this.claimsService.getClientsClaims(this.id).subscribe(claims => {
+            this.clientClaims = claims;
         });
     }
 

@@ -39,33 +39,33 @@ export class EmployementInformationComponent implements OnInit {
         return this.employementInformationForm.controls;
     }
 
-  onSubmit() {
-      const some = this.employementInformationForm.value;
-      console.log(some);
-      this.clientsService.addClient(some);
-      this.stepperService.changeIndex(3);
-      this.router.navigateByUrl('/clients/bank-details');
+    onSubmit() {
+        const some = this.employementInformationForm.value;
+        console.log(some);
+        // this.clientsService.addClient(some);
+        this.stepperService.changeIndex(3);
+        this.router.navigateByUrl('/clients/bank-details');
     }
 
     ngOnInit(): void {
-      this.personal = this.getFromLocalStrorage();
-      console.log(this.personal);
-      this.employementInformationForm = this.formBuilder.group({
-          title: [this.personal.title],
-          firstName: [this.personal.firstName],
-          lastName: [this.personal.lastName],
-          email: [this.personal.email],
-          address: [this.personal.address],
-          phone: [this.personal.phone],
-          gender: [this.personal.gender],
-          dob: [this.personal.dob],
-          clientID: [this.personal.clientID],
-          type: ['Individual'],
-          status: ['Inactive'],
-          sector: ['', Validators.required],
-          occupation: ['', Validators.required]
-      });
-      this.stepperService.toggleStepper(true);
-      this.stepperService.changeIndex(2);
+        this.personal = this.getFromLocalStrorage();
+        console.log(this.personal);
+        this.employementInformationForm = this.formBuilder.group({
+            title: [this.personal.title],
+            firstName: [this.personal.firstName],
+            lastName: [this.personal.lastName],
+            email: [this.personal.email],
+            address: [this.personal.address],
+            phone: [this.personal.phone],
+            gender: [this.personal.gender],
+            dob: [this.personal.dob],
+            clientID: [this.personal.clientID],
+            type: ['Individual'],
+            status: ['Inactive'],
+            sector: ['', Validators.required],
+            occupation: ['', Validators.required]
+        });
+        this.stepperService.toggleStepper(true);
+        this.stepperService.changeIndex(2);
     }
 }
