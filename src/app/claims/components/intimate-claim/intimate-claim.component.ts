@@ -23,7 +23,6 @@ export class IntimateClaimComponent implements OnInit {
     this.intimateClaimForm = this.formBuilder.group({
       bookedBy: '',
       claimID: '',
-      riskID: '',
       policyNumber: '',
       clientName: '',
       serviceProvider: '',
@@ -32,7 +31,8 @@ export class IntimateClaimComponent implements OnInit {
       risk: '',
       activity: '',
       lossDate: '',
-      notificationDate: ''
+      notificationDate: '',
+      status: 'pending'
     })
   }
 
@@ -41,6 +41,7 @@ export class IntimateClaimComponent implements OnInit {
   // }
 
   onSubmit() {
+    console.log(this.intimateClaimForm.value);
     const claim = this.intimateClaimForm.value;
     this.claimService.addClaim(claim);
   }

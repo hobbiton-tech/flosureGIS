@@ -19,15 +19,40 @@ export class ClaimsService {
         this.claims = this.claimsCollection.valueChanges();
     }
 
-    addClaim(claim: Claim): void {
-        this.claimsCollection.add(claim);
-    }
-
-    getClaims(): Observable<Claim[]> {
-        return this.claims;
+    async addClaim(claim: Claim): Promise<void> {
+        this.claims.pipe(first()).subscribe(async claims => {
+            claim.claimId = this.generateCliamID('BR20200012', claims.length);
+            await this.claimsCollection.add(claim);
+        });
     }
 
     getClientsClaims(clientId: string): Observable<Claim[]> {
         return this.claims.pipe(filter(claim => clientId === clientId));
+    }
+    getClaims(): Observable<Claim[]> {
+        return this.claims;
+    }
+
+    countGenerator(number) {
+        if (number <= 9999) {
+            number = ('0000' + number).slice(-5);
+        }
+        return number;
+    }
+
+    //generate cliam ID
+    generateCliamID(brokerName: string, totalClaims: number): string {
+        const broker_name = brokerName.substring(0, 2).toLocaleUpperCase();
+        const count = this.countGenerator(totalClaims);
+        const today = new Date();
+        const dateString: string =
+            today
+                .getFullYear()
+                .toString()
+                .substr(-2) +
+            ('0' + (today.getMonth() + 1)).slice(-2) +
+            +('0' + today.getDate()).slice(-2);
+
+        return 'CL' + broker_name + dateString + count;
     }
 }

@@ -57,4 +57,17 @@ export class ClientsService {
     getClients(): Observable<IClient[]> {
         return this.clients;
     }
+
+    countGenerator(number) {
+        if (number<=99999) { number = ("0000"+number).slice(-5); }
+        return number;
+      }
+      
+      generateClientID(clientType: string, brokerName: string, totalClients: number) {
+          const client_type = clientType.substring(0,3).toLocaleUpperCase();
+          const broker_name = brokerName.substring(0,2).toLocaleUpperCase();
+          const count = this.countGenerator(totalClients);
+      
+          return (client_type + broker_name + count);
+      }
 }
