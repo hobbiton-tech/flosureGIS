@@ -12,18 +12,18 @@
         <nz-page-header>
           <nz-page-header-title>Registered Clients</nz-page-header-title>
           <nz-page-header-extra>
-            <button nz-button routerLink="/clients/create-client" nzType="primary">Add New Client</button>
+            <button nz-button (click)="isAddClientDrawerOpen = true" nzType="primary">Add New Client</button>
           </nz-page-header-extra>
           <nz-page-header-content>
             <nz-row [nzGutter]="1">
               <nz-col [nzSpan]="6">
-                <nz-statistic [nzValue]="1941 | number" [nzTitle]="'Total Clients'"></nz-statistic>
+                <nz-statistic [nzValueTemplate]="clientsTotal" [nzTitle]="'Total Clients'"></nz-statistic>
               </nz-col>
               <nz-col [nzSpan]="6">
-                <nz-statistic [nzValue]="2019 | number " [nzTitle]="'Individual Clients'"></nz-statistic>
+                <nz-statistic [nzValueTemplate]="individaulTotal" [nzTitle]="'Individual Clients'"></nz-statistic>
               </nz-col>
               <nz-col [nzSpan]="6">
-                <nz-statistic [nzValue]="941 | number" [nzTitle]="'Corporate Clients'"></nz-statistic>
+                <nz-statistic [nzValueTemplate]="corporateTotal" [nzTitle]="'Corporate Clients'"></nz-statistic>
               </nz-col>
             </nz-row>
           </nz-page-header-content>
@@ -47,7 +47,7 @@
             <label nz-radio nzValue="individual">Individual Clients</label>
           </nz-radio-group>
         </div>
-        <nz-table #clientsTable [nzData]="Clients" [nzSize]="'small'" [nzBordered]="true"
+        <nz-table #clientsTable [nzData]="clientList" [nzSize]="'small'" [nzBordered]="true"
           style="background-color: white;">
           <thead>
             <tr>
@@ -86,3 +86,119 @@
       </div>
     </nz-card>
 </div>
+
+<ng-template #clientsTotal>
+  <div *ngIf="clientsLoading">
+      <nz-spin nzSimple></nz-spin>
+  </div>
+  <div *ngIf="!clientsLoading">
+      {{totalClients | number}}
+  </div>
+</ng-template>
+
+<ng-template #individaulTotal>
+  <div *ngIf="clientsLoading">
+      <nz-spin nzSimple></nz-spin>
+  </div>
+  <div *ngIf="!clientsLoading">
+      {{totalIndividualClients | number}}
+  </div>
+</ng-template>
+
+<ng-template #corporateTotal>
+  <div *ngIf="clientsLoading">
+      <nz-spin nzSimple></nz-spin>
+  </div>
+  <div *ngIf="!clientsLoading">
+      {{totalCorporateClients | number}}
+  </div>
+</ng-template>
+
+<!-- Drawer for adding app-clients -->
+<!-- TODO: Should move this to a seperate component -->
+<nz-drawer
+[nzBodyStyle]="{ height: 'calc(100% - 55px)', overflow: 'auto', 'padding-bottom': '53px' }"
+[nzPlacement]="'left'"
+[nzMaskClosable]="false"
+[nzWidth]="720"
+[nzVisible]="isAddClientDrawerOpen"
+nzTitle="Create"
+(nzOnClose)="isAddClientDrawerOpen = false;"
+>
+<form nz-form>
+  <div nz-row nzGutter="8">
+    <div nz-col nzSpan="12">
+      <nz-form-item>
+        <nz-form-label>Name</nz-form-label>
+        <nz-form-control>
+          <input nz-input placeholder="please enter user name" />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col nzSpan="12">
+      <nz-form-item>
+        <nz-form-label>Url</nz-form-label>
+        <nz-form-control>
+          <nz-input-group nzAddOnBefore="http://" nzAddOnAfter=".com">
+            <input type="text" nz-input placeholder="please enter url" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+  <div nz-row nzGutter="8">
+    <div nz-col nzSpan="12">
+      <nz-form-item>
+        <nz-form-label>Owner</nz-form-label>
+        <nz-form-control>
+          <nz-select nzPlaceHolder="Please select an owner"></nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col nzSpan="12">
+      <nz-form-item>
+        <nz-form-label>Type</nz-form-label>
+        <nz-form-control>
+          <nz-select nzPlaceHolder="Please choose the type"></nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+  <div nz-row nzGutter="8">
+    <div nz-col nzSpan="12">
+      <nz-form-item>
+        <nz-form-label>Approver</nz-form-label>
+        <nz-form-control>
+          <nz-select nzPlaceHolder="Please choose the approver"></nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col nzSpan="12">
+      <nz-form-item>
+        <nz-form-label>DateTime</nz-form-label>
+        <nz-form-control>
+          <nz-range-picker></nz-range-picker>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+  <div nz-row nzGutter="8">
+    <div nz-col nzSpan="24">
+      <nz-form-item>
+        <nz-form-label>Description</nz-form-label>
+        <nz-form-control>
+          <textarea
+            nz-input
+            placeholder="please enter url description"
+            [nzAutosize]="{ minRows: 4, maxRows: 4 }"
+          ></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+</form>
+<div class="footer">
+  <button type="button" (click)="isAddClientDrawerOpen = false" class="ant-btn" style="margin-right: 8px;"><span>Cancel</span></button>
+  <button type="button" (click)="isAddClientDrawerOpen = false" class="ant-btn ant-btn-primary"><span>Add Client</span></button>
+</div>
+</nz-drawer>

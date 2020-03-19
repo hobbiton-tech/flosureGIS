@@ -1,0 +1,77 @@
+<div style="margin: 20px;">
+
+        <nz-breadcrumb>
+                <nz-breadcrumb-item>
+                    Settings
+                </nz-breadcrumb-item>
+                <nz-breadcrumb-item>
+                    Insurance Companies
+                </nz-breadcrumb-item>
+              </nz-breadcrumb>
+
+        <nz-card [nzBordered]="false" style="margin-top: 20px">
+            <nz-tabset>
+                <nz-tab nzTitle="Insurance Companies">
+                    <nz-card [nzBordered]="false">
+    
+                        <div style="margin-bottom: 10px;">
+                            <div nz-row [nzGutter]="24">
+                                <div nz-col nzSpan="12">
+                                    <div style="width: 75%">
+                                        <nz-input-group [nzSuffix]="suffixIconSearch">
+                                            <input type="text" nz-input placeholder="Search by ID, name, company code, date" />
+                                        </nz-input-group>
+                                        <ng-template #suffixIconSearch>
+                                            <i nz-icon nzType="search"></i>
+                                        </ng-template>
+                                    </div>
+                                </div>
+                                <div nz-col nzSpan=12>
+                                    <button nz-button nzType="primary" style="float: right" (click)="openAddInsuranceCompanyFormDrawer()">Add Insurance Company</button>
+                                </div>
+    
+                            </div>
+                        </div>
+    
+    
+    
+                        <nz-table #insuranceCompaniesTable [nzData]="" [nzSize]="'small'" [nzBordered]="true"
+                            style="background-color: white;">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Company Code</th>
+                                    <th>Date Created</th>
+                                    <th>Contract</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let insuranceCompany of insuranceCompaniesTable.data">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td style="width: 70px">
+                                        <!-- <div class="icons-list" style="text-align: center;width: 65px">
+                                            <i nz-icon [nzType]="'edit'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#b3cde8'"></i>
+                                            <nz-divider nzType="vertical"></nz-divider>
+                                            <i nz-icon [nzType]="'delete'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#eb2f32'"></i>
+                                        </div> -->
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </nz-table>
+                    </nz-card>
+                </nz-tab>   
+                    
+                
+            </nz-tabset>
+        </nz-card>
+    </div>
+
+    <app-add-insurance-company [isAddInsuranceCompanyDrawerVisible]="addInsuranceCompanyFormDrawerVisible" (closeAddInsuranceCompanyDrawer)="addInsuranceCompanyFormDrawerVisible = false"></app-add-insurance-company>
+    
+    

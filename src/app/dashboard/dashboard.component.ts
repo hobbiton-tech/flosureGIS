@@ -10,39 +10,38 @@ import { PoliciesService } from '../underwriting/services/policies.service';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+    clientsCount: number = 0;
+    claimsCount: number = 0;
+    policiesCount: number = 0;
+    cancelledPoliciesCount: number;
+    commissionEarned: number = 0;
 
+    clientsLoading: boolean = true;
+    claimsLoading: boolean = true;
+    policiesLoading: boolean = true;
 
-  clientsCount = 0;
-  claimsCount = 0;
-  policiesCount = 0;
-  cancelledPoliciesCount: number;
-  commissionEarned = 0;
+    constructor(
+        private clientsService: ClientsService,
+        private claimsService: ClaimsService,
+        private policiesService: PoliciesService
+    ) {}
 
-  clientsLoading = true;
-  claimsLoading = true;
-  policiesLoading = true;
+    ngOnInit(): void {
+        this.clientsService.getClients().subscribe(clients => {
+            this.clientsCount = clients.length;
+            this.clientsLoading = false;
+        });
 
-  constructor(
-    private readonly dashboardService: DashboardService,
-    private clientsService: ClientsService,
-    private claimsService: ClaimsService,
-    private policiesService: PoliciesService) { }
+        this.claimsService.getClaims().subscribe(claims => {
+            this.claimsCount = claims.length;
+            this.claimsLoading = false;
+        });
 
-  ngOnInit(): void {
-    this.clientsService.getClients().subscribe((clients) => {
-      this.clientsCount = clients.length;
-      this.clientsLoading = false;
-    });
+        this.policiesService.getPolicies().subscribe(policies => {
+            this.policiesCount = policies.length;
+            this.policiesLoading;
+        });
+    }
 
-    this.claimsService.getClaims().subscribe((claims) => {
-      this.claimsCount = claims.length;
-      this.claimsLoading = false;
-    });
-
-    this.policiesService.getPolicies().subscribe((policies) => {
-      this.policiesCount = policies.length;
-      this.policiesLoading = false;
-    });
-  }
 }
 
