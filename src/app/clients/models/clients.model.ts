@@ -10,9 +10,11 @@ export interface IClient {
     dateCreated: Date;
     dateUpdated: Date;
     clientType: ClientType;
+    individualDetails: IIndividualDetails;
+    corporateDetails: ICorporateDetails;
 }
 
-export interface IIndividualClient extends IClient {
+export interface IIndividualDetails {
     title: string;
     gender: GenderType;
     idType: IDType;
@@ -21,12 +23,10 @@ export interface IIndividualClient extends IClient {
     occupation: string;
 }
 
-export interface ICorporateClient extends IClient {
+export interface ICorporateDetails {
     companyName: string;
     taxPin: number;
 }
-
-export type CombinedClients = IIndividualClient & ICorporateClient;
 
 export type ClientType = 'Individual' | 'Corporate';
 export type OccupationType = 'Employed' | 'Unemployed' | 'Student';

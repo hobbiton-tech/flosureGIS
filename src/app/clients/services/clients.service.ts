@@ -1,10 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import {
-    IIndividualClient,
-    ICorporateClient,
-    IClient
-} from '../models/clients.model';
+import { IClient } from '../models/clients.model';
 import {
     AngularFirestore,
     AngularFirestoreCollection,
@@ -33,7 +29,7 @@ export class ClientsService {
         this.clients = this.clientsCollection.valueChanges();
     }
 
-    async addIndividualClient(client: IIndividualClient): Promise<void> {
+    async addIndividualClient(client: IClient): Promise<void> {
         this.clients.pipe(first()).subscribe(async clients => {
             client.id = v4();
             client.clientType = 'Individual';
@@ -46,7 +42,7 @@ export class ClientsService {
         });
     }
 
-    async addCorporateClient(client: ICorporateClient): Promise<void> {
+    async addCorporateClient(client: IClient): Promise<void> {
         this.clients.pipe(first()).subscribe(async clients => {
             client.id = v4();
             client.clientID = this.generateClientID(

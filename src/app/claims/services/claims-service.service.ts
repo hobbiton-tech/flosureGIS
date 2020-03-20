@@ -5,7 +5,9 @@ import {
     AngularFirestore,
     AngularFirestoreCollection
 } from '@angular/fire/firestore';
-import { filter, first } from 'rxjs/operators';
+import { filter, first, take } from 'rxjs/operators';
+
+// import 'firebase/firestore';
 
 import { v4 } from 'uuid';
 
@@ -13,11 +15,11 @@ import { v4 } from 'uuid';
     providedIn: 'root'
 })
 export class ClaimsService {
-    private claimsCollection: AngularFirestoreCollection<Claim>;
+    claimsCollection: AngularFirestoreCollection<Claim>;
     claims: Observable<Claim[]>;
 
-    constructor(private firebase: AngularFirestore) {
-        this.claimsCollection = this.firebase.collection<Claim>('claims');
+    constructor(private firestore: AngularFirestore) {
+        this.claimsCollection = this.firestore.collection<Claim>('claims');
         this.claims = this.claimsCollection.valueChanges();
     }
 
@@ -25,14 +27,22 @@ export class ClaimsService {
         this.claims.pipe(first()).subscribe(async claims => {
             claim.id = v4();
             claim.claimId = this.generateCliamID('BR20200012', claims.length);
+
+            // this.claimsCollection
             await this.claimsCollection.add(claim);
         });
+    }
+
+    async updateClaim(id: string): Promise<void> {
+        const cliam = this.firestore.doc<Claim>(`claims/${id}`);
     }
 
     getClientsClaims(clientId: string): Observable<Claim[]> {
         return this.claims.pipe(filter(claim => clientId === clientId));
     }
+
     getClaims(): Observable<Claim[]> {
+        console.log(this.claims);
         return this.claims;
     }
 

@@ -4,6 +4,8 @@ import { ClientsService } from '../clients/services/clients.service';
 import { ClaimsService } from '../claims/services/claims-service.service';
 import { PoliciesService } from '../underwriting/services/policies.service';
 
+import * as _ from 'lodash';
+
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
@@ -13,6 +15,11 @@ export class DashboardComponent implements OnInit {
     clientsCount: number = 0;
     claimsCount: number = 0;
     policiesCount: number = 0;
+
+    totalPolicies: number = 0;
+    activePolices: number = 0;
+    inactivePolicies: number = 0;
+
     cancelledPoliciesCount: number;
     commissionEarned: number = 0;
 
@@ -21,25 +28,33 @@ export class DashboardComponent implements OnInit {
     policiesLoading: boolean = true;
 
     constructor(
-        private clientsService: ClientsService,
-        private claimsService: ClaimsService,
+        private clients: ClientsService,
+        private claims: ClaimsService,
         private policiesService: PoliciesService
     ) {}
 
     ngOnInit(): void {
-        this.clientsService.getClients().subscribe(clients => {
+        this.clients.getClients().subscribe(clients => {
             this.clientsCount = clients.length;
             this.clientsLoading = false;
         });
-
-        this.claimsService.getClaims().subscribe(claims => {
+        this.claims.getClaims().subscribe(claims => {
+            console.log('SOME', claims);
             this.claimsCount = claims.length;
             this.claimsLoading = false;
         });
-
         this.policiesService.getPolicies().subscribe(policies => {
             this.policiesCount = policies.length;
-            this.policiesLoading;
+            this.totalPolicies = policies.length;
+            this.activePolices = _.filter(
+                policies,
+                x => x.status === 'Active'
+            ).length;
+            this.inactivePolicies = _.filter(
+                policies,
+                x => x.status === 'Expired'
+            ).length;
+            this.policiesLoading = false;
         });
     }
 }

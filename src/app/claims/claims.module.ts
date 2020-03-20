@@ -7,7 +7,8 @@ import { IntimateClaimComponent } from './components/intimate-claim/intimate-cla
 import { ClaimTransactionsComponent } from './components/claim-transactions/claim-transactions.component';
 import { ClaimantsComponent } from './components/claimants/claimants.component';
 import { ClaimDetailsComponent } from './components/claim-details/claim-details.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ClaimsService } from './services/claims-service.service';
 
 const routes: Routes = [
     {
@@ -36,6 +37,12 @@ const routes: Routes = [
         ClaimantsComponent,
         ClaimDetailsComponent
     ],
-    imports: [CommonModule, ReactiveFormsModule, NgZorroAntdModule, RouterModule.forChild(routes)]
+    providers: [ClaimsService],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        NgZorroAntdModule,
+        RouterModule.forChild(routes)
+    ]
 })
 export class ClaimsModule {}

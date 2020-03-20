@@ -2,42 +2,60 @@
     <div nz-row [nzGutter]="8">
         <div nz-col [nzSpan]="8">
             <nz-card>
-                <nz-statistic [nzValueTemplate]="clientStats" [nzTitle]="'Total Clients'"></nz-statistic>
+                <nz-statistic
+                    [nzValueTemplate]="clientStats"
+                    [nzTitle]="'Total Clients'"
+                ></nz-statistic>
             </nz-card>
         </div>
         <div nz-col [nzSpan]="8">
             <nz-card>
-                <nz-statistic [nzValueTemplate]="claimsStats" [nzTitle]="'Pending Claims'"></nz-statistic>
+                <nz-statistic
+                    [nzValueTemplate]="claimsStats"
+                    [nzTitle]="'Pending Claims'"
+                ></nz-statistic>
             </nz-card>
         </div>
         <div nz-col [nzSpan]="8">
             <nz-card>
-                <nz-statistic [nzValueTemplate]="policiesStats" [nzTitle]="'Active Policies'"></nz-statistic>
+                <nz-statistic
+                    [nzValueTemplate]="policiesStats"
+                    [nzTitle]="'Active Policies'"
+                ></nz-statistic>
             </nz-card>
         </div>
     </div>
     <div nz-row [nzGutter]="8" style="padding-top: 10px">
         <div nz-col [nzSpan]="8">
             <nz-card>
-                <nz-statistic [nzValueTemplate]="policiesStats" [nzTitle]="'Expiring Policies'"></nz-statistic>
+                <nz-statistic
+                    [nzValueTemplate]="policiesStats"
+                    [nzTitle]="'Expiring Policies'"
+                ></nz-statistic>
             </nz-card>
         </div>
         <div nz-col [nzSpan]="8">
             <nz-card>
-                <nz-statistic [nzValue]="commissionEarned | number"  [nzTitle]="'Commission Earned (ZMK)'"></nz-statistic>
+                <nz-statistic
+                    [nzValue]="commissionEarned | number"
+                    [nzTitle]="'Commission Earned (ZMK)'"
+                ></nz-statistic>
             </nz-card>
         </div>
         <div nz-col [nzSpan]="8">
             <nz-card>
-                <nz-statistic [nzValue]="commissionEarned | number"  [nzTitle]="'Total Premium (ZMK)'"></nz-statistic>
+                <nz-statistic
+                    [nzValue]="commissionEarned | number"
+                    [nzTitle]="'Total Policies'"
+                ></nz-statistic>
             </nz-card>
         </div>
     </div>
 
     <div style="margin-top: 20px">
-    <nz-card nzTitle="Expiring Policies">
-        <nz-table></nz-table>
-    </nz-card>
+        <nz-card nzTitle="Expiring Policies">
+            <nz-table></nz-table>
+        </nz-card>
     </div>
 </div>
 
@@ -46,7 +64,7 @@
         <nz-spin nzSimple></nz-spin>
     </div>
     <div *ngIf="!clientsLoading">
-        {{clientsCount | number}}
+        {{ clientsCount | number }}
     </div>
 </ng-template>
 
@@ -55,7 +73,7 @@
         <nz-spin nzSimple></nz-spin>
     </div>
     <div *ngIf="!claimsLoading">
-        {{claimsCount | number}}
+        {{ claimsCount | number }}
     </div>
 </ng-template>
 
@@ -64,6 +82,6 @@
         <nz-spin nzSimple></nz-spin>
     </div>
     <div *ngIf="!policiesLoading">
-        {{policiesCount | number}}
+        {{ policiesCount | number }}
     </div>
 </ng-template>

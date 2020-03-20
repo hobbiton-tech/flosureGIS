@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { NavigationComponent } from './navigation/navigation.component';
-import { QuotesComponent } from './quotes/quotes.component';
 import { SettingsComponent } from './settings/settings.component';
 import { OrganizationalSetupsComponent } from './settings/components/organizational-setups/organizational-setups.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
+
+import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
 
 const routes: Routes = [
     {
@@ -17,11 +17,8 @@ const routes: Routes = [
         component: NavigationComponent,
         children: [
             {
-                path: '',
-                component: DashboardComponent
-            },
-            {
                 path: 'dashboard',
+                // canActivate: [AngularFireAuthGuard],
                 loadChildren: () =>
                     import('./dashboard/dashboard.module').then(
                         m => m.DashboardModule
@@ -29,6 +26,7 @@ const routes: Routes = [
             },
             {
                 path: 'clients',
+                // canActivate: [AngularFireAuthGuard],
                 loadChildren: () =>
                     import('./clients/clients.module').then(
                         m => m.ClientsModule
@@ -36,14 +34,17 @@ const routes: Routes = [
             },
             {
                 path: 'settings',
+                // canActivate: [AngularFireAuthGuard],
                 component: SettingsComponent
             },
             {
                 path: 'organizational-setups',
+                // canActivate: [AngularFireAuthGuard],
                 component: OrganizationalSetupsComponent
             },
             {
                 path: 'underwriting',
+                // canActivate: [AngularFireAuthGuard],
                 loadChildren: () =>
                     import('./underwriting/underwriting.module').then(
                         m => m.UnderWritingModule
@@ -51,16 +52,19 @@ const routes: Routes = [
             },
             {
                 path: 'quotes',
+                // canActivate: [AngularFireAuthGuard],
                 loadChildren: () =>
                     import('./quotes/quotes.module').then(m => m.QuotesModule)
             },
             {
                 path: 'claims',
+                // canActivate: [AngularFireAuthGuard],
                 loadChildren: () =>
                     import('./claims/claims.module').then(m => m.ClaimsModule)
             },
             {
                 path: 'accounts',
+                // canActivate: [AngularFireAuthGuard],
                 loadChildren: () =>
                     import('./accounts/accounts.module').then(
                         m => m.AccountsModule
@@ -68,6 +72,7 @@ const routes: Routes = [
             },
             {
                 path: 'reports',
+                // canActivate: [AngularFireAuthGuard],
                 loadChildren: () =>
                     import('./reports/reports.module').then(
                         m => m.ReportsModule
@@ -75,11 +80,13 @@ const routes: Routes = [
             },
             {
                 path: 'user-management',
+                // canActivate: [AngularFireAuthGuard],
                 loadChildren: () =>
                     import('./users/users.module').then(m => m.UsersModule)
             },
             {
                 path: 'settings',
+                // canActivate: [AngularFireAuthGuard],
                 loadChildren: () =>
                     import('./settings/settings.module').then(
                         m => m.SettingsModule

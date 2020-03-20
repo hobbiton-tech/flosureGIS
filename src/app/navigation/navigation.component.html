@@ -7,13 +7,16 @@
             <div>
                 charlesmalama86@gmail.com
             </div>
-            <div style="margin-left: 20px; font-size: 18px;">
+            <div style="margin-left: 20px; font-size: 18px; cursor: pointer">
                 <i nz-icon nzType="bell"></i>
             </div>
-            <div style="margin-left: 20px; font-size: 18px;">
+            <div style="margin-left: 20px; font-size: 18px; cursor: pointer">
                 <i nz-icon nzType="setting"></i>
             </div>
-            <div style="margin-left: 20px; font-size: 18px;" (click)="logout()">
+            <div
+                style="margin-left: 20px; font-size: 18px; cursor: pointer"
+                (click)="logout()"
+            >
                 <i nz-icon nzType="logout"></i>
             </div>
         </div>
@@ -21,12 +24,7 @@
     <nz-layout>
         <nz-sider [nzTheme]="'light'" [nzWidth]="250">
             <ul nz-menu nzMode="inline" style="padding-top: 30px" nzMatchRouter>
-                <li
-                    nz-menu-item
-                    nz-tooltip
-                    nzPlacement="right"
-                    [nzTitle]="isCollapsed ? 'Dashboard' : ''"
-                >
+                <li nz-menu-item nzPlacement="right" nzMatchRouter>
                     <a routerLink="/flosure/dashboard">
                         <i nz-icon nzType="dashboard"></i>
                         <span>Dashboard</span>
@@ -47,56 +45,56 @@
                             >
                         </li>
                         <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/quotes/quotes-list"
-                                >View Quotes</a
-                            >
+                            <a routerLink="/flosure/quotes/quotes-list">
+                                View Quotes
+                            </a>
                         </li>
                     </ul>
                 </li>
                 <li nz-submenu nzTitle="Underwriting" nzIcon="edit">
                     <ul>
                         <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/underwriting/endorsements"
-                                >Endorsements</a
-                            >
+                            <a routerLink="/flosure/underwriting/endorsements">
+                                Endorsements
+                            </a>
                         </li>
                         <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/underwriting/policies"
-                                >Policies</a
-                            >
+                            <a routerLink="/flosure/underwriting/policies">
+                                Policies
+                            </a>
                         </li>
                     </ul>
                 </li>
                 <li nz-submenu nzTitle="Claims" nzIcon="question-circle">
                     <ul>
                         <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/claims/claim-transactions"
-                                >Claims</a
-                            >
+                            <a routerLink="/flosure/claims/claim-transactions">
+                                Claims
+                            </a>
                         </li>
                         <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/claims/claimants"
-                                >Claimants</a
-                            >
+                            <a routerLink="/flosure/claims/claimants">
+                                Claimants
+                            </a>
                         </li>
                     </ul>
                 </li>
                 <li nz-submenu nzTitle="Accounts" nzIcon="dollar">
                     <ul>
                         <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/accounts/generate-receipts"
-                                >Generate Reciepts</a
-                            >
+                            <a routerLink="/flosure/accounts/generate-receipts">
+                                Generate Reciepts
+                            </a>
                         </li>
                         <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/accounts/view-receipts"
-                                >View Reciepts</a
-                            >
+                            <a routerLink="/flosure/accounts/view-receipts">
+                                View Reciepts
+                            </a>
                         </li>
                         <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/accounts/payments"
-                                >Payments</a
-                            >
+                            <a routerLink="/flosure/accounts/payments">
+                                Payments
+                            </a>
                         </li>
                     </ul>
                 </li>
@@ -106,24 +104,25 @@
                             <a routerLink="/flosure/reports/claims">Claims</a>
                         </li>
                         <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/reports/policies"
-                                >Policies</a
-                            >
+                            <a routerLink="/flosure/reports/policies">
+                                Policies
+                            </a>
                         </li>
                     </ul>
                 </li>
                 <li nz-submenu nzTitle="User Managenent" nzIcon="user">
                     <ul>
                         <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/user-management/users"
-                                >Users and Roles</a
-                            >
+                            <a routerLink="/flosure/user-management/users">
+                                Users and Roles
+                            </a>
                         </li>
                         <li nz-menu-item nzMatchRouter>
                             <a
                                 routerLink="/flosure/user-management/roles-permissions"
-                                >Roles and Permisions</a
                             >
+                                Roles and Permisions
+                            </a>
                         </li>
                     </ul>
                 </li>
