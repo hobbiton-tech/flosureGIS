@@ -1,10 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {
-    IClient,
-    IIndividualClient,
-    ICorporateClient,
-    ClientType
-} from '../../models/clients.model';
+import { IClient, ClientType } from '../../models/clients.model';
 import { Router } from '@angular/router';
 import { ClientsService } from '../../services/clients.service';
 
@@ -21,9 +16,9 @@ export class ClientsListComponent implements OnInit {
     selectedClientType: ClientType = 'Individual';
 
     totalClients: number = 0;
-    individualClients: IIndividualClient[];
+    individualClients: IClient[];
     totalIndividualClients: number = 0;
-    corporateClients: ICorporateClient[];
+    corporateClients: IClient[];
     totalCorporateClients: number = 0;
 
     clientsLoading: boolean = true;
@@ -41,12 +36,12 @@ export class ClientsListComponent implements OnInit {
             this.individualClients = _.filter(
                 clients,
                 x => x.clientType === 'Individual'
-            ) as IIndividualClient[];
+            );
 
             this.corporateClients = _.filter(
                 clients,
                 x => x.clientType === 'Corporate'
-            ) as ICorporateClient[];
+            );
 
             this.totalIndividualClients = this.individualClients.length;
             this.totalCorporateClients = this.corporateClients.length;
@@ -61,11 +56,11 @@ export class ClientsListComponent implements OnInit {
         );
     }
 
-    addIndividualClient(client: IIndividualClient): void {
+    addIndividualClient(client: IClient): void {
         this.clientsService.addIndividualClient(client);
     }
 
-    addCorporateClient(client: ICorporateClient): void {
+    addCorporateClient(client: IClient): void {
         this.clientsService.addCorporateClient(client);
     }
 }
