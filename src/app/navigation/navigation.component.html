@@ -1,96 +1,173 @@
 <nz-layout style="height: 100%;">
-  <nz-header style="display: flex; justify-content: space-between;">
-    <div class="logo" style="font-size: 18px;">
-      Flosure Insurance Brokerage
-    </div>
-    <div style="display: flex">
-      <div>
-        charlesmalama86@gmail.com
-      </div>
-      <div style="margin-left: 20px; font-size: 18px;">
-        <i nz-icon nzType="bell"></i>
-      </div>
-      <div style="margin-left: 20px; font-size: 18px;">
-        <i nz-icon nzType="setting"></i>
-      </div>
-    </div>
-  </nz-header>
-<nz-layout>
+    <nz-header style="display: flex; justify-content: space-between;">
+        <div class="logo" style="font-size: 18px;">
+            Flosure Insurance Brokerage
+        </div>
+        <div style="display: flex">
+            <div>
+                charlesmalama86@gmail.com
+            </div>
+            <div style="margin-left: 20px; font-size: 18px;">
+                <i nz-icon nzType="bell"></i>
+            </div>
+            <div style="margin-left: 20px; font-size: 18px;">
+                <i nz-icon nzType="setting"></i>
+            </div>
+        </div>
+    </nz-header>
+    <nz-layout>
+        <nz-sider [nzTheme]="'light'" [nzWidth]="250">
+            <ul nz-menu nzMode="inline" style="padding-top: 30px" nzMatchRouter>
+                <li
+                    nz-menu-item
+                    nz-tooltip
+                    nzPlacement="right"
+                    [nzTitle]="isCollapsed ? 'Dashboard' : ''"
+                >
+                    <a routerLink="/flosure/dashboard">
+                        <i nz-icon nzType="dashboard"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
 
-  <nz-sider [nzTheme]="'light'" [nzWidth]="250">
-    <ul nz-menu nzMode="inline" style="padding-top: 30px" nzMatchRouter>
-      <li nz-menu-item nz-tooltip nzPlacement="right" [nzTitle]="isCollapsed ? 'Dashboard' : ''">
-        <a routerLink="/dashboard">
-        <i nz-icon nzType="dashboard"></i>
-        <span>Dashboard</span>
-      </a>
-      </li>
-
-      <li nz-menu-item nzPlacement="right" nzMatchRouter>
-        <a routerLink="/clients/clients-list">
-          <i nz-icon nzType="usergroup-add"></i>
-        <span>Clients</span>
-        </a>
-      </li>
-      <li nz-submenu nzTitle="Quotes" nzIcon="mail">
-        <ul>
-          <li nz-menu-item nzMatchRouter><a routerLink="/quotes/create-quote">Create Quotes</a></li>
-          <li nz-menu-item nzMatchRouter><a routerLink="/quotes/quotes-list">View Quotes</a></li>
-        </ul>
-      </li>
-      <li nz-submenu nzTitle="Underwriting" nzIcon="edit">
-        <ul>
-          <li nz-menu-item nzMatchRouter><a routerLink="/underwriting/endorsements">Endorsements</a></li>
-          <li nz-menu-item nzMatchRouter><a routerLink="/underwriting/policies">Policies</a></li>
-        </ul>
-      </li>
-      <!-- <li nz-submenu nzTitle="Certificates" nzIcon="bars">
+                <li nz-menu-item nzPlacement="right" nzMatchRouter>
+                    <a routerLink="/flosure/clients/clients-list">
+                        <i nz-icon nzType="usergroup-add"></i>
+                        <span>Clients</span>
+                    </a>
+                </li>
+                <li nz-submenu nzTitle="Quotes" nzIcon="mail">
+                    <ul>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/quotes/create-quote"
+                                >Create Quotes</a
+                            >
+                        </li>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/quotes/quotes-list"
+                                >View Quotes</a
+                            >
+                        </li>
+                    </ul>
+                </li>
+                <li nz-submenu nzTitle="Underwriting" nzIcon="edit">
+                    <ul>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/underwriting/endorsements"
+                                >Endorsements</a
+                            >
+                        </li>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/underwriting/policies"
+                                >Policies</a
+                            >
+                        </li>
+                    </ul>
+                </li>
+                <!-- <li nz-submenu nzTitle="Certificates" nzIcon="bars">
         <ul>
           <li nz-menu-item><a routerLink="/certificates">Certificate Type</a></li>
         </ul>
       </li> -->
 
-      <li nz-submenu nzTitle="Claims" nzIcon="question-circle">
-        <ul>
-          <!-- <li nz-menu-item nzMatchRouter><a routerLink="/claims/intimate-claims">Intimate Claims</a></li> -->
-          <li nz-menu-item nzMatchRouter><a routerLink="/claims/claim-transactions">Claims</a></li>
-          <li nz-menu-item nzMatchRouter><a routerLink="/claims/claimants">Claimants</a></li>
-        </ul>
-      </li>
-      <li nz-submenu nzTitle="Accounts" nzIcon="dollar">
-        <ul>
-          <li nz-menu-item nzMatchRouter><a routerLink="/accounts/generate-receipts">Generate Reciepts</a></li>
-          <li nz-menu-item nzMatchRouter><a routerLink="/accounts/view-receipts">View Reciepts</a></li>
-          <li nz-menu-item nzMatchRouter><a routerLink="/accounts/payments">Payments</a></li>
-        </ul>
-      </li>
-      <li nz-submenu nzTitle="Reports" nzIcon="reconciliation">
-        <ul>
-          <li nz-menu-item nzMatchRouter><a routerLink="/reports/claims">Claims</a></li>
-          <li nz-menu-item nzMatchRouter><a routerLink="/reports/policies">Policies</a></li>
-        </ul>
-      </li>
-      <li nz-submenu nzTitle="User Managenent" nzIcon="user">
-        <ul>
-          <li nz-menu-item nzMatchRouter><a routerLink="/user-management/users">Users and Roles</a></li>
-          <li nz-menu-item nzMatchRouter><a routerLink="/user-management/roles-permissions">Roles and Permisions</a></li>
-        </ul>
-      </li>
-      <li nz-submenu nzTitle="Settings" nzIcon="setting" style="padding-bottom: 50px">
-        <ul>
-          <li nz-menu-item nzMatchRouter><a routerLink="/settings/insurance-companies">Insurance Companies</a></li>
-          <li nz-menu-item nzMatchRouter><a routerLink="/settings/organization-setups">Organization Setups</a></li>
-          <li nz-menu-item nzMatchRouter><a routerLink="/settings/underwriting">Underwriting Setups</a></li>
-          <li nz-menu-item nzMatchRouter><a routerLink="/settings/accounts">Accounts Setups</a></li>
-        </ul>
-      </li>
-    </ul>
-  </nz-sider>
-  <nz-layout>
-
-  <nz-content style="background: #ececec;">
-    <router-outlet></router-outlet>
-  </nz-content>
-  </nz-layout>
-</nz-layout>
+                <li nz-submenu nzTitle="Claims" nzIcon="question-circle">
+                    <ul>
+                        <!-- <li nz-menu-item nzMatchRouter><a routerLink="/claims/intimate-claims">Intimate Claims</a></li> -->
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/claims/claim-transactions"
+                                >Claims</a
+                            >
+                        </li>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/claims/claimants"
+                                >Claimants</a
+                            >
+                        </li>
+                    </ul>
+                </li>
+                <li nz-submenu nzTitle="Accounts" nzIcon="dollar">
+                    <ul>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/accounts/generate-receipts"
+                                >Generate Reciepts</a
+                            >
+                        </li>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/accounts/view-receipts"
+                                >View Reciepts</a
+                            >
+                        </li>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/accounts/payments"
+                                >Payments</a
+                            >
+                        </li>
+                    </ul>
+                </li>
+                <li nz-submenu nzTitle="Reports" nzIcon="reconciliation">
+                    <ul>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/reports/claims">Claims</a>
+                        </li>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/reports/policies"
+                                >Policies</a
+                            >
+                        </li>
+                    </ul>
+                </li>
+                <li nz-submenu nzTitle="User Managenent" nzIcon="user">
+                    <ul>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/user-management/users"
+                                >Users and Roles</a
+                            >
+                        </li>
+                        <li nz-menu-item nzMatchRouter>
+                            <a
+                                routerLink="/flosure/user-management/roles-permissions"
+                                >Roles and Permisions</a
+                            >
+                        </li>
+                    </ul>
+                </li>
+                <li
+                    nz-submenu
+                    nzTitle="Settings"
+                    nzIcon="setting"
+                    style="padding-bottom: 50px"
+                >
+                    <ul>
+                        <li nz-menu-item nzMatchRouter>
+                            <a
+                                routerLink="/flosure/settings/insurance-companies"
+                                >Insurance Companies</a
+                            >
+                        </li>
+                        <li nz-menu-item nzMatchRouter>
+                            <a
+                                routerLink="/flosure/settings/organization-setups"
+                                >Organization Setups</a
+                            >
+                        </li>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/settings/underwriting"
+                                >Underwriting Setups</a
+                            >
+                        </li>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/settings/accounts"
+                                >Accounts Setups</a
+                            >
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nz-sider>
+        <nz-layout>
+            <nz-content style="background: #ececec;">
+                <router-outlet></router-outlet>
+            </nz-content>
+        </nz-layout>
+    </nz-layout>
 </nz-layout>

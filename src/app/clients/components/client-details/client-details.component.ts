@@ -65,14 +65,14 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
     }
 
     goToClientsList(): void {
-        this.route.navigateByUrl('/clients/clients-list');
+        this.route.navigateByUrl('/flosure/clients/clients-list');
     }
 
     viewPolicyDetails(): void {
-        this.route.navigateByUrl('/underwriting/policy-details');
+        this.route.navigateByUrl('/flosure/underwriting/policy-details');
     }
 
     viewClaimDetails(): void {
-        this.route.navigateByUrl('/claims/claim-details');
+        this.route.navigateByUrl('/flosure/claims/claim-details');
     }
 }

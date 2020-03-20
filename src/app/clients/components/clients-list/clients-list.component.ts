@@ -56,7 +56,9 @@ export class ClientsListComponent implements OnInit {
     }
 
     viewDetails(client: IClient): void {
-        this.router.navigateByUrl('/clients/client-details/' + client.id);
+        this.router.navigateByUrl(
+            '/flosure/clients/client-details/' + client.id
+        );
     }
 
     addIndividualClient(client: IIndividualClient): void {

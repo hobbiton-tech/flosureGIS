@@ -1,204 +1,276 @@
 <div style="margin: 15px;">
-  <nz-breadcrumb>
-    <nz-breadcrumb-item>
-      Clients
-    </nz-breadcrumb-item>
-    <nz-breadcrumb-item>
-      Clients List
-    </nz-breadcrumb-item>
-  </nz-breadcrumb>
-    <div >
-      <div style="margin-bottom: 20px; margin-top: 20px; background: #fff;">
-        <nz-page-header>
-          <nz-page-header-title>Registered Clients</nz-page-header-title>
-          <nz-page-header-extra>
-            <button nz-button (click)="isAddClientDrawerOpen = true" nzType="primary">Add New Client</button>
-          </nz-page-header-extra>
-          <nz-page-header-content>
-            <nz-row [nzGutter]="1">
-              <nz-col [nzSpan]="6">
-                <nz-statistic [nzValueTemplate]="clientsTotal" [nzTitle]="'Total Clients'"></nz-statistic>
-              </nz-col>
-              <nz-col [nzSpan]="6">
-                <nz-statistic [nzValueTemplate]="individaulTotal" [nzTitle]="'Individual Clients'"></nz-statistic>
-              </nz-col>
-              <nz-col [nzSpan]="6">
-                <nz-statistic [nzValueTemplate]="corporateTotal" [nzTitle]="'Corporate Clients'"></nz-statistic>
-              </nz-col>
-            </nz-row>
-          </nz-page-header-content>
-        </nz-page-header>
-      </div>
+    <nz-breadcrumb>
+        <nz-breadcrumb-item>
+            Clients
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            Clients List
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+    <div>
+        <div style="margin-bottom: 20px; margin-top: 20px; background: #fff;">
+            <nz-page-header>
+                <nz-page-header-title>Registered Clients</nz-page-header-title>
+                <nz-page-header-extra>
+                    <button
+                        nz-button
+                        (click)="isAddClientDrawerOpen = true"
+                        nzType="primary"
+                    >
+                        Add New Client
+                    </button>
+                    <!-- <button nz-button routerLink="/clients/create-client" nzType="primary">Add New Client</button> -->
+                </nz-page-header-extra>
+                <nz-page-header-content>
+                    <nz-row [nzGutter]="1">
+                        <nz-col [nzSpan]="6">
+                            <nz-statistic
+                                [nzValueTemplate]="clientsTotal"
+                                [nzTitle]="'Total Clients'"
+                            ></nz-statistic>
+                        </nz-col>
+                        <nz-col [nzSpan]="6">
+                            <nz-statistic
+                                [nzValueTemplate]="individaulTotal"
+                                [nzTitle]="'Individual Clients'"
+                            ></nz-statistic>
+                        </nz-col>
+                        <nz-col [nzSpan]="6">
+                            <nz-statistic
+                                [nzValueTemplate]="corporateTotal"
+                                [nzTitle]="'Corporate Clients'"
+                            ></nz-statistic>
+                        </nz-col>
+                    </nz-row>
+                </nz-page-header-content>
+            </nz-page-header>
+        </div>
     </div>
-  <nz-card>
-      <div style="margin-bottom: 20px;">
-        <div style="margin-bottom: 20px; width: 50%">
-          <nz-input-group [nzSuffix]="suffixIconSearch">
-            <input type="text" nz-input placeholder="Search by client, First Name, Last Name" />
-          </nz-input-group>
-          <ng-template #suffixIconSearch>
-            <i nz-icon nzType="search"></i>
-          </ng-template>
-        </div>
-        <div style="margin: 20px;">
-          <nz-radio-group>
-            <label nz-radio nzValue="all">View All</label>
-            <label nz-radio nzValue="corporate">Corporate Clients</label>
-            <label nz-radio nzValue="individual">Individual Clients</label>
-          </nz-radio-group>
-        </div>
-        <nz-table #clientsTable [nzData]="clientList" [nzSize]="'small'" [nzBordered]="true"
-          style="background-color: white;">
-          <thead>
-            <tr>
-              <th>Client ID</th>
-              <th>Client Name</th>
-              <th>Email</th>
-              <th>Phone</th>
-              <th>Client Type</th>
-              <th>Client Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- <tr *ngFor="let client of clientsTable.data" (click)="addClient(client)"> -->
+    <nz-card>
+        <div style="margin-bottom: 20px;">
+            <div style="margin-bottom: 20px; width: 50%">
+                <nz-input-group [nzSuffix]="suffixIconSearch">
+                    <input
+                        type="text"
+                        nz-input
+                        placeholder="Search by client, First Name, Last Name"
+                    />
+                </nz-input-group>
+                <ng-template #suffixIconSearch>
+                    <i nz-icon nzType="search"></i>
+                </ng-template>
+            </div>
+            <div style="margin: 20px;">
+                <nz-radio-group>
+                    <label nz-radio nzValue="all">View All</label>
+                    <label nz-radio nzValue="corporate"
+                        >Corporate Clients</label
+                    >
+                    <label nz-radio nzValue="individual"
+                        >Individual Clients</label
+                    >
+                </nz-radio-group>
+            </div>
+            <nz-table
+                #clientsTable
+                [nzData]="clientList"
+                [nzSize]="'small'"
+                [nzBordered]="true"
+                style="background-color: white;"
+            >
+                <thead>
+                    <tr>
+                        <th>Client ID</th>
+                        <th>Client Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Client Type</th>
+                        <th>Client Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- <tr *ngFor="let client of clientsTable.data" (click)="addClient(client)"> -->
 
-            <tr *ngFor="let client of clientsTable.data" (click)="viewDetails(client)" style="cursor: pointer;">
-              <td>{{ client.id }}</td>
-              <ng-container *ngIf="client.type === 'Individual'">
-                <td>{{ client.firstName + ' ' + client.lastName }}</td>
-              </ng-container>
-              <!-- <div *ngIf="individual; else corporate">
+                    <tr
+                        *ngFor="let client of clientsTable.data"
+                        (click)="viewDetails(client)"
+                        style="cursor: pointer;"
+                    >
+                        <td>{{ client.id }}</td>
+                        <ng-container *ngIf="client.type === 'Individual'">
+                            <td>
+                                {{ client.firstName + ' ' + client.lastName }}
+                            </td>
+                        </ng-container>
+                        <!-- <div *ngIf="individual; else corporate">
                 <td>{{ client.firstName + ' ' + client.lastName }}</td>
               </div> -->
-              <ng-container *ngIf="client.type === 'Corporate'">
-                <td>{{ client.companyName }}</td>
-              </ng-container>
-              <td>{{ client.email }}</td>
-              <td>{{ client.phone }}</td>
-              <td>{{ client.type }}</td>
-              <td>
-                <nz-badge [nzStatus]="client.status === 'Inactive' ? 'error' : 'success'" [nzText]="client.status">
-                </nz-badge>
-              </td>
-            </tr>
-          </tbody>
-        </nz-table>
-      </div>
+                        <ng-container *ngIf="client.type === 'Corporate'">
+                            <td>{{ client.companyName }}</td>
+                        </ng-container>
+                        <td>{{ client.email }}</td>
+                        <td>{{ client.phone }}</td>
+                        <td>{{ client.type }}</td>
+                        <td>
+                            <nz-badge
+                                [nzStatus]="
+                                    client.status === 'Inactive'
+                                        ? 'error'
+                                        : 'success'
+                                "
+                                [nzText]="client.status"
+                            >
+                            </nz-badge>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
     </nz-card>
 </div>
 
 <ng-template #clientsTotal>
-  <div *ngIf="clientsLoading">
-      <nz-spin nzSimple></nz-spin>
-  </div>
-  <div *ngIf="!clientsLoading">
-      {{totalClients | number}}
-  </div>
+    <div *ngIf="clientsLoading">
+        <nz-spin nzSimple></nz-spin>
+    </div>
+    <div *ngIf="!clientsLoading">
+        {{ totalClients | number }}
+    </div>
 </ng-template>
 
 <ng-template #individaulTotal>
-  <div *ngIf="clientsLoading">
-      <nz-spin nzSimple></nz-spin>
-  </div>
-  <div *ngIf="!clientsLoading">
-      {{totalIndividualClients | number}}
-  </div>
+    <div *ngIf="clientsLoading">
+        <nz-spin nzSimple></nz-spin>
+    </div>
+    <div *ngIf="!clientsLoading">
+        {{ totalIndividualClients | number }}
+    </div>
 </ng-template>
 
 <ng-template #corporateTotal>
-  <div *ngIf="clientsLoading">
-      <nz-spin nzSimple></nz-spin>
-  </div>
-  <div *ngIf="!clientsLoading">
-      {{totalCorporateClients | number}}
-  </div>
+    <div *ngIf="clientsLoading">
+        <nz-spin nzSimple></nz-spin>
+    </div>
+    <div *ngIf="!clientsLoading">
+        {{ totalCorporateClients | number }}
+    </div>
 </ng-template>
 
 <!-- Drawer for adding app-clients -->
 <!-- TODO: Should move this to a seperate component -->
 <nz-drawer
-[nzBodyStyle]="{ height: 'calc(100% - 55px)', overflow: 'auto', 'padding-bottom': '53px' }"
-[nzPlacement]="'left'"
-[nzMaskClosable]="false"
-[nzWidth]="720"
-[nzVisible]="isAddClientDrawerOpen"
-nzTitle="Create"
-(nzOnClose)="isAddClientDrawerOpen = false;"
+    [nzBodyStyle]="{
+        height: 'calc(100% - 55px)',
+        overflow: 'auto',
+        'padding-bottom': '53px'
+    }"
+    [nzPlacement]="'left'"
+    [nzMaskClosable]="false"
+    [nzWidth]="720"
+    [nzVisible]="isAddClientDrawerOpen"
+    nzTitle="Create"
+    (nzOnClose)="isAddClientDrawerOpen = false"
 >
-<form nz-form>
-  <div nz-row nzGutter="8">
-    <div nz-col nzSpan="12">
-      <nz-form-item>
-        <nz-form-label>Name</nz-form-label>
-        <nz-form-control>
-          <input nz-input placeholder="please enter user name" />
-        </nz-form-control>
-      </nz-form-item>
+    <form nz-form>
+        <div nz-row nzGutter="8">
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label>Name</nz-form-label>
+                    <nz-form-control>
+                        <input nz-input placeholder="please enter user name" />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label>Url</nz-form-label>
+                    <nz-form-control>
+                        <nz-input-group
+                            nzAddOnBefore="http://"
+                            nzAddOnAfter=".com"
+                        >
+                            <input
+                                type="text"
+                                nz-input
+                                placeholder="please enter url"
+                            />
+                        </nz-input-group>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+        <div nz-row nzGutter="8">
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label>Owner</nz-form-label>
+                    <nz-form-control>
+                        <nz-select
+                            nzPlaceHolder="Please select an owner"
+                        ></nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label>Type</nz-form-label>
+                    <nz-form-control>
+                        <nz-select
+                            nzPlaceHolder="Please choose the type"
+                        ></nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+        <div nz-row nzGutter="8">
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label>Approver</nz-form-label>
+                    <nz-form-control>
+                        <nz-select
+                            nzPlaceHolder="Please choose the approver"
+                        ></nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label>DateTime</nz-form-label>
+                    <nz-form-control>
+                        <nz-range-picker></nz-range-picker>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+        <div nz-row nzGutter="8">
+            <div nz-col nzSpan="24">
+                <nz-form-item>
+                    <nz-form-label>Description</nz-form-label>
+                    <nz-form-control>
+                        <textarea
+                            nz-input
+                            placeholder="please enter url description"
+                            [nzAutosize]="{ minRows: 4, maxRows: 4 }"
+                        ></textarea>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+    </form>
+    <div class="footer">
+        <button
+            type="button"
+            (click)="isAddClientDrawerOpen = false"
+            class="ant-btn"
+            style="margin-right: 8px;"
+        >
+            <span>Cancel</span>
+        </button>
+        <button
+            type="button"
+            (click)="isAddClientDrawerOpen = false"
+            class="ant-btn ant-btn-primary"
+        >
+            <span>Add Client</span>
+        </button>
     </div>
-    <div nz-col nzSpan="12">
-      <nz-form-item>
-        <nz-form-label>Url</nz-form-label>
-        <nz-form-control>
-          <nz-input-group nzAddOnBefore="http://" nzAddOnAfter=".com">
-            <input type="text" nz-input placeholder="please enter url" />
-          </nz-input-group>
-        </nz-form-control>
-      </nz-form-item>
-    </div>
-  </div>
-  <div nz-row nzGutter="8">
-    <div nz-col nzSpan="12">
-      <nz-form-item>
-        <nz-form-label>Owner</nz-form-label>
-        <nz-form-control>
-          <nz-select nzPlaceHolder="Please select an owner"></nz-select>
-        </nz-form-control>
-      </nz-form-item>
-    </div>
-    <div nz-col nzSpan="12">
-      <nz-form-item>
-        <nz-form-label>Type</nz-form-label>
-        <nz-form-control>
-          <nz-select nzPlaceHolder="Please choose the type"></nz-select>
-        </nz-form-control>
-      </nz-form-item>
-    </div>
-  </div>
-  <div nz-row nzGutter="8">
-    <div nz-col nzSpan="12">
-      <nz-form-item>
-        <nz-form-label>Approver</nz-form-label>
-        <nz-form-control>
-          <nz-select nzPlaceHolder="Please choose the approver"></nz-select>
-        </nz-form-control>
-      </nz-form-item>
-    </div>
-    <div nz-col nzSpan="12">
-      <nz-form-item>
-        <nz-form-label>DateTime</nz-form-label>
-        <nz-form-control>
-          <nz-range-picker></nz-range-picker>
-        </nz-form-control>
-      </nz-form-item>
-    </div>
-  </div>
-  <div nz-row nzGutter="8">
-    <div nz-col nzSpan="24">
-      <nz-form-item>
-        <nz-form-label>Description</nz-form-label>
-        <nz-form-control>
-          <textarea
-            nz-input
-            placeholder="please enter url description"
-            [nzAutosize]="{ minRows: 4, maxRows: 4 }"
-          ></textarea>
-        </nz-form-control>
-      </nz-form-item>
-    </div>
-  </div>
-</form>
-<div class="footer">
-  <button type="button" (click)="isAddClientDrawerOpen = false" class="ant-btn" style="margin-right: 8px;"><span>Cancel</span></button>
-  <button type="button" (click)="isAddClientDrawerOpen = false" class="ant-btn ant-btn-primary"><span>Add Client</span></button>
-</div>
 </nz-drawer>

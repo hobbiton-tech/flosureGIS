@@ -25,13 +25,13 @@ export class CreateClientComponent implements OnInit {
         return this.clientTypeForm.controls;
     }
 
-  next() {
-      this.stepperService.changeIndex(1);
-      if (this.f.type.value === 'ind') {
-        this.router.navigateByUrl('/clients/personal-details');
-      } else if (this.f.type.value === 'cor') {
-        this.router.navigateByUrl('/clients/company-details');
-      }
+    next() {
+        this.stepperService.changeIndex(1);
+        if (this.f.type.value === 'ind') {
+            this.router.navigateByUrl('/flosure/clients/personal-details');
+        } else if (this.f.type.value === 'cor') {
+            this.router.navigateByUrl('/flosure/clients/company-details');
+        }
     }
 
     ngOnInit(): void {

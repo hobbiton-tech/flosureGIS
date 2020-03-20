@@ -12,6 +12,7 @@ import en from '@angular/common/locales/en';
 import { NavigationComponent } from './navigation/navigation.component';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { LoginComponent } from './login/login.component';
 
 
 registerLocaleData(en);
@@ -30,7 +31,8 @@ const firebaseConfig = {
 @NgModule({
   declarations: [
     AppComponent,
-    NavigationComponent
+    NavigationComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

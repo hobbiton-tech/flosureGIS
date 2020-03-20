@@ -17,7 +17,7 @@ export class ClaimTransactionsComponent implements OnInit {
     ) {}
 
     viewClaimDetails(): void {
-        this.route.navigateByUrl('/claims/claim-details');
+        this.route.navigateByUrl('/flosure/claims/claim-details');
     }
 
     async addClaim(claim: Claim): Promise<void> {

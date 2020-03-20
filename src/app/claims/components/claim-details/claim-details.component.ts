@@ -15,6 +15,6 @@ export class ClaimDetailsComponent implements OnInit {
     ngOnInit(): void {}
 
     intimateClaim(): void {
-        this.router.navigateByUrl('/claims/claim-transactions');
+        this.router.navigateByUrl('/flosure/claims/claim-transactions');
     }
 }
