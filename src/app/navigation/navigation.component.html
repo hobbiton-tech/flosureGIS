@@ -13,6 +13,9 @@
             <div style="margin-left: 20px; font-size: 18px;">
                 <i nz-icon nzType="setting"></i>
             </div>
+            <div style="margin-left: 20px; font-size: 18px;" (click)="logout()">
+                <i nz-icon nzType="logout"></i>
+            </div>
         </div>
     </nz-header>
     <nz-layout>
@@ -64,15 +67,8 @@
                         </li>
                     </ul>
                 </li>
-                <!-- <li nz-submenu nzTitle="Certificates" nzIcon="bars">
-        <ul>
-          <li nz-menu-item><a routerLink="/certificates">Certificate Type</a></li>
-        </ul>
-      </li> -->
-
                 <li nz-submenu nzTitle="Claims" nzIcon="question-circle">
                     <ul>
-                        <!-- <li nz-menu-item nzMatchRouter><a routerLink="/claims/intimate-claims">Intimate Claims</a></li> -->
                         <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/claims/claim-transactions"
                                 >Claims</a
