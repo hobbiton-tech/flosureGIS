@@ -35,32 +35,36 @@
     
     
     
-                        <nz-table #insuranceCompaniesTable [nzData]="" [nzSize]="'small'" [nzBordered]="true"
+                        <nz-table #insuranceCompaniesTable [nzData]="insuranceCompaniesList" [nzSize]="'small'" [nzBordered]="true"
                             style="background-color: white;">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
+                                    <th>Company Name</th>
                                     <th>Company Code</th>
+                                    <th>Company Email</th>
+                                    <th>Contact First Name</th>
+                                    <th>Contact Second Name</th>
                                     <th>Date Created</th>
                                     <th>Contract</th>
-                                    <th>Action</th>
+                                    <!-- <th>Action</th> -->
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let insuranceCompany of insuranceCompaniesTable.data">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td style="width: 70px">
-                                        <!-- <div class="icons-list" style="text-align: center;width: 65px">
+                                    <td>{{insuranceCompany.companyName}}</td>
+                                    <td>{{insuranceCompany.companyCode}}</td>
+                                    <td>{{insuranceCompany.companyEmail}}</td>
+                                    <td>{{insuranceCompany.contactFirstName}}</td>
+                                    <td>{{insuranceCompany.contactSecondName}}</td>
+                                    <td>{{insuranceCompany.dateCreated.seconds | date}}</td>
+                                     <td><a>View</a></td>
+                                  <!--  <td style="width: 70px">
+                                        <div class="icons-list" style="text-align: center;width: 65px">
                                             <i nz-icon [nzType]="'edit'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#b3cde8'"></i>
                                             <nz-divider nzType="vertical"></nz-divider>
                                             <i nz-icon [nzType]="'delete'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#eb2f32'"></i>
-                                        </div> -->
-                                    </td>
+                                        </div>
+                                    </td> -->
                                 </tr>
                             </tbody>
                         </nz-table>

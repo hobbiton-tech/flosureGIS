@@ -14,6 +14,9 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { LoginComponent } from './login/login.component';
+import { AngularFireStorageModule, BUCKET } from '@angular/fire/storage';
+import { environment } from '../environments/environment';
+import 'firebase/storage';
 
 registerLocaleData(en);
 
@@ -29,20 +32,22 @@ const firebaseConfig = {
 };
 
 @NgModule({
-    declarations: [AppComponent, NavigationComponent, LoginComponent],
+    declarations: [AppComponent, NavigationComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,
         NgZorroAntdModule,
         FormsModule,
-        ReactiveFormsModule,
         HttpClientModule,
         BrowserAnimationsModule,
-        AngularFireAuthModule,
+        AngularFireModule.initializeApp(firebaseConfig),
         AngularFireDatabaseModule,
-        AngularFireModule.initializeApp(firebaseConfig)
+        AngularFireStorageModule
     ],
-    providers: [{ provide: NZ_I18N, useValue: en_US }],
+    providers: [
+        { provide: NZ_I18N, useValue: en_US }
+        //{provide: BUCKET, useValue: 'documents'}
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {}

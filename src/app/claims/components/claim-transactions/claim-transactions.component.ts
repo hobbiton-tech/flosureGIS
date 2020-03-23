@@ -10,6 +10,10 @@ import { Claim } from '../../models/claim.model';
 })
 export class ClaimTransactionsComponent implements OnInit {
     claimsList: Claim[];
+    claimsCount: number = 0;
+
+    //spin feedback when loading figures
+    claimsLoading: boolean = true;
 
     constructor(
         private readonly route: Router,
@@ -26,6 +30,8 @@ export class ClaimTransactionsComponent implements OnInit {
 
     ngOnInit(): void {
         this.claimsService.getClaims().subscribe(claims => {
+            this.claimsCount = claims.length;
+            this.claimsLoading = false;
             this.claimsList = claims;
             console.log(claims);
         });

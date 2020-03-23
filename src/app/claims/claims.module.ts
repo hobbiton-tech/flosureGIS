@@ -7,8 +7,10 @@ import { IntimateClaimComponent } from './components/intimate-claim/intimate-cla
 import { ClaimTransactionsComponent } from './components/claim-transactions/claim-transactions.component';
 import { ClaimantsComponent } from './components/claimants/claimants.component';
 import { ClaimDetailsComponent } from './components/claim-details/claim-details.component';
-import { ReactiveFormsModule } from '@angular/forms';
 import { ClaimsService } from './services/claims-service.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PerilsComponent } from './components/perils/perils.component';
+import { AddPerilsComponent } from './components/perils/components/add-perils/add-perils.component';
 
 const routes: Routes = [
     {
@@ -26,6 +28,10 @@ const routes: Routes = [
     {
         path: 'claim-details',
         component: ClaimDetailsComponent
+    },
+    {
+        path: 'claim-details/:id',
+        component: ClaimDetailsComponent
     }
 ];
 
@@ -35,7 +41,9 @@ const routes: Routes = [
         IntimateClaimComponent,
         ClaimTransactionsComponent,
         ClaimantsComponent,
-        ClaimDetailsComponent
+        ClaimDetailsComponent,
+        PerilsComponent,
+        AddPerilsComponent
     ],
     providers: [ClaimsService],
     imports: [

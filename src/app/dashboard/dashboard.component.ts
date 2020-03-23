@@ -7,9 +7,9 @@ import { PoliciesService } from '../underwriting/services/policies.service';
 import * as _ from 'lodash';
 
 @Component({
-    selector: 'app-dashboard',
-    templateUrl: './dashboard.component.html',
-    styleUrls: ['./dashboard.component.scss']
+  selector: 'app-dashboard',
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
     clientsCount: number = 0;
@@ -57,4 +57,6 @@ export class DashboardComponent implements OnInit {
             this.policiesLoading = false;
         });
     }
+
 }
+

@@ -9,6 +9,7 @@ import { RiskDetailsComponent } from './components/create-quote/stepper/risk-det
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { StepperService } from 'src/app/quotes/services/stepper.service';
 import { RouterModule, Routes } from '@angular/router';
+import { QuotesService } from './services/quotes.service';
 
 const routes: Routes = [
     {
@@ -22,15 +23,21 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    QuotesComponent,
-    CreateQuoteComponent,
-    QuotationDetailsComponent,
-    QuotationProductDetailsComponent,
-    RiskDetailsComponent
-  ],
-    imports: [CommonModule, NgZorroAntdModule, FormsModule, ReactiveFormsModule, RouterModule.forChild(routes)],
+    declarations: [
+        QuotesComponent,
+        CreateQuoteComponent,
+        QuotationDetailsComponent,
+        QuotationProductDetailsComponent,
+        RiskDetailsComponent
+    ],
+    imports: [
+        CommonModule,
+        NgZorroAntdModule,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterModule.forChild(routes)
+    ],
     exports: [QuotesComponent, CreateQuoteComponent],
-    providers: [StepperService]
+    providers: [StepperService, QuotesService]
 })
 export class QuotesModule {}
