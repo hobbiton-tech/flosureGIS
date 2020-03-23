@@ -17,16 +17,16 @@ import * as _ from 'lodash';
 })
 export class ClientsListComponent implements OnInit {
     clientList: IClient[];
-    isAddClientDrawerOpen: boolean = false;
+    isAddClientDrawerOpen = false;
     selectedClientType: ClientType = 'Individual';
 
-    totalClients: number = 0;
+    totalClients = 0;
     individualClients: IIndividualClient[];
-    totalIndividualClients: number = 0;
+    totalIndividualClients = 0;
     corporateClients: ICorporateClient[];
-    totalCorporateClients: number = 0;
+    totalCorporateClients = 0;
 
-    clientsLoading: boolean = true;
+    clientsLoading = true;
 
     constructor(
         private router: Router,

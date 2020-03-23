@@ -102,7 +102,7 @@
           <!-- <div *ngFor="let control of listOfControl; let i = index"> -->
               <nz-collapse>
                 <nz-collapse-panel
-                  nzHeader="risk one"
+                  nzHeader="Add Risks"
                 >
                   <form [formGroup]="riskForm" novalidate>
                     <div nz-row nzGutter="0">
@@ -189,8 +189,46 @@
             Add field
           </button>
 
+           <nz-card> -->
 
-        </div> -->
+      <div style="margin-bottom: 20px; margin-top: 20px; width: 50%">
+        <nz-input-group [nzSuffix]="suffixIconSearch">
+          <input type="text" nz-input placeholder="Search by client, quotation number, agent" />
+        </nz-input-group>
+        <ng-template #suffixIconSearch>
+          <i nz-icon nzType="search"></i>
+        </ng-template>
+      </div>
+      <nz-table #risksTable [nzData]="risks" [nzSize]="'small'" [nzBordered]="true">
+        <thead>
+          <tr>
+            <th>Risk ID</th>
+            <th>Registration Number</th>
+            <th>Vehicle Make</th>
+            <th>Vehicle Model</th>
+            <th>Engine Number</th>
+            <th>Chasis Number</th>
+            <th>Color</th>
+            <th>Product Type</th>
+            <th>Estimated Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let risk of risksTable.data">
+            <td>{{ risk.riskID }}</td>
+            <td>{{ risk.registrationNumber }}</td>
+            <td>{{ risk.vehicleMake}}</td>
+            <td>{{ risk.vehicleModel}}</td>
+            <td>{{ risk.engineNumber }}</td>
+            <td>{{ risk.chasisNumber }}</td>
+            <td>{{ risk.color }}</td>
+            <td>{{ risk.productType }}</td>
+            <td>{{ risk.estimatedValue }}</td>
+          </tr>
+        </tbody>
+      </nz-table>
+
+
         </nz-card>
     <!-- </nz-card> -->
   </div>
