@@ -1,5 +1,8 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { InsuranceCompanyService } from '../../services/insurance-company.service';
+import { AngularFireStorage } from '@angular/fire/storage';
+import 'firebase/storage';
 
 @Component({
   selector: 'app-add-insurance-company',
@@ -16,7 +19,14 @@ export class AddInsuranceCompanyComponent implements OnInit {
   @Output()
   closeAddInsuranceCompanyDrawer: EventEmitter<any> = new EventEmitter();
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(
+    private formBuilder: FormBuilder, 
+    private storage: AngularFireStorage,
+    private insuranceCompanyService: InsuranceCompanyService) {
+    
+   }
+
+  ngOnInit(): void {
     this.insuranceCompanyDetailsForm = this.formBuilder.group({
       id: ['', Validators.required],
       companyName: ['', Validators.required],
@@ -27,13 +37,20 @@ export class AddInsuranceCompanyComponent implements OnInit {
       dateCreated: ['', Validators.required],
       contract: ['', Validators.required]
     });
-   }
+  }
 
-  ngOnInit(): void {}
+   //handle file uploads
+   uploadFile(event): void {
+    const file = event.target.files[0];
+    const filePath = `broker-contracts`;
+    const task = this.storage.upload(filePath, file);
+  }
 
   onSubmit() {
+    console.log(this.insuranceCompanyDetailsForm.value);
     const insurance_company_details = this.insuranceCompanyDetailsForm.value;
-    console.log(insurance_company_details);
+    this.insuranceCompanyService.addInsuranceCompany(insurance_company_details);
+    this.insuranceCompanyDetailsForm.reset();
   }
 
   resetForm(e: MouseEvent): void {

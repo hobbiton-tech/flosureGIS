@@ -3,19 +3,23 @@ import * as faker from 'faker';
 
 export class Claim {
     claimId: string;
-    //riskId: number;
     policyNumber: string;
     clientName: string;
-    lossDate: string | ITimestamp;
+    lossDate: Date;
     status: ClaimStatus;
-    notificationDate: string | ITimestamp;
+    notificationDate: Date;
     bookedBy: string;
     serviceProvider: string;
     serviceType: string;
     claimDescription: string;
     risk: string;
     activity: string;
-    
+    document?: IDocument; 
+}
+
+export interface IDocument {
+    name: string;
+    url: string
 }
 
 export type ClaimStatus = 'Pending' | 'Resolved' | 'Cancelled';
@@ -34,9 +38,9 @@ const createClaim = () => {
         //riskId: faker.random.number(100),
         policyNumber: faker.internet.ipv6(),
         clientName: `${faker.name.firstName()} ${faker.name.lastName()}`,
-        lossDate: faker.date.past().toString(),
+        lossDate: faker.date.past(),
         status: faker.random.arrayElement(['Pending', 'Resolved', 'Cancelled']),
-        notificationDate: faker.date.past().toString(),
+        notificationDate: faker.date.past(),
         bookedBy: `${faker.name.firstName()} ${faker.name.lastName()}`,
         risk: faker.random.words(2)
     };

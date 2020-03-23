@@ -12,6 +12,9 @@ import en from '@angular/common/locales/en';
 import { NavigationComponent } from './navigation/navigation.component';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { AngularFireStorageModule, BUCKET } from '@angular/fire/storage';
+import { environment } from '../environments/environment';
+import 'firebase/storage';
 
 
 registerLocaleData(en);
@@ -41,9 +44,13 @@ const firebaseConfig = {
     BrowserAnimationsModule,
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireDatabaseModule,
+    AngularFireStorageModule
 
   ],
-  providers: [{ provide: NZ_I18N, useValue: en_US }],
+  providers: [
+    { provide: NZ_I18N, useValue: en_US },
+  //{provide: BUCKET, useValue: 'documents'}
+],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
