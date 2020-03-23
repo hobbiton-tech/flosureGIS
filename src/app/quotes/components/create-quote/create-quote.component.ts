@@ -1,11 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import {
+    FormGroup,
+    FormBuilder,
+    Validators,
+    FormControl
+} from '@angular/forms';
 import { StepperService } from 'src/app/quotes/services/stepper.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { QuotesService } from '../../services/quotes.service';
 import { ClientsService } from 'src/app/clients/services/clients.service';
-import { Client } from 'src/app/clients/models/clients.model';
+import { IClient } from 'src/app/clients/models/clients.model';
 
 @Component({
     selector: 'app-create-quote',
@@ -37,14 +42,14 @@ export class CreateQuoteComponent implements OnInit {
             return false;
         }
         return startValue.getTime() > this.endValue.getTime();
-    }
+    };
 
     disabledEndDate = (endValue: Date): boolean => {
         if (!endValue || !this.startValue) {
             return false;
         }
         return endValue.getTime() <= this.startValue.getTime();
-    }
+    };
 
     handleStartOpenChange(open: boolean): void {
         if (!open) {
@@ -101,7 +106,7 @@ export class CreateQuoteComponent implements OnInit {
             this.Clients = [];
             clients.forEach(client => {
                 const a = client;
-                this.Clients.push(a as Client);
+                this.Clients.push(a as IClient);
             });
             console.log('<============Quote Client Data=============>');
             console.log(this.Clients);
@@ -118,7 +123,7 @@ export class CreateQuoteComponent implements OnInit {
             chasisNumber: ['', Validators.required],
             color: ['', Validators.required],
             estimatedValue: ['', Validators.required],
-            productType: ['', Validators.required],
+            productType: ['', Validators.required]
         });
     }
 
@@ -132,11 +137,11 @@ export class CreateQuoteComponent implements OnInit {
         console.log(some);
         this.quoteService.addMotorQuotation(some);
         this.ResetForm();
-  }
+    }
 
-  onAdd() {
-    const risk = this.riskForm.value;
-    console.log('<============Risk Form Data=============>');
-    console.log(risk);
-  }
+    onAdd() {
+        const risk = this.riskForm.value;
+        console.log('<============Risk Form Data=============>');
+        console.log(risk);
+    }
 }

@@ -129,9 +129,9 @@ export class ClaimsService {
     //         const cliam = this.firestore.doc<Claim>(`claims/${id}`);
     //     }
 
-    //     getClientsClaims(clientId: string): Observable<Claim[]> {
-    //         return this.claims.pipe(filter(claim => clientId === clientId));
-    //     }
+    getClientsClaims(clientId: string): Observable<Claim[]> {
+        return this.claims.pipe(filter(claim => clientId === clientId));
+    }
 
     //     getClaims(): Observable<Claim[]> {
     //         console.log(this.claims);

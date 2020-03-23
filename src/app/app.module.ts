@@ -32,7 +32,7 @@ const firebaseConfig = {
 };
 
 @NgModule({
-    declarations: [AppComponent, NavigationComponent],
+    declarations: [AppComponent, NavigationComponent, LoginComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,
@@ -40,6 +40,7 @@ const firebaseConfig = {
         FormsModule,
         HttpClientModule,
         BrowserAnimationsModule,
+        ReactiveFormsModule,
         AngularFireModule.initializeApp(firebaseConfig),
         AngularFireDatabaseModule,
         AngularFireStorageModule
