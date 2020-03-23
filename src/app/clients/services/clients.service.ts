@@ -72,11 +72,11 @@ export class ClientsService {
         return this.clients;
     }
 
-    countGenerator(number: string | number) {
-        if (number <= 99999) {
-            number = ('0000' + number).slice(-5);
+    countGenerator(numb: string | number) {
+        if (numb <= 99999) {
+            numb = ('0000' + numb).slice(-5);
         }
-        return number;
+        return numb;
     }
 
     generateClientID(
@@ -84,10 +84,10 @@ export class ClientsService {
         brokerName: string,
         totalClients: number
     ) {
-        const client_type = clientType.substring(0, 3).toLocaleUpperCase();
-        const broker_name = brokerName.substring(0, 2).toLocaleUpperCase();
+        const clientTyp = clientType.substring(0, 3).toLocaleUpperCase();
+        const brokerNam = brokerName.substring(0, 2).toLocaleUpperCase();
         const count = this.countGenerator(totalClients);
 
-        return client_type + broker_name + count;
+        return clientTyp + brokerNam + count;
     }
 }

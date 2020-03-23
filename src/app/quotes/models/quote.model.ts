@@ -16,21 +16,22 @@ export class MotorQuotationModel {
     messageCode: string;
     coverCode: string;
     currency: string;
-    risks?: RiskModel[];
+    // risks?: RiskModel[];
     startDate: Date;
     endDate: Date;
 }
 
 export class RiskModel {
-    id: string;
-    regNumber: string;
-    vehicleMake: string;
-    vehicleModel: string;
-    engineNumber: string;
-    chassisNumber: string;
-    color: string;
-    estimatedValue?: number;
-    productType: ProductType;
+  id: string;
+  quoteNumber: string;
+  regNumber: string;
+  vehicleMake: string;
+  vehicleModel: string;
+  engineNumber: string;
+  chassisNumber: string;
+  color: string;
+  estimatedValue?: number;
+  productType: ProductType;
 }
 
 export class MessageModel {
