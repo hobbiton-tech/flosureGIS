@@ -1,110 +1,176 @@
-
-<div style="margin: 20px;">
-  <nz-steps [nzCurrent]="1">
-    <nz-step ></nz-step>
-    <nz-step> </nz-step>
-    <nz-step></nz-step>
-    <nz-step></nz-step>
-  </nz-steps>
-</div>
-<div style="margin: 20px;">
-  <nz-card style="width:80%; margin: 0 auto;" [nzBordered]="true" nzTitle="Personal Details">
+<div>
+    <nz-divider nzText="Personal Details" nzOrientation="left"></nz-divider>
     <form nz-form [formGroup]="personalDetailsForm" novalidate>
-      <div nz-row>
-        <div nz-col [nzSpan]="12">
-        <nz-form-item >
-            <nz-form-label [nzSpan]="6" nzFor="title">Title</nz-form-label>
-        <nz-form-control [nzSpan]="18">
-          <nz-select formControlName="title" nzShowSearch nzAllowClear placeholder="Select a Title">
-              <nz-option
-                *ngFor="let option of listOfOption"
-                [nzLabel]="option"
-                [nzValue]="option"
-                [nzHide]="!isNotSelected(option)"
-              ></nz-option>
-            </nz-select>
-          </nz-form-control>
-        </nz-form-item >
+        <div nz-row>
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzFor="title"
+                        >Title</nz-form-label
+                    >
+                    <nz-form-control [nzSpan]="14">
+                        <nz-select
+                            formControlName="title"
+                            nzShowSearch
+                            nzAllowClear
+                            placeholder="Select a Title"
+                        >
+                            <nz-option
+                                *ngFor="let option of listOfOption"
+                                [nzLabel]="option"
+                                [nzValue]="option"
+                                [nzHide]="!isNotSelected(option)"
+                            ></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzFor="firstName"
+                        >First Name</nz-form-label
+                    >
+                    <nz-form-control [nzSpan]="14">
+                        <input
+                            nz-input
+                            formControlName="firstName"
+                            name="firstName"
+                            type="text"
+                            id="firstName"
+                            placeholder="First Name"
+                        />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
         </div>
 
-        <div nz-col [nzSpan]="12">
-          <nz-form-item>
-            <nz-form-label [nzSpan]="6" nzFor="firstName">First Name</nz-form-label>
-          <nz-form-control [nzSpan]="18">
-              <input nz-input formControlName="firstName" name="firstName" type="text" id="firstName" placeholder="First Name">
+        <div nz-row>
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzFor="lastName"
+                        >Last Name</nz-form-label
+                    >
+                    <nz-form-control [nzSpan]="14">
+                        <input
+                            nz-input
+                            formControlName="lastName"
+                            name="lastName"
+                            id="lastName"
+                            placeholder="Last Name"
+                        />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzFor="email"
+                        >Email</nz-form-label
+                    >
+                    <nz-form-control [nzSpan]="14">
+                        <input
+                            nz-input
+                            formControlName="email"
+                            name="email"
+                            type="email"
+                            id="email"
+                            placeholder="Email Address"
+                        />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <div nz-row>
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzFor="dob"
+                        >Date of Birth</nz-form-label
+                    >
+                    <nz-form-control [nzSpan]="14">
+                        <nz-date-picker
+                            formControlName="dob"
+                            name="dob"
+                            id="dob"
+                            placeholder="Date of Birth"
+                        ></nz-date-picker>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzFor="phone"
+                        >Phone</nz-form-label
+                    >
+                    <nz-form-control [nzSpan]="14">
+                        <input
+                            nz-input
+                            formControlName="phone"
+                            name="phone"
+                            id="phone"
+                            placeholder="Phone Number"
+                        />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <div nz-row>
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzFor="address"
+                        >Address</nz-form-label
+                    >
+                    <nz-form-control [nzSpan]="14">
+                        <input
+                            nz-input
+                            formControlName="address"
+                            name="address"
+                            id="address"
+                            placeholder="Address"
+                        />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzFor="gender"
+                        >Gender</nz-form-label
+                    >
+                    <nz-form-control [nzSpan]="14">
+                        <nz-select
+                            formControlName="gender"
+                            nzShowSearch
+                            nzAllowClear
+                            placeholder="Select Gender"
+                        >
+                            <nz-option
+                                nzLabel="Male"
+                                nzValue="male"
+                            ></nz-option>
+                            <nz-option
+                                nzLabel="Female"
+                                nzValue="female"
+                            ></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <nz-form-item nz-row>
+            <nz-form-control [nzSpan]="14" [nzOffset]="10">
+                <button
+                    nz-button
+                    nzType="primary"
+                    style="float: right;"
+                    (click)="onSubmit()"
+                >
+                    Save
+                </button>
             </nz-form-control>
-          </nz-form-item >
-        </div>
-      </div>
-
-      <div nz-row>
-        <div nz-col [nzSpan]="12">
-          <nz-form-item >
-            <nz-form-label [nzSpan]="6" nzFor="lastName">Last Name</nz-form-label>
-        <nz-form-control [nzSpan]="18">
-          <input nz-input formControlName="lastName" name="lastName" id="lastName" placeholder="Last Name">
-          </nz-form-control>
-        </nz-form-item >
-        </div>
-
-        <div nz-col [nzSpan]="12">
-            <nz-form-item>
-              <nz-form-label [nzSpan]="6" nzFor="email">Email</nz-form-label>
-          <nz-form-control [nzSpan]="18">
-              <input nz-input formControlName="email" name="email" type="email" id="email" placeholder="Email Address">
-            </nz-form-control>
-          </nz-form-item >
-        </div>
-      </div>
-
-      <div nz-row>
-        <div nz-col [nzSpan]="12">
-          <nz-form-item >
-            <nz-form-label [nzSpan]="6" nzFor="dob">Date of Birth</nz-form-label>
-        <nz-form-control [nzSpan]="18">
-          <nz-date-picker formControlName="dob" name="dob"  id="dob" placeholder="Date of Birth"></nz-date-picker>
-          </nz-form-control>
-        </nz-form-item >
-        </div>
-
-        <div nz-col [nzSpan]="12">
-            <nz-form-item>
-              <nz-form-label [nzSpan]="6" nzFor="phone">Phone</nz-form-label>
-          <nz-form-control [nzSpan]="18">
-              <input nz-input formControlName="phone" name="phone"  id="phone" placeholder="Phone Number">
-            </nz-form-control>
-          </nz-form-item >
-        </div>
-      </div>
-
-      <div nz-row>
-        <div nz-col [nzSpan]="12">
-          <nz-form-item >
-            <nz-form-label [nzSpan]="6" nzFor="address">Address</nz-form-label>
-        <nz-form-control [nzSpan]="18">
-          <input nz-input formControlName="address" name="address" id="address" placeholder="Address">
-          </nz-form-control>
-        </nz-form-item >
-        </div>
-
-        <div nz-col [nzSpan]="12">
-            <nz-form-item>
-              <nz-form-label [nzSpan]="6" nzFor="gender">Gender</nz-form-label>
-          <nz-form-control [nzSpan]="18">
-             <nz-select formControlName="gender" nzShowSearch nzAllowClear placeholder="Select Gender">
-            <nz-option nzLabel="Male" nzValue="male"></nz-option>
-            <nz-option nzLabel="Female" nzValue="female"></nz-option>
-          </nz-select>
-            </nz-form-control>
-          </nz-form-item >
-        </div>
-      </div>
-
-      <nz-form-item nz-row>
-        <nz-form-control [nzSpan]="14" [nzOffset]="10" >
-          <button nz-button nzType="primary" style="float: right;" (click)="onSubmit()">Submit</button>
-        </nz-form-control>
-      </nz-form-item>
+        </nz-form-item>
     </form>
-  </nz-card>
 </div>

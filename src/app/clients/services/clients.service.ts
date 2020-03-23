@@ -31,13 +31,15 @@ export class ClientsService {
 
     async addIndividualClient(client: IClient): Promise<void> {
         this.clients.pipe(first()).subscribe(async clients => {
-            client.id = v4();
+            client.id = v4(); // Generates UUID of version 4.
+
             client.clientType = 'Individual';
             client.clientID = this.generateClientID(
                 'Individual',
                 'BR202000030',
                 clients.length
             );
+
             await this.clientsCollection.add(client);
         });
     }
