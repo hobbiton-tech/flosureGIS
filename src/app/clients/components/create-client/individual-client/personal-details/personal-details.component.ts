@@ -11,8 +11,8 @@ import { ClientsService } from 'src/app/clients/services/clients.service';
 })
 export class PersonalDetailsComponent implements OnInit {
     // Declarations
-  personalDetailsForm: FormGroup;
-  clientID = 200;
+    personalDetailsForm: FormGroup;
+    clientID = 200;
     // title values
     listOfOption = ['Mr', 'Mrs', 'Dr', 'Prof'];
     listOfSelectedValue: string[] = [];
@@ -24,9 +24,9 @@ export class PersonalDetailsComponent implements OnInit {
     constructor(
         private stepperService: StepperService,
         private router: Router,
-        private formBuilder: FormBuilder,
-        // private readonly clientsService: ClientsService
-    ) {
+        private formBuilder: FormBuilder
+    ) // private readonly clientsService: ClientsService
+    {
         this.personalDetailsForm = this.formBuilder.group({
             title: ['', Validators.required],
             firstName: ['', Validators.required],
@@ -56,16 +56,13 @@ export class PersonalDetailsComponent implements OnInit {
     }
 
     onSubmit() {
-      // console.log(this.f.value);
-      const some = this.personalDetailsForm.value;
-      console.log(some);
-      // this.clientsService.addClient(some);
-      localStorage.setItem(
-           'personal',
-           JSON.stringify(some)
-       );
-      this.ResetForm();
-      this.stepperService.changeIndex(2);
-      this.router.navigateByUrl('/clients/employement-information');
+        // console.log(this.f.value);
+        const some = this.personalDetailsForm.value;
+        console.log(some);
+        // this.clientsService.addClient(some);
+        localStorage.setItem('personal', JSON.stringify(some));
+        this.ResetForm();
+        this.stepperService.changeIndex(2);
+        this.router.navigateByUrl('/flosure/clients/employement-information');
     }
 }

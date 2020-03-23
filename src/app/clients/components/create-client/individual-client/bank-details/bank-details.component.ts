@@ -51,6 +51,6 @@ export class BankDetailsComponent implements OnInit {
         console.log(some);
         this.clientsService.addAccountDetails(some);
         this.stepperService.changeIndex(0);
-        this.router.navigateByUrl('/clients/create-client');
+        this.router.navigateByUrl('/flosure/clients/create-client');
     }
 }

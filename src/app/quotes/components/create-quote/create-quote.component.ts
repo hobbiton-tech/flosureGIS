@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import {
+    FormGroup,
+    FormBuilder,
+    Validators,
+    FormControl
+} from '@angular/forms';
 import { StepperService } from 'src/app/quotes/services/stepper.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -42,14 +47,14 @@ export class CreateQuoteComponent implements OnInit {
             return false;
         }
         return startValue.getTime() > this.endValue.getTime();
-    }
+    };
 
     disabledEndDate = (endValue: Date): boolean => {
         if (!endValue || !this.startValue) {
             return false;
         }
         return endValue.getTime() <= this.startValue.getTime();
-    }
+    };
 
     handleStartOpenChange(open: boolean): void {
         if (!open) {
@@ -161,7 +166,6 @@ export class CreateQuoteComponent implements OnInit {
         console.log('Risks', this.risks);
       }
       );
-
     }
 
     // ResetForm() {
@@ -174,6 +178,7 @@ export class CreateQuoteComponent implements OnInit {
         console.log('<============Quote Form Data=============>');
         console.log(some);
         this.quoteService.addMotorQuotation(some);
+
         localStorage.setItem('motor', JSON.stringify(some));
         this.quoteService.getRisk('an');
         // this.ResetForm();

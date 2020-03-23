@@ -5,6 +5,11 @@ export class InsuranceCompany {
     contactFirstName: string;
     contactSecondName: string;
     companyCode: string;
-    dateCreated: string;
+    dateCreated: string | ITimestamp;
     contract: string;
+}
+
+export interface ITimestamp {
+    seconds: string;
+    milliseconds: string;
 }

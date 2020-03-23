@@ -16,10 +16,10 @@ export class PolicyDetailsComponent implements OnInit {
     ngOnInit(): void {}
 
     goToPoliciesList(): void {
-        this.router.navigateByUrl('/underwriting/policies');
+        this.router.navigateByUrl('/flosure/underwriting/policies');
     }
 
     goToClientsList(): void {
-        this.router.navigateByUrl('/clients/clients-list');
+        this.router.navigateByUrl('/flosure/clients/clients-list');
     }
 }

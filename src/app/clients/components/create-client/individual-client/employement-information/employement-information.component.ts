@@ -44,7 +44,7 @@ export class EmployementInformationComponent implements OnInit {
         console.log(some);
         // this.clientsService.addClient(some);
         this.stepperService.changeIndex(3);
-        this.router.navigateByUrl('/clients/bank-details');
+        this.router.navigateByUrl('/flosure/clients/bank-details');
     }
 
     ngOnInit(): void {

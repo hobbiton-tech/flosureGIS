@@ -57,6 +57,6 @@ export class ContactPersonComponent implements OnInit {
         console.log(some);
         // this.clientsService.addClient(some);
         this.stepperService.changeIndex(3);
-        this.router.navigateByUrl('/clients/company-bank-details');
+        this.router.navigateByUrl('/flosure/clients/company-bank-details');
     }
 }

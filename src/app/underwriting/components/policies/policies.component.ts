@@ -11,9 +11,9 @@ export class PoliciesComponent implements OnInit {
     policiesList = generatePolicies();
     constructor(private readonly route: Router) {}
 
-  ngOnInit(): void { }
+    ngOnInit(): void {}
 
     viewPolicyDetails(): void {
-        this.route.navigateByUrl('/underwriting/policy-details');
+        this.route.navigateByUrl('/flosure/underwriting/policy-details');
     }
 }

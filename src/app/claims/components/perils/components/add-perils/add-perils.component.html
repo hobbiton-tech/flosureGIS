@@ -1,0 +1,48 @@
+
+<nz-drawer [nzClosable]="false" [nzVisible]="isAddPerilDrawerVisible" nzPlacement="left"
+nzTitle="Add Peril" (nzOnClose)="closeDrawer()" [nzWidth]="650">
+
+<form nz-form [formGroup]="perilDetailsForm" (ngSubmit)="onSubmit()" style="margin: 0 auto;">
+  
+  <div nz-row nzGutter="0">
+    <nz-form-item>
+      <nz-form-label nzSpan="6" nzRequired>Claimant Name</nz-form-label>
+      <nz-form-control nzSpan="16">
+            <input nz-input formControlName="claimant"/>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label nzSpan="6" nzRequired>Peril</nz-form-label>
+      <nz-form-control nzSpan="16">
+            <input nz-input formControlName="peril"/>
+      </nz-form-control>
+    </nz-form-item>
+    
+    <nz-form-item>
+      <nz-form-label nzSpan="6" nzRequired>Estimated Amount</nz-form-label>
+      <nz-form-control nzSpan="16">
+            <input nz-input formControlName="estimatedAmount"/>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label nzSpan="6" nzRequired>Expired Section</nz-form-label>
+      <nz-form-control nzSpan="16">
+            <input nz-input formControlName="expiredSection"/>
+      </nz-form-control>
+    </nz-form-item>
+  
+</div>
+<div style="text-align: center; margin-top: 10px;">
+
+        <button nz-button nzType="primary">Add Peril</button>
+        <button nz-button nzType="default" style="margin-left: 10px" (click)="resetForm($event)">Reset Form</button>
+        </div>
+  
+
+  
+
+</form>
+
+</nz-drawer>

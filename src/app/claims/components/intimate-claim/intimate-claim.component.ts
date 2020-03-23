@@ -1,6 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ClaimsService } from '../../services/claims-service.service';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import {
+    FormGroup,
+    FormControl,
+    FormBuilder,
+    ReactiveFormsModule,
+    Validators
+} from '@angular/forms';
+import { IClient } from 'src/app/clients/models/clients.model';
+import { Claim } from '../../models/claim.model';
 
 @Component({
     selector: 'app-intimate-claim',
@@ -19,8 +27,7 @@ export class IntimateClaimComponent implements OnInit {
 
     ngOnInit(): void {
         this.intimateClaimForm = this.formBuilder.group({
-            bookedBy: '',
-            claimID: '',
+            bookedBy: ['', Validators.required],
             policyNumber: '',
             clientName: '',
             serviceProvider: '',
@@ -40,7 +47,14 @@ export class IntimateClaimComponent implements OnInit {
 
     onSubmit() {
         console.log(this.intimateClaimForm.value);
-        const claim = this.intimateClaimForm.value;
+        const claim = this.intimateClaimForm.value as Claim;
+        claim.document = { url: '', name: '' };
         this.claimService.addClaim(claim);
+        this.intimateClaimForm.reset();
+    }
+
+    resetForm(e: MouseEvent): void {
+        e.preventDefault();
+        this.intimateClaimForm.reset();
     }
 }

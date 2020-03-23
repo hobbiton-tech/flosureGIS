@@ -59,6 +59,6 @@ export class CompanyDetailsComponent implements OnInit {
         localStorage.setItem('personal', JSON.stringify(some));
         this.ResetForm();
         this.stepperService.changeIndex(2);
-        this.router.navigateByUrl('/clients/contact-person');
+        this.router.navigateByUrl('/flosure/clients/contact-person');
     }
 }

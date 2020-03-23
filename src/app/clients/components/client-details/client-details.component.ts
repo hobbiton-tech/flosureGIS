@@ -4,12 +4,7 @@ import {
     ChangeDetectorRef,
     AfterViewInit
 } from '@angular/core';
-import {
-    IClient,
-    IIndividualClient,
-    ICorporateClient,
-    CombinedClients
-} from '../../models/clients.model';
+import { IClient } from '../../models/clients.model';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AccountDetails } from '../../models/account-details.model';
 import { ClientsService } from '../../services/clients.service';
@@ -26,7 +21,7 @@ import { ClaimsService } from 'src/app/claims/services/claims-service.service';
 export class ClientDetailsComponent implements OnInit, AfterViewInit {
     isEditmode = false;
 
-    client: CombinedClients;
+    client: IClient;
     clientPolicies: Policy[];
     clientClaims: Claim[];
 
@@ -48,7 +43,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
         });
 
         this.clientsService.getClient(this.id).subscribe(client => {
-            this.client = client as CombinedClients;
+            this.client = client;
         });
 
         this.policyService.getClientsPolicies(this.id).subscribe(policies => {
@@ -65,14 +60,14 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
     }
 
     goToClientsList(): void {
-        this.route.navigateByUrl('/clients/clients-list');
+        this.route.navigateByUrl('/flosure/clients/clients-list');
     }
 
     viewPolicyDetails(): void {
-        this.route.navigateByUrl('/underwriting/policy-details');
+        this.route.navigateByUrl('/flosure/underwriting/policy-details');
     }
 
     viewClaimDetails(): void {
-        this.route.navigateByUrl('/claims/claim-details');
+        this.route.navigateByUrl('/flosure/claims/claim-details');
     }
 }

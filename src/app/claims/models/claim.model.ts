@@ -3,15 +3,21 @@ export class Claim {
     claimId: string;
     policyNumber: string;
     clientName: string;
-    lossDate: string | ITimestamp;
+    lossDate: Date;
     status: ClaimStatus;
-    notificationDate: string | ITimestamp;
+    notificationDate: Date;
     bookedBy: string;
     serviceProvider: string;
     serviceType: string;
     claimDescription: string;
     risk: string;
     activity: string;
+    document?: IDocument;
+}
+
+export interface IDocument {
+    name: string;
+    url: string;
 }
 
 export type ClaimStatus = 'Pending' | 'Resolved' | 'Cancelled';
