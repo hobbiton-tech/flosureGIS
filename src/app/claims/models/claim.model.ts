@@ -1,7 +1,5 @@
-import * as faker from 'faker';
-// import * as f from 'firebase'
-
 export class Claim {
+    id: string;
     claimId: string;
     policyNumber: string;
     clientName: string;
@@ -14,12 +12,15 @@ export class Claim {
     claimDescription: string;
     risk: string;
     activity: string;
+<<<<<<< HEAD
     document?: IDocument; 
 }
 
 export interface IDocument {
     name: string;
     url: string
+=======
+>>>>>>> 06e7fbebfa4286c6af3a7e117103027e84398a08
 }
 
 export type ClaimStatus = 'Pending' | 'Resolved' | 'Cancelled';
@@ -27,6 +28,7 @@ export interface ITimestamp {
     seconds: string;
     milliseconds: string;
 }
+<<<<<<< HEAD
 
 const createClaim = () => {
     const claim: Claim = {
@@ -54,3 +56,5 @@ export const generateClaimsList = () => {
     }
     return claims;
 };
+=======
+>>>>>>> 06e7fbebfa4286c6af3a7e117103027e84398a08

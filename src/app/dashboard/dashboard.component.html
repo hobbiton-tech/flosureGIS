@@ -19,12 +19,17 @@
     <div nz-row [nzGutter]="8" style="padding-top: 10px">
         <div nz-col [nzSpan]="8">
             <nz-card>
-                <nz-statistic [nzValueTemplate]="policiesStats" [nzTitle]="'Cancelled Policies'"></nz-statistic>
+                <nz-statistic [nzValueTemplate]="policiesStats" [nzTitle]="'Expiring Policies'"></nz-statistic>
             </nz-card>
         </div>
         <div nz-col [nzSpan]="8">
             <nz-card>
-                <nz-statistic [nzValue]="commissionEarned | number"  [nzPrefix]="'ZMW'" [nzTitle]="'Commission Earned'"></nz-statistic>
+                <nz-statistic [nzValue]="commissionEarned | number"  [nzTitle]="'Commission Earned (ZMK)'"></nz-statistic>
+            </nz-card>
+        </div>
+        <div nz-col [nzSpan]="8">
+            <nz-card>
+                <nz-statistic [nzValue]="commissionEarned | number"  [nzTitle]="'Total Premium (ZMK)'"></nz-statistic>
             </nz-card>
         </div>
     </div>

@@ -12,7 +12,7 @@ import { ClientsService } from 'src/app/clients/services/clients.service';
 export class ContactPersonComponent implements OnInit {
     // Declarations
     contactPersornForm: FormGroup;
-  companyDetails: any;
+    companyDetails: any;
 
     constructor(
         private stepperService: StepperService,
@@ -55,7 +55,7 @@ export class ContactPersonComponent implements OnInit {
     onSubmit() {
         const some = this.contactPersornForm.value;
         console.log(some);
-        this.clientsService.addClient(some);
+        // this.clientsService.addClient(some);
         this.stepperService.changeIndex(3);
         this.router.navigateByUrl('/clients/company-bank-details');
     }

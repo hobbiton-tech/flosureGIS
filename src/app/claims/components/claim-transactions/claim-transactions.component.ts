@@ -1,8 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { generateClaimsList } from '../../models/claim.model';
 import { Router } from '@angular/router';
 import { ClaimsService } from '../../services/claims-service.service';
-import { Claim } from '../../models/claim.model'
+import { Claim } from '../../models/claim.model';
 
 @Component({
     selector: 'app-claim-transactions',
@@ -11,16 +10,17 @@ import { Claim } from '../../models/claim.model'
 })
 export class ClaimTransactionsComponent implements OnInit {
     claimsList: Claim[];
+<<<<<<< HEAD
     claimsCount: number = 0;
 
     //spin feedback when loading figures
     claimsLoading:boolean = true;
+=======
+>>>>>>> 06e7fbebfa4286c6af3a7e117103027e84398a08
 
     constructor(
         private readonly route: Router,
-        private cdr: ChangeDetectorRef,
         private readonly claimsService: ClaimsService
-
     ) {}
 
     viewClaimDetails(claim: Claim): void {
@@ -29,7 +29,7 @@ export class ClaimTransactionsComponent implements OnInit {
 
     async addClaim(claim: Claim): Promise<void> {
         await this.claimsService.addClaim(claim);
-      }
+    }
 
     ngOnInit(): void {
         this.claimsService.getClaims().subscribe(claims => {
@@ -37,7 +37,6 @@ export class ClaimTransactionsComponent implements OnInit {
             this.claimsLoading = false;
             this.claimsList = claims;
             console.log(claims);
-        })
-        
+        });
     }
 }
