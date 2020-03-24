@@ -6,6 +6,7 @@ export class Quote {
     client: string;
     status: QuoteStatus;
     preparedBy: string;
+    risks: RiskModel[];
 }
 
 export class MotorQuotationModel {
@@ -16,14 +17,12 @@ export class MotorQuotationModel {
     messageCode: string;
     coverCode: string;
     currency: string;
-    // risks?: RiskModel[];
+    risks: RiskModel[];
     startDate: Date;
     endDate: Date;
 }
 
 export class RiskModel {
-  id: string;
-  quoteNumber: string;
   regNumber: string;
   vehicleMake: string;
   vehicleModel: string;

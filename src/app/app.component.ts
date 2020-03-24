@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { generateQuotes } from './quotes/data/quote.data';
+// import { generateQuotes } from './quotes/data/quote.data';
 
 @Component({
     selector: 'app-root',
@@ -8,9 +8,9 @@ import { generateQuotes } from './quotes/data/quote.data';
 })
 export class AppComponent implements OnInit {
     title = 'flosure-broker-ui';
-    quotes = generateQuotes();
+    // quotes = generateQuotes();
 
     ngOnInit() {
-        console.log(this.quotes);
+        // console.log(this.quotes);
     }
 }

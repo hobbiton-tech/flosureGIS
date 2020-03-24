@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MotorQuotationModel, RiskModel } from '../models/quote.model';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 import {
     AngularFirestore,
     AngularFirestoreCollection,
@@ -8,6 +8,7 @@ import {
     DocumentReference
 } from '@angular/fire/firestore';
 import { map, flatMap, first } from 'rxjs/operators';
+import { v4 } from 'uuid';
 
 @Injectable({
     providedIn: 'root'
@@ -76,7 +77,6 @@ export class QuotesService {
   async addRisk(risk: RiskModel): Promise<void> {
 
     this.risks.pipe(first()).subscribe(async risks => {
-      risk.id = v4()
       this.riskCollection
           .add(risk)
           .then(mess => {

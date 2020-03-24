@@ -10,8 +10,11 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { QuotesService } from '../../services/quotes.service';
 import { ClientsService } from 'src/app/clients/services/clients.service';
-import { IClient } from 'src/app/clients/models/clients.model';
-import { RiskModel } from '../../models/quote.model';
+import {
+    ICorporateClient,
+    IIndividualClient
+} from 'src/app/clients/models/clients.model';
+import { RiskModel, Quote } from '../../models/quote.model';
 import { map, tap, filter, scan, retry, catchError } from 'rxjs/operators';
 
 @Component({
@@ -20,7 +23,7 @@ import { map, tap, filter, scan, retry, catchError } from 'rxjs/operators';
     styleUrls: ['./create-quote.component.scss']
 })
 export class CreateQuoteComponent implements OnInit {
-  motor: any;
+    motor: any;
     constructor(
         private formBuilder: FormBuilder,
         private stepperService: StepperService,
@@ -31,10 +34,10 @@ export class CreateQuoteComponent implements OnInit {
     // Decleration
     quoteForm: FormGroup;
     riskForm: FormGroup;
-    Clients: any[];
+    clients: Array<IIndividualClient & ICorporateClient>;
     disabled = false;
     quoteNumber = '';
-    risks: RiskModel[];
+    risks: RiskModel[] = [];
 
     startValue: Date | null = null;
     endValue: Date | null = null;
@@ -100,78 +103,64 @@ export class CreateQuoteComponent implements OnInit {
     }
 
     // getting data from local storage
-  public getFromLocalStrorage() {
-    const quotes = JSON.parse(localStorage.getItem('motor'));
-    return quotes;
-  }
-
-  ngOnInit(): void {
-    this.quoteForm = this.formBuilder.group({
-      quoteNumber: [this.quoteService.generateQuoteNumber('ran', 10)],
-      clientCode: ['', Validators.required],
-      messageCode: ['ewrewre', Validators.required],
-      currency: ['', Validators.required],
-      startDate: ['', Validators.required],
-      endDate: ['', Validators.required]
-    });
-
-    this.clientsService.getClients().subscribe(clients => {
-      this.Clients = [];
-      clients.forEach(client => {
-        const a = client;
-        this.Clients.push(a as IClient);
-      });
-      console.log('<============Quote Client Data=============>');
-      console.log(this.Clients);
-    });
-
-    this.addField();
-
-
-    this.motor = this.getFromLocalStrorage();
-    console.log('<============Quote Number Data=============>');
-    console.log(this.quoteService.generateQuoteNumber('ran', 10));
-
-    console.log('<============Risks with Quote Number Data=============>');
-    console.log(
-      this.quoteService.getRisk(
-        this.quoteService.generateQuoteNumber('ran', 10)
-      )
-    );
-
-    this.riskForm = this.formBuilder.group({
-      riskID: ['any', Validators.required],
-      quoteNumber: [this.quoteService.generateQuoteNumber('ran', 10)],
-      registrationNumber: ['', Validators.required],
-      vehicleMake: ['', Validators.required],
-      vehicleModel: ['', Validators.required],
-      engineNumber: ['', Validators.required],
-      chasisNumber: ['', Validators.required],
-      color: ['', Validators.required],
-      estimatedValue: ['', Validators.required],
-      productType: ['', Validators.required]
-    });
-
-    // get risks
-
-    this.quoteService.getRisks().subscribe(risk => {
-      this.risks = risk;
-    });
-
-    this.quoteService
-      .getRisks()
-      .subscribe(result => {
-        this.risks = result.filter(x => x.quoteNumber === 'QOran2003230010');
-        // console.log('<============Risk Data=============>');
-        console.log('Risks', this.risks);
-      }
-      );
+    public getFromLocalStrorage() {
+        const quotes = JSON.parse(localStorage.getItem('motor'));
+        return quotes;
     }
 
-    // ResetForm() {
-    //     this.quoteForm.value.reset();
-    // }
+    ngOnInit(): void {
+        this.quoteForm = this.formBuilder.group({
+            quoteNumber: [this.quoteService.generateQuoteNumber('ran', 10)],
+            clientCode: ['', Validators.required],
+            messageCode: ['ewrewre', Validators.required],
+            currency: ['', Validators.required],
+            startDate: ['', Validators.required],
+            endDate: ['', Validators.required]
+        });
 
+        this.clientsService.getAllClients().subscribe(clients => {
+            this.clients = [...clients[0], ...clients[1]] as Array<
+                IIndividualClient & ICorporateClient
+            >;
+        });
+
+        // this.motor = this.getFromLocalStrorage();
+        // console.log('<============Quote Number Data=============>');
+        // console.log(this.quoteService.generateQuoteNumber('ran', 10));
+
+        // console.log('<============Risks with Quote Number Data=============>');
+        // console.log(
+        //   this.quoteService.getRisk(
+        //     this.quoteService.generateQuoteNumber('ran', 10)
+        //   )
+        // );
+
+        this.riskForm = this.formBuilder.group({
+            registrationNumber: ['', Validators.required],
+            vehicleMake: ['', Validators.required],
+            vehicleModel: ['', Validators.required],
+            engineNumber: ['', Validators.required],
+            chasisNumber: ['', Validators.required],
+            color: ['', Validators.required],
+            estimatedValue: ['', Validators.required],
+            productType: ['', Validators.required]
+        });
+
+        // get risks
+
+        // this.quoteService.getRisks().subscribe(risk => {
+        //   this.risks = risk;
+        // });
+
+        // this.quoteService
+        //   .getRisks()
+        //   .subscribe(result => {
+        //     this.risks = result.filter(x => x.quoteNumber === 'QOran2003230010');
+        //     // console.log('<============Risk Data=============>');
+        //     console.log('Risks', this.risks);
+        //   }
+        //   );
+    }
 
     onSubmit() {
         const some = this.quoteForm.value;
@@ -181,14 +170,28 @@ export class CreateQuoteComponent implements OnInit {
 
         localStorage.setItem('motor', JSON.stringify(some));
         this.quoteService.getRisk('an');
-        // this.ResetForm();
     }
 
-  onAdd() {
-    const risk = this.riskForm.value;
-    console.log('<============Risk Form Data=============>');
-    console.log(risk);
-    console.log('<============Client Code Data=============>');
-    this.quoteService.addRisk(risk);
+    onAdd() {
+        const risk = this.riskForm.value;
+        console.log('<============Risk Form Data=============>');
+        console.log(risk);
+        console.log('<============Client Code Data=============>');
+        this.quoteService.addRisk(risk);
+    }
+
+    addRisk(): void {
+        const some: RiskModel[] = []
+        some.push(this.riskForm.value);
+        this.risks = [...this.risks, ...some];
+        console.log(this.risks);
+    }
+
+    addQuote(): void {
+        // const quote: Quote = {
+        //   // quote detail
+        //   risks: this.risks,
+        // }
+        // this.quoteService.addMotorQuotation(quote);
     }
 }
