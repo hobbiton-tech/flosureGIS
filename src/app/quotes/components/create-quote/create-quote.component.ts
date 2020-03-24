@@ -14,7 +14,7 @@ import {
     ICorporateClient,
     IIndividualClient
 } from 'src/app/clients/models/clients.model';
-import { RiskModel, Quote } from '../../models/quote.model';
+import { RiskModel, Quote, MotorQuotationModel } from '../../models/quote.model';
 import { map, tap, filter, scan, retry, catchError } from 'rxjs/operators';
 
 @Component({
@@ -188,10 +188,10 @@ export class CreateQuoteComponent implements OnInit {
     }
 
     addQuote(): void {
-        // const quote: Quote = {
-        //   // quote detail
-        //   risks: this.risks,
-        // }
-        // this.quoteService.addMotorQuotation(quote);
+        const quote: MotorQuotationModel = {
+          ...this.quoteForm.value,
+          risks: this.risks,
+        }
+        this.quoteService.addMotorQuotation(quote);
     }
 }
