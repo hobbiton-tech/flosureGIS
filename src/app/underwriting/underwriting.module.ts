@@ -6,6 +6,8 @@ import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { Routes, RouterModule } from '@angular/router';
 import { EndorsementsComponent } from './components/endorsements/endorsements.component';
 import { PolicyDetailsComponent } from './components/policy-details/policy-details.component';
+import { ReactiveFormsModule } from '@angular/forms';
+
 
 
 const routes: Routes = [
@@ -20,6 +22,10 @@ const routes: Routes = [
     {
         path: 'policy-details',
         component: PolicyDetailsComponent
+    },
+    {
+        path: 'policy-details/:policyNumber',
+        component: PolicyDetailsComponent
     }
 ];
 
@@ -30,6 +36,7 @@ const routes: Routes = [
         PoliciesComponent,
         PolicyDetailsComponent
     ],
-    imports: [CommonModule, NgZorroAntdModule, RouterModule.forChild(routes)]
+    imports: [CommonModule, NgZorroAntdModule, RouterModule.forChild(routes), ReactiveFormsModule],
+    exports: [ReactiveFormsModule]
 })
 export class UnderWritingModule {}

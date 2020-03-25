@@ -23,7 +23,7 @@ export class QuotesComponent implements OnInit {
 
     viewDetails(quotation: MotorQuotationModel): void {
         this.router.navigateByUrl(
-            '/flosure/quotes/quote-details/' + quotation.id
+            '/flosure/quotes/quote-details/' + quotation.quoteNumber
         );
     }
 }
