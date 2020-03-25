@@ -132,7 +132,7 @@ export class QuotesService {
     }
 
     // Get Quotes
-    getQoutes() {
+    getQoutes(): Observable<MotorQuotationModel[]> {
         return this.quotations;
     }
 }
