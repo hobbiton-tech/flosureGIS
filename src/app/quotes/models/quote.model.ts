@@ -23,14 +23,15 @@ export class MotorQuotationModel {
 }
 
 export class RiskModel {
-  regNumber: string;
-  vehicleMake: string;
-  vehicleModel: string;
-  engineNumber: string;
-  chassisNumber: string;
-  color: string;
-  estimatedValue?: number;
-  productType: ProductType;
+    regNumber: string;
+    vehicleMake: string;
+    vehicleModel: string;
+    engineNumber: string;
+    chassisNumber: string;
+    color: string;
+    estimatedValue?: number;
+    productType: ProductType;
+    insuranceType: InsuranceType;
 }
 
 export class MessageModel {
@@ -48,3 +49,5 @@ export class CoverModel {
 export type ProductType = 'Private' | 'Commercial' | 'Bus/Taxi';
 
 export type QuoteStatus = 'Draft' | 'Confirmed';
+
+export type InsuranceType = 'ThirdParty' | 'Comprehensive';

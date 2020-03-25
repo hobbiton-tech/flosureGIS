@@ -1,60 +1,99 @@
 <div style="margin: 20px;">
     <div style="margin-bottom: 20px; background: #fff;">
-      <nz-page-header>
-        <nz-page-header-title>Quotes</nz-page-header-title>
-        <nz-page-header-subtitle>List of all quotes</nz-page-header-subtitle>
-        <nz-page-header-content>
-          <nz-descriptions [nzColumn]="3">
-            <nz-descriptions-item nzTitle="Agent" [nzSpan]="1">Charles Malama</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Association" [nzSpan]="1"><a>421421</a></nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Last Update" [nzSpan]="1">2017-01-10</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Total Quotes" [nzSpan]="1">231</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Draft Quotes" [nzSpan]="1">130</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Confirmed Quotes" [nzSpan]="1">101</nz-descriptions-item>
-          </nz-descriptions>
-        </nz-page-header-content>
-      </nz-page-header>
+        <nz-page-header>
+            <nz-page-header-title>Quotes</nz-page-header-title>
+            <nz-page-header-subtitle
+                >List of all quotes</nz-page-header-subtitle
+            >
+            <nz-page-header-content>
+                <nz-descriptions [nzColumn]="3">
+                    <nz-descriptions-item nzTitle="Agent" [nzSpan]="1"
+                        >Charles Malama</nz-descriptions-item
+                    >
+                    <nz-descriptions-item nzTitle="Association" [nzSpan]="1"
+                        ><a>421421</a></nz-descriptions-item
+                    >
+                    <nz-descriptions-item nzTitle="Last Update" [nzSpan]="1"
+                        >2017-01-10</nz-descriptions-item
+                    >
+                    <nz-descriptions-item nzTitle="Total Quotes" [nzSpan]="1"
+                        >231</nz-descriptions-item
+                    >
+                    <nz-descriptions-item nzTitle="Draft Quotes" [nzSpan]="1"
+                        >130</nz-descriptions-item
+                    >
+                    <nz-descriptions-item
+                        nzTitle="Confirmed Quotes"
+                        [nzSpan]="1"
+                        >101</nz-descriptions-item
+                    >
+                </nz-descriptions>
+            </nz-page-header-content>
+        </nz-page-header>
     </div>
-  <nz-card>
-    <!-- <nz-card> -->
-      <div style="margin-bottom: 20px; width: 50%">
-        <nz-input-group [nzSuffix]="suffixIconSearch">
-          <input type="text" nz-input placeholder="Search by client, quotation number, agent" />
-        </nz-input-group>
-        <ng-template #suffixIconSearch>
-          <i nz-icon nzType="search"></i>
-        </ng-template>
-      </div>
-      <nz-table #quotesTable [nzData]="quotesList" [nzSize]="'small'" [nzBordered]="true">
-        <thead>
-          <tr>
-            <th>Quote ID</th>
-            <th>Rev. Number</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Client Name</th>
-            <th>Quote Status</th>
-            <th>Agent</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let quote of quotesTable.data">
-            <td>{{ quote.quoteNumber }}</td>
-            <td>{{ quote.revisionNumber }}</td>
-            <td>{{ quote.startDate | date }}</td>
-            <td>{{ quote.endDate | date }}</td>
-            <td>{{ quote.client }}</td>
-            <td>
-              <nz-badge [nzStatus]="quote.status === 'Draft' ? 'warning' : 'success'" [nzText]="quote.status"></nz-badge>
-            </td>
-            <td>{{ quote.preparedBy }}</td>
-            <td>
-              <button nz-button nzType="default" nzSize="small" [disabled]="quote.status === 'Confirmed'">Convert</button>
-            </td>
-          </tr>
-        </tbody>
-      </nz-table>
+    <nz-card>
+        <!-- <nz-card> -->
+        <div style="margin-bottom: 20px; width: 50%">
+            <nz-input-group [nzSuffix]="suffixIconSearch">
+                <input
+                    type="text"
+                    nz-input
+                    placeholder="Search by client, quotation number, agent"
+                />
+            </nz-input-group>
+            <ng-template #suffixIconSearch>
+                <i nz-icon nzType="search"></i>
+            </ng-template>
+        </div>
+        <nz-table
+            #quotesTable
+            [nzData]="quotesList"
+            [nzSize]="'small'"
+            [nzBordered]="true"
+        >
+            <thead>
+                <tr>
+                    <th>Quote ID</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Client Name</th>
+                    <th>Quote Status</th>
+                    <th>Agent</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr
+                    *ngFor="let quote of quotesTable.data"
+                    (click)="viewDetails(quote)"
+                    style="cursor: pointer;"
+                >
+                    <td>{{ quote.quoteNumber }}</td>
+                    <td>{{ quote.startDate }}</td>
+                    <td>{{ quote.endDate }}</td>
+                    <td>{{ quote.client }}</td>
+                    <td>
+                        <nz-badge
+                            [nzStatus]="
+                                quote.status === 'Draft' ? 'warning' : 'success'
+                            "
+                            [nzText]="quote.status"
+                        ></nz-badge>
+                    </td>
+                    <td>{{ quote.preparedBy }}</td>
+                    <td>
+                        <button
+                            nz-button
+                            nzType="default"
+                            nzSize="small"
+                            [disabled]="quote.status === 'Confirmed'"
+                        >
+                            Convert
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
     </nz-card>
-  <!-- </nz-card> -->
+    <!-- </nz-card> -->
 </div>
