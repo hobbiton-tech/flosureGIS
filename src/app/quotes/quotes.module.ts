@@ -22,7 +22,7 @@ const routes: Routes = [
         component: QuotesComponent
     },
     {
-        path: 'quote-details',
+        path: 'quote-details/:quoteNumber',
         component: QuoteDetailsComponent
     }
 ];
