@@ -56,7 +56,7 @@
                     <td>{{ receipt.policyNumber }}</td>
                     <td>{{ receipt.product }}</td>
                     <td>{{ receipt.startDate.seconds | date }}</td>
-                    <td>{{ receipt.endDate }}</td>
+                    <td>{{ receipt.endDate.seconds * 1000 | date }}</td>
                     <td>{{ receipt.client }}</td>
                     <td>{{ receipt.sumInsured }}</td>
                 </tr>

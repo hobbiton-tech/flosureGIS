@@ -9,13 +9,15 @@ import { Router } from '@angular/router';
     styleUrls: ['./quotes.component.scss']
 })
 export class QuotesComponent implements OnInit {
-    quotesList: MotorQuotationModel[] = [];
+    quotesList: MotorQuotationModel[];
+    quotesCount = 0;
 
     constructor(private quoteServise: QuotesService, private router: Router) {}
 
     ngOnInit(): void {
         this.quoteServise.getQoutes().subscribe(quotes => {
             this.quotesList = quotes;
+            this.quotesCount = quotes.length;
             console.log('======= Qoute List =======');
             console.log(this.quotesList);
         });
