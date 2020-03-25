@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ClientType, IIndividualClient, ICorporateClient } from '../../models/clients.model';
+import {
+    ClientType,
+    IIndividualClient,
+    ICorporateClient
+} from '../../models/clients.model';
 import { Router } from '@angular/router';
 import { ClientsService } from '../../services/clients.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -24,18 +28,18 @@ export class ClientsListComponent implements OnInit {
 
     corporateClientForm: FormGroup;
 
-
-    totalClients: number = 0;
+    totalClients = 0;
     individualClients: IIndividualClient[];
-    totalIndividualClients: number = 0;
+    totalIndividualClients = 0;
     corporateClients: ICorporateClient[];
-    totalCorporateClients: number = 0;
+    totalCorporateClients = 0;
 
     clientsLoading = true;
 
     constructor(
         private router: Router,
-        private readonly clientsService: ClientsService, private formBuilder: FormBuilder
+        private readonly clientsService: ClientsService,
+        private formBuilder: FormBuilder
     ) {}
 
     ngOnInit(): void {
@@ -47,13 +51,15 @@ export class ClientsListComponent implements OnInit {
             this.totalCorporateClients = clients[1].length;
 
             // I'm not sure this actually works. Still doing some research on intersection types.
-            this.clientList = [...clients[0], ...clients[1]] as Array<ICorporateClient & IIndividualClient>;
+            this.clientList = [...clients[0], ...clients[1]] as Array<
+                ICorporateClient & IIndividualClient
+            >;
             this.displayClientList = this.clientList;
 
             this.totalClients = this.clientList.length;
 
             this.clientsLoading = false;
-        })
+        });
     }
 
     viewDetails(client: IIndividualClient | ICorporateClient): void {
@@ -71,13 +77,17 @@ export class ClientsListComponent implements OnInit {
     }
 
     filterClients(filter: 'All' | 'Individaul' | 'Corporate'): void {
-        switch(filter) {
+        switch (filter) {
             case 'All':
                 this.displayClientList = this.clientList;
             case 'Individaul':
-                this.displayClientList = this.individualClients as Array<IIndividualClient & ICorporateClient>;
+                this.displayClientList = this.individualClients as Array<
+                    IIndividualClient & ICorporateClient
+                >;
             case 'Corporate':
-                this.displayClientList = this.corporateClients as Array<IIndividualClient & ICorporateClient>;
+                this.displayClientList = this.corporateClients as Array<
+                    IIndividualClient & ICorporateClient
+                >;
         }
     }
-    }
+}

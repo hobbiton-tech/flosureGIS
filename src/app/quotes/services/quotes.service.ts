@@ -29,7 +29,7 @@ export class QuotesService {
     constructor(private firebase: AngularFirestore) {
         this.motorQuoteCollection = firebase.collection<MotorQuotationModel>(
             'mortor_quotations'
-      );
+        );
 
         this.quotations = this.motorQuoteCollection.valueChanges();
 
@@ -37,62 +37,50 @@ export class QuotesService {
         this.risks = this.riskCollection.valueChanges();
     }
 
-  // add quotation
-  async addMotorQuotation(quotation: MotorQuotationModel): Promise<void> {
-    this.quotations.pipe(first()).subscribe(async quotations => {
-      quotation.id = v4();
+    // add quotation
+    async addMotorQuotation(quotation: MotorQuotationModel): Promise<void> {
+        this.quotations.pipe(first()).subscribe(async quotations => {
+            quotation.id = v4();
 
-      quotation.quoteNumber = this.generateQuoteNumber('BRaa', quotations.length);
+            quotation.quoteNumber = this.generateQuoteNumber(
+                'BRaa',
+                quotations.length
+            );
 
-      await this.motorQuoteCollection
-          .add(quotation)
-          .then(mess => {
-              // view message
-              console.log('<========Qoutation Details==========>');
+            await this.motorQuoteCollection
+                .add(quotation)
+                .then(mess => {
+                    // view message
+                    console.log('<========Qoutation Details==========>');
 
-              console.log(quotation);
-          })
-          .catch(err => {
-              console.log('<========Qoutation Error Details==========>');
-              console.log(err);
-          });
-      // });
-      // this.motorQuoteCollection
-      //       .add(quotation)
-            // .then(mess => {
-            //     // Do something
-            //     console.log('<========Qoutation Details==========>');
-
-            //     console.log(quotation);
-            // })
-            // .catch(err => {
-            //     console.log('<========Qoutation Error Details==========>');
-            //     console.log(err);
-            // });
-    });
-  }
-
-
-    // add risks
-  async addRisk(risk: RiskModel): Promise<void> {
-
-    this.risks.pipe(first()).subscribe(async risks => {
-      this.riskCollection
-          .add(risk)
-          .then(mess => {
-              // view message
-              console.log('<========Risk Details==========>');
-
-              console.log(risk);
-          })
-          .catch(err => {
-              console.log('<========Risk Error Details==========>');
-              console.log(err);
-          });
-    });
+                    console.log(quotation);
+                })
+                .catch(err => {
+                    console.log('<========Qoutation Error Details==========>');
+                    console.log(err);
+                });
+        });
     }
 
-  // get single risk
+    // add risks
+    async addRisk(risk: RiskModel): Promise<void> {
+        this.risks.pipe(first()).subscribe(async risks => {
+            this.riskCollection
+                .add(risk)
+                .then(mess => {
+                    // view message
+                    console.log('<========Risk Details==========>');
+
+                    console.log(risk);
+                })
+                .catch(err => {
+                    console.log('<========Risk Error Details==========>');
+                    console.log(err);
+                });
+        });
+    }
+
+    // get single risk
     getRisk(quoteNumber: string) {
         return this.firebase
             .collection('risks')
@@ -108,11 +96,10 @@ export class QuotesService {
             .catch(error => {
                 console.log('Error getting documents: ', error);
             });
-      // return this.risks.pipe(map(x => x.find(y => y.qouteNumber === quoteNumber)));
-  }
+        // return this.risks.pipe(map(x => x.find(y => y.qouteNumber === quoteNumber)));
+    }
 
-
-  // get risks
+    // get risks
 
     getRisks(): Observable<RiskModel[]> {
         return this.risks;
@@ -138,5 +125,10 @@ export class QuotesService {
             +('0' + today.getDate()).slice(-2);
         const count = this.countGenerator(totalQuotes);
         return 'QO' + brokerCode + dateString + count;
+    }
+
+    // Get Quotes
+    getQoutes() {
+        return this.quotations;
     }
 }
