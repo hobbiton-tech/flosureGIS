@@ -16,6 +16,7 @@ export class MotorQuotationModel {
     clientCode: string;
     messageCode: string;
     coverCode: string;
+    town: string;
     currency: string;
     risks: RiskModel[];
     startDate: Date;

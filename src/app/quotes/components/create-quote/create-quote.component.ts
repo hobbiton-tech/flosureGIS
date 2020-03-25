@@ -94,6 +94,7 @@ export class CreateQuoteComponent implements OnInit {
             quoteNumber: [this.quoteService.generateQuoteNumber('ran', 10)],
             clientCode: ['', Validators.required],
             messageCode: ['ewrewre', Validators.required],
+            town: ['', Validators.required],
             currency: ['', Validators.required],
             startDate: ['', Validators.required],
             endDate: ['', Validators.required]

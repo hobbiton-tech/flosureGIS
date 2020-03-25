@@ -13,9 +13,6 @@
         <nz-card nzTitle="Client Details" style="margin-bottom: 5px;">
             <div nz-row nzGutter="0">
                 <div nz-col nzSpan="12">
-                    <div *ngFor="let client of clients">
-                        {{ client.accountName }}
-                    </div>
                     <nz-form-item>
                         <nz-form-label nzSpan="7" nzRequired
                             >Client Name</nz-form-label
@@ -53,6 +50,16 @@
                             </nz-select>
                         </nz-form-control>
                     </nz-form-item>
+                    <div nz-col nzSpan="12">
+                        <nz-form-item>
+                            <nz-form-label nzRequired nzSpan="7"
+                                >Town</nz-form-label
+                            >
+                            <nz-form-control nzSpan="17">
+                                <input nz-input formControlName="town" />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
                     <nz-form-item>
                         <nz-form-label nzSpan="7" nzRequired
                             >Currency</nz-form-label
@@ -109,6 +116,15 @@
                             >
                             </nz-date-picker>
                         </nz-form-control>
+                    </nz-form-item>
+                </div>
+
+                <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <nz-form-label nzRequired nzSpan="7"
+                            >Town</nz-form-label
+                        >
+                        <nz-form-control nzSpan="17"> </nz-form-control>
                     </nz-form-item>
                 </div>
             </div>
