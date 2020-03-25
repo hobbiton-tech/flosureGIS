@@ -1,32 +1,62 @@
-export interface IClient {
+import { Quote } from 'src/app/quotes/models/quote.model';
+import { Claim } from 'src/app/claims/models/claim.model';
+import { AccountDetails } from './account-details.model';
+
+export interface IIndividualClient {
     id: string;
-    clientID: string;
+    title: string;
     firstName: string;
     lastName: string;
-    address: string;
     email: string;
-    status: ClientStatus;
     phone: string;
-    dateCreated: Date;
-    dateUpdated: Date;
-    clientType: ClientType;
-    individualDetails: IIndividualDetails;
-    corporateDetails: ICorporateDetails;
-}
-
-export interface IIndividualDetails {
-    title: string;
+    maritalStatus: string;
+    nationality: string;
+    clientID: string;
     gender: GenderType;
+    address: string;
     idType: IDType;
     idNumber: string;
     dateOfBirth: Date;
-    occupation: string;
+    dateCreated: Date;
+    dateUpdated: Date;
+    occupation: OccupationType;
+    clientType: ClientType;
+    status: ClientStatus;
+    //accountDetails: AccountDetails;
+    sector: string;
+    accountName: string;
+    accountNumber: number;
+    bank: string;
+    branch: string;
+    accountType: string;
+    // quotes: Quote[];
+    // claims: Claim[];
 }
 
-export interface ICorporateDetails {
+export interface ICorporateClient {
+    id: string;
+    registrationNumber: string;
+    address: string;
+    clientID: string;
+    contactFirstName: string;
+    contactLastName: string;
+    contactEmail: string;
     companyName: string;
     taxPin: number;
+    dateCreated: Date;
+    dateUpdated: Date;
+    clientType: ClientType;
+    status: ClientStatus;
+    accountName: string;
+    accountNumber: number;
+    bank: string;
+    branch: string;
+    accountType: string;
+    // accountDetails: AccountDetails;
+    // quotes: Quote[];
+    // claims: Claim[];
 }
+
 
 export type ClientType = 'Individual' | 'Corporate';
 export type OccupationType = 'Employed' | 'Unemployed' | 'Student';

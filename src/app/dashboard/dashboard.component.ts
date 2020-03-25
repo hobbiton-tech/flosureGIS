@@ -28,16 +28,19 @@ export class DashboardComponent implements OnInit {
     policiesLoading: boolean = true;
 
     constructor(
-        private clients: ClientsService,
+        private clientsService: ClientsService,
         private claims: ClaimsService,
         private policiesService: PoliciesService
     ) {}
 
     ngOnInit(): void {
-        this.clients.getClients().subscribe(clients => {
-            this.clientsCount = clients.length;
-            this.clientsLoading = false;
-        });
+        // this.clients.getClients().subscribe(clients => {
+        //     this.clientsCount = clients.length;
+        //     this.clientsLoading = false;
+        // });
+        this.clientsService.getAllClients().subscribe(clients => {
+            this.clientsCount = [...clients[0], ...clients[1]].length;
+        })
         this.claims.getClaims().subscribe(claims => {
             console.log('SOME', claims);
             this.claimsCount = claims.length;

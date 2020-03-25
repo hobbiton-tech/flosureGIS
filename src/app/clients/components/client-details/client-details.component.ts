@@ -4,7 +4,7 @@ import {
     ChangeDetectorRef,
     AfterViewInit
 } from '@angular/core';
-import { IClient } from '../../models/clients.model';
+import { ICorporateClient, IIndividualClient } from '../../models/clients.model';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AccountDetails } from '../../models/account-details.model';
 import { ClientsService } from '../../services/clients.service';
@@ -21,7 +21,7 @@ import { ClaimsService } from 'src/app/claims/services/claims-service.service';
 export class ClientDetailsComponent implements OnInit, AfterViewInit {
     isEditmode = false;
 
-    client: IClient;
+    client: IIndividualClient & ICorporateClient;
     clientPolicies: Policy[];
     clientClaims: Claim[];
 
@@ -42,9 +42,10 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
             this.id = param.id;
         });
 
-        this.clientsService.getClient(this.id).subscribe(client => {
-            this.client = client;
-        });
+        this.clientsService.getAllClients().subscribe(clients => {
+            // I don't know yet if this actually works. Still doing some research on intersection types.
+            this.client = [...clients[1], ...clients[0]].filter(x => x.id === this.id)[0] as IIndividualClient & ICorporateClient;
+        })
 
         this.policyService.getClientsPolicies(this.id).subscribe(policies => {
             this.clientPolicies = policies;

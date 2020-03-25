@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { IClient } from '../models/clients.model';
+import { Observable, combineLatest } from 'rxjs';
+import { IIndividualClient, ICorporateClient } from '../models/clients.model';
 import {
     AngularFirestore,
     AngularFirestoreCollection,
@@ -14,46 +14,58 @@ import { v4 } from 'uuid';
     providedIn: 'root'
 })
 export class ClientsService {
-    private clientsCollection: AngularFirestoreCollection<IClient>;
+    private individualClientsCollection: AngularFirestoreCollection<IIndividualClient>;
+    private corporateClientsCollection: AngularFirestoreCollection<ICorporateClient>;
+    
     private accountDetailsCollection: AngularFirestoreCollection<
         AccountDetails
     >;
 
-    clients: Observable<IClient[]>;
+    individualClients: Observable<IIndividualClient[]>;
+    corporateClients: Observable<ICorporateClient[]>;
 
     accountDetails: Observable<AccountDetails[]>;
     accountDetail: Observable<AccountDetails>;
 
     constructor(private firebase: AngularFirestore) {
-        this.clientsCollection = this.firebase.collection<IClient>('clients');
-        this.clients = this.clientsCollection.valueChanges();
+        this.individualClientsCollection = this.firebase.collection<IIndividualClient>('individaul_clients');
+        this.corporateClientsCollection = this.firebase.collection<ICorporateClient>('corporate_clients');
+
+        this.individualClients = this.individualClientsCollection.valueChanges();
+        this.corporateClients = this.corporateClientsCollection.valueChanges();
+
     }
 
-    async addIndividualClient(client: IClient): Promise<void> {
-        this.clients.pipe(first()).subscribe(async clients => {
+    async addIndividualClient(client: IIndividualClient): Promise<void> {
+        this.individualClients.pipe(first()).subscribe(async clients => {
             client.id = v4(); // Generates UUID of version 4.
-
             client.clientType = 'Individual';
+            client.dateCreated = new Date();
+            client.dateUpdated = new Date();
+            client.status = 'Inactive';
             client.clientID = this.generateClientID(
                 'Individual',
                 'BR202000030',
                 clients.length
             );
 
-            await this.clientsCollection.add(client);
+            await this.individualClientsCollection.add(client);
         });
     }
 
-    async addCorporateClient(client: IClient): Promise<void> {
-        this.clients.pipe(first()).subscribe(async clients => {
+    async addCorporateClient(client: ICorporateClient): Promise<void> {
+        this.corporateClients.pipe(first()).subscribe(async clients => {
             client.id = v4();
+            client.dateCreated = new Date();
+            client.dateUpdated = new Date();
+            client.status = 'Inactive';
             client.clientID = this.generateClientID(
                 'Corporate',
                 'BR20200020',
                 clients.length
             );
             client.clientType = 'Corporate';
-            await this.clientsCollection.add(client);
+            await this.corporateClientsCollection.add(client);
         });
     }
 
@@ -63,13 +75,16 @@ export class ClientsService {
         return this.accountDetailsCollection.add(accountDetail);
     }
 
-    getClient(id: string): Observable<IClient> {
-        return this.clients.pipe(map(x => x.find(y => y.id === id)));
+    getIndividaulClients(): Observable<IIndividualClient[]> {
+        return this.individualClients;
     }
 
-    getClients(): Observable<IClient[]> {
-        console.log('HERE', this.clients);
-        return this.clients;
+    getCorporateClients(): Observable<ICorporateClient[]> {
+        return this.corporateClients;
+    }
+
+    getAllClients(): Observable<[IIndividualClient[], ICorporateClient[]]> {
+        return combineLatest(this.individualClients, this.corporateClients)
     }
 
     countGenerator(numb: string | number) {

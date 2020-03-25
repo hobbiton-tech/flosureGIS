@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { generateQuotes } from './data/quote.data';
 
 @Component({
     selector: 'app-quotes',
@@ -7,7 +6,7 @@ import { generateQuotes } from './data/quote.data';
     styleUrls: ['./quotes.component.scss']
 })
 export class QuotesComponent implements OnInit {
-    quotesList = generateQuotes();
+    quotesList = [];
 
     constructor() {}
 

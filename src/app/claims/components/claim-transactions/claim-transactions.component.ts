@@ -20,8 +20,8 @@ export class ClaimTransactionsComponent implements OnInit {
         private readonly claimsService: ClaimsService
     ) {}
 
-    viewClaimDetails(): void {
-        this.route.navigateByUrl('/flosure/claims/claim-details');
+    viewClaimDetails(claim: Claim): void {
+        this.route.navigateByUrl('/flosure/claims/claim-details/' + claim.claimId);
     }
 
     async addClaim(claim: Claim): Promise<void> {

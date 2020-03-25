@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { IClient, ClientType } from '../../models/clients.model';
+import { ClientType, IIndividualClient, ICorporateClient } from '../../models/clients.model';
 import { Router } from '@angular/router';
 import { ClientsService } from '../../services/clients.service';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import * as _ from 'lodash';
 
@@ -11,57 +12,72 @@ import * as _ from 'lodash';
     styleUrls: ['./clients-list.component.scss']
 })
 export class ClientsListComponent implements OnInit {
-    clientList: IClient[];
+    // clientList: IIndividualClient[] & ICorporateClient[];
+
+    clientList: Array<IIndividualClient & ICorporateClient>;
+    displayClientList: Array<IIndividualClient & ICorporateClient>;
+
     isAddClientDrawerOpen = false;
     selectedClientType: ClientType = 'Individual';
 
+    individualClientForm: FormGroup;
+
+    corporateClientForm: FormGroup;
+
 
     totalClients: number = 0;
-    individualClients: IClient[];
+    individualClients: IIndividualClient[];
     totalIndividualClients: number = 0;
-    corporateClients: IClient[];
+    corporateClients: ICorporateClient[];
     totalCorporateClients: number = 0;
 
     clientsLoading = true;
 
     constructor(
         private router: Router,
-        private readonly clientsService: ClientsService
+        private readonly clientsService: ClientsService, private formBuilder: FormBuilder
     ) {}
 
     ngOnInit(): void {
-        this.clientsService.getClients().subscribe(clients => {
-            this.clientList = clients;
-            this.totalClients = clients.length;
+        this.clientsService.getAllClients().subscribe(clients => {
+            this.individualClients = clients[0];
+            this.corporateClients = clients[1];
 
-            this.individualClients = _.filter(
-                clients,
-                x => x.clientType === 'Individual'
-            );
+            this.totalIndividualClients = clients[0].length;
+            this.totalCorporateClients = clients[1].length;
 
-            this.corporateClients = _.filter(
-                clients,
-                x => x.clientType === 'Corporate'
-            );
+            // I'm not sure this actually works. Still doing some research on intersection types.
+            this.clientList = [...clients[0], ...clients[1]] as Array<ICorporateClient & IIndividualClient>;
+            this.displayClientList = this.clientList;
 
-            this.totalIndividualClients = this.individualClients.length;
-            this.totalCorporateClients = this.corporateClients.length;
+            this.totalClients = this.clientList.length;
 
             this.clientsLoading = false;
-        });
+        })
     }
 
-    viewDetails(client: IClient): void {
+    viewDetails(client: IIndividualClient | ICorporateClient): void {
         this.router.navigateByUrl(
             '/flosure/clients/client-details/' + client.id
         );
     }
 
-    addIndividualClient(client: IClient): void {
+    addIndividualClient(client: IIndividualClient): void {
         this.clientsService.addIndividualClient(client);
     }
 
-    addCorporateClient(client: IClient): void {
+    addCorporateClient(client: ICorporateClient): void {
         this.clientsService.addCorporateClient(client);
     }
-}
+
+    filterClients(filter: 'All' | 'Individaul' | 'Corporate'): void {
+        switch(filter) {
+            case 'All':
+                this.displayClientList = this.clientList;
+            case 'Individaul':
+                this.displayClientList = this.individualClients as Array<IIndividualClient & ICorporateClient>;
+            case 'Corporate':
+                this.displayClientList = this.corporateClients as Array<IIndividualClient & ICorporateClient>;
+        }
+    }
+    }

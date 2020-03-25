@@ -7,7 +7,6 @@ import {
     ReactiveFormsModule,
     Validators
 } from '@angular/forms';
-import { IClient } from 'src/app/clients/models/clients.model';
 import { Claim } from '../../models/claim.model';
 
 @Component({
