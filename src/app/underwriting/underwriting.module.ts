@@ -7,11 +7,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { EndorsementsComponent } from './components/endorsements/endorsements.component';
 import { PolicyDetailsComponent } from './components/policy-details/policy-details.component';
 
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 const routes: Routes = [
     {
         path: 'endorsements',
-        component: EndorsementsComponent,
+        component: EndorsementsComponent
     },
     {
         path: 'policies',
@@ -30,6 +31,11 @@ const routes: Routes = [
         PoliciesComponent,
         PolicyDetailsComponent
     ],
-    imports: [CommonModule, NgZorroAntdModule, RouterModule.forChild(routes)]
+    imports: [
+        CommonModule,
+        NgZorroAntdModule,
+        RouterModule.forChild(routes),
+        PdfViewerModule
+    ]
 })
 export class UnderWritingModule {}

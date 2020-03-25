@@ -11,6 +11,10 @@ export class PolicyDetailsComponent implements OnInit {
     selectedPolicy = generatePolicies()[8];
     isEditmode = false;
 
+    showCertModal = false;
+    showDebitModal = false;
+    showReceiptModal = false;
+
     constructor(private readonly router: Router) {}
 
     ngOnInit(): void {}
