@@ -32,13 +32,18 @@ export class PolicyDetailsComponent implements OnInit {
 
     ngOnInit(): void {
         this.policiesService.getPolicies().subscribe(policies => {
+            this.policyData = policies.filter(x => x.policyNumber === this.policyNumber)[0];
             this.policiesList = policies;
-        })
+        });
 
         //get policy number from url parameter
         this.route.params.subscribe(param => {
             this.policyNumber = param.policyNumber;
-            this.policy = this.policiesList.filter(x => x.policyNumber === this.policyNumber)[0]
+            this.policiesService.getPolicies().subscribe(policies => {
+                this.policyData = policies.filter(x => x.policyNumber === this.policyNumber)[0];
+                this.policiesList = policies;
+                this.policy = this.policiesList.filter(x => x.policyNumber === this.policyNumber)[0]
+            });
         });
 
         //policy details form

@@ -10,7 +10,7 @@
             Quote Details
         </nz-breadcrumb-item>
     </nz-breadcrumb>
-    <nz-page-header nzBackIcon nzTitle="Quote Number: HFB-489384">
+<nz-page-header nzBackIcon nzTitle="Quote Number: {{quoteData.quoteNumber}}">
         <nz-page-header-extra>
             <button nz-button nzType="primary" (click)="handlePayment()">Convert</button>
             <button *ngIf="!isEditmode" nz-button nzType="primary" (click)="isEditmode = true">Edit Policy</button>
@@ -32,8 +32,14 @@
                             <nz-form-label nzSpan="7" nzRequired>Currency</nz-form-label>
                             <nz-form-control nzSpan="17">
                                 <nz-select [nzDisabled]="!isEditmode" formControlName="currency">
-                                        <nz-option nzValue="currency 1" nzLabel="currency 1"></nz-option>
-                                        <nz-option nzValue="currency 2" nzLabel="currency 2"></nz-option>
+                                        <nz-option
+                                    nzValue="ZMW"
+                                    nzLabel="ZMW"
+                                ></nz-option>
+                                <nz-option
+                                    nzValue="Dollar"
+                                    nzLabel="Dollar"
+                                ></nz-option>
                                 </nz-select>
                             </nz-form-control>
                         </nz-form-item>
@@ -142,7 +148,7 @@
             </div>
         </form> -->
         <div style="margin-top:20px">
-                <nz-table #risksTable [nzData]="quote" nzSize="small">
+                <nz-table #risksTable [nzData]="quote.risks" nzSize="small">
                         <thead>
                             <tr>
                                 <th>Insurance Type</th>
@@ -158,15 +164,15 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let quote of risksTable.data">
-                                <td>{{quote.risk.insuranceType}}</td>
-                                <td>{{quote.risk.regNumber}}</td>
-                                <td>{{quote.risk.vehicleMake}}</td>
-                                <td>{{quote.risk.vehicleModel}}</td>
-                                <td>{{quote.risk.engineNumber}}</td>
-                                <td>{{quote.risk.chassisNumber}}</td>
-                                <td>{{quote.risk.color}}</td>
-                                <td>{{quote.risk.productType}}</td>
-                                <td>{{quote.risk.estimatedValue}}</td>
+                                <td>{{quote.insuranceType}}</td>
+                                <td>{{quote.regNumber}}</td>
+                                <td>{{quote.vehicleMake}}</td>
+                                <td>{{quote.vehicleModel}}</td>
+                                <td>{{quote.engineNumber}}</td>
+                                <td>{{quote.chassisNumber}}</td>
+                                <td>{{quote.color}}</td>
+                                <td>{{quote.productType}}</td>
+                                <td>{{quote.estimatedValue}}</td>
                             </tr>
                         </tbody>
                     </nz-table></div>
@@ -205,7 +211,7 @@
                         <nz-form-item>
                                 <nz-form-label nzSpan="7" nzRequired>Amount</nz-form-label>
                                 <nz-form-control nzSpan="17">
-                                    <input nz-input  placeholder="K5,400" formControlName="sumInsured"/>
+                                    <input nz-input   formControlName="sumInsured"/>
                                 </nz-form-control>
                             </nz-form-item>
           </form>
