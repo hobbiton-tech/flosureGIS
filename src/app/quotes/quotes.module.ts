@@ -11,6 +11,8 @@ import { StepperService } from 'src/app/quotes/services/stepper.service';
 import { RouterModule, Routes } from '@angular/router';
 import { QuotesService } from './services/quotes.service';
 
+import 'firebase/firestore';
+
 const routes: Routes = [
     {
         path: 'create-quote',
