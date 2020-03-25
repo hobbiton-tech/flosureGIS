@@ -13,7 +13,11 @@
             (nzBack)="goToClientsList()"
             nzBackIcon
             nzTitle="Client ID: {{ client.clientID }}"
-            [nzSubtitle]="client.firstName + ' ' + client.lastName"
+            [nzSubtitle]="
+                client.clientType === 'Individual'
+                    ? client.firstName + ' ' + client.lastName
+                    : client.companyName
+            "
         >
             <nz-page-header-extra>
                 <button
@@ -30,9 +34,8 @@
                     nzType="primary"
                     (click)="isEditmode = true"
                 >
-                    Edit clientData
+                    Edit Client
                 </button>
-                <!-- <button nz-button nzType="danger">Delete clientData</button> -->
             </nz-page-header-extra>
         </nz-page-header>
     </nz-breadcrumb>
@@ -80,9 +83,7 @@
                                 >
                                 <nz-form-control nzSpan="17">
                                     <nz-select
-                                        nzPlaceHolder="{{
-                                            client.idType
-                                        }}"
+                                        nzPlaceHolder="{{ client.idType }}"
                                         [nzDisabled]="!isEditmode"
                                     ></nz-select>
                                 </nz-form-control>
@@ -109,9 +110,7 @@
                                     <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
                                     <input
                                         nz-input
-                                        [(placeholder)]="
-                                            client.dateOfBirth
-                                        "
+                                        [(placeholder)]="client.dateOfBirth"
                                         nzFormat="dd.MM.yyyy"
                                         [disabled]="!isEditmode"
                                     />
@@ -151,9 +150,7 @@
                                 >
                                 <nz-form-control nzSpan="17">
                                     <nz-select
-                                        nzPlaceHolder="{{
-                                            client.gender
-                                        }}"
+                                        nzPlaceHolder="{{ client.gender }}"
                                         [nzDisabled]="!isEditmode"
                                     ></nz-select>
                                 </nz-form-control>
@@ -166,9 +163,7 @@
                                 >
                                 <nz-form-control nzSpan="17">
                                     <nz-select
-                                        nzPlaceHolder="{{
-                                            client.idType
-                                        }}"
+                                        nzPlaceHolder="{{ client.idType }}"
                                         [nzDisabled]="!isEditmode"
                                     ></nz-select>
                                 </nz-form-control>
@@ -208,9 +203,7 @@
                                 <nz-form-control nzSpan="17">
                                     <input
                                         nz-input
-                                        [(placeholder)]="
-                                            client.occupation
-                                        "
+                                        [(placeholder)]="client.occupation"
                                         [disabled]="!isEditmode"
                                     />
                                 </nz-form-control>
@@ -245,7 +238,7 @@
                                 <nz-form-control nzSpan="17">
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.firstName"
+                                        [(placeholder)]="client.companyName"
                                         [disabled]="!isEditmode"
                                     />
                                 </nz-form-control>
@@ -258,7 +251,7 @@
                                     <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.lastName"
+                                        [(placeholder)]="client.taxPin"
                                         [disabled]="!isEditmode"
                                     />
                                 </nz-form-control>
@@ -271,9 +264,7 @@
                                 >
                                 <nz-form-control nzSpan="17">
                                     <nz-select
-                                        nzPlaceHolder="{{
-                                            client.idType
-                                        }}"
+                                        nzPlaceHolder="{{ client.idType }}"
                                         [nzDisabled]="!isEditmode"
                                     ></nz-select>
                                 </nz-form-control>
@@ -285,7 +276,7 @@
                                 <nz-form-control nzSpan="17">
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.email"
+                                        [(placeholder)]="client.taxPin"
                                         [disabled]="!isEditmode"
                                     />
                                 </nz-form-control>
@@ -327,7 +318,7 @@
                                 <nz-form-control nzSpan="17">
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.email"
+                                        [(placeholder)]="client.contactEmail"
                                         [disabled]="!isEditmode"
                                     />
                                 </nz-form-control>
@@ -352,7 +343,9 @@
                                 <nz-form-control nzSpan="17">
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.firstName"
+                                        [(placeholder)]="
+                                            client.contactFirstName
+                                        "
                                         [disabled]="!isEditmode"
                                     />
                                 </nz-form-control>
@@ -364,7 +357,7 @@
                                 <nz-form-control nzSpan="17">
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.email"
+                                        [(placeholder)]="client.contactEmail"
                                         [disabled]="!isEditmode"
                                     />
                                 </nz-form-control>
@@ -377,7 +370,9 @@
                                 >
                                 <nz-form-control nzSpan="17">
                                     <nz-select
-                                        nzPlaceHolder="{{ client.lastName }}"
+                                        nzPlaceHolder="{{
+                                            client.contactLastName
+                                        }}"
                                         [nzDisabled]="!isEditmode"
                                     ></nz-select>
                                 </nz-form-control>
@@ -400,9 +395,7 @@
                             <nz-form-control nzSpan="18">
                                 <input
                                     nz-input
-                                    [(placeholder)]="
-                                        client.occupation
-                                    "
+                                    [(placeholder)]="client.accountName"
                                     [disabled]="!isEditmode"
                                 />
                             </nz-form-control>
@@ -414,9 +407,7 @@
                             <nz-form-control nzSpan="18">
                                 <input
                                     nz-input
-                                    [(placeholder)]="
-                                        client.occupation
-                                    "
+                                    [(placeholder)]="client.accountNumber"
                                     [disabled]="!isEditmode"
                                 />
                             </nz-form-control>
@@ -429,7 +420,7 @@
                             >
                             <nz-form-control nzSpan="16">
                                 <nz-select
-                                    nzPlaceHolder="Select Bank"
+                                    [nzPlaceHolder]="client.bank"
                                     [nzDisabled]="!isEditmode"
                                 ></nz-select>
                             </nz-form-control>
@@ -440,7 +431,7 @@
                             >
                             <nz-form-control nzSpan="16">
                                 <nz-select
-                                    nzPlaceHolder="Select Branch"
+                                    [nzPlaceHolder]="client.branch"
                                     [nzDisabled]="!isEditmode"
                                 ></nz-select>
                             </nz-form-control>

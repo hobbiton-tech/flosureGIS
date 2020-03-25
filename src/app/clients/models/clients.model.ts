@@ -35,6 +35,7 @@ export interface IIndividualClient {
 
 export interface ICorporateClient {
     id: string;
+    phone: string;
     registrationNumber: string;
     address: string;
     clientID: string;
@@ -56,7 +57,6 @@ export interface ICorporateClient {
     // quotes: Quote[];
     // claims: Claim[];
 }
-
 
 export type ClientType = 'Individual' | 'Corporate';
 export type OccupationType = 'Employed' | 'Unemployed' | 'Student';

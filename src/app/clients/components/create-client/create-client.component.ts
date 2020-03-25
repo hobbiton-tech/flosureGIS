@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { StepperService } from '../../common/services/stepper.service';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -13,7 +13,7 @@ import { ClientsService } from '../../services/clients.service';
     templateUrl: './create-client.component.html',
     styleUrls: ['./create-client.component.scss']
 })
-export class CreateClientComponent implements OnInit {
+export class CreateClientComponent implements OnInit, AfterViewInit {
     clientTypeForm: FormGroup;
     individualClientForm: FormGroup;
     corporateClientForm: FormGroup;
@@ -72,8 +72,13 @@ export class CreateClientComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        // this.selectedClientType = 'Corporate';
         this.stepperService.toggleStepper(true);
         this.stepperService.changeIndex(0);
+    }
+
+    ngAfterViewInit(): void {
+        this.selectedClientType = 'Corporate';
     }
 
     changeClientType(event): void {
@@ -96,7 +101,12 @@ export class CreateClientComponent implements OnInit {
         }
 
         if (this.individualClientForm.valid) {
-            this.addIndividualClient(this.individualClientForm.value);
+            this.addIndividualClient(this.individualClientForm.value).then(
+                res => {
+                    console.log('Added Individaul');
+                    this.individualClientForm.reset();
+                }
+            );
         }
     }
 
@@ -104,11 +114,16 @@ export class CreateClientComponent implements OnInit {
         for (let i in this.corporateClientForm.controls) {
             /// validation;
             this.corporateClientForm.controls[i].markAsDirty();
-            this.individualClientForm.updateValueAndValidity();
+            this.corporateClientForm.updateValueAndValidity();
         }
 
         if (this.corporateClientForm.valid) {
-            this.addIndividualClient(this.corporateClientForm.value);
+            this.addCorporateClient(this.corporateClientForm.value).then(
+                res => {
+                    console.log('Added Corporate.');
+                    this.corporateClientForm.reset();
+                }
+            );
         }
     }
 }

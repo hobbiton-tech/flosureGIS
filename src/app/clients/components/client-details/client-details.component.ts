@@ -4,7 +4,10 @@ import {
     ChangeDetectorRef,
     AfterViewInit
 } from '@angular/core';
-import { ICorporateClient, IIndividualClient } from '../../models/clients.model';
+import {
+    ICorporateClient,
+    IIndividualClient
+} from '../../models/clients.model';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AccountDetails } from '../../models/account-details.model';
 import { ClientsService } from '../../services/clients.service';
@@ -12,6 +15,8 @@ import { Policy } from 'src/app/underwriting/models/policy.model';
 import { Claim } from 'src/app/claims/models/claim.model';
 import { PoliciesService } from 'src/app/underwriting/services/policies.service';
 import { ClaimsService } from 'src/app/claims/services/claims-service.service';
+
+import { getDate } from 'date-fns';
 
 @Component({
     selector: 'app-client-details',
@@ -22,8 +27,8 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
     isEditmode = false;
 
     client: IIndividualClient & ICorporateClient;
-    clientPolicies: Policy[];
-    clientClaims: Claim[];
+    clientPolicies: Policy[] = [];
+    clientClaims: Claim[] = [];
 
     account: AccountDetails;
     id: string;
@@ -43,17 +48,22 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
         });
 
         this.clientsService.getAllClients().subscribe(clients => {
+            console.log(clients);
             // I don't know yet if this actually works. Still doing some research on intersection types.
-            this.client = [...clients[1], ...clients[0]].filter(x => x.id === this.id)[0] as IIndividualClient & ICorporateClient;
-        })
+            this.client = [...clients[1], ...clients[0]].filter(
+                x => x.id === this.id
+            )[0] as IIndividualClient & ICorporateClient;
 
-        this.policyService.getClientsPolicies(this.id).subscribe(policies => {
-            this.clientPolicies = policies;
+            console.log('CLIENTS', this.client);
         });
 
-        this.claimsService.getClientsClaims(this.id).subscribe(claims => {
-            this.clientClaims = claims;
-        });
+        // this.policyService.getClientsPolicies(this.id).subscribe(policies => {
+        //     this.clientPolicies = policies;
+        // });
+
+        // this.claimsService.getClientsClaims(this.id).subscribe(claims => {
+        //     this.clientClaims = claims;
+        // });
     }
 
     ngAfterViewInit(): void {
@@ -70,5 +80,9 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
 
     viewClaimDetails(): void {
         this.route.navigateByUrl('/flosure/claims/claim-details');
+    }
+
+    convertFirebaseTime(value: number): number {
+        return getDate(value);
     }
 }

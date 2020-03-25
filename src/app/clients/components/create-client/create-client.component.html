@@ -1,15 +1,29 @@
 <div>
-
     <div>
         <div>
             <form>
                 <nz-row>
                     <div nz-col [nzSpan]="12">
-                        <nz-form-label [nzSpan]="8" nzFor="clientType">Client Type</nz-form-label>
+                        <nz-form-label [nzSpan]="8" nzFor="clientType"
+                            >Client Type</nz-form-label
+                        >
                         <nz-form-control [nzSpan]="14">
-                            <nz-select nzShowSearch nzAllowClear placeholder="Select an Client Type" [(ngModel)]="selectedClientType" (ngModelChange)="changeClientType($event)" name="select">
-                                <nz-option nzLabel="Individual" nzValue="individual"></nz-option>
-                                <nz-option nzLabel="Corporate" nzValue="corporate"></nz-option>
+                            <nz-select
+                                nzShowSearch
+                                nzAllowClear
+                                placeholder="Select an Client Type"
+                                [(ngModel)]="selectedClientType"
+                                (ngModelChange)="changeClientType($event)"
+                                name="select"
+                            >
+                                <nz-option
+                                    nzLabel="Individual"
+                                    nzValue="individual"
+                                ></nz-option>
+                                <nz-option
+                                    nzLabel="Corporate"
+                                    nzValue="corporate"
+                                ></nz-option>
                             </nz-select>
                         </nz-form-control>
                     </div>
@@ -17,20 +31,50 @@
             </form>
         </div>
         <!--Individual client form-->
-        <form *ngIf="selectedClientType === 'individual'"  nz-form [formGroup]="individualClientForm" (ngSubmit)="submitIndividualClient()">
+        <form
+            *ngIf="selectedClientType === 'individual'"
+            nz-form
+            [formGroup]="individualClientForm"
+            (ngSubmit)="submitIndividualClient()"
+        >
             <!--Personal Details starts here-->
-            <nz-divider nzText="Personal Details" nzOrientation="left"></nz-divider>
+            <nz-divider
+                nzText="Personal Details"
+                nzOrientation="left"
+            ></nz-divider>
             <div nz-row>
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                        <nz-form-label [nzSpan]="8" nzFor="title">Title</nz-form-label>
+                        <nz-form-label [nzSpan]="8" nzFor="title"
+                            >Title</nz-form-label
+                        >
                         <nz-form-control [nzSpan]="14">
-                            <nz-select formControlName="title" nzShowSearch nzAllowClear placeholder="Select a Title">
-                                    <nz-option nzLabel="Mr" nzValue="mr"></nz-option>
-                                    <nz-option nzLabel="Mrs" nzValue="mrs"></nz-option>
-                                    <nz-option nzLabel="Miss" nzValue="miss"></nz-option>
-                                    <nz-option nzLabel="Dr" nzValue="dr"></nz-option>
-                                    <nz-option nzLabel="Prof" nzValue="prof"></nz-option>
+                            <nz-select
+                                formControlName="title"
+                                nzShowSearch
+                                nzAllowClear
+                                placeholder="Select a Title"
+                            >
+                                <nz-option
+                                    nzLabel="Mr"
+                                    nzValue="mr"
+                                ></nz-option>
+                                <nz-option
+                                    nzLabel="Mrs"
+                                    nzValue="mrs"
+                                ></nz-option>
+                                <nz-option
+                                    nzLabel="Miss"
+                                    nzValue="miss"
+                                ></nz-option>
+                                <nz-option
+                                    nzLabel="Dr"
+                                    nzValue="dr"
+                                ></nz-option>
+                                <nz-option
+                                    nzLabel="Prof"
+                                    nzValue="prof"
+                                ></nz-option>
                             </nz-select>
                         </nz-form-control>
                     </nz-form-item>
@@ -38,10 +82,18 @@
 
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                        <nz-form-label [nzSpan]="8" nzFor="firstName">First Name</nz-form-label>
+                        <nz-form-label [nzSpan]="8" nzFor="firstName"
+                            >First Name</nz-form-label
+                        >
                         <nz-form-control [nzSpan]="14">
-                            <input nz-input formControlName="firstName" name="firstName" type="text" id="firstName"
-                                placeholder="First Name" />
+                            <input
+                                nz-input
+                                formControlName="firstName"
+                                name="firstName"
+                                type="text"
+                                id="firstName"
+                                placeholder="First Name"
+                            />
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -50,12 +102,24 @@
             <div nz-row>
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                        <nz-form-label [nzSpan]="8" nzFor="idType">ID Type</nz-form-label>
+                        <nz-form-label [nzSpan]="8" nzFor="idType"
+                            >ID Type</nz-form-label
+                        >
                         <nz-form-control [nzSpan]="14">
-                            <nz-select formControlName="idType" nzShowSearch nzAllowClear
-                                placeholder="Select an ID Type">
-                                <nz-option nzLabel="NRC" nzValue="nrc"></nz-option>
-                                <nz-option nzLabel="Passport" nzValue="passport"></nz-option>
+                            <nz-select
+                                formControlName="idType"
+                                nzShowSearch
+                                nzAllowClear
+                                placeholder="Select an ID Type"
+                            >
+                                <nz-option
+                                    nzLabel="NRC"
+                                    nzValue="nrc"
+                                ></nz-option>
+                                <nz-option
+                                    nzLabel="Passport"
+                                    nzValue="passport"
+                                ></nz-option>
                             </nz-select>
                         </nz-form-control>
                     </nz-form-item>
@@ -63,10 +127,17 @@
 
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                        <nz-form-label [nzSpan]="8" nzFor="idNumber">ID Number</nz-form-label>
+                        <nz-form-label [nzSpan]="8" nzFor="idNumber"
+                            >ID Number</nz-form-label
+                        >
                         <nz-form-control [nzSpan]="14">
-                            <input nz-input formControlName="idNumber" name="idNumber" id="idNumber"
-                                placeholder="ID Number" />
+                            <input
+                                nz-input
+                                formControlName="idNumber"
+                                name="idNumber"
+                                id="idNumber"
+                                placeholder="ID Number"
+                            />
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -75,42 +146,35 @@
             <div nz-row>
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                        <nz-form-label [nzSpan]="8" nzFor="lastName">Last Name</nz-form-label>
+                        <nz-form-label [nzSpan]="8" nzFor="lastName"
+                            >Last Name</nz-form-label
+                        >
                         <nz-form-control [nzSpan]="14">
-                            <input nz-input formControlName="lastName" name="lastName" id="lastName"
-                                placeholder="Last Name" />
+                            <input
+                                nz-input
+                                formControlName="lastName"
+                                name="lastName"
+                                id="lastName"
+                                placeholder="Last Name"
+                            />
                         </nz-form-control>
                     </nz-form-item>
                 </div>
 
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                        <nz-form-label [nzSpan]="8" nzFor="email">Email</nz-form-label>
+                        <nz-form-label [nzSpan]="8" nzFor="email"
+                            >Email</nz-form-label
+                        >
                         <nz-form-control [nzSpan]="14">
-                            <input nz-input formControlName="email" name="email" type="email" id="email"
-                                placeholder="Email Address" />
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-            </div>
-
-            <div nz-row>
-                <div nz-col [nzSpan]="12">
-                    <nz-form-item>
-                        <nz-form-label [nzSpan]="8" nzFor="dateOfBirth">Date of Birth</nz-form-label>
-                        <nz-form-control [nzSpan]="14">
-                            <nz-date-picker formControlName="dateOfBirth" name="dateOfBirth" id="dateOfBirth"
-                                placeholder="Date of Birth"></nz-date-picker>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-
-                <div nz-col [nzSpan]="12">
-                    <nz-form-item>
-                        <nz-form-label [nzSpan]="8" nzFor="phone">Phone</nz-form-label>
-                        <nz-form-control [nzSpan]="14">
-                            <input nz-input formControlName="phone" name="phone" id="phone"
-                                placeholder="Phone Number" />
+                            <input
+                                nz-input
+                                formControlName="email"
+                                name="email"
+                                type="email"
+                                id="email"
+                                placeholder="Email Address"
+                            />
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -119,48 +183,117 @@
             <div nz-row>
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                        <nz-form-label [nzSpan]="8" nzFor="address">Address</nz-form-label>
+                        <nz-form-label [nzSpan]="8" nzFor="dateOfBirth"
+                            >Date of Birth</nz-form-label
+                        >
                         <nz-form-control [nzSpan]="14">
-                            <input nz-input formControlName="address" name="address" id="address"
-                                placeholder="Address" />
+                            <nz-date-picker
+                                formControlName="dateOfBirth"
+                                name="dateOfBirth"
+                                id="dateOfBirth"
+                                placeholder="Date of Birth"
+                            ></nz-date-picker>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
 
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                        <nz-form-label [nzSpan]="8" nzFor="gender">Gender</nz-form-label>
+                        <nz-form-label [nzSpan]="8" nzFor="phone"
+                            >Phone</nz-form-label
+                        >
                         <nz-form-control [nzSpan]="14">
-                            <nz-select formControlName="gender" nzShowSearch nzAllowClear placeholder="Select Gender">
-                                <nz-option nzLabel="Male" nzValue="male"></nz-option>
-                                <nz-option nzLabel="Female" nzValue="female"></nz-option>
+                            <input
+                                nz-input
+                                formControlName="phone"
+                                name="phone"
+                                id="phone"
+                                placeholder="Phone Number"
+                            />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+
+            <div nz-row>
+                <div nz-col [nzSpan]="12">
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="8" nzFor="address"
+                            >Address</nz-form-label
+                        >
+                        <nz-form-control [nzSpan]="14">
+                            <input
+                                nz-input
+                                formControlName="address"
+                                name="address"
+                                id="address"
+                                placeholder="Address"
+                            />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+
+                <div nz-col [nzSpan]="12">
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="8" nzFor="gender"
+                            >Gender</nz-form-label
+                        >
+                        <nz-form-control [nzSpan]="14">
+                            <nz-select
+                                formControlName="gender"
+                                nzShowSearch
+                                nzAllowClear
+                                placeholder="Select Gender"
+                            >
+                                <nz-option
+                                    nzLabel="Male"
+                                    nzValue="male"
+                                ></nz-option>
+                                <nz-option
+                                    nzLabel="Female"
+                                    nzValue="female"
+                                ></nz-option>
                             </nz-select>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
             </div>
 
-                <div nz-row>
-
-                    <div nz-col [nzSpan]="12">
-                        <nz-form-item>
-                            <nz-form-label [nzSpan]="8" nzFor="maritalStatus">Marital Status</nz-form-label>
-                            <nz-form-control [nzSpan]="14">
-                                <nz-select formControlName="maritalStatus" nzShowSearch nzAllowClear
-                                    placeholder="Select Marital Status">
-                                    <nz-option nzLabel="Single" nzValue="single"></nz-option>
-                                    <nz-option nzLabel="Married" nzValue="married"></nz-option>
-                                </nz-select>
-                            </nz-form-control>
-                        </nz-form-item>
-                    </div>
+            <div nz-row>
+                <div nz-col [nzSpan]="12">
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="8" nzFor="maritalStatus"
+                            >Marital Status</nz-form-label
+                        >
+                        <nz-form-control [nzSpan]="14">
+                            <nz-select
+                                formControlName="maritalStatus"
+                                nzShowSearch
+                                nzAllowClear
+                                placeholder="Select Marital Status"
+                            >
+                                <nz-option
+                                    nzLabel="Single"
+                                    nzValue="single"
+                                ></nz-option>
+                                <nz-option
+                                    nzLabel="Married"
+                                    nzValue="married"
+                                ></nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
                 </div>
-            
+            </div>
+
             <!--Personal Details ends here-->
 
             <!--Employment Information starts here-->
             <div>
-                <nz-divider nzText="Employment Information" nzOrientation="left"></nz-divider>
+                <nz-divider
+                    nzText="Employment Information"
+                    nzOrientation="left"
+                ></nz-divider>
                 <!-- <form
                     nz-form
                     [formGroup]="employementInformationForm"
@@ -170,12 +303,24 @@
                 <div nz-row>
                     <div nz-col [nzSpan]="12">
                         <nz-form-item>
-                            <nz-form-label [nzSpan]="6" nzFor="sector">Sector</nz-form-label>
+                            <nz-form-label [nzSpan]="6" nzFor="sector"
+                                >Sector</nz-form-label
+                            >
                             <nz-form-control [nzSpan]="18">
-                                <nz-select formControlName="sector" nzShowSearch nzAllowClear
-                                    placeholder="Select a Sector">
-                                    <nz-option nzLabel="Finance" nzValue="finance"></nz-option>
-                                    <nz-option nzLabel="Manufacturing" nzValue="manufacturing"></nz-option>
+                                <nz-select
+                                    formControlName="sector"
+                                    nzShowSearch
+                                    nzAllowClear
+                                    placeholder="Select a Sector"
+                                >
+                                    <nz-option
+                                        nzLabel="Finance"
+                                        nzValue="finance"
+                                    ></nz-option>
+                                    <nz-option
+                                        nzLabel="Manufacturing"
+                                        nzValue="manufacturing"
+                                    ></nz-option>
                                 </nz-select>
                             </nz-form-control>
                         </nz-form-item>
@@ -183,13 +328,28 @@
 
                     <div nz-col [nzSpan]="12">
                         <nz-form-item>
-                            <nz-form-label [nzSpan]="6" nzFor="occupation">Occupation</nz-form-label>
+                            <nz-form-label [nzSpan]="6" nzFor="occupation"
+                                >Occupation</nz-form-label
+                            >
                             <nz-form-control [nzSpan]="18">
-                                <nz-select formControlName="occupation" nzShowSearch nzAllowClear
-                                    placeholder="Select Occupation">
-                                    <nz-option nzLabel="Student" nzValue="student"></nz-option>
-                                    <nz-option nzLabel="Employed" nzValue="employed"></nz-option>
-                                    <nz-option nzLabel="Unemployed" nzValue="unemployed"></nz-option>
+                                <nz-select
+                                    formControlName="occupation"
+                                    nzShowSearch
+                                    nzAllowClear
+                                    placeholder="Select Occupation"
+                                >
+                                    <nz-option
+                                        nzLabel="Student"
+                                        nzValue="student"
+                                    ></nz-option>
+                                    <nz-option
+                                        nzLabel="Employed"
+                                        nzValue="employed"
+                                    ></nz-option>
+                                    <nz-option
+                                        nzLabel="Unemployed"
+                                        nzValue="unemployed"
+                                    ></nz-option>
                                 </nz-select>
                             </nz-form-control>
                         </nz-form-item>
@@ -200,7 +360,10 @@
 
             <!--Bank Details starts here-->
             <div>
-                <nz-divider nzText="Bank Details" nzOrientation="left"></nz-divider>
+                <nz-divider
+                    nzText="Bank Details"
+                    nzOrientation="left"
+                ></nz-divider>
                 <!-- <form
                         nz-form
                         [formGroup]="bankDetailsForm"
@@ -210,20 +373,36 @@
                 <div nz-row>
                     <div nz-col [nzSpan]="12">
                         <nz-form-item>
-                            <nz-form-label [nzSpan]="6" nzFor="accountName">Account Name</nz-form-label>
+                            <nz-form-label [nzSpan]="6" nzFor="accountName"
+                                >Account Name</nz-form-label
+                            >
                             <nz-form-control [nzSpan]="18">
-                                <input nz-input formControlName="accountName" name="accountName" type="text"
-                                    id="accountName" placeholder="Account Name" />
+                                <input
+                                    nz-input
+                                    formControlName="accountName"
+                                    name="accountName"
+                                    type="text"
+                                    id="accountName"
+                                    placeholder="Account Name"
+                                />
                             </nz-form-control>
                         </nz-form-item>
                     </div>
 
                     <div nz-col [nzSpan]="12">
                         <nz-form-item>
-                            <nz-form-label [nzSpan]="6" nzFor="accountNumber">Account No.</nz-form-label>
+                            <nz-form-label [nzSpan]="6" nzFor="accountNumber"
+                                >Account No.</nz-form-label
+                            >
                             <nz-form-control [nzSpan]="18">
-                                <input nz-input formControlName="accountNumber" name="accountNumber" type="number"
-                                    id="accountNumber" placeholder="Account Number" />
+                                <input
+                                    nz-input
+                                    formControlName="accountNumber"
+                                    name="accountNumber"
+                                    type="number"
+                                    id="accountNumber"
+                                    placeholder="Account Number"
+                                />
                             </nz-form-control>
                         </nz-form-item>
                     </div>
@@ -232,12 +411,24 @@
                 <div nz-row>
                     <div nz-col [nzSpan]="12">
                         <nz-form-item>
-                            <nz-form-label [nzSpan]="6" nzFor="accountType">Account Type</nz-form-label>
+                            <nz-form-label [nzSpan]="6" nzFor="accountType"
+                                >Account Type</nz-form-label
+                            >
                             <nz-form-control [nzSpan]="18">
-                                <nz-select formControlName="accountType" nzShowSearch nzAllowClear
-                                    placeholder="Account Type">
-                                    <nz-option nzLabel="ZMW" nzValue="zmw"></nz-option>
-                                    <nz-option nzLabel="Dollar" nzValue="dollar"></nz-option>
+                                <nz-select
+                                    formControlName="accountType"
+                                    nzShowSearch
+                                    nzAllowClear
+                                    placeholder="Account Type"
+                                >
+                                    <nz-option
+                                        nzLabel="ZMW"
+                                        nzValue="zmw"
+                                    ></nz-option>
+                                    <nz-option
+                                        nzLabel="Dollar"
+                                        nzValue="dollar"
+                                    ></nz-option>
                                 </nz-select>
                             </nz-form-control>
                         </nz-form-item>
@@ -245,10 +436,18 @@
 
                     <div nz-col [nzSpan]="12">
                         <nz-form-item>
-                            <nz-form-label [nzSpan]="6" nzFor="bank">Bank</nz-form-label>
+                            <nz-form-label [nzSpan]="6" nzFor="bank"
+                                >Bank</nz-form-label
+                            >
                             <nz-form-control [nzSpan]="18">
-                                <input nz-input formControlName="bank" name="bank" type="text" id="bank"
-                                    placeholder="Bank" />
+                                <input
+                                    nz-input
+                                    formControlName="bank"
+                                    name="bank"
+                                    type="text"
+                                    id="bank"
+                                    placeholder="Bank"
+                                />
                             </nz-form-control>
                         </nz-form-item>
                     </div>
@@ -257,10 +456,17 @@
                 <div nz-row>
                     <div nz-col [nzSpan]="12">
                         <nz-form-item>
-                            <nz-form-label [nzSpan]="6" nzFor="branch">Branch</nz-form-label>
+                            <nz-form-label [nzSpan]="6" nzFor="branch"
+                                >Branch</nz-form-label
+                            >
                             <nz-form-control [nzSpan]="18">
-                                <input nz-input formControlName="branch" name="branch" id="branch"
-                                    placeholder="Branch" />
+                                <input
+                                    nz-input
+                                    formControlName="branch"
+                                    name="branch"
+                                    id="branch"
+                                    placeholder="Branch"
+                                />
                             </nz-form-control>
                         </nz-form-item>
                     </div>
@@ -271,8 +477,14 @@
             <nz-form-item>
                 <nz-form-control>
                     <div style="text-align: center; margin-top: 10px">
-
-                        <button nz-button nzType="primary" style="margin-right: 8px">Add Client</button>
+                        <button
+                            nz-button
+                            nzType="primary"
+                            style="margin-right: 8px"
+                            (click)="submitIndividualClient()"
+                        >
+                            Add Client
+                        </button>
                         <button nz-button nzType="default">Reset Form</button>
                     </div>
                 </nz-form-control>
@@ -280,13 +492,19 @@
         </form>
         <!--End of individual client form-->
 
-
-
         <div>
             <!--Corporate  clients form-->
-            <form *ngIf="selectedClientType === 'corporate'" nz-form [formGroup]="corporateClientForm" (ngSubmit)="submitCorporateClient()">
+            <form
+                *ngIf="selectedClientType === 'corporate'"
+                nz-form
+                [formGroup]="corporateClientForm"
+                (ngSubmit)="submitCorporateClient()"
+            >
                 <!--Company Details starts here-->
-                <nz-divider nzText="Company Details" nzOrientation="left"></nz-divider>
+                <nz-divider
+                    nzText="Company Details"
+                    nzOrientation="left"
+                ></nz-divider>
                 <!-- <form
                     nz-form
                     [formGroup]="companyDetailsForm"
@@ -296,42 +514,35 @@
                 <div nz-row>
                     <div nz-col [nzSpan]="12">
                         <nz-form-item>
-                            <nz-form-label [nzSpan]="8" nzFor="companyName">Company Name</nz-form-label>
+                            <nz-form-label [nzSpan]="8" nzFor="companyName"
+                                >Company Name</nz-form-label
+                            >
                             <nz-form-control [nzSpan]="15">
-                                <input nz-input formControlName="companyName" name="companyName" id="companyName"
-                                    placeholder="Company Name" />
+                                <input
+                                    nz-input
+                                    formControlName="companyName"
+                                    name="companyName"
+                                    id="companyName"
+                                    placeholder="Company Name"
+                                />
                             </nz-form-control>
                         </nz-form-item>
                     </div>
 
                     <div nz-col [nzSpan]="12">
                         <nz-form-item>
-                            <nz-form-label [nzSpan]="8" nzFor="taxPin">Tpin Number</nz-form-label>
+                            <nz-form-label [nzSpan]="8" nzFor="taxPin"
+                                >Tpin Number</nz-form-label
+                            >
                             <nz-form-control [nzSpan]="15">
-                                <input nz-input formControlName="taxPin" name="taxPin" type="text" id="taxPin"
-                                    placeholder="taxPin" />
-                            </nz-form-control>
-                        </nz-form-item>
-                    </div>
-                </div>
-
-                <div nz-row>
-                    <div nz-col [nzSpan]="12">
-                        <nz-form-item>
-                            <nz-form-label [nzSpan]="8" nzFor="registrationNumber">Registration Number</nz-form-label>
-                            <nz-form-control [nzSpan]="15">
-                                <input nz-input formControlName="registrationNumber" name="registrationNumber"
-                                    type="text" id="registrationNumber" placeholder="Registration Number" />
-                            </nz-form-control>
-                        </nz-form-item>
-                    </div>
-
-                    <div nz-col [nzSpan]="12">
-                        <nz-form-item>
-                            <nz-form-label [nzSpan]="8" nzFor="email">Email</nz-form-label>
-                            <nz-form-control [nzSpan]="15">
-                                <input nz-input formControlName="email" name="email" type="email" id="email"
-                                    placeholder="Email Address" />
+                                <input
+                                    nz-input
+                                    formControlName="taxPin"
+                                    name="taxPin"
+                                    type="text"
+                                    id="taxPin"
+                                    placeholder="taxPin"
+                                />
                             </nz-form-control>
                         </nz-form-item>
                     </div>
@@ -340,20 +551,38 @@
                 <div nz-row>
                     <div nz-col [nzSpan]="12">
                         <nz-form-item>
-                            <nz-form-label [nzSpan]="8" nzFor="phone">Phone</nz-form-label>
+                            <nz-form-label
+                                [nzSpan]="8"
+                                nzFor="registrationNumber"
+                                >Registration Number</nz-form-label
+                            >
                             <nz-form-control [nzSpan]="15">
-                                <input nz-input formControlName="phone" name="phone" id="phone"
-                                    placeholder="Phone Number" />
+                                <input
+                                    nz-input
+                                    formControlName="registrationNumber"
+                                    name="registrationNumber"
+                                    type="text"
+                                    id="registrationNumber"
+                                    placeholder="Registration Number"
+                                />
                             </nz-form-control>
                         </nz-form-item>
                     </div>
 
                     <div nz-col [nzSpan]="12">
                         <nz-form-item>
-                            <nz-form-label [nzSpan]="8" nzFor="address">Address</nz-form-label>
+                            <nz-form-label [nzSpan]="8" nzFor="email"
+                                >Email</nz-form-label
+                            >
                             <nz-form-control [nzSpan]="15">
-                                <input nz-input formControlName="address" name="address" id="address"
-                                    placeholder="Address" />
+                                <input
+                                    nz-input
+                                    formControlName="email"
+                                    name="email"
+                                    type="email"
+                                    id="email"
+                                    placeholder="Email Address"
+                                />
                             </nz-form-control>
                         </nz-form-item>
                     </div>
@@ -362,12 +591,60 @@
                 <div nz-row>
                     <div nz-col [nzSpan]="12">
                         <nz-form-item>
-                            <nz-form-label [nzSpan]="8" nzFor="sector">Sector</nz-form-label>
+                            <nz-form-label [nzSpan]="8" nzFor="phone"
+                                >Phone</nz-form-label
+                            >
                             <nz-form-control [nzSpan]="15">
-                                <nz-select formControlName="sector" nzShowSearch nzAllowClear
-                                    placeholder="Select a Sector">
-                                    <nz-option nzLabel="Finance" nzValue="finace"></nz-option>
-                                    <nz-option nzLabel="Manufacturing" nzValue="manufacturing"></nz-option>
+                                <input
+                                    nz-input
+                                    formControlName="phone"
+                                    name="phone"
+                                    id="phone"
+                                    placeholder="Phone Number"
+                                />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="8" nzFor="address"
+                                >Address</nz-form-label
+                            >
+                            <nz-form-control [nzSpan]="15">
+                                <input
+                                    nz-input
+                                    formControlName="address"
+                                    name="address"
+                                    id="address"
+                                    placeholder="Address"
+                                />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+
+                <div nz-row>
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="8" nzFor="sector"
+                                >Sector</nz-form-label
+                            >
+                            <nz-form-control [nzSpan]="15">
+                                <nz-select
+                                    formControlName="sector"
+                                    nzShowSearch
+                                    nzAllowClear
+                                    placeholder="Select a Sector"
+                                >
+                                    <nz-option
+                                        nzLabel="Finance"
+                                        nzValue="finace"
+                                    ></nz-option>
+                                    <nz-option
+                                        nzLabel="Manufacturing"
+                                        nzValue="manufacturing"
+                                    ></nz-option>
                                 </nz-select>
                             </nz-form-control>
                         </nz-form-item>
@@ -377,7 +654,10 @@
 
                 <!--Corporate Contact Details starts here put under corporate client-->
                 <div>
-                    <nz-divider nzText="Corporate Contact Details" nzOrientation="left"></nz-divider>
+                    <nz-divider
+                        nzText="Corporate Contact Details"
+                        nzOrientation="left"
+                    ></nz-divider>
                     <!-- <form
                         nz-form
                         [formGroup]="contactPersornForm"
@@ -387,20 +667,39 @@
                     <div nz-row>
                         <div nz-col [nzSpan]="12">
                             <nz-form-item>
-                                <nz-form-label [nzSpan]="8" nzFor="contactFirstName">Contact First Name</nz-form-label>
+                                <nz-form-label
+                                    [nzSpan]="8"
+                                    nzFor="contactFirstName"
+                                    >Contact First Name</nz-form-label
+                                >
                                 <nz-form-control [nzSpan]="16">
-                                    <input nz-input formControlName="contactFirstName" name="contactFirstName"
-                                        type="text" id="contactFirstName" placeholder="Contact First Name" />
+                                    <input
+                                        nz-input
+                                        formControlName="contactFirstName"
+                                        name="contactFirstName"
+                                        type="text"
+                                        id="contactFirstName"
+                                        placeholder="Contact First Name"
+                                    />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
 
                         <div nz-col [nzSpan]="12">
                             <nz-form-item>
-                                <nz-form-label [nzSpan]="8" nzFor="contactLastName">Contact Last Name</nz-form-label>
+                                <nz-form-label
+                                    [nzSpan]="8"
+                                    nzFor="contactLastName"
+                                    >Contact Last Name</nz-form-label
+                                >
                                 <nz-form-control [nzSpan]="16">
-                                    <input nz-input formControlName="contactLastName" name="contactLastName"
-                                        id="contactLastName" placeholder="Contact Last Name" />
+                                    <input
+                                        nz-input
+                                        formControlName="contactLastName"
+                                        name="contactLastName"
+                                        id="contactLastName"
+                                        placeholder="Contact Last Name"
+                                    />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -409,20 +708,36 @@
                     <div nz-row>
                         <div nz-col [nzSpan]="12">
                             <nz-form-item>
-                                <nz-form-label [nzSpan]="8" nzFor="contactEmail">Contact Email</nz-form-label>
+                                <nz-form-label [nzSpan]="8" nzFor="contactEmail"
+                                    >Contact Email</nz-form-label
+                                >
                                 <nz-form-control [nzSpan]="16">
-                                    <input nz-input formControlName="contactEmail" name="contactEmail" type="email"
-                                        id="contactEmail" placeholder="Contact Email Address" />
+                                    <input
+                                        nz-input
+                                        formControlName="contactEmail"
+                                        name="contactEmail"
+                                        type="email"
+                                        id="contactEmail"
+                                        placeholder="Contact Email Address"
+                                    />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
 
                         <div nz-col [nzSpan]="12">
                             <nz-form-item>
-                                <nz-form-label [nzSpan]="8" nzFor="contactPhone">Contact Phone</nz-form-label>
+                                <nz-form-label [nzSpan]="8" nzFor="contactPhone"
+                                    >Contact Phone</nz-form-label
+                                >
                                 <nz-form-control [nzSpan]="16">
-                                    <input nz-input formControlName="contactPhone" name="contactPhone" type="phone"
-                                        id="contactPhone" placeholder="Contact Phone" />
+                                    <input
+                                        nz-input
+                                        formControlName="contactPhone"
+                                        name="contactPhone"
+                                        type="phone"
+                                        id="contactPhone"
+                                        placeholder="Contact Phone"
+                                    />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -431,10 +746,19 @@
                     <div nz-row>
                         <div nz-col [nzSpan]="12">
                             <nz-form-item>
-                                <nz-form-label [nzSpan]="8" nzFor="contactAddress">Contact Address</nz-form-label>
+                                <nz-form-label
+                                    [nzSpan]="8"
+                                    nzFor="contactAddress"
+                                    >Contact Address</nz-form-label
+                                >
                                 <nz-form-control [nzSpan]="16">
-                                    <input nz-input formControlName="contactAddress" name="contactAddress"
-                                        id="contactAddress" placeholder="Contact Address" />
+                                    <input
+                                        nz-input
+                                        formControlName="contactAddress"
+                                        name="contactAddress"
+                                        id="contactAddress"
+                                        placeholder="Contact Address"
+                                    />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -442,10 +766,12 @@
                 </div>
                 <!--Corporate Contact Details ends here-->
 
-
                 <!--Corporate Bank Details starts here-->
                 <div>
-                    <nz-divider nzText="Corporate Bank Details" nzOrientation="left"></nz-divider>
+                    <nz-divider
+                        nzText="Corporate Bank Details"
+                        nzOrientation="left"
+                    ></nz-divider>
 
                     <!-- <form
                     nz-form
@@ -456,20 +782,38 @@
                     <div nz-row>
                         <div nz-col [nzSpan]="12">
                             <nz-form-item>
-                                <nz-form-label [nzSpan]="6" nzFor="accountName">Account Name</nz-form-label>
+                                <nz-form-label [nzSpan]="6" nzFor="accountName"
+                                    >Account Name</nz-form-label
+                                >
                                 <nz-form-control [nzSpan]="18">
-                                    <input nz-input formControlName="accountName" name="accountName" type="text"
-                                        id="accountName" placeholder="Account Name" />
+                                    <input
+                                        nz-input
+                                        formControlName="accountName"
+                                        name="accountName"
+                                        type="text"
+                                        id="accountName"
+                                        placeholder="Account Name"
+                                    />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
 
                         <div nz-col [nzSpan]="12">
                             <nz-form-item>
-                                <nz-form-label [nzSpan]="6" nzFor="accountNumber">Account No.</nz-form-label>
+                                <nz-form-label
+                                    [nzSpan]="6"
+                                    nzFor="accountNumber"
+                                    >Account No.</nz-form-label
+                                >
                                 <nz-form-control [nzSpan]="18">
-                                    <input nz-input formControlName="accountNumber" name="accountNumber" type="number"
-                                        id="accountNumber" placeholder="Account Number" />
+                                    <input
+                                        nz-input
+                                        formControlName="accountNumber"
+                                        name="accountNumber"
+                                        type="number"
+                                        id="accountNumber"
+                                        placeholder="Account Number"
+                                    />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -478,12 +822,24 @@
                     <div nz-row>
                         <div nz-col [nzSpan]="12">
                             <nz-form-item>
-                                <nz-form-label [nzSpan]="6" nzFor="accountType">Account Type</nz-form-label>
+                                <nz-form-label [nzSpan]="6" nzFor="accountType"
+                                    >Account Type</nz-form-label
+                                >
                                 <nz-form-control [nzSpan]="18">
-                                    <nz-select formControlName="accountType" nzShowSearch nzAllowClear
-                                        placeholder="Account Type">
-                                        <nz-option nzLabel="ZMW" nzValue="zmw"></nz-option>
-                                        <nz-option nzLabel="Dollar" nzValue="dollar"></nz-option>
+                                    <nz-select
+                                        formControlName="accountType"
+                                        nzShowSearch
+                                        nzAllowClear
+                                        placeholder="Account Type"
+                                    >
+                                        <nz-option
+                                            nzLabel="ZMW"
+                                            nzValue="zmw"
+                                        ></nz-option>
+                                        <nz-option
+                                            nzLabel="Dollar"
+                                            nzValue="dollar"
+                                        ></nz-option>
                                     </nz-select>
                                 </nz-form-control>
                             </nz-form-item>
@@ -491,10 +847,18 @@
 
                         <div nz-col [nzSpan]="12">
                             <nz-form-item>
-                                <nz-form-label [nzSpan]="6" nzFor="bank">Bank</nz-form-label>
+                                <nz-form-label [nzSpan]="6" nzFor="bank"
+                                    >Bank</nz-form-label
+                                >
                                 <nz-form-control [nzSpan]="18">
-                                    <input nz-input formControlName="bank" name="bank" type="text" id="bank"
-                                        placeholder="Bank" />
+                                    <input
+                                        nz-input
+                                        formControlName="bank"
+                                        name="bank"
+                                        type="text"
+                                        id="bank"
+                                        placeholder="Bank"
+                                    />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -503,10 +867,17 @@
                     <div nz-row>
                         <div nz-col [nzSpan]="12">
                             <nz-form-item>
-                                <nz-form-label [nzSpan]="6" nzFor="branch">Branch</nz-form-label>
+                                <nz-form-label [nzSpan]="6" nzFor="branch"
+                                    >Branch</nz-form-label
+                                >
                                 <nz-form-control [nzSpan]="18">
-                                    <input nz-input formControlName="branch" name="branch" id="branch"
-                                        placeholder="Branch" />
+                                    <input
+                                        nz-input
+                                        formControlName="branch"
+                                        name="branch"
+                                        id="branch"
+                                        placeholder="Branch"
+                                    />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -517,18 +888,22 @@
                 <nz-form-item>
                     <nz-form-control>
                         <div style="text-align: center; margin-top: 10px">
-
-                            <button nz-button nzType="primary" style="margin-right: 8px">Add CLient</button>
-                            <button nz-button nzType="default">Reset Form</button>
+                            <button
+                                nz-button
+                                nzType="primary"
+                                style="margin-right: 8px"
+                            >
+                                Add CLient
+                            </button>
+                            <button nz-button nzType="default">
+                                Reset Form
+                            </button>
                         </div>
                     </nz-form-control>
                 </nz-form-item>
             </form>
         </div>
     </div>
-
-
-
 
     <!-- <div style="margin: 20px;">
   <nz-breadcrumb>
@@ -568,3 +943,4 @@
     </form>
   </nz-card>
 </div> -->
+</div>
