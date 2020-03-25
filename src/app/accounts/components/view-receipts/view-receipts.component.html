@@ -1,1 +1,66 @@
-<p>view-receipts works!</p>
+<div style="margin: 10px;">
+    <div style="margin-bottom: 20px; background: #fff;">
+        <nz-page-header>
+            <nz-page-header-title>Receipts</nz-page-header-title>
+            <nz-page-header-subtitle
+                >List of all receipts</nz-page-header-subtitle
+            >
+            <nz-page-header-extra>
+                <!-- <button nz-button>View Summary</button> -->
+            </nz-page-header-extra>
+            <nz-page-header-content>
+                <nz-descriptions [nzColumn]="3">
+                    <nz-descriptions-item
+                        nzTitle="Total Policies"
+                        [nzSpan]="1"
+                        >{{ receiptsCount }}</nz-descriptions-item
+                    >
+                    <!-- <nz-descriptions-item nzTitle="Draft Policies" [nzSpan]="1">130</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Confirmed Policies" [nzSpan]="1">101</nz-descriptions-item> -->
+                </nz-descriptions>
+            </nz-page-header-content>
+        </nz-page-header>
+    </div>
+    <nz-card>
+        <div style="margin-bottom: 10px; width: 50%">
+            <nz-input-group [nzSuffix]="suffixIconSearch">
+                <input
+                    type="text"
+                    nz-input
+                    placeholder="Search by client, receipt number"
+                />
+            </nz-input-group>
+            <ng-template #suffixIconSearch>
+                <i nz-icon nzType="search"></i>
+            </ng-template>
+        </div>
+
+        <nz-table
+            #receiptsTable
+            [nzData]="receiptsList"
+            [nzSize]="'small'"
+            [nzBordered]="true"
+        >
+            <thead>
+                <tr>
+                    <th>Receipt Number</th>
+                    <th>Product</th>
+                    <th>Cover From</th>
+                    <th>Cover To</th>
+                    <th>Client Name</th>
+                    <th>Sum Insured</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let receipt of receiptsTable.data">
+                    <td>{{ receipt.policyNumber }}</td>
+                    <td>{{ receipt.product }}</td>
+                    <td>{{ receipt.startDate.seconds | date }}</td>
+                    <td>{{ receipt.endDate }}</td>
+                    <td>{{ receipt.client }}</td>
+                    <td>{{ receipt.sumInsured }}</td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </nz-card>
+</div>

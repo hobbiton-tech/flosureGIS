@@ -22,7 +22,7 @@ export interface IIndividualClient {
     occupation: OccupationType;
     clientType: ClientType;
     status: ClientStatus;
-    //accountDetails: AccountDetails;
+    // accountDetails: AccountDetails;
     sector: string;
     accountName: string;
     accountNumber: number;
@@ -56,7 +56,6 @@ export interface ICorporateClient {
     // quotes: Quote[];
     // claims: Claim[];
 }
-
 
 export type ClientType = 'Individual' | 'Corporate';
 export type OccupationType = 'Employed' | 'Unemployed' | 'Student';
