@@ -52,7 +52,10 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let receipt of receiptsTable.data">
+                <tr
+                    *ngFor="let receipt of receiptsTable.data"
+                    (click)="showReceiptModal = true"
+                >
                     <td>{{ receipt.policyNumber }}</td>
                     <td>{{ receipt.product }}</td>
                     <td>{{ receipt.startDate.seconds | date }}</td>
@@ -64,3 +67,34 @@
         </nz-table>
     </nz-card>
 </div>
+
+<nz-modal
+    [(nzVisible)]="showReceiptModal"
+    nzTitle="Policy Receipt"
+    (nzOnCancel)="showReceiptModal = false"
+    (nzOnOk)="showReceiptModal = false"
+>
+    <div style="margin: 20px;">
+        <nz-card style="width: 100%" nzTitle="Receipt" [nzExtra]="actions">
+            <pdf-viewer
+                [src]="'/assets/docs/receipt.pdf'"
+                [original-size]="false"
+            ></pdf-viewer>
+        </nz-card>
+        <ng-template #actions>
+            <div>
+                <button
+                    nz-button
+                    nzType="primary"
+                    nzSize="medium"
+                    style="margin-right: 8px;"
+                >
+                    Print
+                </button>
+                <button nz-button nzType="default" nzSize="medium">
+                    Email
+                </button>
+            </div>
+        </ng-template>
+    </div>
+</nz-modal>
