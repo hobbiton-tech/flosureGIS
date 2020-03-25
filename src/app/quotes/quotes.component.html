@@ -67,8 +67,8 @@
                     style="cursor: pointer;"
                 >
                     <td>{{ quote.quoteNumber }}</td>
-                    <td>{{ quote.startDate }}</td>
-                    <td>{{ quote.endDate }}</td>
+                    <td>{{ quote.startDate.seconds * 1000 | date }}</td>
+                    <td>{{ quote.endDate.seconds * 1000 | date }}</td>
                     <td>{{ quote.clientCode }}</td>
                     <td>
                         <nz-badge

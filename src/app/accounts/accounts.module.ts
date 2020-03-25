@@ -6,6 +6,7 @@ import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { ReceiptsGenerationComponent } from './components/receipts-generation/receipts-generation.component';
 import { ViewReceiptsComponent } from './components/view-receipts/view-receipts.component';
 import { PaymentsComponent } from './components/payments/payments.component';
+import { AccountService } from './services/account.service';
 
 const routes: Routes = [
     {
@@ -29,6 +30,7 @@ const routes: Routes = [
         ViewReceiptsComponent,
         PaymentsComponent
     ],
-    imports: [CommonModule, NgZorroAntdModule, RouterModule.forChild(routes)]
+    imports: [CommonModule, NgZorroAntdModule, RouterModule.forChild(routes)],
+    providers: [AccountService]
 })
 export class AccountsModule {}

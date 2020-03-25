@@ -97,7 +97,8 @@ export class CreateQuoteComponent implements OnInit {
             town: ['', Validators.required],
             currency: ['', Validators.required],
             startDate: ['', Validators.required],
-            endDate: ['', Validators.required]
+            endDate: ['', Validators.required],
+            status: ['Draft']
         });
 
         this.clientsService.getAllClients().subscribe(clients => {
