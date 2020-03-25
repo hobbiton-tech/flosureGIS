@@ -8,6 +8,7 @@ import {
     Validators
 } from '@angular/forms';
 import { Claim } from '../../models/claim.model';
+import { ICorporateClient } from 'src/app/clients/models/clients.model';
 
 @Component({
     selector: 'app-intimate-claim',
@@ -27,22 +28,18 @@ export class IntimateClaimComponent implements OnInit {
     ngOnInit(): void {
         this.intimateClaimForm = this.formBuilder.group({
             bookedBy: ['', Validators.required],
-            policyNumber: '',
-            clientName: '',
-            serviceProvider: '',
-            serviceType: '',
-            claimDescription: '',
-            risk: '',
-            activity: '',
-            lossDate: '',
-            notificationDate: '',
+            policyNumber: ['', Validators.required],
+            clientName: ['', Validators.required],
+            serviceProvider: ['', Validators.required],
+            serviceType: ['', Validators.required],
+            claimDescription: ['', Validators.required],
+            risk: ['', Validators.required],
+            activity: ['', Validators.required],
+            lossDate: ['', Validators.required],
+            notificationDate: ['', Validators.required],
             status: 'pending'
         });
     }
-
-    // addClaim(claim: Claim): void {
-    //   this.claimService.addClaim(claim)
-    // }
 
     onSubmit() {
         console.log(this.intimateClaimForm.value);

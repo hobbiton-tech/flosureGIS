@@ -10,6 +10,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { StepperService } from 'src/app/quotes/services/stepper.service';
 import { RouterModule, Routes } from '@angular/router';
 import { QuotesService } from './services/quotes.service';
+import { QuoteDetailsComponent } from './components/quote-details/quote-details.component';
 
 const routes: Routes = [
     {
@@ -19,6 +20,10 @@ const routes: Routes = [
     {
         path: 'quotes-list',
         component: QuotesComponent
+    },
+    {
+        path: 'quote-details',
+        component: QuoteDetailsComponent
     }
 ];
 
@@ -28,7 +33,8 @@ const routes: Routes = [
         CreateQuoteComponent,
         QuotationDetailsComponent,
         QuotationProductDetailsComponent,
-        RiskDetailsComponent
+        RiskDetailsComponent,
+        QuoteDetailsComponent
     ],
     imports: [
         CommonModule,

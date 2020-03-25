@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MotorQuotationModel, RiskModel } from '../models/quote.model';
+import { MotorQuotationModel, RiskModel, Quote } from '../models/quote.model';
 import { Observable, from } from 'rxjs';
 import {
     AngularFirestore,
@@ -116,6 +116,10 @@ export class QuotesService {
 
     getRisks(): Observable<RiskModel[]> {
         return this.risks;
+    }
+
+    getQuotes(): Observable<MotorQuotationModel[]> {
+        return this.quotations;
     }
 
     private countGenerator(numb) {

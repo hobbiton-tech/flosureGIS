@@ -37,12 +37,6 @@
                             </nz-select>
                         </nz-form-control>
                     </nz-form-item>
-                    <!-- <nz-form-item> -->
-                    <!--     <nz-form-label nzRequired nzSpan="7">Notification Date</nz-form-label> -->
-                    <!--     <nz-form-control nzSpan="16"> -->
-                    <!--         <nz-date-picker formControlName="rangePicker"></nz-date-picker> -->
-                    <!--     </nz-form-control> -->
-                    <!-- </nz-form-item> -->
                     <nz-form-item>
                         <nz-form-label nzRequired nzSpan="8">Claim Description</nz-form-label>
                         <nz-form-control nzSpan="15">
@@ -60,15 +54,7 @@
 
                 </div>
                 <div nz-col nzSpan="12">
-                    <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired>Select Risk</nz-form-label>
-                        <nz-form-control nzSpan="16">
-                            <nz-select nzPlaceHolder="Select risk" formControlName="risk">
-                                    <nz-option nzValue="risk 1" nzLabel="risk 1"></nz-option>
-                                    <nz-option nzValue="risk 2" nzLabel="risk 2"></nz-option>
-                            </nz-select>
-                        </nz-form-control>
-                    </nz-form-item>
+                    
                     <nz-form-item>
                             <nz-form-label nzSpan="7" nzRequired>Policy number</nz-form-label>
                             <nz-form-control nzSpan="16">
@@ -76,6 +62,15 @@
                             </nz-form-control>
                         </nz-form-item>
                     <nz-form-item>
+                            <nz-form-item>
+                                    <nz-form-label nzSpan="7" nzRequired>Select Risk</nz-form-label>
+                                    <nz-form-control nzSpan="16">
+                                        <nz-select nzPlaceHolder="Select risk" formControlName="risk">
+                                                <nz-option nzValue="risk 1" nzLabel="risk 1"></nz-option>
+                                                <nz-option nzValue="risk 2" nzLabel="risk 2"></nz-option>
+                                        </nz-select>
+                                    </nz-form-control>
+                                </nz-form-item>
                         <nz-form-label nzSpan="7" nzRequired>Select Activity</nz-form-label>
                         <nz-form-control nzSpan="16">
                             <nz-select nzPlaceHolder="Select activity" formControlName="activity">
