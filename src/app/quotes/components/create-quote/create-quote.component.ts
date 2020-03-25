@@ -103,6 +103,9 @@ export class CreateQuoteComponent implements OnInit {
             this.clients = [...clients[0], ...clients[1]] as Array<
                 IIndividualClient & ICorporateClient
             >;
+
+            console.log('============All Clients=========');
+            console.log(this.clients);
         });
 
         // Comprehensive Form
