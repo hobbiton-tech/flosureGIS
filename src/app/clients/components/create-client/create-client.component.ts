@@ -1,4 +1,9 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    AfterViewInit,
+    ChangeDetectorRef
+} from '@angular/core';
 import { StepperService } from '../../common/services/stepper.service';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -24,7 +29,8 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
         private stepperService: StepperService,
         private router: Router,
         private formBuilder: FormBuilder,
-        private clientsService: ClientsService
+        private clientsService: ClientsService,
+        private cdr: ChangeDetectorRef
     ) {
         this.individualClientForm = this.formBuilder.group({
             title: ['', Validators.required],
@@ -73,12 +79,15 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {
         // this.selectedClientType = 'Corporate';
+        this.selectedClientType = 'Corporate';
+        this.cdr.detectChanges();
         this.stepperService.toggleStepper(true);
         this.stepperService.changeIndex(0);
     }
 
     ngAfterViewInit(): void {
         this.selectedClientType = 'Corporate';
+        // this.cdr.detectChanges();
     }
 
     changeClientType(event): void {
