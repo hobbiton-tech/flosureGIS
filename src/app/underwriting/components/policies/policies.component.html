@@ -32,36 +32,24 @@
     <thead>
       <tr>
         <th>Policy Number</th>
-        <th>Endorsement Number</th>
         <th>Product</th>
         <th>Cover From</th>
         <th>Cover To</th>
         <th>Client Name</th>
-        <th>Insurance Company</th>
-        <th>Currency</th>
         <th>Agent</th>
         <th>Status</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let policy of policiesTable.data" (click)="viewPolicyDetails()" style="cursor:pointer;">
+      <tr *ngFor="let policy of policiesTable.data" (click)="viewPolicyDetails(policy)" style="cursor:pointer;">
         <td>{{ policy.policyNumber }}</td>
-        <td>{{ policy.endorsementNumber }}</td>
-        <td>{{ policy.product }}</td>
-        <td>{{ policy.startDate | date }}</td>
-        <td>{{ policy.endDate | date }}</td>
+        <td>{{ policy.productType }}</td>
+        <td>{{ policy.startDate}}</td>
+        <td>{{ policy.endDate}}</td>
         <td>{{ policy.client }}</td>
-        <td>{{ policy.insuranceCompany}}</td>
-        <td>{{ policy.currency}}</td>
-        <td>{{ policy.preparedBy }}</td>
+        <td>{{ policy.preparedBy}}</td>
         <td>{{ policy.status}}</td>
 
-        <!-- <td>
-          <nz-badge [nzStatus]="policy.status === 'Draft' ? 'warning' : 'success'" [nzText]="policy.status"></nz-badge>
-        </td> -->
-        <!-- <td>
-          <button nz-button nzType="default" nzSize="small">Download</button>
-        </td> -->
       </tr>
     </tbody>
   </nz-table>

@@ -22,7 +22,7 @@ export interface IIndividualClient {
     occupation: OccupationType;
     clientType: ClientType;
     status: ClientStatus;
-    //accountDetails: AccountDetails;
+    // accountDetails: AccountDetails;
     sector: string;
     accountName: string;
     accountNumber: number;

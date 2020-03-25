@@ -14,7 +14,11 @@ import {
     ICorporateClient,
     IIndividualClient
 } from 'src/app/clients/models/clients.model';
-import { RiskModel, Quote, MotorQuotationModel } from '../../models/quote.model';
+import {
+    RiskModel,
+    Quote,
+    MotorQuotationModel
+} from '../../models/quote.model';
 import { map, tap, filter, scan, retry, catchError } from 'rxjs/operators';
 
 @Component({
@@ -23,7 +27,6 @@ import { map, tap, filter, scan, retry, catchError } from 'rxjs/operators';
     styleUrls: ['./create-quote.component.scss']
 })
 export class CreateQuoteComponent implements OnInit {
-    motor: any;
     constructor(
         private formBuilder: FormBuilder,
         private stepperService: StepperService,
@@ -31,19 +34,34 @@ export class CreateQuoteComponent implements OnInit {
         private readonly quoteService: QuotesService,
         private readonly clientsService: ClientsService
     ) {}
+    motor: any;
     // Decleration
     quoteForm: FormGroup;
-    riskForm: FormGroup;
+    riskThirdPartyForm: FormGroup;
+    riskComprehensiveForm: FormGroup;
     clients: Array<IIndividualClient & ICorporateClient>;
     disabled = false;
     quoteNumber = '';
     risks: RiskModel[] = [];
+
+    optionList = [
+        { label: 'Motor Comprehensive', value: 'Comprehensive' },
+        { label: 'Motor Third Party', value: 'ThirdParty' }
+    ];
+    selectedValue = { label: 'Motor Comprehensive', value: 'Comprehensive' };
 
     startValue: Date | null = null;
     endValue: Date | null = null;
     endOpen = false;
 
     listOfControl: Array<{ id: number; controlInstance: string }> = [];
+
+    compareFn = (o1: any, o2: any) =>
+        o1 && o2 ? o1.value === o2.value : o1 === o2;
+
+    log(value: { label: string; value: string }): void {
+        console.log(value);
+    }
 
     disabledStartDate = (startValue: Date): boolean => {
         if (!startValue || !this.endValue) {
@@ -71,71 +89,29 @@ export class CreateQuoteComponent implements OnInit {
         this.endOpen = open;
     }
 
-    addField(e?: MouseEvent): void {
-        if (e) {
-            e.preventDefault();
-        }
-        const id =
-            this.listOfControl.length > 0
-                ? this.listOfControl[this.listOfControl.length - 1].id + 1
-                : 0;
-
-        const control = {
-            id,
-            controlInstance: `passenger${id}`
-        };
-        const index = this.listOfControl.push(control);
-        console.log('<=============Check=============>');
-
-        console.log(this.listOfControl[this.listOfControl.length - 1]);
-    }
-
-    removeField(
-        i: { id: number; controlInstance: string },
-        e: MouseEvent
-    ): void {
-        e.preventDefault();
-        if (this.listOfControl.length > 1) {
-            const index = this.listOfControl.indexOf(i);
-            this.listOfControl.splice(index, 1);
-            console.log(this.listOfControl);
-        }
-    }
-
-    // getting data from local storage
-    public getFromLocalStrorage() {
-        const quotes = JSON.parse(localStorage.getItem('motor'));
-        return quotes;
-    }
-
     ngOnInit(): void {
         this.quoteForm = this.formBuilder.group({
             quoteNumber: [this.quoteService.generateQuoteNumber('ran', 10)],
             clientCode: ['', Validators.required],
             messageCode: ['ewrewre', Validators.required],
+            town: ['', Validators.required],
             currency: ['', Validators.required],
             startDate: ['', Validators.required],
-            endDate: ['', Validators.required]
+            endDate: ['', Validators.required],
+            status: ['Draft']
         });
 
         this.clientsService.getAllClients().subscribe(clients => {
             this.clients = [...clients[0], ...clients[1]] as Array<
                 IIndividualClient & ICorporateClient
             >;
+
+            console.log('============All Clients=========');
+            console.log(this.clients);
         });
 
-        // this.motor = this.getFromLocalStrorage();
-        // console.log('<============Quote Number Data=============>');
-        // console.log(this.quoteService.generateQuoteNumber('ran', 10));
-
-        // console.log('<============Risks with Quote Number Data=============>');
-        // console.log(
-        //   this.quoteService.getRisk(
-        //     this.quoteService.generateQuoteNumber('ran', 10)
-        //   )
-        // );
-
-        this.riskForm = this.formBuilder.group({
+        // Comprehensive Form
+        this.riskComprehensiveForm = this.formBuilder.group({
             registrationNumber: ['', Validators.required],
             vehicleMake: ['', Validators.required],
             vehicleModel: ['', Validators.required],
@@ -143,23 +119,22 @@ export class CreateQuoteComponent implements OnInit {
             chasisNumber: ['', Validators.required],
             color: ['', Validators.required],
             estimatedValue: ['', Validators.required],
-            productType: ['', Validators.required]
+            productType: ['', Validators.required],
+            insuranceType: ['Comprehensive', Validators.required]
         });
 
-        // get risks
-
-        // this.quoteService.getRisks().subscribe(risk => {
-        //   this.risks = risk;
-        // });
-
-        // this.quoteService
-        //   .getRisks()
-        //   .subscribe(result => {
-        //     this.risks = result.filter(x => x.quoteNumber === 'QOran2003230010');
-        //     // console.log('<============Risk Data=============>');
-        //     console.log('Risks', this.risks);
-        //   }
-        //   );
+        // Third Party Form
+        this.riskThirdPartyForm = this.formBuilder.group({
+            registrationNumber: ['', Validators.required],
+            vehicleMake: ['', Validators.required],
+            vehicleModel: ['', Validators.required],
+            engineNumber: ['', Validators.required],
+            chasisNumber: ['', Validators.required],
+            color: ['', Validators.required],
+            estimatedValue: ['', Validators.required],
+            productType: ['', Validators.required],
+            insuranceType: ['ThirdParty', Validators.required]
+        });
     }
 
     onSubmit() {
@@ -172,26 +147,27 @@ export class CreateQuoteComponent implements OnInit {
         this.quoteService.getRisk('an');
     }
 
-    onAdd() {
-        const risk = this.riskForm.value;
-        console.log('<============Risk Form Data=============>');
-        console.log(risk);
-        console.log('<============Client Code Data=============>');
-        this.quoteService.addRisk(risk);
+    addThirdPartyRisk(): void {
+        const some: RiskModel[] = [];
+        some.push(this.riskThirdPartyForm.value);
+        this.risks = [...this.risks, ...some];
+        console.log(this.risks);
     }
 
-    addRisk(): void {
-        const some: RiskModel[] = []
-        some.push(this.riskForm.value);
+    addComprehensiveRisk(): void {
+        const some: RiskModel[] = [];
+        some.push(this.riskComprehensiveForm.value);
         this.risks = [...this.risks, ...some];
         console.log(this.risks);
     }
 
     addQuote(): void {
         const quote: MotorQuotationModel = {
-          ...this.quoteForm.value,
-          risks: this.risks,
-        }
+            ...this.quoteForm.value,
+            risks: this.risks
+        };
+        console.log('=======Full Quotation=======');
+        console.log(quote);
         this.quoteService.addMotorQuotation(quote);
     }
 }
