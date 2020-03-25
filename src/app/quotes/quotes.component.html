@@ -58,8 +58,6 @@
                     <th>End Date</th>
                     <th>Client Name</th>
                     <th>Quote Status</th>
-                    <th>Agent</th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -79,17 +77,6 @@
                             "
                             [nzText]="quote.status"
                         ></nz-badge>
-                    </td>
-                    <td>{{ quote.preparedBy }}</td>
-                    <td>
-                        <button
-                            nz-button
-                            nzType="default"
-                            nzSize="small"
-                            [disabled]="quote.status === 'Confirmed'"
-                        >
-                            Convert
-                        </button>
                     </td>
                 </tr>
             </tbody>
