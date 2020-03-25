@@ -7,7 +7,7 @@
             >
             <nz-page-header-content>
                 <nz-descriptions [nzColumn]="3">
-                    <nz-descriptions-item nzTitle="Agent" [nzSpan]="1"
+                    <!-- <nz-descriptions-item nzTitle="Agent" [nzSpan]="1"
                         >Charles Malama</nz-descriptions-item
                     >
                     <nz-descriptions-item nzTitle="Association" [nzSpan]="1"
@@ -15,18 +15,18 @@
                     >
                     <nz-descriptions-item nzTitle="Last Update" [nzSpan]="1"
                         >2017-01-10</nz-descriptions-item
-                    >
-                    <nz-descriptions-item nzTitle="Total Quotes" [nzSpan]="1"
-                        >231</nz-descriptions-item
-                    >
-                    <nz-descriptions-item nzTitle="Draft Quotes" [nzSpan]="1"
+                    > -->
+                    <nz-descriptions-item nzTitle="Total Quotes" [nzSpan]="1">{{
+                        quotesCount
+                    }}</nz-descriptions-item>
+                    <!-- <nz-descriptions-item nzTitle="Draft Quotes" [nzSpan]="1"
                         >130</nz-descriptions-item
                     >
                     <nz-descriptions-item
                         nzTitle="Confirmed Quotes"
                         [nzSpan]="1"
                         >101</nz-descriptions-item
-                    >
+                    > -->
                 </nz-descriptions>
             </nz-page-header-content>
         </nz-page-header>
@@ -67,8 +67,8 @@
                     style="cursor: pointer;"
                 >
                     <td>{{ quote.quoteNumber }}</td>
-                    <td>{{ quote.startDate }}</td>
-                    <td>{{ quote.endDate }}</td>
+                    <td>{{ quote.startDate.seconds * 1000 | date }}</td>
+                    <td>{{ quote.endDate.seconds * 1000 | date }}</td>
                     <td>{{ quote.clientCode }}</td>
                     <td>
                         <nz-badge
