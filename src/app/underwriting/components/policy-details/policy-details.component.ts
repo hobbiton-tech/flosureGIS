@@ -24,6 +24,11 @@ export class PolicyDetailsComponent implements OnInit {
 
     isEditmode = false;
 
+
+    showCertModal = false;
+    showDebitModal = false;
+    showReceiptModal = false;
+
     constructor(
         private readonly router: Router,
         private route: ActivatedRoute,
@@ -35,6 +40,7 @@ export class PolicyDetailsComponent implements OnInit {
             this.policyData = policies.filter(x => x.policyNumber === this.policyNumber)[0];
             this.policiesList = policies;
         });
+
 
         //get policy number from url parameter
         this.route.params.subscribe(param => {

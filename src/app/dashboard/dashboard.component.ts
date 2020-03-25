@@ -7,9 +7,9 @@ import { PoliciesService } from '../underwriting/services/policies.service';
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+    selector: 'app-dashboard',
+    templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
     clientsCount: number = 0;
@@ -34,13 +34,16 @@ export class DashboardComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        // this.clients.getClients().subscribe(clients => {
-        //     this.clientsCount = clients.length;
-        //     this.clientsLoading = false;
-        // });
+        // Using reduce to combine all the clients.
         this.clientsService.getAllClients().subscribe(clients => {
-            this.clientsCount = [...clients[0], ...clients[1]].length;
-        })
+            const combined = [clients[0], clients[1]].reduce(
+                (x, y) => [...x, ...y],
+                []
+            );
+
+            this.clientsCount = combined.length;
+            this.clientsLoading = false;
+        });
         this.claims.getClaims().subscribe(claims => {
             console.log('SOME', claims);
             this.claimsCount = claims.length;
@@ -60,6 +63,4 @@ export class DashboardComponent implements OnInit {
             this.policiesLoading = false;
         });
     }
-
 }
-
