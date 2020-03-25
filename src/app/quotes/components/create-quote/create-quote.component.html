@@ -22,15 +22,22 @@
                                 formControlName="clientCode"
                                 nzPlaceHolder="Select or create client"
                             >
-                                <ng-container *ngFor="let client of clients">
+                                <div *ngFor="let client of clients">
                                     <nz-option
+                                        [nzValue]="client.accountName"
+                                        [nzLabel]="client.accountName"
+                                    ></nz-option>
+                                </div>
+                                <!-- <ng-container > -->
+
+                                <!-- <nz-option
                                         *ngIf="
                                             client.clientType === 'Corporate'
                                         "
                                         [nzValue]="client.companyName"
                                         nzLabel="{{ client.companyName }}"
-                                    ></nz-option>
-                                    <nz-option
+                                    ></nz-option> -->
+                                <!-- <nz-option
                                         *ngIf="
                                             client.clientType === 'Individual'
                                         "
@@ -38,9 +45,17 @@
                                         nzLabel="{{ client.firstName }} {{
                                             client.lastName
                                         }}"
-                                    ></nz-option>
-                                </ng-container>
+                                    ></nz-option> -->
+                                <!-- </ng-container> -->
                             </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label nzRequired nzSpan="7"
+                            >Town</nz-form-label
+                        >
+                        <nz-form-control nzSpan="17">
+                            <input nz-input formControlName="town" />
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
