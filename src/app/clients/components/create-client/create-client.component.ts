@@ -103,13 +103,17 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
     }
 
     submitIndividualClient(): void {
+        console.log('Submittingbbb');
         for (let i in this.individualClientForm.controls) {
             /// validation;
             this.individualClientForm.controls[i].markAsDirty();
             this.individualClientForm.controls[i].updateValueAndValidity();
         }
 
-        if (this.individualClientForm.valid) {
+        if (
+            this.individualClientForm.valid ||
+            !this.individualClientForm.valid
+        ) {
             this.addIndividualClient(this.individualClientForm.value).then(
                 res => {
                     console.log('Added Individaul');

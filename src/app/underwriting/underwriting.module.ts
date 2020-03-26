@@ -6,8 +6,7 @@ import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { Routes, RouterModule } from '@angular/router';
 import { EndorsementsComponent } from './components/endorsements/endorsements.component';
 import { PolicyDetailsComponent } from './components/policy-details/policy-details.component';
-import { ReactiveFormsModule } from '@angular/forms';
-
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 
@@ -40,6 +39,8 @@ const routes: Routes = [
     imports: [
         CommonModule,
         NgZorroAntdModule,
+        FormsModule,
+        ReactiveFormsModule,
         RouterModule.forChild(routes),
         PdfViewerModule
     ]

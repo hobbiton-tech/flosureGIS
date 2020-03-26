@@ -21,7 +21,7 @@
             (nzBack)="goToClientsList()"
             nzBackIcon
             nzTitle="Policy Number: HFB-489384"
-            [nzSubtitle]="selectedPolicy.client"
+            [nzSubtitle]="policyData.client"
         >
             <nz-page-header-extra>
                 <button
@@ -173,99 +173,180 @@
             <div nz-row nzGutter="0">
                 <div nz-col nzSpan="12">
                     <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired>Client Name</nz-form-label>
+                        <nz-form-label nzSpan="7" nzRequired
+                            >Client Name</nz-form-label
+                        >
                         <nz-form-control nzSpan="17">
                             <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
-                            <input nz-input  [disabled]="!isEditmode" formControlName="client"/>
+                            <input
+                                nz-input
+                                [disabled]="!isEditmode"
+                                formControlName="client"
+                            />
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired>Name of Insured</nz-form-label>
+                        <nz-form-label nzSpan="7" nzRequired
+                            >Name of Insured</nz-form-label
+                        >
                         <nz-form-control nzSpan="17">
                             <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
-                            <input nz-input  [disabled]="!isEditmode" formControlName="nameOfInsured"/>
+                            <input
+                                nz-input
+                                [disabled]="!isEditmode"
+                                formControlName="nameOfInsured"
+                            />
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired>Sum Insured</nz-form-label>
+                        <nz-form-label nzSpan="7" nzRequired
+                            >Sum Insured</nz-form-label
+                        >
                         <nz-form-control nzSpan="17">
                             <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
-                            <input nz-input  [disabled]="!isEditmode" formControlName="sumInsured"/>
+                            <input
+                                nz-input
+                                [disabled]="!isEditmode"
+                                formControlName="sumInsured"
+                            />
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired>Currency</nz-form-label>
+                        <nz-form-label nzSpan="7" nzRequired
+                            >Currency</nz-form-label
+                        >
                         <nz-form-control nzSpan="17">
-                            <nz-select  [nzDisabled]="!isEditmode" formControlName="currency">
-                                <nz-option nzValue="currency 1" nzLabel="currency 1"></nz-option>
-                                <nz-option nzValue="currency 2" nzLabel="currency 2"></nz-option>
+                            <nz-select
+                                [nzDisabled]="!isEditmode"
+                                formControlName="currency"
+                            >
+                                <nz-option
+                                    nzValue="currency 1"
+                                    nzLabel="currency 1"
+                                ></nz-option>
+                                <nz-option
+                                    nzValue="currency 2"
+                                    nzLabel="currency 2"
+                                ></nz-option>
                             </nz-select>
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
-                            <nz-form-label nzSpan="7" nzRequired>Expiry Date</nz-form-label>
-                            <nz-form-control nzSpan="17">
-                                <input nz-input  [disabled]="!isEditmode" formControlName="expiryDate"/>
-                            </nz-form-control>
-                        </nz-form-item>
-                        <nz-form-item>
-                                <nz-form-label nzSpan="7" nzRequired>Quater</nz-form-label>
-                                <nz-form-control nzSpan="17">
-                                    <nz-select  [nzDisabled]="!isEditmode" formControlName="quater">
-                                        <nz-option nzValue="1" nzLabel="1"></nz-option>
-                                        <nz-option nzValue="2" nzLabel="2"></nz-option>
-                                        <nz-option nzValue="3" nzLabel="3"></nz-option>
-                                        <nz-option nzValue="4" nzLabel="4"></nz-option>
-                                    </nz-select>
-                                </nz-form-control>
-                            </nz-form-item>
-                </div>
-                <div nz-col nzSpan="12">
-                    <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired>Product</nz-form-label>
+                        <nz-form-label nzSpan="7" nzRequired
+                            >Expiry Date</nz-form-label
+                        >
                         <nz-form-control nzSpan="17">
-                            <nz-select nzPlaceHolder="Motor Comprehensive" [nzDisabled]="!isEditmode" formControlName="product">
-                                <nz-option nzValue="type 1" nzLabel="type 1"></nz-option>
-                                <nz-option nzValue="type 2" nzLabel="type 2"></nz-option>
+                            <input
+                                nz-input
+                                [disabled]="!isEditmode"
+                                formControlName="expiryDate"
+                            />
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label nzSpan="7" nzRequired
+                            >Quater</nz-form-label
+                        >
+                        <nz-form-control nzSpan="17">
+                            <nz-select
+                                [nzDisabled]="!isEditmode"
+                                formControlName="quater"
+                            >
+                                <nz-option nzValue="1" nzLabel="1"></nz-option>
+                                <nz-option nzValue="2" nzLabel="2"></nz-option>
+                                <nz-option nzValue="3" nzLabel="3"></nz-option>
+                                <nz-option nzValue="4" nzLabel="4"></nz-option>
                             </nz-select>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
                 <div nz-col nzSpan="12">
                     <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired>Start Date</nz-form-label>
+                        <nz-form-label nzSpan="7" nzRequired
+                            >Product</nz-form-label
+                        >
+                        <nz-form-control nzSpan="17">
+                            <nz-select
+                                nzPlaceHolder="Motor Comprehensive"
+                                [nzDisabled]="!isEditmode"
+                                formControlName="product"
+                            >
+                                <nz-option
+                                    nzValue="type 1"
+                                    nzLabel="type 1"
+                                ></nz-option>
+                                <nz-option
+                                    nzValue="type 2"
+                                    nzLabel="type 2"
+                                ></nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="7" nzRequired
+                            >Start Date</nz-form-label
+                        >
                         <nz-form-control nzSpan="17">
                             <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
-                            <input nz-input [disabled]="!isEditmode" formControlName="startDate"/>
+                            <input
+                                nz-input
+                                [disabled]="!isEditmode"
+                                formControlName="startDate"
+                            />
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired>End Date</nz-form-label>
+                        <nz-form-label nzSpan="7" nzRequired
+                            >End Date</nz-form-label
+                        >
                         <nz-form-control nzSpan="17">
                             <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
-                            <input nz-input  [disabled]="!isEditmode" formControlName="endDate"/>
+                            <input
+                                nz-input
+                                [disabled]="!isEditmode"
+                                formControlName="endDate"
+                            />
                         </nz-form-control>
                     </nz-form-item>
-                  
-                            <nz-form-item>
-                                <nz-form-label nzSpan="7" nzRequired>Date Of Issue</nz-form-label>
-                                <nz-form-control nzSpan="17">
-                                    <input nz-input  [disabled]="!isEditmode" formControlName="dateOfIssue"/>
-                                </nz-form-control>
-                            </nz-form-item>
-                            <nz-form-item>
-                                    <nz-form-label nzSpan="7" nzRequired>Time Of Issue</nz-form-label>
-                                    <nz-form-control nzSpan="17">
-                                        <input nz-input  [disabled]="!isEditmode" formControlName="timeOfIssue"/>
-                                    </nz-form-control>
-                                </nz-form-item>
-                                <nz-form-item>
-                                        <nz-form-label nzSpan="7" nzRequired>Town</nz-form-label>
-                                        <nz-form-control nzSpan="17">
-                                            <input nz-input  [disabled]="!isEditmode" formControlName="town"/>
-                                        </nz-form-control>
-                                    </nz-form-item>
-                        
+
+                    <nz-form-item>
+                        <nz-form-label nzSpan="7" nzRequired
+                            >Date Of Issue</nz-form-label
+                        >
+                        <nz-form-control nzSpan="17">
+                            <input
+                                nz-input
+                                [disabled]="!isEditmode"
+                                formControlName="dateOfIssue"
+                            />
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label nzSpan="7" nzRequired
+                            >Time Of Issue</nz-form-label
+                        >
+                        <nz-form-control nzSpan="17">
+                            <input
+                                nz-input
+                                [disabled]="!isEditmode"
+                                formControlName="timeOfIssue"
+                            />
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label nzSpan="7" nzRequired
+                            >Town</nz-form-label
+                        >
+                        <nz-form-control nzSpan="17">
+                            <input
+                                nz-input
+                                [disabled]="!isEditmode"
+                                formControlName="town"
+                            />
+                        </nz-form-control>
+                    </nz-form-item>
                 </div>
             </div>
         </form>
@@ -273,33 +354,34 @@
     <nz-card>
         <nz-divider nzText="Risk Details" nzOrientation="left"></nz-divider>
         <div style="margin-top:20px">
-                <nz-table #risksTable [nzData]="policy" nzSize="small">
-                        <thead>
-                            <tr>
-                                <th>Insurance Type</th>
-                                <th>Registration Number</th>
-                                <th>Vehicle Make</th>
-                                <th>Vehicle Model</th>
-                                <th>Engine Number</th>
-                                <th>Chassis Number</th>
-                                <th>Color</th>
-                                <th>Product Type</th>
-                                <th>Estimated Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let policy of risksTable.data">
-                                <td>{{policy.risk.insuranceType}}</td>
-                                <td>{{policy.risk.regNumber}}</td>
-                                <td>{{policy.risk.vehicleMake}}</td>
-                                <td>{{policy.risk.vehicleModel}}</td>
-                                <td>{{policy.risk.engineNumber}}</td>
-                                <td>{{policy.risk.chassisNumber}}</td>
-                                <td>{{policy.risk.color}}</td>
-                                <td>{{policy.risk.productType}}</td>
-                                <td>{{policy.risk.estimatedValue}}</td>
-                            </tr>
-                        </tbody>
-                    </nz-table></div>
+            <nz-table #risksTable [nzData]="policy" nzSize="small">
+                <thead>
+                    <tr>
+                        <th>Insurance Type</th>
+                        <th>Registration Number</th>
+                        <th>Vehicle Make</th>
+                        <th>Vehicle Model</th>
+                        <th>Engine Number</th>
+                        <th>Chassis Number</th>
+                        <th>Color</th>
+                        <th>Product Type</th>
+                        <th>Estimated Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let policy of risksTable.data">
+                        <td>{{ policy.risk.insuranceType }}</td>
+                        <td>{{ policy.risk.regNumber }}</td>
+                        <td>{{ policy.risk.vehicleMake }}</td>
+                        <td>{{ policy.risk.vehicleModel }}</td>
+                        <td>{{ policy.risk.engineNumber }}</td>
+                        <td>{{ policy.risk.chassisNumber }}</td>
+                        <td>{{ policy.risk.color }}</td>
+                        <td>{{ policy.risk.productType }}</td>
+                        <td>{{ policy.risk.estimatedValue }}</td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
     </nz-card>
 </div>

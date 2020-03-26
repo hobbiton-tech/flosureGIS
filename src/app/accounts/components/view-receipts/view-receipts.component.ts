@@ -10,6 +10,7 @@ import { Policy } from 'src/app/underwriting/models/policy.model';
 export class ViewReceiptsComponent implements OnInit {
     receiptsList: Policy[];
     receiptsCount = 0;
+    showReceiptModal = false;
     constructor(private accountService: AccountService) {}
 
     ngOnInit(): void {

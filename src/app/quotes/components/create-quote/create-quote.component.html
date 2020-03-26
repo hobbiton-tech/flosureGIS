@@ -24,8 +24,20 @@
                             >
                                 <div *ngFor="let client of clients">
                                     <nz-option
-                                        [nzValue]="client.accountName"
-                                        [nzLabel]="client.accountName"
+                                        [nzValue]="
+                                            client.clientType === 'Individual'
+                                                ? client.firstName +
+                                                  ' ' +
+                                                  client.lastName
+                                                : client.companyName
+                                        "
+                                        [nzLabel]="
+                                            client.clientType === 'Individual'
+                                                ? client.firstName +
+                                                  ' ' +
+                                                  client.lastName
+                                                : client.companyName
+                                        "
                                     ></nz-option>
                                 </div>
                                 <!-- <ng-container > -->
