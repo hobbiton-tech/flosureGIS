@@ -1,60 +1,188 @@
 <div style="background: #ECECEC;padding:30px;">
     <div nz-row [nzGutter]="8">
         <div nz-col [nzSpan]="8">
-            <nz-card>
-                <nz-statistic
-                    [nzValueTemplate]="clientStats"
-                    [nzTitle]="'Total Clients'"
-                ></nz-statistic>
+            <nz-card
+                [nzTitle]="'Total Clients'"
+                [nzExtra]="tClients"
+                [nzHoverable]="true"
+            >
+                <nz-statistic [nzValueTemplate]="clientStats"></nz-statistic>
+                <ng-template #tClients>
+                    <a routerLink="/flosure/clients/clients-list">View>></a>
+                </ng-template>
             </nz-card>
         </div>
         <div nz-col [nzSpan]="8">
-            <nz-card>
-                <nz-statistic
-                    [nzValueTemplate]="claimsStats"
-                    [nzTitle]="'Pending Claims'"
-                ></nz-statistic>
+            <nz-card
+                [nzTitle]="'Pending Claims'"
+                [nzExtra]="pClaims"
+                [nzHoverable]="true"
+            >
+                <nz-statistic [nzValueTemplate]="claimsStats"></nz-statistic>
+                <ng-template #pClaims>
+                    <a routerLink="/flosure/claims/claim-transactions"
+                        >View>></a
+                    >
+                </ng-template>
             </nz-card>
         </div>
         <div nz-col [nzSpan]="8">
-            <nz-card>
-                <nz-statistic
-                    [nzValueTemplate]="policiesStats"
-                    [nzTitle]="'Active Policies'"
-                ></nz-statistic>
+            <nz-card
+                [nzTitle]="'Active Policies'"
+                [nzExtra]="aPolicies"
+                [nzHoverable]="true"
+            >
+                <nz-statistic [nzValueTemplate]="policiesStats"></nz-statistic>
+                <ng-template #aPolicies>
+                    <a routerLink="/flosure/underwriting/policies">View>></a>
+                </ng-template>
             </nz-card>
         </div>
     </div>
     <div nz-row [nzGutter]="8" style="padding-top: 10px">
         <div nz-col [nzSpan]="8">
-            <nz-card>
-                <nz-statistic
-                    [nzValueTemplate]="policiesStats"
-                    [nzTitle]="'Expiring Policies'"
-                ></nz-statistic>
+            <nz-card
+                [nzTitle]="'Expiring Policies'"
+                [nzExtra]="ePolicies"
+                [nzHoverable]="true"
+            >
+                <nz-statistic [nzValueTemplate]="policiesStats"></nz-statistic>
+                <ng-template #ePolicies>
+                    <a routerLink="/flosure/underwriting/policies">View>></a>
+                </ng-template>
             </nz-card>
         </div>
         <div nz-col [nzSpan]="8">
-            <nz-card>
+            <nz-card
+                [nzTitle]="'Total Policies'"
+                [nzExtra]="tPolicies"
+                [nzHoverable]="true"
+            >
                 <nz-statistic
                     [nzValue]="commissionEarned | number"
-                    [nzTitle]="'Commission Earned (ZMK)'"
                 ></nz-statistic>
+                <ng-template #tPolicies>
+                    <a routerLink="/flosure/underwriting/policies">View>></a>
+                </ng-template>
             </nz-card>
         </div>
         <div nz-col [nzSpan]="8">
-            <nz-card>
+            <nz-card [nzTitle]="'Commission Earned (ZMK)'">
                 <nz-statistic
                     [nzValue]="commissionEarned | number"
-                    [nzTitle]="'Total Policies'"
                 ></nz-statistic>
             </nz-card>
         </div>
     </div>
 
     <div style="margin-top: 20px">
-        <nz-card nzTitle="Expiring Policies">
-            <nz-table></nz-table>
+        <nz-card>
+            <nz-tabset>
+                <nz-tab nzTitle="Active Policies">
+                    <div style="margin-bottom: 10px; width: 50%">
+                        <nz-input-group [nzSuffix]="suffixIconSearch">
+                            <input
+                                type="text"
+                                nz-input
+                                placeholder="Search by client, policy number, agent"
+                            />
+                        </nz-input-group>
+                        <ng-template #suffixIconSearch>
+                            <i nz-icon nzType="search"></i>
+                        </ng-template>
+                    </div>
+
+                    <nz-table
+                        #activePoliciesTable
+                        [nzData]="activePoliciesList"
+                        [nzSize]="'small'"
+                        [nzBordered]="true"
+                    >
+                        <thead>
+                            <tr>
+                                <th>Policy Number</th>
+                                <th>Product</th>
+                                <th>Cover From</th>
+                                <th>Cover To</th>
+                                <th>Client Name</th>
+                                <th>Agent</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let policy of activePoliciesTable.data"
+                                (click)="viewPolicyDetails(policy)"
+                                style="cursor:pointer;"
+                            >
+                                <td>{{ policy.policyNumber }}</td>
+                                <td>{{ policy.productType }}</td>
+                                <td>
+                                    {{ policy.startDate.seconds * 1000 | date }}
+                                </td>
+                                <td>
+                                    {{ policy.endDate.seconds * 1000 | date }}
+                                </td>
+                                <td>{{ policy.client }}</td>
+                                <td>{{ policy.preparedBy }}</td>
+                                <td>{{ policy.status }}</td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-tab>
+                <nz-tab nzTitle="Expiring Policies">
+                    <div style="margin-bottom: 10px; width: 50%">
+                        <nz-input-group [nzSuffix]="suffixIconSearch">
+                            <input
+                                type="text"
+                                nz-input
+                                placeholder="Search by client, policy number, agent"
+                            />
+                        </nz-input-group>
+                        <ng-template #suffixIconSearch>
+                            <i nz-icon nzType="search"></i>
+                        </ng-template>
+                    </div>
+
+                    <nz-table
+                        #expiredPoliciesTable
+                        [nzData]="expiredPoliciesList"
+                        [nzSize]="'small'"
+                        [nzBordered]="true"
+                    >
+                        <thead>
+                            <tr>
+                                <th>Policy Number</th>
+                                <th>Product</th>
+                                <th>Cover From</th>
+                                <th>Cover To</th>
+                                <th>Client Name</th>
+                                <th>Agent</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let policy of expiredPoliciesTable.data"
+                                (click)="viewPolicyDetails(policy)"
+                                style="cursor:pointer;"
+                            >
+                                <td>{{ policy.policyNumber }}</td>
+                                <td>{{ policy.productType }}</td>
+                                <td>
+                                    {{ policy.startDate.seconds * 1000 | date }}
+                                </td>
+                                <td>
+                                    {{ policy.endDate.seconds * 1000 | date }}
+                                </td>
+                                <td>{{ policy.client }}</td>
+                                <td>{{ policy.preparedBy }}</td>
+                                <td>{{ policy.status }}</td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-tab>
+            </nz-tabset>
         </nz-card>
     </div>
 </div>

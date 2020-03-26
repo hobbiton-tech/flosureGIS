@@ -5,6 +5,8 @@ import { ClaimsService } from '../claims/services/claims-service.service';
 import { PoliciesService } from '../underwriting/services/policies.service';
 
 import * as _ from 'lodash';
+import { Policy } from '../underwriting/models/policy.model';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-dashboard',
@@ -12,25 +14,30 @@ import * as _ from 'lodash';
     styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-    clientsCount: number = 0;
-    claimsCount: number = 0;
-    policiesCount: number = 0;
+    clientsCount = 0;
+    claimsCount = 0;
+    policiesCount = 0;
 
-    totalPolicies: number = 0;
-    activePolices: number = 0;
-    inactivePolicies: number = 0;
+    totalPolicies = 0;
+    activePolices = 0;
+    inactivePolicies = 0;
 
     cancelledPoliciesCount: number;
-    commissionEarned: number = 0;
+    commissionEarned = 0;
 
-    clientsLoading: boolean = true;
-    claimsLoading: boolean = true;
-    policiesLoading: boolean = true;
+    clientsLoading = true;
+    claimsLoading = true;
+    policiesLoading = true;
+
+    activePoliciesList: Policy[];
+
+    expiredPoliciesList: Policy[];
 
     constructor(
         private clientsService: ClientsService,
         private claims: ClaimsService,
-        private policiesService: PoliciesService
+        private policiesService: PoliciesService,
+        private readonly route: Router
     ) {}
 
     ngOnInit(): void {
@@ -62,5 +69,27 @@ export class DashboardComponent implements OnInit {
             ).length;
             this.policiesLoading = false;
         });
+
+        this.policiesService.getPolicies().subscribe(activePolices => {
+            this.activePoliciesList = _.filter(
+                activePolices,
+                x => x.status === 'Active'
+            );
+            console.log(this.activePoliciesList);
+        });
+
+        this.policiesService.getPolicies().subscribe(expiredPolices => {
+            this.expiredPoliciesList = _.filter(
+                expiredPolices,
+                x => x.status === 'Expired'
+            );
+            console.log(this.expiredPoliciesList);
+        });
+    }
+
+    viewPolicyDetails(policy: Policy): void {
+        this.route.navigateByUrl(
+            '/flosure/underwriting/policy-details/' + policy.policyNumber
+        );
     }
 }
