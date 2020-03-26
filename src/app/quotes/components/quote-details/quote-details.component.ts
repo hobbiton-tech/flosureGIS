@@ -19,6 +19,8 @@ export class QuoteDetailsComponent implements OnInit {
   quotesList: MotorQuotationModel[];
   risks: RiskModel[];
 
+  quoteData: MotorQuotationModel = new MotorQuotationModel();
+
   //quoteNumber
   quoteNumber: string;
   quote: MotorQuotationModel;
@@ -39,14 +41,23 @@ export class QuoteDetailsComponent implements OnInit {
      ) { }
 
   ngOnInit(): void {
-    this.quotesService.getQuotes().subscribe(quotes => {
-      this.quotesList = quotes;
-    })
+    // this.quotesService.getQuotes().subscribe(quotes => {
+    //   this.quoteData = quotes.filter(x => x.quoteNumber === this.quoteNumber)[0];
+    //   this.quotesList = quotes;
+    //   console.log(this.quotesList);
+    //   console.log(this.quoteData);
+    // })
 
     //get Quote number from parameters
     this.route.params.subscribe(param => {
       this.quoteNumber = param.quoteNumber;
-      this.quote = this.quotesList.filter(x => x.quoteNumber === this.quoteNumber)[0]
+      this.quotesService.getQuotes().subscribe(quotes => {
+        this.quoteData = quotes.filter(x => x.quoteNumber === this.quoteNumber)[0];
+        this.quotesList = quotes;
+        this.quote = this.quotesList.filter(x => x.quoteNumber === this.quoteNumber)[0];
+        console.log(this.quotesList);
+        console.log(this.quoteData);
+      })
     })
 
     this.quoteDetailsForm = this.formBuilder.group({
@@ -67,6 +78,15 @@ export class QuoteDetailsComponent implements OnInit {
       preparedBy: ['', Validators.required],
       paymentMethod: ['', Validators.required],
       sumInsured: ['', Validators.required]
+    })
+
+    //set values of fields in policy details form
+    this.quotesService.getQuotes().subscribe(quotes => {
+      this.quoteData = quotes.filter(x => x.quoteNumber === this.quoteNumber)[0];
+      this.quoteDetailsForm.get('client').setValue(this.quoteData.clientCode);
+      this.quoteDetailsForm.get('currency').setValue(this.quoteData.currency);
+      this.quoteDetailsForm.get('startDate').setValue(this.quoteData.startDate);
+      this.quoteDetailsForm.get('endDate').setValue(this.quoteData.endDate);
     })
   }
 

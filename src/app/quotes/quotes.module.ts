@@ -12,6 +12,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { QuotesService } from './services/quotes.service';
 import { QuoteDetailsComponent } from './components/quote-details/quote-details.component';
 
+import 'firebase/firestore';
+
 const routes: Routes = [
     {
         path: 'create-quote',

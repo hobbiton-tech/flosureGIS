@@ -35,6 +35,7 @@ export interface IIndividualClient {
 
 export interface ICorporateClient {
     id: string;
+    phone: string;
     registrationNumber: string;
     address: string;
     clientID: string;

@@ -1,22 +1,172 @@
+<div class="policy-detail">
+    <div style="margin: 15px;">
+        <nz-breadcrumb>
+            <nz-breadcrumb-item
+                (click)="goToPoliciesList()"
+                style="cursor: pointer"
+            >
+                Policies
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item
+                (click)="goToPoliciesList()"
+                style="cursor: pointer"
+            >
+                Policies List
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                Policy Details
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+        <nz-page-header
+            (nzBack)="goToClientsList()"
+            nzBackIcon
+            nzTitle="Policy Number: HFB-489384"
+            [nzSubtitle]="selectedPolicy.client"
+        >
+            <nz-page-header-extra>
+                <button
+                    nz-button
+                    nzType="primary"
+                    (click)="showCertModal = true"
+                >
+                    View Certificate
+                </button>
+                <button
+                    nz-button
+                    nzType="primary"
+                    (click)="showReceiptModal = true"
+                >
+                    View Receipt
+                </button>
+                <button
+                    nz-button
+                    nzType="primary"
+                    (click)="showDebitModal = true"
+                >
+                    View Debit Note
+                </button>
+                <button
+                    *ngIf="isEditmode"
+                    nz-button
+                    nzType="primary"
+                    (click)="isEditmode = false"
+                >
+                    Save Changes
+                </button>
+                <button
+                    *ngIf="!isEditmode"
+                    nz-button
+                    nzType="primary"
+                    (click)="isEditmode = true"
+                >
+                    Edit Policy
+                </button>
+            </nz-page-header-extra>
+        </nz-page-header>
+    </div>
+
+    <nz-modal
+        [(nzVisible)]="showCertModal"
+        nzTitle="Policy Certificate"
+        (nzOnCancel)="showCertModal = false"
+        (nzOnOk)="showCertModal = false"
+    >
+        <div style="margin: 20px;">
+            <nz-card
+                style="width: 100%"
+                nzTitle="Certificate"
+                [nzExtra]="actions"
+            >
+                <pdf-viewer
+                    [src]="'/assets/docs/cert.pdf'"
+                    [original-size]="false"
+                ></pdf-viewer>
+            </nz-card>
+            <ng-template #actions>
+                <div>
+                    <button
+                        nz-button
+                        nzType="primary"
+                        nzSize="medium"
+                        style="margin-right: 8px;"
+                    >
+                        Print
+                    </button>
+                    <button nz-button nzType="default" nzSize="medium">
+                        Email
+                    </button>
+                </div>
+            </ng-template>
+        </div>
+    </nz-modal>
+
+    <nz-modal
+        [(nzVisible)]="showReceiptModal"
+        nzTitle="Policy Receipt"
+        (nzOnCancel)="showReceiptModal = false"
+        (nzOnOk)="showReceiptModal = false"
+    >
+        <div style="margin: 20px;">
+            <nz-card style="width: 100%" nzTitle="Receipt" [nzExtra]="actions">
+                <pdf-viewer
+                    [src]="'/assets/docs/receipt.pdf'"
+                    [original-size]="false"
+                ></pdf-viewer>
+            </nz-card>
+            <ng-template #actions>
+                <div>
+                    <button
+                        nz-button
+                        nzType="primary"
+                        nzSize="medium"
+                        style="margin-right: 8px;"
+                    >
+                        Print
+                    </button>
+                    <button nz-button nzType="default" nzSize="medium">
+                        Email
+                    </button>
+                </div>
+            </ng-template>
+        </div>
+    </nz-modal>
+
+    <nz-modal
+        [(nzVisible)]="showDebitModal"
+        nzTitle="Debit Note"
+        (nzOnCancel)="showDebitModal = false"
+        (nzOnOk)="showDebitModal = false"
+    >
+        <div style="margin: 20px;">
+            <nz-card
+                style="width: 100%"
+                nzTitle="Debit Note"
+                [nzExtra]="actions"
+            >
+                <pdf-viewer
+                    [src]="'/assets/docs/debit.pdf'"
+                    [original-size]="false"
+                ></pdf-viewer>
+            </nz-card>
+            <ng-template #actions>
+                <div>
+                    <button
+                        nz-button
+                        nzType="primary"
+                        nzSize="medium"
+                        style="margin-right: 8px;"
+                    >
+                        Print
+                    </button>
+                    <button nz-button nzType="default" nzSize="medium">
+                        Email
+                    </button>
+                </div>
+            </ng-template>
+        </div>
+    </nz-modal>
+</div>
 <div style="margin: 15px;">
-    <nz-breadcrumb>
-        <nz-breadcrumb-item (click)="goToPoliciesList()" style="cursor: pointer">
-            Policies
-        </nz-breadcrumb-item>
-        <nz-breadcrumb-item (click)="goToPoliciesList()" style="cursor: pointer">
-            Policies List
-        </nz-breadcrumb-item>
-        <nz-breadcrumb-item>
-            Policy Details
-        </nz-breadcrumb-item>
-    </nz-breadcrumb>
-<nz-page-header (nzBack)="goToClientsList()" nzBackIcon nzTitle="Policy Number: {{policyData.policyNumber}}"
-        [nzSubtitle]="policyData.client">
-        <nz-page-header-extra>
-            <button nz-button nzType="primary" >Generate PDF</button>
-            <button *ngIf="isEditmode" nz-button nzType="primary" (click)="isEditmode = false">Save Changes</button>
-        </nz-page-header-extra>
-    </nz-page-header>
     <nz-card>
         <nz-divider nzText="Policy Details" nzOrientation="left"></nz-divider>
         <form nz-form [formGroup]="policyDetailsForm">

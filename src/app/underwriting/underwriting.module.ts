@@ -9,11 +9,12 @@ import { PolicyDetailsComponent } from './components/policy-details/policy-detai
 import { ReactiveFormsModule } from '@angular/forms';
 
 
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 const routes: Routes = [
     {
         path: 'endorsements',
-        component: EndorsementsComponent,
+        component: EndorsementsComponent
     },
     {
         path: 'policies',
@@ -36,7 +37,11 @@ const routes: Routes = [
         PoliciesComponent,
         PolicyDetailsComponent
     ],
-    imports: [CommonModule, NgZorroAntdModule, RouterModule.forChild(routes), ReactiveFormsModule],
-    exports: [ReactiveFormsModule]
+    imports: [
+        CommonModule,
+        NgZorroAntdModule,
+        RouterModule.forChild(routes),
+        PdfViewerModule
+    ]
 })
 export class UnderWritingModule {}

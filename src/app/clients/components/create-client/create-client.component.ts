@@ -1,8 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    AfterViewInit,
+    ChangeDetectorRef
+} from '@angular/core';
 import { StepperService } from '../../common/services/stepper.service';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { IIndividualClient, ICorporateClient } from '../../models/clients.model';
+import {
+    IIndividualClient,
+    ICorporateClient
+} from '../../models/clients.model';
 import { ClientsService } from '../../services/clients.service';
 
 @Component({
@@ -10,7 +18,7 @@ import { ClientsService } from '../../services/clients.service';
     templateUrl: './create-client.component.html',
     styleUrls: ['./create-client.component.scss']
 })
-export class CreateClientComponent implements OnInit {
+export class CreateClientComponent implements OnInit, AfterViewInit {
     clientTypeForm: FormGroup;
     individualClientForm: FormGroup;
     corporateClientForm: FormGroup;
@@ -22,11 +30,8 @@ export class CreateClientComponent implements OnInit {
         private router: Router,
         private formBuilder: FormBuilder,
         private clientsService: ClientsService,
+        private cdr: ChangeDetectorRef
     ) {
-        // this.clientTypeForm = this.formBuilder.group({
-        //     type: ['', Validators.required]
-        // });
-
         this.individualClientForm = this.formBuilder.group({
             title: ['', Validators.required],
             idType: ['', Validators.required],
@@ -51,43 +56,38 @@ export class CreateClientComponent implements OnInit {
         });
 
         this.corporateClientForm = this.formBuilder.group({
-           companyName: ['', Validators.required],
-           taxPin: ['', Validators.required],
-           registrationNumber: ['', Validators.required],
-           email: ['', Validators.required],
-           phone: ['', Validators.required],
-           address: ['', Validators.required],
-           sector: ['', Validators.required],
-           contactFirstName: ['', Validators.required],
-           contactLastName: ['', Validators.required],
+            companyName: ['', Validators.required],
+            taxPin: ['', Validators.required],
+            registrationNumber: ['', Validators.required],
+            email: ['', Validators.required],
+            phone: ['', Validators.required],
+            address: ['', Validators.required],
+            sector: ['', Validators.required],
+            contactFirstName: ['', Validators.required],
+            contactLastName: ['', Validators.required],
             contactEmail: ['', Validators.required],
             contactPhone: ['', Validators.required],
-           contactAddress: ['', Validators.required],
-           clientType: ['Corporate'],
-           accountName: ['', Validators.required],
-           accountNumber: ['', Validators.required],
-           accountType: ['', Validators.required],
-           bank: ['', Validators.required],
-           branch: ['', Validators.required]
-        })
+            contactAddress: ['', Validators.required],
+            clientType: ['Corporate'],
+            accountName: ['', Validators.required],
+            accountNumber: ['', Validators.required],
+            accountType: ['', Validators.required],
+            bank: ['', Validators.required],
+            branch: ['', Validators.required]
+        });
     }
 
-    // get f() {
-    //     return this.clientTypeForm.controls;
-    // }
-
-    // next() {
-    //     this.stepperService.changeIndex(1);
-    //     if (this.f.type.value === 'ind') {
-    //         this.router.navigateByUrl('/flosure/clients/personal-details');
-    //     } else if (this.f.type.value === 'cor') {
-    //         this.router.navigateByUrl('/flosure/clients/company-details');
-    //     }
-    // }
-
     ngOnInit(): void {
+        // this.selectedClientType = 'Corporate';
+        this.selectedClientType = 'Corporate';
+        this.cdr.detectChanges();
         this.stepperService.toggleStepper(true);
         this.stepperService.changeIndex(0);
+    }
+
+    ngAfterViewInit(): void {
+        this.selectedClientType = 'Corporate';
+        // this.cdr.detectChanges();
     }
 
     changeClientType(event): void {
@@ -110,7 +110,12 @@ export class CreateClientComponent implements OnInit {
         }
 
         if (this.individualClientForm.valid) {
-            this.addIndividualClient(this.individualClientForm.value);
+            this.addIndividualClient(this.individualClientForm.value).then(
+                res => {
+                    console.log('Added Individaul');
+                    this.individualClientForm.reset();
+                }
+            );
         }
     }
 
@@ -118,11 +123,16 @@ export class CreateClientComponent implements OnInit {
         for (let i in this.corporateClientForm.controls) {
             /// validation;
             this.corporateClientForm.controls[i].markAsDirty();
-            this.individualClientForm.updateValueAndValidity();
+            this.corporateClientForm.updateValueAndValidity();
         }
 
         if (this.corporateClientForm.valid) {
-            this.addIndividualClient(this.corporateClientForm.value);
+            this.addCorporateClient(this.corporateClientForm.value).then(
+                res => {
+                    console.log('Added Corporate.');
+                    this.corporateClientForm.reset();
+                }
+            );
         }
     }
 }

@@ -1,1 +1,21 @@
-<p>policies works!</p>
+<div style="margin: 20px;">
+    <nz-card style="width: 100%" nzTitle="Policy Reports" [nzExtra]="actions">
+        <pdf-viewer
+            [src]="'/assets/docs/AnnualFinancialSample.pdf'"
+            [original-size]="false"
+        ></pdf-viewer>
+    </nz-card>
+    <ng-template #actions>
+        <div>
+            <button
+                nz-button
+                nzType="primary"
+                nzSize="medium"
+                style="margin-right: 10px;"
+            >
+                Print
+            </button>
+            <button nz-button nzType="defualt" nzSize="medium">Email</button>
+        </div>
+    </ng-template>
+</div>
