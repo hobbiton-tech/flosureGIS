@@ -24,14 +24,22 @@ export class PoliciesService {
         this.policies.pipe(first()).subscribe(async policies => {
             const today = new Date();
             policy.nameOfInsured = policy.client;
-            policy.dateOfIssue = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-            policy.timeOfIssue = today.getHours() + ":" + today.getMinutes();
+            policy.dateOfIssue =
+                today.getFullYear() +
+                '-' +
+                (today.getMonth() + 1) +
+                '-' +
+                today.getDate();
+            policy.timeOfIssue = today.getHours() + ':' + today.getMinutes();
             policy.expiryDate = policy.endDate;
             policy.status = 'Active';
-            policy.policyNumber = this.generatePolicyNumber('BR202000030', policies.length);
+            policy.policyNumber = this.generatePolicyNumber(
+                'BR202000030',
+                policies.length
+            );
 
             await this.policiesCollection.doc(policy.policyNumber).set(policy);
-        })
+        });
     }
 
     getPolicies(): Observable<Policy[]> {
