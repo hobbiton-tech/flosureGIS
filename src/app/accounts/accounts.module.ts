@@ -7,6 +7,7 @@ import { ReceiptsGenerationComponent } from './components/receipts-generation/re
 import { ViewReceiptsComponent } from './components/view-receipts/view-receipts.component';
 import { PaymentsComponent } from './components/payments/payments.component';
 import { AccountService } from './services/account.service';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 const routes: Routes = [
     {
@@ -30,7 +31,12 @@ const routes: Routes = [
         ViewReceiptsComponent,
         PaymentsComponent
     ],
-    imports: [CommonModule, NgZorroAntdModule, RouterModule.forChild(routes)],
+    imports: [
+        CommonModule,
+        NgZorroAntdModule,
+        RouterModule.forChild(routes),
+        PdfViewerModule
+    ],
     providers: [AccountService]
 })
 export class AccountsModule {}
