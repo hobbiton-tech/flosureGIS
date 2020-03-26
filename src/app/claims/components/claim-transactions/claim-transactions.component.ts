@@ -10,7 +10,10 @@ import { Claim } from '../../models/claim.model';
 })
 export class ClaimTransactionsComponent implements OnInit {
     claimsList: Claim[];
+    displayClaimsList: Claim[];
     claimsCount: number = 0;
+
+    searchString: string;
 
     //spin feedback when loading figures
     claimsLoading: boolean = true;
@@ -34,6 +37,21 @@ export class ClaimTransactionsComponent implements OnInit {
             this.claimsLoading = false;
             this.claimsList = claims;
             console.log(claims);
+
+            this.displayClaimsList = this.claimsList;
+        });
+    }
+
+    search(value: string): void {
+        if (value === '' || !value) {
+            this.displayClaimsList = this.claimsList;
+        }
+
+        this.displayClaimsList = this.claimsList.filter(claim => {   
+                return (claim.claimId.toLowerCase().includes(value.toLowerCase())
+            || claim.policyNumber.toLocaleLowerCase().includes(value.toLowerCase()) 
+            || claim.clientName.toLocaleLowerCase().includes(value.toLowerCase())
+            || claim.status.toLocaleLowerCase().includes(value.toLowerCase()));
         });
     }
 }

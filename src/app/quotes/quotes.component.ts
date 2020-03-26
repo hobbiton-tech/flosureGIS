@@ -10,7 +10,10 @@ import { Router } from '@angular/router';
 })
 export class QuotesComponent implements OnInit {
     quotesList: MotorQuotationModel[];
+    displayQuotesList: MotorQuotationModel[];
     quotesCount = 0;
+
+    searchString: string;
 
     constructor(private quoteServise: QuotesService, private router: Router) {}
 
@@ -18,14 +21,34 @@ export class QuotesComponent implements OnInit {
         this.quoteServise.getQoutes().subscribe(quotes => {
             this.quotesList = quotes;
             this.quotesCount = quotes.length;
-            console.log('======= Qoute List =======');
+            console.log('======= Quote List =======');
             console.log(this.quotesList);
+
+            this.displayQuotesList = this.quotesList;
         });
+
+        
     }
 
     viewDetails(quotation: MotorQuotationModel): void {
         this.router.navigateByUrl(
             '/flosure/quotes/quote-details/' + quotation.quoteNumber
         );
+    }
+
+    search(value: string): void {
+        if (value === ' ' || !value) {
+            this.displayQuotesList = this.quotesList;
+        }
+
+        this.displayQuotesList = this.quotesList.filter(quote => {
+            return(
+            quote.quoteNumber.toLowerCase().includes(value.toLowerCase())
+            || quote.clientCode.toLowerCase().includes(value.toLowerCase())
+            || quote.startDate.toString().toLowerCase().includes(value.toLowerCase())
+            || quote.endDate.toString().toLowerCase().includes(value.toLowerCase())
+            );
+
+        })
     }
 }

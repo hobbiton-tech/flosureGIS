@@ -26,6 +26,8 @@
                     type="text"
                     nz-input
                     placeholder="Search by client, policy number, agent"
+                    [(ngModel)]="searchString"
+                    (ngModelChange)="search($event)"
                 />
             </nz-input-group>
             <ng-template #suffixIconSearch>
@@ -35,7 +37,7 @@
 
         <nz-table
             #policiesTable
-            [nzData]="policiesList"
+            [nzData]="displayPoliciesList"
             [nzSize]="'small'"
             [nzBordered]="true"
         >

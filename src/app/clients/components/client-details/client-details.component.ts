@@ -17,6 +17,7 @@ import { PoliciesService } from 'src/app/underwriting/services/policies.service'
 import { ClaimsService } from 'src/app/claims/services/claims-service.service';
 
 import { getDate } from 'date-fns';
+import { ITimestamp } from 'src/app/settings/components/insurance-companies/models/insurance-company.model';
 
 @Component({
     selector: 'app-client-details',
@@ -82,7 +83,9 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
         this.route.navigateByUrl('/flosure/claims/claim-details');
     }
 
-    convertFirebaseTime(value: number): number {
-        return getDate(value);
+    getTimeStamp(client: ICorporateClient & IIndividualClient): number {
+        const date = client.dateCreated as ITimestamp;
+        return date.seconds
+
     }
 }

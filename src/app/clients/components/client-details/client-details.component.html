@@ -15,8 +15,8 @@
             nzTitle="Client ID: {{ client.clientID }}"
             [nzSubtitle]="
                 client.clientType === 'Individual'
-                    ? client.firstName + ' ' + client.lastName
-                    : client.companyName
+                    ? client.firstName + ' ' + client.lastName + ' ' + '(Created on' + ' ' + (getTimeStamp(client) * 1000 | date) + ')'
+                    : client.companyName + ' ' + '(Created on' + ' ' + (getTimeStamp(client) * 1000 | date) + ')'
             "
         >
             <nz-page-header-extra>

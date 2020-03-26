@@ -7,8 +7,10 @@ import {
 import { Router } from '@angular/router';
 import { ClientsService } from '../../services/clients.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import * as XLSX from 'xlsx';
 
 import * as _ from 'lodash';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
     selector: 'app-clients-list',
@@ -20,6 +22,7 @@ export class ClientsListComponent implements OnInit {
 
     clientList: Array<IIndividualClient & ICorporateClient>;
     displayClientList: Array<IIndividualClient & ICorporateClient>;
+    searchedClientList: Array<IIndividualClient & ICorporateClient>;
 
     isAddClientDrawerOpen = false;
     selectedClientType: ClientType = 'Individual';
@@ -35,6 +38,12 @@ export class ClientsListComponent implements OnInit {
     totalCorporateClients = 0;
 
     clientsLoading = true;
+
+    //search string when filtering clients
+    searchString: string;
+
+    /*name of the excel-file which will be downloaded. */ 
+    fileName= 'ClientsSheet.xlsx';
 
     constructor(
         private router: Router,
@@ -89,5 +98,38 @@ export class ClientsListComponent implements OnInit {
                     IIndividualClient & ICorporateClient
                 >;
         }
+    }
+
+    search(value: string): void {
+        if (value === '' || !value) {
+            this.displayClientList = this.clientList;
+        }
+
+        this.displayClientList = this.clientList.filter(client => {
+
+            if (client.clientType === 'Individual') {
+                return (client.clientID.toLowerCase().includes(value.toLowerCase())
+            || client.clientType.toLocaleLowerCase().includes(value.toLowerCase()) 
+            || client.status.toLocaleLowerCase().includes(value.toLowerCase())
+            || client.firstName.toLowerCase().includes(value.toLowerCase())
+            || client.lastName.toLowerCase().includes(value.toLowerCase()));
+            } else {
+                return client.clientID.toLowerCase().includes(value.toLowerCase())
+            || client.clientType.toLocaleLowerCase().includes(value.toLowerCase()) 
+            || client.status.toLocaleLowerCase().includes(value.toLowerCase())
+            || client.companyName.toLowerCase().includes(value.toLowerCase());
+            }
+        })
+    }
+
+    downloadClientsList() {   
+       let element = document.getElementById('clientsTable'); 
+       const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+
+       const wb: XLSX.WorkBook = XLSX.utils.book_new();
+       XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+       /* save to file */
+       XLSX.writeFile(wb, this.fileName);
     }
 }

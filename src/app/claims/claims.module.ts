@@ -50,7 +50,8 @@ const routes: Routes = [
         CommonModule,
         ReactiveFormsModule,
         NgZorroAntdModule,
-        RouterModule.forChild(routes)
+        RouterModule.forChild(routes),
+        FormsModule
     ]
 })
 export class ClaimsModule {}

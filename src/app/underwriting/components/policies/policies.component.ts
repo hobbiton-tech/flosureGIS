@@ -11,7 +11,10 @@ import { PoliciesService } from '../../services/policies.service';
 })
 export class PoliciesComponent implements OnInit {
     policiesList: Policy[];
+    displayPoliciesList: Policy[];
     policiesCount: number = 0;
+
+    searchString: string;
 
     constructor(private readonly route: Router, private policiesService: PoliciesService) {}
 
@@ -19,10 +22,24 @@ export class PoliciesComponent implements OnInit {
         this.policiesService.getPolicies().subscribe(policies => {
             this.policiesList = policies;
             this.policiesCount = policies.length;
+
+            this.displayPoliciesList = this.policiesList
         })
     }
 
     viewPolicyDetails(policy: Policy): void {
         this.route.navigateByUrl('/flosure/underwriting/policy-details/' + policy.policyNumber);
+    }
+
+    search(value: string): void {
+        if (value === '' || !value) {
+            this.displayPoliciesList = this.policiesList;
+        }
+
+        this.displayPoliciesList = this.policiesList.filter(policy => {   
+                return (policy.policyNumber.toLowerCase().includes(value.toLowerCase())
+            || policy.client.toLocaleLowerCase().includes(value.toLowerCase()) 
+            || policy.preparedBy.toLocaleLowerCase().includes(value.toLowerCase()));
+        });
     }
 }

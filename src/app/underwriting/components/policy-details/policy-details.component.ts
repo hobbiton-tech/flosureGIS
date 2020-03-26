@@ -20,6 +20,9 @@ export class PolicyDetailsComponent implements OnInit {
 
     //risks
     risks: RiskModel;
+
+    searchString: string;
+    
     
 
     isEditmode = false;
