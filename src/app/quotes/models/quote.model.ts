@@ -1,8 +1,10 @@
+import { ITimestamp } from 'src/app/claims/models/claim.model';
+
 export class Quote {
     quoteNumber: number;
     revisionNumber: number;
-    startDate: Date;
-    endDate: Date;
+    startDate: Date | ITimestamp;
+    endDate: Date | ITimestamp;
     client: string;
     status: QuoteStatus;
     preparedBy: string;
@@ -19,8 +21,8 @@ export class MotorQuotationModel {
     town: string;
     currency: string;
     risks: RiskModel[];
-    startDate: Date;
-    endDate: Date;
+    startDate: Date | ITimestamp;
+    endDate: Date | ITimestamp;
     status: QuoteStatus;
 }
 
@@ -50,6 +52,6 @@ export class CoverModel {
 
 export type ProductType = 'Private' | 'Commercial' | 'Bus/Taxi';
 
-export type QuoteStatus = 'Draft' | 'Confirmed';
+export type QuoteStatus = 'Draft' | 'Approved';
 
 export type InsuranceType = 'ThirdParty' | 'Comprehensive';
