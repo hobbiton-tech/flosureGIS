@@ -105,9 +105,6 @@ export class CreateQuoteComponent implements OnInit {
             this.clients = [...clients[0], ...clients[1]] as Array<
                 IIndividualClient & ICorporateClient
             >;
-
-            console.log('============All Clients=========');
-            console.log(this.clients);
         });
 
         // Comprehensive Form
@@ -139,8 +136,6 @@ export class CreateQuoteComponent implements OnInit {
 
     onSubmit() {
         const some = this.quoteForm.value;
-        console.log('<============Quote Form Data=============>');
-        console.log(some);
         this.quoteService.addMotorQuotation(some);
 
         localStorage.setItem('motor', JSON.stringify(some));
@@ -166,8 +161,6 @@ export class CreateQuoteComponent implements OnInit {
             ...this.quoteForm.value,
             risks: this.risks
         };
-        console.log('=======Full Quotation=======');
-        console.log(quote);
         this.quoteService.addMotorQuotation(quote);
     }
 }

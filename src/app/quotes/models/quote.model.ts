@@ -13,6 +13,7 @@ export class Quote {
 
 export class MotorQuotationModel {
     id: string;
+    client: string;
     quoteNumber: string;
     dateCreated: Date;
     clientCode: string;

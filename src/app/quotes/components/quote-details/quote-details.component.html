@@ -1,148 +1,155 @@
-<div style="margin: 15px;">
-    <nz-breadcrumb>
-        <nz-breadcrumb-item>
-            Quotes
-        </nz-breadcrumb-item>
-        <nz-breadcrumb-item>
-            Quotes List
-        </nz-breadcrumb-item>
-        <nz-breadcrumb-item>
-            Quote Details
-        </nz-breadcrumb-item>
-    </nz-breadcrumb>
-    <nz-page-header nzBackIcon nzTitle="Quote Number: {{ quote.quoteNumber }}">
-        <nz-page-header-extra>
-            <button nz-button nzType="primary" (click)="handlePayment()">
-                Approve
-            </button>
-            <button
-                *ngIf="!isEditmode"
-                nz-button
-                nzType="primary"
-                (click)="isEditmode = true"
-            >
-                Edit Policy
-            </button>
-            <button
-                *ngIf="isEditmode"
-                nz-button
-                nzType="primary"
-                (click)="isEditmode = false"
-            >
-                Save Changes
-            </button>
-        </nz-page-header-extra>
-    </nz-page-header>
-    <nz-card>
-        <nz-divider nzText="Quote Details" nzOrientation="left"></nz-divider>
-        <form nz-form [formGroup]="quoteDetailsForm">
-            <div nz-row nzGutter="0">
-                <div nz-col nzSpan="12">
-                    <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired
-                            >Client Name</nz-form-label
-                        >
-                        <nz-form-control nzSpan="17">
-                            <input
-                                nz-input
-                                [disabled]="!isEditmode"
-                                formControlName="client"
-                            />
-                        </nz-form-control>
-                    </nz-form-item>
-                    <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired
-                            >Currency</nz-form-label
-                        >
-                        <nz-form-control nzSpan="17">
-                            <nz-select
-                                [nzDisabled]="!isEditmode"
-                                formControlName="currency"
+<nz-spin [nzSize]="'large'" [nzSpinning]="true" [nzTip]="'Approving Quote...'">
+    <div style="margin: 15px;">
+        <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                Quotes
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                Quotes List
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                Quote Details
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+        <nz-page-header nzBackIcon [nzTitle]="title">
+            <nz-page-header-extra>
+                <button nz-button nzType="primary" (click)="handlePayment()">
+                    Approve
+                </button>
+                <button
+                    *ngIf="!isEditmode"
+                    nz-button
+                    nzType="primary"
+                    (click)="isEditmode = true"
+                >
+                    Edit Policy
+                </button>
+                <button
+                    *ngIf="isEditmode"
+                    nz-button
+                    nzType="primary"
+                    (click)="isEditmode = false"
+                >
+                    Save Changes
+                </button>
+            </nz-page-header-extra>
+        </nz-page-header>
+        <nz-card>
+            <nz-divider
+                nzText="Quote Details"
+                nzOrientation="left"
+            ></nz-divider>
+            <form nz-form [formGroup]="quoteDetailsForm">
+                <div nz-row nzGutter="0">
+                    <div nz-col nzSpan="12">
+                        <nz-form-item>
+                            <nz-form-label nzSpan="7" nzRequired
+                                >Client Name</nz-form-label
                             >
-                                <nz-option
-                                    nzValue="ZMW"
-                                    nzLabel="ZMW"
-                                ></nz-option>
-                                <nz-option
-                                    nzValue="Dollar"
-                                    nzLabel="Dollar"
-                                ></nz-option>
-                            </nz-select>
-                        </nz-form-control>
-                    </nz-form-item>
+                            <nz-form-control nzSpan="17">
+                                <input
+                                    nz-input
+                                    [disabled]="!isEditmode"
+                                    [ngModel]="quote.client"
+                                    formControlName="client"
+                                />
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label nzSpan="7" nzRequired
+                                >Currency</nz-form-label
+                            >
+                            <nz-form-control nzSpan="17">
+                                <nz-select
+                                    [nzDisabled]="!isEditmode"
+                                    formControlName="currency"
+                                    [ngModel]="quote.currency"
+                                >
+                                    <nz-option
+                                        nzValue="ZMW"
+                                        nzLabel="ZMW"
+                                    ></nz-option>
+                                    <nz-option
+                                        nzValue="Dollar"
+                                        nzLabel="Dollar"
+                                    ></nz-option>
+                                </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="12">
+                        <nz-form-item>
+                            <nz-form-label nzSpan="7" nzRequired
+                                >Start Date</nz-form-label
+                            >
+                            <nz-form-control nzSpan="17">
+                                <input
+                                    nz-input
+                                    [disabled]="!isEditmode"
+                                    [value]="getTimeStamp(quote) * 1000 | date"
+                                    formControlName="startDate"
+                                />
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label nzSpan="7" nzRequired
+                                >End Date</nz-form-label
+                            >
+                            <nz-form-control nzSpan="17">
+                                <input
+                                    nz-input
+                                    [disabled]="!isEditmode"
+                                    [value]="
+                                        getEndDateTimeStamp(quote) * 1000 | date
+                                    "
+                                    formControlName="endDate"
+                                />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
                 </div>
-                <div nz-col nzSpan="12">
-                    <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired
-                            >Start Date</nz-form-label
-                        >
-                        <nz-form-control nzSpan="17">
-                            <input
-                                nz-input
-                                [disabled]="!isEditmode"
-                                [value]="getTimeStamp(quote) * 1000 | date"
-                                formControlName="startDate"
-                            />
-                        </nz-form-control>
-                    </nz-form-item>
-                    <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired
-                            >End Date</nz-form-label
-                        >
-                        <nz-form-control nzSpan="17">
-                            <input
-                                nz-input
-                                [disabled]="!isEditmode"
-                                [value]="
-                                    getEndDateTimeStamp(quote) * 1000 | date
-                                "
-                                formControlName="endDate"
-                            />
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
+            </form>
+        </nz-card>
+        <nz-card>
+            <nz-divider nzText="Risk Details" nzOrientation="left"></nz-divider>
+            <div style="margin-top:20px">
+                <nz-table
+                    #risksTable
+                    [nzData]="quote.risks"
+                    nzSize="small"
+                    [nzLoading]="quotesLoading"
+                >
+                    <thead>
+                        <tr>
+                            <th>Insurance Type</th>
+                            <th>Registration Number</th>
+                            <th>Vehicle Make</th>
+                            <th>Vehicle Model</th>
+                            <th>Engine Number</th>
+                            <th>Chassis Number</th>
+                            <th>Color</th>
+                            <th>Product Type</th>
+                            <th>Estimated Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let quote of risksTable.data">
+                            <td>{{ quote.insuranceType }}</td>
+                            <td>{{ quote.regNumber }}</td>
+                            <td>{{ quote.vehicleMake }}</td>
+                            <td>{{ quote.vehicleModel }}</td>
+                            <td>{{ quote.engineNumber }}</td>
+                            <td>{{ quote.chassisNumber }}</td>
+                            <td>{{ quote.color }}</td>
+                            <td>{{ quote.productType }}</td>
+                            <td>{{ quote.estimatedValue }}</td>
+                        </tr>
+                    </tbody>
+                </nz-table>
             </div>
-        </form>
-    </nz-card>
-    <nz-card>
-        <nz-divider nzText="Risk Details" nzOrientation="left"></nz-divider>
-        <div style="margin-top:20px">
-            <nz-table
-                #risksTable
-                [nzData]="quote.risks"
-                nzSize="small"
-                [nzLoading]="quotesLoading"
-            >
-                <thead>
-                    <tr>
-                        <th>Insurance Type</th>
-                        <th>Registration Number</th>
-                        <th>Vehicle Make</th>
-                        <th>Vehicle Model</th>
-                        <th>Engine Number</th>
-                        <th>Chassis Number</th>
-                        <th>Color</th>
-                        <th>Product Type</th>
-                        <th>Estimated Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let quote of risksTable.data">
-                        <td>{{ quote.insuranceType }}</td>
-                        <td>{{ quote.regNumber }}</td>
-                        <td>{{ quote.vehicleMake }}</td>
-                        <td>{{ quote.vehicleModel }}</td>
-                        <td>{{ quote.engineNumber }}</td>
-                        <td>{{ quote.chassisNumber }}</td>
-                        <td>{{ quote.color }}</td>
-                        <td>{{ quote.productType }}</td>
-                        <td>{{ quote.estimatedValue }}</td>
-                    </tr>
-                </tbody>
-            </nz-table>
-        </div>
-    </nz-card>
-</div>
+        </nz-card>
+    </div>
+</nz-spin>
 
 <nz-modal
     [(nzVisible)]="isVisible"
@@ -206,3 +213,12 @@
         </button>
     </ng-template>
 </nz-modal>
+
+<ng-template #title>
+    <div style="display: flex; align-items: center;">
+        <span style="margin-right: 8px;"
+            >Quote Number: {{ quote.quoteNumber }}</span
+        >
+        <nz-tag [nzColor]="'orange'">Not Approved</nz-tag>
+    </div>
+</ng-template>

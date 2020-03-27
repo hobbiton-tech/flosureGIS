@@ -52,6 +52,7 @@ export class QuoteDetailsComponent implements OnInit {
                     x => x.quoteNumber === this.quoteNumber
                 )[0];
 
+                console.log(this.quote);
                 this.quotesLoading = false;
             });
         });
@@ -60,7 +61,7 @@ export class QuoteDetailsComponent implements OnInit {
             client: ['', Validators.required],
             startDate: ['', Validators.required],
             endDate: ['', Validators.required],
-            currency: ['', Validators.required],
+            currency: [`${this.quote.currency}`, Validators.required],
             product: ['', Validators.required],
             model: ['', Validators.required],
             color: ['', Validators.required],
