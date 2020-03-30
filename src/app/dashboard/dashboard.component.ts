@@ -83,7 +83,6 @@ export class DashboardComponent implements OnInit {
                 expiredPolices,
                 x => x.status === 'Expired'
             );
-            console.log(this.expiredPoliciesList);
         });
     }
 
