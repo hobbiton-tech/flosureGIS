@@ -9,6 +9,16 @@ import {
 } from '@angular/fire/firestore';
 import { map, flatMap, first } from 'rxjs/operators';
 import { v4 } from 'uuid';
+import { IQuoteDTO } from '../models/quote.dto';
+import { IDebitNoteDTO } from '../models/debit-note.dto';
+import { ICertificateDTO } from '../models/certificate.dto';
+import { IReceiptDTO } from '../models/receipt.dto';
+
+export interface IQuoteDocument {
+    clientID: string;
+    receiptNumber: string;
+    documentUrl: string;
+}
 
 @Injectable({
     providedIn: 'root'
@@ -23,6 +33,9 @@ export class QuotesService {
     quote: MotorQuotationModel;
     myQuote: DocumentReference;
 
+    quoteDocumentsCollection: AngularFirestoreCollection<IQuoteDocument>;
+    quoteDocuments: Observable<IQuoteDocument[]>;
+
     private riskCollection: AngularFirestoreCollection<RiskModel>;
     risks: Observable<RiskModel[]>;
     risk: Observable<RiskModel>;
@@ -35,6 +48,11 @@ export class QuotesService {
 
         this.riskCollection = firebase.collection<RiskModel>('risks');
         this.risks = this.riskCollection.valueChanges();
+
+        this.quoteDocumentsCollection = firebase.collection<IQuoteDocument>(
+            'quote-documents'
+        );
+        this.quoteDocuments = this.quoteDocumentsCollection.valueChanges();
     }
 
     // add quotation
@@ -132,7 +150,23 @@ export class QuotesService {
     }
 
     // Get Quotes
-    getQoutes(): Observable<MotorQuotationModel[]> {
+    getQoute(): Observable<MotorQuotationModel[]> {
         return this.quotations;
+    }
+
+    generateQuote(dto: IQuoteDTO): Observable<IQuoteDocument> {
+        return null;
+    }
+
+    generateDebitNote(dto: IDebitNoteDTO): Observable<IQuoteDocument> {
+        return null;
+    }
+
+    generateCertificate(dto: ICertificateDTO): Observable<IQuoteDocument> {
+        return null;
+    }
+
+    generateReceipt(dto: IReceiptDTO): Observable<IQuoteDocument> {
+        return null;
     }
 }
