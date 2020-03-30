@@ -16,6 +16,9 @@ import { Routes, RouterModule } from '@angular/router';
 import { AccountsComponent } from './components/accounts/accounts.component';
 import { InsuranceCompaniesComponent } from './components/insurance-companies/insurance-companies.component';
 import { AddInsuranceCompanyComponent } from './components/insurance-companies/components/add-insurance-company/add-insurance-company.component';
+import { AgentsComponent } from './components/agents/agents.component';
+import { AgentsService } from './components/agents/services/agents.service';
+import { AddAgentComponent } from './components/agents/add-agent/add-agent.component';
 
 const routes: Routes = [
     {
@@ -37,6 +40,14 @@ const routes: Routes = [
     {
         path: 'organization-setups',
         component: OrganizationalSetupsComponent
+    },
+    {
+        path: 'agents-setups',
+        component: AgentsComponent
+    },
+    {
+        path: 'add-agents',
+        component: AddAgentComponent
     }
 ];
 
@@ -55,7 +66,9 @@ const routes: Routes = [
         CreateSectorComponent,
         AccountsComponent,
         InsuranceCompaniesComponent,
-        AddInsuranceCompanyComponent
+        AddInsuranceCompanyComponent,
+        AgentsComponent,
+        AddAgentComponent
     ],
     imports: [
         CommonModule,
@@ -64,6 +77,7 @@ const routes: Routes = [
         ReactiveFormsModule,
         RouterModule.forChild(routes)
     ],
-    exports: [SettingsComponent]
+    exports: [SettingsComponent],
+    providers: [AgentsService]
 })
 export class SettingsModule {}
