@@ -20,6 +20,7 @@ export interface ICertificateDTO {
     timeOfIssue: Date;
     dateOfIssue: Date;
     thirdPartyPropertyDamage: number;
+    thirdPartyInuryAndDeath: number;
     thirdPartyBoodilyInjury_DeathPerEvent: number;
     town: string;
 }

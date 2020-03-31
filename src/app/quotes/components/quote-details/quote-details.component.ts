@@ -1,9 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {
-    Quote,
-    MotorQuotationModel,
-    RiskModel
-} from '../../models/quote.model';
+import { Quote, MotorQuotationModel } from '../../models/quote.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Policy } from 'src/app/underwriting/models/policy.model';
 import { PoliciesService } from 'src/app/underwriting/services/policies.service';
@@ -13,6 +9,7 @@ import { ITimestamp } from 'src/app/claims/models/claim.model';
 import { IDebitNoteDTO } from '../../models/debit-note.dto';
 import { IQuoteDTO } from '../../models/quote.dto';
 import { ICertificateDTO } from '../../models/certificate.dto';
+import { combineLatest } from 'rxjs';
 
 @Component({
     selector: 'app-quote-details',
@@ -27,6 +24,9 @@ export class QuoteDetailsComponent implements OnInit {
     quotesList: MotorQuotationModel[] = [];
     quotesLoading = true;
 
+    isQuoteApproved = false;
+    approvingQuote = false;
+
     //quoteNumber
     quoteNumber: string;
     quote: MotorQuotationModel = new MotorQuotationModel();
@@ -37,6 +37,11 @@ export class QuoteDetailsComponent implements OnInit {
     //modal
     isVisible = false;
     isConfirmLoading = false;
+
+    // generated PDFs
+    policyCertificateURl: string = '';
+    debitNoteURL: string = '';
+    quoteURL: string = '';
 
     constructor(
         private formBuilder: FormBuilder,
@@ -81,10 +86,6 @@ export class QuoteDetailsComponent implements OnInit {
         });
     }
 
-    handlePayment() {
-        this.isVisible = true;
-    }
-
     handleOk(): void {
         this.isConfirmLoading = true;
         setTimeout(() => {
@@ -117,86 +118,101 @@ export class QuoteDetailsComponent implements OnInit {
     }
 
     generateDocuments(): void {
+        this.approvingQuote = true;
         const debitNote: IDebitNoteDTO = {
-            companyTelephone: '',
-            companyEmail: '',
-            vat: '',
-            pin: '',
+            companyTelephone: 'Joshua Silwembe',
+            companyEmail: 'joshua.silwembe@hobbiton.co.zm',
+            vat: '5%',
+            pin: '4849304930',
             todayDate: new Date(),
-            agency: '',
-            nameOfInsured: '',
-            addressOfInsured: '',
-            ref: '',
-            policyNumber: '',
-            endorsementNumber: '',
-            regarding: '',
-            classOfBusiness: '',
-            brokerRef: '',
+            agency: 'string',
+            nameOfInsured: 'Joshua Silwembe',
+            addressOfInsured: 'string',
+            ref: 'string',
+            policyNumber: 'string',
+            endorsementNumber: 'string',
+            regarding: 'string',
+            classOfBusiness: 'string',
+            brokerRef: 'string',
             fromDate: new Date(),
             toDate: new Date(),
-            currency: '',
+            currency: 'string',
             basicPremium: 0,
             insuredPremiumLevy: 0,
             netPremium: 0,
-            processedBy: ''
+            processedBy: 'string'
         };
 
         const certificate: ICertificateDTO = {
-            certificateNumber: '',
-            policyNumber: '',
-            clientName: '',
-            nameOfInsured: '',
-            address: '',
-            phone: '',
-            email: '',
-            coverType: '',
+            certificateNumber: 'string',
+            policyNumber: 'string',
+            clientName: 'string',
+            nameOfInsured: 'string',
+            address: 'string',
+            phone: 'string',
+            email: 'james@gmail.com',
+            coverType: 'string',
             startDate: new Date(),
             expiryDate: new Date(),
             sumInsured: 0,
-            regMark: '',
-            makeAndType: '',
-            engine: '',
-            chassisNumber: '',
-            yearOfManufacture: '',
-            color: '',
-            branch: '',
+            regMark: 'string',
+            makeAndType: 'string',
+            engine: 'string',
+            chassisNumber: 'string',
+            yearOfManufacture: 'string',
+            color: 'string',
+            branch: 'string',
             timeOfIssue: new Date(),
             dateOfIssue: new Date(),
             thirdPartyPropertyDamage: 0,
+            thirdPartyInuryAndDeath: 0,
             thirdPartyBoodilyInjury_DeathPerEvent: 0,
-            town: ''
+            town: 'string'
         };
 
-        const quoteDoc: IQuoteDTO = {
-            quoteNumber: '',
-            revisionNumber: '',
+        const quote: IQuoteDTO = {
+            quoteNumber: 'string',
+            revisionNumber: 'string',
             startDate: new Date(),
             endDate: new Date(),
-            client: '',
+            client: 'string',
             status: 'Confirmed',
-            preparedBy: '',
-            motorQuotationModelId: '',
+            preparedBy: 'string',
+            motorQuotationModelId: 'string',
             dateCreated: new Date(),
-            clientCode: '',
-            messageCode: '',
-            coverCode: '',
-            currency: '',
-            riskModelId: '',
-            regNumber: '',
-            vehicleMake: '',
-            vehicleModel: '',
-            engineNumber: '',
-            chassisNumber: '',
-            color: '',
+            clientCode: 'string',
+            messageCode: 'string',
+            coverCode: 'string',
+            currency: 'string',
+            riskModelId: 'stirng',
+            regNumber: 'string',
+            vehicleMake: 'string',
+            vehicleModel: 'string',
+            engineNumber: 'string',
+            chassisNumber: 'string',
+            color: 'string',
             estimatedValue: 0,
-            productType: null,
-            messageModelId: '',
-            description: '',
-            coverModelId: ''
+            productType: 'Commercial',
+            messageModelId: 'string',
+            description: 'string',
+            coverModelId: 'string'
         };
 
-        const debit = this.quotesService.generateDebitNote(debitNote);
-        const cert = this.quotesService.generateCertificate(certificate);
-        const quote = this.quotesService.generateQuote(quoteDoc);
+        const debit$ = this.quotesService.generateDebitNote(debitNote);
+
+        const cert$ = this.quotesService.generateCertificate(certificate);
+
+        const quote$ = this.quotesService.generateQuote(quote);
+
+        combineLatest([debit$, cert$, quote$]).subscribe(
+            ([debit, cert, quote]) => {
+                this.debitNoteURL = debit.Location;
+                this.policyCertificateURl = cert.Location;
+                this.quoteURL = quote.Location;
+
+                this.isQuoteApproved = true;
+                this.approvingQuote = false;
+            }
+        );
     }
 }

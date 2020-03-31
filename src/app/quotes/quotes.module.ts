@@ -14,6 +14,7 @@ import { QuoteDetailsComponent } from './components/quote-details/quote-details.
 
 import 'firebase/firestore';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { HttpClientModule } from '@angular/common/http';
 
 const routes: Routes = [
     {
@@ -45,6 +46,7 @@ const routes: Routes = [
         FormsModule,
         ReactiveFormsModule,
         PdfViewerModule,
+        HttpClientModule,
         RouterModule.forChild(routes)
     ],
     exports: [QuotesComponent, CreateQuoteComponent],

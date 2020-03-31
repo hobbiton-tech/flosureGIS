@@ -1,4 +1,8 @@
-<nz-spin [nzSize]="'large'" [nzSpinning]="false" [nzTip]="'Approving Quote...'">
+<nz-spin
+    [nzSize]="'large'"
+    [nzSpinning]="approvingQuote"
+    [nzTip]="'Approving Quote...'"
+>
     <div style="margin: 15px;">
         <nz-breadcrumb>
             <nz-breadcrumb-item>
@@ -13,11 +17,15 @@
         </nz-breadcrumb>
         <nz-page-header nzBackIcon [nzTitle]="title">
             <nz-page-header-extra>
-                <button nz-button nzType="primary" (click)="handlePayment()">
-                    Approve
+                <button
+                    nz-button
+                    nzType="primary"
+                    (click)="generateDocuments()"
+                >
+                    {{ isQuoteApproved ? 'Receipt' : 'Approve' }}
                 </button>
                 <button
-                    *ngIf="!isEditmode"
+                    *ngIf="!isEditmode && !isQuoteApproved"
                     nz-button
                     nzType="primary"
                     (click)="isEditmode = true"
@@ -50,7 +58,7 @@
                                 <input
                                     nz-input
                                     [disabled]="!isEditmode"
-                                    [ngModel]="quote.client"
+                                    [ngModel]="quote.clientCode"
                                     formControlName="client"
                                 />
                             </nz-form-control>
@@ -148,7 +156,7 @@
                 </nz-table>
             </div>
         </nz-card>
-        <nz-card>
+        <nz-card *ngIf="isQuoteApproved">
             <nz-divider
                 [nzText]="'Documents'"
                 [nzOrientation]="'left'"
@@ -157,7 +165,7 @@
                 <div nz-col [nzSpan]="8">
                     <nz-card nzTitle="Certificate" [nzExtra]="expansionView">
                         <pdf-viewer
-                            [src]="'/assets/docs/AnnualFinancialSample.pdf'"
+                            [src]="policyCertificateURl"
                             [original-size]="false"
                         ></pdf-viewer>
                     </nz-card>
@@ -165,7 +173,7 @@
                 <div nz-col [nzSpan]="8">
                     <nz-card nzTitle="Debit Note" [nzExtra]="expansionView">
                         <pdf-viewer
-                            [src]="'/assets/docs/AnnualFinancialSample.pdf'"
+                            [src]="debitNoteURL"
                             [original-size]="false"
                         ></pdf-viewer>
                     </nz-card>
@@ -176,7 +184,7 @@
                         [nzExtra]="expansionView"
                     >
                         <pdf-viewer
-                            [src]="'/assets/docs/AnnualFinancialSample.pdf'"
+                            [src]="quoteURL"
                             [original-size]="false"
                         ></pdf-viewer>
                     </nz-card>
@@ -254,13 +262,22 @@
         <span style="margin-right: 8px;"
             >Quote Number: {{ quote.quoteNumber }}</span
         >
-        <nz-tag [nzColor]="'orange'">Not Approved</nz-tag>
+        <nz-tag [nzColor]="isQuoteApproved ? 'blue' : 'orange'">
+            {{ isQuoteApproved ? 'Approved' : 'Pending Approval' }}
+        </nz-tag>
     </div>
 </ng-template>
 
 <ng-template #expansionView>
     <div>
-        <button nz-button nzType="default">View</button>
-        <button nz-button nzType="default">Print</button>
+        <button
+            nz-button
+            nzType="primary"
+            nzSize="small"
+            style="margin-right: 5px;"
+        >
+            View
+        </button>
+        <button nz-button nzType="default" nzSize="small">Print</button>
     </div>
 </ng-template>

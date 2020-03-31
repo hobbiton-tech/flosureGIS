@@ -13,11 +13,20 @@ import { IQuoteDTO } from '../models/quote.dto';
 import { IDebitNoteDTO } from '../models/debit-note.dto';
 import { ICertificateDTO } from '../models/certificate.dto';
 import { IReceiptDTO } from '../models/receipt.dto';
+import { HttpClient } from '@angular/common/http';
 
 export interface IQuoteDocument {
     clientID: string;
     receiptNumber: string;
     documentUrl: string;
+}
+
+export interface IAmazonS3Result {
+    Etag: string;
+    Location: string;
+    key: string;
+    Key: string;
+    Bucket: string;
 }
 
 @Injectable({
@@ -39,7 +48,7 @@ export class QuotesService {
     private riskCollection: AngularFirestoreCollection<RiskModel>;
     risks: Observable<RiskModel[]>;
     risk: Observable<RiskModel>;
-    constructor(private firebase: AngularFirestore) {
+    constructor(private firebase: AngularFirestore, private http: HttpClient) {
         this.motorQuoteCollection = firebase.collection<MotorQuotationModel>(
             'mortor_quotations'
         );
@@ -68,13 +77,9 @@ export class QuotesService {
             await this.motorQuoteCollection
                 .add(quotation)
                 .then(mess => {
-                    // view message
-                    console.log('<========Qoutation Details==========>');
-
                     console.log(quotation);
                 })
                 .catch(err => {
-                    console.log('<========Qoutation Error Details==========>');
                     console.log(err);
                 });
         });
@@ -86,13 +91,9 @@ export class QuotesService {
             this.riskCollection
                 .add(risk)
                 .then(mess => {
-                    // view message
-                    console.log('<========Risk Details==========>');
-
                     console.log(risk);
                 })
                 .catch(err => {
-                    console.log('<========Risk Error Details==========>');
                     console.log(err);
                 });
         });
@@ -106,18 +107,13 @@ export class QuotesService {
             .get()
             .then(querySnapshot => {
                 querySnapshot.forEach(doc => {
-                    // doc.data() is never undefined for query doc snapshots
-                    console.log('<============Quote Data=============>');
                     console.log(doc.data());
                 });
             })
             .catch(error => {
                 console.log('Error getting documents: ', error);
             });
-        // return this.risks.pipe(map(x => x.find(y => y.qouteNumber === quoteNumber)));
     }
-
-    // get risks
 
     getRisks(): Observable<RiskModel[]> {
         return this.risks;
@@ -136,7 +132,6 @@ export class QuotesService {
 
     // Genereating quote number
     generateQuoteNumber(brokerCode: string, totalQuotes: number) {
-        const brokerCod = brokerCode;
         const today = new Date();
         const dateString: string =
             today
@@ -154,19 +149,31 @@ export class QuotesService {
         return this.quotations;
     }
 
-    generateQuote(dto: IQuoteDTO): Observable<IQuoteDocument> {
-        return null;
+    generateQuote(dto: IQuoteDTO): Observable<IAmazonS3Result> {
+        return this.http.post<IAmazonS3Result>(
+            'https://flosure-pdf-service.herokuapp.com/quotation',
+            dto
+        );
     }
 
-    generateDebitNote(dto: IDebitNoteDTO): Observable<IQuoteDocument> {
-        return null;
+    generateDebitNote(dto: IDebitNoteDTO): Observable<IAmazonS3Result> {
+        return this.http.post<IAmazonS3Result>(
+            'https://flosure-pdf-service.herokuapp.com/debit-note',
+            dto
+        );
     }
 
-    generateCertificate(dto: ICertificateDTO): Observable<IQuoteDocument> {
-        return null;
+    generateCertificate(dto: ICertificateDTO): Observable<IAmazonS3Result> {
+        return this.http.post<IAmazonS3Result>(
+            'https://flosure-pdf-service.herokuapp.com/certificate',
+            dto
+        );
     }
 
-    generateReceipt(dto: IReceiptDTO): Observable<IQuoteDocument> {
-        return null;
+    generateReceipt(dto: IReceiptDTO): Observable<IAmazonS3Result> {
+        return this.http.post<IAmazonS3Result>(
+            'https://flosure-pdf-service.herokuapp.com/reciept',
+            dto
+        );
     }
 }
