@@ -20,7 +20,7 @@
         <nz-page-header
             (nzBack)="goToClientsList()"
             nzBackIcon
-            nzTitle="Policy Number: HFB-489384"
+            nzTitle="Policy Number: {{policyData.policyNumber}}"
             [nzSubtitle]="policyData.client"
         >
             <nz-page-header-extra>
@@ -221,12 +221,12 @@
                                 formControlName="currency"
                             >
                                 <nz-option
-                                    nzValue="currency 1"
-                                    nzLabel="currency 1"
+                                    nzValue="Dollar"
+                                    nzLabel="Dollar"
                                 ></nz-option>
                                 <nz-option
-                                    nzValue="currency 2"
-                                    nzLabel="currency 2"
+                                    nzValue="ZMW"
+                                    nzLabel="ZMW"
                                 ></nz-option>
                             </nz-select>
                         </nz-form-control>
@@ -256,29 +256,6 @@
                                 <nz-option nzValue="2" nzLabel="2"></nz-option>
                                 <nz-option nzValue="3" nzLabel="3"></nz-option>
                                 <nz-option nzValue="4" nzLabel="4"></nz-option>
-                            </nz-select>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col nzSpan="12">
-                    <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired
-                            >Product</nz-form-label
-                        >
-                        <nz-form-control nzSpan="17">
-                            <nz-select
-                                nzPlaceHolder="Motor Comprehensive"
-                                [nzDisabled]="!isEditmode"
-                                formControlName="product"
-                            >
-                                <nz-option
-                                    nzValue="type 1"
-                                    nzLabel="type 1"
-                                ></nz-option>
-                                <nz-option
-                                    nzValue="type 2"
-                                    nzLabel="type 2"
-                                ></nz-option>
                             </nz-select>
                         </nz-form-control>
                     </nz-form-item>
@@ -354,7 +331,7 @@
     <nz-card>
         <nz-divider nzText="Risk Details" nzOrientation="left"></nz-divider>
         <div style="margin-top:20px">
-            <nz-table #risksTable [nzData]="policy" nzSize="small">
+            <nz-table #risksTable [nzData]="displayPolicy.risks" nzSize="small">
                 <thead>
                     <tr>
                         <th>Insurance Type</th>
@@ -370,15 +347,15 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let policy of risksTable.data">
-                        <td>{{ policy.risk.insuranceType }}</td>
-                        <td>{{ policy.risk.regNumber }}</td>
-                        <td>{{ policy.risk.vehicleMake }}</td>
-                        <td>{{ policy.risk.vehicleModel }}</td>
-                        <td>{{ policy.risk.engineNumber }}</td>
-                        <td>{{ policy.risk.chassisNumber }}</td>
-                        <td>{{ policy.risk.color }}</td>
-                        <td>{{ policy.risk.productType }}</td>
-                        <td>{{ policy.risk.estimatedValue }}</td>
+                        <td>{{ policy.insuranceType }}</td>
+                        <td>{{ policy.regNumber }}</td>
+                        <td>{{ policy.vehicleMake }}</td>
+                        <td>{{ policy.vehicleModel }}</td>
+                        <td>{{ policy.engineNumber }}</td>
+                        <td>{{ policy.chassisNumber }}</td>
+                        <td>{{ policy.color }}</td>
+                        <td>{{ policy.productType }}</td>
+                        <td>{{ policy.estimatedValue }}</td>
                     </tr>
                 </tbody>
             </nz-table>

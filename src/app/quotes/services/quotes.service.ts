@@ -43,20 +43,16 @@ export class QuotesService {
             quotation.id = v4();
 
             quotation.quoteNumber = this.generateQuoteNumber(
-                'BRaa',
+                'BRAA',
                 quotations.length
             );
 
             await this.motorQuoteCollection
-                .add(quotation)
+            .doc(quotation.id)
+            .set(quotation)
                 .then(mess => {
-                    // view message
-                    console.log('<========Qoutation Details==========>');
-
-                    console.log(quotation);
                 })
                 .catch(err => {
-                    console.log('<========Qoutation Error Details==========>');
                     console.log(err);
                 });
         });

@@ -47,6 +47,7 @@ export class QuotesComponent implements OnInit {
             || quote.clientCode.toLowerCase().includes(value.toLowerCase())
             || quote.startDate.toString().toLowerCase().includes(value.toLowerCase())
             || quote.endDate.toString().toLowerCase().includes(value.toLowerCase())
+            || quote.status.toString().toLowerCase().includes(value.toLowerCase())
             );
 
         })

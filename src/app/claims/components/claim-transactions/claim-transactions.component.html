@@ -67,9 +67,9 @@
                       <td>{{claim.policyNumber }}</td>
                       <td>{{claim.risk}}</td>
                       <td>{{claim.activity}}</td>
-        	            <td>{{claim.lossDate.seconds | date}}</td>
+        	            <td>{{claim.lossDate.seconds * 1000 | date}}</td>
         	            <td>{{claim.status }}</td>
-        	            <td>{{claim.notificationDate.seconds | date}}</td>
+        	            <td>{{claim.notificationDate.seconds * 1000 | date}}</td>
         	            <td>{{claim.bookedBy}}</td>
         	        </tr>
         	    </tbody>

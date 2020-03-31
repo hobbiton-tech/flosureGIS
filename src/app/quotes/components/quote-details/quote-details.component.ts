@@ -17,13 +17,14 @@ export class QuoteDetailsComponent implements OnInit {
 
   //quotesLists 
   quotesList: MotorQuotationModel[];
-  risks: RiskModel[];
+  risks: RiskModel[] = [];
 
   quoteData: MotorQuotationModel = new MotorQuotationModel();
 
   //quoteNumber
   quoteNumber: string;
   quote: MotorQuotationModel;
+  displayQuote: MotorQuotationModel;
 
   selectedQuote:Quote;
   isEditmode = false;
@@ -31,6 +32,8 @@ export class QuoteDetailsComponent implements OnInit {
   //modal
   isVisible = false;
   isConfirmLoading = false;
+
+  searchString: string;
 
   constructor(
      private formBuilder: FormBuilder,
@@ -55,24 +58,18 @@ export class QuoteDetailsComponent implements OnInit {
         this.quoteData = quotes.filter(x => x.quoteNumber === this.quoteNumber)[0];
         this.quotesList = quotes;
         this.quote = this.quotesList.filter(x => x.quoteNumber === this.quoteNumber)[0];
-        console.log(this.quotesList);
-        console.log(this.quoteData);
+        this.displayQuote = this.quote;
       })
     })
+
+    
 
     this.quoteDetailsForm = this.formBuilder.group({
       client: ['', Validators.required],
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
       currency: ['', Validators.required],
-      product: ['', Validators.required],
-      model: ['', Validators.required],
-      color: ['', Validators.required],
-      chassisNumber: ['', Validators.required],
-      regNumber: ['', Validators.required],
-      make: ['', Validators.required],
-      type: ['', Validators.required],
-      engineNumber: ['', Validators.required],
+      productType: ['', Validators.required],
       quater: ['', Validators.required],
       town: ['', Validators.required],
       preparedBy: ['', Validators.required],
@@ -87,6 +84,7 @@ export class QuoteDetailsComponent implements OnInit {
       this.quoteDetailsForm.get('currency').setValue(this.quoteData.currency);
       this.quoteDetailsForm.get('startDate').setValue(this.quoteData.startDate);
       this.quoteDetailsForm.get('endDate').setValue(this.quoteData.endDate);
+      this.quoteDetailsForm.get('town').setValue(this.quoteData.town);
     })
   }
 
@@ -105,7 +103,10 @@ export class QuoteDetailsComponent implements OnInit {
 
     console.log(this.quoteDetailsForm.value);
     //push to convert quote to policy and policies collection
-    const policy = this.quoteDetailsForm.value as Policy;
+    const policy: Policy = {
+      ...this.quoteDetailsForm.value,
+      risks: this.quoteData.risks
+    };
     this.policiesService.addPolicy(policy);
 
    
@@ -114,5 +115,23 @@ export class QuoteDetailsComponent implements OnInit {
   handleCancel(): void {
     this.isVisible = false;
   }
+
+  //filter by search
+  search(value: string): void {
+    if (value === '' || !value) {
+        this.displayQuote = this.quote;
+    }
+
+    this.displayQuote.risks = this.quote.risks.filter(quote => {   
+            return (quote.insuranceType.toLowerCase().includes(value.toLowerCase())
+        || quote.regNumber.toLowerCase().includes(value.toLowerCase()) 
+        || quote.chassisNumber.toLowerCase().includes(value.toLowerCase())
+        || quote.vehicleMake.toLowerCase().includes(value.toLowerCase())
+        || quote.vehicleModel.toLowerCase().includes(value.toLowerCase())
+        || quote.engineNumber.toLowerCase().includes(value.toLowerCase())
+        || quote.productType.toLowerCase().includes(value.toLowerCase())
+        || quote.color.toLowerCase().includes(value.toLowerCase()));
+    });
+}
 
 }

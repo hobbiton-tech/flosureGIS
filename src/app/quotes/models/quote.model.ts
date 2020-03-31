@@ -1,3 +1,5 @@
+
+
 export class Quote {
     quoteNumber: number;
     revisionNumber: number;
@@ -11,16 +13,17 @@ export class Quote {
 
 export class MotorQuotationModel {
     id: string;
+    user: string;
     quoteNumber: string;
-    dateCreated: Date;
+    dateCreated: Date | ITimestamp;
     clientCode: string;
     messageCode: string;
     coverCode: string;
     town: string;
     currency: string;
     risks: RiskModel[];
-    startDate: Date;
-    endDate: Date;
+    startDate: Date | ITimestamp;
+    endDate: Date | ITimestamp;
     status: QuoteStatus;
 }
 
@@ -46,6 +49,11 @@ export class CoverModel {
     id: string;
     coverCode: string;
     description: string;
+}
+
+export interface ITimestamp {
+    seconds: number;
+    milliseconds: number;
 }
 
 export type ProductType = 'Private' | 'Commercial' | 'Bus/Taxi';

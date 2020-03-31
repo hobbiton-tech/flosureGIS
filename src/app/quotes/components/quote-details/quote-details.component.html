@@ -43,6 +43,14 @@
                                 </nz-select>
                             </nz-form-control>
                         </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label nzRequired nzSpan="7"
+                                >Town</nz-form-label
+                            >
+                            <nz-form-control nzSpan="17">
+                                <input nz-input [disabled]="!isEditmode" formControlName="town" />
+                            </nz-form-control>
+                        </nz-form-item>
                 </div>
                 <div nz-col nzSpan="12">
                     <nz-form-item>
@@ -147,8 +155,22 @@
                 </div>
             </div>
         </form> -->
-        <div style="margin-top:20px">
-                <nz-table #risksTable [nzData]="quote.risks" nzSize="small">
+        <div style="margin-bottom: 20px; margin-top: 20px">
+            <div style="margin-bottom: 20px; margin-top: 20px; width: 50%">
+            <nz-input-group [nzSuffix]="suffixIconSearch">
+                <input
+                    type="text"
+                    nz-input
+                    placeholder="Search by insurance type, vehicle make, vehicle model, engine number, chassis number"
+                    [(ngModel)]="searchString"
+                    (ngModelChange)="search($event)"
+                />
+            </nz-input-group>
+            <ng-template #suffixIconSearch>
+                <i nz-icon nzType="search"></i>
+            </ng-template>
+        </div>
+                <nz-table #risksTable [nzData]="displayQuote.risks" nzSize="small">
                         <thead>
                             <tr>
                                 <th>Insurance Type</th>
@@ -172,7 +194,7 @@
                                 <td>{{quote.chassisNumber}}</td>
                                 <td>{{quote.color}}</td>
                                 <td>{{quote.productType}}</td>
-                                <td>{{quote.estimatedValue}}</td>
+                                <td>{{quote.estimatedValue | number}}</td>
                             </tr>
                         </tbody>
                     </nz-table></div>
