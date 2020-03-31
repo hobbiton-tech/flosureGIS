@@ -32,7 +32,7 @@
                 [nzExtra]="aPolicies"
                 [nzHoverable]="true"
             >
-                <nz-statistic [nzValueTemplate]="policiesStats"></nz-statistic>
+                <nz-statistic [nzValueTemplate]="activePolicy"></nz-statistic>
                 <ng-template #aPolicies>
                     <a routerLink="/flosure/underwriting/policies">View>></a>
                 </ng-template>
@@ -42,11 +42,11 @@
     <div nz-row [nzGutter]="8" style="padding-top: 10px">
         <div nz-col [nzSpan]="8">
             <nz-card
-                [nzTitle]="'Expiring Policies'"
+                [nzTitle]="'Expired Policies'"
                 [nzExtra]="ePolicies"
                 [nzHoverable]="true"
             >
-                <nz-statistic [nzValueTemplate]="policiesStats"></nz-statistic>
+                <nz-statistic [nzValueTemplate]="expiredPolicy"></nz-statistic>
                 <ng-template #ePolicies>
                     <a routerLink="/flosure/underwriting/policies">View>></a>
                 </ng-template>
@@ -58,16 +58,14 @@
                 [nzExtra]="tPolicies"
                 [nzHoverable]="true"
             >
-                <nz-statistic
-                    [nzValue]="commissionEarned | number"
-                ></nz-statistic>
+                <nz-statistic [nzValueTemplate]="policiesStats"></nz-statistic>
                 <ng-template #tPolicies>
                     <a routerLink="/flosure/underwriting/policies">View>></a>
                 </ng-template>
             </nz-card>
         </div>
         <div nz-col [nzSpan]="8">
-            <nz-card [nzTitle]="'Commission Earned (ZMK)'">
+            <nz-card [nzTitle]="'Premiums Earned (ZMK)'">
                 <nz-statistic
                     [nzValue]="commissionEarned | number"
                 ></nz-statistic>
@@ -211,5 +209,23 @@
     </div>
     <div *ngIf="!policiesLoading">
         {{ policiesCount | number }}
+    </div>
+</ng-template>
+
+<ng-template #activePolicy>
+    <div *ngIf="policiesLoading">
+        <nz-spin nzSimple></nz-spin>
+    </div>
+    <div *ngIf="!policiesLoading">
+        {{ activePolices | number }}
+    </div>
+</ng-template>
+
+<ng-template #expiredPolicy>
+    <div *ngIf="policiesLoading">
+        <nz-spin nzSimple></nz-spin>
+    </div>
+    <div *ngIf="!policiesLoading">
+        {{ inactivePolicies | number }}
     </div>
 </ng-template>

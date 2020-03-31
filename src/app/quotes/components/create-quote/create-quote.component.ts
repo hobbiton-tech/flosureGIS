@@ -7,7 +7,6 @@ import {
 } from '@angular/forms';
 import { StepperService } from 'src/app/quotes/services/stepper.service';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { QuotesService } from '../../services/quotes.service';
 import { ClientsService } from 'src/app/clients/services/clients.service';
 import {
@@ -19,7 +18,7 @@ import {
     Quote,
     MotorQuotationModel
 } from '../../models/quote.model';
-import { map, tap, filter, scan, retry, catchError } from 'rxjs/operators';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
     selector: 'app-create-quote',
@@ -32,8 +31,10 @@ export class CreateQuoteComponent implements OnInit {
         private stepperService: StepperService,
         private readonly router: Router,
         private readonly quoteService: QuotesService,
-        private readonly clientsService: ClientsService
+        private readonly clientsService: ClientsService,
+        private message: NzMessageService
     ) {}
+    validateRiskThirdPartyForm: FormGroup;
     motor: any;
     // Decleration
     quoteForm: FormGroup;
@@ -55,6 +56,15 @@ export class CreateQuoteComponent implements OnInit {
     endOpen = false;
 
     listOfControl: Array<{ id: number; controlInstance: string }> = [];
+
+    submitForm(): void {
+        for (const i in this.validateRiskThirdPartyForm.controls) {
+            this.validateRiskThirdPartyForm.controls[i].markAsDirty();
+            this.validateRiskThirdPartyForm.controls[
+                i
+            ].updateValueAndValidity();
+        }
+    }
 
     compareFn = (o1: any, o2: any) =>
         o1 && o2 ? o1.value === o2.value : o1 === o2;
@@ -109,28 +119,27 @@ export class CreateQuoteComponent implements OnInit {
 
         // Comprehensive Form
         this.riskComprehensiveForm = this.formBuilder.group({
-            registrationNumber: ['', Validators.required],
+            regNumber: ['', Validators.required],
             vehicleMake: ['', Validators.required],
             vehicleModel: ['', Validators.required],
             engineNumber: ['', Validators.required],
-            chasisNumber: ['', Validators.required],
+            chassisNumber: ['', Validators.required],
             color: ['', Validators.required],
             estimatedValue: ['', Validators.required],
             productType: ['', Validators.required],
-            insuranceType: ['Comprehensive', Validators.required]
+            insuranceType: ['Comprehensive']
         });
 
         // Third Party Form
         this.riskThirdPartyForm = this.formBuilder.group({
-            registrationNumber: ['', Validators.required],
-            vehicleMake: ['', Validators.required],
-            vehicleModel: ['', Validators.required],
-            engineNumber: ['', Validators.required],
-            chasisNumber: ['', Validators.required],
-            color: ['', Validators.required],
-            estimatedValue: ['', Validators.required],
-            productType: ['', Validators.required],
-            insuranceType: ['ThirdParty', Validators.required]
+            regNumber: ['', [Validators.required]],
+            vehicleMake: ['', [Validators.required]],
+            vehicleModel: ['', [Validators.required]],
+            engineNumber: ['', [Validators.required]],
+            chassisNumber: ['', [Validators.required]],
+            color: ['', [Validators.required]],
+            productType: ['', [Validators.required]],
+            insuranceType: ['ThirdParty']
         });
     }
 
@@ -161,6 +170,15 @@ export class CreateQuoteComponent implements OnInit {
             ...this.quoteForm.value,
             risks: this.risks
         };
-        this.quoteService.addMotorQuotation(quote);
+        console.log('=======Full Quotation=======');
+        console.log(quote);
+        this.quoteService
+            .addMotorQuotation(quote)
+            .then(success => {
+                this.message.success('Quotation Successfully created');
+            })
+            .catch(err => {
+                this.message.error('Quotation Creation Failed');
+            });
     }
 }

@@ -10,70 +10,68 @@ import { generateRelationshipTypes } from 'src/app/settings/data/relationship-ty
 import { generateSectors } from 'src/app/settings/data/sector.data';
 
 @Component({
-  selector: 'app-organizational-setups',
-  templateUrl: './organizational-setups.component.html',
-  styleUrls: ['./organizational-setups.component.scss']
+    selector: 'app-organizational-setups',
+    templateUrl: './organizational-setups.component.html',
+    styleUrls: ['./organizational-setups.component.scss']
 })
 export class OrganizationalSetupsComponent implements OnInit {
-  currencyList = generateCurrency();
-  clientList = generateClients();
-  accountList = generateAccounts();
-  account = createAccount();
-  accountTypes = generateAccountTypes();
-  paymentModes = generatePaymentModes();
-  relationshipTypes = generateRelationshipTypes();
-  sectorsList = generateSectors();
+    currencyList = [];
+    clientList = [];
+    accountList = [];
+    account = [];
+    accountTypes = [];
+    paymentModes = [];
+    relationshipTypes = [];
+    sectorsList = [];
 
-  
-  newAccountTypeFormDrawerVisible = false;
-  newAccountFormDrawerVisible = false;
-  newClientTypeFormDrawerVisible = false;
-  newCurrencyFormDrawerVisible = false;
-  newPaymentModeFormDrawerVisible = false;
-  newRelationshipTypeFormDrawerVisible = false;
-  newSectorFormDrawerVisible = false;
+    newAccountTypeFormDrawerVisible = false;
+    newAccountFormDrawerVisible = false;
+    newClientTypeFormDrawerVisible = false;
+    newCurrencyFormDrawerVisible = false;
+    newPaymentModeFormDrawerVisible = false;
+    newRelationshipTypeFormDrawerVisible = false;
+    newSectorFormDrawerVisible = false;
 
+    accountsDrawerVisible = false;
+    selectedAccount: IAccount;
 
-  accountsDrawerVisible = false;
-  selectedAccount: IAccount;
+    constructor() {}
 
-  constructor() { }
+    ngOnInit(): void {
+        this.selectedAccount = this.accountList[0];
+        console.log(this.selectedAccount);
+    }
 
-  ngOnInit(): void {
-    this.selectedAccount = this.accountList[0];
-    console.log(this.selectedAccount);
-  }
+    openAccountsDrawer(account: IAccount) {
+        this.selectedAccount = account;
+        this.accountsDrawerVisible = true;
+    }
 
-  openAccountsDrawer(account: IAccount) {
-   this.selectedAccount = account;
-   this.accountsDrawerVisible = true; 
-  }
+    openAccountTypeFormDrawer() {
+        this.newAccountTypeFormDrawerVisible = true;
+    }
 
-  openAccountTypeFormDrawer() {
-    this.newAccountTypeFormDrawerVisible = true;
-  }
+    openAccountFormDrawer() {
+        this.newAccountFormDrawerVisible = true;
+    }
 
-  openAccountFormDrawer() {
-    this.newAccountFormDrawerVisible = true;
-  }
+    openClientTypeFormDrawer() {
+        this.newClientTypeFormDrawerVisible = true;
+    }
 
-  openClientTypeFormDrawer() {
-    this.newClientTypeFormDrawerVisible = true;
-  }
+    openCurrencyFormDrawer() {
+        this.newCurrencyFormDrawerVisible = true;
+    }
 
-  openCurrencyFormDrawer() {
-    this.newCurrencyFormDrawerVisible = true;
-  }
+    openPaymentModeFormDrawer() {
+        this.newPaymentModeFormDrawerVisible = true;
+    }
 
-  openPaymentModeFormDrawer() {
-    this.newPaymentModeFormDrawerVisible = true;
-  }
+    openRelationshipTypeFormDrawer() {
+        this.newRelationshipTypeFormDrawerVisible = true;
+    }
 
-  openRelationshipTypeFormDrawer() {
-    this.newRelationshipTypeFormDrawerVisible = true;
-  }
-
-  openSectorFormDrawer() {
-    this.newSectorFormDrawerVisible = true;
-  }
+    openSectorFormDrawer() {
+        this.newSectorFormDrawerVisible = true;
+    }
 }

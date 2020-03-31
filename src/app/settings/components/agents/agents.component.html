@@ -1,0 +1,88 @@
+<div style="margin: 20px;">
+    <nz-breadcrumb>
+        <nz-breadcrumb-item>
+            Settings
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            Agents
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <nz-card [nzBordered]="false" style="margin-top: 20px">
+        <nz-tabset>
+            <nz-tab nzTitle="Agents">
+                <nz-card [nzBordered]="false">
+                    <div style="margin-bottom: 10px;">
+                        <div nz-row [nzGutter]="24">
+                            <div nz-col nzSpan="12">
+                                <div style="width: 75%">
+                                    <nz-input-group
+                                        [nzSuffix]="suffixIconSearch"
+                                    >
+                                        <input
+                                            type="text"
+                                            nz-input
+                                            placeholder="Search by ID, name, date"
+                                        />
+                                    </nz-input-group>
+                                    <ng-template #suffixIconSearch>
+                                        <i nz-icon nzType="search"></i>
+                                    </ng-template>
+                                </div>
+                            </div>
+                            <div nz-col nzSpan="12">
+                                <button
+                                    nz-button
+                                    nzType="primary"
+                                    style="float: right"
+                                    (click)="openAddAgentsFormDrawer()"
+                                >
+                                    Add Agent
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <nz-table
+                        #agentsTable
+                        [nzData]="agentsList"
+                        [nzSize]="'small'"
+                        [nzBordered]="true"
+                        style="background-color: white;"
+                    >
+                        <thead>
+                            <tr>
+                                <th>Agent ID</th>
+                                <th>Agent Name</th>
+                                <th>Agent Email</th>
+                                <th>Agent Phone Number</th>
+                                <th>Date Created</th>
+                                <!-- <th>Action</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let agent of agentsTable.data">
+                                <td>{{ agent.agentID }}</td>
+                                <td>
+                                    {{ agent.firstName }} {{ agent.lastName }}
+                                </td>
+                                <td>{{ agent.email }}</td>
+                                <td>{{ agent.phone }}</td>
+                                <td>
+                                    {{
+                                        agent.dateCreated.seconds * 1000 | date
+                                    }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-card>
+            </nz-tab>
+        </nz-tabset>
+    </nz-card>
+</div>
+
+<app-add-agent
+    [isAddAgentsFormDrawerVisible]="addAgentsFormDrawerVisible"
+    (closeAddAgentsFormDrawerVisible)="addAgentsFormDrawerVisible = false"
+></app-add-agent>
