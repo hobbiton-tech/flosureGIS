@@ -1,549 +1,749 @@
 <div style="margin: 20px">
+    <nz-card>
+        <nz-tabset>
+            <nz-tab nzTitle="Products">
+                <nz-card>
+                    <div style="margin-bottom: 10px;">
+                        <div nz-row [nzGutter]="24">
+                            <div nz-col nzSpan="12">
+                                <div style="width: 75%">
+                                    <nz-input-group
+                                        [nzSuffix]="suffixIconSearch"
+                                    >
+                                        <input
+                                            type="text"
+                                            nz-input
+                                            placeholder="Search by product name, interface type"
+                                        />
+                                    </nz-input-group>
+                                    <ng-template #suffixIconSearch>
+                                        <i nz-icon nzType="search"></i>
+                                    </ng-template>
+                                </div>
+                            </div>
+                            <div nz-col nzSpan="12">
+                                <button
+                                    nz-button
+                                    nzType="primary"
+                                    style="float: right"
+                                >
+                                    Add New Product
+                                </button>
+                            </div>
+                        </div>
+                    </div>
 
-  <nz-card>
+                    <nz-table #productTable [nzData]="productsList">
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Policy Prefix</th>
+                                <th>Claim Prefix</th>
+                                <th>Min Premium</th>
+                                <th>Renewable</th>
+                                <th>Risk Note</th>
+                                <th>Interface Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let product of productTable.data">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-card>
 
-    <nz-tabset>
-      <nz-tab nzTitle="Products">
-        <nz-card>
+                <nz-card nzTitle="Product group" style="margin-top: 10px;">
+                    <div style="margin-bottom: 10px;">
+                        <div nz-row [nzGutter]="24">
+                            <div nz-col nzSpan="12">
+                                <div style="width: 75%">
+                                    <nz-input-group
+                                        [nzSuffix]="suffixIconSearch"
+                                    >
+                                        <input
+                                            type="text"
+                                            nz-input
+                                            placeholder="Search by group name, group type"
+                                        />
+                                    </nz-input-group>
+                                    <ng-template #suffixIconSearch>
+                                        <i nz-icon nzType="search"></i>
+                                    </ng-template>
+                                </div>
+                            </div>
+                            <div nz-col nzSpan="12">
+                                <button
+                                    nz-button
+                                    nzType="primary"
+                                    style="float: right"
+                                >
+                                    Add New Prduct Group
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <nz-table #productGroupTable [nzData]="productGroupList">
+                        <thead>
+                            <tr>
+                                <th>Group Name</th>
+                                <th>Group Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="
+                                    let product_group of productGroupTable.data
+                                "
+                            >
+                                <td>{{ product_group.groupName }}</td>
+                                <td>{{ product_group.groupType }}</td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-card>
 
-          <div style="margin-bottom: 10px;">
-            <div nz-row [nzGutter]="24">
-              <div nz-col nzSpan="12">
-                <div style="width: 75%">
-                  <nz-input-group [nzSuffix]="suffixIconSearch">
-                    <input type="text" nz-input placeholder="Search by product name, interface type" />
-                  </nz-input-group>
-                  <ng-template #suffixIconSearch>
-                    <i nz-icon nzType="search"></i>
-                  </ng-template>
-                </div>
-              </div>
-              <div nz-col nzSpan=12>
-                <button nz-button nzType="primary" style="float: right">Add New Product</button>
-              </div>
-            </div>
-          </div>
+                <nz-card nzTitle="Product class" style="margin-top: 10px;">
+                    <div style="margin-bottom: 10px;">
+                        <div nz-row [nzGutter]="24">
+                            <div nz-col nzSpan="12">
+                                <div style="width: 75%">
+                                    <nz-input-group
+                                        [nzSuffix]="suffixIconSearch"
+                                    >
+                                        <input
+                                            type="text"
+                                            nz-input
+                                            placeholder="Search by class ID, class Name"
+                                        />
+                                    </nz-input-group>
+                                    <ng-template #suffixIconSearch>
+                                        <i nz-icon nzType="search"></i>
+                                    </ng-template>
+                                </div>
+                            </div>
+                            <div nz-col nzSpan="12">
+                                <button
+                                    nz-button
+                                    nzType="primary"
+                                    style="float: right"
+                                >
+                                    Add New Product Class
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <nz-table #productClassTable [nzData]="productClassList">
+                        <thead>
+                            <tr>
+                                <th>Class ID</th>
+                                <th>Class Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="
+                                    let product_class of productClassTable.data
+                                "
+                            >
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-card>
 
-          <nz-table #productTable [nzData]="productsList">
-            <thead>
-              <tr>
-                <th>Product Name</th>
-                <th>Policy Prefix</th>
-                <th>Claim Prefix</th>
-                <th>Min Premium</th>
-                <th>Renewable</th>
-                <th>Risk Note</th>
-                <th>Interface Type</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let product of productTable.data">
-                <td>{{product.productName}}</td>
-                <td>{{product.policyPrefix}}</td>
-                <td>{{product.claimPrefix}}</td>
-                <td>{{product.minPremium}}</td>
-                <td>{{product.isRenewable ? 'Yes' : 'No'}}</td>
-                <td>{{product.riskNote}}</td>
-                <td>{{product.interfaceType}}</td>
-              </tr>
-            </tbody>
-          </nz-table>
-        </nz-card>
+                <nz-card nzTitle="Product Sub-class" style="margin-top: 10px;">
+                    <div style="margin-bottom: 10px;">
+                        <div nz-row [nzGutter]="24">
+                            <div nz-col nzSpan="12">
+                                <div style="width: 75%">
+                                    <nz-input-group
+                                        [nzSuffix]="suffixIconSearch"
+                                    >
+                                        <input
+                                            type="text"
+                                            nz-input
+                                            placeholder="Search by sub-class ID, sub-class Name"
+                                        />
+                                    </nz-input-group>
+                                    <ng-template #suffixIconSearch>
+                                        <i nz-icon nzType="search"></i>
+                                    </ng-template>
+                                </div>
+                            </div>
+                            <div nz-col nzSpan="12">
+                                <button
+                                    nz-button
+                                    nzType="primary"
+                                    style="float: right"
+                                >
+                                    Add New Product Subclass
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <nz-table
+                        #productSubClassTable
+                        [nzData]="productSubclassGroupList"
+                    >
+                        <thead>
+                            <tr>
+                                <th>Sub-class ID</th>
+                                <th>Sub-class Name</th>
+                                <th>Risk ID Format</th>
+                                <th>Is Unique</th>
+                                <th>Active Indicator</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="
+                                    let product_subclass of productSubClassTable.data
+                                "
+                            >
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-card>
+            </nz-tab>
 
-        <nz-card nzTitle="Product group" style="margin-top: 10px;">
-          <div style="margin-bottom: 10px;">
-            <div nz-row [nzGutter]="24">
-              <div nz-col nzSpan="12">
-                <div style="width: 75%">
-                  <nz-input-group [nzSuffix]="suffixIconSearch">
-                    <input type="text" nz-input placeholder="Search by group name, group type" />
-                  </nz-input-group>
-                  <ng-template #suffixIconSearch>
-                    <i nz-icon nzType="search"></i>
-                  </ng-template>
-                </div>
-              </div>
-              <div nz-col nzSpan=12>
-                <button nz-button nzType="primary" style="float: right">Add New Prduct Group</button>
-              </div>
-            </div>
-          </div>
-          <nz-table #productGroupTable [nzData]="productGroupList">
-            <thead>
-              <tr>
-                <th>Group Name</th>
-                <th>Group Type</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let product_group of productGroupTable.data">
-                <td>{{product_group.groupName}}</td>
-                <td>{{product_group.groupType}}</td>
-              </tr>
-            </tbody>
-          </nz-table>
-        </nz-card>
+            <nz-tab nzTitle="Covers">
+                <nz-card nzTitle="Cover Type" style="margin-top: 10px;">
+                    <div style="margin-bottom: 10px;">
+                        <div nz-row [nzGutter]="24">
+                            <div nz-col nzSpan="12">
+                                <div style="width: 75%">
+                                    <nz-input-group
+                                        [nzSuffix]="suffixIconSearch"
+                                    >
+                                        <input
+                                            type="text"
+                                            nz-input
+                                            placeholder="Search by ID, cover type name"
+                                        />
+                                    </nz-input-group>
+                                    <ng-template #suffixIconSearch>
+                                        <i nz-icon nzType="search"></i>
+                                    </ng-template>
+                                </div>
+                            </div>
+                            <div nz-col nzSpan="12">
+                                <button
+                                    nz-button
+                                    nzType="primary"
+                                    style="float: right"
+                                >
+                                    Add New Cover
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <nz-table #coverTypeTable [nzData]="coverTypesList">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Cover Type Name</th>
+                                <th>Default</th>
+                                <th>Min Premium</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let cover_type of coverTypeTable.data">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-card>
 
-        <nz-card nzTitle="Product class" style="margin-top: 10px;">
-          <div style="margin-bottom: 10px;">
-            <div nz-row [nzGutter]="24">
-              <div nz-col nzSpan="12">
-                <div style="width: 75%">
-                  <nz-input-group [nzSuffix]="suffixIconSearch">
-                    <input type="text" nz-input placeholder="Search by class ID, class Name" />
-                  </nz-input-group>
-                  <ng-template #suffixIconSearch>
-                    <i nz-icon nzType="search"></i>
-                  </ng-template>
-                </div>
-              </div>
-              <div nz-col nzSpan=12>
-                <button nz-button nzType="primary" style="float: right">Add New Product Class</button>
-              </div>
-            </div>
-          </div>
-          <nz-table #productClassTable [nzData]="productClassList">
-            <thead>
-              <tr>
-                <th>Class ID</th>
-                <th>Class Name</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let product_class of productClassTable.data">
-                <td>{{product_class.classId}}</td>
-                <td>{{product_class.className}}</td>
-              </tr>
-            </tbody>
-          </nz-table>
-        </nz-card>
+                <nz-card nzTitle="Cover Type Premium" style="margin-top: 10px;">
+                    <div style="margin-bottom: 10px;">
+                        <div nz-row [nzGutter]="24">
+                            <div nz-col nzSpan="12">
+                                <div style="width: 75%">
+                                    <nz-input-group
+                                        [nzSuffix]="suffixIconSearch"
+                                    >
+                                        <input
+                                            type="text"
+                                            nz-input
+                                            placeholder="Search by ID, item name, order"
+                                        />
+                                    </nz-input-group>
+                                    <ng-template #suffixIconSearch>
+                                        <i nz-icon nzType="search"></i>
+                                    </ng-template>
+                                </div>
+                            </div>
+                            <div nz-col nzSpan="12">
+                                <button
+                                    nz-button
+                                    nzType="primary"
+                                    style="float: right"
+                                >
+                                    Add New Cover Type Premium
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <nz-table
+                        #coverTypePremiumTable
+                        [nzData]="coverTypePremiumsList"
+                    >
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Item Name</th>
+                                <th>Order</th>
+                                <th>Mandatory</th>
+                                <th>Intergrated</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="
+                                    let cover_type_premium of coverTypePremiumTable.data
+                                "
+                            >
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-card>
+            </nz-tab>
 
-        <nz-card nzTitle="Product Sub-class" style="margin-top: 10px;">
-          <div style="margin-bottom: 10px;">
-            <div nz-row [nzGutter]="24">
-              <div nz-col nzSpan="12">
-                <div style="width: 75%">
-                  <nz-input-group [nzSuffix]="suffixIconSearch">
-                    <input type="text" nz-input placeholder="Search by sub-class ID, sub-class Name" />
-                  </nz-input-group>
-                  <ng-template #suffixIconSearch>
-                    <i nz-icon nzType="search"></i>
-                  </ng-template>
-                </div>
-              </div>
-              <div nz-col nzSpan=12>
-                <button nz-button nzType="primary" style="float: right">Add New Product Subclass</button>
-              </div>
-            </div>
-          </div>
-          <nz-table #productSubClassTable [nzData]="productSubclassGroupList">
-            <thead>
-              <tr>
-                <th>Sub-class ID</th>
-                <th>Sub-class Name</th>
-                <th>Risk ID Format</th>
-                <th>Is Unique</th>
-                <th>Active Indicator</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let product_subclass of productSubClassTable.data">
-                <td>{{product_subclass.subClassId}}</td>
-                <td>{{product_subclass.subClassName}}</td>
-                <td>{{product_subclass.riskIdFormat}}</td>
-                <td>{{product_subclass.isUnique ? 'Yes' : 'No'}}</td>
-                <td>{{product_subclass.activeIndicator}}</td>
-              </tr>
-            </tbody>
-          </nz-table>
-        </nz-card>
-      </nz-tab>
+            <nz-tab nzTitle="Perils">
+                <nz-card style="margin-top: 10px;">
+                    <div style="margin-bottom: 10px;">
+                        <div nz-row [nzGutter]="24">
+                            <div nz-col nzSpan="12">
+                                <div style="width: 75%">
+                                    <nz-input-group
+                                        [nzSuffix]="suffixIconSearch"
+                                    >
+                                        <input
+                                            type="text"
+                                            nz-input
+                                            placeholder="Search by peril ID, peril type"
+                                        />
+                                    </nz-input-group>
+                                    <ng-template #suffixIconSearch>
+                                        <i nz-icon nzType="search"></i>
+                                    </ng-template>
+                                </div>
+                            </div>
+                            <div nz-col nzSpan="12">
+                                <button
+                                    nz-button
+                                    nzType="primary"
+                                    style="float: right"
+                                >
+                                    Add New Peril
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <nz-table #perilTable [nzData]="perilsList">
+                        <thead>
+                            <tr>
+                                <th>Peril ID</th>
+                                <th>Peril Description</th>
+                                <th>Peril Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let peril of perilTable.data">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-card>
 
-      <nz-tab nzTitle="Covers">
-        <nz-card nzTitle="Cover Type" style="margin-top: 10px;">
-          <div style="margin-bottom: 10px;">
-            <div nz-row [nzGutter]="24">
-              <div nz-col nzSpan="12">
-                <div style="width: 75%">
-                  <nz-input-group [nzSuffix]="suffixIconSearch">
-                    <input type="text" nz-input placeholder="Search by ID, cover type name" />
-                  </nz-input-group>
-                  <ng-template #suffixIconSearch>
-                    <i nz-icon nzType="search"></i>
-                  </ng-template>
-                </div>
-              </div>
-              <div nz-col nzSpan=12>
-                <button nz-button nzType="primary" style="float: right">Add New Cover</button>
-              </div>
-            </div>
-          </div>
-          <nz-table #coverTypeTable [nzData]="coverTypesList">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Cover Type Name</th>
-                <th>Default</th>
-                <th>Min Premium</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let cover_type of coverTypeTable.data">
-                <td>{{cover_type.id}}</td>
-                <td>{{cover_type.coverTypeName}}</td>
-                <td>{{cover_type.isDefault ? 'Yes' : 'No'}}</td>
-                <td>{{cover_type.minPremium}}</td>
-              </tr>
-            </tbody>
-          </nz-table>
-        </nz-card>
+                <nz-card nzTitle="Perils Sub-class" style="margin-top: 10px;">
+                    <div style="margin-bottom: 10px;">
+                        <div nz-row [nzGutter]="24">
+                            <div nz-col nzSpan="12">
+                                <div style="width: 75%">
+                                    <nz-input-group
+                                        [nzSuffix]="suffixIconSearch"
+                                    >
+                                        <input
+                                            type="text"
+                                            nz-input
+                                            placeholder="Search by peril ID, peril type"
+                                        />
+                                    </nz-input-group>
+                                    <ng-template #suffixIconSearch>
+                                        <i nz-icon nzType="search"></i>
+                                    </ng-template>
+                                </div>
+                            </div>
+                            <div nz-col nzSpan="12">
+                                <button
+                                    nz-button
+                                    nzType="primary"
+                                    style="float: right"
+                                >
+                                    Add New Peril Subclass
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <nz-table #perilSubClassTable [nzData]="perilsSubclassList">
+                        <thead>
+                            <tr>
+                                <th>Peril ID</th>
+                                <th>Peril Type</th>
+                                <th>Dep On Loss Type</th>
+                                <th>Limit Description</th>
+                                <th>Depricit Percentage</th>
+                                <th>Mandatory</th>
+                                <th>Excess</th>
+                                <th>Excess Max</th>
+                                <th>Claim Excess Max</th>
+                                <th>Perils SI Limit</th>
+                                <th>Expire On Claim</th>
+                                <th>Person Limit</th>
+                                <th>Amount Limit</th>
+                                <th>Excess Type</th>
+                                <th>Excess Min</th>
+                                <th>Claim Excess Type</th>
+                                <th>Claim Excess Min</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="
+                                    let peril_subclass of perilSubClassTable.data
+                                "
+                            >
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-card>
+            </nz-tab>
 
-        <nz-card nzTitle="Cover Type Premium" style="margin-top: 10px;">
-          <div style="margin-bottom: 10px;">
-            <div nz-row [nzGutter]="24">
-              <div nz-col nzSpan="12">
-                <div style="width: 75%">
-                  <nz-input-group [nzSuffix]="suffixIconSearch">
-                    <input type="text" nz-input placeholder="Search by ID, item name, order" />
-                  </nz-input-group>
-                  <ng-template #suffixIconSearch>
-                    <i nz-icon nzType="search"></i>
-                  </ng-template>
-                </div>
-              </div>
-              <div nz-col nzSpan=12>
-                <button nz-button nzType="primary" style="float: right">Add New Cover Type Premium</button>
-              </div>
-            </div>
-          </div>
-          <nz-table #coverTypePremiumTable [nzData]="coverTypePremiumsList">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Item Name</th>
-                <th>Order</th>
-                <th>Mandatory</th>
-                <th>Intergrated</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let cover_type_premium of coverTypePremiumTable.data">
-                <td>{{cover_type_premium.id}}</td>
-                <td>{{cover_type_premium.itemName}}</td>
-                <td>{{cover_type_premium.order}}</td>
-                <td>{{cover_type_premium.isMandatory ? 'Yes' : 'No'}}</td>
-                <td>{{cover_type_premium.isIntegrated ? 'Yes' : 'No'}}</td>
-              </tr>
-            </tbody>
-          </nz-table>
-        </nz-card>
-      </nz-tab>
+            <nz-tab nzTitle="Endorsements">
+                <nz-card
+                    nzTitle="Endorsement Remarks"
+                    style="margin-top: 10px;"
+                >
+                    <div style="margin-bottom: 10px;">
+                        <div nz-row [nzGutter]="24">
+                            <div nz-col nzSpan="12">
+                                <div style="width: 75%">
+                                    <nz-input-group
+                                        [nzSuffix]="suffixIconSearch"
+                                    >
+                                        <input
+                                            type="text"
+                                            nz-input
+                                            placeholder="Search by remark ID"
+                                        />
+                                    </nz-input-group>
+                                    <ng-template #suffixIconSearch>
+                                        <i nz-icon nzType="search"></i>
+                                    </ng-template>
+                                </div>
+                            </div>
+                            <div nz-col nzSpan="12">
+                                <button
+                                    nz-button
+                                    nzType="primary"
+                                    style="float: right"
+                                >
+                                    Add New Remark
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <nz-table
+                        #endorsementsRemarksTable
+                        [nzData]="endorsementRemarksList"
+                    >
+                        <thead>
+                            <tr>
+                                <th>Remark ID</th>
+                                <th>Remark Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="
+                                    let endorsement of endorsementsRemarksTable.data
+                                "
+                            >
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-card>
+            </nz-tab>
 
-      <nz-tab nzTitle="Perils">
-        <nz-card style="margin-top: 10px;">
-          <div style="margin-bottom: 10px;">
-            <div nz-row [nzGutter]="24">
-              <div nz-col nzSpan="12">
-                <div style="width: 75%">
-                  <nz-input-group [nzSuffix]="suffixIconSearch">
-                    <input type="text" nz-input placeholder="Search by peril ID, peril type" />
-                  </nz-input-group>
-                  <ng-template #suffixIconSearch>
-                    <i nz-icon nzType="search"></i>
-                  </ng-template>
-                </div>
-              </div>
-              <div nz-col nzSpan=12>
-                <button nz-button nzType="primary" style="float: right">Add New Peril</button>
-              </div>
-            </div>
-          </div>
-          <nz-table #perilTable [nzData]="perilsList">
-            <thead>
-              <tr>
-                <th>Peril ID</th>
-                <th>Peril Description</th>
-                <th>Peril Type</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let peril of perilTable.data">
-                <td>{{peril.perilId}}</td>
-                <td>{{peril.perilDescription}}</td>
-                <td>{{peril.perilType}}</td>
-              </tr>
-            </tbody>
-          </nz-table>
-        </nz-card>
+            <nz-tab nzTitle="Clauses">
+                <nz-card style="margin-top: 10px;">
+                    <div style="margin-bottom: 10px;">
+                        <div nz-row [nzGutter]="24">
+                            <div nz-col nzSpan="12">
+                                <div style="width: 75%">
+                                    <nz-input-group
+                                        [nzSuffix]="suffixIconSearch"
+                                    >
+                                        <input
+                                            type="text"
+                                            nz-input
+                                            placeholder="Search by clause ID, clause type"
+                                        />
+                                    </nz-input-group>
+                                    <ng-template #suffixIconSearch>
+                                        <i nz-icon nzType="search"></i>
+                                    </ng-template>
+                                </div>
+                            </div>
+                            <div nz-col nzSpan="12">
+                                <button
+                                    nz-button
+                                    nzType="primary"
+                                    style="float: right"
+                                >
+                                    Add New Clause
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <nz-table #clausesTable [nzData]="clausesList">
+                        <thead>
+                            <tr>
+                                <th>Clause ID</th>
+                                <th>Clause Heading</th>
+                                <th>Clause Type</th>
+                                <th>Editable</th>
+                                <th>Clause Wording</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let clause of clausesTable.data">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-card>
 
-        <nz-card nzTitle="Perils Sub-class" style="margin-top: 10px;">
-          <div style="margin-bottom: 10px;">
-            <div nz-row [nzGutter]="24">
-              <div nz-col nzSpan="12">
-                <div style="width: 75%">
-                  <nz-input-group [nzSuffix]="suffixIconSearch">
-                    <input type="text" nz-input placeholder="Search by peril ID, peril type" />
-                  </nz-input-group>
-                  <ng-template #suffixIconSearch>
-                    <i nz-icon nzType="search"></i>
-                  </ng-template>
-                </div>
-              </div>
-              <div nz-col nzSpan=12>
-                <button nz-button nzType="primary" style="float: right">Add New Peril Subclass</button>
-              </div>
-            </div>
-          </div>
-          <nz-table #perilSubClassTable [nzData]="perilsSubclassList">
-            <thead>
-              <tr>
-                <th>Peril ID</th>
-                <th>Peril Type</th>
-                <th>Dep On Loss Type</th>
-                <th>Limit Description</th>
-                <th>Depricit Percentage</th>
-                <th>Mandatory</th>
-                <th>Excess</th>
-                <th>Excess Max</th>
-                <th>Claim Excess Max</th>
-                <th>Perils SI Limit</th>
-                <th>Expire On Claim</th>
-                <th>Person Limit</th>
-                <th>Amount Limit</th>
-                <th>Excess Type</th>
-                <th>Excess Min</th>
-                <th>Claim Excess Type</th>
-                <th>Claim Excess Min</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let peril_subclass of perilSubClassTable.data">
-                <td>{{peril_subclass.perilId}}</td>
-                <td>{{peril_subclass.perilType}}</td>
-                <td>{{peril_subclass.isDepOnLossType ? 'Yes' : 'No'}}</td>
-                <td>{{peril_subclass.limitDescription}}</td>
-                <td>{{peril_subclass.depricitPercent}}</td>
-                <td>{{peril_subclass.isMandatory ? 'Yes' : 'No'}}</td>
-                <td>{{peril_subclass.excess}}</td>
-                <td>{{peril_subclass.excessMax}}</td>
-                <td>{{peril_subclass.claimExcessMax}}</td>
-                <td>{{peril_subclass.perilSILimit}}</td>
-                <td>{{peril_subclass.isExpireOnClaim ? 'Yes' : 'No'}}</td>
-                <td>{{peril_subclass.personLimit}}</td>
-                <td>{{peril_subclass.amountLimit}}</td>
-                <td>{{peril_subclass.excessType}}</td>
-                <td>{{peril_subclass.excessMin}}</td>
-                <td>{{peril_subclass.claimExcessType}}</td>
-                <td>{{peril_subclass.claimExcessMin}}</td>
-              </tr>
-            </tbody>
-          </nz-table>
-        </nz-card>
-      </nz-tab>
+                <nz-card nzTitle="Clause Sub-class" style="margin-top: 10px;">
+                    <div style="margin-bottom: 10px;">
+                        <div nz-row [nzGutter]="24">
+                            <div nz-col nzSpan="12">
+                                <div style="width: 75%">
+                                    <nz-input-group
+                                        [nzSuffix]="suffixIconSearch"
+                                    >
+                                        <input
+                                            type="text"
+                                            nz-input
+                                            placeholder="Search by clause ID, clause type"
+                                        />
+                                    </nz-input-group>
+                                    <ng-template #suffixIconSearch>
+                                        <i nz-icon nzType="search"></i>
+                                    </ng-template>
+                                </div>
+                            </div>
+                            <div nz-col nzSpan="12">
+                                <button
+                                    nz-button
+                                    nzType="primary"
+                                    style="float: right"
+                                >
+                                    Add New Clause Subclass
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <nz-table
+                        #clauseSubclassTable
+                        [nzData]="clauseSubClassList"
+                    >
+                        <thead>
+                            <tr>
+                                <th>Clause ID</th>
+                                <th>Clause Heading</th>
+                                <th>Clause Type</th>
+                                <th>Editable</th>
+                                <th>Mandatory</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="
+                                    let clause_subclass of clauseSubclassTable.data
+                                "
+                            >
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-card>
+            </nz-tab>
 
-      <nz-tab nzTitle="Endorsements">
-        <nz-card nzTitle="Endorsement Remarks" style="margin-top: 10px;">
-          <div style="margin-bottom: 10px;">
-            <div nz-row [nzGutter]="24">
-              <div nz-col nzSpan="12">
-                <div style="width: 75%">
-                  <nz-input-group [nzSuffix]="suffixIconSearch">
-                    <input type="text" nz-input placeholder="Search by remark ID" />
-                  </nz-input-group>
-                  <ng-template #suffixIconSearch>
-                    <i nz-icon nzType="search"></i>
-                  </ng-template>
-                </div>
-              </div>
-              <div nz-col nzSpan=12>
-                <button nz-button nzType="primary" style="float: right">Add New Remark</button>
-              </div>
-            </div>
-          </div>
-          <nz-table #endorsementsRemarksTable [nzData]="endorsementRemarksList">
-            <thead>
-              <tr>
-                <th>Remark ID</th>
-                <th>Remark Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let endorsement of endorsementsRemarksTable.data">
-                <td>{{endorsement.remarkId}}</td>
-                <td>{{endorsement.remarkDescription}}</td>
-              </tr>
-            </tbody>
-          </nz-table>
-        </nz-card>
-      </nz-tab>
+            <nz-tab nzTitle="Revenue">
+                <nz-card nzTitle="Revenue Item" style="margin-top: 10px;">
+                    <div style="margin-bottom: 10px;">
+                        <div nz-row [nzGutter]="24">
+                            <div nz-col nzSpan="12">
+                                <div style="width: 75%">
+                                    <nz-input-group
+                                        [nzSuffix]="suffixIconSearch"
+                                    >
+                                        <input
+                                            type="text"
+                                            nz-input
+                                            placeholder="Search by itme ID"
+                                        />
+                                    </nz-input-group>
+                                    <ng-template #suffixIconSearch>
+                                        <i nz-icon nzType="search"></i>
+                                    </ng-template>
+                                </div>
+                            </div>
+                            <div nz-col nzSpan="12">
+                                <button
+                                    nz-button
+                                    nzType="primary"
+                                    style="float: right"
+                                >
+                                    Add New Revenue Item
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <nz-table #revenueItemTable [nzData]="revenuesList">
+                        <thead>
+                            <tr>
+                                <th>Item ID</th>
+                                <th>Item Description</th>
+                                <th>Debit Amount</th>
+                                <th>Credit Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="
+                                    let revenue_item of revenueItemTable.data
+                                "
+                            >
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-card>
+            </nz-tab>
 
-      <nz-tab nzTitle="Clauses">
-        <nz-card style="margin-top: 10px;">
-          <div style="margin-bottom: 10px;">
-            <div nz-row [nzGutter]="24">
-              <div nz-col nzSpan="12">
-                <div style="width: 75%">
-                  <nz-input-group [nzSuffix]="suffixIconSearch">
-                    <input type="text" nz-input placeholder="Search by clause ID, clause type" />
-                  </nz-input-group>
-                  <ng-template #suffixIconSearch>
-                    <i nz-icon nzType="search"></i>
-                  </ng-template>
-                </div>
-              </div>
-              <div nz-col nzSpan=12>
-                <button nz-button nzType="primary" style="float: right">Add New Clause</button>
-              </div>
-            </div>
-          </div>
-          <nz-table #clausesTable [nzData]="clausesList">
-            <thead>
-              <tr>
-                <th>Clause ID</th>
-                <th>Clause Heading</th>
-                <th>Clause Type</th>
-                <th>Editable</th>
-                <th>Clause Wording</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let clause of clausesTable.data">
-                <td>{{clause.clauseId}}</td>
-                <td>{{clause.clauseHeading}}</td>
-                <td>{{clause.clauseType}}</td>
-                <td>{{clause.isEditable ? 'Yes' : 'No'}}</td>
-                <td>{{clause.clauseWording}}</td>
-              </tr>
-            </tbody>
-          </nz-table>
-        </nz-card>
-
-        <nz-card nzTitle="Clause Sub-class" style="margin-top: 10px;">
-          <div style="margin-bottom: 10px;">
-            <div nz-row [nzGutter]="24">
-              <div nz-col nzSpan="12">
-                <div style="width: 75%">
-                  <nz-input-group [nzSuffix]="suffixIconSearch">
-                    <input type="text" nz-input placeholder="Search by clause ID, clause type" />
-                  </nz-input-group>
-                  <ng-template #suffixIconSearch>
-                    <i nz-icon nzType="search"></i>
-                  </ng-template>
-                </div>
-              </div>
-              <div nz-col nzSpan=12>
-                <button nz-button nzType="primary" style="float: right">Add New Clause Subclass</button>
-              </div>
-            </div>
-          </div>
-          <nz-table #clauseSubclassTable [nzData]="clauseSubClassList">
-            <thead>
-              <tr>
-                <th>Clause ID</th>
-                <th>Clause Heading</th>
-                <th>Clause Type</th>
-                <th>Editable</th>
-                <th>Mandatory</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let clause_subclass of clauseSubclassTable.data">
-                <td>{{clause_subclass.clauseId}}</td>
-                <td>{{clause_subclass.clauseHeading}}</td>
-                <td>{{clause_subclass.clauseType}}</td>
-                <td>{{clause_subclass.isEditable ? 'Yes' : 'No'}}</td>
-                <td>{{clause_subclass.isMandatory ? 'Yes' : 'No'}}</td>
-              </tr>
-            </tbody>
-          </nz-table>
-        </nz-card>
-      </nz-tab>
-
-      <nz-tab nzTitle="Revenue">
-        <nz-card nzTitle="Revenue Item" style="margin-top: 10px;">
-          <div style="margin-bottom: 10px;">
-            <div nz-row [nzGutter]="24">
-              <div nz-col nzSpan="12">
-                <div style="width: 75%">
-                  <nz-input-group [nzSuffix]="suffixIconSearch">
-                    <input type="text" nz-input placeholder="Search by itme ID" />
-                  </nz-input-group>
-                  <ng-template #suffixIconSearch>
-                    <i nz-icon nzType="search"></i>
-                  </ng-template>
-                </div>
-              </div>
-              <div nz-col nzSpan=12>
-                <button nz-button nzType="primary" style="float: right">Add New Revenue Item</button>
-              </div>
-            </div>
-          </div>
-          <nz-table #revenueItemTable [nzData]="revenuesList">
-            <thead>
-              <tr>
-                <th>Item ID</th>
-                <th>Item Description</th>
-                <th>Debit Amount</th>
-                <th>Credit Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let revenue_item of revenueItemTable.data">
-                <td>{{revenue_item.itemId}}</td>
-                <td>{{revenue_item.itemDescription}}</td>
-                <td>{{revenue_item.debitAmount}}</td>
-                <td>{{revenue_item.creditAmount}}</td>
-              </tr>
-            </tbody>
-          </nz-table>
-        </nz-card>
-      </nz-tab>
-
-      <nz-tab nzTitle="Taxes">
-        <nz-card nzTitle="Tax rate" style="margin-top: 10px;">
-          <div style="margin-bottom: 10px;">
-            <div nz-row [nzGutter]="24">
-              <div nz-col nzSpan="12">
-                <div style="width: 75%">
-                  <nz-input-group [nzSuffix]="suffixIconSearch">
-                    <input type="text" nz-input placeholder="Search by rate, rate type, revenue item" />
-                  </nz-input-group>
-                  <ng-template #suffixIconSearch>
-                    <i nz-icon nzType="search"></i>
-                  </ng-template>
-                </div>
-              </div>
-              <div nz-col nzSpan=12>
-                <button nz-button nzType="primary" style="float: right">Add Tax Rate</button>
-              </div>
-            </div>
-          </div>
-          <nz-table #taxRateTable [nzData]="taxRatesList">
-            <thead>
-              <tr>
-                <th>Start Range</th>
-                <th>End Range</th>
-                <th>Rate Type</th>
-                <th>Rate</th>
-                <th>Revenue Item</th>
-                <th>Active</th>
-                <th>Mandatory</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let tax_rate of taxRateTable.data">
-                <td>{{tax_rate.startRange}}</td>
-                <td>{{tax_rate.endRange}}</td>
-                <td>{{tax_rate.rateType}}</td>
-                <td>{{tax_rate.rate}}</td>
-                <td>{{tax_rate.revenueItem}}</td>
-                <td>{{tax_rate.isActive ? 'Yes' : 'No'}}</td>
-                <td>{{tax_rate.isMandatory ? 'Yes' : 'No'}}</td>
-              </tr>
-            </tbody>
-          </nz-table>
-        </nz-card>
-      </nz-tab>
-    </nz-tabset>
-  </nz-card>
+            <nz-tab nzTitle="Taxes">
+                <nz-card nzTitle="Tax rate" style="margin-top: 10px;">
+                    <div style="margin-bottom: 10px;">
+                        <div nz-row [nzGutter]="24">
+                            <div nz-col nzSpan="12">
+                                <div style="width: 75%">
+                                    <nz-input-group
+                                        [nzSuffix]="suffixIconSearch"
+                                    >
+                                        <input
+                                            type="text"
+                                            nz-input
+                                            placeholder="Search by rate, rate type, revenue item"
+                                        />
+                                    </nz-input-group>
+                                    <ng-template #suffixIconSearch>
+                                        <i nz-icon nzType="search"></i>
+                                    </ng-template>
+                                </div>
+                            </div>
+                            <div nz-col nzSpan="12">
+                                <button
+                                    nz-button
+                                    nzType="primary"
+                                    style="float: right"
+                                >
+                                    Add Tax Rate
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <nz-table #taxRateTable [nzData]="taxRatesList">
+                        <thead>
+                            <tr>
+                                <th>Start Range</th>
+                                <th>End Range</th>
+                                <th>Rate Type</th>
+                                <th>Rate</th>
+                                <th>Revenue Item</th>
+                                <th>Active</th>
+                                <th>Mandatory</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let tax_rate of taxRateTable.data">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-card>
+            </nz-tab>
+        </nz-tabset>
+    </nz-card>
 </div>

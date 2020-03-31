@@ -1,0 +1,151 @@
+<div style="margin: 20px;">
+    <div style="margin-bottom: 20px; background: #fff;">
+        <nz-page-header>
+            <nz-page-header-title>Receipts</nz-page-header-title>
+            <nz-page-header-subtitle
+                >List of all receipts</nz-page-header-subtitle
+            >
+            <nz-page-header-extra> </nz-page-header-extra>
+            <nz-page-header-content>
+                <nz-descriptions [nzColumn]="3">
+                    <nz-descriptions-item
+                        nzTitle="Total Receipts"
+                        [nzSpan]="1"
+                        >{{ receiptsCount }}</nz-descriptions-item
+                    >
+                </nz-descriptions>
+            </nz-page-header-content>
+        </nz-page-header>
+    </div>
+    <nz-card [nzBordered]="false">
+        <nz-tabset>
+            <nz-tab nzTitle="Unreceipted">
+                <nz-card [nzBordered]="false">
+                    <div style="margin-bottom: 10px;">
+                        <div nz-row [nzGutter]="24">
+                            <div nz-col nzSpan="12">
+                                <div style="width: 75%">
+                                    <nz-input-group
+                                        [nzSuffix]="suffixIconSearch"
+                                    >
+                                        <input
+                                            type="text"
+                                            nz-input
+                                            placeholder="Search by type, account type"
+                                        />
+                                    </nz-input-group>
+                                    <ng-template #suffixIconSearch>
+                                        <i nz-icon nzType="search"></i>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <nz-table
+                        #unreceiptedTable
+                        [nzData]="unreceipted"
+                        [nzSize]="'small'"
+                        [nzBordered]="true"
+                        style="background-color: white;"
+                    >
+                        <thead>
+                            <tr>
+                                <th>Receipt Number</th>
+                                <th>Product</th>
+                                <th>Cover From</th>
+                                <th>Cover To</th>
+                                <th>Client Name</th>
+                                <th>Sum Insured</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="
+                                    let unreceipted of unreceiptedTable.data
+                                "
+                            >
+                                <td>unreceipted.quoteNumber</td>
+                                <td></td>
+                                <td>unreceipted.startDate</td>
+                                <td>unreceipted.endDate</td>
+                                <td>unreceipted.clientCode</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-card>
+            </nz-tab>
+
+            <nz-tab nzTitle="Receipted">
+                <nz-card [nzBordered]="false">
+                    <div style="margin-bottom: 10px;">
+                        <div nz-row [nzGutter]="24">
+                            <div nz-col nzSpan="12">
+                                <div style="width: 75%">
+                                    <nz-input-group
+                                        [nzSuffix]="suffixIconSearch"
+                                    >
+                                        <input
+                                            type="text"
+                                            nz-input
+                                            placeholder="Search by account id, account name, bank"
+                                        />
+                                    </nz-input-group>
+                                    <ng-template #suffixIconSearch>
+                                        <i nz-icon nzType="search"></i>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <nz-table
+                        #receiptTable
+                        [nzData]="receiptList"
+                        [nzSize]="'small'"
+                        [nzBordered]="true"
+                        style="background-color: white;"
+                    >
+                        <thead>
+                            <tr>
+                                <th>Receipt Number</th>
+                                <th>Product</th>
+                                <th>Cover From</th>
+                                <th>Cover To</th>
+                                <th>Client Name</th>
+                                <th>Sum Insured</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let receipt of receiptTable.data"
+                                class="table-row"
+                            >
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <!-- <nz-badge
+                                        [nzStatus]="
+                                            account.status === 'Inactive'
+                                                ? 'error'
+                                                : 'success'
+                                        "
+                                        [nzText]="account.status"
+                                    >
+                                    </nz-badge> -->
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-card>
+            </nz-tab>
+        </nz-tabset>
+    </nz-card>
+</div>

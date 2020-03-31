@@ -14,35 +14,32 @@ import { generateRevenueItems } from '../../models/underwriting/revenue-item.mod
 import { generateEndorsementRemarks } from '../../models/underwriting/endorsement-remark.model';
 
 @Component({
-  selector: 'app-underwriting-setups',
-  templateUrl: './underwriting-setups.component.html',
-  styleUrls: ['./underwriting-setups.component.scss']
+    selector: 'app-underwriting-setups',
+    templateUrl: './underwriting-setups.component.html',
+    styleUrls: ['./underwriting-setups.component.scss']
 })
 export class UnderwritingSetupsComponent implements OnInit {
+    clausesList = [];
+    clauseSubClassList = [];
 
-  clausesList = generateClauses();
-  clauseSubClassList = generateClauseSubclassData();
+    coverTypePremiumsList = [];
+    coverTypesList = [];
 
-  coverTypePremiumsList = generateCoverTypePremiums();
-  coverTypesList = generateCoverTypes();
+    perilsList = [];
+    perilsSubclassList = [];
 
-  perilsList = generatePerils();
-  perilsSubclassList = generatePerilSubclasses();
+    productsList = [];
+    productClassList = [];
+    productGroupList = [];
+    productSubclassGroupList = [];
 
-  productsList = generateProducts();
-  productClassList = generateProductClasses();
-  productGroupList = generateProductGroups();
-  productSubclassGroupList = generateProductSubclasses();
+    revenuesList = [];
 
-  revenuesList = generateRevenueItems();
+    taxRatesList = [];
 
-  taxRatesList = generateTaxRates();
+    endorsementRemarksList = [];
 
-  endorsementRemarksList = generateEndorsementRemarks();
+    constructor() {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+    ngOnInit(): void {}
 }
