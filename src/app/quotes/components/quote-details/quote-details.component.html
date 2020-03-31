@@ -148,6 +148,41 @@
                 </nz-table>
             </div>
         </nz-card>
+        <nz-card>
+            <nz-divider
+                [nzText]="'Documents'"
+                [nzOrientation]="'left'"
+            ></nz-divider>
+            <div nz-row [nzGutter]="8">
+                <div nz-col [nzSpan]="8">
+                    <nz-card nzTitle="Certificate" [nzExtra]="expansionView">
+                        <pdf-viewer
+                            [src]="'/assets/docs/AnnualFinancialSample.pdf'"
+                            [original-size]="false"
+                        ></pdf-viewer>
+                    </nz-card>
+                </div>
+                <div nz-col [nzSpan]="8">
+                    <nz-card nzTitle="Debit Note" [nzExtra]="expansionView">
+                        <pdf-viewer
+                            [src]="'/assets/docs/AnnualFinancialSample.pdf'"
+                            [original-size]="false"
+                        ></pdf-viewer>
+                    </nz-card>
+                </div>
+                <div nz-col [nzSpan]="8">
+                    <nz-card
+                        nzTitle="Policy Schedule"
+                        [nzExtra]="expansionView"
+                    >
+                        <pdf-viewer
+                            [src]="'/assets/docs/AnnualFinancialSample.pdf'"
+                            [original-size]="false"
+                        ></pdf-viewer>
+                    </nz-card>
+                </div>
+            </div>
+        </nz-card>
     </div>
 </nz-spin>
 
@@ -220,5 +255,12 @@
             >Quote Number: {{ quote.quoteNumber }}</span
         >
         <nz-tag [nzColor]="'orange'">Not Approved</nz-tag>
+    </div>
+</ng-template>
+
+<ng-template #expansionView>
+    <div>
+        <button nz-button nzType="default">View</button>
+        <button nz-button nzType="default">Print</button>
     </div>
 </ng-template>

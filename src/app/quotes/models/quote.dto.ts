@@ -1,6 +1,6 @@
 export interface IQuoteDTO {
-    quoteNumber: number;
-    revisionNumber: number;
+    quoteNumber: string;
+    revisionNumber: string;
     startDate: Date;
     endDate: Date;
     client: string;

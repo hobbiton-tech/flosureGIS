@@ -1,9 +1,9 @@
 export interface IDebitNoteDTO {
-    companyTelephone: number;
+    companyTelephone: string;
     companyEmail: string;
-    vat: number;
-    pin: number;
-    todayDate: string;
+    vat: string;
+    pin: string;
+    todayDate: Date;
     agency: string;
     nameOfInsured: string;
     addressOfInsured: string;
@@ -13,8 +13,8 @@ export interface IDebitNoteDTO {
     regarding: string;
     classOfBusiness: string;
     brokerRef: string;
-    fromDate: string;
-    toDate: string;
+    fromDate: Date;
+    toDate: Date;
     currency: string;
     basicPremium: number;
     insuredPremiumLevy: number;

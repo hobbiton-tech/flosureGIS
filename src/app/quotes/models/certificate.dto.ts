@@ -7,8 +7,8 @@ export interface ICertificateDTO {
     phone: string;
     email: string;
     coverType: string;
-    startDate: string;
-    expiryDate: string;
+    startDate: Date;
+    expiryDate: Date;
     sumInsured: number;
     regMark: string;
     makeAndType: string;

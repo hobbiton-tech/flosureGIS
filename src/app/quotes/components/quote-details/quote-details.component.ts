@@ -10,6 +10,9 @@ import { PoliciesService } from 'src/app/underwriting/services/policies.service'
 import { Router, ActivatedRoute } from '@angular/router';
 import { QuotesService } from '../../services/quotes.service';
 import { ITimestamp } from 'src/app/claims/models/claim.model';
+import { IDebitNoteDTO } from '../../models/debit-note.dto';
+import { IQuoteDTO } from '../../models/quote.dto';
+import { ICertificateDTO } from '../../models/certificate.dto';
 
 @Component({
     selector: 'app-quote-details',
@@ -111,5 +114,89 @@ export class QuoteDetailsComponent implements OnInit {
 
     handleCancel(): void {
         this.isVisible = false;
+    }
+
+    generateDocuments(): void {
+        const debitNote: IDebitNoteDTO = {
+            companyTelephone: '',
+            companyEmail: '',
+            vat: '',
+            pin: '',
+            todayDate: new Date(),
+            agency: '',
+            nameOfInsured: '',
+            addressOfInsured: '',
+            ref: '',
+            policyNumber: '',
+            endorsementNumber: '',
+            regarding: '',
+            classOfBusiness: '',
+            brokerRef: '',
+            fromDate: new Date(),
+            toDate: new Date(),
+            currency: '',
+            basicPremium: 0,
+            insuredPremiumLevy: 0,
+            netPremium: 0,
+            processedBy: ''
+        };
+
+        const certificate: ICertificateDTO = {
+            certificateNumber: '',
+            policyNumber: '',
+            clientName: '',
+            nameOfInsured: '',
+            address: '',
+            phone: '',
+            email: '',
+            coverType: '',
+            startDate: new Date(),
+            expiryDate: new Date(),
+            sumInsured: 0,
+            regMark: '',
+            makeAndType: '',
+            engine: '',
+            chassisNumber: '',
+            yearOfManufacture: '',
+            color: '',
+            branch: '',
+            timeOfIssue: new Date(),
+            dateOfIssue: new Date(),
+            thirdPartyPropertyDamage: 0,
+            thirdPartyBoodilyInjury_DeathPerEvent: 0,
+            town: ''
+        };
+
+        const quoteDoc: IQuoteDTO = {
+            quoteNumber: '',
+            revisionNumber: '',
+            startDate: new Date(),
+            endDate: new Date(),
+            client: '',
+            status: 'Confirmed',
+            preparedBy: '',
+            motorQuotationModelId: '',
+            dateCreated: new Date(),
+            clientCode: '',
+            messageCode: '',
+            coverCode: '',
+            currency: '',
+            riskModelId: '',
+            regNumber: '',
+            vehicleMake: '',
+            vehicleModel: '',
+            engineNumber: '',
+            chassisNumber: '',
+            color: '',
+            estimatedValue: 0,
+            productType: null,
+            messageModelId: '',
+            description: '',
+            coverModelId: ''
+        };
+
+        const debit = this.quotesService.generateDebitNote(debitNote);
+        const cert = this.quotesService.generateCertificate(certificate);
+        const quote = this.quotesService.generateQuote(quoteDoc);
     }
 }
