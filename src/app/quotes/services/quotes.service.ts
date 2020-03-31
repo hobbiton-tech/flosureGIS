@@ -14,8 +14,10 @@ import { IDebitNoteDTO } from '../models/debit-note.dto';
 import { ICertificateDTO } from '../models/certificate.dto';
 import { IReceiptDTO } from '../models/receipt.dto';
 import { HttpClient } from '@angular/common/http';
+import { IDocument } from 'src/app/claims/models/claim.model';
 
 export interface IQuoteDocument {
+    id: string;
     clientID: string;
     receiptNumber: string;
     documentUrl: string;
@@ -36,7 +38,6 @@ export class QuotesService {
     private motorQuoteCollection: AngularFirestoreCollection<
         MotorQuotationModel
     >;
-    private quoteObject: AngularFirestoreDocument<MotorQuotationModel>;
     quotations: Observable<MotorQuotationModel[]>;
     quotation: Observable<MotorQuotationModel>;
     quote: MotorQuotationModel;
@@ -75,7 +76,8 @@ export class QuotesService {
             );
 
             await this.motorQuoteCollection
-                .add(quotation)
+                .doc(`${quotation.id}`)
+                .set(quotation)
                 .then(mess => {
                     console.log(quotation);
                 })
@@ -85,6 +87,9 @@ export class QuotesService {
         });
     }
 
+    async addQuoteDocuments(document: IQuoteDocument): Promise<void> {
+        await this.quoteDocumentsCollection.doc(`${document.id}`).set(document);
+    }
     // add risks
     async addRisk(risk: RiskModel): Promise<void> {
         this.risks.pipe(first()).subscribe(async risks => {
@@ -147,6 +152,18 @@ export class QuotesService {
     // Get Quotes
     getQoute(): Observable<MotorQuotationModel[]> {
         return this.quotations;
+    }
+
+    async updateQuote(quote: MotorQuotationModel): Promise<void> {
+        return this.motorQuoteCollection
+            .doc(`${quote.id}`)
+            .update(quote)
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
 
     generateQuote(dto: IQuoteDTO): Observable<IAmazonS3Result> {

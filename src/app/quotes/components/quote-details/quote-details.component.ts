@@ -37,11 +37,17 @@ export class QuoteDetailsComponent implements OnInit {
     //modal
     isVisible = false;
     isConfirmLoading = false;
+    showDocumentModal = false;
 
     // generated PDFs
     policyCertificateURl: string = '';
+    showCertModal = false;
+
     debitNoteURL: string = '';
+    showDebitModal = false;
+
     quoteURL: string = '';
+    showQuoteModal = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -56,9 +62,12 @@ export class QuoteDetailsComponent implements OnInit {
             this.quoteNumber = param.quoteNumber;
             this.quotesService.getQuotes().subscribe(quotes => {
                 this.quotesList = quotes;
+                console.log(quotes);
                 this.quote = this.quotesList.filter(
                     x => x.quoteNumber === this.quoteNumber
                 )[0];
+
+                this.isQuoteApproved = this.quote.status === 'Approved';
 
                 console.log(this.quote);
                 this.quotesLoading = false;
@@ -91,7 +100,6 @@ export class QuoteDetailsComponent implements OnInit {
         setTimeout(() => {
             this.isVisible = false;
             this.isConfirmLoading = false;
-            //route to policy details
             this.router.navigateByUrl('/flosure/underwriting/policies');
         }, 3000);
 
@@ -199,16 +207,19 @@ export class QuoteDetailsComponent implements OnInit {
         };
 
         const debit$ = this.quotesService.generateDebitNote(debitNote);
-
         const cert$ = this.quotesService.generateCertificate(certificate);
-
         const quote$ = this.quotesService.generateQuote(quote);
 
         combineLatest([debit$, cert$, quote$]).subscribe(
-            ([debit, cert, quote]) => {
+            async ([debit, cert, quote]) => {
                 this.debitNoteURL = debit.Location;
                 this.policyCertificateURl = cert.Location;
                 this.quoteURL = quote.Location;
+
+                // await this.quotesService.addQuoteDocuments()
+
+                this.quote.status = 'Approved';
+                await this.quotesService.updateQuote(this.quote);
 
                 this.isQuoteApproved = true;
                 this.approvingQuote = false;
