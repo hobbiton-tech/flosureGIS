@@ -1,0 +1,147 @@
+<nz-drawer
+    [nzClosable]="false"
+    [nzVisible]="isAddAgentsFormDrawerVisible"
+    nzPlacement="left"
+    nzTitle="Add Agent"
+    (nzOnClose)="closeDrawer()"
+    [nzWidth]="650"
+>
+    <form
+        nz-form
+        [formGroup]="agentForm"
+        (ngSubmit)="onSubmit()"
+        style="margin: 0 auto;"
+    >
+        <div nz-row>
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzFor="title"
+                        >Title</nz-form-label
+                    >
+                    <nz-form-control [nzSpan]="14">
+                        <nz-select
+                            formControlName="title"
+                            nzShowSearch
+                            nzAllowClear
+                            placeholder="Select a Title"
+                        >
+                            <nz-option nzLabel="Mr" nzValue="mr"></nz-option>
+                            <nz-option nzLabel="Mrs" nzValue="mrs"></nz-option>
+                            <nz-option
+                                nzLabel="Miss"
+                                nzValue="miss"
+                            ></nz-option>
+                            <nz-option nzLabel="Dr" nzValue="dr"></nz-option>
+                            <nz-option
+                                nzLabel="Prof"
+                                nzValue="prof"
+                            ></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzFor="firstName"
+                        >First Name</nz-form-label
+                    >
+                    <nz-form-control [nzSpan]="14">
+                        <input
+                            nz-input
+                            formControlName="firstName"
+                            name="firstName"
+                            type="text"
+                            id="firstName"
+                            placeholder="First Name"
+                        />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <div nz-row>
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzFor="lastName"
+                        >Last Name</nz-form-label
+                    >
+                    <nz-form-control [nzSpan]="14">
+                        <input
+                            nz-input
+                            formControlName="lastName"
+                            name="lastName"
+                            id="lastName"
+                            placeholder="Last Name"
+                        />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzFor="email"
+                        >Email</nz-form-label
+                    >
+                    <nz-form-control [nzSpan]="14">
+                        <input
+                            nz-input
+                            formControlName="email"
+                            name="email"
+                            type="email"
+                            id="email"
+                            placeholder="Email Address"
+                        />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <div nz-row>
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzFor="phone"
+                        >Phone</nz-form-label
+                    >
+                    <nz-form-control [nzSpan]="14">
+                        <input
+                            nz-input
+                            formControlName="phone"
+                            name="phone"
+                            id="phone"
+                            placeholder="Phone Number"
+                        />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzFor="address"
+                        >Address</nz-form-label
+                    >
+                    <nz-form-control [nzSpan]="14">
+                        <input
+                            nz-input
+                            formControlName="address"
+                            name="address"
+                            id="address"
+                            placeholder="Address"
+                        />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 10px;">
+            <button nz-button nzType="primary">Add Agent</button>
+            <button
+                nz-button
+                nzType="default"
+                style="margin-left: 10px"
+                (click)="resetForm($event)"
+            >
+                Reset Form
+            </button>
+        </div>
+    </form>
+</nz-drawer>

@@ -1,5 +1,5 @@
 import * as faker from 'faker';
-import { ICurrency } from '../models/organizational/Currency.model'
+import { ICurrency } from '../models/organizational/currency.model'
 
 const createCurrency = () => {
     const currency: ICurrency = {

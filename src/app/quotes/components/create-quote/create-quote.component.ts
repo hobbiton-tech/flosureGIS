@@ -7,7 +7,6 @@ import {
 } from '@angular/forms';
 import { StepperService } from 'src/app/quotes/services/stepper.service';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { QuotesService } from '../../services/quotes.service';
 import { ClientsService } from 'src/app/clients/services/clients.service';
 import {
@@ -52,6 +51,7 @@ export class CreateQuoteComponent implements OnInit {
         private readonly clientsService: ClientsService,
         private msg: NzMessageService
     ) {}
+    validateRiskThirdPartyForm: FormGroup;
     motor: any;
     // Decleration
     quoteForm: FormGroup;
@@ -78,6 +78,15 @@ export class CreateQuoteComponent implements OnInit {
     endOpen = false;
 
     listOfControl: Array<{ id: number; controlInstance: string }> = [];
+
+    submitForm(): void {
+        for (const i in this.validateRiskThirdPartyForm.controls) {
+            this.validateRiskThirdPartyForm.controls[i].markAsDirty();
+            this.validateRiskThirdPartyForm.controls[
+                i
+            ].updateValueAndValidity();
+        }
+    }
 
     compareFn = (o1: any, o2: any) =>
         o1 && o2 ? o1.value === o2.value : o1 === o2;
@@ -144,31 +153,20 @@ export class CreateQuoteComponent implements OnInit {
             color: ['', Validators.required],
             estimatedValue: ['', Validators.required],
             productType: ['', Validators.required],
-            insuranceType: ['Comprehensive', Validators.required]
+            insuranceType: ['Comprehensive']
         });
 
         // Third Party Form
         this.riskThirdPartyForm = this.formBuilder.group({
-            regNumber: ['', Validators.required],
-            vehicleMake: ['', Validators.required],
-            vehicleModel: ['', Validators.required],
-            engineNumber: ['', Validators.required],
-            chassisNumber: ['', Validators.required],
-            color: ['', Validators.required],
-            estimatedValue: ['', Validators.required],
-            productType: ['', Validators.required],
-            insuranceType: ['ThirdParty', Validators.required]
+            regNumber: ['', [Validators.required]],
+            vehicleMake: ['', [Validators.required]],
+            vehicleModel: ['', [Validators.required]],
+            engineNumber: ['', [Validators.required]],
+            chassisNumber: ['', [Validators.required]],
+            color: ['', [Validators.required]],
+            productType: ['', [Validators.required]],
+            insuranceType: ['ThirdParty']
         });
-    }
-
-    onSubmit() {
-        const some = this.quoteForm.value;
-        console.log('<============Quote Form Data=============>');
-        console.log(some);
-        this.quoteService.addMotorQuotation(some);
-
-        localStorage.setItem('motor', JSON.stringify(some));
-        this.quoteService.getRisk('an');
     }
 
     addThirdPartyRisk(): void {
@@ -191,7 +189,16 @@ export class CreateQuoteComponent implements OnInit {
             user: this.agentMode ? this.quoteForm.get('user').value : 'Charles Malama',
             risks: this.risks
         };
-        this.quoteService.addMotorQuotation(quote);
+        console.log('=======Full Quotation=======');
+        console.log(quote);
+        this.quoteService
+            .addMotorQuotation(quote)
+            .then(success => {
+                this.msg.success('Quotation Successfully created');
+            })
+            .catch(err => {
+                this.msg.error('Quotation Creation Failed');
+            });
     }
 
     showModal(): void {

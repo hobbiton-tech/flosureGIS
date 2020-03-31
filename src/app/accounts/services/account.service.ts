@@ -5,22 +5,42 @@ import {
 } from '@angular/fire/firestore';
 import 'firebase/firestore';
 import { filter, first } from 'rxjs/operators';
-import { Policy } from 'src/app/underwriting/models/policy.model';
 import { Observable } from 'rxjs';
+import { MotorQuotationModel } from 'src/app/quotes/models/quote.model';
 
 @Injectable({
     providedIn: 'root'
 })
 export class AccountService {
-    private recieptsCollection: AngularFirestoreCollection<Policy>;
-    reciepts: Observable<Policy[]>;
+    // private recieptsCollection: AngularFirestoreCollection<MotorQuotationModel>;
+    // reciepts: Observable<MotorQuotationModel[]>;
+    // reciept: MotorQuotationModel;
+
+    private motorQuoteCollection: AngularFirestoreCollection<
+        MotorQuotationModel
+    >;
+    quotations: Observable<MotorQuotationModel[]>;
+    quotation: Observable<MotorQuotationModel>;
+    quote: MotorQuotationModel;
 
     constructor(private firebase: AngularFirestore) {
-        this.recieptsCollection = firebase.collection<Policy>('policies');
-        this.reciepts = this.recieptsCollection.valueChanges();
+        // this.recieptsCollection = firebase.collection<MotorQuotationModel>(
+        //     'motor_quotations'
+        // );
+        // this.reciepts = this.recieptsCollection.valueChanges();
+
+        this.motorQuoteCollection = firebase.collection<MotorQuotationModel>(
+            'mortor_quotations'
+        );
+
+        this.quotations = this.motorQuoteCollection.valueChanges();
     }
 
-    getReciepts(): Observable<Policy[]> {
-        return this.reciepts;
+    // getReciepts(): Observable<MotorQuotationModel[]> {
+    //     return this.reciepts;
+    // }
+
+    getQuotes(): Observable<MotorQuotationModel[]> {
+        return this.quotations;
     }
 }
