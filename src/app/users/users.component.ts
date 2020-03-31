@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { generateUsers } from './data/users.data';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import {
+    FormGroup,
+    FormBuilder,
+    Validators,
+    FormControl
+} from '@angular/forms';
 
 @Component({
     selector: 'app-users',
@@ -8,7 +13,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
     styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
-    usersList = generateUsers();
+    usersList = [];
 
     isVisible = false;
     // Declarations
@@ -74,7 +79,7 @@ export class UsersComponent implements OnInit {
             return { confirm: true, error: true };
         }
         return {};
-    }
+    };
 
     onSubmit() {}
 }

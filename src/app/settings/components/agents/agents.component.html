@@ -68,7 +68,11 @@
                                 </td>
                                 <td>{{ agent.email }}</td>
                                 <td>{{ agent.phone }}</td>
-                                <td>{{ agent.dateCreated.seconds | date }}</td>
+                                <td>
+                                    {{
+                                        agent.dateCreated.seconds * 1000 | date
+                                    }}
+                                </td>
                             </tr>
                         </tbody>
                     </nz-table>

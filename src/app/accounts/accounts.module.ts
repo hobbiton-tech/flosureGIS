@@ -8,6 +8,7 @@ import { ViewReceiptsComponent } from './components/view-receipts/view-receipts.
 import { PaymentsComponent } from './components/payments/payments.component';
 import { AccountService } from './services/account.service';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { ReceiptsComponent } from './components/receipts/receipts.component';
 
 const routes: Routes = [
     {
@@ -15,8 +16,8 @@ const routes: Routes = [
         component: ReceiptsGenerationComponent
     },
     {
-        path: 'view-receipts',
-        component: ViewReceiptsComponent
+        path: 'receipts',
+        component: ReceiptsComponent
     },
     {
         path: 'payments',
@@ -29,7 +30,8 @@ const routes: Routes = [
         AccountsComponent,
         ReceiptsGenerationComponent,
         ViewReceiptsComponent,
-        PaymentsComponent
+        PaymentsComponent,
+        ReceiptsComponent
     ],
     imports: [
         CommonModule,

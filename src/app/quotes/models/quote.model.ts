@@ -50,6 +50,6 @@ export class CoverModel {
 
 export type ProductType = 'Private' | 'Commercial' | 'Bus/Taxi';
 
-export type QuoteStatus = 'Draft' | 'Confirmed';
+export type QuoteStatus = 'Draft' | 'Approved';
 
 export type InsuranceType = 'ThirdParty' | 'Comprehensive';
