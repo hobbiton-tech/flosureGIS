@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AccountsComponent } from './accounts.component';
 import { Routes, RouterModule } from '@angular/router';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { ReceiptsGenerationComponent } from './components/receipts-generation/receipts-generation.component';
@@ -26,7 +25,6 @@ const routes: Routes = [
 
 @NgModule({
     declarations: [
-        AccountsComponent,
         ReceiptsGenerationComponent,
         ViewReceiptsComponent,
         PaymentsComponent
