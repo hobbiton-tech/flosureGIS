@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ClaimsService } from '../../services/claims-service.service';
+import { ClaimsService } from '../../services/claims.service';
 import {
     FormGroup,
     FormControl,

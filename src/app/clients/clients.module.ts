@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ClientsComponent } from './clients.component';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { CreateClientComponent } from './components/create-client/create-client.component';
 import { Routes, RouterModule } from '@angular/router';
@@ -14,7 +13,6 @@ import { ContactPersonComponent } from './components/create-client/corporate-cli
 import { CompanyBankDetailsComponent } from './components/create-client/corporate-client/company-bank-details/company-bank-details.component';
 import { ClientDetailsComponent } from './components/client-details/client-details.component';
 import { ClientsService } from './services/clients.service';
-import { AngularFirestore } from '@angular/fire/firestore';
 
 
 const routes: Routes = [
@@ -59,7 +57,6 @@ const routes: Routes = [
 
 @NgModule({
     declarations: [
-        ClientsComponent,
         CreateClientComponent,
         PersonalDetailsComponent,
         EmployementInformationComponent,
@@ -77,7 +74,6 @@ const routes: Routes = [
         ReactiveFormsModule,
         RouterModule.forChild(routes)
     ],
-    providers: [ClientsService],
-    exports: [ClientsComponent]
+    providers: [ClientsService]
 })
 export class ClientsModule {}

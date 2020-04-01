@@ -4,7 +4,6 @@ import {
     AngularFirestoreCollection
 } from '@angular/fire/firestore';
 import 'firebase/firestore';
-import { filter, first } from 'rxjs/operators';
 import { Policy } from 'src/app/underwriting/models/policy.model';
 import { Observable } from 'rxjs';
 
@@ -12,15 +11,15 @@ import { Observable } from 'rxjs';
     providedIn: 'root'
 })
 export class AccountService {
-    private recieptsCollection: AngularFirestoreCollection<Policy>;
-    reciepts: Observable<Policy[]>;
+    private receiptsCollection: AngularFirestoreCollection<Policy>;
+    receipts: Observable<Policy[]>;
 
     constructor(private firebase: AngularFirestore) {
-        this.recieptsCollection = firebase.collection<Policy>('policies');
-        this.reciepts = this.recieptsCollection.valueChanges();
+        this.receiptsCollection = firebase.collection<Policy>('policies');
+        this.receipts = this.receiptsCollection.valueChanges();
     }
 
-    getReciepts(): Observable<Policy[]> {
-        return this.reciepts;
+    getReceipts(): Observable<Policy[]> {
+        return this.receipts;
     }
 }

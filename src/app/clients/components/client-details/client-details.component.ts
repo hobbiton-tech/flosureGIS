@@ -14,7 +14,7 @@ import { ClientsService } from '../../services/clients.service';
 import { Policy } from 'src/app/underwriting/models/policy.model';
 import { Claim } from 'src/app/claims/models/claim.model';
 import { PoliciesService } from 'src/app/underwriting/services/policies.service';
-import { ClaimsService } from 'src/app/claims/services/claims-service.service';
+import { ClaimsService } from 'src/app/claims/services/claims.service';
 
 import { getDate } from 'date-fns';
 

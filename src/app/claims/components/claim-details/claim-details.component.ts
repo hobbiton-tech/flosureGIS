@@ -4,9 +4,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Claim } from '../../models/claim.model';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { finalize } from 'rxjs/operators';
-import { ClaimsService } from '../../services/claims-service.service';
+import { ClaimsService } from '../../services/claims.service';
 import { Peril } from '../../models/peril.model';
-import { PerilService } from '../../services/peril-service.service';
+import { PerilService } from '../../services/perils.service';
 import { IDocument } from '../../models/claim.model';
 
 import * as _ from 'lodash';

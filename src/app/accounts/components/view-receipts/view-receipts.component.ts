@@ -14,7 +14,7 @@ export class ViewReceiptsComponent implements OnInit {
     constructor(private accountService: AccountService) {}
 
     ngOnInit(): void {
-        this.accountService.getReciepts().subscribe(data => {
+        this.accountService.getReceipts().subscribe(data => {
             this.receiptsList = data;
             this.receiptsCount = data.length;
         });

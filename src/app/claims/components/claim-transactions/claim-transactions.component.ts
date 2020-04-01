@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { ClaimsService } from '../../services/claims-service.service';
+import { ClaimsService } from '../../services/claims.service';
 import { Claim } from '../../models/claim.model';
 
 @Component({

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DashboardService } from './services/dashboard.service';
 import { ClientsService } from '../clients/services/clients.service';
-import { ClaimsService } from '../claims/services/claims-service.service';
+import { ClaimsService } from '../claims/services/claims.service';
 import { PoliciesService } from '../underwriting/services/policies.service';
 
 import * as _ from 'lodash';

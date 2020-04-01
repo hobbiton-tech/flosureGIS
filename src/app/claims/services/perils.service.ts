@@ -21,7 +21,7 @@ import { Peril } from '../models/peril.model';
           return this.perils;
       }
 
-      addPeril(peril: Peril): void {
-          this.perilsCollection.add(peril);
+      async addPeril(peril: Peril): Promise<void> {
+        return this.perilsCollection.doc<Peril>(`${peril.id}`).set(peril);
       }
   }

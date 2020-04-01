@@ -2,7 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AngularFireStorage } from '@angular/fire/storage';
 import 'firebase/storage';
-import { PerilService } from '../../../../services/peril-service.service';
+import { PerilService } from '../../../../services/perils.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
