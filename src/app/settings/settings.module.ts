@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SettingsComponent } from './settings.component';
 import { OrganizationalSetupsComponent } from './components/organizational-setups/organizational-setups.component';
 import { UnderwritingSetupsComponent } from './components/underwriting-setups/underwriting-setups.component';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
@@ -54,7 +53,6 @@ const routes: Routes = [
 @NgModule({
     declarations: [
         AccountsComponent,
-        SettingsComponent,
         OrganizationalSetupsComponent,
         UnderwritingSetupsComponent,
         CreateAccountTypeComponent,
@@ -77,7 +75,6 @@ const routes: Routes = [
         ReactiveFormsModule,
         RouterModule.forChild(routes),
     ],
-    exports: [SettingsComponent],
     providers: [AgentsService],
 })
 export class SettingsModule {}

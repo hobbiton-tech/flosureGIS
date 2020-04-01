@@ -17,36 +17,30 @@ import { combineLatest } from 'rxjs';
     styleUrls: ['./quote-details.component.scss'],
 })
 export class QuoteDetailsComponent implements OnInit {
-    //form
     quoteDetailsForm: FormGroup;
-
-    //quotesLists
     quotesList: MotorQuotationModel[] = [];
     quotesLoading = true;
 
     isQuoteApproved = false;
     approvingQuote = false;
 
-    //quoteNumber
     quoteNumber: string;
     quote: MotorQuotationModel = new MotorQuotationModel();
 
-    selectedQuote: Quote;
     isEditmode = false;
 
-    //modal
     isVisible = false;
     isConfirmLoading = false;
     showDocumentModal = false;
 
     // generated PDFs
-    policyCertificateURl: string = '';
+    policyCertificateURl = '';
     showCertModal = false;
 
-    debitNoteURL: string = '';
+    debitNoteURL = '';
     showDebitModal = false;
 
-    quoteURL: string = '';
+    quoteURL = '';
     showQuoteModal = false;
 
     constructor(
@@ -104,7 +98,6 @@ export class QuoteDetailsComponent implements OnInit {
         }, 3000);
 
         console.log(this.quoteDetailsForm.value);
-        //push to convert quote to policy and policies collection
         const policy = this.quoteDetailsForm.value as Policy;
         this.policiesService.addPolicy(policy);
     }
@@ -214,11 +207,8 @@ export class QuoteDetailsComponent implements OnInit {
             async ([debit, cert, quote]) => {
                 this.debitNoteURL = debit.Location;
                 this.policyCertificateURl = cert.Location;
-                this.quoteURL = quote.Location;
-
-                // await this.quotesService.addQuoteDocuments()
-
                 this.quote.status = 'Approved';
+
                 await this.quotesService.updateQuote(this.quote);
 
                 this.isQuoteApproved = true;
