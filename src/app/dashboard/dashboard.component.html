@@ -1,4 +1,4 @@
-<div style="background: #ECECEC;padding:30px;">
+<div style="background: #ececec; padding: 30px;">
     <div nz-row [nzGutter]="8">
         <div nz-col [nzSpan]="8">
             <nz-card
@@ -39,7 +39,7 @@
             </nz-card>
         </div>
     </div>
-    <div nz-row [nzGutter]="8" style="padding-top: 10px">
+    <div nz-row [nzGutter]="8" style="padding-top: 10px;">
         <div nz-col [nzSpan]="8">
             <nz-card
                 [nzTitle]="'Expired Policies'"
@@ -73,11 +73,11 @@
         </div>
     </div>
 
-    <div style="margin-top: 20px">
+    <div style="margin-top: 20px;">
         <nz-card>
             <nz-tabset>
                 <nz-tab nzTitle="Active Policies">
-                    <div style="margin-bottom: 10px; width: 50%">
+                    <div style="margin-bottom: 10px; width: 50%;">
                         <nz-input-group [nzSuffix]="suffixIconSearch">
                             <input
                                 type="text"
@@ -111,7 +111,7 @@
                             <tr
                                 *ngFor="let policy of activePoliciesTable.data"
                                 (click)="viewPolicyDetails(policy)"
-                                style="cursor:pointer;"
+                                style="cursor: pointer;"
                             >
                                 <td>{{ policy.policyNumber }}</td>
                                 <td>{{ policy.productType }}</td>
@@ -129,7 +129,7 @@
                     </nz-table>
                 </nz-tab>
                 <nz-tab nzTitle="Expiring Policies">
-                    <div style="margin-bottom: 10px; width: 50%">
+                    <div style="margin-bottom: 10px; width: 50%;">
                         <nz-input-group [nzSuffix]="suffixIconSearch">
                             <input
                                 type="text"
@@ -163,7 +163,7 @@
                             <tr
                                 *ngFor="let policy of expiredPoliciesTable.data"
                                 (click)="viewPolicyDetails(policy)"
-                                style="cursor:pointer;"
+                                style="cursor: pointer;"
                             >
                                 <td>{{ policy.policyNumber }}</td>
                                 <td>{{ policy.productType }}</td>

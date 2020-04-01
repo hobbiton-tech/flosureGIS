@@ -23,32 +23,32 @@ import { AddAgentComponent } from './components/agents/add-agent/add-agent.compo
 const routes: Routes = [
     {
         path: 'insurance-companies',
-        component: InsuranceCompaniesComponent
+        component: InsuranceCompaniesComponent,
     },
     {
         path: 'add-insurance-company',
-        component: AddInsuranceCompanyComponent
+        component: AddInsuranceCompanyComponent,
     },
     {
         path: 'underwriting',
-        component: UnderwritingSetupsComponent
+        component: UnderwritingSetupsComponent,
     },
     {
         path: 'accounts',
-        component: AccountsComponent
+        component: AccountsComponent,
     },
     {
         path: 'organization-setups',
-        component: OrganizationalSetupsComponent
+        component: OrganizationalSetupsComponent,
     },
     {
         path: 'agents-setups',
-        component: AgentsComponent
+        component: AgentsComponent,
     },
     {
         path: 'add-agents',
-        component: AddAgentComponent
-    }
+        component: AddAgentComponent,
+    },
 ];
 
 @NgModule({
@@ -68,16 +68,16 @@ const routes: Routes = [
         InsuranceCompaniesComponent,
         AddInsuranceCompanyComponent,
         AgentsComponent,
-        AddAgentComponent
+        AddAgentComponent,
     ],
     imports: [
         CommonModule,
         NgZorroAntdModule,
         FormsModule,
         ReactiveFormsModule,
-        RouterModule.forChild(routes)
+        RouterModule.forChild(routes),
     ],
     exports: [SettingsComponent],
-    providers: [AgentsService]
+    providers: [AgentsService],
 })
 export class SettingsModule {}

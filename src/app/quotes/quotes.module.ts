@@ -19,16 +19,16 @@ import { HttpClientModule } from '@angular/common/http';
 const routes: Routes = [
     {
         path: 'create-quote',
-        component: CreateQuoteComponent
+        component: CreateQuoteComponent,
     },
     {
         path: 'quotes-list',
-        component: QuotesComponent
+        component: QuotesComponent,
     },
     {
         path: 'quote-details/:quoteNumber',
-        component: QuoteDetailsComponent
-    }
+        component: QuoteDetailsComponent,
+    },
 ];
 
 @NgModule({
@@ -38,7 +38,7 @@ const routes: Routes = [
         QuotationDetailsComponent,
         QuotationProductDetailsComponent,
         RiskDetailsComponent,
-        QuoteDetailsComponent
+        QuoteDetailsComponent,
     ],
     imports: [
         CommonModule,
@@ -47,9 +47,9 @@ const routes: Routes = [
         ReactiveFormsModule,
         PdfViewerModule,
         HttpClientModule,
-        RouterModule.forChild(routes)
+        RouterModule.forChild(routes),
     ],
     exports: [QuotesComponent, CreateQuoteComponent],
-    providers: [StepperService, QuotesService]
+    providers: [StepperService, QuotesService],
 })
 export class QuotesModule {}

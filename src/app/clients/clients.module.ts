@@ -16,46 +16,44 @@ import { ClientDetailsComponent } from './components/client-details/client-detai
 import { ClientsService } from './services/clients.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 
-
 const routes: Routes = [
     {
         path: 'create-client',
-        component: CreateClientComponent
+        component: CreateClientComponent,
     },
     {
         path: 'client-details/:id',
-        component: ClientDetailsComponent
+        component: ClientDetailsComponent,
     },
     {
         path: 'clients-list',
-        component: ClientsListComponent
+        component: ClientsListComponent,
     },
     {
         path: 'personal-details',
-        component: PersonalDetailsComponent
+        component: PersonalDetailsComponent,
     },
     {
         path: 'employement-information',
-        component: EmployementInformationComponent
+        component: EmployementInformationComponent,
     },
     {
         path: 'bank-details',
-        component: BankDetailsComponent
+        component: BankDetailsComponent,
     },
     {
         path: 'company-details',
-        component: CompanyDetailsComponent
+        component: CompanyDetailsComponent,
     },
     {
         path: 'contact-person',
-        component: ContactPersonComponent
+        component: ContactPersonComponent,
     },
     {
         path: 'company-bank-details',
-        component: CompanyBankDetailsComponent
-    }
+        component: CompanyBankDetailsComponent,
+    },
 ];
-
 
 @NgModule({
     declarations: [
@@ -68,16 +66,16 @@ const routes: Routes = [
         ContactPersonComponent,
         CompanyBankDetailsComponent,
         ClientsListComponent,
-        ClientDetailsComponent
+        ClientDetailsComponent,
     ],
     imports: [
         CommonModule,
         NgZorroAntdModule,
         FormsModule,
         ReactiveFormsModule,
-        RouterModule.forChild(routes)
+        RouterModule.forChild(routes),
     ],
     providers: [ClientsService],
-    exports: [ClientsComponent]
+    exports: [ClientsComponent],
 })
 export class ClientsModule {}

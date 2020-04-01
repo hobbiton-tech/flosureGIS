@@ -7,7 +7,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss']
+    styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
     email: string;
@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
         this.loginForm = this.fb.group({
             email: [null, [Validators.required, Validators.email]],
             password: [null, [Validators.required]],
-            remember: [true]
+            remember: [true],
         });
     }
 
@@ -40,11 +40,11 @@ export class LoginComponent implements OnInit {
                     this.loginForm.controls['email'].value,
                     this.loginForm.controls['password'].value
                 )
-                .then(res => {
+                .then((res) => {
                     console.log(res);
                     this.router.navigateByUrl('/flosure/dashboard');
                 })
-                .catch(err => {
+                .catch((err) => {
                     console.log(err);
                     for (const i in this.loginForm.controls) {
                         this.loginForm.controls[i].markAsDirty();

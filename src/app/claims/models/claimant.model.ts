@@ -19,10 +19,10 @@ const createClaimant = () => {
         identificationType: faker.random.arrayElement(['NRC', 'Passport']),
         address: faker.name.jobArea(),
         mobileNumber: faker.phone.phoneNumber('+260 9## ### ###'),
-    }
+    };
 
     return claimant;
-}
+};
 
 const generateClaimants = () => {
     let claimants: IClaimant[] = [];
@@ -30,4 +30,4 @@ const generateClaimants = () => {
         claimants.push(createClaimant());
     }
     return claimants;
-}
+};

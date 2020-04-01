@@ -120,7 +120,7 @@
         </nz-card>
         <nz-card>
             <nz-divider nzText="Risk Details" nzOrientation="left"></nz-divider>
-            <div style="margin-top:20px">
+            <div style="margin-top: 20px;">
                 <nz-table
                     #risksTable
                     [nzData]="quote.risks"
@@ -302,7 +302,7 @@
     (nzOnOk)="showCertModal = false"
 >
     <div style="margin: 20px;">
-        <nz-card style="width: 100%" nzTitle="Receipt" [nzExtra]="actions">
+        <nz-card style="width: 100%;" nzTitle="Receipt" [nzExtra]="actions">
             <pdf-viewer
                 [src]="policyCertificateURl"
                 [original-size]="false"
@@ -332,7 +332,7 @@
     (nzOnOk)="showDebitModal = false"
 >
     <div style="margin: 20px;">
-        <nz-card style="width: 100%" nzTitle="Receipt" [nzExtra]="actions">
+        <nz-card style="width: 100%;" nzTitle="Receipt" [nzExtra]="actions">
             <pdf-viewer
                 [src]="debitNoteURL"
                 [original-size]="false"
@@ -362,7 +362,7 @@
     (nzOnOk)="showQuoteModal = false"
 >
     <div style="margin: 20px;">
-        <nz-card style="width: 100%" nzTitle="Receipt" [nzExtra]="actions">
+        <nz-card style="width: 100%;" nzTitle="Receipt" [nzExtra]="actions">
             <pdf-viewer [src]="quoteURL" [original-size]="false"></pdf-viewer>
         </nz-card>
         <ng-template #actions>

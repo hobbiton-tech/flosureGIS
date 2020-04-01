@@ -3,7 +3,7 @@ import {
     FormGroup,
     FormBuilder,
     Validators,
-    FormControl
+    FormControl,
 } from '@angular/forms';
 import { StepperService } from 'src/app/quotes/services/stepper.service';
 import { Router } from '@angular/router';
@@ -11,19 +11,19 @@ import { QuotesService } from '../../services/quotes.service';
 import { ClientsService } from 'src/app/clients/services/clients.service';
 import {
     ICorporateClient,
-    IIndividualClient
+    IIndividualClient,
 } from 'src/app/clients/models/clients.model';
 import {
     RiskModel,
     Quote,
-    MotorQuotationModel
+    MotorQuotationModel,
 } from '../../models/quote.model';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
     selector: 'app-create-quote',
     templateUrl: './create-quote.component.html',
-    styleUrls: ['./create-quote.component.scss']
+    styleUrls: ['./create-quote.component.scss'],
 })
 export class CreateQuoteComponent implements OnInit {
     constructor(
@@ -47,7 +47,7 @@ export class CreateQuoteComponent implements OnInit {
 
     optionList = [
         { label: 'Motor Comprehensive', value: 'Comprehensive' },
-        { label: 'Motor Third Party', value: 'ThirdParty' }
+        { label: 'Motor Third Party', value: 'ThirdParty' },
     ];
     selectedValue = { label: 'Motor Comprehensive', value: 'Comprehensive' };
 
@@ -108,10 +108,10 @@ export class CreateQuoteComponent implements OnInit {
             currency: ['', Validators.required],
             startDate: ['', Validators.required],
             endDate: ['', Validators.required],
-            status: ['Draft']
+            status: ['Draft'],
         });
 
-        this.clientsService.getAllClients().subscribe(clients => {
+        this.clientsService.getAllClients().subscribe((clients) => {
             this.clients = [...clients[0], ...clients[1]] as Array<
                 IIndividualClient & ICorporateClient
             >;
@@ -127,7 +127,7 @@ export class CreateQuoteComponent implements OnInit {
             color: ['', Validators.required],
             estimatedValue: ['', Validators.required],
             productType: ['', Validators.required],
-            insuranceType: ['Comprehensive']
+            insuranceType: ['Comprehensive'],
         });
 
         // Third Party Form
@@ -139,7 +139,7 @@ export class CreateQuoteComponent implements OnInit {
             chassisNumber: ['', [Validators.required]],
             color: ['', [Validators.required]],
             productType: ['', [Validators.required]],
-            insuranceType: ['ThirdParty']
+            insuranceType: ['ThirdParty'],
         });
     }
 
@@ -168,16 +168,16 @@ export class CreateQuoteComponent implements OnInit {
     addQuote(): void {
         const quote: MotorQuotationModel = {
             ...this.quoteForm.value,
-            risks: this.risks
+            risks: this.risks,
         };
         console.log('=======Full Quotation=======');
         console.log(quote);
         this.quoteService
             .addMotorQuotation(quote)
-            .then(success => {
+            .then((success) => {
                 this.message.success('Quotation Successfully created');
             })
-            .catch(err => {
+            .catch((err) => {
                 this.message.error('Quotation Creation Failed');
             });
     }

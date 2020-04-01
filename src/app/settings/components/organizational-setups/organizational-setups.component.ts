@@ -12,7 +12,7 @@ import { generateSectors } from 'src/app/settings/data/sector.data';
 @Component({
     selector: 'app-organizational-setups',
     templateUrl: './organizational-setups.component.html',
-    styleUrls: ['./organizational-setups.component.scss']
+    styleUrls: ['./organizational-setups.component.scss'],
 })
 export class OrganizationalSetupsComponent implements OnInit {
     currencyList = [];

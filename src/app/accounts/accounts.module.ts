@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AccountsComponent } from './accounts.component';
 import { Routes, RouterModule } from '@angular/router';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { ReceiptsGenerationComponent } from './components/receipts-generation/receipts-generation.component';
@@ -13,32 +12,31 @@ import { ReceiptsComponent } from './components/receipts/receipts.component';
 const routes: Routes = [
     {
         path: 'generate-receipts',
-        component: ReceiptsGenerationComponent
+        component: ReceiptsGenerationComponent,
     },
     {
         path: 'receipts',
-        component: ReceiptsComponent
+        component: ReceiptsComponent,
     },
     {
         path: 'payments',
-        component: PaymentsComponent
-    }
+        component: PaymentsComponent,
+    },
 ];
 
 @NgModule({
     declarations: [
-        AccountsComponent,
         ReceiptsGenerationComponent,
         ViewReceiptsComponent,
         PaymentsComponent,
-        ReceiptsComponent
+        ReceiptsComponent,
     ],
     imports: [
         CommonModule,
         NgZorroAntdModule,
         RouterModule.forChild(routes),
-        PdfViewerModule
+        PdfViewerModule,
     ],
-    providers: [AccountService]
+    providers: [AccountService],
 })
 export class AccountsModule {}

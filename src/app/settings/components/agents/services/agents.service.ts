@@ -3,14 +3,14 @@ import { IAgent } from '../models/agents.model';
 import {
     AngularFirestore,
     AngularFirestoreCollection,
-    DocumentReference
+    DocumentReference,
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { v4 } from 'uuid';
 import { first } from 'rxjs/operators';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class AgentsService {
     private agentsCollection: AngularFirestoreCollection<IAgent>;
@@ -23,7 +23,7 @@ export class AgentsService {
     }
 
     async addAgent(agent: IAgent): Promise<void> {
-        this.agents.pipe(first()).subscribe(async agents => {
+        this.agents.pipe(first()).subscribe(async (agents) => {
             agent.id = v4(); // Generates UUID of version 4.
             agent.userType = 'Agent';
             agent.dateCreated = new Date();

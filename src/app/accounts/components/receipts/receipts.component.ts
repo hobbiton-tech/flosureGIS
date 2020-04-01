@@ -6,7 +6,7 @@ import * as _ from 'lodash';
 @Component({
     selector: 'app-receipts',
     templateUrl: './receipts.component.html',
-    styleUrls: ['./receipts.component.scss']
+    styleUrls: ['./receipts.component.scss'],
 })
 export class ReceiptsComponent implements OnInit {
     receiptsCount = 0;
@@ -30,7 +30,7 @@ export class ReceiptsComponent implements OnInit {
         //     ).length;
         // });
 
-        this.receiptService.getQuotes().subscribe(quotes => {
+        this.receiptService.getQuotes().subscribe((quotes) => {
             this.unreceipted = quotes;
             this.receiptsCount = quotes.length;
             console.log('======= Receipt List =======');

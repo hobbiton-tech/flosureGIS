@@ -5,7 +5,7 @@ import {
     FormControl,
     FormBuilder,
     ReactiveFormsModule,
-    Validators
+    Validators,
 } from '@angular/forms';
 import { Claim } from '../../models/claim.model';
 import { ICorporateClient } from 'src/app/clients/models/clients.model';
@@ -13,7 +13,7 @@ import { ICorporateClient } from 'src/app/clients/models/clients.model';
 @Component({
     selector: 'app-intimate-claim',
     templateUrl: './intimate-claim.component.html',
-    styleUrls: ['./intimate-claim.component.scss']
+    styleUrls: ['./intimate-claim.component.scss'],
 })
 export class IntimateClaimComponent implements OnInit {
     intimateClaimForm: FormGroup;
@@ -37,7 +37,7 @@ export class IntimateClaimComponent implements OnInit {
             activity: ['', Validators.required],
             lossDate: ['', Validators.required],
             notificationDate: ['', Validators.required],
-            status: 'pending'
+            status: 'pending',
         });
     }
 

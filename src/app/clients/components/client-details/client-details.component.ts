@@ -2,11 +2,11 @@ import {
     Component,
     OnInit,
     ChangeDetectorRef,
-    AfterViewInit
+    AfterViewInit,
 } from '@angular/core';
 import {
     ICorporateClient,
-    IIndividualClient
+    IIndividualClient,
 } from '../../models/clients.model';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AccountDetails } from '../../models/account-details.model';
@@ -21,7 +21,7 @@ import { getDate } from 'date-fns';
 @Component({
     selector: 'app-client-details',
     templateUrl: './client-details.component.html',
-    styleUrls: ['./client-details.component.scss']
+    styleUrls: ['./client-details.component.scss'],
 })
 export class ClientDetailsComponent implements OnInit, AfterViewInit {
     isEditmode = false;
@@ -43,15 +43,15 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
     ) {}
 
     ngOnInit(): void {
-        this.router.params.subscribe(param => {
+        this.router.params.subscribe((param) => {
             this.id = param.id;
         });
 
-        this.clientsService.getAllClients().subscribe(clients => {
+        this.clientsService.getAllClients().subscribe((clients) => {
             console.log(clients);
             // I don't know yet if this actually works. Still doing some research on intersection types.
             this.client = [...clients[1], ...clients[0]].filter(
-                x => x.id === this.id
+                (x) => x.id === this.id
             )[0] as IIndividualClient & ICorporateClient;
 
             console.log('CLIENTS', this.client);

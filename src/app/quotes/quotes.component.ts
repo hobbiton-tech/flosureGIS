@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 @Component({
     selector: 'app-quotes',
     templateUrl: './quotes.component.html',
-    styleUrls: ['./quotes.component.scss']
+    styleUrls: ['./quotes.component.scss'],
 })
 export class QuotesComponent implements OnInit {
     quotesList: MotorQuotationModel[];
@@ -15,7 +15,7 @@ export class QuotesComponent implements OnInit {
     constructor(private quoteServise: QuotesService, private router: Router) {}
 
     ngOnInit(): void {
-        this.quoteServise.getQuotes().subscribe(quotes => {
+        this.quoteServise.getQuotes().subscribe((quotes) => {
             this.quotesList = quotes;
             this.quotesCount = quotes.length;
         });

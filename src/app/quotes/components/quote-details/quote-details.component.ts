@@ -14,7 +14,7 @@ import { combineLatest } from 'rxjs';
 @Component({
     selector: 'app-quote-details',
     templateUrl: './quote-details.component.html',
-    styleUrls: ['./quote-details.component.scss']
+    styleUrls: ['./quote-details.component.scss'],
 })
 export class QuoteDetailsComponent implements OnInit {
     //form
@@ -58,13 +58,13 @@ export class QuoteDetailsComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.route.params.subscribe(param => {
+        this.route.params.subscribe((param) => {
             this.quoteNumber = param.quoteNumber;
-            this.quotesService.getQuotes().subscribe(quotes => {
+            this.quotesService.getQuotes().subscribe((quotes) => {
                 this.quotesList = quotes;
                 console.log(quotes);
                 this.quote = this.quotesList.filter(
-                    x => x.quoteNumber === this.quoteNumber
+                    (x) => x.quoteNumber === this.quoteNumber
                 )[0];
 
                 this.isQuoteApproved = this.quote.status === 'Approved';
@@ -91,7 +91,7 @@ export class QuoteDetailsComponent implements OnInit {
             town: ['', Validators.required],
             preparedBy: ['', Validators.required],
             paymentMethod: ['', Validators.required],
-            sumInsured: ['', Validators.required]
+            sumInsured: ['', Validators.required],
         });
     }
 
@@ -148,7 +148,7 @@ export class QuoteDetailsComponent implements OnInit {
             basicPremium: 0,
             insuredPremiumLevy: 0,
             netPremium: 0,
-            processedBy: 'string'
+            processedBy: 'string',
         };
 
         const certificate: ICertificateDTO = {
@@ -175,7 +175,7 @@ export class QuoteDetailsComponent implements OnInit {
             thirdPartyPropertyDamage: 0,
             thirdPartyInuryAndDeath: 0,
             thirdPartyBoodilyInjury_DeathPerEvent: 0,
-            town: 'string'
+            town: 'string',
         };
 
         const quote: IQuoteDTO = {
@@ -203,7 +203,7 @@ export class QuoteDetailsComponent implements OnInit {
             productType: 'Commercial',
             messageModelId: 'string',
             description: 'string',
-            coverModelId: 'string'
+            coverModelId: 'string',
         };
 
         const debit$ = this.quotesService.generateDebitNote(debitNote);

@@ -14,7 +14,7 @@ import * as _ from 'lodash';
 @Component({
     selector: 'app-claim-details',
     templateUrl: './claim-details.component.html',
-    styleUrls: ['./claim-details.component.scss']
+    styleUrls: ['./claim-details.component.scss'],
 })
 export class ClaimDetailsComponent implements OnInit {
     claimDetailsForm: FormGroup;
@@ -48,7 +48,7 @@ export class ClaimDetailsComponent implements OnInit {
 
     ngOnInit(): void {
         //get claimId from parameters
-        this.router.params.subscribe(param => {
+        this.router.params.subscribe((param) => {
             this.claimId = param.id;
         });
 
@@ -61,13 +61,15 @@ export class ClaimDetailsComponent implements OnInit {
             lossDate: [``, Validators.required],
             notificationDate: [``, Validators.required],
             status: 'resolved',
-            document: [``, Validators.required]
+            document: [``, Validators.required],
         });
 
-        this.claimsService.getClaims().subscribe(claims => {
-            this.claimsList = claims.filter(x => x.claimId === this.claimId);
+        this.claimsService.getClaims().subscribe((claims) => {
+            this.claimsList = claims.filter((x) => x.claimId === this.claimId);
 
-            this.claimData = claims.filter(x => x.claimId === this.claimId)[0];
+            this.claimData = claims.filter(
+                (x) => x.claimId === this.claimId
+            )[0];
 
             this.claimDetailsForm
                 .get('serviceProvider')
@@ -87,9 +89,9 @@ export class ClaimDetailsComponent implements OnInit {
         });
 
         //populate perils list
-        this.perilService.getPerils().subscribe(perils => {
+        this.perilService.getPerils().subscribe((perils) => {
             this.perilsList = perils.filter(
-                x => x.claimId === this.claimData.claimId
+                (x) => x.claimId === this.claimData.claimId
             );
         });
     }
@@ -103,7 +105,7 @@ export class ClaimDetailsComponent implements OnInit {
             .snapshotChanges()
             .pipe(
                 finalize(() => {
-                    fileRef.getDownloadURL().subscribe(url => {
+                    fileRef.getDownloadURL().subscribe((url) => {
                         this.url = url;
 
                         const claim = this.claimDetailsForm.value as Claim;
