@@ -10,7 +10,7 @@ import { ClientsService } from 'src/app/clients/services/clients.service';
 import {
     ICorporateClient,
     IIndividualClient,
-} from 'src/app/clients/models/clients.model';
+} from 'src/app/clients/models/client.model';
 import {
     RiskModel,
     Quote,

@@ -4,12 +4,8 @@ import {
     ChangeDetectorRef,
     AfterViewInit,
 } from '@angular/core';
-import {
-    ICorporateClient,
-    IIndividualClient,
-} from '../../models/clients.model';
+import { ICorporateClient, IIndividualClient } from '../../models/client.model';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AccountDetails } from '../../models/account-details.model';
 import { ClientsService } from '../../services/clients.service';
 import { Policy } from 'src/app/underwriting/models/policy.model';
 import { Claim } from 'src/app/claims/models/claim.model';
@@ -25,8 +21,6 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
     client: IIndividualClient & ICorporateClient;
     clientPolicies: Policy[] = [];
     clientClaims: Claim[] = [];
-
-    account: AccountDetails;
     id: string;
 
     constructor(

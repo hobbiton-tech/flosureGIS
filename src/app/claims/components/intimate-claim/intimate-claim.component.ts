@@ -8,7 +8,7 @@ import {
     Validators,
 } from '@angular/forms';
 import { Claim } from '../../models/claim.model';
-import { ICorporateClient } from 'src/app/clients/models/clients.model';
+import { ICorporateClient } from 'src/app/clients/models/client.model';
 
 @Component({
     selector: 'app-intimate-claim',

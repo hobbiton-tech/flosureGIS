@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {
     IIndividualClient,
     ICorporateClient,
-} from '../../models/clients.model';
+} from '../../models/client.model';
 import { Router } from '@angular/router';
 import { ClientsService } from '../../services/clients.service';
 
