@@ -15,6 +15,8 @@ export class LoginComponent implements OnInit {
     validateStatus: string;
     loginForm: FormGroup;
 
+    isLoggingIn = false;
+
     constructor(
         private router: Router,
         public auth: AngularFireAuth,
@@ -29,27 +31,27 @@ export class LoginComponent implements OnInit {
         });
     }
 
-    login(): void {
+    async login(): Promise<void> {
+        this.isLoggingIn = true;
         for (const i in this.loginForm.controls) {
             this.loginForm.controls[i].markAsDirty();
             this.loginForm.controls[i].updateValueAndValidity();
         }
         if (!this.loginForm.invalid) {
-            this.auth
+            await this.auth
                 .signInWithEmailAndPassword(
-                    this.loginForm.controls['email'].value,
-                    this.loginForm.controls['password'].value
+                    this.loginForm.controls.email.value,
+                    this.loginForm.controls.password.value
                 )
                 .then((res) => {
-                    console.log(res);
+                    this.isLoggingIn = false;
                     this.router.navigateByUrl('/flosure/dashboard');
                 })
                 .catch((err) => {
-                    console.log(err);
+                    this.isLoggingIn = false;
                     for (const i in this.loginForm.controls) {
                         this.loginForm.controls[i].markAsDirty();
                         this.validateStatus = 'error';
-                        // this.loginForm.controls[i].updateValueAndValidity();
                     }
                     // this.loginForm.reset();
                 });
