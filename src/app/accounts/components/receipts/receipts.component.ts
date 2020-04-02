@@ -10,7 +10,7 @@ import { v4 } from 'uuid';
 @Component({
     selector: 'app-receipts',
     templateUrl: './receipts.component.html',
-    styleUrls: ['./receipts.component.scss']
+    styleUrls: ['./receipts.component.scss'],
 })
 export class ReceiptsComponent implements OnInit {
     receiptForm: FormGroup;

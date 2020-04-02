@@ -22,6 +22,6 @@ export interface IDocument {
 
 export type ClaimStatus = 'Pending' | 'Resolved' | 'Cancelled';
 export interface ITimestamp {
-    seconds: string;
-    milliseconds: string;
+    seconds: number;
+    milliseconds: number;
 }
