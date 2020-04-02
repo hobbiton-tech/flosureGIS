@@ -45,67 +45,34 @@
                 <li nz-submenu nzTitle="Quotations" nzIcon="mail">
                     <ul>
                         <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/quotes/create-quote"
-                                >Motor</a
-                            >
-                        </li>
-                        <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/quotes/create-motor-quotation"
-                                >Accident</a
-                            >
-                        </li>
-                        <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/quotes/create-accident-quotation"
-                                >Fire</a
-                            >
-                        </li>
-                        <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/quotes/create-fire-quotatione"
-                                >Engineering</a
-                            >
-                        </li> 
-                        <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/quotes/create-engineering-quotation"
-                                >Marine</a
-                            >
-                        </li>
-                        <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/quotes/quotes-list">
-                                View Quotes
+                                Quotation Listing
                             </a>
+                        </li>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/quotes/create-quote"
+                                >Create Quote</a
+                            >
                         </li>
                     </ul>
                 </li>
                 <li nz-submenu nzTitle="Underwriting" nzIcon="edit">
                     <ul>
-                        <!-- <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/underwriting/endorsements">
-                                Endorsements
-                            </a>
-                        </li> -->
                         <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/underwriting/policies">
-                                Motor Policies
+                                Policy Listing
                             </a>
                         </li>
                         <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/underwriting/accident-policies">
-                                Accident Policies
+                            <a
+                                routerLink="/flosure/underwriting/accident-policies"
+                            >
+                                Endorsements
                             </a>
                         </li>
                         <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/underwriting/fire-policies">
-                                Fire Policies
-                            </a>
-                        </li>
-                        <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/underwriting/engineering-policies">
-                                Engineering Policies
-                            </a>
-                        </li>
-                        <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/underwriting/marine-policies">
-                                Marine Policies
+                                Renewals
                             </a>
                         </li>
                     </ul>
@@ -114,33 +81,67 @@
                     <ul>
                         <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/claims/claim-transactions">
-                                Claims
+                                Claims Listing
                             </a>
                         </li>
-                        <!-- <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/claims/claimants">
-                                Claimants
-                            </a>
-                        </li> -->
-                    </ul>
-                </li>
-                <li nz-submenu nzTitle="Accounts" nzIcon="dollar">
-                    <ul>
-                        <!-- <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/accounts/generate-receipts">
-                                Generate Reciepts
-                            </a>
-                        </li> -->
                         <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/accounts/receipts">
-                                Reciepts
-                            </a>
-                        </li>
-                        <!-- <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/accounts/payments">
+                            <a routerLink="/flosure/claims/claimants">
                                 Payments
                             </a>
-                        </li> -->
+                        </li>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/claims/claimants">
+                                Reopening
+                            </a>
+                        </li>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/claims/claimants">
+                                Salvages
+                            </a>
+                        </li>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/claims/claimants">
+                                Editing
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li nz-submenu nzTitle="Client Accounts" nzIcon="dollar">
+                    <ul>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/accounts/receipts">
+                                Accounts Listing
+                            </a>
+                        </li>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/accounts/receipts">
+                                Allocations
+                            </a>
+                        </li>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/accounts/receipts">
+                                Journals
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li nz-submenu nzTitle="Finance" nzIcon="dollar">
+                    <ul>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/accounts/receipts">
+                                Reciepting
+                            </a>
+                        </li>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/accounts/receipts">
+                                Requisitions
+                            </a>
+                        </li>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/accounts/receipts">
+                                Payments
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li nz-submenu nzTitle="Reports" nzIcon="reconciliation">
@@ -151,6 +152,35 @@
                         <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/reports/policies">
                                 Policies
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li nz-submenu nzTitle="Intermediaries" nzIcon="reconciliation">
+                    <ul>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/reports/policies">
+                                Account Listing
+                            </a>
+                        </li>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/reports/policies">
+                                Allocations
+                            </a>
+                        </li>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/reports/policies">
+                                Journals
+                            </a>
+                        </li>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/reports/policies">
+                                Commission Processing
+                            </a>
+                        </li>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/reports/policies">
+                                Commission Approval
                             </a>
                         </li>
                     </ul>
@@ -186,29 +216,31 @@
                         </li> -->
                         <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/settings/agents-setups"
-                                >Agent Setups</a
+                                >Agents</a
                             >
                         </li>
                         <li nz-menu-item nzMatchRouter>
                             <a
                                 routerLink="/flosure/settings/organization-setups"
-                                >Organization Setups</a
+                                >Organizations</a
                             >
                         </li>
                         <li nz-menu-item nzMatchRouter>
-                            <a
-                                routerLink="/flosure/settings/rates"
-                                >Rates</a
-                            >
+                            <a routerLink="/flosure/settings/rates">Rates</a>
                         </li>
                         <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/settings/underwriting"
-                                >Underwriting Setups</a
+                                >Underwriting</a
                             >
                         </li>
                         <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/settings/accounts"
-                                >Accounts Setups</a
+                                >Accounts</a
+                            >
+                        </li>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/settings/accounts"
+                                >Finance</a
                             >
                         </li>
                     </ul>
