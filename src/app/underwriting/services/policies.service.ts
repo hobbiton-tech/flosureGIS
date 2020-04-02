@@ -57,7 +57,7 @@ export class PoliciesService {
         return number;
     }
 
-    //Generating Policy Number
+    // Generating Policy Number
     generatePolicyNumber(brokerName: string, totalPolicies: number) {
         const broker_name = brokerName.substring(0, 2).toLocaleUpperCase();
         const count = this.countGenerator(totalPolicies);

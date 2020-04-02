@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { MotorQuotationModel } from 'src/app/quotes/models/quote.model';
 import { AccountService } from '../../services/account.service';
 import * as _ from 'lodash';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { IReceiptModel } from '../models/receipts.model';
+import { NzMessageService } from 'ng-zorro-antd';
+import { v4 } from 'uuid';
 
 @Component({
     selector: 'app-receipts',
@@ -9,32 +13,97 @@ import * as _ from 'lodash';
     styleUrls: ['./receipts.component.scss'],
 })
 export class ReceiptsComponent implements OnInit {
+    receiptForm: FormGroup;
     receiptsCount = 0;
-    unreceipted: MotorQuotationModel[];
+    unreceiptedList: MotorQuotationModel[];
+    receiptedList: IReceiptModel[];
+    today = new Date();
+    clientName = '';
 
     receiptList = [];
 
-    constructor(private receiptService: AccountService) {}
+    isVisible = false;
+    isOkLoading = false;
+    quoteNumber = '';
+    user = '';
 
-    ngOnInit(): void {
-        // this.receiptService.getReciepts().subscribe(receipts => {
-        //     console.log('<========receipts=========>');
-        //     console.log(receipts);
-        //     this.unreceipted = _.filter(receipts, x => x.status === 'Approved');
-        //     console.log('<========receipts=========>');
-        //     console.log(receipts);
+    showModal(unreceipted: MotorQuotationModel): void {
+        this.isVisible = true;
+        this.clientName = unreceipted.clientCode;
+        this.quoteNumber = unreceipted.quoteNumber;
+        this.user = unreceipted.user;
+        console.log(unreceipted);
+    }
 
-        //     this.receiptsCount = _.filter(
-        //         receipts,
-        //         x => x.status === 'Approved'
-        //     ).length;
-        // });
+    async handleOk() {
+        this.isOkLoading = true;
+        const receipt: IReceiptModel = {
+            id: v4(),
+            ...this.receiptForm.value,
+            onBehalfOf: this.clientName,
+            capturedBy: this.user,
+            policyNumber: this.quoteNumber,
+            todayDate: new Date()
+        };
+        await this.receiptService
+            .addReceipt(receipt)
+            .then(mess => {
+                this.message.success('Receipt Successfully created');
+                console.log(mess);
+            })
+            .catch(err => {
+                this.message.warning('Receipt Failed');
+                console.log(err);
+            });
+        this.receiptForm.reset();
+        setTimeout(() => {
+            this.isVisible = false;
+            this.isOkLoading = false;
+        }, 30);
+    }
 
-        this.receiptService.getQuotes().subscribe((quotes) => {
-            this.unreceipted = quotes;
-            this.receiptsCount = quotes.length;
-            console.log('======= Receipt List =======');
-            console.log(this.unreceipted);
+    handleCancel(): void {
+        this.isVisible = false;
+    }
+
+    constructor(
+        private receiptService: AccountService,
+        private formBuilder: FormBuilder,
+        private message: NzMessageService
+    ) {
+        this.receiptForm = this.formBuilder.group({
+            receivedFrom: ['', Validators.required],
+            sumInDigits: ['', Validators.required],
+            paymentMethod: ['', Validators.required],
+            tpinNumber: ['4324324324324324', Validators.required],
+            address: ['', Validators.required],
+            // sumInWords: ['', Validators.required],
+            dateReceived: [''],
+            todayDate: [this.today],
+            remarks: ['', Validators.required]
         });
     }
+
+    ngOnInit(): void {
+        this.receiptService.getQuotes().subscribe(quotes => {
+            this.unreceiptedList = _.filter(
+                quotes,
+                x => x.status === 'Approved'
+            );
+            this.receiptsCount = _.filter(
+                quotes,
+                x => x.status === 'Approved'
+            ).length;
+            console.log('======= Unreceipt List =======');
+            console.log(this.unreceiptedList);
+        });
+
+        this.receiptService.getReciepts().subscribe(receipts => {
+            this.receiptedList = receipts;
+            console.log('======= Receipt List =======');
+            console.log(receipts);
+        });
+    }
+
+    onSubmit() {}
 }
