@@ -3,8 +3,8 @@
 export class Quote {
     quoteNumber: number;
     revisionNumber: number;
-    startDate: Date;
-    endDate: Date;
+    startDate: Date | ITimestamp;
+    endDate: Date | ITimestamp;
     client: string;
     status: QuoteStatus;
     preparedBy: string;
@@ -14,12 +14,14 @@ export class Quote {
 export class MotorQuotationModel {
     id: string;
     user: string;
+    client: string;
     quoteNumber: string;
     dateCreated: Date | ITimestamp;
     clientCode: string;
     messageCode: string;
     coverCode: string;
     town: string;
+    branch: string;
     currency: string;
     risks: RiskModel[];
     startDate: Date | ITimestamp;

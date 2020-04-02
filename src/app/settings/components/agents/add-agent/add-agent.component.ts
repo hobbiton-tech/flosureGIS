@@ -37,7 +37,8 @@ export class AddAgentComponent implements OnInit {
             lastName: ['', Validators.required],
             email: ['', Validators.required],
             phone: ['', Validators.required],
-            address: ['', Validators.required]
+            address: ['', Validators.required],
+            branch: ['', Validators.required]
         });
     }
 

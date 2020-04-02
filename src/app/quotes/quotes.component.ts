@@ -18,7 +18,7 @@ export class QuotesComponent implements OnInit {
     constructor(private quoteServise: QuotesService, private router: Router) {}
 
     ngOnInit(): void {
-        this.quoteServise.getQoutes().subscribe(quotes => {
+        this.quoteServise.getQuotes().subscribe(quotes => {
             this.quotesList = quotes;
             this.quotesCount = quotes.length;
             console.log('======= Quote List =======');

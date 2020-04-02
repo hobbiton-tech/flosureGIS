@@ -3,9 +3,9 @@ export class Claim {
     claimId: string;
     policyNumber: string;
     clientName: string;
-    lossDate: Date;
+    lossDate: Date | ITimestamp;
     status: ClaimStatus;
-    notificationDate: Date;
+    notificationDate: Date | ITimestamp;
     bookedBy: string;
     serviceProvider: string;
     serviceType: string;
@@ -22,6 +22,6 @@ export interface IDocument {
 
 export type ClaimStatus = 'Pending' | 'Resolved' | 'Cancelled';
 export interface ITimestamp {
-    seconds: string;
-    milliseconds: string;
+    seconds: number;
+    milliseconds: number;
 }

@@ -96,6 +96,14 @@
                     </nz-form-item>
                 </div>
                 <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <nz-form-label nzRequired nzSpan="7">Branch</nz-form-label>
+                        <nz-form-control nzSpan="17">
+                            <input nz-input formControlName="branch" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="12">
                     <nz-form-item *ngIf="agentMode">
                         <nz-form-label nzRequired nzSpan="7">Agent</nz-form-label>
                         <nz-form-control nzSpan="17">
@@ -133,12 +141,13 @@
                 <div nz-col>
             <nz-collapse>
                 <nz-collapse-panel nzHeader="Add Risk">
-                    <div nz-row nzGutter="0">
-                        <div nz-col>
+                    
+                        <div nz-row nzGutter="0" style="margin-bottom: 30px;">
+                            <div nz-col nzSpan="12">
                             <nz-form-item>
-                                <nz-form-label [nzSpan]="6" nzFor="insuranceType" nzRequired>Insurance Type
+                                <nz-form-label [nzSpan]="7" nzFor="insuranceType" nzRequired>Insurance Type
                                 </nz-form-label>
-                                <nz-form-control nzSpan="18">
+                                <nz-form-control nzSpan="17">
                                     <nz-select name="insuranceType" [(ngModel)]="selectedValue"
                                         [compareWith]="compareFn" (ngModelChange)="log($event)" nzAllowClear
                                         nzPlaceHolder="Choose">
@@ -147,14 +156,13 @@
                                     </nz-select>
                                 </nz-form-control>
                             </nz-form-item>
+                            
                         </div>
-                        <div nz-col> 
-                            <nz-form-control>
-                            <nz-form-item>
-                                <button nz-button nzType="primary" (click)="showModal()" style="float: right;">Import</button>
-                            </nz-form-item>
-                        </nz-form-control>
-                        </div>
+                        <div nz-col nzSpan="12">
+                                <nz-form-item>
+                                        <button nz-button nzType="primary" (click)="showModal()" style="float: right;">Import</button>
+                                    </nz-form-item>         
+                                </div>
                     </div>
                     <div *ngIf="selectedValue?.value === 'Comprehensive'">
                         <form
@@ -510,7 +518,7 @@
                     <td>{{ risk.chassisNumber }}</td>
                     <td>{{ risk.color }}</td>
                     <td>{{ risk.productType }}</td>
-                    <td>{{ risk.estimatedValue }}</td>
+                    <td>{{ risk.estimatedValue | number }}</td>
                 </tr>
             </tbody>
         </nz-table>

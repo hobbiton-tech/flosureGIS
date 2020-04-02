@@ -127,10 +127,11 @@ export class CreateQuoteComponent implements OnInit {
             clientCode: ['', Validators.required],
             messageCode: ['ewrewre', Validators.required],
             town: ['', Validators.required],
+            branch: ['', Validators.required],
             currency: ['', Validators.required],
             startDate: ['', Validators.required],
             endDate: ['', Validators.required],
-            user: ['', Validators.required],
+            user: ['charles', Validators.required],
             status: ['Draft']
         });
 
@@ -138,9 +139,6 @@ export class CreateQuoteComponent implements OnInit {
             this.clients = [...clients[0], ...clients[1]] as Array<
                 IIndividualClient & ICorporateClient
             >;
-
-            console.log('============All Clients=========');
-            console.log(this.clients);
         });
 
         // Comprehensive Form
@@ -167,6 +165,14 @@ export class CreateQuoteComponent implements OnInit {
             productType: ['', [Validators.required]],
             insuranceType: ['ThirdParty']
         });
+    }
+
+    onSubmit() {
+        const some = this.quoteForm.value;
+        this.quoteService.addMotorQuotation(some);
+
+        localStorage.setItem('motor', JSON.stringify(some));
+        this.quoteService.getRisk('an');
     }
 
     addThirdPartyRisk(): void {

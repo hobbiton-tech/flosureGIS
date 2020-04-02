@@ -13,6 +13,8 @@ import { QuotesService } from './services/quotes.service';
 import { QuoteDetailsComponent } from './components/quote-details/quote-details.component';
 
 import 'firebase/firestore';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { HttpClientModule } from '@angular/common/http';
 
 const routes: Routes = [
     {
@@ -43,6 +45,8 @@ const routes: Routes = [
         NgZorroAntdModule,
         FormsModule,
         ReactiveFormsModule,
+        PdfViewerModule,
+        HttpClientModule,
         RouterModule.forChild(routes)
     ],
     exports: [QuotesComponent, CreateQuoteComponent],

@@ -24,43 +24,6 @@
             [nzSubtitle]="policyData.client"
         >
             <nz-page-header-extra>
-                <button
-                    nz-button
-                    nzType="primary"
-                    (click)="showCertModal = true"
-                >
-                    View Certificate
-                </button>
-                <button
-                    nz-button
-                    nzType="primary"
-                    (click)="showReceiptModal = true"
-                >
-                    View Receipt
-                </button>
-                <button
-                    nz-button
-                    nzType="primary"
-                    (click)="showDebitModal = true"
-                >
-                    View Debit Note
-                </button>
-                <button
-                    *ngIf="isEditmode"
-                    nz-button
-                    nzType="primary"
-                    (click)="isEditmode = false"
-                >
-                    Save Changes
-                </button>
-                <button
-                    *ngIf="!isEditmode"
-                    nz-button
-                    nzType="primary"
-                    (click)="isEditmode = true"
-                >
-                    Edit Policy
-                </button>
             </nz-page-header-extra>
         </nz-page-header>
     </div>
@@ -240,6 +203,7 @@
                                 nz-input
                                 [disabled]="!isEditmode"
                                 formControlName="expiryDate"
+                                [value]="getEndDateTimeStamp(policy) * 1000 | date"
                             />
                         </nz-form-control>
                     </nz-form-item>
@@ -271,6 +235,7 @@
                                 nz-input
                                 [disabled]="!isEditmode"
                                 formControlName="startDate"
+                                [value]="getTimeStamp(policy) * 1000 | date"
                             />
                         </nz-form-control>
                     </nz-form-item>
@@ -284,6 +249,7 @@
                                 nz-input
                                 [disabled]="!isEditmode"
                                 formControlName="endDate"
+                                [value]="getEndDateTimeStamp(policy) * 1000 | date"
                             />
                         </nz-form-control>
                     </nz-form-item>
@@ -324,6 +290,18 @@
                             />
                         </nz-form-control>
                     </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label nzSpan="7" nzRequired
+                            >Branch</nz-form-label
+                        >
+                        <nz-form-control nzSpan="17">
+                            <input
+                                nz-input
+                                [disabled]="!isEditmode"
+                                formControlName="branch"
+                            />
+                        </nz-form-control>
+                    </nz-form-item>
                 </div>
             </div>
         </form>
@@ -355,7 +333,7 @@
                         <td>{{ policy.chassisNumber }}</td>
                         <td>{{ policy.color }}</td>
                         <td>{{ policy.productType }}</td>
-                        <td>{{ policy.estimatedValue }}</td>
+                        <td>{{ policy.estimatedValue | number }}</td>
                     </tr>
                 </tbody>
             </nz-table>

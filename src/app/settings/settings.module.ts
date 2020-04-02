@@ -21,6 +21,7 @@ import { AddRateComponent } from './components/rates/components/add-rate/add-rat
 import { AgentsComponent } from './components/agents/agents.component';
 import { AgentsService } from './components/agents/services/agents.service';
 import { AddAgentComponent } from './components/agents/add-agent/add-agent.component';
+import { AddTaxComponent } from './components/rates/components/add-tax/add-tax.component';
 
 const routes: Routes = [
     {
@@ -76,7 +77,8 @@ const routes: Routes = [
         RatesComponent,
         AddRateComponent,
         AgentsComponent,
-        AddAgentComponent
+        AddAgentComponent,
+        AddTaxComponent
     ],
     imports: [
         CommonModule,

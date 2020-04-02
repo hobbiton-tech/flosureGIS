@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { RatesService } from '../../services/rates.service';
 import 'firebase/storage';
 import 'firebase/firestore';
+import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-add-rate',
@@ -14,30 +15,40 @@ export class AddRateComponent implements OnInit {
   ratesDetailsForm: FormGroup;
 
   @Input()
-  isAddRateDrawerVisible: boolean;
+  isDrawerVisible: boolean;
 
   @Output()
   closeAddRateDrawer: EventEmitter<any> = new EventEmitter();
 
   constructor(
     private formBuilder: FormBuilder,
-    private ratesService: RatesService
+    private ratesService: RatesService,
+    private msg: NzMessageService
   ) { }
 
   ngOnInit(): void {
     this.ratesDetailsForm = this.formBuilder.group({
-      id: ['', Validators.required],
+      id: [''],
       insuranceProduct: ['', Validators.required],
+      description: ['', Validators.required],
       premiumRate: ['', Validators.required],
       premiumLevy: ['', Validators.required],
-      taxRate: ['', Validators.required]
+      maxLimit: ['', Validators.required],
+      minLimit: ['', Validators.required]
     })
   }
 
   onSubmit() {
     const rate_details = this.ratesDetailsForm.value;
-    this.ratesService.addRate(rate_details);
+    this.ratesService.addRate(rate_details)
+    .then(success => {
+      this.msg.success('Rate Added Successfully')
+    })
+    .catch(err => {
+      this.msg.error('Failed To add Rate')
+    });
     this.ratesDetailsForm.reset();
+    this.closeAddRateDrawer.emit();
   }
 
   resetForm(e: MouseEvent): void {
@@ -45,7 +56,7 @@ export class AddRateComponent implements OnInit {
     this.ratesDetailsForm.reset();
   }
 
-  closeRateDrawer(): void {
+  closeDrawer(): void {
     this.closeAddRateDrawer.emit();
   }
 
