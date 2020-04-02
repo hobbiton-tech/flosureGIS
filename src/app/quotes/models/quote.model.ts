@@ -22,6 +22,7 @@ export class MotorQuotationModel {
     startDate: Date;
     endDate: Date;
     status: QuoteStatus;
+    user: string;
 }
 
 export class RiskModel {

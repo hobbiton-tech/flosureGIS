@@ -9,6 +9,7 @@ import { PaymentsComponent } from './components/payments/payments.component';
 import { AccountService } from './services/account.service';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { ReceiptsComponent } from './components/receipts/receipts.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
     {
@@ -37,7 +38,9 @@ const routes: Routes = [
         CommonModule,
         NgZorroAntdModule,
         RouterModule.forChild(routes),
-        PdfViewerModule
+        PdfViewerModule,
+        FormsModule,
+        ReactiveFormsModule
     ],
     providers: [AccountService]
 })
