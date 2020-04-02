@@ -1,6 +1,3 @@
-import { Quote } from 'src/app/quotes/models/quote.model';
-import { Claim } from 'src/app/claims/models/claim.model';
-import { AccountDetails } from './account-details.model';
 import { ITimestamp } from 'src/app/settings/components/insurance-companies/models/insurance-company.model';
 
 export interface IIndividualClient {
@@ -23,15 +20,12 @@ export interface IIndividualClient {
     occupation: OccupationType;
     clientType: ClientType;
     status: ClientStatus;
-    // accountDetails: AccountDetails;
     sector: string;
     accountName: string;
     accountNumber: number;
     bank: string;
     branch: string;
     accountType: string;
-    // quotes: Quote[];
-    // claims: Claim[];
 }
 
 export interface ICorporateClient {
@@ -54,9 +48,6 @@ export interface ICorporateClient {
     bank: string;
     branch: string;
     accountType: string;
-    // accountDetails: AccountDetails;
-    // quotes: Quote[];
-    // claims: Claim[];
 }
 
 export type ClientType = 'Individual' | 'Corporate';

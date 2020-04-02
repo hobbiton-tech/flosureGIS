@@ -1,9 +1,15 @@
 <div style="margin: 15px;">
     <nz-breadcrumb>
-        <nz-breadcrumb-item (click)="goToClientsList()" style="cursor: pointer">
+        <nz-breadcrumb-item
+            (click)="goToClientsList()"
+            style="cursor: pointer;"
+        >
             Clients
         </nz-breadcrumb-item>
-        <nz-breadcrumb-item (click)="goToClientsList()" style="cursor: pointer">
+        <nz-breadcrumb-item
+            (click)="goToClientsList()"
+            style="cursor: pointer;"
+        >
             Clients List
         </nz-breadcrumb-item>
         <nz-breadcrumb-item>
@@ -39,7 +45,7 @@
             </nz-page-header-extra>
         </nz-page-header>
     </nz-breadcrumb>
-    <div class="client-personal-details" style="margin-top: 20px">
+    <div class="client-personal-details" style="margin-top: 20px;">
         <div *ngIf="client.clientType == 'Individual'">
             <nz-card>
                 <nz-divider

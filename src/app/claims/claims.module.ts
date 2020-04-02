@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ClaimsComponent } from './claims.component';
 import { Routes, RouterModule } from '@angular/router';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { IntimateClaimComponent } from './components/intimate-claim/intimate-claim.component';
@@ -15,35 +14,34 @@ import { AddPerilsComponent } from './components/perils/components/add-perils/ad
 const routes: Routes = [
     {
         path: 'intimate-claims',
-        component: IntimateClaimComponent
+        component: IntimateClaimComponent,
     },
     {
         path: 'claim-transactions',
-        component: ClaimTransactionsComponent
+        component: ClaimTransactionsComponent,
     },
     {
         path: 'claimants',
-        component: ClaimantsComponent
+        component: ClaimantsComponent,
     },
     {
         path: 'claim-details',
-        component: ClaimDetailsComponent
+        component: ClaimDetailsComponent,
     },
     {
         path: 'claim-details/:id',
-        component: ClaimDetailsComponent
-    }
+        component: ClaimDetailsComponent,
+    },
 ];
 
 @NgModule({
     declarations: [
-        ClaimsComponent,
         IntimateClaimComponent,
         ClaimTransactionsComponent,
         ClaimantsComponent,
         ClaimDetailsComponent,
         PerilsComponent,
-        AddPerilsComponent
+        AddPerilsComponent,
     ],
     providers: [ClaimsService],
     imports: [
@@ -51,7 +49,6 @@ const routes: Routes = [
         ReactiveFormsModule,
         NgZorroAntdModule,
         RouterModule.forChild(routes),
-        FormsModule
-    ]
+    ],
 })
 export class ClaimsModule {}

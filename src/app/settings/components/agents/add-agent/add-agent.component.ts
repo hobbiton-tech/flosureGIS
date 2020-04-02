@@ -4,7 +4,7 @@ import {
     ChangeDetectorRef,
     Input,
     Output,
-    EventEmitter
+    EventEmitter,
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AgentsService } from '../services/agents.service';
@@ -13,7 +13,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 @Component({
     selector: 'app-add-agent',
     templateUrl: './add-agent.component.html',
-    styleUrls: ['./add-agent.component.scss']
+    styleUrls: ['./add-agent.component.scss'],
 })
 export class AddAgentComponent implements OnInit {
     agentForm: FormGroup;
@@ -47,10 +47,10 @@ export class AddAgentComponent implements OnInit {
     onSubmit() {
         this.agentService
             .addAgent(this.agentForm.value)
-            .then(success => {
+            .then((success) => {
                 this.message.success('Agent Successfully created');
             })
-            .catch(err => {
+            .catch((err) => {
                 this.message.error('Agent Creation Failed');
             });
         this.agentForm.reset();

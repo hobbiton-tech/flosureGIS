@@ -5,7 +5,7 @@ import { Policy } from 'src/app/underwriting/models/policy.model';
 @Component({
     selector: 'app-view-receipts',
     templateUrl: './view-receipts.component.html',
-    styleUrls: ['./view-receipts.component.scss']
+    styleUrls: ['./view-receipts.component.scss'],
 })
 export class ViewReceiptsComponent implements OnInit {
     receiptsList: Policy[];

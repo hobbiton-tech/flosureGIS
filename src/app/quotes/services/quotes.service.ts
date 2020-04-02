@@ -5,7 +5,7 @@ import {
     AngularFirestore,
     AngularFirestoreCollection,
     AngularFirestoreDocument,
-    DocumentReference
+    DocumentReference,
 } from '@angular/fire/firestore';
 import { map, flatMap, first } from 'rxjs/operators';
 import { v4 } from 'uuid';
@@ -32,7 +32,7 @@ export interface IAmazonS3Result {
 }
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class QuotesService {
     private motorQuoteCollection: AngularFirestoreCollection<
@@ -67,7 +67,7 @@ export class QuotesService {
 
     // add quotation
     async addMotorQuotation(quotation: MotorQuotationModel): Promise<void> {
-        this.quotations.pipe(first()).subscribe(async quotations => {
+        this.quotations.pipe(first()).subscribe(async (quotations) => {
             quotation.id = v4();
 
             quotation.quoteNumber = this.generateQuoteNumber(
@@ -80,7 +80,7 @@ export class QuotesService {
             .set(quotation)
                 .then(mess => {
                 })
-                .catch(err => {
+                .catch((err) => {
                     console.log(err);
                 });
         });
@@ -91,13 +91,13 @@ export class QuotesService {
     }
     // add risks
     async addRisk(risk: RiskModel): Promise<void> {
-        this.risks.pipe(first()).subscribe(async risks => {
+        this.risks.pipe(first()).subscribe(async (risks) => {
             this.riskCollection
                 .add(risk)
-                .then(mess => {
+                .then((mess) => {
                     console.log(risk);
                 })
-                .catch(err => {
+                .catch((err) => {
                     console.log(err);
                 });
         });
@@ -109,12 +109,12 @@ export class QuotesService {
             .collection('risks')
             .ref.where('quoteNumber', '==', quoteNumber)
             .get()
-            .then(querySnapshot => {
-                querySnapshot.forEach(doc => {
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
                     console.log(doc.data());
                 });
             })
-            .catch(error => {
+            .catch((error) => {
                 console.log('Error getting documents: ', error);
             });
     }
@@ -138,10 +138,7 @@ export class QuotesService {
     generateQuoteNumber(brokerCode: string, totalQuotes: number) {
         const today = new Date();
         const dateString: string =
-            today
-                .getFullYear()
-                .toString()
-                .substr(-2) +
+            today.getFullYear().toString().substr(-2) +
             ('0' + (today.getMonth() + 1)).slice(-2) +
             +('0' + today.getDate()).slice(-2);
         const count = this.countGenerator(totalQuotes);
@@ -157,10 +154,10 @@ export class QuotesService {
         return this.motorQuoteCollection
             .doc(`${quote.id}`)
             .update(quote)
-            .then(res => {
+            .then((res) => {
                 console.log(res);
             })
-            .catch(err => {
+            .catch((err) => {
                 console.log(err);
             });
     }

@@ -4,13 +4,13 @@ import {
     FormGroup,
     FormBuilder,
     Validators,
-    FormControl
+    FormControl,
 } from '@angular/forms';
 
 @Component({
     selector: 'app-users',
     templateUrl: './users.component.html',
-    styleUrls: ['./users.component.scss']
+    styleUrls: ['./users.component.scss'],
 })
 export class UsersComponent implements OnInit {
     usersList = [];
@@ -33,7 +33,7 @@ export class UsersComponent implements OnInit {
             email: ['', Validators.required],
             password: ['', Validators.required],
             phone_number: ['', Validators.required],
-            roleID: ['', Validators.required]
+            roleID: ['', Validators.required],
         });
     }
 

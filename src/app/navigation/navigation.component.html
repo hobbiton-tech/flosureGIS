@@ -3,18 +3,18 @@
         <div class="logo" style="font-size: 18px;">
             Flosure Insurance
         </div>
-        <div style="display: flex">
+        <div style="display: flex;">
             <div>
                 charlesmalama86@gmail.com
             </div>
-            <div style="margin-left: 20px; font-size: 18px; cursor: pointer">
+            <div style="margin-left: 20px; font-size: 18px; cursor: pointer;">
                 <i nz-icon nzType="bell"></i>
             </div>
-            <div style="margin-left: 20px; font-size: 18px; cursor: pointer">
+            <div style="margin-left: 20px; font-size: 18px; cursor: pointer;">
                 <i nz-icon nzType="setting"></i>
             </div>
             <div
-                style="margin-left: 20px; font-size: 18px; cursor: pointer"
+                style="margin-left: 20px; font-size: 18px; cursor: pointer;"
                 (click)="logout()"
             >
                 <i nz-icon nzType="logout"></i>
@@ -23,7 +23,12 @@
     </nz-header>
     <nz-layout>
         <nz-sider [nzTheme]="'light'" [nzWidth]="250">
-            <ul nz-menu nzMode="inline" style="padding-top: 30px" nzMatchRouter>
+            <ul
+                nz-menu
+                nzMode="inline"
+                style="padding-top: 30px;"
+                nzMatchRouter
+            >
                 <li nz-menu-item nzPlacement="right" nzMatchRouter>
                     <a routerLink="/flosure/dashboard">
                         <i nz-icon nzType="dashboard"></i>
@@ -170,7 +175,7 @@
                     nz-submenu
                     nzTitle="Settings"
                     nzIcon="setting"
-                    style="padding-bottom: 50px"
+                    style="padding-bottom: 50px;"
                 >
                     <ul>
                         <!-- <li nz-menu-item nzMatchRouter>

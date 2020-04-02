@@ -24,7 +24,7 @@
                     <div style="margin-bottom: 10px;">
                         <div nz-row [nzGutter]="24">
                             <div nz-col nzSpan="12">
-                                <div style="width: 75%">
+                                <div style="width: 75%;">
                                     <nz-input-group
                                         [nzSuffix]="suffixIconSearch"
                                     >
@@ -44,19 +44,17 @@
 
                     <nz-table
                         #unreceiptedTable
-                        [nzData]="unreceipted"
+                        [nzData]="unreceiptedList"
                         [nzSize]="'small'"
                         [nzBordered]="true"
-                        style="background-color: white;"
                     >
                         <thead>
                             <tr>
-                                <th>Receipt Number</th>
-                                <th>Product</th>
-                                <th>Cover From</th>
-                                <th>Cover To</th>
+                                <th>Quote ID</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
                                 <th>Client Name</th>
-                                <th>Sum Insured</th>
+                                <th>Quote Status</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -66,16 +64,122 @@
                                     let unreceipted of unreceiptedTable.data
                                 "
                             >
-                                <td>unreceipted.quoteNumber</td>
-                                <td></td>
-                                <td>unreceipted.startDate</td>
-                                <td>unreceipted.endDate</td>
-                                <td>unreceipted.clientCode</td>
-                                <td></td>
-                                <td></td>
+                                <td>{{ unreceipted.quoteNumber }}</td>
+                                <td>
+                                    {{
+                                        unreceipted.startDate.seconds * 1000
+                                            | date
+                                    }}
+                                </td>
+                                <td>
+                                    {{
+                                        unreceipted.endDate.seconds * 1000
+                                            | date
+                                    }}
+                                </td>
+                                <td>{{ unreceipted.clientCode }}</td>
+                                <td>
+                                    <nz-badge
+                                        [nzStatus]="
+                                            unreceipted.status === 'Draft'
+                                                ? 'warning'
+                                                : 'success'
+                                        "
+                                        [nzText]="unreceipted.status"
+                                    ></nz-badge>
+                                </td>
+                                <td>
+                                    <button
+                                        nz-button
+                                        nzType="primary"
+                                        (click)="showModal(unreceipted)"
+                                    >
+                                        <i nz-icon nzType="form"></i>
+                                    </button>
+                                </td>
                             </tr>
                         </tbody>
                     </nz-table>
+
+                    <nz-modal
+                        [(nzVisible)]="isVisible"
+                        nzTitle="Capture Form"
+                        (nzOnCancel)="handleCancel()"
+                        (nzOnOk)="handleOk()"
+                        [nzOkLoading]="isOkLoading"
+                        [nzWidth]="'1200'"
+                    >
+                        <nz-card
+                            style="width:90%; margin: 0 auto;"
+                            [nzBordered]="true"
+                            nzTitle="Personal Details"
+                        >
+                            <form [formGroup]="receiptForm" nz-form>
+                                <div nz-row>
+                                    <div nz-col [nzSpan]="12">
+                                        <nz-form-item>
+                                            <nz-form-label
+                                                [nzSpan]="8"
+                                                nzFor="receivedFrom"
+                                                >Received From</nz-form-label
+                                            >
+                                            <nz-form-control [nzSpan]="16">
+                                                <input
+                                                    nz-input
+                                                    formControlName="receivedFrom"
+                                                    name="receivedFrom"
+                                                    type="text"
+                                                    id="receivedFrom"
+                                                    placeholder="Received From"
+                                                />
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+
+                                    <div nz-col [nzSpan]="12">
+                                        <nz-form-item>
+                                            <nz-form-label
+                                                [nzSpan]="8"
+                                                nzFor="sumInDigits"
+                                                >Amount</nz-form-label
+                                            >
+                                            <nz-form-control [nzSpan]="16">
+                                                <input
+                                                    nz-input
+                                                    formControlName="sumInDigits"
+                                                    name="sumInDigits"
+                                                    type="sumInDigits"
+                                                    id="sumInDigits"
+                                                    placeholder="Sum In Digits"
+                                                />
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                </div>
+
+                                <div nz-row>
+                                    <div nz-col [nzSpan]="12">
+                                        <nz-form-item>
+                                            <nz-form-label
+                                                [nzSpan]="8"
+                                                nzFor="paymentMethod"
+                                                >Payment Method</nz-form-label
+                                            >
+                                            <nz-form-control [nzSpan]="16">
+                                                <input
+                                                    nz-input
+                                                    formControlName="paymentMethod"
+                                                    name="paymentMethod"
+                                                    id="paymentMethod"
+                                                    placeholder="Payment Method"
+                                                />
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                </div>
+                            </form>
+                        </nz-card>
+                    </nz-modal>
                 </nz-card>
             </nz-tab>
 
@@ -84,7 +188,7 @@
                     <div style="margin-bottom: 10px;">
                         <div nz-row [nzGutter]="24">
                             <div nz-col nzSpan="12">
-                                <div style="width: 75%">
+                                <div style="width: 75%;">
                                     <nz-input-group
                                         [nzSuffix]="suffixIconSearch"
                                     >
@@ -104,7 +208,7 @@
 
                     <nz-table
                         #receiptTable
-                        [nzData]="receiptList"
+                        [nzData]="receiptedList"
                         [nzSize]="'small'"
                         [nzBordered]="true"
                         style="background-color: white;"
@@ -112,11 +216,9 @@
                         <thead>
                             <tr>
                                 <th>Receipt Number</th>
-                                <th>Product</th>
-                                <th>Cover From</th>
-                                <th>Cover To</th>
                                 <th>Client Name</th>
-                                <th>Sum Insured</th>
+                                <th>Amount</th>
+                                <th>Date Receipted</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -124,22 +226,14 @@
                                 *ngFor="let receipt of receiptTable.data"
                                 class="table-row"
                             >
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td>{{ receipt.receiptNumber }}</td>
+                                <td>{{ receipt.onBehalfOf }}</td>
+                                <td>{{ receipt.sumInDigits }}</td>
+
                                 <td>
-                                    <!-- <nz-badge
-                                        [nzStatus]="
-                                            account.status === 'Inactive'
-                                                ? 'error'
-                                                : 'success'
-                                        "
-                                        [nzText]="account.status"
-                                    >
-                                    </nz-badge> -->
+                                    {{
+                                        receipt.todayDate.seconds * 1000 | date
+                                    }}
                                 </td>
                             </tr>
                         </tbody>

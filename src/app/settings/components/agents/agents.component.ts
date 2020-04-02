@@ -6,7 +6,7 @@ import { AgentsService } from './services/agents.service';
 @Component({
     selector: 'app-agents',
     templateUrl: './agents.component.html',
-    styleUrls: ['./agents.component.scss']
+    styleUrls: ['./agents.component.scss'],
 })
 export class AgentsComponent implements OnInit {
     addAgentsFormDrawerVisible = false;
@@ -19,7 +19,7 @@ export class AgentsComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.agentService.getAgents().subscribe(agents => {
+        this.agentService.getAgents().subscribe((agents) => {
             this.agentsList = agents;
             console.log('<=========Agent List=========>');
             console.log(this.agentsList);

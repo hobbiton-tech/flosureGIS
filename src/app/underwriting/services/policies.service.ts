@@ -3,13 +3,13 @@ import { Observable } from 'rxjs';
 import { Policy } from '../models/policy.model';
 import {
     AngularFirestore,
-    AngularFirestoreCollection
+    AngularFirestoreCollection,
 } from '@angular/fire/firestore';
 import 'firebase/firestore';
 import { filter, first } from 'rxjs/operators';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class PoliciesService {
     private policiesCollection: AngularFirestoreCollection<Policy>;
@@ -21,7 +21,7 @@ export class PoliciesService {
     }
 
     async addPolicy(policy: Policy): Promise<void> {
-        this.policies.pipe(first()).subscribe(async policies => {
+        this.policies.pipe(first()).subscribe(async (policies) => {
             const today = new Date();
             policy.nameOfInsured = policy.client;
             policy.dateOfIssue =
@@ -47,7 +47,7 @@ export class PoliciesService {
     }
 
     getClientsPolicies(clientId: string): Observable<Policy[]> {
-        return this.policies.pipe(filter(policy => clientId === clientId));
+        return this.policies.pipe(filter((policy) => clientId === clientId));
     }
 
     countGenerator(number) {
@@ -57,16 +57,13 @@ export class PoliciesService {
         return number;
     }
 
-    //Generating Policy Number
+    // Generating Policy Number
     generatePolicyNumber(brokerName: string, totalPolicies: number) {
         const broker_name = brokerName.substring(0, 2).toLocaleUpperCase();
         const count = this.countGenerator(totalPolicies);
         const today = new Date();
         const dateString: string =
-            today
-                .getFullYear()
-                .toString()
-                .substr(-2) +
+            today.getFullYear().toString().substr(-2) +
             ('0' + (today.getMonth() + 1)).slice(-2) +
             +('0' + today.getDate()).slice(-2);
 

@@ -1,4 +1,4 @@
-<div style="background: #ECECEC;padding:30px;">
+<div style="background: #ececec; padding: 30px;">
     <div nz-row [nzGutter]="8">
         <div nz-col [nzSpan]="8">
             <nz-card
@@ -8,7 +8,7 @@
             >
                 <nz-statistic [nzValueTemplate]="clientStats"></nz-statistic>
                 <ng-template #tClients>
-                    <a routerLink="/flosure/clients/clients-list">View>></a>
+                    <a routerLink="/flosure/clients/clients-list">View</a>
                 </ng-template>
             </nz-card>
         </div>
@@ -21,7 +21,7 @@
                 <nz-statistic [nzValueTemplate]="claimsStats"></nz-statistic>
                 <ng-template #pClaims>
                     <a routerLink="/flosure/claims/claim-transactions"
-                        >View>></a
+                        >View</a
                     >
                 </ng-template>
             </nz-card>
@@ -34,12 +34,12 @@
             >
                 <nz-statistic [nzValueTemplate]="activePolicy"></nz-statistic>
                 <ng-template #aPolicies>
-                    <a routerLink="/flosure/underwriting/policies">View>></a>
+                    <a routerLink="/flosure/underwriting/policies">View</a>
                 </ng-template>
             </nz-card>
         </div>
     </div>
-    <div nz-row [nzGutter]="8" style="padding-top: 10px">
+    <div nz-row [nzGutter]="8" style="padding-top: 10px;">
         <div nz-col [nzSpan]="8">
             <nz-card
                 [nzTitle]="'Expired Policies'"
@@ -48,7 +48,7 @@
             >
                 <nz-statistic [nzValueTemplate]="expiredPolicy"></nz-statistic>
                 <ng-template #ePolicies>
-                    <a routerLink="/flosure/underwriting/policies">View>></a>
+                    <a routerLink="/flosure/underwriting/policies">View</a>
                 </ng-template>
             </nz-card>
         </div>
@@ -60,7 +60,7 @@
             >
                 <nz-statistic [nzValueTemplate]="policiesStats"></nz-statistic>
                 <ng-template #tPolicies>
-                    <a routerLink="/flosure/underwriting/policies">View>></a>
+                    <a routerLink="/flosure/underwriting/policies">View</a>
                 </ng-template>
             </nz-card>
         </div>
@@ -73,11 +73,11 @@
         </div>
     </div>
 
-    <div style="margin-top: 20px">
+    <div style="margin-top: 20px;">
         <nz-card>
             <nz-tabset>
                 <nz-tab nzTitle="Active Policies">
-                    <div style="margin-bottom: 10px; width: 50%">
+                    <div style="margin-bottom: 10px; width: 50%;">
                         <nz-input-group [nzSuffix]="suffixIconSearch">
                             <input
                                 type="text"
@@ -113,7 +113,7 @@
                             <tr
                                 *ngFor="let policy of activePoliciesTable.data"
                                 (click)="viewPolicyDetails(policy)"
-                                style="cursor:pointer;"
+                                style="cursor: pointer;"
                             >
                                 <td>{{ policy.policyNumber }}</td>
                                 <td>{{ policy.productType }}</td>
@@ -131,7 +131,7 @@
                     </nz-table>
                 </nz-tab>
                 <nz-tab nzTitle="Expiring Policies">
-                    <div style="margin-bottom: 10px; width: 50%">
+                    <div style="margin-bottom: 10px; width: 50%;">
                         <nz-input-group [nzSuffix]="suffixIconSearch">
                             <input
                                 type="text"
@@ -167,7 +167,7 @@
                             <tr
                                 *ngFor="let policy of expiredPoliciesTable.data"
                                 (click)="viewPolicyDetails(policy)"
-                                style="cursor:pointer;"
+                                style="cursor: pointer;"
                             >
                                 <td>{{ policy.policyNumber }}</td>
                                 <td>{{ policy.productType }}</td>
