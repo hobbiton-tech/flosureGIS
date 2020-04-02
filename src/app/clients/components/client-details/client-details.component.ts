@@ -7,9 +7,9 @@ import {
 import {
     ICorporateClient,
     IIndividualClient
-} from '../../models/clients.model';
+} from '../../models/client.model';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AccountDetails } from '../../models/account-details.model';
+// import { AccountDetails } from '../../models/account-details.model';
 import { ClientsService } from '../../services/clients.service';
 import { Policy } from 'src/app/underwriting/models/policy.model';
 import { Claim } from 'src/app/claims/models/claim.model';
@@ -31,7 +31,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
     clientPolicies: Policy[] = [];
     clientClaims: Claim[] = [];
 
-    account: AccountDetails;
+    // account: AccountDetails;
     id: string;
 
     constructor(
