@@ -426,12 +426,12 @@
                     <nz-form-label nzSpan="7" nzRequired>Rate</nz-form-label>
                     <nz-form-control nzSpan="17">
                         <nz-input-group nzCompact>
-                        <nz-select [(ngModel)]="premiumRateType" style="width: 30%;">
+                        <nz-select [(ngModel)]="premiumRateType" style="width: 20%;">
                             <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
                             <nz-option *ngIf="quoteForm.get('currency').value === 'ZMW'" [nzLabel]="'K'" nzValue="figure"></nz-option>
                             <nz-option *ngIf="quoteForm.get('currency').value === 'Dollar'" [nzLabel]="'$'" nzValue="figure"></nz-option>
                         </nz-select>
-                        <input nz-input nzPlaceHolder="" name="premiumRate" [(ngModel)]="premiumRate" style="width: 70%;"/>
+                        <input nz-input nzPlaceHolder="" name="premiumRate" [(ngModel)]="premiumRate" style="width: 80%;"/>
                         </nz-input-group>
                     </nz-form-control>
                 </nz-form-item>
@@ -665,12 +665,12 @@
                         <nz-form-label nzSpan="7">Discount Rate</nz-form-label>
                         <nz-form-control nzSpan="17">
                                 <nz-input-group nzCompact>
-                                        <nz-select [(ngModel)]="premiumDiscountRateType" style="width: 30%;">
+                                        <nz-select [(ngModel)]="premiumDiscountRateType" style="width: 20%;">
                                             <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
                                             <nz-option *ngIf="quoteForm.get('currency').value === 'ZMW'" [nzLabel]="'K'" nzValue="figure"></nz-option>
                                             <nz-option *ngIf="quoteForm.get('currency').value === 'Dollar'" [nzLabel]="'$'" nzValue="figure"></nz-option>
                                         </nz-select>
-                                        <input nz-input nzPlaceHolder="" name="premiumDiscountRate" [(ngModel)]="premiumDiscountRate" style="width: 70%;"/>
+                                        <input nz-input nzPlaceHolder="" name="premiumDiscountRate" [(ngModel)]="premiumDiscountRate" style="width: 80%;"/>
                                         </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
