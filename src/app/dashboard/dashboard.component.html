@@ -20,9 +20,7 @@
             >
                 <nz-statistic [nzValueTemplate]="claimsStats"></nz-statistic>
                 <ng-template #pClaims>
-                    <a routerLink="/flosure/claims/claim-transactions"
-                        >View</a
-                    >
+                    <a routerLink="/flosure/claims/claim-transactions">View</a>
                 </ng-template>
             </nz-card>
         </div>
@@ -65,7 +63,7 @@
             </nz-card>
         </div>
         <div nz-col [nzSpan]="8">
-            <nz-card [nzTitle]="'Gross Written Premium (ZMK)'">
+            <nz-card [nzTitle]="'Gross Written Premium (ZMw)'">
                 <nz-statistic
                     [nzValue]="commissionEarned | number"
                 ></nz-statistic>
