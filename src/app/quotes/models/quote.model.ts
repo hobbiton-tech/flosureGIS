@@ -27,6 +27,22 @@ export class MotorQuotationModel {
     startDate: Date | ITimestamp;
     endDate: Date | ITimestamp;
     status: QuoteStatus;
+    sumInsured: number;
+    premiumRate: number;
+    basicPremium: number;
+    premiumLevy: number;
+    basicPremiumSubTotal: number;
+    loads: LoadModel[];
+    loadingSubTotal: number;
+    discount: number;
+    discountRate: number;
+    discountSubTotal: number;
+    netPremium: number;
+}
+
+export class LoadModel {
+    loadType: LoadType;
+    amount: number;
 }
 
 export class RiskModel {
@@ -58,8 +74,15 @@ export interface ITimestamp {
     milliseconds: number;
 }
 
+export class Load {
+    label: string;
+    value: number;
+}
+
 export type ProductType = 'Private' | 'Commercial' | 'Bus/Taxi';
 
 export type QuoteStatus = 'Draft' | 'Approved';
+
+export type LoadType = 'Increased Third Party Limit' | 'Riot And Strike' | 'Car Stereo' | 'Territorial Extension' | 'Loss Of Use';
 
 export type InsuranceType = 'ThirdParty' | 'Comprehensive';
