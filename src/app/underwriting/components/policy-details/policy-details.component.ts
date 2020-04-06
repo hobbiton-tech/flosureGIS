@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators} from '@angular/forms';
-import { Policy, RiskModel } from '../../models/policy.model';
+import { Policy, RiskModel, ITimestamp } from '../../models/policy.model';
 import { PoliciesService } from '../../services/policies.service';
 // import { generatePolicies } from '../../data/policy.data';
 
@@ -17,9 +17,13 @@ export class PolicyDetailsComponent implements OnInit {
     policyNumber: string;
     policyData: Policy = new Policy();
     policy: Policy;
+    displayPolicy: Policy;
 
     //risks
-    risks: RiskModel;
+    risks: RiskModel[];
+
+    searchString: string;
+    
     
 
     isEditmode = false;
@@ -36,10 +40,10 @@ export class PolicyDetailsComponent implements OnInit {
         private policiesService: PoliciesService) {}
 
     ngOnInit(): void {
-        this.policiesService.getPolicies().subscribe(policies => {
-            this.policyData = policies.filter(x => x.policyNumber === this.policyNumber)[0];
-            this.policiesList = policies;
-        });
+        // this.policiesService.getPolicies().subscribe(policies => {
+        //     this.policyData = policies.filter(x => x.policyNumber === this.policyNumber)[0];
+        //     this.policiesList = policies;
+        // });
 
 
         //get policy number from url parameter
@@ -48,7 +52,8 @@ export class PolicyDetailsComponent implements OnInit {
             this.policiesService.getPolicies().subscribe(policies => {
                 this.policyData = policies.filter(x => x.policyNumber === this.policyNumber)[0];
                 this.policiesList = policies;
-                this.policy = this.policiesList.filter(x => x.policyNumber === this.policyNumber)[0]
+                this.policy = this.policiesList.filter(x => x.policyNumber === this.policyNumber)[0];
+                this.displayPolicy = this.policy;
             });
         });
 
@@ -61,6 +66,7 @@ export class PolicyDetailsComponent implements OnInit {
             product: ['', Validators.required],
             sumInsured: ['', Validators.required],
             currency: ['', Validators.required],
+            branch: ['', Validators.required],
             timeOfIssue: ['', Validators.required],
             dateOfIssue: ['', Validators.required],
             expiryDate: ['', Validators.required],
@@ -80,19 +86,27 @@ export class PolicyDetailsComponent implements OnInit {
             this.policyData = policies.filter(x => x.policyNumber === this.policyNumber)[0];
             this.policyDetailsForm.get('client').setValue(this.policyData.client);
             this.policyDetailsForm.get('nameOfInsured').setValue(this.policyData.nameOfInsured);
-            this.policyDetailsForm.get('startDate').setValue(this.policyData.startDate);
-            this.policyDetailsForm.get('endDate').setValue(this.policyData.endDate);
-            this.policyDetailsForm.get('product').setValue(this.policyData.product);
+            // this.policyDetailsForm.get('startDate').setValue(this.policyData.startDate);
+            //this.policyDetailsForm.get('endDate').setValue(this.policyData.endDate);
             this.policyDetailsForm.get('sumInsured').setValue(this.policyData.sumInsured);
             this.policyDetailsForm.get('currency').setValue(this.policyData.currency);
             this.policyDetailsForm.get('timeOfIssue').setValue(this.policyData.timeOfIssue);
             this.policyDetailsForm.get('dateOfIssue').setValue(this.policyData.dateOfIssue);
-            this.policyDetailsForm.get('expiryDate').setValue(this.policyData.expiryDate);
-            this.policyDetailsForm.get('type').setValue(this.policyData.type);
+            //this.policyDetailsForm.get('expiryDate').setValue(this.policyData.expiryDate);
             this.policyDetailsForm.get('quater').setValue(this.policyData.quater);
             this.policyDetailsForm.get('town').setValue(this.policyData.town);
+            this.policyDetailsForm.get('branch').setValue(this.policyData.branch);
         })
     }
+
+    getTimeStamp(policy: Policy): number {
+            return (policy.startDate as ITimestamp).seconds;
+        }
+
+        getEndDateTimeStamp(policy: Policy): number {
+                return (policy.endDate as ITimestamp).seconds;
+        }
+    
 
     goToPoliciesList(): void {
         this.router.navigateByUrl('/flosure/underwriting/policies');

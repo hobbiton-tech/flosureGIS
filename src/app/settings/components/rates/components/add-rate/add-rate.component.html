@@ -1,0 +1,83 @@
+
+    <nz-drawer [nzClosable]="false" [nzVisible]="isDrawerVisible" nzPlacement="left"
+    nzTitle="Add Rate" (nzOnClose)="closeDrawer()" [nzWidth]="650">
+    
+    <form nz-form [formGroup]="ratesDetailsForm" (ngSubmit)="onSubmit()" style="margin: 0 auto;" novalidate>
+      
+      <div nz-row nzGutter="0">
+        <nz-form-item>
+            <nz-form-label [nzSpan]="6" nzFor="insuranceProduct" nzRequired>Insurance Product</nz-form-label>
+            <nz-form-control nzSpan="16" nzHasFeedback nzErrorTip="Please select required product">
+                <nz-select nzShowSearch nzAllowClear formControlName="insuranceProduct"
+                    nzPlaceHolder="Select insurance product" name="insuranceProduct"
+                    id="insuranceProduct"
+                    [ngModel]="''" required>
+                    <nz-option nzLabel="Motor Comprehensive" nzValue="Comprehensive"></nz-option>
+                    <nz-option nzLabel="Motor Third Party" nzValue="Third Party"></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label nzSpan="6" nzRequired>Description</nz-form-label>
+          <nz-form-control nzSpan="16" nzHasFeedback nzErrorTip="Input is required">
+                <input nz-input [ngModel]="''" formControlName="description" required/>
+          </nz-form-control>
+        </nz-form-item>
+  
+        <nz-form-item>
+          <nz-form-label nzSpan="6" nzRequired>Premium Rate</nz-form-label>
+          <nz-form-control nzSpan="16" nzHasFeedback [nzErrorTip]="validatePremiumRate">
+                <input nz-input formControlName="premiumRate" [ngModel]="''" required pattern="^[0-9]\d*(\.\d+)?$"/>
+          </nz-form-control>
+          <ng-template #validatePremiumRate let-control>
+            <ng-container *ngIf="control.hasError('required')">Input is Required</ng-container>
+            <ng-container *ngIf="control.hasError('pattern')">Premium rate requires numerical input</ng-container>
+          </ng-template>
+        </nz-form-item>
+        
+        <nz-form-item>
+          <nz-form-label nzSpan="6" nzRequired>Premium Levy</nz-form-label>
+          <nz-form-control nzSpan="16" nzHasFeedback [nzErrorTip]="validatePremiumLevy">
+                <input nz-input formControlName="premiumLevy" [ngModel]="''" required pattern="^[0-9]\d*(\.\d+)?$"/>
+          </nz-form-control>
+          <ng-template #validatePremiumLevy let-control>
+              <ng-container *ngIf="control.hasError('required')">Input is Required</ng-container>
+              <ng-container *ngIf="control.hasError('pattern')">Premium levy requires numerical input</ng-container>
+            </ng-template>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label nzSpan="6" nzRequired>Max Limit</nz-form-label>
+          <nz-form-control nzSpan="16" nzHasFeedback [nzErrorTip]="validateMaxLimit">
+                <input nz-input formControlName="maxLimit" [ngModel]="''" required pattern="^[0-9]\d*(\.\d+)?$"/>
+          </nz-form-control>
+          <ng-template #validateMaxLimit let-control>
+              <ng-container *ngIf="control.hasError('required')">Input is Required</ng-container>
+              <ng-container *ngIf="control.hasError('pattern')">Max limit requires numerical input</ng-container>
+            </ng-template>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label nzSpan="6" nzRequired>Min Limit</nz-form-label>
+          <nz-form-control nzSpan="16" nzHasFeedback [nzErrorTip]="validateMinLimit">
+                <input nz-input formControlName="minLimit" [ngModel]="''" required pattern="^[0-9]\d*(\.\d+)?$"/>
+          </nz-form-control>
+          <ng-template #validateMinLimit let-control>
+              <ng-container *ngIf="control.hasError('required')">Input is Required</ng-container>
+              <ng-container *ngIf="control.hasError('pattern')">Max limit requires numerical input</ng-container>
+            </ng-template>
+        </nz-form-item>
+  
+        
+      
+    </div>
+    <div style="text-align: center; margin-top: 10px;">
+  
+            <button nz-button nzType="primary" [disabled]="!ratesDetailsForm.valid">Add Rate</button>
+            <button nz-button nzType="default" style="margin-left: 10px" (click)="resetForm($event)">Reset Form</button>
+            </div>
+    </form>
+  
+  </nz-drawer>
+  

@@ -32,17 +32,21 @@
     </div>
     <nz-card>
         <nz-card nzTitle="Claim Transactions">
-            <div nz-col nzSpan="12" style="margin-bottom: 20px;">
-                <div style="width: 75%">
-                    <nz-input-group [nzSuffix]="suffixIconSearch">
-                        <input type="text" nz-input placeholder="Search by Client name, Claim ID, Policy number, status" />
-                    </nz-input-group>
-                    <ng-template #suffixIconSearch>
-                        <i nz-icon nzType="search"></i>
-                    </ng-template>
-                </div>
+            <div style="margin-bottom: 10px; width: 50%">
+                <nz-input-group [nzSuffix]="suffixIconSearch">
+                    <input
+                        type="text"
+                        nz-input
+                        placeholder="Search by Client, ClaimID, Policy Number, Status"
+                        [(ngModel)]="searchString"
+                        (ngModelChange)="search($event)"
+                    />
+                </nz-input-group>
+                <ng-template #suffixIconSearch>
+                    <i nz-icon nzType="search"></i>
+                </ng-template>
             </div>
-        	<nz-table #claimsTable [nzData]="claimsList" nzSize="small">
+        	<nz-table #claimsTable [nzData]="displayClaimsList" nzSize="small">
         	    <thead>
         	        <tr>
                       <th>Client Name</th>
@@ -63,9 +67,9 @@
                       <td>{{claim.policyNumber }}</td>
                       <td>{{claim.risk}}</td>
                       <td>{{claim.activity}}</td>
-        	            <td>{{claim.lossDate.seconds | date}}</td>
+        	            <td>{{claim.lossDate.seconds * 1000 | date}}</td>
         	            <td>{{claim.status }}</td>
-        	            <td>{{claim.notificationDate.seconds | date}}</td>
+        	            <td>{{claim.notificationDate.seconds * 1000 | date}}</td>
         	            <td>{{claim.bookedBy}}</td>
         	        </tr>
         	    </tbody>

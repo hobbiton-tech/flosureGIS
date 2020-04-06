@@ -71,15 +71,14 @@ export class QuotesService {
             quotation.id = v4();
 
             quotation.quoteNumber = this.generateQuoteNumber(
-                'BRaa',
+                'BRAA',
                 quotations.length
             );
 
             await this.motorQuoteCollection
-                .doc(`${quotation.id}`)
-                .set(quotation)
-                .then((mess) => {
-                    console.log(quotation);
+            .doc(quotation.id)
+            .set(quotation)
+                .then(mess => {
                 })
                 .catch((err) => {
                     console.log(err);

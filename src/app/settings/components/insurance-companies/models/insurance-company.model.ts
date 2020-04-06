@@ -10,6 +10,6 @@ export class InsuranceCompany {
 }
 
 export interface ITimestamp {
-    seconds: string;
-    milliseconds: string;
+    seconds: number;
+    milliseconds: number;
 }

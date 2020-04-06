@@ -1,0 +1,124 @@
+<div style="margin: 20px;">
+
+    <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                Settings
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                Rates
+            </nz-breadcrumb-item>
+          </nz-breadcrumb>
+
+    <nz-card [nzBordered]="false" style="margin-top: 20px">
+        <nz-tabset>
+            <nz-tab nzTitle="Rates">
+                <nz-card [nzBordered]="false">
+
+                    <div style="margin-bottom: 10px;">
+                        <div nz-row [nzGutter]="24">
+                            <div nz-col nzSpan="12">
+                                <div style="width: 75%">
+                                    <nz-input-group [nzSuffix]="suffixIconSearch">
+                                        <input type="text"
+                                         nz-input placeholder="Search by insurance product, tax rate, premium rate"
+                                         [(ngModel)]="ratesSearchString"
+                                        (ngModelChange)="searchRates($event)" />
+                                    </nz-input-group>
+                                    <ng-template #suffixIconSearch>
+                                        <i nz-icon nzType="search"></i>
+                                    </ng-template>
+                                </div>
+                            </div>
+                            <div nz-col nzSpan=12>
+                                <button nz-button nzType="primary" style="float: right" (click)="openAddRateFormDrawer()">Add Rate</button>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+                    <nz-table #ratesTable [nzData]="displayRatesList" [nzSize]="'small'" [nzBordered]="true"
+                        style="background-color: white;">
+                        <thead>
+                            <tr>
+                                <th>Insurance Product</th>
+                                <th>Description</th>
+                                <th>Premium Rate</th>
+                                <th>Premium Levy</th>
+                                <th>Max Limit</th>
+                                <th>Min Limit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let  rate of ratesTable.data">
+                                <td>{{rate.insuranceProduct}}</td>
+                                <td>{{rate.description}}</td>
+                                <td>{{rate.premiumRate / 100 | percent: '1.2-2'}}</td>
+                                <td>{{rate.premiumLevy / 100 | percent: '1.2-2'}}</td>
+                                <td>{{rate.maxLimit | number}}</td>
+                                <td>{{rate.minLimit | number}}</td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-card>
+            </nz-tab>
+            <nz-tab nzTitle="Taxes">
+                <nz-card [nzBordered]="false">
+
+                    <div style="margin-bottom: 10px;">
+                        <div nz-row [nzGutter]="24">
+                            <div nz-col nzSpan="12">
+                                <div style="width: 75%">
+                                    <nz-input-group [nzSuffix]="suffixIconSearch">
+                                        <input type="text"
+                                         nz-input placeholder="Search by Short name"
+                                         [(ngModel)]="taxesSearchString"
+                                        (ngModelChange)="searchTaxes($event)" />
+                                    </nz-input-group>
+                                    <ng-template #suffixIconSearch>
+                                        <i nz-icon nzType="search"></i>
+                                    </ng-template>
+                                </div>
+                            </div>
+                            <div nz-col nzSpan=12>
+                                <button nz-button nzType="primary" style="float: right" (click)="openAddTaxFormDrawer()">Add Tax</button>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div style="margin-top: 10px;">
+                    <nz-table #taxesTable [nzData]="displayTaxList" [nzSize]="'small'" [nzBordered]="true"
+                        style="background-color: white;">
+                        <thead>
+                            <tr>
+                                <th>Short Name</th>
+                                <th>Description</th>
+                                <th>Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let tax of taxesTable.data">
+                                <td>{{tax.shortName}}</td>
+                                <td>{{tax.description}}</td>
+                                <td>{{tax.rate / 100 | percent: '1.2-2'}}</td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+                </nz-card>
+            </nz-tab>   
+                
+            
+        </nz-tabset>
+    </nz-card>
+</div>
+
+<app-add-rate [isDrawerVisible]="addRateFormDrawerVisible" (closeAddRateDrawer)="addRateFormDrawerVisible = false"></app-add-rate>
+<app-add-tax 
+[isDrawerVisible]="addTaxFormDrawerVisible"
+(closeAddTaxDrawer)="addTaxFormDrawerVisible = false"></app-add-tax>
+
+

@@ -117,6 +117,23 @@
 
             <div nz-col [nzSpan]="12">
                 <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzFor="branch"
+                        >Branch</nz-form-label
+                    >
+                    <nz-form-control [nzSpan]="14">
+                        <input
+                            nz-input
+                            formControlName="branch"
+                            name="branch"
+                            id="branch"
+                            placeholder="Branch"
+                        />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
                     <nz-form-label [nzSpan]="8" nzFor="address"
                         >Address</nz-form-label
                     >

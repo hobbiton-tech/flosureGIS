@@ -9,36 +9,33 @@
         </nz-breadcrumb-item>
     </nz-breadcrumb>
     <!-- <nz-card style="padding: 20px"> -->
-    <form nz-form style="margin-top: 20px;" [formGroup]="quoteForm" novalidate>
-        <nz-card nzTitle="Client Details" style="margin-bottom: 5px;">
+    <form nz-form style="margin-top: 20px" [formGroup]="quoteForm" novalidate>
+        <nz-card nzTitle="Client Details" style="margin-bottom: 5px;" [nzExtra]="switchTemplate">
+            <ng-template #switchTemplate>
+                <nz-switch [ngModel]="agentMode" [ngModelOptions]="{standalone: true}" nzCheckedChildren="Agent Mode"
+                    nzUnCheckedChildren="User Mode" [nzControl]="false" (click)="switchMode()"
+                    [nzLoading]="switchLoading"></nz-switch>
+            </ng-template>
             <div nz-row nzGutter="0">
                 <div nz-col nzSpan="12">
                     <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired
-                            >Client Name</nz-form-label
-                        >
+                        <nz-form-label nzSpan="7" nzRequired>Client Name</nz-form-label>
                         <nz-form-control nzSpan="17">
-                            <nz-select
-                                formControlName="clientCode"
-                                nzPlaceHolder="Select or create client"
-                            >
+                            <nz-select formControlName="clientCode" nzPlaceHolder="Select or create client">
                                 <div *ngFor="let client of clients">
-                                    <nz-option
-                                        [nzValue]="
+                                    <nz-option [nzValue]="
                                             client.clientType === 'Individual'
                                                 ? client.firstName +
                                                   ' ' +
                                                   client.lastName
                                                 : client.companyName
-                                        "
-                                        [nzLabel]="
+                                        " [nzLabel]="
                                             client.clientType === 'Individual'
                                                 ? client.firstName +
                                                   ' ' +
                                                   client.lastName
                                                 : client.companyName
-                                        "
-                                    ></nz-option>
+                                        "></nz-option>
                                 </div>
                                 <!-- <ng-container > -->
 
@@ -63,538 +60,295 @@
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
-                        <nz-form-label nzRequired nzSpan="7"
-                            >Town</nz-form-label
-                        >
+                        <nz-form-label nzRequired nzSpan="7">Town</nz-form-label>
                         <nz-form-control nzSpan="17">
                             <input nz-input formControlName="town" />
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired
-                            >Currency</nz-form-label
-                        >
+                        <nz-form-label nzSpan="7" nzRequired>Currency</nz-form-label>
                         <nz-form-control nzSpan="17">
-                            <nz-select
-                                formControlName="currency"
-                                nzPlaceHolder="Select currency"
-                            >
-                                <nz-option
-                                    nzValue="ZMW"
-                                    nzLabel="ZMW"
-                                ></nz-option>
-                                <nz-option
-                                    nzValue="Dollar"
-                                    nzLabel="Dollar"
-                                ></nz-option>
+                            <nz-select formControlName="currency" nzPlaceHolder="Select currency">
+                                <nz-option nzValue="ZMW" nzLabel="ZMW"></nz-option>
+                                <nz-option nzValue="Dollar" nzLabel="Dollar"></nz-option>
                             </nz-select>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
                 <div nz-col nzSpan="12">
                     <nz-form-item>
-                        <nz-form-label nzRequired nzSpan="7"
-                            >Select Start Date</nz-form-label
-                        >
+                        <nz-form-label nzRequired nzSpan="7">Select Start Date</nz-form-label>
                         <nz-form-control nzSpan="17">
-                            <nz-date-picker
-                                formControlName="startDate"
-                                [nzDisabledDate]="disabledStartDate"
-                                nzShowTime
-                                nzFormat="yyyy-MM-dd HH:mm:ss"
-                                nzPlaceHolder="Start"
-                                (nzOnOpenChange)="handleStartOpenChange($event)"
-                            ></nz-date-picker>
+                            <nz-date-picker formControlName="startDate" [nzDisabledDate]="disabledStartDate" nzShowTime
+                                nzFormat="yyyy-MM-dd HH:mm:ss" nzPlaceHolder="Start"
+                                (nzOnOpenChange)="handleStartOpenChange($event)"></nz-date-picker>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
 
                 <div nz-col nzSpan="12">
                     <nz-form-item>
-                        <nz-form-label nzRequired nzSpan="7"
-                            >Select End Date</nz-form-label
-                        >
+                        <nz-form-label nzRequired nzSpan="7">Select End Date</nz-form-label>
                         <nz-form-control nzSpan="17">
-                            <nz-date-picker
-                                formControlName="endDate"
-                                [nzDisabledDate]="disabledEndDate"
-                                nzShowTime
-                                nzFormat="yyyy-MM-dd HH:mm:ss"
-                                nzPlaceHolder="End"
-                                [nzOpen]="endOpen"
-                                (nzOnOpenChange)="handleEndOpenChange($event)"
-                            >
+                            <nz-date-picker formControlName="endDate" [nzDisabledDate]="disabledEndDate" nzShowTime
+                                nzFormat="yyyy-MM-dd HH:mm:ss" nzPlaceHolder="End" [nzOpen]="endOpen"
+                                (nzOnOpenChange)="handleEndOpenChange($event)">
                             </nz-date-picker>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="12">
+                    <nz-form-item *ngIf="agentMode">
+                        <nz-form-label nzRequired nzSpan="7">Agent</nz-form-label>
+                        <nz-form-control nzSpan="17">
+                            <input nz-input formControlName="user" />
                         </nz-form-control>
                     </nz-form-item>
                 </div>
             </div>
         </nz-card>
-        <!-- <nz-card nzTitle="Quotation Details" style="margin-bottom: 5px;">
-            <div nz-row nzGutter="0">
-                <div nz-col nzSpan="12">
-                    <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired
-                            >Binding Type</nz-form-label
-                        >
-                        <nz-form-control nzSpan="17">
-                            <nz-select
-                                nzPlaceHolder="Select binding type"
-                            ></nz-select>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col nzSpan="12">
-                    <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired
-                            >Binding</nz-form-label
-                        >
-                        <nz-form-control nzSpan="17">
-                            <nz-select
-                                nzPlaceHolder="Select binding"
-                            ></nz-select>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-            </div>
-        </nz-card> -->
     </form>
 
     <nz-card nzTitle="Risk Details" style="margin-bottom: 5px;">
         <div nz-row nzGutter="0">
             <!-- <div *ngFor="let control of listOfControl; let i = index"> -->
-            <nz-collapse>
-                <nz-collapse-panel nzHeader="Add Risks">
-                    <div nz-row nzGutter="0">
-                        <div>
-                            <nz-form-item>
-                                <nz-form-label
-                                    [nzSpan]="6"
-                                    nzFor="insuranceType"
-                                    nzRequired
-                                    >Insurance Type</nz-form-label
-                                >
-                                <nz-form-control nzSpan="18">
-                                    <nz-select
-                                        name="insuranceType"
-                                        [(ngModel)]="selectedValue"
-                                        [compareWith]="compareFn"
-                                        (ngModelChange)="log($event)"
-                                        nzAllowClear
-                                        nzPlaceHolder="Choose"
-                                    >
-                                        <nz-option
-                                            *ngFor="let option of optionList"
-                                            [nzValue]="option"
-                                            [nzLabel]="option.label"
-                                        ></nz-option>
-                                    </nz-select>
-                                </nz-form-control>
-                            </nz-form-item>
+            <div nz-col>
+                <nz-collapse>
+                    <nz-collapse-panel nzHeader="Add Risk">
+                        <div nz-row nzGutter="0" style="margin-bottom: 30px;">
+                            <div nz-col nzSpan="12">
+                                <nz-form-item>
+                                    <nz-form-label [nzSpan]="7" nzFor="insuranceType" nzRequired>Insurance Type
+                                    </nz-form-label>
+                                    <nz-form-control nzSpan="17">
+                                        <nz-select name="insuranceType" [(ngModel)]="selectedValue"
+                                            [compareWith]="compareFn" (ngModelChange)="log($event)" nzAllowClear
+                                            nzPlaceHolder="Choose">
+                                            <nz-option *ngFor="let option of optionList" [nzValue]="option"
+                                                [nzLabel]="option.label"></nz-option>
+                                        </nz-select>
+                                    </nz-form-control>
+                                </nz-form-item>
+
+                            </div>
+                            <div nz-col nzSpan="12">
+                                <nz-form-item>
+                                    <button nz-button nzType="primary" (click)="showModal()"
+                                        style="float: right;">Import</button>
+                                </nz-form-item>
+                            </div>
                         </div>
-                    </div>
-                    <div *ngIf="selectedValue?.value === 'Comprehensive'">
-                        <form
-                            [formGroup]="riskComprehensiveForm"
-                            (ngSubmit)="addComprehensiveRisk()"
-                        >
-                            <div nz-row nzGutter="0">
-                                <div nz-col nzSpan="12">
-                                    <nz-form-item>
-                                        <nz-form-label
-                                            [nzSpan]="7"
-                                            nzFor="vehicleMake"
-                                            nzRequired
-                                            >Vehicle Make</nz-form-label
-                                        >
-                                        <nz-form-control nzSpan="17">
-                                            <input
-                                                nz-input
-                                                name="vehicleMake"
-                                                formControlName="vehicleMake"
-                                                type="text"
-                                                id="vehicleMake"
-                                            />
-                                        </nz-form-control>
-                                    </nz-form-item>
+                        <div *ngIf="selectedValue?.value === 'Comprehensive'">
+                            <form [formGroup]="riskComprehensiveForm" (ngSubmit)="addComprehensiveRisk()">
+                                <div nz-row nzGutter="0">
+                                    <div nz-col nzSpan="12">
+                                        <nz-form-item>
+                                            <nz-form-label [nzSpan]="7" nzFor="vehicleMake" nzRequired>Vehicle Make
+                                            </nz-form-label>
+                                            <nz-form-control nzSpan="17">
+                                                <input nz-input name="vehicleMake" formControlName="vehicleMake"
+                                                    type="text" id="vehicleMake" />
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div nz-col nzSpan="12">
+                                        <nz-form-item>
+                                            <nz-form-label [nzSpan]="7" nzFor="vehicleModel" nzRequired>Vehicle Model
+                                            </nz-form-label>
+                                            <nz-form-control nzSpan="17">
+                                                <input nz-input name="vehicleModel" formControlName="vehicleModel"
+                                                    type="text" id="vehicleModel" />
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
                                 </div>
-                                <div nz-col nzSpan="12">
-                                    <nz-form-item>
-                                        <nz-form-label
-                                            [nzSpan]="7"
-                                            nzFor="vehicleModel"
-                                            nzRequired
-                                            >Vehicle Model</nz-form-label
-                                        >
-                                        <nz-form-control nzSpan="17">
-                                            <input
-                                                nz-input
-                                                name="vehicleModel"
-                                                formControlName="vehicleModel"
-                                                type="text"
-                                                id="vehicleModel"
-                                            />
-                                        </nz-form-control>
-                                    </nz-form-item>
+                                <div nz-row nzGutter="0">
+                                    <div nz-col nzSpan="12">
+                                        <nz-form-item>
+                                            <nz-form-label [nzSpan]="7" nzFor="regNumber" nzRequired>Registration Number
+                                            </nz-form-label>
+                                            <nz-form-control nzSpan="17">
+                                                <input nz-input name="regNumber" formControlName="regNumber" type="text"
+                                                    id="regNumber" />
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div nz-col nzSpan="12">
+                                        <nz-form-item>
+                                            <nz-form-label [nzSpan]="7" nzFor="engineNumber" nzRequired>Engine Number
+                                            </nz-form-label>
+                                            <nz-form-control nzSpan="17">
+                                                <input nz-input name="engineNumber" formControlName="engineNumber"
+                                                    type="text" id="engineNumber" />
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
                                 </div>
-                            </div>
-                            <div nz-row nzGutter="0">
-                                <div nz-col nzSpan="12">
-                                    <nz-form-item>
-                                        <nz-form-label
-                                            [nzSpan]="7"
-                                            nzFor="regNumber"
-                                            nzRequired
-                                            >Registration Number</nz-form-label
-                                        >
-                                        <nz-form-control nzSpan="17">
-                                            <input
-                                                nz-input
-                                                name="regNumber"
-                                                formControlName="regNumber"
-                                                type="text"
-                                                id="regNumber"
-                                            />
-                                        </nz-form-control>
-                                    </nz-form-item>
-                                </div>
-                                <div nz-col nzSpan="12">
-                                    <nz-form-item>
-                                        <nz-form-label
-                                            [nzSpan]="7"
-                                            nzFor="engineNumber"
-                                            nzRequired
-                                            >Engine Number</nz-form-label
-                                        >
-                                        <nz-form-control nzSpan="17">
-                                            <input
-                                                nz-input
-                                                name="engineNumber"
-                                                formControlName="engineNumber"
-                                                type="text"
-                                                id="engineNumber"
-                                            />
-                                        </nz-form-control>
-                                    </nz-form-item>
-                                </div>
-                            </div>
 
-                            <div nz-row nzGutter="0">
-                                <div nz-col nzSpan="12">
-                                    <nz-form-item>
-                                        <nz-form-label
-                                            [nzSpan]="7"
-                                            nzFor="color"
-                                            nzRequired
-                                            >Color</nz-form-label
-                                        >
-                                        <nz-form-control nzSpan="17">
-                                            <input
-                                                nz-input
-                                                name="color"
-                                                formControlName="color"
-                                                type="text"
-                                                id="color"
-                                            />
-                                        </nz-form-control>
-                                    </nz-form-item>
+                                <div nz-row nzGutter="0">
+                                    <div nz-col nzSpan="12">
+                                        <nz-form-item>
+                                            <nz-form-label [nzSpan]="7" nzFor="color" nzRequired>Color</nz-form-label>
+                                            <nz-form-control nzSpan="17">
+                                                <input nz-input name="color" formControlName="color" type="text"
+                                                    id="color" />
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div nz-col nzSpan="12">
+                                        <nz-form-item>
+                                            <nz-form-label [nzSpan]="7" nzFor="productType">Product Type</nz-form-label>
+                                            <nz-form-control nzSpan="17">
+                                                <nz-select nzShowSearch nzAllowClear formControlName="productType"
+                                                    nzPlaceHolder="Select a product type" name="productType"
+                                                    id="productType">
+                                                    <nz-option nzLabel="Private" nzValue="Private"></nz-option>
+                                                    <nz-option nzLabel="Commercial" nzValue="Commercial"></nz-option>
+                                                    <nz-option nzLabel="Bus/Taxi" nzValue="Bus/Taxi"></nz-option>
+                                                </nz-select>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
                                 </div>
-                                <div nz-col nzSpan="12">
-                                    <nz-form-item>
-                                        <nz-form-label
-                                            [nzSpan]="7"
-                                            nzFor="productType"
-                                            >Product Type</nz-form-label
-                                        >
-                                        <nz-form-control nzSpan="17">
-                                            <nz-select
-                                                nzShowSearch
-                                                nzAllowClear
-                                                formControlName="productType"
-                                                nzPlaceHolder="Select a product type"
-                                                name="productType"
-                                                id="productType"
-                                            >
-                                                <nz-option
-                                                    nzLabel="Private"
-                                                    nzValue="Private"
-                                                ></nz-option>
-                                                <nz-option
-                                                    nzLabel="Commercial"
-                                                    nzValue="Commercial"
-                                                ></nz-option>
-                                                <nz-option
-                                                    nzLabel="Bus/Taxi"
-                                                    nzValue="Bus/Taxi"
-                                                ></nz-option>
-                                            </nz-select>
-                                        </nz-form-control>
-                                    </nz-form-item>
+                                <div nz-row nzGutter="0">
+                                    <div nz-col nzSpan="12">
+                                        <nz-form-item>
+                                            <nz-form-label [nzSpan]="7" nzFor="chassisNumber" nzRequired>Chassis Number
+                                            </nz-form-label>
+                                            <nz-form-control nzSpan="17">
+                                                <input nz-input name="chassisNumber" formControlName="chassisNumber"
+                                                    type="text" id="chassisNumber" />
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div nz-col nzSpan="12">
+                                        <nz-form-item>
+                                            <nz-form-label [nzSpan]="7" nzFor="estimatedValue" nzRequired>Estimated
+                                                Value
+                                            </nz-form-label>
+                                            <nz-form-control nzSpan="17">
+                                                <input nz-input name="estimatedValue" formControlName="estimatedValue"
+                                                    type="text" id="estimatedValue" />
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
                                 </div>
-                            </div>
-                            <div nz-row nzGutter="0">
-                                <div nz-col nzSpan="12">
-                                    <nz-form-item>
-                                        <nz-form-label
-                                            [nzSpan]="7"
-                                            nzFor="chassisNumber"
-                                            nzRequired
-                                            >Chasis Number</nz-form-label
-                                        >
-                                        <nz-form-control nzSpan="17">
-                                            <input
-                                                nz-input
-                                                name="chassisNumber"
-                                                formControlName="chassisNumber"
-                                                type="text"
-                                                id="chassisNumber"
-                                            />
-                                        </nz-form-control>
-                                    </nz-form-item>
-                                </div>
-                                <div nz-col nzSpan="12">
-                                    <nz-form-item>
-                                        <nz-form-label
-                                            [nzSpan]="7"
-                                            nzFor="estimatedValue"
-                                            nzRequired
-                                            >Estimated Value</nz-form-label
-                                        >
-                                        <nz-form-control nzSpan="17">
-                                            <input
-                                                nz-input
-                                                name="estimatedValue"
-                                                formControlName="estimatedValue"
-                                                type="text"
-                                                id="estimatedValue"
-                                            />
-                                        </nz-form-control>
-                                    </nz-form-item>
-                                </div>
-                            </div>
-                            <div
-                                style="
+                                <div style="
                                     text-align: center;
                                     margin-top: 10px;
                                     margin-bottom: 10px;
-                                "
-                            >
-                                <button
-                                    nz-button
-                                    nzType="primary"
-                                    [disabled]="!riskComprehensiveForm.valid"
-                                >
-                                    Add Risk
-                                </button>
-                                <button nz-button nzType="default" type>
-                                    Reset Form
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                    <div *ngIf="selectedValue?.value === 'ThirdParty'">
-                        <form
-                            [formGroup]="riskThirdPartyForm"
-                            (ngSubmit)="addThirdPartyRisk()"
-                        >
-                            <div nz-row nzGutter="0">
-                                <div nz-col nzSpan="12">
-                                    <nz-form-item>
-                                        <nz-form-label
-                                            [nzSpan]="7"
-                                            nzFor="vehicleMake"
-                                            nzRequired
-                                            >Vehicle Make</nz-form-label
-                                        >
-                                        <nz-form-control
-                                            nzSpan="17"
-                                            nzErrorTip="Please input your Vehicle Make!"
-                                        >
-                                            <input
-                                                nz-input
-                                                name="vehicleMake"
-                                                formControlName="vehicleMake"
-                                                type="text"
-                                                id="vehicleMake"
-                                            />
-                                        </nz-form-control>
-                                    </nz-form-item>
+                                ">
+                                    <button nz-button nzType="primary" [disabled]="!riskComprehensiveForm.valid">
+                                        Add Risk
+                                    </button>
+                                    <button nz-button nzType="default" type>
+                                        Reset Form
+                                    </button>
                                 </div>
-                                <div nz-col nzSpan="12">
-                                    <nz-form-item>
-                                        <nz-form-label
-                                            [nzSpan]="7"
-                                            nzFor="vehicleModel"
-                                            nzRequired
-                                            >Vehicle Model</nz-form-label
-                                        >
-                                        <nz-form-control
-                                            nzSpan="17"
-                                            nzErrorTip="Please input your Vehicle Model!"
-                                        >
-                                            <input
-                                                nz-input
-                                                name="vehicleModel"
-                                                formControlName="vehicleModel"
-                                                type="text"
-                                                id="vehicleModel"
-                                            />
-                                        </nz-form-control>
-                                    </nz-form-item>
+                            </form>
+                        </div>
+                        <div *ngIf="selectedValue?.value === 'ThirdParty'">
+                            <form [formGroup]="riskThirdPartyForm" (ngSubmit)="addThirdPartyRisk()">
+                                <div nz-row nzGutter="0">
+                                    <div nz-col nzSpan="12">
+                                        <nz-form-item>
+                                            <nz-form-label [nzSpan]="7" nzFor="vehicleMake" nzRequired>Vehicle Make
+                                            </nz-form-label>
+                                            <nz-form-control nzSpan="17" nzErrorTip="Please input your Vehicle Make!">
+                                                <input nz-input name="vehicleMake" formControlName="vehicleMake"
+                                                    type="text" id="vehicleMake" />
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div nz-col nzSpan="12">
+                                        <nz-form-item>
+                                            <nz-form-label [nzSpan]="7" nzFor="vehicleModel" nzRequired>Vehicle Model
+                                            </nz-form-label>
+                                            <nz-form-control nzSpan="17" nzErrorTip="Please input your Vehicle Model!">
+                                                <input nz-input name="vehicleModel" formControlName="vehicleModel"
+                                                    type="text" id="vehicleModel" />
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
                                 </div>
-                            </div>
-                            <div nz-row nzGutter="0">
-                                <div nz-col nzSpan="12">
-                                    <nz-form-item>
-                                        <nz-form-label
-                                            [nzSpan]="7"
-                                            nzFor="regNumber"
-                                            nzRequired
-                                            >Registration Number</nz-form-label
-                                        >
-                                        <nz-form-control
-                                            nzSpan="17"
-                                            nzErrorTip="Please input your Registration Number!"
-                                        >
-                                            <input
-                                                nz-input
-                                                name="regNumber"
-                                                formControlName="regNumber"
-                                                type="text"
-                                                id="regNumber"
-                                            />
-                                        </nz-form-control>
-                                    </nz-form-item>
+                                <div nz-row nzGutter="0">
+                                    <div nz-col nzSpan="12">
+                                        <nz-form-item>
+                                            <nz-form-label [nzSpan]="7" nzFor="regNumber" nzRequired>Registration Number
+                                            </nz-form-label>
+                                            <nz-form-control nzSpan="17"
+                                                nzErrorTip="Please input your Registration Number!">
+                                                <input nz-input name="regNumber" formControlName="regNumber" type="text"
+                                                    id="regNumber" />
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div nz-col nzSpan="12">
+                                        <nz-form-item>
+                                            <nz-form-label [nzSpan]="7" nzFor="engineNumber" nzRequired>Engine Number
+                                            </nz-form-label>
+                                            <nz-form-control nzSpan="17" nzErrorTip="Please input your Engine Number!">
+                                                <input nz-input name="engineNumber" formControlName="engineNumber"
+                                                    type="text" id="engineNumber" />
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
                                 </div>
-                                <div nz-col nzSpan="12">
-                                    <nz-form-item>
-                                        <nz-form-label
-                                            [nzSpan]="7"
-                                            nzFor="engineNumber"
-                                            nzRequired
-                                            >Engine Number</nz-form-label
-                                        >
-                                        <nz-form-control
-                                            nzSpan="17"
-                                            nzErrorTip="Please input your Engine Number!"
-                                        >
-                                            <input
-                                                nz-input
-                                                name="engineNumber"
-                                                formControlName="engineNumber"
-                                                type="text"
-                                                id="engineNumber"
-                                            />
-                                        </nz-form-control>
-                                    </nz-form-item>
-                                </div>
-                            </div>
 
-                            <div nz-row nzGutter="0">
-                                <div nz-col nzSpan="12">
-                                    <nz-form-item>
-                                        <nz-form-label
-                                            [nzSpan]="7"
-                                            nzFor="color"
-                                            nzRequired
-                                            >Color</nz-form-label
-                                        >
-                                        <nz-form-control
-                                            nzSpan="17"
-                                            nzErrorTip="Please input your Color!"
-                                        >
-                                            <input
-                                                nz-input
-                                                name="color"
-                                                formControlName="color"
-                                                type="text"
-                                                id="color"
-                                            />
-                                        </nz-form-control>
-                                    </nz-form-item>
+                                <div nz-row nzGutter="0">
+                                    <div nz-col nzSpan="12">
+                                        <nz-form-item>
+                                            <nz-form-label [nzSpan]="7" nzFor="color" nzRequired>Color</nz-form-label>
+                                            <nz-form-control nzSpan="17" nzErrorTip="Please input your Color!">
+                                                <input nz-input name="color" formControlName="color" type="text"
+                                                    id="color" />
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div nz-col nzSpan="12">
+                                        <nz-form-item>
+                                            <nz-form-label [nzSpan]="7" nzFor="productType">Product Type</nz-form-label>
+                                            <nz-form-control nzSpan="17" nzErrorTip="Please input your Color!">
+                                                <nz-select nzShowSearch nzAllowClear formControlName="productType"
+                                                    nzPlaceHolder="Select a product type" name="productType"
+                                                    id="productType">
+                                                    <nz-option nzLabel="Private" nzValue="Private"></nz-option>
+                                                    <nz-option nzLabel="Commercial" nzValue="Commercial"></nz-option>
+                                                    <nz-option nzLabel="Bus/Taxi" nzValue="Bus/Taxi"></nz-option>
+                                                </nz-select>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
                                 </div>
-                                <div nz-col nzSpan="12">
-                                    <nz-form-item>
-                                        <nz-form-label
-                                            [nzSpan]="7"
-                                            nzFor="productType"
-                                            >Product Type</nz-form-label
-                                        >
-                                        <nz-form-control
-                                            nzSpan="17"
-                                            nzErrorTip="Please input your Color!"
-                                        >
-                                            <nz-select
-                                                nzShowSearch
-                                                nzAllowClear
-                                                formControlName="productType"
-                                                nzPlaceHolder="Select a product type"
-                                                name="productType"
-                                                id="productType"
-                                            >
-                                                <nz-option
-                                                    nzLabel="Private"
-                                                    nzValue="Private"
-                                                ></nz-option>
-                                                <nz-option
-                                                    nzLabel="Commercial"
-                                                    nzValue="Commercial"
-                                                ></nz-option>
-                                                <nz-option
-                                                    nzLabel="Bus/Taxi"
-                                                    nzValue="Bus/Taxi"
-                                                ></nz-option>
-                                            </nz-select>
-                                        </nz-form-control>
-                                    </nz-form-item>
+                                <div nz-row nzGutter="0">
+                                    <div nz-col nzSpan="12">
+                                        <nz-form-item>
+                                            <nz-form-label [nzSpan]="7" nzFor="chassisNumber" nzRequired>Chassis Number
+                                            </nz-form-label>
+                                            <nz-form-control nzSpan="17" nzErrorTip="Please input your Chassis Number!">
+                                                <input nz-input name="chassisNumber" formControlName="chassisNumber"
+                                                    type="text" id="chassisNumber" />
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
                                 </div>
-                            </div>
-                            <div nz-row nzGutter="0">
-                                <div nz-col nzSpan="12">
-                                    <nz-form-item>
-                                        <nz-form-label
-                                            [nzSpan]="7"
-                                            nzFor="chassisNumber"
-                                            nzRequired
-                                            >Chassis Number</nz-form-label
-                                        >
-                                        <nz-form-control
-                                            nzSpan="17"
-                                            nzErrorTip="Please input your Chassis Number!"
-                                        >
-                                            <input
-                                                nz-input
-                                                name="chassisNumber"
-                                                formControlName="chassisNumber"
-                                                type="text"
-                                                id="chassisNumber"
-                                            />
-                                        </nz-form-control>
-                                    </nz-form-item>
-                                </div>
-                            </div>
-                            <div
-                                style="
+                                <div style="
                                     text-align: center;
                                     margin-top: 10px;
                                     margin-bottom: 10px;
-                                "
-                            >
-                                <button
-                                    nz-button
-                                    nzType="primary"
-                                    [disabled]="!riskThirdPartyForm.valid"
-                                >
-                                    Add Risk
-                                </button>
-                                <button nz-button nzType="default" type>
-                                    Reset Form
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </nz-collapse-panel>
-            </nz-collapse>
+                                ">
+                                    <button nz-button nzType="primary" [disabled]="!riskThirdPartyForm.valid">
+                                        Add Risk
+                                    </button>
+                                    <button nz-button nzType="default" type>
+                                        Reset Form
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </nz-collapse-panel>
+                </nz-collapse>
+            </div>
             <!-- <i nz-icon nzType="minus-circle-o" class="dynamic-delete-button" (click)="removeField(control, $event)"></i> -->
         </div>
         <!-- <button nz-button nzType="dashed" class="add-button" (click)="addField($event)">
@@ -606,22 +360,13 @@
 
         <div style="margin-bottom: 20px; margin-top: 20px; width: 50%;">
             <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input
-                    type="text"
-                    nz-input
-                    placeholder="Search by client, quotation number, agent"
-                />
+                <input type="text" nz-input placeholder="Search by client, quotation number, agent" />
             </nz-input-group>
             <ng-template #suffixIconSearch>
                 <i nz-icon nzType="search"></i>
             </ng-template>
         </div>
-        <nz-table
-            #risksTable
-            [nzData]="risks"
-            [nzSize]="'small'"
-            [nzBordered]="true"
-        >
+        <nz-table #risksTable [nzData]="risks" [nzSize]="'small'" [nzBordered]="true" id="risksTable">
             <thead>
                 <tr>
                     <th>Insurance Type</th>
@@ -629,7 +374,7 @@
                     <th>Vehicle Make</th>
                     <th>Vehicle Model</th>
                     <th>Engine Number</th>
-                    <th>Chasis Number</th>
+                    <th>Chassis Number</th>
                     <th>Color</th>
                     <th>Product Type</th>
                     <th>Estimated Value</th>
@@ -638,28 +383,360 @@
             <tbody>
                 <tr *ngFor="let risk of risksTable.data">
                     <td>{{ risk.insuranceType }}</td>
-                    <td>{{ risk.registrationNumber }}</td>
+                    <td>{{ risk.regNumber }}</td>
                     <td>{{ risk.vehicleMake }}</td>
                     <td>{{ risk.vehicleModel }}</td>
                     <td>{{ risk.engineNumber }}</td>
-                    <td>{{ risk.chasisNumber }}</td>
+                    <td>{{ risk.chassisNumber }}</td>
                     <td>{{ risk.color }}</td>
                     <td>{{ risk.productType }}</td>
-                    <td>{{ risk.estimatedValue }}</td>
+                    <td>{{ risk.estimatedValue | number }}</td>
                 </tr>
             </tbody>
         </nz-table>
+        <ng-template id="risksTemplateTable">
+            <nz-table [nzData]="risks" [nzSize]="'small'" [nzBordered]="true" id="risksTemplateTable">
+                <thead>
+                    <tr>
+                        <th>insuranceType</th>
+                        <th>regNumber</th>
+                        <th>vehicleMake</th>
+                        <th>vehicleModel</th>
+                        <th>engineNumber</th>
+                        <th>chassisNumber</th>
+                        <th>color</th>
+                        <th>productType</th>
+                        <th>estimatedValue</th>
+                    </tr>
+                </thead>
+            </nz-table>
+        </ng-template>
     </nz-card>
-    <!-- </nz-card> -->
-    <div style="text-align: center; margin-top: 10px; margin-bottom: 10px;">
-        <button
-            nz-button
-            nzType="primary"
-            (click)="addQuote()"
-            [disabled]="!quoteForm.valid"
-        >
-            Create Quote
-        </button>
-        <button nz-button nzType="default">Reset Form</button>
-    </div>
-</div>
+    <nz-card nzTitle="Premium Computation">
+        <nz-divider nzText="Basic Premuim" nzOrientation="left"></nz-divider>
+        <div nz-row nzGutter="0">
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label nzSpan="7" nzRequired>Sum Insured</nz-form-label>
+                    <nz-form-control nzSpan="17">
+                        <input nz-input nzPlaceHolder="" name="sumInsured" [(ngModel)]="sumInsured" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzSpan="7" nzRequired>Rate</nz-form-label>
+                    <nz-form-control nzSpan="17">
+                        <nz-input-group nzCompact>
+                        <nz-select [(ngModel)]="premiumRateType" style="width: 10%;">
+                            <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
+                            <nz-option *ngIf="quoteForm.get('currency').value === 'ZMW'" [nzLabel]="'K'" nzValue="figure"></nz-option>
+                            <nz-option *ngIf="quoteForm.get('currency').value === 'Dollar'" [nzLabel]="'$'" nzValue="figure"></nz-option>
+                        </nz-select>
+                        <input nz-input nzPlaceHolder="" name="premiumRate" [(ngModel)]="premiumRate" style="width: 90%;"/>
+                        </nz-input-group>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-control [nzXs]="{ span: 24, offset: 4 }" [nzSm]="{ span: 20, offset: 7 }">
+                        <button nz-button nzType="primary" (click)="computeBasicPremium()">Compute</button>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12">
+                <nz-card style="margin: 0 auto; float: right;">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="12">Premium</nz-form-label>
+                        <nz-form-control nzSpan="12">
+                            <input nz-input [disabled]="true" name="basicPremium" [ngModel]="basicPremium"
+                                [value]="basicPremium" />
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label nzSpan="12">Levy</nz-form-label>
+                        <nz-form-control nzSpan="12">
+                            <input nz-input [disabled]="true" name="basicPremiumLevy" [ngModel]="basicPremiumLevy"
+                                [value]="basicPremiumLevy" />
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label nzSpan="12">Sub Total</nz-form-label>
+                        <nz-form-control nzSpan="12" nzDisabled>
+                            <input nz-input [disabled]="true" name="basicPremiumSubTotal"
+                                [ngModel]="basicPremiumSubTotal" [value]="basicPremiumSubTotal" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </nz-card>
+            </div>
+        </div>
+
+        <nz-divider nzText="Loading" nzOrientation="left"></nz-divider>
+        <div nz-row nzGutter="0">
+            <div nz-col nzSpan="12">
+                <div *ngIf="selectedValue?.value === 'Comprehensive'">
+                            <nz-form-item>
+                                <nz-form-label [nzSpan]="7" nzFor="load">Load
+                                </nz-form-label>
+                                <nz-form-control nzSpan="17">
+                                    <nz-select name="load" [(ngModel)]="selectedLoadingValue" [compareWith]="compareFn"
+                                        nzAllowClear>
+                                        <nz-option *ngFor="let option of motorComprehensiveloadingOptions"
+                                            [nzValue]="option" [nzLabel]="option.label"></nz-option>
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                </div>
+                <div *ngIf="selectedValue?.value === 'ThirdParty'">
+                            <nz-form-item>
+                                <nz-form-label [nzSpan]="7" nzFor="load">Load
+                                </nz-form-label>
+                                <nz-form-control nzSpan="17">
+                                    <nz-select name="load" [(ngModel)]="selectedLoadingValue" [compareWith]="compareFn"
+                                        (ngModelChange)="log($event)" nzAllowClear>
+                                        <nz-option *ngFor="let option of motorThirdPartyloadingOptions"
+                                            [nzValue]="option" [nzLabel]="option.label"></nz-option>
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                </div>
+                <div *ngIf="selectedLoadingValue.value === 'increasedThirdPartyLimits'">
+                                <nz-form-item>
+                                        <nz-form-label [nzSpan]="7" nzFor="increasedThirdPartyLimitsRate">Increase to
+                                        </nz-form-label>
+                                        <nz-form-control nzSpan="6">
+                                                        <input nz-input [(ngModel)]="increasedThirdPartyLimitValue"/>
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                <nz-form-item>
+                                    <nz-form-label [nzSpan]="7" nzFor="increasedThirdPartyLimitsRate">Rate
+                                    </nz-form-label>
+                                    <nz-form-control nzSpan="6">
+                                            <nz-input-group nzCompact>
+                                                    <nz-select [(ngModel)]="increasedThirdPartyLimitsRateType" style="width: 30%;">
+                                                        <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
+                                                        <nz-option *ngIf="quoteForm.get('currency').value === 'ZMW'" [nzLabel]="'K'" nzValue="figure"></nz-option>
+                                                        <nz-option *ngIf="quoteForm.get('currency').value === 'Dollar'" [nzLabel]="'$'" nzValue="figure"></nz-option>
+                                                    </nz-select>
+                                                    <input nz-input style="width: 70%;" name="increasedThirdPartyLimitsRate" [(ngModel)]="increasedThirdPartyLimitsRate"/>
+                                                    </nz-input-group>
+                                    </nz-form-control>
+                                </nz-form-item>
+                                <nz-form-item>
+                                    <nz-form-control [nzXs]="{ span: 24, offset: 4 }" [nzSm]="{ span: 20, offset: 7 }">
+                                        <button nz-button nzType="primary"
+                                            (click)="computeIncreasedThirdPartyLimit()">Compute</button>
+                                    </nz-form-control>
+                                </nz-form-item>
+                </div>
+                <div *ngIf="selectedLoadingValue.value === 'riotAndStrike'">
+                            <nz-form-item>
+                                <nz-form-label [nzSpan]="7" nzFor="riotAndStrikeRate">Rate</nz-form-label>
+                                <nz-form-control nzSpan="6">
+                                        <nz-input-group nzCompact>
+                                                <nz-select [(ngModel)]="riotAndStrikeRateType" style="width: 30%;">
+                                                    <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
+                                                    <nz-option *ngIf="quoteForm.get('currency').value === 'ZMW'" [nzLabel]="'K'" nzValue="figure"></nz-option>
+                                                    <nz-option *ngIf="quoteForm.get('currency').value === 'Dollar'" [nzLabel]="'$'" nzValue="figure"></nz-option>
+                                                </nz-select>
+                                                <input nz-input nzPlaceHolder="" name="riotAndStrikeRate" [(ngModel)]="riotAndStrikeRate" style="width: 70%;"/>
+                                                </nz-input-group>
+                                </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item>
+                                <nz-form-control [nzXs]="{ span: 24, offset: 4 }" [nzSm]="{ span: 20, offset: 7 }">
+                                    <button nz-button nzType="primary" (click)="computeRiotAndStrike()">Compute</button>
+                                </nz-form-control>
+                            </nz-form-item>
+                </div>
+                <div *ngIf="selectedLoadingValue.value === 'carStereo'">
+                    <div nz-row nzGutter="2">
+                        <div nz-col nzSpan="25">
+                            <nz-form-item>
+                                <nz-form-label [nzSpan]="7" nzFor="carStereoValue">Car Stereo Value</nz-form-label>
+                                <nz-form-control nzSpan="6">
+                                    <input nz-input nzPlaceHolder="" name="carStereoValue"
+                                        [(ngModel)]="carStereoValue" />
+                                </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item>
+                                    <nz-form-label [nzSpan]="7" nzFor="carStereoRate">Rate</nz-form-label>
+                                    <nz-form-control nzSpan="6">
+                                            <nz-input-group nzCompact>
+                                                    <nz-select [(ngModel)]="carStereoRateType" style="width: 30%;">
+                                                        <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
+                                                        <nz-option *ngIf="quoteForm.get('currency').value === 'ZMW'" [nzLabel]="'K'" nzValue="figure"></nz-option>
+                                                        <nz-option *ngIf="quoteForm.get('currency').value === 'Dollar'" [nzLabel]="'$'" nzValue="figure"></nz-option>
+                                                    </nz-select>
+                                                    <input nz-input nzPlaceHolder="" name="carStereoRate" [(ngModel)]="carStereoRate" style="width: 70%;"/>
+                                                    </nz-input-group>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            <nz-form-item>
+                                <nz-form-control [nzXs]="{ span: 24, offset: 4 }" [nzSm]="{ span: 20, offset: 7 }">
+                                    <button nz-button nzType="primary" (click)="computeCarStereo()">Compute</button>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="selectedLoadingValue.value === 'territorailExtension'">
+                    <div nz-row nzGutter="0">
+                        <div nz-col nzSpan="25">
+                            <nz-form-item>
+                                <nz-form-label [nzSpan]="7" nzFor="territorailExtensionRate">Rate</nz-form-label>
+                                <nz-form-control nzSpan="6">
+                                        <nz-input-group nzCompact>
+                                                <nz-select [(ngModel)]="territorailExtensionRateType" style="width: 30%;">
+                                                    <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
+                                                    <nz-option *ngIf="quoteForm.get('currency').value === 'ZMW'" [nzLabel]="'K'" nzValue="figure"></nz-option>
+                                                    <nz-option *ngIf="quoteForm.get('currency').value === 'Dollar'" [nzLabel]="'$'" nzValue="figure"></nz-option>
+                                                </nz-select>
+                                                <input nz-input style="width: 70%;"/>
+                                                </nz-input-group>
+                                </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item>
+                                <nz-form-control [nzXs]="{ span: 24, offset: 4 }" [nzSm]="{ span: 20, offset: 7 }">
+                                    <button nz-button nzType="primary"
+                                        (click)="computeTerritorialExtension()">Compute</button>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="selectedLoadingValue.value === 'lossOfUse'">
+                    <div nz-row nzGutter="0">
+                        <div nz-col nzSpan="25">
+                            <nz-form-item>
+                                <nz-form-label [nzSpan]="7" nzFor="lossOfUseDailyRate">Daily Rate</nz-form-label>
+                                <nz-form-control nzSpan="6">
+                                        <nz-input-group nzCompact>
+                                                <nz-select [(ngModel)]="lossOfUseDailyRateType" style="width: 30%;">
+                                                    <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
+                                                    <nz-option *ngIf="quoteForm.get('currency').value === 'ZMW'" [nzLabel]="'K'" nzValue="figure"></nz-option>
+                                                    <nz-option *ngIf="quoteForm.get('currency').value === 'Dollar'" [nzLabel]="'$'" nzValue="figure"></nz-option>
+                                                </nz-select>
+                                                <input nz-input nzPlaceHolder="" name="lossOfUseDailyRate" [(ngModel)]="lossOfUseDailyRate" style="width: 70%;"/>
+                                                </nz-input-group>
+                                </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item>
+                                    <nz-form-label [nzSpan]="7" nzFor="lossOfUseDays">Number Of Days</nz-form-label>
+                                    <nz-form-control nzSpan="6">
+                                        <input nz-input id="lossOfUseDays" nzPlaceHolder="" name="lossOfUseDays"
+                                            [(ngModel)]="lossOfUseDays" />
+                                    </nz-form-control>
+                                </nz-form-item>
+                            <nz-form-item>
+                                <nz-form-control [nzXs]="{ span: 24, offset: 4 }" [nzSm]="{ span: 20, offset: 7 }">
+                                    <button nz-button nzType="primary" (click)="computeLossOfUse()">Compute</button>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div nz-col nSpan="12">
+                        <nz-card style="margin: 0 auto; float: right">
+                            <form>
+                                <section *ngFor="let load of loads; let i = index;">
+                                    <nz-form-item>
+                                        <nz-form-label nzSpan="12">{{load.loadType}}</nz-form-label>
+                                        <nz-form-control nzSpan="12" nzDisabled>
+                                            <input nz-input [value]="load.amount" [disabled]="true" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                </section>
+                            </form>
+                            <nz-form-item>
+                                <nz-form-label nzSpan="12">Sub Total</nz-form-label>
+                                <nz-form-control nzSpan="12" nzDisabled>
+                                    <input nz-input [disabled]="true" name="premiumLoadingsubTotal"
+                                        [ngModel]="premiumLoadingsubTotal" />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </nz-card>
+            </div>
+        </div>
+
+
+        <nz-divider nzText="Discount" nzOrientation="left"></nz-divider>
+            <div nz-row nzGutter="0">
+                <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="7">Discount Rate</nz-form-label>
+                        <nz-form-control nzSpan="17">
+                                <nz-input-group nzCompact>
+                                        <nz-select [(ngModel)]="premiumDiscountRateType" style="width: 10%;">
+                                            <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
+                                            <nz-option *ngIf="quoteForm.get('currency').value === 'ZMW'" [nzLabel]="'K'" nzValue="figure"></nz-option>
+                                            <nz-option *ngIf="quoteForm.get('currency').value === 'Dollar'" [nzLabel]="'$'" nzValue="figure"></nz-option>
+                                        </nz-select>
+                                        <input nz-input nzPlaceHolder="" name="premiumDiscountRate" [(ngModel)]="premiumDiscountRate" style="width: 90%;"/>
+                                        </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-control [nzXs]="{ span: 24, offset: 4 }" [nzSm]="{ span: 20, offset: 7 }">
+                            <button nz-button nzType="primary" (click)="computeDiscount()">Compute</button>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="12">
+                    <nz-card style="margin: 0 auto; float: right;">
+                        <nz-form-item>
+                            <nz-form-label nzSpan="12">Discount</nz-form-label>
+                            <nz-form-control nzSpan="12" nzDisabled>
+                                <input nz-input [disabled]="true" name="premiumDiscount" [ngModel]="premiumDiscount" />
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label nzSpan="12">Sub Total</nz-form-label>
+                            <nz-form-control nzSpan="12" nzDisabled>
+                                <input nz-input [disabled]="true" name="premiumDiscountSubtotal"
+                                    [ngModel]="premiumDiscountSubtotal" />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </nz-card>
+                </div>
+            </div>
+        <nz-divider nzText="Net Premium" nzOrientation="left"></nz-divider>
+        <div nz-row nzGutter="0">
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label nzSpan="7">Total Premium</nz-form-label>
+                    <nz-form-control nzSpan="17" nzDisabled>
+                        <input nz-input [disabled]="true" [ngModel]="totalPremium" />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+        <!-- </nz-card> -->
+        <div style="text-align: center; margin-top: 10px; margin-bottom: 10px;">
+            <button nz-button nzType="primary" (click)="addQuote()" [disabled]="!quoteForm.valid">
+                Create Quote
+            </button>
+            <button nz-button nzType="default">Reset Form</button>
+        </div>
+    </nz-card>
+
+
+        <nz-modal [(nzVisible)]="isVisible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter"
+            (nzOnCancel)="handleCancel()">
+            <ng-template #modalTitle>
+                Upload Risks
+            </ng-template>
+
+            <ng-template #modalContent>
+                <nz-upload nzType="drag" [nzMultiple]="true" [nzLimit]="2"
+                    nzAction="https://flosure-pdf-service.herokuapp.com/risks-uploads"
+                    (nzChange)="handleChange($event)">
+                    <p class="ant-upload-drag-icon">
+                        <i nz-icon nzType="inbox"></i>
+                    </p>
+                    <p class="ant-upload-text">Click or drag file to this area to upload</p>
+                </nz-upload>
+            </ng-template>
+
+            <ng-template #modalFooter>
+                <button nz-button nzType="default" (click)="handleDownloadTemplate()">Download Template</button>
+            </ng-template>
+        </nz-modal>

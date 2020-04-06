@@ -5,6 +5,11 @@ import {
 } from '../../models/client.model';
 import { Router } from '@angular/router';
 import { ClientsService } from '../../services/clients.service';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import * as XLSX from 'xlsx';
+
+import * as _ from 'lodash';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
     selector: 'app-clients-list',
@@ -14,6 +19,7 @@ import { ClientsService } from '../../services/clients.service';
 export class ClientsListComponent implements OnInit {
     clientList: Array<IIndividualClient & ICorporateClient>;
     displayClientList: Array<IIndividualClient & ICorporateClient>;
+    searchedClientList: Array<IIndividualClient & ICorporateClient>;
 
     isAddClientDrawerOpen = false;
 
@@ -24,6 +30,12 @@ export class ClientsListComponent implements OnInit {
     totalCorporateClients = 0;
 
     clientsLoading = true;
+
+    //search string when filtering clients
+    searchString: string;
+
+    /*name of the excel-file which will be downloaded. */ 
+    fileName= 'ClientsSheet.xlsx';
 
     constructor(
         private router: Router,
@@ -53,5 +65,61 @@ export class ClientsListComponent implements OnInit {
         this.router.navigateByUrl(
             '/flosure/clients/client-details/' + client.id
         );
+    }
+
+    addIndividualClient(client: IIndividualClient): void {
+        this.clientsService.addIndividualClient(client);
+    }
+
+    addCorporateClient(client: ICorporateClient): void {
+        this.clientsService.addCorporateClient(client);
+    }
+
+    filterClients(filter: 'All' | 'Individaul' | 'Corporate'): void {
+        switch (filter) {
+            case 'All':
+                this.displayClientList = this.clientList;
+            case 'Individaul':
+                this.displayClientList = this.individualClients as Array<
+                    IIndividualClient & ICorporateClient
+                >;
+            case 'Corporate':
+                this.displayClientList = this.corporateClients as Array<
+                    IIndividualClient & ICorporateClient
+                >;
+        }
+    }
+
+    search(value: string): void {
+        if (value === '' || !value) {
+            this.displayClientList = this.clientList;
+        }
+
+        this.displayClientList = this.clientList.filter(client => {
+
+            if (client.clientType === 'Individual') {
+                return (client.clientID.toLowerCase().includes(value.toLowerCase())
+            || client.clientType.toLocaleLowerCase().includes(value.toLowerCase()) 
+            || client.status.toLocaleLowerCase().includes(value.toLowerCase())
+            || client.firstName.toLowerCase().includes(value.toLowerCase())
+            || client.lastName.toLowerCase().includes(value.toLowerCase()));
+            } else {
+                return client.clientID.toLowerCase().includes(value.toLowerCase())
+            || client.clientType.toLocaleLowerCase().includes(value.toLowerCase()) 
+            || client.status.toLocaleLowerCase().includes(value.toLowerCase())
+            || client.companyName.toLowerCase().includes(value.toLowerCase());
+            }
+        })
+    }
+
+    downloadClientsList() {   
+       let element = document.getElementById('clientsTable'); 
+       const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+
+       const wb: XLSX.WorkBook = XLSX.utils.book_new();
+       XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+       /* save to file */
+       XLSX.writeFile(wb, this.fileName);
     }
 }

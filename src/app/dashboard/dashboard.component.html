@@ -83,6 +83,8 @@
                                 type="text"
                                 nz-input
                                 placeholder="Search by client, policy number, agent"
+                                [(ngModel)]="searchString"
+                                (ngModelChange)="searchActivePolicies($event)"
                             />
                         </nz-input-group>
                         <ng-template #suffixIconSearch>
@@ -92,7 +94,7 @@
 
                     <nz-table
                         #activePoliciesTable
-                        [nzData]="activePoliciesList"
+                        [nzData]="displayActivePoliciesList"
                         [nzSize]="'small'"
                         [nzBordered]="true"
                     >
@@ -135,6 +137,8 @@
                                 type="text"
                                 nz-input
                                 placeholder="Search by client, policy number, agent"
+                                [(ngModel)]="searchString"
+                                (ngModelChange)="searchExpiredPolicies($event)"
                             />
                         </nz-input-group>
                         <ng-template #suffixIconSearch>
@@ -144,7 +148,7 @@
 
                     <nz-table
                         #expiredPoliciesTable
-                        [nzData]="expiredPoliciesList"
+                        [nzData]="displayExpiredPoliciesList"
                         [nzSize]="'small'"
                         [nzBordered]="true"
                     >

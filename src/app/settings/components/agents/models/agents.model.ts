@@ -7,6 +7,7 @@ export interface IAgent {
     email: string;
     phone: string;
     address: string;
+    branch: string;
     dateCreated: Date;
     dateUpdated: Date;
     userType: UserType;

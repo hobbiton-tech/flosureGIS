@@ -22,7 +22,7 @@
                                         <input
                                             type="text"
                                             nz-input
-                                            placeholder="Search by ID, name, date"
+                                            placeholder="Search by ID, name, date, branch"
                                         />
                                     </nz-input-group>
                                     <ng-template #suffixIconSearch>
@@ -56,6 +56,7 @@
                                 <th>Agent Name</th>
                                 <th>Agent Email</th>
                                 <th>Agent Phone Number</th>
+                                <th>Branch</th>
                                 <th>Date Created</th>
                                 <!-- <th>Action</th> -->
                             </tr>
@@ -68,6 +69,7 @@
                                 </td>
                                 <td>{{ agent.email }}</td>
                                 <td>{{ agent.phone }}</td>
+                                <td>{{ agent.branch }}</td>
                                 <td>
                                     {{
                                         agent.dateCreated.seconds * 1000 | date

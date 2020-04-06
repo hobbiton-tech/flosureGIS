@@ -17,6 +17,7 @@ import { LoginComponent } from './login/login.component';
 import { AngularFireStorageModule, BUCKET } from '@angular/fire/storage';
 import { environment } from '../environments/environment';
 import 'firebase/storage';
+import { RatesComponent } from './app/settings/components/rates/rates.component';
 
 registerLocaleData(en);
 
@@ -32,7 +33,7 @@ const firebaseConfig = {
 };
 
 @NgModule({
-    declarations: [AppComponent, NavigationComponent, LoginComponent],
+    declarations: [AppComponent, NavigationComponent, LoginComponent, RatesComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,

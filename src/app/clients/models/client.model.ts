@@ -1,3 +1,5 @@
+import { ITimestamp } from 'src/app/settings/components/insurance-companies/models/insurance-company.model';
+
 export interface IIndividualClient {
     id: string;
     title: string;
@@ -13,9 +15,9 @@ export interface IIndividualClient {
     address: string;
     idType: IDType;
     idNumber: string;
-    dateOfBirth: Date;
-    dateCreated: Date;
-    dateUpdated: Date;
+    dateOfBirth: Date | ITimestamp;
+    dateCreated: Date | ITimestamp;
+    dateUpdated: Date | ITimestamp;
     occupation: OccupationType;
     clientType: ClientType;
     status: ClientStatus;
@@ -38,8 +40,8 @@ export interface ICorporateClient {
     contactEmail: string;
     companyName: string;
     taxPin: number;
-    dateCreated: Date;
-    dateUpdated: Date;
+    dateCreated: Date | ITimestamp;
+    dateUpdated: Date | ITimestamp;
     clientType: ClientType;
     status: ClientStatus;
     accountName: string;

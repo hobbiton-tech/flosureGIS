@@ -3,9 +3,9 @@ export class Claim {
     claimId: string;
     policyNumber: string;
     clientName: string;
-    lossDate: Date;
+    lossDate: Date | ITimestamp;
     status: ClaimStatus;
-    notificationDate: Date;
+    notificationDate: Date | ITimestamp;
     bookedBy: string;
     serviceProvider: string;
     serviceType: string;

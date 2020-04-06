@@ -48,6 +48,7 @@ const routes: Routes = [
         CommonModule,
         ReactiveFormsModule,
         NgZorroAntdModule,
+        FormsModule,
         RouterModule.forChild(routes),
     ],
 })

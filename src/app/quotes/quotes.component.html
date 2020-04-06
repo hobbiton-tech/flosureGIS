@@ -20,7 +20,9 @@
                 <input
                     type="text"
                     nz-input
-                    placeholder="Search by client, quotation number, agent"
+                    placeholder="Search by client, quotation number"
+                    [(ngModel)]="searchString"
+                    (ngModelChange)="search($event)"
                 />
             </nz-input-group>
             <ng-template #suffixIconSearch>
@@ -29,7 +31,7 @@
         </div>
         <nz-table
             #quotesTable
-            [nzData]="quotesList"
+            [nzData]="displayQuotesList"
             [nzSize]="'small'"
             [nzBordered]="true"
         >

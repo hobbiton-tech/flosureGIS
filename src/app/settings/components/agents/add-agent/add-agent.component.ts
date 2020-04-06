@@ -38,6 +38,7 @@ export class AddAgentComponent implements OnInit {
             email: ['', Validators.required],
             phone: ['', Validators.required],
             address: ['', Validators.required],
+            branch: ['', Validators.required]
         });
     }
 

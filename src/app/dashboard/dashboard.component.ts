@@ -25,13 +25,17 @@ export class DashboardComponent implements OnInit {
     cancelledPoliciesCount: number;
     commissionEarned = 0;
 
+    searchString: string;
+
     clientsLoading = true;
     claimsLoading = true;
     policiesLoading = true;
 
     activePoliciesList: Policy[];
+    displayActivePoliciesList: Policy[];
 
     expiredPoliciesList: Policy[];
+    displayExpiredPoliciesList: Policy[];
 
     constructor(
         private clientsService: ClientsService,
@@ -49,6 +53,7 @@ export class DashboardComponent implements OnInit {
             );
 
             this.clientsCount = combined.length;
+            
             this.clientsLoading = false;
         });
         this.claims.getClaims().subscribe((claims) => {
@@ -59,6 +64,8 @@ export class DashboardComponent implements OnInit {
         this.policiesService.getPolicies().subscribe((policies) => {
             this.policiesCount = policies.length;
             this.totalPolicies = policies.length;
+            
+            
             this.activePolices = _.filter(
                 policies,
                 (x) => x.status === 'Active'
@@ -75,6 +82,7 @@ export class DashboardComponent implements OnInit {
                 activePolices,
                 (x) => x.status === 'Active'
             );
+            this.displayActivePoliciesList = this.activePoliciesList;
             console.log(this.activePoliciesList);
         });
 
@@ -83,6 +91,8 @@ export class DashboardComponent implements OnInit {
                 expiredPolices,
                 (x) => x.status === 'Expired'
             );
+            this.displayExpiredPoliciesList = this.expiredPoliciesList;
+            console.log(this.expiredPoliciesList);
         });
     }
 
@@ -90,5 +100,29 @@ export class DashboardComponent implements OnInit {
         this.route.navigateByUrl(
             '/flosure/underwriting/policy-details/' + policy.policyNumber
         );
+    }
+
+    searchActivePolicies(value: string): void {
+        if (value === '' || !value) {
+            this.displayActivePoliciesList = this.activePoliciesList;
+        }
+
+        this.displayActivePoliciesList = this.activePoliciesList.filter(policy => {   
+            return (policy.policyNumber.toLowerCase().includes(value.toLowerCase())
+            || policy.client.toLocaleLowerCase().includes(value.toLowerCase()) 
+            || policy.preparedBy.toLocaleLowerCase().includes(value.toLowerCase()));
+        });
+    }
+
+    searchExpiredPolicies(value: string): void {
+        if (value === '' || !value) {
+            this.displayActivePoliciesList = this.activePoliciesList;
+        }
+
+        this.displayExpiredPoliciesList = this.expiredPoliciesList.filter(policy => {   
+            return (policy.policyNumber.toLowerCase().includes(value.toLowerCase())
+            || policy.client.toLocaleLowerCase().includes(value.toLowerCase()) 
+            || policy.preparedBy.toLocaleLowerCase().includes(value.toLowerCase()));
+        });
     }
 }

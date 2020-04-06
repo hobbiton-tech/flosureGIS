@@ -1,4 +1,4 @@
-import { ITimestamp } from 'src/app/claims/models/claim.model';
+
 
 export class Quote {
     quoteNumber: number;
@@ -13,19 +13,36 @@ export class Quote {
 
 export class MotorQuotationModel {
     id: string;
+    user: string;
     client: string;
     quoteNumber: string;
-    dateCreated: Date;
+    dateCreated: Date | ITimestamp;
     clientCode: string;
     messageCode: string;
     coverCode: string;
     town: string;
+    branch: string;
     currency: string;
     risks: RiskModel[];
     startDate: Date | ITimestamp;
     endDate: Date | ITimestamp;
     status: QuoteStatus;
-    user: string;
+    sumInsured: number;
+    premiumRate: number;
+    basicPremium: number;
+    premiumLevy: number;
+    basicPremiumSubTotal: number;
+    loads: LoadModel[];
+    loadingSubTotal: number;
+    discount: number;
+    discountRate: number;
+    discountSubTotal: number;
+    netPremium: number;
+}
+
+export class LoadModel {
+    loadType: LoadType;
+    amount: number;
 }
 
 export class RiskModel {
@@ -52,8 +69,20 @@ export class CoverModel {
     description: string;
 }
 
+export interface ITimestamp {
+    seconds: number;
+    milliseconds: number;
+}
+
+export class Load {
+    label: string;
+    value: number;
+}
+
 export type ProductType = 'Private' | 'Commercial' | 'Bus/Taxi';
 
 export type QuoteStatus = 'Draft' | 'Approved';
+
+export type LoadType = 'Increased Third Party Limit' | 'Riot And Strike' | 'Car Stereo' | 'Territorial Extension' | 'Loss Of Use';
 
 export type InsuranceType = 'ThirdParty' | 'Comprehensive';

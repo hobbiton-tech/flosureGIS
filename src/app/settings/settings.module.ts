@@ -15,14 +15,21 @@ import { Routes, RouterModule } from '@angular/router';
 import { AccountsComponent } from './components/accounts/accounts.component';
 import { InsuranceCompaniesComponent } from './components/insurance-companies/insurance-companies.component';
 import { AddInsuranceCompanyComponent } from './components/insurance-companies/components/add-insurance-company/add-insurance-company.component';
+import { RatesComponent } from './components/rates/rates.component';
+import { AddRateComponent } from './components/rates/components/add-rate/add-rate.component';
 import { AgentsComponent } from './components/agents/agents.component';
 import { AgentsService } from './components/agents/services/agents.service';
 import { AddAgentComponent } from './components/agents/add-agent/add-agent.component';
+import { AddTaxComponent } from './components/rates/components/add-tax/add-tax.component';
 
 const routes: Routes = [
     {
         path: 'insurance-companies',
         component: InsuranceCompaniesComponent,
+    },
+    {
+        path: 'rates',
+        component: RatesComponent
     },
     {
         path: 'add-insurance-company',
@@ -65,8 +72,11 @@ const routes: Routes = [
         AccountsComponent,
         InsuranceCompaniesComponent,
         AddInsuranceCompanyComponent,
+        RatesComponent,
+        AddRateComponent,
         AgentsComponent,
         AddAgentComponent,
+        AddTaxComponent
     ],
     imports: [
         CommonModule,
