@@ -1,66 +1,68 @@
-<div style="margin: 0 auto; width: 400px; height: 100%;">
-    <div class="logo" style="text-align: center; margin: 70px auto 0;">
-        <img src="assets/images/flosure-bg.png" height="200" />
-        <h2>Flosure Insurance</h2>
+<nz-spin [nzSpinning]="isLoggingIn" [nzSize]="'large'">
+    <div style="margin: 0 auto; width: 400px; height: 100%;">
+        <div class="logo" style="text-align: center; margin: 70px auto 0;">
+            <img src="assets/images/flosure-bg.png" height="200" />
+            <h2>Flosure Insurance</h2>
+        </div>
+        <form
+            nz-form
+            [formGroup]="loginForm"
+            class="login-form"
+            (ngSubmit)="login()"
+        >
+            <nz-form-item>
+                <nz-form-control
+                    nzErrorTip="Please check your email address."
+                    [nzValidateStatus]="validateStatus"
+                    [nzHasFeedback]="true"
+                >
+                    <nz-input-group nzPrefixIcon="mail">
+                        <input
+                            type="text"
+                            nz-input
+                            formControlName="email"
+                            placeholder="Email address"
+                        />
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-control
+                    nzErrorTip="Please check your password."
+                    [nzValidateStatus]="validateStatus"
+                    [nzHasFeedback]="true"
+                >
+                    <nz-input-group nzPrefixIcon="lock">
+                        <input
+                            type="password"
+                            nz-input
+                            formControlName="password"
+                            placeholder="Password"
+                        />
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-control>
+                    <button
+                        nz-button
+                        class="login-form-button"
+                        [nzType]="'primary'"
+                        style="width: 100%;"
+                    >
+                        Log in
+                    </button>
+                    <button
+                        nz-button
+                        class="login-form-button"
+                        [nzType]="'link'"
+                        style="width: 100%;"
+                    >
+                        Forgot password?
+                    </button>
+                    <!--        <a style="width: 100%; margin: 0 auto;">Forgot password?</a>-->
+                </nz-form-control>
+            </nz-form-item>
+        </form>
     </div>
-    <form
-        nz-form
-        [formGroup]="loginForm"
-        class="login-form"
-        (ngSubmit)="login()"
-    >
-        <nz-form-item>
-            <nz-form-control
-                nzErrorTip="Please check your email address."
-                [nzValidateStatus]="validateStatus"
-                [nzHasFeedback]="true"
-            >
-                <nz-input-group nzPrefixIcon="mail">
-                    <input
-                        type="text"
-                        nz-input
-                        formControlName="email"
-                        placeholder="Email address"
-                    />
-                </nz-input-group>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-control
-                nzErrorTip="Please check your password."
-                [nzValidateStatus]="validateStatus"
-                [nzHasFeedback]="true"
-            >
-                <nz-input-group nzPrefixIcon="lock">
-                    <input
-                        type="password"
-                        nz-input
-                        formControlName="password"
-                        placeholder="Password"
-                    />
-                </nz-input-group>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-control>
-                <button
-                    nz-button
-                    class="login-form-button"
-                    [nzType]="'primary'"
-                    style="width: 100%"
-                >
-                    Log in
-                </button>
-                <button
-                    nz-button
-                    class="login-form-button"
-                    [nzType]="'link'"
-                    style="width: 100%"
-                >
-                    Forgot password?
-                </button>
-                <!--        <a style="width: 100%; margin: 0 auto;">Forgot password?</a>-->
-            </nz-form-control>
-        </nz-form-item>
-    </form>
-</div>
+</nz-spin>

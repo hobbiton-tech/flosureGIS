@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
     AngularFirestore,
-    AngularFirestoreCollection
+    AngularFirestoreCollection,
 } from '@angular/fire/firestore';
 import 'firebase/firestore';
 import { filter, first } from 'rxjs/operators';
@@ -11,7 +11,7 @@ import { IReceiptModel } from '../components/models/receipts.model';
 import { v4 } from 'uuid';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class AccountService {
     private motorQuoteCollection: AngularFirestoreCollection<

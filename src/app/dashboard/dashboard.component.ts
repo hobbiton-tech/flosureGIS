@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
-    styleUrls: ['./dashboard.component.scss']
+    styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
     clientsCount = 0;
@@ -42,7 +42,7 @@ export class DashboardComponent implements OnInit {
 
     ngOnInit(): void {
         // Using reduce to combine all the clients.
-        this.clientsService.getAllClients().subscribe(clients => {
+        this.clientsService.getAllClients().subscribe((clients) => {
             const combined = [clients[0], clients[1]].reduce(
                 (x, y) => [...x, ...y],
                 []
@@ -51,37 +51,37 @@ export class DashboardComponent implements OnInit {
             this.clientsCount = combined.length;
             this.clientsLoading = false;
         });
-        this.claims.getClaims().subscribe(claims => {
+        this.claims.getClaims().subscribe((claims) => {
             console.log('SOME', claims);
             this.claimsCount = claims.length;
             this.claimsLoading = false;
         });
-        this.policiesService.getPolicies().subscribe(policies => {
+        this.policiesService.getPolicies().subscribe((policies) => {
             this.policiesCount = policies.length;
             this.totalPolicies = policies.length;
             this.activePolices = _.filter(
                 policies,
-                x => x.status === 'Active'
+                (x) => x.status === 'Active'
             ).length;
             this.inactivePolicies = _.filter(
                 policies,
-                x => x.status === 'Expired'
+                (x) => x.status === 'Expired'
             ).length;
             this.policiesLoading = false;
         });
 
-        this.policiesService.getPolicies().subscribe(activePolices => {
+        this.policiesService.getPolicies().subscribe((activePolices) => {
             this.activePoliciesList = _.filter(
                 activePolices,
-                x => x.status === 'Active'
+                (x) => x.status === 'Active'
             );
             console.log(this.activePoliciesList);
         });
 
-        this.policiesService.getPolicies().subscribe(expiredPolices => {
+        this.policiesService.getPolicies().subscribe((expiredPolices) => {
             this.expiredPoliciesList = _.filter(
                 expiredPolices,
-                x => x.status === 'Expired'
+                (x) => x.status === 'Expired'
             );
         });
     }

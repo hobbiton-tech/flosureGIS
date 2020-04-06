@@ -16,7 +16,7 @@ import { generateEndorsementRemarks } from '../../models/underwriting/endorsemen
 @Component({
     selector: 'app-underwriting-setups',
     templateUrl: './underwriting-setups.component.html',
-    styleUrls: ['./underwriting-setups.component.scss']
+    styleUrls: ['./underwriting-setups.component.scss'],
 })
 export class UnderwritingSetupsComponent implements OnInit {
     clausesList = [];

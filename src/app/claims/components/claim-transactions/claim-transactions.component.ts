@@ -6,7 +6,7 @@ import { Claim } from '../../models/claim.model';
 @Component({
     selector: 'app-claim-transactions',
     templateUrl: './claim-transactions.component.html',
-    styleUrls: ['./claim-transactions.component.scss']
+    styleUrls: ['./claim-transactions.component.scss'],
 })
 export class ClaimTransactionsComponent implements OnInit {
     claimsList: Claim[];
@@ -21,7 +21,9 @@ export class ClaimTransactionsComponent implements OnInit {
     ) {}
 
     viewClaimDetails(claim: Claim): void {
-        this.route.navigateByUrl('/flosure/claims/claim-details/' + claim.claimId);
+        this.route.navigateByUrl(
+            '/flosure/claims/claim-details/' + claim.claimId
+        );
     }
 
     async addClaim(claim: Claim): Promise<void> {
@@ -29,7 +31,7 @@ export class ClaimTransactionsComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.claimsService.getClaims().subscribe(claims => {
+        this.claimsService.getClaims().subscribe((claims) => {
             this.claimsCount = claims.length;
             this.claimsLoading = false;
             this.claimsList = claims;

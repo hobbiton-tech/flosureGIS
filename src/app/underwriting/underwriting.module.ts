@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UnderwritingComponent } from './underwriting.component';
 import { PoliciesComponent } from './components/policies/policies.component';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { Routes, RouterModule } from '@angular/router';
@@ -31,7 +30,6 @@ const routes: Routes = [
 
 @NgModule({
     declarations: [
-        UnderwritingComponent,
         EndorsementsComponent,
         PoliciesComponent,
         PolicyDetailsComponent

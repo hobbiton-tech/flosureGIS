@@ -1,8 +1,10 @@
+import { ITimestamp } from 'src/app/claims/models/claim.model';
+
 export class Quote {
     quoteNumber: number;
     revisionNumber: number;
-    startDate: Date;
-    endDate: Date;
+    startDate: Date | ITimestamp;
+    endDate: Date | ITimestamp;
     client: string;
     status: QuoteStatus;
     preparedBy: string;
@@ -11,6 +13,7 @@ export class Quote {
 
 export class MotorQuotationModel {
     id: string;
+    client: string;
     quoteNumber: string;
     dateCreated: Date;
     clientCode: string;
@@ -19,8 +22,8 @@ export class MotorQuotationModel {
     town: string;
     currency: string;
     risks: RiskModel[];
-    startDate: Date;
-    endDate: Date;
+    startDate: Date | ITimestamp;
+    endDate: Date | ITimestamp;
     status: QuoteStatus;
     user: string;
 }

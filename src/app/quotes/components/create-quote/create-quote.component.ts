@@ -3,51 +3,47 @@ import {
     FormGroup,
     FormBuilder,
     Validators,
-    FormControl
 } from '@angular/forms';
-import { StepperService } from 'src/app/quotes/services/stepper.service';
 import { Router } from '@angular/router';
 import { QuotesService } from '../../services/quotes.service';
 import { ClientsService } from 'src/app/clients/services/clients.service';
 import {
     ICorporateClient,
-    IIndividualClient
-} from 'src/app/clients/models/clients.model';
+    IIndividualClient,
+} from 'src/app/clients/models/client.model';
 import {
     RiskModel,
     Quote,
-    MotorQuotationModel
+    MotorQuotationModel,
 } from '../../models/quote.model';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
     selector: 'app-create-quote',
     templateUrl: './create-quote.component.html',
-    styleUrls: ['./create-quote.component.scss']
+    styleUrls: ['./create-quote.component.scss'],
 })
 export class CreateQuoteComponent implements OnInit {
     constructor(
         private formBuilder: FormBuilder,
-        private stepperService: StepperService,
         private readonly router: Router,
         private readonly quoteService: QuotesService,
         private readonly clientsService: ClientsService,
         private message: NzMessageService
     ) {}
-    validateRiskThirdPartyForm: FormGroup;
+
     motor: any;
-    // Decleration
     quoteForm: FormGroup;
     riskThirdPartyForm: FormGroup;
     riskComprehensiveForm: FormGroup;
     clients: Array<IIndividualClient & ICorporateClient>;
-    disabled = false;
+
     quoteNumber = '';
     risks: RiskModel[] = [];
 
     optionList = [
         { label: 'Motor Comprehensive', value: 'Comprehensive' },
-        { label: 'Motor Third Party', value: 'ThirdParty' }
+        { label: 'Motor Third Party', value: 'ThirdParty' },
     ];
     selectedValue = { label: 'Motor Comprehensive', value: 'Comprehensive' };
 
@@ -55,16 +51,6 @@ export class CreateQuoteComponent implements OnInit {
     endValue: Date | null = null;
     endOpen = false;
 
-    listOfControl: Array<{ id: number; controlInstance: string }> = [];
-
-    submitForm(): void {
-        for (const i in this.validateRiskThirdPartyForm.controls) {
-            this.validateRiskThirdPartyForm.controls[i].markAsDirty();
-            this.validateRiskThirdPartyForm.controls[
-                i
-            ].updateValueAndValidity();
-        }
-    }
 
     compareFn = (o1: any, o2: any) =>
         o1 && o2 ? o1.value === o2.value : o1 === o2;
@@ -78,14 +64,14 @@ export class CreateQuoteComponent implements OnInit {
             return false;
         }
         return startValue.getTime() > this.endValue.getTime();
-    };
+    }
 
     disabledEndDate = (endValue: Date): boolean => {
         if (!endValue || !this.startValue) {
             return false;
         }
         return endValue.getTime() <= this.startValue.getTime();
-    };
+    }
 
     handleStartOpenChange(open: boolean): void {
         if (!open) {
@@ -108,19 +94,15 @@ export class CreateQuoteComponent implements OnInit {
             currency: ['', Validators.required],
             startDate: ['', Validators.required],
             endDate: ['', Validators.required],
-            status: ['Draft']
+            status: ['Draft'],
         });
 
-        this.clientsService.getAllClients().subscribe(clients => {
+        this.clientsService.getAllClients().subscribe((clients) => {
             this.clients = [...clients[0], ...clients[1]] as Array<
                 IIndividualClient & ICorporateClient
             >;
-
-            console.log('============All Clients=========');
-            console.log(this.clients);
         });
 
-        // Comprehensive Form
         this.riskComprehensiveForm = this.formBuilder.group({
             regNumber: ['', Validators.required],
             vehicleMake: ['', Validators.required],
@@ -130,10 +112,9 @@ export class CreateQuoteComponent implements OnInit {
             color: ['', Validators.required],
             estimatedValue: ['', Validators.required],
             productType: ['', Validators.required],
-            insuranceType: ['Comprehensive']
+            insuranceType: ['Comprehensive'],
         });
 
-        // Third Party Form
         this.riskThirdPartyForm = this.formBuilder.group({
             regNumber: ['', [Validators.required]],
             vehicleMake: ['', [Validators.required]],
@@ -142,8 +123,16 @@ export class CreateQuoteComponent implements OnInit {
             chassisNumber: ['', [Validators.required]],
             color: ['', [Validators.required]],
             productType: ['', [Validators.required]],
-            insuranceType: ['ThirdParty']
+            insuranceType: ['ThirdParty'],
         });
+    }
+
+    onSubmit() {
+        const some = this.quoteForm.value;
+        this.quoteService.addMotorQuotation(some);
+
+        localStorage.setItem('motor', JSON.stringify(some));
+        this.quoteService.getRisk('an');
     }
 
     addThirdPartyRisk(): void {
@@ -160,19 +149,17 @@ export class CreateQuoteComponent implements OnInit {
         console.log(this.risks);
     }
 
-    addQuote(): void {
+    async addQuote(): Promise<void> {
         const quote: MotorQuotationModel = {
             ...this.quoteForm.value,
-            risks: this.risks
+            risks: this.risks,
         };
-        console.log('=======Full Quotation=======');
-        console.log(quote);
-        this.quoteService
+        await this.quoteService
             .addMotorQuotation(quote)
-            .then(success => {
+            .then((success) => {
                 this.message.success('Quotation Successfully created');
             })
-            .catch(err => {
+            .catch((err) => {
                 this.message.error('Quotation Creation Failed');
             });
     }

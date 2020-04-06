@@ -4,13 +4,9 @@ import {
     AfterViewInit,
     ChangeDetectorRef,
 } from '@angular/core';
-import { StepperService } from '../../common/services/stepper.service';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import {
-    IIndividualClient,
-    ICorporateClient,
-} from '../../models/clients.model';
+import { IIndividualClient, ICorporateClient } from '../../models/client.model';
 import { ClientsService } from '../../services/clients.service';
 
 @Component({
@@ -19,14 +15,12 @@ import { ClientsService } from '../../services/clients.service';
     styleUrls: ['./create-client.component.scss'],
 })
 export class CreateClientComponent implements OnInit, AfterViewInit {
-    clientTypeForm: FormGroup;
     individualClientForm: FormGroup;
     corporateClientForm: FormGroup;
 
     selectedClientType: string;
 
     constructor(
-        private stepperService: StepperService,
         private router: Router,
         private formBuilder: FormBuilder,
         private clientsService: ClientsService,
@@ -79,16 +73,12 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit(): void {
-        // this.selectedClientType = 'Corporate';
         this.selectedClientType = 'Corporate';
         this.cdr.detectChanges();
-        this.stepperService.toggleStepper(true);
-        this.stepperService.changeIndex(0);
     }
 
     ngAfterViewInit(): void {
         this.selectedClientType = 'Corporate';
-        // this.cdr.detectChanges();
     }
 
     changeClientType(event): void {
@@ -96,11 +86,11 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
     }
 
     async addIndividualClient(client: IIndividualClient): Promise<void> {
-        this.clientsService.addIndividualClient(client);
+        await this.clientsService.addIndividualClient(client);
     }
 
     async addCorporateClient(client: ICorporateClient): Promise<void> {
-        this.clientsService.addCorporateClient(client);
+        await this.clientsService.addCorporateClient(client);
     }
 
     submitIndividualClient(): void {

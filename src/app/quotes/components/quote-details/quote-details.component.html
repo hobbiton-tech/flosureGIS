@@ -1,223 +1,384 @@
-<div style="margin: 15px;">
-    <nz-breadcrumb>
-        <nz-breadcrumb-item>
-            Quotes
-        </nz-breadcrumb-item>
-        <nz-breadcrumb-item>
-            Quotes List
-        </nz-breadcrumb-item>
-        <nz-breadcrumb-item>
-            Quote Details
-        </nz-breadcrumb-item>
-    </nz-breadcrumb>
-<nz-page-header nzBackIcon nzTitle="Quote Number: {{quoteData.quoteNumber}}">
-        <nz-page-header-extra>
-            <button nz-button nzType="primary" (click)="handlePayment()">Convert</button>
-            <button *ngIf="!isEditmode" nz-button nzType="primary" (click)="isEditmode = true">Edit Policy</button>
-            <button *ngIf="isEditmode" nz-button nzType="primary" (click)="isEditmode = false">Save Changes</button>
-        </nz-page-header-extra>
-    </nz-page-header>
-    <nz-card>
-        <nz-divider nzText="Quote Details" nzOrientation="left"></nz-divider>
-        <form nz-form [formGroup]="quoteDetailsForm">
-            <div nz-row nzGutter="0">
-                <div nz-col nzSpan="12">
-                    <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired>Client Name</nz-form-label>
-                        <nz-form-control nzSpan="17">
-                            <input nz-input [disabled]="!isEditmode" formControlName="client"/>
-                        </nz-form-control>
-                    </nz-form-item>
-                    <nz-form-item>
-                            <nz-form-label nzSpan="7" nzRequired>Currency</nz-form-label>
+<nz-spin
+    [nzSize]="'large'"
+    [nzSpinning]="approvingQuote"
+    [nzTip]="'Approving Quote...'"
+>
+    <div style="margin: 15px;">
+        <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                Quotes
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                Quotes List
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                Quote Details
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+        <nz-page-header nzBackIcon [nzTitle]="title">
+            <nz-page-header-extra>
+                <button
+                    nz-button
+                    nzType="primary"
+                    (click)="generateDocuments()"
+                >
+                    {{ isQuoteApproved ? 'Receipt' : 'Approve' }}
+                </button>
+                <button
+                    *ngIf="!isEditmode && !isQuoteApproved"
+                    nz-button
+                    nzType="primary"
+                    (click)="isEditmode = true"
+                >
+                    Edit Policy
+                </button>
+                <button
+                    *ngIf="isEditmode"
+                    nz-button
+                    nzType="primary"
+                    (click)="isEditmode = false"
+                >
+                    Save Changes
+                </button>
+            </nz-page-header-extra>
+        </nz-page-header>
+        <nz-card>
+            <nz-divider
+                nzText="Quote Details"
+                nzOrientation="left"
+            ></nz-divider>
+            <form nz-form [formGroup]="quoteDetailsForm">
+                <div nz-row nzGutter="0">
+                    <div nz-col nzSpan="12">
+                        <nz-form-item>
+                            <nz-form-label nzSpan="7" nzRequired
+                                >Client Name</nz-form-label
+                            >
                             <nz-form-control nzSpan="17">
-                                <nz-select [nzDisabled]="!isEditmode" formControlName="currency">
-                                        <nz-option
-                                    nzValue="ZMW"
-                                    nzLabel="ZMW"
-                                ></nz-option>
-                                <nz-option
-                                    nzValue="Dollar"
-                                    nzLabel="Dollar"
-                                ></nz-option>
-                                </nz-select>
-                            </nz-form-control>
-                        </nz-form-item>
-                </div>
-                <div nz-col nzSpan="12">
-                    <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired>Start Date</nz-form-label>
-                        <nz-form-control nzSpan="17">
-                            <input nz-input [disabled]="!isEditmode" formControlName="startDate"/>
-                        </nz-form-control>
-                    </nz-form-item>
-                    <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired>End Date</nz-form-label>
-                        <nz-form-control nzSpan="17">
-                            <input nz-input [disabled]="!isEditmode" formControlName="endDate"/>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-            </div>
-        </form>
-    </nz-card>
-    <nz-card>
-        <nz-divider nzText="Risk Details" nzOrientation="left"></nz-divider>
-        <!-- <form nz-form [formGroup]="quoteDetailsForm">
-            <div nz-row nzGutter="0">
-                <div nz-col nzSpan="12">
-                    <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired>Product Type</nz-form-label>
-                        <nz-form-control nzSpan="17">
-                            <nz-select [nzDisabled]="!isEditmode" formControlName="product">
-                                    <nz-option nzValue="type 1" nzLabel="type 1"></nz-option>
-                                    <nz-option nzValue="type 2" nzLabel="type 2"></nz-option>
-                            </nz-select>
-                        </nz-form-control>
-                    </nz-form-item>
-                    <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired>Model</nz-form-label>
-                        <nz-form-control nzSpan="17">
-                            <nz-select [nzDisabled]="!isEditmode" formControlName="model">
-                                    <nz-option nzValue="model 1" nzLabel="model 1"></nz-option>
-                                    <nz-option nzValue="model 2" nzLabel="model 2"></nz-option>
-                            </nz-select>
-                        </nz-form-control>
-                    </nz-form-item>
-                    <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired>Color</nz-form-label>
-                        <nz-form-control nzSpan="17">
-                            <input nz-input [disabled]="!isEditmode" formControlName="color"/>
-                        </nz-form-control>
-                    </nz-form-item>
-                    <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired>Chassis No</nz-form-label>
-                        <nz-form-control nzSpan="17">
-                            <input nz-input [disabled]="!isEditmode" formControlName="chassisNumber"/>
-                        </nz-form-control>
-                    </nz-form-item>
-                    <nz-form-item>
-                            <nz-form-label nzSpan="7" nzRequired>Town</nz-form-label>
-                            <nz-form-control nzSpan="17">
-                                <input nz-input [disabled]="!isEditmode" formControlName="town"/>
-                            </nz-form-control>
-                        </nz-form-item>
-                </div>
-                <div nz-col nzSpan="12">
-                    <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired>Vehicle Reg No</nz-form-label>
-                        <nz-form-control nzSpan="17">
-                            <input nz-input [disabled]="!isEditmode" formControlName="regNumber"/>
-                        </nz-form-control>
-                    </nz-form-item>
-                    <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired>Make</nz-form-label>
-                        <nz-form-control nzSpan="17">
-                            <nz-select [nzDisabled]="!isEditmode" formControlName="make">
-                                    <nz-option nzValue="make 1" nzLabel="make 1"></nz-option>
-                                    <nz-option nzValue="make 2" nzLabel="make 2"></nz-option>
-                            </nz-select>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col nzSpan="12">
-                    <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired>Type</nz-form-label>
-                        <nz-form-control nzSpan="17">
-                            <input nz-input [disabled]="!isEditmode" formControlName="type"/>
-                        </nz-form-control>
-                    </nz-form-item>
-                    <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired>Engine No</nz-form-label>
-                        <nz-form-control nzSpan="17">
-                            <input nz-input [disabled]="!isEditmode" formControlName="engineNumber"/>
-                        </nz-form-control>
-                    </nz-form-item>
-                    <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired>Quater</nz-form-label>
-                        <nz-form-control nzSpan="17">
-                            <nz-select  [nzDisabled]="!isEditmode" formControlName="quater">
-                                <nz-option nzValue="1" nzLabel="1"></nz-option>
-                                <nz-option nzValue="2" nzLabel="2"></nz-option>
-                                <nz-option nzValue="3" nzLabel="3"></nz-option>
-                                <nz-option nzValue="4" nzLabel="4"></nz-option>
-                            </nz-select>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-            </div>
-        </form> -->
-        <div style="margin-top:20px">
-                <nz-table #risksTable [nzData]="quote.risks" nzSize="small">
-                        <thead>
-                            <tr>
-                                <th>Insurance Type</th>
-                                <th>Registration Number</th>
-                                <th>Vehicle Make</th>
-                                <th>Vehicle Model</th>
-                                <th>Engine Number</th>
-                                <th>Chassis Number</th>
-                                <th>Color</th>
-                                <th>Product Type</th>
-                                <th>Estimated Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let quote of risksTable.data">
-                                <td>{{quote.insuranceType}}</td>
-                                <td>{{quote.regNumber}}</td>
-                                <td>{{quote.vehicleMake}}</td>
-                                <td>{{quote.vehicleModel}}</td>
-                                <td>{{quote.engineNumber}}</td>
-                                <td>{{quote.chassisNumber}}</td>
-                                <td>{{quote.color}}</td>
-                                <td>{{quote.productType}}</td>
-                                <td>{{quote.estimatedValue}}</td>
-                            </tr>
-                        </tbody>
-                    </nz-table></div>
-    </nz-card>
-</div>
-
-<nz-modal
-      [(nzVisible)]="isVisible"
-      [nzTitle]="modalTitle"
-      [nzContent]="modalContent"
-      [nzFooter]="modalFooter"
-      (nzOnCancel)="handleCancel()"
-    >
-      <ng-template #modalTitle>
-        Payment
-      </ng-template>
-
-      <ng-template #modalContent>
-          <form nz-form [formGroup]="quoteDetailsForm">
-                <nz-form-item>
-                        <nz-form-label nzSpan="8" nzRequired>Payment Method</nz-form-label>
-                        <nz-form-control nzSpan="15">
-                            <nz-select nzPlaceHolder="Select Payment Method" formControlName="paymentMethod">
-                                    <nz-option nzValue="mobileMoney" nzLabel="Mobile Money"></nz-option>
-                                    <nz-option nzValue="cash" nzLabel="Cash"></nz-option>
-                                    <nz-option nzValue="cheque" nzLabel="Cheque"></nz-option>
-                            </nz-select>
-                        </nz-form-control>
-                    </nz-form-item>
-                    <nz-form-item>
-                            <nz-form-label nzSpan="7" nzRequired>Recieved From</nz-form-label>
-                            <nz-form-control nzSpan="17">
-                                <input nz-input  formControlName="preparedBy"/>
+                                <input
+                                    nz-input
+                                    [disabled]="!isEditmode"
+                                    [ngModel]="quote.clientCode"
+                                    formControlName="client"
+                                />
                             </nz-form-control>
                         </nz-form-item>
                         <nz-form-item>
-                                <nz-form-label nzSpan="7" nzRequired>Amount</nz-form-label>
-                                <nz-form-control nzSpan="17">
-                                    <input nz-input   formControlName="sumInsured"/>
-                                </nz-form-control>
-                            </nz-form-item>
-          </form>
-      </ng-template>
+                            <nz-form-label nzSpan="7" nzRequired
+                                >Currency</nz-form-label
+                            >
+                            <nz-form-control nzSpan="17">
+                                <nz-select
+                                    [nzDisabled]="!isEditmode"
+                                    formControlName="currency"
+                                    [ngModel]="quote.currency"
+                                >
+                                    <nz-option
+                                        nzValue="ZMW"
+                                        nzLabel="ZMW"
+                                    ></nz-option>
+                                    <nz-option
+                                        nzValue="Dollar"
+                                        nzLabel="Dollar"
+                                    ></nz-option>
+                                </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="12">
+                        <nz-form-item>
+                            <nz-form-label nzSpan="7" nzRequired
+                                >Start Date</nz-form-label
+                            >
+                            <nz-form-control nzSpan="17">
+                                <input
+                                    nz-input
+                                    [disabled]="!isEditmode"
+                                    [value]="getTimeStamp(quote) * 1000 | date"
+                                    formControlName="startDate"
+                                />
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label nzSpan="7" nzRequired
+                                >End Date</nz-form-label
+                            >
+                            <nz-form-control nzSpan="17">
+                                <input
+                                    nz-input
+                                    [disabled]="!isEditmode"
+                                    [value]="
+                                        getEndDateTimeStamp(quote) * 1000 | date
+                                    "
+                                    formControlName="endDate"
+                                />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+            </form>
+        </nz-card>
+        <nz-card>
+            <nz-divider nzText="Risk Details" nzOrientation="left"></nz-divider>
+            <div style="margin-top: 20px;">
+                <nz-table
+                    #risksTable
+                    [nzData]="quote.risks"
+                    nzSize="small"
+                    [nzLoading]="quotesLoading"
+                >
+                    <thead>
+                        <tr>
+                            <th>Insurance Type</th>
+                            <th>Registration Number</th>
+                            <th>Vehicle Make</th>
+                            <th>Vehicle Model</th>
+                            <th>Engine Number</th>
+                            <th>Chassis Number</th>
+                            <th>Color</th>
+                            <th>Product Type</th>
+                            <th>Estimated Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let quote of risksTable.data">
+                            <td>{{ quote.insuranceType }}</td>
+                            <td>{{ quote.regNumber }}</td>
+                            <td>{{ quote.vehicleMake }}</td>
+                            <td>{{ quote.vehicleModel }}</td>
+                            <td>{{ quote.engineNumber }}</td>
+                            <td>{{ quote.chassisNumber }}</td>
+                            <td>{{ quote.color }}</td>
+                            <td>{{ quote.productType }}</td>
+                            <td>{{ quote.estimatedValue }}</td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </div>
+        </nz-card>
+        <nz-card *ngIf="isQuoteApproved">
+            <nz-divider
+                [nzText]="'Documents'"
+                [nzOrientation]="'left'"
+            ></nz-divider>
+            <div nz-row [nzGutter]="8">
+                <div nz-col [nzSpan]="8">
+                    <nz-card
+                        nzTitle="Certificate"
+                        [nzExtra]="expansionView"
+                        [nzHoverable]="true"
+                        (nzClick)="showCertModal = true"
+                    >
+                        <pdf-viewer
+                            [src]="policyCertificateURl"
+                            [original-size]="false"
+                        ></pdf-viewer>
+                    </nz-card>
+                </div>
+                <div nz-col [nzSpan]="8">
+                    <nz-card
+                        nzTitle="Debit Note"
+                        [nzExtra]="expansionView"
+                        [nzHoverable]="true"
+                        (nzClick)="showDebitModal = true"
+                    >
+                        <pdf-viewer
+                            [src]="debitNoteURL"
+                            [original-size]="false"
+                        ></pdf-viewer>
+                    </nz-card>
+                </div>
+                <div nz-col [nzSpan]="8">
+                    <nz-card
+                        nzTitle="Policy Schedule"
+                        [nzExtra]="expansionView"
+                        [nzHoverable]="true"
+                        (nzClick)="showQuoteModal = true"
+                    >
+                        <pdf-viewer
+                            [src]="quoteURL"
+                            [original-size]="false"
+                        ></pdf-viewer>
+                    </nz-card>
+                </div>
+            </div>
+        </nz-card>
+    </div>
+</nz-spin>
 
-      <ng-template #modalFooter>
-        <button nz-button nzType="primary" (click)="handleOk()" [nzLoading]="isConfirmLoading">Reciept</button>
-      </ng-template>
-    </nz-modal>
+<nz-modal
+    [(nzVisible)]="isVisible"
+    [nzTitle]="modalTitle"
+    [nzContent]="modalContent"
+    [nzFooter]="modalFooter"
+    (nzOnCancel)="handleCancel()"
+>
+    <ng-template #modalTitle>
+        Payment
+    </ng-template>
+
+    <ng-template #modalContent>
+        <form nz-form [formGroup]="quoteDetailsForm">
+            <nz-form-item>
+                <nz-form-label nzSpan="8" nzRequired
+                    >Payment Method</nz-form-label
+                >
+                <nz-form-control nzSpan="15">
+                    <nz-select
+                        nzPlaceHolder="Select Payment Method"
+                        formControlName="paymentMethod"
+                    >
+                        <nz-option
+                            nzValue="mobileMoney"
+                            nzLabel="Mobile Money"
+                        ></nz-option>
+                        <nz-option nzValue="cash" nzLabel="Cash"></nz-option>
+                        <nz-option
+                            nzValue="cheque"
+                            nzLabel="Cheque"
+                        ></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label nzSpan="7" nzRequired
+                    >Recieved From</nz-form-label
+                >
+                <nz-form-control nzSpan="17">
+                    <input nz-input formControlName="preparedBy" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label nzSpan="7" nzRequired>Amount</nz-form-label>
+                <nz-form-control nzSpan="17">
+                    <input nz-input formControlName="sumInsured" />
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+    </ng-template>
+
+    <ng-template #modalFooter>
+        <button
+            nz-button
+            nzType="primary"
+            (click)="handleOk()"
+            [nzLoading]="isConfirmLoading"
+        >
+            Reciept
+        </button>
+    </ng-template>
+</nz-modal>
+
+<ng-template #title>
+    <div style="display: flex; align-items: center;">
+        <span style="margin-right: 8px;"
+            >Quote Number: {{ quote.quoteNumber }}</span
+        >
+        <nz-tag [nzColor]="isQuoteApproved ? 'blue' : 'orange'">
+            {{ isQuoteApproved ? 'Approved' : 'Pending Approval' }}
+        </nz-tag>
+    </div>
+</ng-template>
+
+<ng-template #expansionView>
+    <div>
+        <button
+            nz-button
+            nzType="primary"
+            nzSize="small"
+            style="margin-right: 5px;"
+        >
+            View
+        </button>
+        <button nz-button nzType="default" nzSize="small">Print</button>
+    </div>
+</ng-template>
+
+<!-- Document Modals -->
+<nz-modal
+    [(nzVisible)]="showCertModal"
+    nzTitle="Policy Receipt"
+    (nzOnCancel)="showCertModal = false"
+    (nzOnOk)="showCertModal = false"
+>
+    <div style="margin: 20px;">
+        <nz-card style="width: 100%;" nzTitle="Receipt" [nzExtra]="actions">
+            <pdf-viewer
+                [src]="policyCertificateURl"
+                [original-size]="false"
+            ></pdf-viewer>
+        </nz-card>
+        <ng-template #actions>
+            <div>
+                <button
+                    nz-button
+                    nzType="primary"
+                    nzSize="medium"
+                    style="margin-right: 8px;"
+                >
+                    Print
+                </button>
+                <button nz-button nzType="default" nzSize="medium">
+                    Email
+                </button>
+            </div>
+        </ng-template>
+    </div>
+</nz-modal>
+<nz-modal
+    [(nzVisible)]="showDebitModal"
+    nzTitle="Debit Note"
+    (nzOnCancel)="showDebitModal = false"
+    (nzOnOk)="showDebitModal = false"
+>
+    <div style="margin: 20px;">
+        <nz-card style="width: 100%;" nzTitle="Receipt" [nzExtra]="actions">
+            <pdf-viewer
+                [src]="debitNoteURL"
+                [original-size]="false"
+            ></pdf-viewer>
+        </nz-card>
+        <ng-template #actions>
+            <div>
+                <button
+                    nz-button
+                    nzType="primary"
+                    nzSize="medium"
+                    style="margin-right: 8px;"
+                >
+                    Print
+                </button>
+                <button nz-button nzType="default" nzSize="medium">
+                    Email
+                </button>
+            </div>
+        </ng-template>
+    </div>
+</nz-modal>
+<nz-modal
+    [(nzVisible)]="showQuoteModal"
+    nzTitle="Quote"
+    (nzOnCancel)="showQuoteModal = false"
+    (nzOnOk)="showQuoteModal = false"
+>
+    <div style="margin: 20px;">
+        <nz-card style="width: 100%;" nzTitle="Receipt" [nzExtra]="actions">
+            <pdf-viewer [src]="quoteURL" [original-size]="false"></pdf-viewer>
+        </nz-card>
+        <ng-template #actions>
+            <div>
+                <button
+                    nz-button
+                    nzType="primary"
+                    nzSize="medium"
+                    style="margin-right: 8px;"
+                >
+                    Print
+                </button>
+                <button nz-button nzType="default" nzSize="medium">
+                    Email
+                </button>
+            </div>
+        </ng-template>
+    </div>
+</nz-modal>

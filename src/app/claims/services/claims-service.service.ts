@@ -4,7 +4,7 @@ import { Claim } from '../models/claim.model';
 import {
     AngularFirestore,
     AngularFirestoreCollection,
-    AngularFirestoreDocument
+    AngularFirestoreDocument,
 } from '@angular/fire/firestore';
 import 'firebase/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
@@ -17,7 +17,7 @@ import * as _ from 'lodash';
 import { v4 } from 'uuid';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class ClaimsService {
     // <<<<<<< HEAD
@@ -38,7 +38,7 @@ export class ClaimsService {
     }
 
     async addClaim(claim: Claim): Promise<void> {
-        this.claims.pipe(first()).subscribe(async claims => {
+        this.claims.pipe(first()).subscribe(async (claims) => {
             claim.claimId = this.generateCliamID('BR20200012', claims.length);
             //await this.claimsCollection.add(claim)
             await this.claimsCollection.doc(claim.claimId).set(claim);
@@ -68,17 +68,14 @@ export class ClaimsService {
     //  }
     updateClaimDoc(claimId: string, claim: Claim): void {
         console.log(claimId);
-        this.firebase
-            .collection('claims')
-            .doc(claimId)
-            .update(claim);
+        this.firebase.collection('claims').doc(claimId).update(claim);
     }
 
     //get single claim by cliam id
     getClaim(id: string): Observable<Claim> {
         // const result = this.claims.pipe(filter(map(x => _.find(y, y => y.c))));
         const result = this.claims.pipe(
-            map(claim => claim.find(x => x.claimId === id))
+            map((claim) => claim.find((x) => x.claimId === id))
         );
         return result;
     }
@@ -96,10 +93,7 @@ export class ClaimsService {
         const count = this.countGenerator(totalClaims);
         const today = new Date();
         const dateString: string =
-            today
-                .getFullYear()
-                .toString()
-                .substr(-2) +
+            today.getFullYear().toString().substr(-2) +
             ('0' + (today.getMonth() + 1)).slice(-2) +
             ('0' + today.getDate()).slice(-2);
 
@@ -130,7 +124,7 @@ export class ClaimsService {
     //     }
 
     getClientsClaims(clientId: string): Observable<Claim[]> {
-        return this.claims.pipe(filter(claim => clientId === clientId));
+        return this.claims.pipe(filter((claim) => clientId === clientId));
     }
 
     //     getClaims(): Observable<Claim[]> {

@@ -3,49 +3,46 @@ import { CommonModule } from '@angular/common';
 import { QuotesComponent } from './quotes.component';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { CreateQuoteComponent } from './components/create-quote/create-quote.component';
-import { QuotationDetailsComponent } from './components/create-quote/stepper/quotation-details/quotation-details.component';
-import { QuotationProductDetailsComponent } from './components/create-quote/stepper/quotation-product-details/quotation-product-details.component';
-import { RiskDetailsComponent } from './components/create-quote/stepper/risk-details/risk-details.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { StepperService } from 'src/app/quotes/services/stepper.service';
 import { RouterModule, Routes } from '@angular/router';
 import { QuotesService } from './services/quotes.service';
 import { QuoteDetailsComponent } from './components/quote-details/quote-details.component';
 
 import 'firebase/firestore';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { HttpClientModule } from '@angular/common/http';
 
 const routes: Routes = [
     {
         path: 'create-quote',
-        component: CreateQuoteComponent
+        component: CreateQuoteComponent,
     },
     {
         path: 'quotes-list',
-        component: QuotesComponent
+        component: QuotesComponent,
     },
     {
         path: 'quote-details/:quoteNumber',
-        component: QuoteDetailsComponent
-    }
+        component: QuoteDetailsComponent,
+    },
 ];
 
 @NgModule({
     declarations: [
         QuotesComponent,
         CreateQuoteComponent,
-        QuotationDetailsComponent,
-        QuotationProductDetailsComponent,
-        RiskDetailsComponent,
-        QuoteDetailsComponent
+        QuoteDetailsComponent,
     ],
     imports: [
         CommonModule,
         NgZorroAntdModule,
         FormsModule,
         ReactiveFormsModule,
-        RouterModule.forChild(routes)
+        PdfViewerModule,
+        HttpClientModule,
+        RouterModule.forChild(routes),
     ],
     exports: [QuotesComponent, CreateQuoteComponent],
-    providers: [StepperService, QuotesService]
+    providers: [QuotesService],
 })
 export class QuotesModule {}
