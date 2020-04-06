@@ -44,7 +44,7 @@
             <div nz-row>
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                        <nz-form-label [nzSpan]="8" nzFor="title"
+                        <nz-form-label [nzSpan]="8" nzFor="title" required
                             >Title</nz-form-label
                         >
                         <nz-form-control [nzSpan]="14">
@@ -81,7 +81,7 @@
 
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                        <nz-form-label [nzSpan]="8" nzFor="firstName"
+                        <nz-form-label [nzSpan]="8" nzFor="firstName" required
                             >First Name</nz-form-label
                         >
                         <nz-form-control [nzSpan]="14">
@@ -97,11 +97,46 @@
                     </nz-form-item>
                 </div>
             </div>
+            <div nz-row>
+                <div nz-col [nzSpan]="12">
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="8" nzFor="lastName" required
+                            >Last Name</nz-form-label
+                        >
+                        <nz-form-control [nzSpan]="14">
+                            <input
+                                nz-input
+                                formControlName="lastName"
+                                name="lastName"
+                                id="lastName"
+                                placeholder="Last Name"
+                            />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+
+                <div nz-col [nzSpan]="12">
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="8" nzFor="middleName"
+                            >Middle Name</nz-form-label
+                        >
+                        <nz-form-control [nzSpan]="14">
+                            <input
+                                nz-input
+                                formControlName="middleName"
+                                name="middleName"
+                                id="middleName"
+                                placeholder="Middle Name"
+                            />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
 
             <div nz-row>
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                        <nz-form-label [nzSpan]="8" nzFor="idType"
+                        <nz-form-label [nzSpan]="8" nzFor="idType" required
                             >ID Type</nz-form-label
                         >
                         <nz-form-control [nzSpan]="14">
@@ -126,7 +161,7 @@
 
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                        <nz-form-label [nzSpan]="8" nzFor="idNumber"
+                        <nz-form-label [nzSpan]="8" nzFor="idNumber" required
                             >ID Number</nz-form-label
                         >
                         <nz-form-control [nzSpan]="14">
@@ -145,24 +180,23 @@
             <div nz-row>
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                        <nz-form-label [nzSpan]="8" nzFor="lastName"
-                            >Last Name</nz-form-label
+                        <nz-form-label [nzSpan]="8" nzFor="dateOfBirth" required
+                            >Date of Birth</nz-form-label
                         >
                         <nz-form-control [nzSpan]="14">
-                            <input
-                                nz-input
-                                formControlName="lastName"
-                                name="lastName"
-                                id="lastName"
-                                placeholder="Last Name"
-                            />
+                            <nz-date-picker
+                                formControlName="dateOfBirth"
+                                name="dateOfBirth"
+                                id="dateOfBirth"
+                                placeholder="Date of Birth"
+                            ></nz-date-picker>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
 
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                        <nz-form-label [nzSpan]="8" nzFor="email"
+                        <nz-form-label [nzSpan]="8" nzFor="email" required
                             >Email</nz-form-label
                         >
                         <nz-form-control [nzSpan]="14">
@@ -182,23 +216,7 @@
             <div nz-row>
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                        <nz-form-label [nzSpan]="8" nzFor="dateOfBirth"
-                            >Date of Birth</nz-form-label
-                        >
-                        <nz-form-control [nzSpan]="14">
-                            <nz-date-picker
-                                formControlName="dateOfBirth"
-                                name="dateOfBirth"
-                                id="dateOfBirth"
-                                placeholder="Date of Birth"
-                            ></nz-date-picker>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-
-                <div nz-col [nzSpan]="12">
-                    <nz-form-item>
-                        <nz-form-label [nzSpan]="8" nzFor="phone"
+                        <nz-form-label [nzSpan]="8" nzFor="phone" required
                             >Phone</nz-form-label
                         >
                         <nz-form-control [nzSpan]="14">
@@ -212,12 +230,10 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-            </div>
 
-            <div nz-row>
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                        <nz-form-label [nzSpan]="8" nzFor="address"
+                        <nz-form-label [nzSpan]="8" nzFor="address" required
                             >Address</nz-form-label
                         >
                         <nz-form-control [nzSpan]="14">
@@ -231,10 +247,12 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
+            </div>
 
+            <div nz-row>
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                        <nz-form-label [nzSpan]="8" nzFor="gender"
+                        <nz-form-label [nzSpan]="8" nzFor="gender" required
                             >Gender</nz-form-label
                         >
                         <nz-form-control [nzSpan]="14">
@@ -256,12 +274,12 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-            </div>
-
-            <div nz-row>
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                        <nz-form-label [nzSpan]="8" nzFor="maritalStatus"
+                        <nz-form-label
+                            [nzSpan]="8"
+                            nzFor="maritalStatus"
+                            required
                             >Marital Status</nz-form-label
                         >
                         <nz-form-control [nzSpan]="14">
@@ -284,6 +302,8 @@
                     </nz-form-item>
                 </div>
             </div>
+
+            <div nz-row></div>
 
             <!--Personal Details ends here-->
 
@@ -475,11 +495,11 @@
 
             <nz-form-item>
                 <nz-form-control>
-                    <div style="text-align: center; margin-top: 10px">
+                    <div style="text-align: center; margin-top: 10px;">
                         <button
                             nz-button
                             nzType="primary"
-                            style="margin-right: 8px"
+                            style="margin-right: 8px;"
                             (click)="submitIndividualClient()"
                         >
                             Add Client
@@ -513,7 +533,10 @@
                 <div nz-row>
                     <div nz-col [nzSpan]="12">
                         <nz-form-item>
-                            <nz-form-label [nzSpan]="8" nzFor="companyName"
+                            <nz-form-label
+                                [nzSpan]="8"
+                                nzFor="companyName"
+                                required
                                 >Company Name</nz-form-label
                             >
                             <nz-form-control [nzSpan]="15">
@@ -530,7 +553,7 @@
 
                     <div nz-col [nzSpan]="12">
                         <nz-form-item>
-                            <nz-form-label [nzSpan]="8" nzFor="taxPin"
+                            <nz-form-label [nzSpan]="8" nzFor="taxPin" required
                                 >Tpin Number</nz-form-label
                             >
                             <nz-form-control [nzSpan]="15">
@@ -553,6 +576,7 @@
                             <nz-form-label
                                 [nzSpan]="8"
                                 nzFor="registrationNumber"
+                                required
                                 >Registration Number</nz-form-label
                             >
                             <nz-form-control [nzSpan]="15">
@@ -570,7 +594,7 @@
 
                     <div nz-col [nzSpan]="12">
                         <nz-form-item>
-                            <nz-form-label [nzSpan]="8" nzFor="email"
+                            <nz-form-label [nzSpan]="8" nzFor="email" required
                                 >Email</nz-form-label
                             >
                             <nz-form-control [nzSpan]="15">
@@ -590,7 +614,7 @@
                 <div nz-row>
                     <div nz-col [nzSpan]="12">
                         <nz-form-item>
-                            <nz-form-label [nzSpan]="8" nzFor="phone"
+                            <nz-form-label [nzSpan]="8" nzFor="phone" required
                                 >Phone</nz-form-label
                             >
                             <nz-form-control [nzSpan]="15">
@@ -607,7 +631,7 @@
 
                     <div nz-col [nzSpan]="12">
                         <nz-form-item>
-                            <nz-form-label [nzSpan]="8" nzFor="address"
+                            <nz-form-label [nzSpan]="8" nzFor="address" required
                                 >Address</nz-form-label
                             >
                             <nz-form-control [nzSpan]="15">
@@ -626,7 +650,7 @@
                 <div nz-row>
                     <div nz-col [nzSpan]="12">
                         <nz-form-item>
-                            <nz-form-label [nzSpan]="8" nzFor="sector"
+                            <nz-form-label [nzSpan]="8" nzFor="sector" required
                                 >Sector</nz-form-label
                             >
                             <nz-form-control [nzSpan]="15">
@@ -886,11 +910,11 @@
 
                 <nz-form-item>
                     <nz-form-control>
-                        <div style="text-align: center; margin-top: 10px">
+                        <div style="text-align: center; margin-top: 10px;">
                             <button
                                 nz-button
                                 nzType="primary"
-                                style="margin-right: 8px"
+                                style="margin-right: 8px;"
                             >
                                 Add CLient
                             </button>
