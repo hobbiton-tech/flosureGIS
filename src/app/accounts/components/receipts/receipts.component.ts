@@ -27,6 +27,15 @@ export class ReceiptsComponent implements OnInit {
     quoteNumber = '';
     user = '';
 
+    optionList = [
+        { label: 'Premium Payment', value: '' },
+        { label: 'Third Party Recovery', value: '' },
+        { label: 'Imprest Retirement Receipt', value: '' },
+        { label: 'Third Party Recovery', value: '' },
+        { label: 'General Receipt', value: '' },
+    ];
+    selectedValue = { label: 'Motor Comprehensive', value: 'Comprehensive' };
+
     showModal(unreceipted: MotorQuotationModel): void {
         this.isVisible = true;
         this.clientName = unreceipted.clientCode;
@@ -43,15 +52,15 @@ export class ReceiptsComponent implements OnInit {
             onBehalfOf: this.clientName,
             capturedBy: this.user,
             policyNumber: this.quoteNumber,
-            todayDate: new Date()
+            todayDate: new Date(),
         };
         await this.receiptService
             .addReceipt(receipt)
-            .then(mess => {
+            .then((mess) => {
                 this.message.success('Receipt Successfully created');
                 console.log(mess);
             })
-            .catch(err => {
+            .catch((err) => {
                 this.message.warning('Receipt Failed');
                 console.log(err);
             });
@@ -80,25 +89,25 @@ export class ReceiptsComponent implements OnInit {
             // sumInWords: ['', Validators.required],
             dateReceived: [''],
             todayDate: [this.today],
-            remarks: ['', Validators.required]
+            remarks: ['', Validators.required],
         });
     }
 
     ngOnInit(): void {
-        this.receiptService.getQuotes().subscribe(quotes => {
+        this.receiptService.getQuotes().subscribe((quotes) => {
             this.unreceiptedList = _.filter(
                 quotes,
-                x => x.status === 'Approved'
+                (x) => x.status === 'Approved'
             );
             this.receiptsCount = _.filter(
                 quotes,
-                x => x.status === 'Approved'
+                (x) => x.status === 'Approved'
             ).length;
             console.log('======= Unreceipt List =======');
             console.log(this.unreceiptedList);
         });
 
-        this.receiptService.getReciepts().subscribe(receipts => {
+        this.receiptService.getReciepts().subscribe((receipts) => {
             this.receiptedList = receipts;
             console.log('======= Receipt List =======');
             console.log(receipts);

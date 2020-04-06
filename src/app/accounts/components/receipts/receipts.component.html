@@ -110,9 +110,9 @@
                         [nzWidth]="'1200'"
                     >
                         <nz-card
-                            style="width:90%; margin: 0 auto;"
+                            style="width: 90%; margin: 0 auto;"
                             [nzBordered]="true"
-                            nzTitle="Personal Details"
+                            nzTitle="Receipt Details"
                         >
                             <form [formGroup]="receiptForm" nz-form>
                                 <div nz-row>
@@ -130,6 +130,7 @@
                                                     name="receivedFrom"
                                                     type="text"
                                                     id="receivedFrom"
+                                                    nzRequired
                                                     placeholder="Received From"
                                                 />
                                             </nz-form-control>
@@ -141,6 +142,7 @@
                                             <nz-form-label
                                                 [nzSpan]="8"
                                                 nzFor="sumInDigits"
+                                                nzRequired
                                                 >Amount</nz-form-label
                                             >
                                             <nz-form-control [nzSpan]="16">
@@ -161,8 +163,35 @@
                                     <div nz-col [nzSpan]="12">
                                         <nz-form-item>
                                             <nz-form-label
+                                                [nzSpan]="6"
+                                                nzFor="receiptType"
+                                                nzRequired
+                                                >Receipt Type</nz-form-label
+                                            >
+                                            <nz-form-control nzSpan="18">
+                                                <nz-select
+                                                    name="receiptType"
+                                                    formControlName="receiptType"
+                                                    nzAllowClear
+                                                    nzPlaceHolder="Choose"
+                                                >
+                                                    <nz-option
+                                                        *ngFor="
+                                                            let option of optionList
+                                                        "
+                                                        [nzValue]="option"
+                                                        [nzLabel]="option.label"
+                                                    ></nz-option>
+                                                </nz-select>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div nz-col [nzSpan]="12">
+                                        <nz-form-item>
+                                            <nz-form-label
                                                 [nzSpan]="8"
                                                 nzFor="paymentMethod"
+                                                nzRequired
                                                 >Payment Method</nz-form-label
                                             >
                                             <nz-form-control [nzSpan]="16">
