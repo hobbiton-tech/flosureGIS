@@ -36,13 +36,6 @@ export class ReceiptsComponent implements OnInit {
     ];
     selectedValue = { label: 'Motor Comprehensive', value: 'Comprehensive' };
 
-    compareFn = (o1: any, o2: any) =>
-        o1 && o2 ? o1.value === o2.value : o1 === o2;
-
-    log(value: { label: string; value: string }): void {
-        console.log(value);
-    }
-
     showModal(unreceipted: MotorQuotationModel): void {
         this.isVisible = true;
         this.clientName = unreceipted.clientCode;
