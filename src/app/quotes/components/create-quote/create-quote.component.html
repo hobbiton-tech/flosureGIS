@@ -426,12 +426,12 @@
                     <nz-form-label nzSpan="7" nzRequired>Rate</nz-form-label>
                     <nz-form-control nzSpan="17">
                         <nz-input-group nzCompact>
-                        <nz-select [(ngModel)]="premiumRateType" style="width: 10%;">
+                        <nz-select [(ngModel)]="premiumRateType" style="width: 30%;">
                             <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
                             <nz-option *ngIf="quoteForm.get('currency').value === 'ZMW'" [nzLabel]="'K'" nzValue="figure"></nz-option>
                             <nz-option *ngIf="quoteForm.get('currency').value === 'Dollar'" [nzLabel]="'$'" nzValue="figure"></nz-option>
                         </nz-select>
-                        <input nz-input nzPlaceHolder="" name="premiumRate" [(ngModel)]="premiumRate" style="width: 90%;"/>
+                        <input nz-input nzPlaceHolder="" name="premiumRate" [(ngModel)]="premiumRate" style="width: 70%;"/>
                         </nz-input-group>
                     </nz-form-control>
                 </nz-form-item>
@@ -510,12 +510,12 @@
                                     </nz-form-label>
                                     <nz-form-control nzSpan="6">
                                             <nz-input-group nzCompact>
-                                                    <nz-select [(ngModel)]="increasedThirdPartyLimitsRateType" style="width: 30%;">
+                                                    <nz-select [(ngModel)]="increasedThirdPartyLimitsRateType" style="width: 40%;">
                                                         <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
                                                         <nz-option *ngIf="quoteForm.get('currency').value === 'ZMW'" [nzLabel]="'K'" nzValue="figure"></nz-option>
                                                         <nz-option *ngIf="quoteForm.get('currency').value === 'Dollar'" [nzLabel]="'$'" nzValue="figure"></nz-option>
                                                     </nz-select>
-                                                    <input nz-input style="width: 70%;" name="increasedThirdPartyLimitsRate" [(ngModel)]="increasedThirdPartyLimitsRate"/>
+                                                    <input nz-input style="width: 60%;" name="increasedThirdPartyLimitsRate" [(ngModel)]="increasedThirdPartyLimitsRate"/>
                                                     </nz-input-group>
                                     </nz-form-control>
                                 </nz-form-item>
@@ -531,12 +531,12 @@
                                 <nz-form-label [nzSpan]="7" nzFor="riotAndStrikeRate">Rate</nz-form-label>
                                 <nz-form-control nzSpan="6">
                                         <nz-input-group nzCompact>
-                                                <nz-select [(ngModel)]="riotAndStrikeRateType" style="width: 30%;">
+                                                <nz-select [(ngModel)]="riotAndStrikeRateType" style="width: 40%;">
                                                     <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
                                                     <nz-option *ngIf="quoteForm.get('currency').value === 'ZMW'" [nzLabel]="'K'" nzValue="figure"></nz-option>
                                                     <nz-option *ngIf="quoteForm.get('currency').value === 'Dollar'" [nzLabel]="'$'" nzValue="figure"></nz-option>
                                                 </nz-select>
-                                                <input nz-input nzPlaceHolder="" name="riotAndStrikeRate" [(ngModel)]="riotAndStrikeRate" style="width: 70%;"/>
+                                                <input nz-input nzPlaceHolder="" name="riotAndStrikeRate" [(ngModel)]="riotAndStrikeRate" style="width: 60%;"/>
                                                 </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
@@ -560,12 +560,12 @@
                                     <nz-form-label [nzSpan]="7" nzFor="carStereoRate">Rate</nz-form-label>
                                     <nz-form-control nzSpan="6">
                                             <nz-input-group nzCompact>
-                                                    <nz-select [(ngModel)]="carStereoRateType" style="width: 30%;">
+                                                    <nz-select [(ngModel)]="carStereoRateType" style="width: 40%;">
                                                         <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
                                                         <nz-option *ngIf="quoteForm.get('currency').value === 'ZMW'" [nzLabel]="'K'" nzValue="figure"></nz-option>
                                                         <nz-option *ngIf="quoteForm.get('currency').value === 'Dollar'" [nzLabel]="'$'" nzValue="figure"></nz-option>
                                                     </nz-select>
-                                                    <input nz-input nzPlaceHolder="" name="carStereoRate" [(ngModel)]="carStereoRate" style="width: 70%;"/>
+                                                    <input nz-input nzPlaceHolder="" name="carStereoRate" [(ngModel)]="carStereoRate" style="width: 60%;"/>
                                                     </nz-input-group>
                                     </nz-form-control>
                                 </nz-form-item>
@@ -584,12 +584,12 @@
                                 <nz-form-label [nzSpan]="7" nzFor="territorailExtensionRate">Rate</nz-form-label>
                                 <nz-form-control nzSpan="6">
                                         <nz-input-group nzCompact>
-                                                <nz-select [(ngModel)]="territorailExtensionRateType" style="width: 30%;">
+                                                <nz-select [(ngModel)]="territorailExtensionRateType" style="width: 40%;">
                                                     <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
                                                     <nz-option *ngIf="quoteForm.get('currency').value === 'ZMW'" [nzLabel]="'K'" nzValue="figure"></nz-option>
                                                     <nz-option *ngIf="quoteForm.get('currency').value === 'Dollar'" [nzLabel]="'$'" nzValue="figure"></nz-option>
                                                 </nz-select>
-                                                <input nz-input style="width: 70%;"/>
+                                                <input nz-input style="width: 60%;"/>
                                                 </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
@@ -609,12 +609,12 @@
                                 <nz-form-label [nzSpan]="7" nzFor="lossOfUseDailyRate">Daily Rate</nz-form-label>
                                 <nz-form-control nzSpan="6">
                                         <nz-input-group nzCompact>
-                                                <nz-select [(ngModel)]="lossOfUseDailyRateType" style="width: 30%;">
+                                                <nz-select [(ngModel)]="lossOfUseDailyRateType" style="width: 40%;">
                                                     <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
                                                     <nz-option *ngIf="quoteForm.get('currency').value === 'ZMW'" [nzLabel]="'K'" nzValue="figure"></nz-option>
                                                     <nz-option *ngIf="quoteForm.get('currency').value === 'Dollar'" [nzLabel]="'$'" nzValue="figure"></nz-option>
                                                 </nz-select>
-                                                <input nz-input nzPlaceHolder="" name="lossOfUseDailyRate" [(ngModel)]="lossOfUseDailyRate" style="width: 70%;"/>
+                                                <input nz-input nzPlaceHolder="" name="lossOfUseDailyRate" [(ngModel)]="lossOfUseDailyRate" style="width: 60%;"/>
                                                 </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
@@ -665,12 +665,12 @@
                         <nz-form-label nzSpan="7">Discount Rate</nz-form-label>
                         <nz-form-control nzSpan="17">
                                 <nz-input-group nzCompact>
-                                        <nz-select [(ngModel)]="premiumDiscountRateType" style="width: 10%;">
+                                        <nz-select [(ngModel)]="premiumDiscountRateType" style="width: 30%;">
                                             <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
                                             <nz-option *ngIf="quoteForm.get('currency').value === 'ZMW'" [nzLabel]="'K'" nzValue="figure"></nz-option>
                                             <nz-option *ngIf="quoteForm.get('currency').value === 'Dollar'" [nzLabel]="'$'" nzValue="figure"></nz-option>
                                         </nz-select>
-                                        <input nz-input nzPlaceHolder="" name="premiumDiscountRate" [(ngModel)]="premiumDiscountRate" style="width: 90%;"/>
+                                        <input nz-input nzPlaceHolder="" name="premiumDiscountRate" [(ngModel)]="premiumDiscountRate" style="width: 70%;"/>
                                         </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
