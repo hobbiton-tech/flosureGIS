@@ -21,10 +21,14 @@ export class ReceiptsComponent implements OnInit {
     receiptsCount = 0;
     unreceiptedList: MotorQuotationModel[];
     receiptedList: IReceiptModel[];
+    receiptObj: IReceiptModel = new IReceiptModel();
+    receipt: IReceiptModel;
     today = new Date();
     clientName = '';
     quote: MotorQuotationModel = new MotorQuotationModel();
     size = 'large';
+
+    receiptNum = '';
 
     receiptList = [];
 
@@ -32,6 +36,7 @@ export class ReceiptsComponent implements OnInit {
     isOkLoading = false;
     quoteNumber = '';
     user = '';
+    _id = '';
 
     // modal
     isReceiptVisible = false;
@@ -71,14 +76,17 @@ export class ReceiptsComponent implements OnInit {
 
     async handleOk() {
         this.isOkLoading = true;
+        this._id = v4();
         const receipt: IReceiptModel = {
-            id: v4(),
+            id: this._id,
             ...this.receiptForm.value,
             onBehalfOf: this.clientName,
             capturedBy: this.user,
             policyNumber: this.quoteNumber,
             todayDate: new Date(),
         };
+
+        this.receiptNum = this._id;
         await this.receiptService
             .addReceipt(receipt)
             .then((mess) => {
@@ -151,7 +159,48 @@ export class ReceiptsComponent implements OnInit {
         });
     }
 
+    generateID(id) {
+        console.log('++++++++++++ID++++++++++++');
+        this._id = id;
+        console.log(this._id);
+        this.generateDocuments();
+    }
+
     generateDocuments(): void {
+        this.receiptService.getReciepts().subscribe((receipts) => {
+            this.receiptObj = receipts.filter((x) => x.id === this._id)[0];
+            this.receiptedList = receipts;
+            this.receipt = this.receiptedList.filter(
+                (x) => x.id === this._id
+            )[0];
+
+            const receipt: IReceiptDTO = {
+                recieptNumber: this.receipt.receiptNumber,
+                tPin: this.receipt.tpinNumber,
+                recievedFrom: this.receipt.receivedFrom,
+                onBehalfOf: this.receipt.onBehalfOf,
+                address: 'this.receipt.address',
+                sumInWords: 'sum in words',
+                agentID: this.receipt.capturedBy,
+                paymentMethod: this.receipt.paymentMethod,
+                paymentRef: this.receipt.receiptNumber,
+                policyNumber: this.receipt.policyNumber,
+                remarks: this.receipt.receiptType,
+                todayDate: this.receipt.todayDate,
+                time: this.receipt.receiptNumber,
+                accountNumber: 'this.receipt.address',
+                dateRecieved: this.receipt.todayDate,
+                sumInDigits: this.receipt.sumInDigits,
+                capturedBy: this.receipt.receiptNumber,
+            };
+
+            this.receiptService.generateReceipt(receipt).subscribe((data) => {
+                this.receiptURl = data.Location;
+            });
+
+            console.log(this.receipt);
+        });
+
         //   const receipt: IReceiptDTO = {
         //       recieptNumber: this.receiptForm.controls.recieptNumber.value,
         //       tPin: this.receiptForm.controls.tpinNumber.value,
@@ -172,34 +221,11 @@ export class ReceiptsComponent implements OnInit {
         //       capturedBy: this.user,
         // };
 
-        const receipt: IReceiptDTO = {
-            recieptNumber: 'String',
-            tPin: 11111,
-            recievedFrom: 'String',
-            onBehalfOf: 'String',
-            address: 'String',
-            sumInWords: 'String',
-            agentID: 'ewrewrwer',
-            paymentMethod: 'String',
-            paymentRef: 'werwre',
-            policyNumber: 'String',
-            remarks: 'wrwerew',
-            todayDate: 'String',
-            time: 'erewrew',
-            accountNumber: 'werwewe',
-            dateRecieved: 'string',
-            sumInDigits: 5345435435,
-            capturedBy: 'dsfdsfsdfds',
-        };
-
         // const receipt$ = this.receiptService.generateReceipt(receipt);
 
         // combineLatest([receipt$]).subscribe(([receipt]) => {
         //     this.receiptURl = receipt.Location;
         // });
-        this.receiptService.generateReceipt(receipt).subscribe((data) => {
-            this.receiptURl = data.Location;
-        });
 
         this.isReceiptApproved = true;
 
