@@ -320,7 +320,7 @@
                 nzType="primary"
                 nzSize="small"
                 style="margin-right: 5px;"
-                (click)="generateDocuments()"
+                (click)="showReceiptModal = true"
             >
                 View
             </button>
@@ -341,12 +341,13 @@
         nzTitle="Receipt Receipt"
         (nzOnCancel)="showReceiptModal = false"
         (nzOnOk)="showReceiptModal = false"
+        nzWidth="1000"
     >
         <div style="margin: 20px;">
             <nz-card style="width: 100%;" nzTitle="Receipt" [nzExtra]="actions">
                 <pdf-viewer
                     [src]="receiptURl"
-                    [original-size]="false"
+                    [original-size]="true"
                 ></pdf-viewer>
             </nz-card>
             <ng-template #actions>
