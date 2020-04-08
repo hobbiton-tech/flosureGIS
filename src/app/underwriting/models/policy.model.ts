@@ -14,11 +14,13 @@ export class Policy {
     timeOfIssue: string;
     expiryDate: Date | ITimestamp;
     dateOfIssue: string | ITimestamp;
-    quater: string;
+    quarter: string;
     user: string;
     town: string;
     productType: ProductType;
     risks: RiskModel[];
+    netPremium: number;
+    underwritingYear: string;
 }
 
 export class RiskModel {

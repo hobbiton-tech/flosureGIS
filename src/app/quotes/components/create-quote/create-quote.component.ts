@@ -19,9 +19,11 @@ import {
     Load,
     LoadModel,
 } from '../../models/quote.model';
-import { map, tap, filter, scan, retry, catchError } from 'rxjs/operators';
+import { map, tap, filter, scan, retry, catchError, debounceTime, switchMap } from 'rxjs/operators';
 import { NzMessageService, UploadChangeParam } from 'ng-zorro-antd';
 import * as XLSX from 'xlsx';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 type AOA = any[][];
 
@@ -34,6 +36,31 @@ export class CreateQuoteComponent implements OnInit {
     // conditional render of agent field based on mode(agent or user)
     agentMode = false;
     switchLoading = false;
+
+    //vehicle make drop down
+    vehicleMakeUrl = 'https://api.randomuser.me/?results=5';
+    searchChange$ = new BehaviorSubject('');
+    vehicleMakeOptionList: string[] = [];
+    selectedVehicleMake: string;
+    isVehicleMakeLoading = false;
+
+    //vehicle model drop down
+    vehicleModelUrl = 'https://api.randomuser.me/?results=5';
+    // searchChange$ = new BehaviorSubject('');
+    vehicleModelOptionList: string[] = [];
+    selectedVehicleModel: string;
+    isVehicleModelLoading = false;
+
+    //loading feedback
+    computeBasicPremiumIsLoading = false;
+    computeIncreasedThirdPartyLimitIsLoading = false;
+    computeRiotAndStrikeIsLoading = false;
+    computeCarStereoIsLoading = false;
+    computeTerritorialExtensionIsLoading = false;
+    computeLossOfUseIsLoading = false;
+    computeDiscountIsLoading = false;
+
+    addLoadIsLoading = false;
 
     //
     data: AOA = [
@@ -51,7 +78,8 @@ export class CreateQuoteComponent implements OnInit {
         private readonly router: Router,
         private readonly quoteService: QuotesService,
         private readonly clientsService: ClientsService,
-        private msg: NzMessageService
+        private msg: NzMessageService,
+        private http: HttpClient
     ) {}
 
     motor: any;
@@ -60,6 +88,8 @@ export class CreateQuoteComponent implements OnInit {
     riskComprehensiveForm: FormGroup;
     clients: Array<IIndividualClient & ICorporateClient>;
     premiumLoadingForm: FormGroup;
+
+    premiumComputationForm: FormGroup;
 
     quoteNumber = '';
     risks: RiskModel[] = [];
@@ -73,6 +103,7 @@ export class CreateQuoteComponent implements OnInit {
     premiumRate: number;
     premiumRateType: string;
     // Loading
+    addingLoad: boolean;
     premiumLoadingsubTotal: number;
 
     increasedThirdPartyLimitsRate: number;
@@ -103,6 +134,7 @@ export class CreateQuoteComponent implements OnInit {
     premiumDiscountSubtotal: number;
     // Net or total premium
     totalPremium: number;
+    netPremium: number;
 
     // loads added to loading
     loads: LoadModel[] = [];
@@ -110,6 +142,8 @@ export class CreateQuoteComponent implements OnInit {
     // risk upload modal
     isVisible = false;
     isConfirmLoading = false;
+
+    todayYear = null;
 
     optionList = [
         { label: 'Motor Comprehensive', value: 'Comprehensive' },
@@ -171,8 +205,10 @@ export class CreateQuoteComponent implements OnInit {
     handleStartOpenChange(open: boolean): void {
         if (!open) {
             this.endOpen = true;
+            // const start_date = this.quoteForm.get('startDate').value;
+           // console.log(start_date);
         }
-        console.log('handleStartOpenChange', open, this.endOpen);
+        
     }
 
     handleEndOpenChange(open: boolean): void {
@@ -185,12 +221,14 @@ export class CreateQuoteComponent implements OnInit {
             quoteNumber: [this.quoteService.generateQuoteNumber('ran', 10)],
             clientCode: ['', Validators.required],
             messageCode: ['ewrewre', Validators.required],
-            town: ['', Validators.required],
+            underwritingYear: ['', Validators.required],
             currency: ['', Validators.required],
             startDate: ['', Validators.required],
-            endDate: ['', Validators.required],
-            user: ['charles', Validators.required],
+            endDate: [''],
+            quarter: ['', Validators.required],
+            user: ['Charles Malama', Validators.required],
             status: ['Draft'],
+            receiptStatus: ['Unreceipted']
         });
 
         this.clientsService.getAllClients().subscribe((clients) => {
@@ -222,14 +260,69 @@ export class CreateQuoteComponent implements OnInit {
             insuranceType: ['ThirdParty'],
         });
 
+        //vehicle make loading
+        const getVehicleMakeList = (name: string) =>
+        this.http
+        .get(`${this.vehicleMakeUrl}`)
+        .pipe(map((res: any) => res.results))
+        .pipe(
+          map((list: any) => {
+            return list.map((item: any) => `${name}`);
+          })
+        );
+
+        const vehicleMakeOptionList$: Observable<string[]> = this.searchChange$
+      .asObservable()
+      .pipe(debounceTime(500))
+      .pipe(switchMap(getVehicleMakeList));
+      vehicleMakeOptionList$.subscribe(data => {
+      this.vehicleMakeOptionList = data;
+      this.isVehicleMakeLoading = false;
+    });
+
+           //vehicle model loading
+           const getVehicleModelList = (name: string) =>
+           this.http
+           .get(`${this.vehicleModelUrl}`)
+           .pipe(map((res: any) => res.results))
+           .pipe(
+             map((list: any) => {
+               return list.map((item: any) => `${name}`);
+             })
+           );
+   
+           const vehicleModelOptionList$: Observable<string[]> = this.searchChange$
+         .asObservable()
+         .pipe(debounceTime(500))
+         .pipe(switchMap(getVehicleModelList));
+         vehicleModelOptionList$.subscribe(data => {
+         this.vehicleModelOptionList = data;
+         this.isVehicleModelLoading = false;
+       });
+
+        this.premiumComputationForm = this.formBuilder.group({
+            sumInsured: ['', Validators.required],
+            premiumRate: ['', Validators.required],
+            increasedThirdPartyLimitsRate: ['', Validators.required],
+            increasedThirdPartyLimitValue: ['', Validators.required],
+            riotAndStrikeRate: ['', Validators.required],
+            carStereoRate: ['', Validators.required],
+            lossOfUseDailyRate: ['', Validators.required],
+            lossOfUseDays: ['', Validators.required],
+            premiumDiscountRate: ['', Validators.required]
+            
+        })
+
         // Basic Premium
         this.sumInsured = 0;
         this.premiumRate = 0;
         this.basicPremium = this.sumInsured * this.premiumRate;
         this.basicPremiumLevy = 0;
-        this.basicPremiumSubTotal = this.basicPremium + this.basicPremiumLevy;
+        this.basicPremiumSubTotal = this.basicPremium;
+        this.netPremium = 0;
 
         // premium Loading
+        this.addingLoad = false;
         this.increasedThirdPartyLimitsRate = 0;
         this.increasedThirdPartyLimitsAmount = 0;
         this.increasedThirdPartyLimitValue = 0;
@@ -303,9 +396,11 @@ export class CreateQuoteComponent implements OnInit {
             discountRate: this.premiumDiscountRate,
             discount: this.premiumDiscount,
             discountSubTotal: this.premiumDiscountSubtotal,
-            netPremium: this.totalPremium,
+            totalPremium: this.totalPremium,
+            netPremium: this.netPremium,
             loads: this.loads,
             loadingSubTotal: this.premiumLoadingsubTotal,
+            endDate: this.quoteForm.get('startDate').value
         };
         await this.quoteService
             .addMotorQuotation(quote)
@@ -401,124 +496,219 @@ export class CreateQuoteComponent implements OnInit {
         }
     }
 
+    //vehicle make loading
+    onVehicleMakeSearch(value: string): void {
+        this.isVehicleMakeLoading = true;
+        this.searchChange$.next(value);
+      }
+
+      //vehicle model loading
+    onVehicleModelSearch(value: string): void {
+        this.isVehicleModelLoading = true;
+        this.searchChange$.next(value);
+      }
+
+    addLoad() {
+        this.addLoadIsLoading = true;
+    setTimeout(() => {
+        
+        this.addingLoad = true;
+      this.addLoadIsLoading = false;
+    }, 1000); 
+    }
+
     // Premium computation methods
     // Basic Premum Computation
     computeBasicPremium() {
-        if (this.premiumRateType === 'percentage') {
-            this.basicPremium = this.sumInsured * (this.premiumRate / 100);
-        } else {
-            this.basicPremium = +this.sumInsured + +this.premiumRate;
-        }
-
-        this.basicPremiumLevy = this.basicPremium * 0.03;
-        this.basicPremiumSubTotal = this.basicPremium + this.basicPremiumLevy;
-        this.totalPremium =
-            this.basicPremiumSubTotal +
-            this.premiumLoadingsubTotal -
-            this.premiumDiscountSubtotal;
+            this.computeBasicPremiumIsLoading = true;
+            setTimeout(() => {
+            
+                if (this.premiumRateType === 'percentage') {
+                    this.basicPremium = this.sumInsured * (this.premiumRate / 100);
+                } else {
+                    this.basicPremium = +this.sumInsured + +this.premiumRate;
+                }
+                    this.basicPremiumSubTotal = this.basicPremium;
+                    this.totalPremium = this.basicPremiumSubTotal + this.premiumLoadingsubTotal - this.premiumDiscountSubtotal;
+                    this.basicPremiumLevy = this.totalPremium * 0.03;
+                    this.netPremium = this.totalPremium + this.basicPremiumLevy;
+            
+            this.computeBasicPremiumIsLoading = false;
+            }, 2000);   
     }
 
     // Loading computation
     computeRiotAndStrike() {
-        if (this.riotAndStrikeRateType === 'percentage') {
-            this.riotAndStrikeAmount =
-                this.basicPremium * (this.riotAndStrikeRate / 100);
-        } else {
-            this.riotAndStrikeAmount = +this.riotAndStrikeRate;
-        }
+        this.computeRiotAndStrikeIsLoading = true;
+            setTimeout(() => {
+            
+                if (this.riotAndStrikeRateType === 'percentage') {
+                    this.riotAndStrikeAmount =
+                        this.basicPremium * (this.riotAndStrikeRate / 100);
+                } else {
+                    this.riotAndStrikeAmount = +this.riotAndStrikeRate;
+                }
+        
+                this.loads.push({
+                    loadType: 'Riot And Strike',
+                    amount: this.riotAndStrikeAmount,
+                });
+                this.premiumLoadingsubTotal =
+                    this.premiumDiscountSubtotal + this.riotAndStrikeAmount;
+                this.totalPremium =
+                    this.basicPremiumSubTotal +
+                    this.premiumLoadingsubTotal -
+                    this.premiumDiscountSubtotal;
 
-        this.loads.push({
-            loadType: 'Riot And Strike',
-            amount: this.riotAndStrikeAmount,
-        });
-        this.premiumLoadingsubTotal =
-            this.premiumDiscountSubtotal + this.riotAndStrikeAmount;
-        this.totalPremium =
-            this.basicPremiumSubTotal +
-            this.premiumLoadingsubTotal -
-            this.premiumDiscountSubtotal;
+                    this.basicPremiumLevy = this.totalPremium * 0.03;
+                    this.netPremium = this.totalPremium + this.basicPremiumLevy;
+        
+                this.addingLoad = false;
+            
+            this.computeRiotAndStrikeIsLoading = false;
+            }, 2000);
     }
 
     computeIncreasedThirdPartyLimit() {
-        if (this.increasedThirdPartyLimitsRateType === 'percentage') {
-            this.increasedThirdPartyLimitsAmount =
-                (+this.increasedThirdPartyLimitValue - 100200) *
-                (this.increasedThirdPartyLimitsRate / 100);
-        } else {
-            this.increasedThirdPartyLimitsAmount = this.increasedThirdPartyLimitsRate;
-        }
-        this.loads.push({
-            loadType: 'Increased Third Party Limit',
-            amount: this.increasedThirdPartyLimitsAmount,
-        });
+        this.computeIncreasedThirdPartyLimitIsLoading = true;
+            setTimeout(() => {
+            
+                if (this.increasedThirdPartyLimitsRateType === 'percentage') {
+                    this.increasedThirdPartyLimitsAmount =
+                        (+this.increasedThirdPartyLimitValue - 100200) *
+                        (this.increasedThirdPartyLimitsRate / 100);
+                } else {
+                    this.increasedThirdPartyLimitsAmount = this.increasedThirdPartyLimitsRate;
+                }
+                this.loads.push({
+                    loadType: 'Increased Third Party Limit',
+                    amount: this.increasedThirdPartyLimitsAmount,
+                });
+        
+                this.premiumLoadingsubTotal =
+                    this.premiumLoadingsubTotal + this.increasedThirdPartyLimitsAmount;
+                this.totalPremium =
+                    this.basicPremiumSubTotal +
+                    this.premiumLoadingsubTotal -
+                    this.premiumDiscountSubtotal;
 
-        this.premiumLoadingsubTotal =
-            this.premiumLoadingsubTotal + this.increasedThirdPartyLimitsAmount;
-        this.totalPremium =
-            this.basicPremiumSubTotal +
-            this.premiumLoadingsubTotal -
-            this.premiumDiscountSubtotal;
+                    this.basicPremiumLevy = this.totalPremium * 0.03;
+                    this.netPremium = this.totalPremium + this.basicPremiumLevy;
+        
+                    this.addingLoad = false;
+            
+            this.computeIncreasedThirdPartyLimitIsLoading = false;
+            }, 2000);
+
+        
     }
 
     computeCarStereo() {
-        if (this.carStereoRateType === 'percentage') {
-            this.carStereoAmount =
-                this.carStereoValue * (this.carStereoRate / 100);
-        } else {
-            this.carStereoAmount = +this.carStereoRate;
-        }
+        this.computeCarStereoIsLoading = true;
+            setTimeout(() => {
+            
+                if (this.carStereoRateType === 'percentage') {
+                    this.carStereoAmount =
+                        this.carStereoValue * (this.carStereoRate / 100);
+                } else {
+                    this.carStereoAmount = +this.carStereoRate;
+                }
+        
+                this.loads.push({
+                    loadType: 'Car Stereo',
+                    amount: this.carStereoAmount,
+                });
+                this.premiumLoadingsubTotal =
+                    this.premiumLoadingsubTotal + this.carStereoAmount;
+                this.totalPremium =
+                    this.basicPremiumSubTotal +
+                    this.premiumLoadingsubTotal -
+                    this.premiumDiscountSubtotal;
 
-        this.loads.push({
-            loadType: 'Car Stereo',
-            amount: this.carStereoAmount,
-        });
-        this.premiumLoadingsubTotal =
-            this.premiumLoadingsubTotal + this.carStereoAmount;
-        this.totalPremium =
-            this.basicPremiumSubTotal +
-            this.premiumLoadingsubTotal -
-            this.premiumDiscountSubtotal;
+                    this.basicPremiumLevy = this.totalPremium * 0.03;
+                    this.netPremium = this.totalPremium + this.basicPremiumLevy;
+        
+                    this.addingLoad = false;
+            
+            this.computeCarStereoIsLoading = false;
+            }, 2000);
+
+        
     }
 
     computeTerritorialExtension() {
-        this.loads.push({ loadType: 'Territorial Extension', amount: 1750 });
-        this.premiumLoadingsubTotal = this.premiumLoadingsubTotal + 1750;
-        this.totalPremium =
-            this.basicPremiumSubTotal +
-            this.premiumLoadingsubTotal -
-            this.premiumDiscountSubtotal;
+        this.computeTerritorialExtensionIsLoading = true;
+            setTimeout(() => {
+            
+                this.loads.push({ loadType: 'Territorial Extension', amount: 1750 });
+                this.premiumLoadingsubTotal = this.premiumLoadingsubTotal + 1750;
+                this.totalPremium =
+                    this.basicPremiumSubTotal +
+                    this.premiumLoadingsubTotal -
+                    this.premiumDiscountSubtotal;
+
+                    this.basicPremiumLevy = this.totalPremium * 0.03;
+                    this.netPremium = this.totalPremium + this.basicPremiumLevy;
+        
+                    this.addingLoad = false;
+            
+            this.computeTerritorialExtensionIsLoading = false;
+            }, 2000);
+
+        
     }
 
     computeLossOfUse() {
-        if (this.lossOfUseDailyRateType === 'percentage') {
-            this.lossOfUseAmount =
-                this.lossOfUseDays *
-                (this.basicPremium * (this.lossOfUseDailyRate / 100));
-        } else {
-            this.lossOfUseAmount = this.lossOfUseDays * this.lossOfUseDailyRate;
-        }
+        this.computeLossOfUseIsLoading = true;
+            setTimeout(() => {
+            
+                if (this.lossOfUseDailyRateType === 'percentage') {
+                    this.lossOfUseAmount =
+                        this.lossOfUseDays *
+                        (this.basicPremium * (this.lossOfUseDailyRate / 100));
+                } else {
+                    this.lossOfUseAmount = this.lossOfUseDays * this.lossOfUseDailyRate;
+                }
+        
+                this.loads.push({
+                    loadType: 'Loss Of Use',
+                    amount: this.lossOfUseAmount,
+                });
+                this.premiumLoadingsubTotal =
+                    this.premiumLoadingsubTotal + this.lossOfUseAmount;
+                this.totalPremium =
+                    this.basicPremiumSubTotal +
+                    this.premiumLoadingsubTotal -
+                    this.premiumDiscountSubtotal;
 
-        this.loads.push({
-            loadType: 'Loss Of Use',
-            amount: this.lossOfUseAmount,
-        });
-        this.premiumLoadingsubTotal =
-            this.premiumLoadingsubTotal + this.lossOfUseAmount;
-        this.totalPremium =
-            this.basicPremiumSubTotal +
-            this.premiumLoadingsubTotal -
-            this.premiumDiscountSubtotal;
+                    this.basicPremiumLevy = this.totalPremium * 0.03;
+                    this.netPremium = this.totalPremium + this.basicPremiumLevy;
+        
+                    this.addingLoad = false;
+            
+            this.computeLossOfUseIsLoading = false;
+            }, 2000);
+
+        
     }
 
     // Discount Computation
     computeDiscount() {
-        this.premiumDiscount =
-            (this.basicPremiumSubTotal + this.premiumLoadingsubTotal) *
-            this.premiumDiscountRate;
-        this.premiumDiscountSubtotal = this.premiumDiscount;
-        this.totalPremium =
-            this.basicPremiumSubTotal +
-            this.premiumLoadingsubTotal -
-            this.premiumDiscountSubtotal;
+        this.computeDiscountIsLoading = true;
+            setTimeout(() => {
+                if (this.premiumDiscountRateType == 'percentage') {this.premiumDiscount = (this.basicPremiumSubTotal + this.premiumLoadingsubTotal) * (this.premiumDiscountRate / 100);}
+                else {this.premiumDiscount = this.premiumDiscountRate;}
+            
+                
+                this.premiumDiscountSubtotal = this.premiumDiscount;
+                this.totalPremium = this.basicPremiumSubTotal + this.premiumLoadingsubTotal - this.premiumDiscountSubtotal;
+
+                this.basicPremiumLevy = this.totalPremium * 0.03;
+                    this.netPremium = this.totalPremium + this.basicPremiumLevy;
+            
+                this.computeDiscountIsLoading = false;
+                }, 2000);
+
+        
     }
 }

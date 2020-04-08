@@ -28,11 +28,12 @@
             </ng-template>
             <nz-page-header-extra>
                 <button
+                *ngIf=!isQuoteApproved
                     nz-button
                     nzType="primary"
                     (click)="generateDocuments()"
                 >
-                    {{ isQuoteApproved ? 'Receipt' : 'Approve' }}
+                    Approve
                 </button>
                 <button
                     *ngIf="!isEditmode && !isQuoteApproved"
@@ -64,7 +65,7 @@
                             <nz-form-label nzSpan="7" nzRequired
                                 >Client Name</nz-form-label
                             >
-                            <nz-form-control nzSpan="17">
+                            <nz-form-control nzSpan="14">
                                 <input
                                     nz-input
                                     [disabled]="!isEditmode"
@@ -77,7 +78,7 @@
                             <nz-form-label nzSpan="7" nzRequired
                                 >Currency</nz-form-label
                             >
-                            <nz-form-control nzSpan="17">
+                            <nz-form-control nzSpan="14">
                                 <nz-select
                                     [nzDisabled]="!isEditmode"
                                     formControlName="currency"
@@ -94,31 +95,47 @@
                                 </nz-select>
                             </nz-form-control>
                         </nz-form-item>
-                        <nz-form-item>
-                            <nz-form-label nzRequired nzSpan="7"
-                                >Town</nz-form-label
-                            >
-                            <nz-form-control nzSpan="17">
-                                <input nz-input [disabled]="!isEditmode" formControlName="town" [ngModel]="quote.town"/>
-                            </nz-form-control>
-                        </nz-form-item>
+                                <nz-form-item>
+                                        <nz-form-label nzSpan="7" nzRequired>Quarter</nz-form-label>
+                                        <nz-form-control nzSpan="5">
+                                            <nz-select formControlName="quarter" nzPlaceHolder="Select quarter" [ngModel]="quote.quarter" [nzDisabled]="!isEditmode">
+                                                <nz-option nzValue="1" nzLabel="1"></nz-option>
+                                                <nz-option nzValue="2" nzLabel="2"></nz-option>
+                                                <nz-option nzValue="3" nzLabel="3"></nz-option>
+                                                <nz-option nzValue="4" nzLabel="4"></nz-option>
+                                            </nz-select>
+                                        </nz-form-control>
+                                    </nz-form-item> 
                 </div>
                 <div nz-col nzSpan="12">
                     <nz-form-item>
                         <nz-form-label nzSpan="7" nzRequired>Start Date</nz-form-label>
                         <nz-form-control nzSpan="17">
-                            <input nz-input [disabled]="!isEditmode" formControlName="startDate" [value]="getTimeStamp(quote) * 1000 | date"/>
+                                <nz-date-picker formControlName="startDate" nzFormat="dd-MM-yyyy" [nzDisabled]="!isEditmode" [ngModel]="getTimeStamp(quote) * 1000 | date"></nz-date-picker>
+                            <!-- <input nz-input [disabled]="!isEditmode" formControlName="startDate" [value]="getTimeStamp(quote) * 1000 | date"/> -->
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
                         <nz-form-label nzSpan="7" nzRequired>End Date</nz-form-label>
                         <nz-form-control nzSpan="17">
-                            <input nz-input [disabled]="!isEditmode" formControlName="endDate" [value]="
+                                <nz-date-picker formControlName="endDate" nzFormat="dd-MM-yyyy" [nzDisabled]="!isEditmode" [disabled]="!isEditmode" [ngModel]="getEndDateTimeStamp(quote) * 1000 | date"></nz-date-picker>
+                            <!-- <input nz-input [disabled]="!isEditmode" formControlName="endDate" [value]="
                             getEndDateTimeStamp(quote) * 1000 | date
-                        "/>
+                        "/> -->
                         </nz-form-control>
                     </nz-form-item>
+                    <nz-form-item>
+                            <nz-form-label nzRequired nzSpan="7"
+                                >Underwriting Year</nz-form-label
+                            >
+                            <nz-form-control nzSpan="17">
+                                <!-- <input nz-input [disabled]="!isEditmode" formControlName="underwritingYear" [ngModel]="quote.underwritingYear"/> -->
+                                <nz-year-picker [nzDisabled]="!isEditmode" formControlName="underwritingYear" [ngModel]="getYearTimeStamp(quote) * 1000 | date"></nz-year-picker>
+                            </nz-form-control>
+                        </nz-form-item>
+                    
                 </div>
+                
             </div>
         </form>
     </nz-card>
@@ -185,7 +202,7 @@
                     <nz-form-label nzSpan="7" nzRequired>Rate</nz-form-label>
                     <nz-form-control nzSpan="17">
                         <nz-input-group nzCompact>
-                        <nz-select [(ngModel)]="premiumRateType" style="width: 20%;" [disabled]="!isEditmode">
+                        <nz-select [(ngModel)]="premiumRateType" style="width: 20%;" [disabled]="!isEditmode" *ngIf="isEditmode">
                             <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
                             <nz-option *ngIf="quoteDetailsForm.get('currency').value === 'ZMW'" [nzLabel]="'K'" nzValue="figure"></nz-option>
                             <nz-option *ngIf="quoteDetailsForm.get('currency').value === 'Dollar'" [nzLabel]="'$'" nzValue="figure"></nz-option>
@@ -196,7 +213,7 @@
                 </nz-form-item>
                 <nz-form-item>
                     <nz-form-control [nzXs]="{ span: 24, offset: 4 }" [nzSm]="{ span: 20, offset: 7 }">
-                        <button nz-button nzType="primary" (click)="computeBasicPremium()">Compute</button>
+                        <button nz-button *ngIf="isEditmode" nzType="primary" (click)="computeBasicPremium()" [nzLoading]="computeBasicPremiumIsLoading">Compute</button>
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -207,13 +224,6 @@
                         <nz-form-control nzSpan="12">
                             <input nz-input [disabled]="true" name="basicPremium" [ngModel]="basicPremium"
                                 [value]="basicPremium" />
-                        </nz-form-control>
-                    </nz-form-item>
-                    <nz-form-item>
-                        <nz-form-label nzSpan="12">Levy</nz-form-label>
-                        <nz-form-control nzSpan="12">
-                            <input nz-input [disabled]="true" name="basicPremiumLevy" [ngModel]="basicPremiumLevy"
-                                [value]="basicPremiumLevy" />
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
@@ -256,7 +266,7 @@
                                     </nz-form-label>
                                     <nz-form-control nzSpan="6">
                                             <nz-input-group nzCompact>
-                                                    <nz-select [(ngModel)]="increasedThirdPartyLimitsRateType" style="width: 40%;" [disabled]="!isEditmode">
+                                                    <nz-select [(ngModel)]="increasedThirdPartyLimitsRateType" style="width: 40%;" [disabled]="!isEditmode" *ngIf="isEditmode">
                                                         <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
                                                         <nz-option *ngIf="quoteDetailsForm.get('currency').value === 'ZMW'" [nzLabel]="'K'" nzValue="figure"></nz-option>
                                                         <nz-option *ngIf="quoteDetailsForm.get('currency').value === 'Dollar'" [nzLabel]="'$'" nzValue="figure"></nz-option>
@@ -277,7 +287,7 @@
                                 <nz-form-label [nzSpan]="7" nzFor="riotAndStrikeRate">Rate</nz-form-label>
                                 <nz-form-control nzSpan="6">
                                         <nz-input-group nzCompact>
-                                                <nz-select [(ngModel)]="riotAndStrikeRateType" style="width: 40%;" [disabled]="!isEditmode">
+                                                <nz-select [(ngModel)]="riotAndStrikeRateType" style="width: 40%;" [disabled]="!isEditmode" *ngIf="isEditmode">
                                                     <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
                                                     <nz-option *ngIf="quoteDetailsForm.get('currency').value === 'ZMW'" [nzLabel]="'K'" nzValue="figure"></nz-option>
                                                     <nz-option *ngIf="quoteDetailsForm.get('currency').value === 'Dollar'" [nzLabel]="'$'" nzValue="figure"></nz-option>
@@ -306,7 +316,7 @@
                                     <nz-form-label [nzSpan]="7" nzFor="carStereoRate">Rate</nz-form-label>
                                     <nz-form-control nzSpan="6">
                                             <nz-input-group nzCompact>
-                                                    <nz-select [(ngModel)]="carStereoRateType" style="width: 40%;" [disabled]="!isEditmode">
+                                                    <nz-select [(ngModel)]="carStereoRateType" style="width: 40%;" [disabled]="!isEditmode" *ngIf="isEditmode">
                                                         <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
                                                         <nz-option *ngIf="quoteDetailsForm.get('currency').value === 'ZMW'" [nzLabel]="'K'" nzValue="figure"></nz-option>
                                                         <nz-option *ngIf="quoteDetailsForm.get('currency').value === 'Dollar'" [nzLabel]="'$'" nzValue="figure"></nz-option>
@@ -330,7 +340,7 @@
                                 <nz-form-label [nzSpan]="7" nzFor="territorailExtensionRate">Rate</nz-form-label>
                                 <nz-form-control nzSpan="6">
                                         <nz-input-group nzCompact>
-                                                <nz-select [(ngModel)]="territorailExtensionRateType" style="width: 40%;" [disabled]="!isEditmode">
+                                                <nz-select [(ngModel)]="territorailExtensionRateType" style="width: 40%;" [disabled]="!isEditmode" *ngIf="isEditmode">
                                                     <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
                                                     <nz-option *ngIf="quoteDetailsForm.get('currency').value === 'ZMW'" [nzLabel]="'K'" nzValue="figure"></nz-option>
                                                     <nz-option *ngIf="quoteDetailsForm.get('currency').value === 'Dollar'" [nzLabel]="'$'" nzValue="figure"></nz-option>
@@ -355,7 +365,7 @@
                                 <nz-form-label [nzSpan]="7" nzFor="lossOfUseDailyRate">Daily Rate</nz-form-label>
                                 <nz-form-control nzSpan="6">
                                         <nz-input-group nzCompact>
-                                                <nz-select [(ngModel)]="lossOfUseDailyRateType" style="width: 40%;" [disabled]="!isEditmode">
+                                                <nz-select [(ngModel)]="lossOfUseDailyRateType" style="width: 40%;" [disabled]="!isEditmode" *ngIf="isEditmode">
                                                     <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
                                                     <nz-option *ngIf="quoteDetailsForm.get('currency').value === 'ZMW'" [nzLabel]="'K'" nzValue="figure"></nz-option>
                                                     <nz-option *ngIf="quoteDetailsForm.get('currency').value === 'Dollar'" [nzLabel]="'$'" nzValue="figure"></nz-option>
@@ -411,7 +421,7 @@
                         <nz-form-label nzSpan="7">Discount Rate</nz-form-label>
                         <nz-form-control nzSpan="17">
                                 <nz-input-group nzCompact>
-                                        <nz-select [(ngModel)]="premiumDiscountRateType" style="width: 20%;" [disabled]="!isEditmode">
+                                        <nz-select [(ngModel)]="premiumDiscountRateType" style="width: 20%;" [disabled]="!isEditmode" *ngIf="isEditmode">
                                             <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
                                             <nz-option *ngIf="quoteDetailsForm.get('currency').value === 'ZMW'" [nzLabel]="'K'" nzValue="figure"></nz-option>
                                             <nz-option *ngIf="quoteDetailsForm.get('currency').value === 'Dollar'" [nzLabel]="'$'" nzValue="figure"></nz-option>
@@ -422,7 +432,7 @@
                     </nz-form-item>
                     <nz-form-item>
                         <nz-form-control [nzXs]="{ span: 24, offset: 4 }" [nzSm]="{ span: 20, offset: 7 }">
-                            <button nz-button nzType="primary" (click)="computeDiscount()">Compute</button>
+                            <button nz-button nzType="primary" *ngIf="isEditmode" (click)="computeDiscount()" [nzLoading]="computeDiscountIsLoading">Compute</button>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -449,10 +459,23 @@
             <div nz-col nzSpan="12">
                 <nz-form-item>
                     <nz-form-label nzSpan="7">Total Premium</nz-form-label>
-                    <nz-form-control nzSpan="17" nzDisabled>
+                    <nz-form-control nzSpan="12" nzDisabled>
                         <input nz-input [disabled]="true" [ngModel]="totalPremium" />
                     </nz-form-control>
                 </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzSpan="7">Levy</nz-form-label>
+                    <nz-form-control nzSpan="12">
+                        <input nz-input [disabled]="true" name="basicPremiumLevy" [ngModel]="basicPremiumLevy"
+                            [value]="basicPremiumLevy" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                        <nz-form-label nzSpan="7">Net Premium</nz-form-label>
+                        <nz-form-control nzSpan="12" nzDisabled>
+                            <input nz-input [disabled]="true" [ngModel]="netPremium" />
+                        </nz-form-control>
+                    </nz-form-item>
             </div>
         </div>
     </nz-card>

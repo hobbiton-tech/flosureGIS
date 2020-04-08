@@ -69,9 +69,24 @@ export class QuoteDetailsComponent implements OnInit {
     premiumDiscountSubtotal: number;
     // Net or total premium
     totalPremium: number;
+    netPremium: number;
+
+    // Loading
+    addingLoad: boolean;
 
     // loads added to loading
     loads: LoadModel[] = [];
+
+    //loading feedback
+    computeBasicPremiumIsLoading = false;
+    computeIncreasedThirdPartyLimitIsLoading = false;
+    computeRiotAndStrikeIsLoading = false;
+    computeCarStereoIsLoading = false;
+    computeTerritorialExtensionIsLoading = false;
+    computeLossOfUseIsLoading = false;
+    computeDiscountIsLoading = false;
+
+    addLoadIsLoading = false;
 
     loadingOptions = [
         {
@@ -165,18 +180,19 @@ export class QuoteDetailsComponent implements OnInit {
 
                 // total premium
                 this.totalPremium = this.quoteData.netPremium;
+                this.netPremium = this.totalPremium + this.basicPremiumLevy;
             });
         });
 
         this.quoteDetailsForm = this.formBuilder.group({
             client: ['', Validators.required],
             startDate: ['', Validators.required],
-            endDate: ['', Validators.required],
+            endDate: [''],
             currency: [`${this.quote.currency}`, Validators.required],
             branch: ['', Validators.required],
             product: ['', Validators.required],
-            quater: ['', Validators.required],
-            town: ['', Validators.required],
+            quarter: ['', Validators.required],
+            underwritingYear: ['', Validators.required],
         });
     }
 
@@ -201,6 +217,12 @@ export class QuoteDetailsComponent implements OnInit {
     getTimeStamp(quote: MotorQuotationModel): number {
         if (!this.quotesLoading) {
             return (quote.startDate as ITimestamp).seconds;
+        }
+    }
+
+    getYearTimeStamp(quote: MotorQuotationModel): number {
+        if (!this.quotesLoading) {
+            return (quote.underwritingYear as ITimestamp).seconds;
         }
     }
 
@@ -314,6 +336,9 @@ export class QuoteDetailsComponent implements OnInit {
                 const policy: Policy = {
                     ...this.quoteDetailsForm.value,
                     risks: this.quoteData.risks,
+                    sumInsured: this.quoteData.sumInsured,
+                    netPremium: this.quoteData.netPremium,
+                    user: this.quoteData.user
                 };
 
                 // const policy = this.quoteDetailsForm.value as Policy;
@@ -356,89 +381,195 @@ export class QuoteDetailsComponent implements OnInit {
     // Premium computation methods
     // Basic Premum Computation
     computeBasicPremium() {
-        this.basicPremium = this.sumInsured * this.premiumRate;
-        this.basicPremiumLevy = this.basicPremium * 0.03;
-        this.basicPremiumSubTotal = this.basicPremium + this.basicPremiumLevy;
-        this.totalPremium =
-            this.basicPremiumSubTotal +
-            this.premiumLoadingsubTotal -
-            this.premiumDiscountSubtotal;
-    }
+        this.computeBasicPremiumIsLoading = true;
+        setTimeout(() => {
+        
+            if (this.premiumRateType === 'percentage') {
+                this.basicPremium = this.sumInsured * (this.premiumRate / 100);
+            } else {
+                this.basicPremium = +this.sumInsured + +this.premiumRate;
+            }
+                this.basicPremiumSubTotal = this.basicPremium;
+                this.totalPremium = this.basicPremiumSubTotal + this.premiumLoadingsubTotal - this.premiumDiscountSubtotal;
+                this.basicPremiumLevy = this.totalPremium * 0.03;
+                this.netPremium = this.totalPremium + this.basicPremiumLevy;
+        
+        this.computeBasicPremiumIsLoading = false;
+        }, 2000);   
+}
 
-    // Loading computation
-    // compute riot and strike--sends rate and basic premium to API should return value to add to premium
-    computeRiotAndStrike() {
-        this.riotAndStrikeAmount = this.riotAndStrikeRate * this.basicPremium;
-        this.loads.push({
-            loadType: 'Riot And Strike',
-            amount: this.riotAndStrikeAmount,
-        });
-        this.premiumLoadingsubTotal =
-            this.premiumDiscountSubtotal + this.riotAndStrikeAmount;
-        this.totalPremium =
-            this.basicPremiumSubTotal +
-            this.premiumLoadingsubTotal -
-            this.premiumDiscountSubtotal;
-    }
+// Loading computation
+computeRiotAndStrike() {
+    this.computeRiotAndStrikeIsLoading = true;
+        setTimeout(() => {
+        
+            if (this.riotAndStrikeRateType === 'percentage') {
+                this.riotAndStrikeAmount =
+                    this.basicPremium * (this.riotAndStrikeRate / 100);
+            } else {
+                this.riotAndStrikeAmount = +this.riotAndStrikeRate;
+            }
+    
+            this.loads.push({
+                loadType: 'Riot And Strike',
+                amount: this.riotAndStrikeAmount,
+            });
+            this.premiumLoadingsubTotal =
+                this.premiumDiscountSubtotal + this.riotAndStrikeAmount;
+            this.totalPremium =
+                this.basicPremiumSubTotal +
+                this.premiumLoadingsubTotal -
+                this.premiumDiscountSubtotal;
 
-    computeIncreasedThirdPartyLimit() {
-        this.loads.push({
-            loadType: 'Increased Third Party Limit',
-            amount: 1200,
-        });
-        this.premiumLoadingsubTotal = this.premiumLoadingsubTotal + 1200;
-        this.totalPremium =
-            this.basicPremiumSubTotal +
-            this.premiumLoadingsubTotal -
-            this.premiumDiscountSubtotal;
-    }
+                this.basicPremiumLevy = this.totalPremium * 0.03;
+                this.netPremium = this.totalPremium + this.basicPremiumLevy;
+    
+            this.addingLoad = false;
+        
+        this.computeRiotAndStrikeIsLoading = false;
+        }, 2000);
+}
 
-    computeCarStereo() {
-        this.carStereoAmount = this.carStereoValue * this.carStereoRate;
-        this.loads.push({
-            loadType: 'Car Stereo',
-            amount: this.carStereoAmount,
-        });
-        this.premiumLoadingsubTotal =
-            this.premiumLoadingsubTotal + this.carStereoAmount;
-        this.totalPremium =
-            this.basicPremiumSubTotal +
-            this.premiumLoadingsubTotal -
-            this.premiumDiscountSubtotal;
-    }
+computeIncreasedThirdPartyLimit() {
+    this.computeIncreasedThirdPartyLimitIsLoading = true;
+        setTimeout(() => {
+        
+            if (this.increasedThirdPartyLimitsRateType === 'percentage') {
+                this.increasedThirdPartyLimitsAmount =
+                    (+this.increasedThirdPartyLimitValue - 100200) *
+                    (this.increasedThirdPartyLimitsRate / 100);
+            } else {
+                this.increasedThirdPartyLimitsAmount = this.increasedThirdPartyLimitsRate;
+            }
+            this.loads.push({
+                loadType: 'Increased Third Party Limit',
+                amount: this.increasedThirdPartyLimitsAmount,
+            });
+    
+            this.premiumLoadingsubTotal =
+                this.premiumLoadingsubTotal + this.increasedThirdPartyLimitsAmount;
+            this.totalPremium =
+                this.basicPremiumSubTotal +
+                this.premiumLoadingsubTotal -
+                this.premiumDiscountSubtotal;
 
-    computeTerritorialExtension() {
-        this.loads.push({ loadType: 'Territorial Extension', amount: 1750 });
-        this.premiumLoadingsubTotal = this.premiumLoadingsubTotal + 1750;
-        this.totalPremium =
-            this.basicPremiumSubTotal +
-            this.premiumLoadingsubTotal -
-            this.premiumDiscountSubtotal;
-    }
+                this.basicPremiumLevy = this.totalPremium * 0.03;
+                this.netPremium = this.totalPremium + this.basicPremiumLevy;
+    
+                this.addingLoad = false;
+        
+        this.computeIncreasedThirdPartyLimitIsLoading = false;
+        }, 2000);
 
-    computeLossOfUse() {
-        this.lossOfUseAmount = this.lossOfUseDailyRate * this.lossOfUseDays;
-        this.loads.push({
-            loadType: 'Loss Of Use',
-            amount: this.lossOfUseAmount,
-        });
-        this.premiumLoadingsubTotal =
-            this.premiumLoadingsubTotal + this.lossOfUseAmount;
-        this.totalPremium =
-            this.basicPremiumSubTotal +
-            this.premiumLoadingsubTotal -
-            this.premiumDiscountSubtotal;
-    }
+    
+}
 
-    // Discount Computation
-    computeDiscount() {
-        this.premiumDiscount =
-            (this.basicPremiumSubTotal + this.premiumLoadingsubTotal) *
-            this.premiumDiscountRate;
-        this.premiumDiscountSubtotal = this.premiumDiscount;
-        this.totalPremium =
-            this.basicPremiumSubTotal +
-            this.premiumLoadingsubTotal -
-            this.premiumDiscountSubtotal;
-    }
+computeCarStereo() {
+    this.computeCarStereoIsLoading = true;
+        setTimeout(() => {
+        
+            if (this.carStereoRateType === 'percentage') {
+                this.carStereoAmount =
+                    this.carStereoValue * (this.carStereoRate / 100);
+            } else {
+                this.carStereoAmount = +this.carStereoRate;
+            }
+    
+            this.loads.push({
+                loadType: 'Car Stereo',
+                amount: this.carStereoAmount,
+            });
+            this.premiumLoadingsubTotal =
+                this.premiumLoadingsubTotal + this.carStereoAmount;
+            this.totalPremium =
+                this.basicPremiumSubTotal +
+                this.premiumLoadingsubTotal -
+                this.premiumDiscountSubtotal;
+
+                this.basicPremiumLevy = this.totalPremium * 0.03;
+                this.netPremium = this.totalPremium + this.basicPremiumLevy;
+    
+                this.addingLoad = false;
+        
+        this.computeCarStereoIsLoading = false;
+        }, 2000);
+
+    
+}
+
+computeTerritorialExtension() {
+    this.computeTerritorialExtensionIsLoading = true;
+        setTimeout(() => {
+        
+            this.loads.push({ loadType: 'Territorial Extension', amount: 1750 });
+            this.premiumLoadingsubTotal = this.premiumLoadingsubTotal + 1750;
+            this.totalPremium =
+                this.basicPremiumSubTotal +
+                this.premiumLoadingsubTotal -
+                this.premiumDiscountSubtotal;
+
+                this.basicPremiumLevy = this.totalPremium * 0.03;
+                this.netPremium = this.totalPremium + this.basicPremiumLevy;
+    
+                this.addingLoad = false;
+        
+        this.computeTerritorialExtensionIsLoading = false;
+        }, 2000);
+
+    
+}
+
+computeLossOfUse() {
+    this.computeLossOfUseIsLoading = true;
+        setTimeout(() => {
+        
+            if (this.lossOfUseDailyRateType === 'percentage') {
+                this.lossOfUseAmount =
+                    this.lossOfUseDays *
+                    (this.basicPremium * (this.lossOfUseDailyRate / 100));
+            } else {
+                this.lossOfUseAmount = this.lossOfUseDays * this.lossOfUseDailyRate;
+            }
+    
+            this.loads.push({
+                loadType: 'Loss Of Use',
+                amount: this.lossOfUseAmount,
+            });
+            this.premiumLoadingsubTotal =
+                this.premiumLoadingsubTotal + this.lossOfUseAmount;
+            this.totalPremium =
+                this.basicPremiumSubTotal +
+                this.premiumLoadingsubTotal -
+                this.premiumDiscountSubtotal;
+
+                this.basicPremiumLevy = this.totalPremium * 0.03;
+                this.netPremium = this.totalPremium + this.basicPremiumLevy;
+    
+                this.addingLoad = false;
+        
+        this.computeLossOfUseIsLoading = false;
+        }, 2000);
+
+    
+}
+
+// Discount Computation
+computeDiscount() {
+    this.computeDiscountIsLoading = true;
+        setTimeout(() => {
+            if (this.premiumDiscountRateType == 'percentage') {this.premiumDiscount = (this.basicPremiumSubTotal + this.premiumLoadingsubTotal) * (this.premiumDiscountRate / 100);}
+            else {this.premiumDiscount = this.premiumDiscountRate;}
+        
+            
+            this.premiumDiscountSubtotal = this.premiumDiscount;
+            this.totalPremium = this.basicPremiumSubTotal + this.premiumLoadingsubTotal - this.premiumDiscountSubtotal;
+
+            this.basicPremiumLevy = this.totalPremium * 0.03;
+                this.netPremium = this.totalPremium + this.basicPremiumLevy;
+        
+            this.computeDiscountIsLoading = false;
+            }, 2000);
+
+    
+}
 }

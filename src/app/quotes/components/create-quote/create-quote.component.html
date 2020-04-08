@@ -10,7 +10,7 @@
     </nz-breadcrumb>
     <!-- <nz-card style="padding: 20px"> -->
     <form nz-form style="margin-top: 20px" [formGroup]="quoteForm" novalidate>
-        <nz-card nzTitle="Client Details" style="margin-bottom: 5px;" [nzExtra]="switchTemplate">
+        <nz-card nzTitle="Policy Details" style="margin-bottom: 5px;" [nzExtra]="switchTemplate">
             <ng-template #switchTemplate>
                 <nz-switch [ngModel]="agentMode" [ngModelOptions]="{standalone: true}" nzCheckedChildren="Agent Mode"
                     nzUnCheckedChildren="User Mode" [nzControl]="false" (click)="switchMode()"
@@ -37,32 +37,8 @@
                                                 : client.companyName
                                         "></nz-option>
                                 </div>
-                                <!-- <ng-container > -->
-
-                                <!-- <nz-option
-                                        *ngIf="
-                                            client.clientType === 'Corporate'
-                                        "
-                                        [nzValue]="client.companyName"
-                                        nzLabel="{{ client.companyName }}"
-                                    ></nz-option> -->
-                                <!-- <nz-option
-                                        *ngIf="
-                                            client.clientType === 'Individual'
-                                        "
-                                        [nzValue]="client.firstName"
-                                        nzLabel="{{ client.firstName }} {{
-                                            client.lastName
-                                        }}"
-                                    ></nz-option> -->
-                                <!-- </ng-container> -->
+                                
                             </nz-select>
-                        </nz-form-control>
-                    </nz-form-item>
-                    <nz-form-item>
-                        <nz-form-label nzRequired nzSpan="7">Town</nz-form-label>
-                        <nz-form-control nzSpan="17">
-                            <input nz-input formControlName="town" />
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
@@ -74,36 +50,51 @@
                             </nz-select>
                         </nz-form-control>
                     </nz-form-item>
+                    <nz-form-item *ngIf="agentMode">
+                            <nz-form-label nzRequired nzSpan="7">Agent</nz-form-label>
+                            <nz-form-control nzSpan="17">
+                                <input nz-input formControlName="user" />
+                            </nz-form-control>
+                        </nz-form-item>
                 </div>
                 <div nz-col nzSpan="12">
                     <nz-form-item>
                         <nz-form-label nzRequired nzSpan="7">Select Start Date</nz-form-label>
                         <nz-form-control nzSpan="17">
-                            <nz-date-picker formControlName="startDate" [nzDisabledDate]="disabledStartDate" nzShowTime
-                                nzFormat="yyyy-MM-dd HH:mm:ss" nzPlaceHolder="Start"
+                            <nz-date-picker formControlName="startDate" [nzDisabledDate]="disabledStartDate" 
+                                nzFormat="dd-MM-yyyy" nzPlaceHolder="Start"
                                 (nzOnOpenChange)="handleStartOpenChange($event)"></nz-date-picker>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
 
                 <div nz-col nzSpan="12">
-                    <nz-form-item>
+                        <nz-form-item>
+                                <nz-form-label nzSpan="7" nzRequired>Quarter</nz-form-label>
+                                <nz-form-control nzSpan="5">
+                                    <nz-select formControlName="quarter" nzPlaceHolder="Select quarter">
+                                        <nz-option nzValue="1" nzLabel="1"></nz-option>
+                                        <nz-option nzValue="2" nzLabel="2"></nz-option>
+                                        <nz-option nzValue="3" nzLabel="3"></nz-option>
+                                        <nz-option nzValue="4" nzLabel="4"></nz-option>
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                    <!-- <nz-form-item>
                         <nz-form-label nzRequired nzSpan="7">Select End Date</nz-form-label>
                         <nz-form-control nzSpan="17">
-                            <nz-date-picker formControlName="endDate" [nzDisabledDate]="disabledEndDate" nzShowTime
-                                nzFormat="yyyy-MM-dd HH:mm:ss" nzPlaceHolder="End" [nzOpen]="endOpen"
+                            <nz-date-picker formControlName="endDate" 
+                                nzFormat="dd-MM-yyyy" nzPlaceHolder="End" [nzOpen]="endOpen"
                                 (nzOnOpenChange)="handleEndOpenChange($event)">
                             </nz-date-picker>
                         </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col nzSpan="12">
-                    <nz-form-item *ngIf="agentMode">
-                        <nz-form-label nzRequired nzSpan="7">Agent</nz-form-label>
-                        <nz-form-control nzSpan="17">
-                            <input nz-input formControlName="user" />
-                        </nz-form-control>
-                    </nz-form-item>
+                    </nz-form-item> -->
+                    <nz-form-item>
+                            <nz-form-label nzRequired nzSpan="7">Underwriting Year</nz-form-label>
+                            <nz-form-control nzSpan="17">
+                                <nz-year-picker formControlName="underwritingYear" nzPlaceHolder="Select year"></nz-year-picker>
+                            </nz-form-control>
+                        </nz-form-item>
                 </div>
             </div>
         </nz-card>
@@ -146,8 +137,17 @@
                                             <nz-form-label [nzSpan]="7" nzFor="vehicleMake" nzRequired>Vehicle Make
                                             </nz-form-label>
                                             <nz-form-control nzSpan="17">
-                                                <input nz-input name="vehicleMake" formControlName="vehicleMake"
-                                                    type="text" id="vehicleMake" />
+                                                <!-- <input nz-input name="vehicleMake" formControlName="vehicleMake"
+                                                    type="text" id="vehicleMake" /> -->
+                                                    <nz-select nzPlaceHolder="Select vehicle make" nzAllowClear nzShowSearch nzServerSearch [(ngModel)]="selectedVehicleMake" formControlName="vehicleMake" (nzOnSearch)="onVehicleMakeSearch($event)"
+                                                >
+                                                <ng-container *ngFor="let o of vehicleMakeOptionList">
+                                                    <nz-option *ngIf="!isVehicleMakeLoading" [nzValue]="o" [nzLabel]="o"></nz-option>
+                                                </ng-container>
+                                                <nz-option *ngIf="isVehicleMakeLoading" nzDisabled nzCustomContent>
+                                                    <i nz-icon nzType="loading" class="loading-icon"></i> Loading Data...
+                                                </nz-option>
+                                                </nz-select>
                                             </nz-form-control>
                                         </nz-form-item>
                                     </div>
@@ -156,8 +156,17 @@
                                             <nz-form-label [nzSpan]="7" nzFor="vehicleModel" nzRequired>Vehicle Model
                                             </nz-form-label>
                                             <nz-form-control nzSpan="17">
-                                                <input nz-input name="vehicleModel" formControlName="vehicleModel"
-                                                    type="text" id="vehicleModel" />
+                                                <!-- <input nz-input name="vehicleModel" formControlName="vehicleModel"
+                                                    type="text" id="vehicleModel" /> -->
+                                                    <nz-select nzPlaceHolder="Select vehicle model" nzAllowClear nzShowSearch nzServerSearch [(ngModel)]="selectedVehicleModel" formControlName="vehicleModel" (nzOnSearch)="onVehicleModelSearch($event)"
+                                                >
+                                                <ng-container *ngFor="let o of vehicleModelOptionList">
+                                                    <nz-option *ngIf="!isVehicleModelLoading" [nzValue]="o" [nzLabel]="o"></nz-option>
+                                                </ng-container>
+                                                <nz-option *ngIf="isVehicleModelLoading" nzDisabled nzCustomContent>
+                                                    <i nz-icon nzType="loading" class="loading-icon"></i> Loading Data...
+                                                </nz-option>
+                                                </nz-select>
                                             </nz-form-control>
                                         </nz-form-item>
                                     </div>
@@ -255,8 +264,16 @@
                                             <nz-form-label [nzSpan]="7" nzFor="vehicleMake" nzRequired>Vehicle Make
                                             </nz-form-label>
                                             <nz-form-control nzSpan="17" nzErrorTip="Please input your Vehicle Make!">
-                                                <input nz-input name="vehicleMake" formControlName="vehicleMake"
-                                                    type="text" id="vehicleMake" />
+                                                <!-- <input nz-input name="vehicleMake" formControlName="vehicleMake" type="text" id="vehicleMake" /> -->
+                                                <nz-select nzMode="multiple" nzPlaceHolder="Select users" nzAllowClear nzShowSearch nzServerSearch formControlName="vehicleMake" (nzOnSearch)="onVehicleMakeSearch($event)"
+                                                >
+                                                <ng-container *ngFor="let o of vehicleMakeOptionList">
+                                                    <nz-option *ngIf="!isVehicleMakeLoading" [nzValue]="o" [nzLabel]="o"></nz-option>
+                                                </ng-container>
+                                                <nz-option *ngIf="isVehicleMakeLoading" nzDisabled nzCustomContent>
+                                                    <i nz-icon nzType="loading" class="loading-icon"></i> Loading Data...
+                                                </nz-option>
+                                                </nz-select>
                                             </nz-form-control>
                                         </nz-form-item>
                                     </div>
@@ -418,8 +435,12 @@
             <div nz-col nzSpan="12">
                 <nz-form-item>
                     <nz-form-label nzSpan="7" nzRequired>Sum Insured</nz-form-label>
-                    <nz-form-control nzSpan="17">
-                        <input nz-input nzPlaceHolder="" name="sumInsured" [(ngModel)]="sumInsured" />
+                    <nz-form-control nzSpan="17" nzHasFeedback [nzErrorTip]="validateSumInsured">
+                        <input nz-input nzPlaceHolder="" name="sumInsured" [(ngModel)]="sumInsured" required pattern="^[0-9]\d*(\.\d+)?$"/>
+                        <ng-template #validateSumInsured let-control>
+                                <ng-container *ngIf="control.hasError('required')">Input is Required</ng-container>
+                                <ng-container *ngIf="control.hasError('pattern')">Sum insured requires numerical input</ng-container>
+                              </ng-template>
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
@@ -437,7 +458,7 @@
                 </nz-form-item>
                 <nz-form-item>
                     <nz-form-control [nzXs]="{ span: 24, offset: 4 }" [nzSm]="{ span: 20, offset: 7 }">
-                        <button nz-button nzType="primary" (click)="computeBasicPremium()">Compute</button>
+                        <button nz-button nzType="primary" (click)="computeBasicPremium()" [nzLoading]="computeBasicPremiumIsLoading">Compute</button>
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -448,13 +469,6 @@
                         <nz-form-control nzSpan="12">
                             <input nz-input [disabled]="true" name="basicPremium" [ngModel]="basicPremium"
                                 [value]="basicPremium" />
-                        </nz-form-control>
-                    </nz-form-item>
-                    <nz-form-item>
-                        <nz-form-label nzSpan="12">Levy</nz-form-label>
-                        <nz-form-control nzSpan="12">
-                            <input nz-input [disabled]="true" name="basicPremiumLevy" [ngModel]="basicPremiumLevy"
-                                [value]="basicPremiumLevy" />
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
@@ -470,6 +484,15 @@
 
         <nz-divider nzText="Loading" nzOrientation="left"></nz-divider>
         <div nz-row nzGutter="0">
+                <div nz-col nzSpan="12" *ngIf="!addingLoad">
+                <nz-form-item>
+                        <nz-form-control [nzXs]="{ span: 24, offset: 4 }" [nzSm]="{ span: 20, offset: 7 }">
+                                <button  nz-button nzType="dashed" (click)="addLoad()" [nzLoading]="addLoadIsLoading"><i nz-icon nzType="plus-circle"></i>Add Load</button>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                
+                <div *ngIf="addingLoad">
             <div nz-col nzSpan="12">
                 <div *ngIf="selectedValue?.value === 'Comprehensive'">
                             <nz-form-item>
@@ -522,7 +545,7 @@
                                 <nz-form-item>
                                     <nz-form-control [nzXs]="{ span: 24, offset: 4 }" [nzSm]="{ span: 20, offset: 7 }">
                                         <button nz-button nzType="primary"
-                                            (click)="computeIncreasedThirdPartyLimit()">Compute</button>
+                                            (click)="computeIncreasedThirdPartyLimit()" [nzLoading]="computeIncreasedThirdPartyLimitIsLoading">Compute</button>
                                     </nz-form-control>
                                 </nz-form-item>
                 </div>
@@ -542,7 +565,7 @@
                             </nz-form-item>
                             <nz-form-item>
                                 <nz-form-control [nzXs]="{ span: 24, offset: 4 }" [nzSm]="{ span: 20, offset: 7 }">
-                                    <button nz-button nzType="primary" (click)="computeRiotAndStrike()">Compute</button>
+                                    <button nz-button nzType="primary" (click)="computeRiotAndStrike()" [nzLoading]="computeRiotAndStrikeIsLoading">Compute</button>
                                 </nz-form-control>
                             </nz-form-item>
                 </div>
@@ -571,7 +594,7 @@
                                 </nz-form-item>
                             <nz-form-item>
                                 <nz-form-control [nzXs]="{ span: 24, offset: 4 }" [nzSm]="{ span: 20, offset: 7 }">
-                                    <button nz-button nzType="primary" (click)="computeCarStereo()">Compute</button>
+                                    <button nz-button nzType="primary" (click)="computeCarStereo()" [nzLoading]="computeCarStereoIsLoading">Compute</button>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -596,7 +619,7 @@
                             <nz-form-item>
                                 <nz-form-control [nzXs]="{ span: 24, offset: 4 }" [nzSm]="{ span: 20, offset: 7 }">
                                     <button nz-button nzType="primary"
-                                        (click)="computeTerritorialExtension()">Compute</button>
+                                        (click)="computeTerritorialExtension()" [nzLoading]="computeTerritorialExtensionIsLoading">Compute</button>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -627,13 +650,14 @@
                                 </nz-form-item>
                             <nz-form-item>
                                 <nz-form-control [nzXs]="{ span: 24, offset: 4 }" [nzSm]="{ span: 20, offset: 7 }">
-                                    <button nz-button nzType="primary" (click)="computeLossOfUse()">Compute</button>
+                                    <button nz-button nzType="primary" (click)="computeLossOfUse()" [nzLoading]="computeLossOfUseIsLoading">Compute</button>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
             <div nz-col nSpan="12">
                         <nz-card style="margin: 0 auto; float: right">
                             <form>
@@ -654,8 +678,7 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </nz-card>
-            </div>
-        </div>
+            </div> </div>
 
 
         <nz-divider nzText="Discount" nzOrientation="left"></nz-divider>
@@ -676,7 +699,7 @@
                     </nz-form-item>
                     <nz-form-item>
                         <nz-form-control [nzXs]="{ span: 24, offset: 4 }" [nzSm]="{ span: 20, offset: 7 }">
-                            <button nz-button nzType="primary" (click)="computeDiscount()">Compute</button>
+                            <button nz-button nzType="primary" (click)="computeDiscount()" [nzLoading]="computeDiscountIsLoading">Compute</button>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -702,11 +725,24 @@
         <div nz-row nzGutter="0">
             <div nz-col nzSpan="12">
                 <nz-form-item>
-                    <nz-form-label nzSpan="7">Total Premium</nz-form-label>
-                    <nz-form-control nzSpan="17" nzDisabled>
+                    <nz-form-label nzSpan="12">Total Premium</nz-form-label>
+                    <nz-form-control nzSpan="12" nzDisabled>
                         <input nz-input [disabled]="true" [ngModel]="totalPremium" />
                     </nz-form-control>
                 </nz-form-item>
+                <nz-form-item>
+                        <nz-form-label nzSpan="12">Levy</nz-form-label>
+                        <nz-form-control nzSpan="12">
+                            <input nz-input [disabled]="true" name="basicPremiumLevy" [ngModel]="basicPremiumLevy"
+                                [value]="basicPremiumLevy" />
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                            <nz-form-label nzSpan="12">Net Premium</nz-form-label>
+                            <nz-form-control nzSpan="12" nzDisabled>
+                                <input nz-input [disabled]="true" [ngModel]="netPremium" />
+                            </nz-form-control>
+                        </nz-form-item>
             </div>
         </div>
         <!-- </nz-card> -->
