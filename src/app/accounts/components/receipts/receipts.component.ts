@@ -9,6 +9,7 @@ import { v4 } from 'uuid';
 import { IReceiptDTO } from 'src/app/quotes/models/receipt.dto';
 import { getTranslationDeclStmts } from '@angular/compiler/src/render3/view/template';
 import { combineLatest } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'app-receipts',
@@ -23,6 +24,7 @@ export class ReceiptsComponent implements OnInit {
     today = new Date();
     clientName = '';
     quote: MotorQuotationModel = new MotorQuotationModel();
+    size = 'large';
 
     receiptList = [];
 
@@ -109,7 +111,8 @@ export class ReceiptsComponent implements OnInit {
     constructor(
         private receiptService: AccountService,
         private formBuilder: FormBuilder,
-        private message: NzMessageService
+        private message: NzMessageService,
+        private http: HttpClient
     ) {
         this.receiptForm = this.formBuilder.group({
             receivedFrom: ['', Validators.required],
@@ -149,23 +152,43 @@ export class ReceiptsComponent implements OnInit {
     }
 
     generateDocuments(): void {
+        //   const receipt: IReceiptDTO = {
+        //       recieptNumber: this.receiptForm.controls.recieptNumber.value,
+        //       tPin: this.receiptForm.controls.tpinNumber.value,
+        //       recievedFrom: this.receiptForm.controls.recievedFrom.value,
+        //       onBehalfOf: this.clientName,
+        //       address: this.receiptForm.controls.address.value,
+        //       sumInWords: this.receiptForm.controls.recieptNumber.value,
+        //       dateRecieved: this.receiptForm.controls.dateReceived.value,
+        //       agentID: '',
+        //       paymentMethod: this.receiptForm.controls.paymentMethod.value,
+        //       paymentRef: '',
+        //       policyNumber: this.quoteNumber,
+        //       remarks: '',
+        //       todayDate: this.receiptForm.controls.todayDate.value,
+        //       time: '',
+        //       accountNumber: '',
+        //       sumInDigits: this.receiptForm.controls.sumInDigits.value,
+        //       capturedBy: this.user,
+        // };
+
         const receipt: IReceiptDTO = {
-            recieptNumber: this.receiptForm.controls.recieptNumber.value,
-            tPin: this.receiptForm.controls.tpinNumber.value,
-            recievedFrom: this.receiptForm.controls.recievedFrom.value,
-            onBehalfOf: this.clientName,
-            address: this.receiptForm.controls.address.value,
-            sumInWords: this.receiptForm.controls.recieptNumber.value,
-            dateRecieved: this.receiptForm.controls.dateReceived.value,
+            recieptNumber: 'String',
+            tPin: 11111,
+            recievedFrom: 'String',
+            onBehalfOf: 'String',
+            address: 'String',
+            sumInWords: 'String',
             agentID: '',
-            paymentMethod: this.receiptForm.controls.paymentMethod.value,
+            paymentMethod: 'String',
             paymentRef: '',
-            policyNumber: this.quoteNumber,
+            policyNumber: 'String',
             remarks: '',
-            todayDate: this.receiptForm.controls.todayDate.value,
+            todayDate: 'String',
             time: '',
             accountNumber: '',
-            sumInDigits: this.receiptForm.controls.sumInDigits.value,
+            dateRecieved: 'string',
+            sumInDigits: 5345435435,
             capturedBy: this.user,
         };
 
@@ -176,5 +199,12 @@ export class ReceiptsComponent implements OnInit {
         });
 
         this.isReceiptApproved = true;
+
+        console.log('reerewrew');
+        console.log(this.isReceiptApproved);
+
+        // this.http.get(
+        //     'https://flosurepdfs.s3.us-east-2.amazonaws.com/%27String%27-cd4f17da-423c-48a3-be90-79883ab6682c.pdf%22'
+        // );
     }
 }
