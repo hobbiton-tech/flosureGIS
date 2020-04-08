@@ -3,13 +3,13 @@
         <nz-breadcrumb>
             <nz-breadcrumb-item
                 (click)="goToPoliciesList()"
-                style="cursor: pointer"
+                style="cursor: pointer;"
             >
                 Policies
             </nz-breadcrumb-item>
             <nz-breadcrumb-item
                 (click)="goToPoliciesList()"
-                style="cursor: pointer"
+                style="cursor: pointer;"
             >
                 Policies List
             </nz-breadcrumb-item>
@@ -20,11 +20,10 @@
         <nz-page-header
             (nzBack)="goToClientsList()"
             nzBackIcon
-            nzTitle="Policy Number: {{policyData.policyNumber}}"
+            nzTitle="Policy Number: {{ policyData.policyNumber }}"
             [nzSubtitle]="policyData.client"
         >
-            <nz-page-header-extra>
-            </nz-page-header-extra>
+            <nz-page-header-extra> </nz-page-header-extra>
         </nz-page-header>
     </div>
 
@@ -36,7 +35,7 @@
     >
         <div style="margin: 20px;">
             <nz-card
-                style="width: 100%"
+                style="width: 100%;"
                 nzTitle="Certificate"
                 [nzExtra]="actions"
             >
@@ -70,7 +69,7 @@
         (nzOnOk)="showReceiptModal = false"
     >
         <div style="margin: 20px;">
-            <nz-card style="width: 100%" nzTitle="Receipt" [nzExtra]="actions">
+            <nz-card style="width: 100%;" nzTitle="Receipt" [nzExtra]="actions">
                 <pdf-viewer
                     [src]="'/assets/docs/receipt.pdf'"
                     [original-size]="false"
@@ -102,7 +101,7 @@
     >
         <div style="margin: 20px;">
             <nz-card
-                style="width: 100%"
+                style="width: 100%;"
                 nzTitle="Debit Note"
                 [nzExtra]="actions"
             >
@@ -135,19 +134,6 @@
         <form nz-form [formGroup]="policyDetailsForm">
             <div nz-row nzGutter="0">
                 <div nz-col nzSpan="12">
-                    <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired
-                            >Client Name</nz-form-label
-                        >
-                        <nz-form-control nzSpan="17">
-                            <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
-                            <input
-                                nz-input
-                                [disabled]="!isEditmode"
-                                formControlName="client"
-                            />
-                        </nz-form-control>
-                    </nz-form-item>
                     <nz-form-item>
                         <nz-form-label nzSpan="7" nzRequired
                             >Name of Insured</nz-form-label
@@ -297,7 +283,7 @@
     </nz-card>
     <nz-card>
         <nz-divider nzText="Risk Details" nzOrientation="left"></nz-divider>
-        <div style="margin-top:20px">
+        <div style="margin-top: 20px;">
             <nz-table #risksTable [nzData]="displayPolicy.risks" nzSize="small">
                 <thead>
                     <tr>

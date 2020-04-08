@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormGroup, FormBuilder, Validators} from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Policy, RiskModel, ITimestamp } from '../../models/policy.model';
 import { PoliciesService } from '../../services/policies.service';
 // import { generatePolicies } from '../../data/policy.data';
@@ -8,7 +8,7 @@ import { PoliciesService } from '../../services/policies.service';
 @Component({
     selector: 'app-policy-details',
     templateUrl: './policy-details.component.html',
-    styleUrls: ['./policy-details.component.scss']
+    styleUrls: ['./policy-details.component.scss'],
 })
 export class PolicyDetailsComponent implements OnInit {
     policyDetailsForm: FormGroup;
@@ -19,15 +19,12 @@ export class PolicyDetailsComponent implements OnInit {
     policy: Policy;
     displayPolicy: Policy;
 
-    //risks
+    // risks
     risks: RiskModel[];
 
     searchString: string;
-    
-    
 
     isEditmode = false;
-
 
     showCertModal = false;
     showDebitModal = false;
@@ -37,7 +34,8 @@ export class PolicyDetailsComponent implements OnInit {
         private readonly router: Router,
         private route: ActivatedRoute,
         private formBuilder: FormBuilder,
-        private policiesService: PoliciesService) {}
+        private policiesService: PoliciesService
+    ) {}
 
     ngOnInit(): void {
         // this.policiesService.getPolicies().subscribe(policies => {
@@ -45,19 +43,22 @@ export class PolicyDetailsComponent implements OnInit {
         //     this.policiesList = policies;
         // });
 
-
-        //get policy number from url parameter
-        this.route.params.subscribe(param => {
+        // get policy number from url parameter
+        this.route.params.subscribe((param) => {
             this.policyNumber = param.policyNumber;
-            this.policiesService.getPolicies().subscribe(policies => {
-                this.policyData = policies.filter(x => x.policyNumber === this.policyNumber)[0];
+            this.policiesService.getPolicies().subscribe((policies) => {
+                this.policyData = policies.filter(
+                    (x) => x.policyNumber === this.policyNumber
+                )[0];
                 this.policiesList = policies;
-                this.policy = this.policiesList.filter(x => x.policyNumber === this.policyNumber)[0];
+                this.policy = this.policiesList.filter(
+                    (x) => x.policyNumber === this.policyNumber
+                )[0];
                 this.displayPolicy = this.policy;
             });
         });
 
-        //policy details form
+        // policy details form
         this.policyDetailsForm = this.formBuilder.group({
             client: ['', Validators.required],
             nameOfInsured: ['', Validators.required],
@@ -95,13 +96,12 @@ export class PolicyDetailsComponent implements OnInit {
     }
 
     getTimeStamp(policy: Policy): number {
-            return (policy.startDate as ITimestamp).seconds;
-        }
+        return (policy.startDate as ITimestamp).seconds;
+    }
 
-        getEndDateTimeStamp(policy: Policy): number {
-                return (policy.endDate as ITimestamp).seconds;
-        }
-    
+    getEndDateTimeStamp(policy: Policy): number {
+        return (policy.endDate as ITimestamp).seconds;
+    }
 
     goToPoliciesList(): void {
         this.router.navigateByUrl('/flosure/underwriting/policies');

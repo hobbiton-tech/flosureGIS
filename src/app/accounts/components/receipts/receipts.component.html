@@ -54,6 +54,7 @@
                                 <th>Start Date</th>
                                 <th>End Date</th>
                                 <th>Client Name</th>
+                                <th>Amount</th>
                                 <th>Quote Status</th>
                                 <th></th>
                             </tr>
@@ -78,6 +79,7 @@
                                     }}
                                 </td>
                                 <td>{{ unreceipted.clientCode }}</td>
+                                <td>{{ unreceipted.netPremium }}</td>
                                 <td>
                                     <nz-badge
                                         [nzStatus]="
@@ -179,7 +181,7 @@
                                                         *ngFor="
                                                             let option of optionList
                                                         "
-                                                        [nzValue]="option"
+                                                        [nzValue]="option.value"
                                                         [nzLabel]="option.label"
                                                     ></nz-option>
                                                 </nz-select>
@@ -195,13 +197,20 @@
                                                 >Payment Method</nz-form-label
                                             >
                                             <nz-form-control [nzSpan]="16">
-                                                <input
-                                                    nz-input
-                                                    formControlName="paymentMethod"
+                                                <nz-select
                                                     name="paymentMethod"
-                                                    id="paymentMethod"
-                                                    placeholder="Payment Method"
-                                                />
+                                                    formControlName="paymentMethod"
+                                                    nzAllowClear
+                                                    nzPlaceHolder="Choose payment Method"
+                                                >
+                                                    <nz-option
+                                                        *ngFor="
+                                                            let method of paymentMethodList
+                                                        "
+                                                        [nzValue]="method.value"
+                                                        [nzLabel]="method.label"
+                                                    ></nz-option>
+                                                </nz-select>
                                             </nz-form-control>
                                         </nz-form-item>
                                     </div>
@@ -247,7 +256,9 @@
                                 <th>Receipt Number</th>
                                 <th>Client Name</th>
                                 <th>Amount</th>
+                                <th>Receipt type</th>
                                 <th>Date Receipted</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -258,12 +269,14 @@
                                 <td>{{ receipt.receiptNumber }}</td>
                                 <td>{{ receipt.onBehalfOf }}</td>
                                 <td>{{ receipt.sumInDigits }}</td>
+                                <td>{{ receipt.receiptType }}</td>
 
                                 <td>
                                     {{
                                         receipt.todayDate.seconds * 1000 | date
                                     }}
                                 </td>
+                                <td></td>
                             </tr>
                         </tbody>
                     </nz-table>
@@ -272,3 +285,69 @@
         </nz-tabset>
     </nz-card>
 </div>
+
+<nz-card *ngIf="isReceiptApproved">
+    <nz-divider [nzText]="'Documents'" [nzOrientation]="'left'"></nz-divider>
+    <div nz-row [nzGutter]="8">
+        <div nz-col [nzSpan]="8">
+            <nz-card
+                nzTitle="Receipt"
+                [nzExtra]="expansionView1"
+                [nzHoverable]="true"
+                (nzClick)="showReceiptModal = true"
+            >
+                <pdf-viewer
+                    [src]="receiptURl"
+                    [original-size]="false"
+                ></pdf-viewer>
+            </nz-card>
+        </div>
+    </div>
+
+    <ng-template #expansionView1>
+        <div>
+            <button
+                nz-button
+                nzType="primary"
+                nzSize="small"
+                style="margin-right: 5px;"
+                (click)="showReceiptModal = true"
+            >
+                View
+            </button>
+            <button nz-button nzType="default" nzSize="small">Print</button>
+        </div>
+    </ng-template>
+
+    <!-- Document Modals -->
+    <nz-modal
+        [(nzVisible)]="showReceiptModal"
+        nzTitle="Receipt Receipt"
+        (nzOnCancel)="showReceiptModal = false"
+        (nzOnOk)="showReceiptModal = false"
+    >
+        <div style="margin: 20px;">
+            <nz-card style="width: 100%;" nzTitle="Receipt" [nzExtra]="actions">
+                <pdf-viewer
+                    [src]="receiptURl"
+                    [original-size]="false"
+                ></pdf-viewer>
+            </nz-card>
+            <ng-template #actions>
+                <div>
+                    <button
+                        nz-button
+                        nzType="primary"
+                        nzSize="medium"
+                        style="margin-right: 8px;"
+                    >
+                        Print
+                    </button>
+                    <button nz-button nzType="default" nzSize="medium">
+                        Email
+                    </button>
+                </div>
+            </ng-template>
+        </div>
+    </nz-modal>
+</nz-card>

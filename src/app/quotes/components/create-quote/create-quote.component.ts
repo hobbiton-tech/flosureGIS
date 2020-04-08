@@ -463,7 +463,7 @@ export class CreateQuoteComponent implements OnInit {
                 // //convert data to binary string
                 const data = new Uint8Array(arraybuffer);
                 const arr = new Array();
-                for (let i = 0; i != data.length; ++i) {
+                for (let i = 0; i !== data.length; ++i) {
                     arr[i] = String.fromCharCode(data[i]);
                 }
                 const bstr = arr.join('');
