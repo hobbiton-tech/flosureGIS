@@ -149,6 +149,18 @@
                     </nz-form-item>
                     <nz-form-item>
                         <nz-form-label nzSpan="7" nzRequired
+                            >Currency</nz-form-label
+                        >
+                        <nz-form-control nzSpan="17">
+                                <input
+                                nz-input
+                                [disabled]="!isEditmode"
+                                formControlName="currency"
+                            />
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label nzSpan="7" nzRequired
                             >Sum Insured</nz-form-label
                         >
                         <nz-form-control nzSpan="17">
@@ -160,57 +172,31 @@
                             />
                         </nz-form-control>
                     </nz-form-item>
+                    
                     <nz-form-item>
                         <nz-form-label nzSpan="7" nzRequired
-                            >Currency</nz-form-label
-                        >
-                        <nz-form-control nzSpan="17">
-                            <nz-select
-                                [nzDisabled]="!isEditmode"
-                                formControlName="currency"
-                            >
-                                <nz-option
-                                    nzValue="Dollar"
-                                    nzLabel="Dollar"
-                                ></nz-option>
-                                <nz-option
-                                    nzValue="ZMW"
-                                    nzLabel="ZMW"
-                                ></nz-option>
-                            </nz-select>
-                        </nz-form-control>
-                    </nz-form-item>
-                    <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired
-                            >Expiry Date</nz-form-label
+                            >Premium</nz-form-label
                         >
                         <nz-form-control nzSpan="17">
                             <input
                                 nz-input
                                 [disabled]="!isEditmode"
-                                formControlName="expiryDate"
-                                [value]="
-                                    getEndDateTimeStamp(policy) * 1000 | date
-                                "
+                                formControlName="netPremium"
                             />
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired
-                            >Quater</nz-form-label
-                        >
-                        <nz-form-control nzSpan="17">
-                            <nz-select
-                                [nzDisabled]="!isEditmode"
-                                formControlName="quater"
+                            <nz-form-label nzSpan="7" nzRequired
+                                >Quarter</nz-form-label
                             >
-                                <nz-option nzValue="1" nzLabel="1"></nz-option>
-                                <nz-option nzValue="2" nzLabel="2"></nz-option>
-                                <nz-option nzValue="3" nzLabel="3"></nz-option>
-                                <nz-option nzValue="4" nzLabel="4"></nz-option>
-                            </nz-select>
-                        </nz-form-control>
-                    </nz-form-item>
+                            <nz-form-control nzSpan="17">
+                                <input
+                                    nz-input
+                                    [disabled]="!isEditmode"
+                                    formControlName="quarter"
+                                />
+                            </nz-form-control>
+                        </nz-form-item>
                 </div>
                 <div nz-col nzSpan="12">
                     <nz-form-item>
@@ -223,7 +209,7 @@
                                 nz-input
                                 [disabled]="!isEditmode"
                                 formControlName="startDate"
-                                [value]="getTimeStamp(policy) * 1000 | date"
+                                
                             />
                         </nz-form-control>
                     </nz-form-item>
@@ -237,9 +223,7 @@
                                 nz-input
                                 [disabled]="!isEditmode"
                                 formControlName="endDate"
-                                [value]="
-                                    getEndDateTimeStamp(policy) * 1000 | date
-                                "
+                                
                             />
                         </nz-form-control>
                     </nz-form-item>
@@ -270,16 +254,29 @@
                     </nz-form-item>
                     <nz-form-item>
                         <nz-form-label nzSpan="7" nzRequired
-                            >Town</nz-form-label
+                            >Expiry Date</nz-form-label
                         >
                         <nz-form-control nzSpan="17">
                             <input
                                 nz-input
                                 [disabled]="!isEditmode"
-                                formControlName="town"
+                                formControlName="expiryDate"
+                                
                             />
                         </nz-form-control>
                     </nz-form-item>
+                    <!-- <nz-form-item>
+                        <nz-form-label nzSpan="7" nzRequired
+                            >Branch</nz-form-label
+                        >
+                        <nz-form-control nzSpan="17">
+                            <input
+                                nz-input
+                                [disabled]="!isEditmode"
+                                formControlName="branch"
+                            />
+                        </nz-form-control>
+                    </nz-form-item> -->
                 </div>
             </div>
         </form>

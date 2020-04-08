@@ -66,56 +66,33 @@ export class PolicyDetailsComponent implements OnInit {
             endDate: ['', Validators.required],
             product: ['', Validators.required],
             sumInsured: ['', Validators.required],
+            netPremium: ['', Validators.required],
             currency: ['', Validators.required],
             branch: ['', Validators.required],
             timeOfIssue: ['', Validators.required],
             dateOfIssue: ['', Validators.required],
             expiryDate: ['', Validators.required],
-            regNumber: ['', Validators.required],
-            make: ['', Validators.required],
-            type: ['', Validators.required],
-            engineNumber: ['', Validators.required],
-            model: ['', Validators.required],
-            color: ['', Validators.required],
-            chassisNumber: ['', Validators.required],
-            quater: ['', Validators.required],
-            town: ['', Validators.required],
-        });
+            quarter: ['', Validators.required],
+            town: ['', Validators.required]
+        })
 
-        // set values of fields
-        this.policiesService.getPolicies().subscribe((policies) => {
-            this.policyData = policies.filter(
-                (x) => x.policyNumber === this.policyNumber
-            )[0];
-            this.policyDetailsForm
-                .get('client')
-                .setValue(this.policyData.client);
-            this.policyDetailsForm
-                .get('nameOfInsured')
-                .setValue(this.policyData.nameOfInsured);
-            // this.policyDetailsForm.get('startDate').setValue(this.policyData.startDate);
-            // this.policyDetailsForm.get('endDate').setValue(this.policyData.endDate);
-            this.policyDetailsForm
-                .get('sumInsured')
-                .setValue(this.policyData.sumInsured);
-            this.policyDetailsForm
-                .get('currency')
-                .setValue(this.policyData.currency);
-            this.policyDetailsForm
-                .get('timeOfIssue')
-                .setValue(this.policyData.timeOfIssue);
-            this.policyDetailsForm
-                .get('dateOfIssue')
-                .setValue(this.policyData.dateOfIssue);
-            // this.policyDetailsForm.get('expiryDate').setValue(this.policyData.expiryDate);
-            this.policyDetailsForm
-                .get('quater')
-                .setValue(this.policyData.quater);
-            this.policyDetailsForm.get('town').setValue(this.policyData.town);
-            this.policyDetailsForm
-                .get('branch')
-                .setValue(this.policyData.branch);
-        });
+        //set values of fields
+        this.policiesService.getPolicies().subscribe(policies => {
+            this.policyData = policies.filter(x => x.policyNumber === this.policyNumber)[0];
+            this.policyDetailsForm.get('client').setValue(this.policyData.client);
+            this.policyDetailsForm.get('nameOfInsured').setValue(this.policyData.nameOfInsured);
+            this.policyDetailsForm.get('startDate').setValue(this.policyData.startDate);
+            this.policyDetailsForm.get('endDate').setValue(this.policyData.endDate);
+            this.policyDetailsForm.get('sumInsured').setValue(this.policyData.sumInsured);
+            this.policyDetailsForm.get('netPremium').setValue(this.policyData.netPremium);
+            this.policyDetailsForm.get('currency').setValue(this.policyData.currency);
+            this.policyDetailsForm.get('timeOfIssue').setValue(this.policyData.timeOfIssue);
+            this.policyDetailsForm.get('dateOfIssue').setValue(this.policyData.dateOfIssue);
+            this.policyDetailsForm.get('expiryDate').setValue(this.policyData.endDate);
+            this.policyDetailsForm.get('quarter').setValue(this.policyData.quarter);
+            //this.policyDetailsForm.get('town').setValue(this.policyData.town);
+            //this.policyDetailsForm.get('branch').setValue(this.policyData.branch);
+        })
     }
 
     getTimeStamp(policy: Policy): number {

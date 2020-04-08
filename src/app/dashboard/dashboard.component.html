@@ -114,15 +114,15 @@
                                 style="cursor: pointer;"
                             >
                                 <td>{{ policy.policyNumber }}</td>
-                                <td>{{ policy.productType }}</td>
+                                <td>{{ policy.risks[0].insuranceType }}</td>
                                 <td>
-                                    {{ policy.startDate.seconds * 1000 | date }}
+                                    {{ policy.startDate}}
                                 </td>
                                 <td>
-                                    {{ policy.endDate.seconds * 1000 | date }}
+                                    {{ policy.endDate}}
                                 </td>
                                 <td>{{ policy.client }}</td>
-                                <td>{{ policy.preparedBy }}</td>
+                                <td>{{ policy.user }}</td>
                                 <td>{{ policy.status }}</td>
                             </tr>
                         </tbody>

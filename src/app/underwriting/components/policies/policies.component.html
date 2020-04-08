@@ -11,7 +11,7 @@
             <nz-page-header-content>
                 <nz-descriptions [nzColumn]="3">
                     <nz-descriptions-item nzTitle="Total Policies" [nzSpan]="1"
-                        >231</nz-descriptions-item
+                >{{policiesCount}}</nz-descriptions-item
                     >
                     <!-- <nz-descriptions-item nzTitle="Draft Policies" [nzSpan]="1">130</nz-descriptions-item>
           <nz-descriptions-item nzTitle="Confirmed Policies" [nzSpan]="1">101</nz-descriptions-item> -->
@@ -58,10 +58,10 @@
                     style="cursor:pointer;"
                 >
                     <td>{{ policy.policyNumber }}</td>
-                    <td>{{ policy.startDate.seconds * 1000 | date }}</td>
-                    <td>{{ policy.endDate.seconds * 1000 | date }}</td>
+                    <td>{{ policy.startDate}}</td>
+                    <td>{{ policy.endDate}}</td>
                     <td>{{ policy.client }}</td>
-                    <td>{{ policy.preparedBy }}</td>
+                    <td>{{ policy.user }}</td>
                     <td>{{ policy.status }}</td>
                 </tr>
             </tbody>

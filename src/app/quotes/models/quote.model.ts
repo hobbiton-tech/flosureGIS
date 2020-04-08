@@ -18,7 +18,7 @@ export class MotorQuotationModel {
     clientCode: string;
     messageCode: string;
     coverCode: string;
-    town: string;
+    underwritingYear: Date | ITimestamp;
     branch: string;
     currency: string;
     risks: RiskModel[];
@@ -35,8 +35,10 @@ export class MotorQuotationModel {
     discount: number;
     discountRate: number;
     discountSubTotal: number;
+    totalPremium: number;
     netPremium: number;
     receiptStatus: ReceiptStatus;
+    quarter: string;
 }
 
 export class LoadModel {
@@ -83,11 +85,6 @@ export type ProductType = 'Private' | 'Commercial' | 'Bus/Taxi';
 
 export type QuoteStatus = 'Draft' | 'Approved';
 
-export type LoadType =
-    | 'Increased Third Party Limit'
-    | 'Riot And Strike'
-    | 'Car Stereo'
-    | 'Territorial Extension'
-    | 'Loss Of Use';
+export type LoadType = 'Increased Third Party Limit' | 'Riot And Strike' | 'Car Stereo' | 'Territorial Extension' | 'Loss Of Use';
 
 export type InsuranceType = 'ThirdParty' | 'Comprehensive';
