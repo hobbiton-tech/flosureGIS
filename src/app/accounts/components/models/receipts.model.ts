@@ -12,4 +12,5 @@ export class IReceiptModel {
     sumInDigits: string;
     capturedBy: string;
     receivedFrom: string;
+    receiptType: string;
 }

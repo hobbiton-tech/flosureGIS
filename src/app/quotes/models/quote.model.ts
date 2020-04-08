@@ -1,5 +1,3 @@
-
-
 export class Quote {
     quoteNumber: number;
     revisionNumber: number;
@@ -38,6 +36,7 @@ export class MotorQuotationModel {
     discountRate: number;
     discountSubTotal: number;
     netPremium: number;
+    receiptStatus: ReceiptStatus;
 }
 
 export class LoadModel {
@@ -79,10 +78,16 @@ export class Load {
     value: number;
 }
 
+export type ReceiptStatus = 'Unreceipted' | 'Receipted';
 export type ProductType = 'Private' | 'Commercial' | 'Bus/Taxi';
 
 export type QuoteStatus = 'Draft' | 'Approved';
 
-export type LoadType = 'Increased Third Party Limit' | 'Riot And Strike' | 'Car Stereo' | 'Territorial Extension' | 'Loss Of Use';
+export type LoadType =
+    | 'Increased Third Party Limit'
+    | 'Riot And Strike'
+    | 'Car Stereo'
+    | 'Territorial Extension'
+    | 'Loss Of Use';
 
 export type InsuranceType = 'ThirdParty' | 'Comprehensive';
