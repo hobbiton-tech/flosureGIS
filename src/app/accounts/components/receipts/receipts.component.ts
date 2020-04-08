@@ -179,23 +179,26 @@ export class ReceiptsComponent implements OnInit {
             onBehalfOf: 'String',
             address: 'String',
             sumInWords: 'String',
-            agentID: '',
+            agentID: 'ewrewrwer',
             paymentMethod: 'String',
-            paymentRef: '',
+            paymentRef: 'werwre',
             policyNumber: 'String',
-            remarks: '',
+            remarks: 'wrwerew',
             todayDate: 'String',
-            time: '',
-            accountNumber: '',
+            time: 'erewrew',
+            accountNumber: 'werwewe',
             dateRecieved: 'string',
             sumInDigits: 5345435435,
-            capturedBy: this.user,
+            capturedBy: 'dsfdsfsdfds',
         };
 
-        const receipt$ = this.receiptService.generateReceipt(receipt);
+        // const receipt$ = this.receiptService.generateReceipt(receipt);
 
-        combineLatest([receipt$]).subscribe(([receipt]) => {
-            this.receiptURl = receipt.Location;
+        // combineLatest([receipt$]).subscribe(([receipt]) => {
+        //     this.receiptURl = receipt.Location;
+        // });
+        this.receiptService.generateReceipt(receipt).subscribe((data) => {
+            this.receiptURl = data.Location;
         });
 
         this.isReceiptApproved = true;
