@@ -31,9 +31,9 @@ export class RiskModel {
     estimatedValue?: number;
     productType: ProductType;
     insuranceType: InsuranceType;
-  }
+}
 
-  export interface ITimestamp {
+export interface ITimestamp {
     seconds: number;
     milliseconds: number;
 }

@@ -6,6 +6,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { IReceiptModel } from '../models/receipts.model';
 import { NzMessageService } from 'ng-zorro-antd';
 import { v4 } from 'uuid';
+import { IReceiptDTO } from 'src/app/quotes/models/receipt.dto';
+import { getTranslationDeclStmts } from '@angular/compiler/src/render3/view/template';
+import { combineLatest } from 'rxjs';
 
 @Component({
     selector: 'app-receipts',
@@ -19,6 +22,7 @@ export class ReceiptsComponent implements OnInit {
     receiptedList: IReceiptModel[];
     today = new Date();
     clientName = '';
+    quote: MotorQuotationModel = new MotorQuotationModel();
 
     receiptList = [];
 
@@ -27,20 +31,39 @@ export class ReceiptsComponent implements OnInit {
     quoteNumber = '';
     user = '';
 
+    // modal
+    isReceiptVisible = false;
+    isConfirmLoading = false;
+    showDocumentModal = false;
+    isReceiptApproved = false;
+
+    // generated PDFs
+    receiptURl = '';
+    showReceiptModal = false;
+
     optionList = [
-        { label: 'Premium Payment', value: '' },
-        { label: 'Third Party Recovery', value: '' },
-        { label: 'Imprest Retirement Receipt', value: '' },
-        { label: 'Third Party Recovery', value: '' },
-        { label: 'General Receipt', value: '' },
+        { label: 'Premium Payment', value: 'Premium Payment' },
+        { label: 'Third Party Recovery', value: 'Third Party Recovery' },
+        {
+            label: 'Imprest Retirement Receipt',
+            value: 'Imprest Retirement Receipt',
+        },
+        { label: 'Third Party Recovery', value: 'Third Party Recovery' },
+        { label: 'General Receipt', value: 'General Receipt' },
     ];
-    selectedValue = { label: 'Motor Comprehensive', value: 'Comprehensive' };
+
+    paymentMethodList = [
+        { label: 'Cash', value: 'cash' },
+        { label: 'EFT', value: 'eft' },
+        { label: 'Bank Transfer', value: 'bank transfer' },
+    ];
 
     showModal(unreceipted: MotorQuotationModel): void {
         this.isVisible = true;
         this.clientName = unreceipted.clientCode;
         this.quoteNumber = unreceipted.quoteNumber;
         this.user = unreceipted.user;
+        this.quote = unreceipted;
         console.log(unreceipted);
     }
 
@@ -69,6 +92,14 @@ export class ReceiptsComponent implements OnInit {
             this.isVisible = false;
             this.isOkLoading = false;
         }, 30);
+
+        this.quote.receiptStatus = 'Receipted';
+        console.log('<++++++++++++++++++CLAIN+++++++++>');
+        console.log(this.quote);
+
+        await this.receiptService.updateQuote(this.quote);
+
+        this.generateDocuments();
     }
 
     handleCancel(): void {
@@ -86,7 +117,8 @@ export class ReceiptsComponent implements OnInit {
             paymentMethod: ['', Validators.required],
             tpinNumber: ['4324324324324324', Validators.required],
             address: ['', Validators.required],
-            // sumInWords: ['', Validators.required],
+            receiptType: ['', Validators.required],
+            sumInWords: [''],
             dateReceived: [''],
             todayDate: [this.today],
             remarks: ['', Validators.required],
@@ -97,11 +129,13 @@ export class ReceiptsComponent implements OnInit {
         this.receiptService.getQuotes().subscribe((quotes) => {
             this.unreceiptedList = _.filter(
                 quotes,
-                (x) => x.status === 'Approved'
+                (x) =>
+                    x.status === 'Approved' && x.receiptStatus === 'Unreceipted'
             );
             this.receiptsCount = _.filter(
                 quotes,
-                (x) => x.status === 'Approved'
+                (x) =>
+                    x.status === 'Approved' && x.receiptStatus === 'Unreceipted'
             ).length;
             console.log('======= Unreceipt List =======');
             console.log(this.unreceiptedList);
@@ -114,5 +148,33 @@ export class ReceiptsComponent implements OnInit {
         });
     }
 
-    onSubmit() {}
+    generateDocuments(): void {
+        const receipt: IReceiptDTO = {
+            recieptNumber: this.receiptForm.controls.recieptNumber.value,
+            tPin: this.receiptForm.controls.tpinNumber.value,
+            recievedFrom: this.receiptForm.controls.recievedFrom.value,
+            onBehalfOf: this.clientName,
+            address: this.receiptForm.controls.address.value,
+            sumInWords: this.receiptForm.controls.recieptNumber.value,
+            dateRecieved: this.receiptForm.controls.dateReceived.value,
+            agentID: '',
+            paymentMethod: this.receiptForm.controls.paymentMethod.value,
+            paymentRef: '',
+            policyNumber: this.quoteNumber,
+            remarks: '',
+            todayDate: this.receiptForm.controls.todayDate.value,
+            time: '',
+            accountNumber: '',
+            sumInDigits: this.receiptForm.controls.sumInDigits.value,
+            capturedBy: this.user,
+        };
+
+        const receipt$ = this.receiptService.generateReceipt(receipt);
+
+        combineLatest([receipt$]).subscribe(([receipt]) => {
+            this.receiptURl = receipt.Location;
+        });
+
+        this.isReceiptApproved = true;
+    }
 }
