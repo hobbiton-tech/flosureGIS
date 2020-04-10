@@ -77,7 +77,7 @@ export class QuoteDetailsComponent implements OnInit {
     // loads added to loading
     loads: LoadModel[] = [];
 
-    //loading feedback
+    // loading feedback
     computeBasicPremiumIsLoading = false;
     computeIncreasedThirdPartyLimitIsLoading = false;
     computeRiotAndStrikeIsLoading = false;
@@ -87,6 +87,8 @@ export class QuoteDetailsComponent implements OnInit {
     computeDiscountIsLoading = false;
 
     addLoadIsLoading = false;
+
+    status = 'Unreceipted';
 
     loadingOptions = [
         {
@@ -335,10 +337,11 @@ export class QuoteDetailsComponent implements OnInit {
                 // convert to policy
                 const policy: Policy = {
                     ...this.quoteDetailsForm.value,
+                    receiptStatus: this.status,
                     risks: this.quoteData.risks,
                     sumInsured: this.quoteData.sumInsured,
                     netPremium: this.quoteData.netPremium,
-                    user: this.quoteData.user
+                    user: this.quoteData.user,
                 };
 
                 // const policy = this.quoteDetailsForm.value as Policy;
@@ -383,33 +386,34 @@ export class QuoteDetailsComponent implements OnInit {
     computeBasicPremium() {
         this.computeBasicPremiumIsLoading = true;
         setTimeout(() => {
-        
             if (this.premiumRateType === 'percentage') {
                 this.basicPremium = this.sumInsured * (this.premiumRate / 100);
             } else {
                 this.basicPremium = +this.sumInsured + +this.premiumRate;
             }
-                this.basicPremiumSubTotal = this.basicPremium;
-                this.totalPremium = this.basicPremiumSubTotal + this.premiumLoadingsubTotal - this.premiumDiscountSubtotal;
-                this.basicPremiumLevy = this.totalPremium * 0.03;
-                this.netPremium = this.totalPremium + this.basicPremiumLevy;
-        
-        this.computeBasicPremiumIsLoading = false;
-        }, 2000);   
-}
+            this.basicPremiumSubTotal = this.basicPremium;
+            this.totalPremium =
+                this.basicPremiumSubTotal +
+                this.premiumLoadingsubTotal -
+                this.premiumDiscountSubtotal;
+            this.basicPremiumLevy = this.totalPremium * 0.03;
+            this.netPremium = this.totalPremium + this.basicPremiumLevy;
 
-// Loading computation
-computeRiotAndStrike() {
-    this.computeRiotAndStrikeIsLoading = true;
+            this.computeBasicPremiumIsLoading = false;
+        }, 2000);
+    }
+
+    // Loading computation
+    computeRiotAndStrike() {
+        this.computeRiotAndStrikeIsLoading = true;
         setTimeout(() => {
-        
             if (this.riotAndStrikeRateType === 'percentage') {
                 this.riotAndStrikeAmount =
                     this.basicPremium * (this.riotAndStrikeRate / 100);
             } else {
                 this.riotAndStrikeAmount = +this.riotAndStrikeRate;
             }
-    
+
             this.loads.push({
                 loadType: 'Riot And Strike',
                 amount: this.riotAndStrikeAmount,
@@ -421,19 +425,18 @@ computeRiotAndStrike() {
                 this.premiumLoadingsubTotal -
                 this.premiumDiscountSubtotal;
 
-                this.basicPremiumLevy = this.totalPremium * 0.03;
-                this.netPremium = this.totalPremium + this.basicPremiumLevy;
-    
-            this.addingLoad = false;
-        
-        this.computeRiotAndStrikeIsLoading = false;
-        }, 2000);
-}
+            this.basicPremiumLevy = this.totalPremium * 0.03;
+            this.netPremium = this.totalPremium + this.basicPremiumLevy;
 
-computeIncreasedThirdPartyLimit() {
-    this.computeIncreasedThirdPartyLimitIsLoading = true;
+            this.addingLoad = false;
+
+            this.computeRiotAndStrikeIsLoading = false;
+        }, 2000);
+    }
+
+    computeIncreasedThirdPartyLimit() {
+        this.computeIncreasedThirdPartyLimitIsLoading = true;
         setTimeout(() => {
-        
             if (this.increasedThirdPartyLimitsRateType === 'percentage') {
                 this.increasedThirdPartyLimitsAmount =
                     (+this.increasedThirdPartyLimitValue - 100200) *
@@ -445,36 +448,34 @@ computeIncreasedThirdPartyLimit() {
                 loadType: 'Increased Third Party Limit',
                 amount: this.increasedThirdPartyLimitsAmount,
             });
-    
+
             this.premiumLoadingsubTotal =
-                this.premiumLoadingsubTotal + this.increasedThirdPartyLimitsAmount;
+                this.premiumLoadingsubTotal +
+                this.increasedThirdPartyLimitsAmount;
             this.totalPremium =
                 this.basicPremiumSubTotal +
                 this.premiumLoadingsubTotal -
                 this.premiumDiscountSubtotal;
 
-                this.basicPremiumLevy = this.totalPremium * 0.03;
-                this.netPremium = this.totalPremium + this.basicPremiumLevy;
-    
-                this.addingLoad = false;
-        
-        this.computeIncreasedThirdPartyLimitIsLoading = false;
+            this.basicPremiumLevy = this.totalPremium * 0.03;
+            this.netPremium = this.totalPremium + this.basicPremiumLevy;
+
+            this.addingLoad = false;
+
+            this.computeIncreasedThirdPartyLimitIsLoading = false;
         }, 2000);
+    }
 
-    
-}
-
-computeCarStereo() {
-    this.computeCarStereoIsLoading = true;
+    computeCarStereo() {
+        this.computeCarStereoIsLoading = true;
         setTimeout(() => {
-        
             if (this.carStereoRateType === 'percentage') {
                 this.carStereoAmount =
                     this.carStereoValue * (this.carStereoRate / 100);
             } else {
                 this.carStereoAmount = +this.carStereoRate;
             }
-    
+
             this.loads.push({
                 loadType: 'Car Stereo',
                 amount: this.carStereoAmount,
@@ -486,51 +487,49 @@ computeCarStereo() {
                 this.premiumLoadingsubTotal -
                 this.premiumDiscountSubtotal;
 
-                this.basicPremiumLevy = this.totalPremium * 0.03;
-                this.netPremium = this.totalPremium + this.basicPremiumLevy;
-    
-                this.addingLoad = false;
-        
-        this.computeCarStereoIsLoading = false;
+            this.basicPremiumLevy = this.totalPremium * 0.03;
+            this.netPremium = this.totalPremium + this.basicPremiumLevy;
+
+            this.addingLoad = false;
+
+            this.computeCarStereoIsLoading = false;
         }, 2000);
+    }
 
-    
-}
-
-computeTerritorialExtension() {
-    this.computeTerritorialExtensionIsLoading = true;
+    computeTerritorialExtension() {
+        this.computeTerritorialExtensionIsLoading = true;
         setTimeout(() => {
-        
-            this.loads.push({ loadType: 'Territorial Extension', amount: 1750 });
+            this.loads.push({
+                loadType: 'Territorial Extension',
+                amount: 1750,
+            });
             this.premiumLoadingsubTotal = this.premiumLoadingsubTotal + 1750;
             this.totalPremium =
                 this.basicPremiumSubTotal +
                 this.premiumLoadingsubTotal -
                 this.premiumDiscountSubtotal;
 
-                this.basicPremiumLevy = this.totalPremium * 0.03;
-                this.netPremium = this.totalPremium + this.basicPremiumLevy;
-    
-                this.addingLoad = false;
-        
-        this.computeTerritorialExtensionIsLoading = false;
+            this.basicPremiumLevy = this.totalPremium * 0.03;
+            this.netPremium = this.totalPremium + this.basicPremiumLevy;
+
+            this.addingLoad = false;
+
+            this.computeTerritorialExtensionIsLoading = false;
         }, 2000);
+    }
 
-    
-}
-
-computeLossOfUse() {
-    this.computeLossOfUseIsLoading = true;
+    computeLossOfUse() {
+        this.computeLossOfUseIsLoading = true;
         setTimeout(() => {
-        
             if (this.lossOfUseDailyRateType === 'percentage') {
                 this.lossOfUseAmount =
                     this.lossOfUseDays *
                     (this.basicPremium * (this.lossOfUseDailyRate / 100));
             } else {
-                this.lossOfUseAmount = this.lossOfUseDays * this.lossOfUseDailyRate;
+                this.lossOfUseAmount =
+                    this.lossOfUseDays * this.lossOfUseDailyRate;
             }
-    
+
             this.loads.push({
                 loadType: 'Loss Of Use',
                 amount: this.lossOfUseAmount,
@@ -542,34 +541,37 @@ computeLossOfUse() {
                 this.premiumLoadingsubTotal -
                 this.premiumDiscountSubtotal;
 
-                this.basicPremiumLevy = this.totalPremium * 0.03;
-                this.netPremium = this.totalPremium + this.basicPremiumLevy;
-    
-                this.addingLoad = false;
-        
-        this.computeLossOfUseIsLoading = false;
+            this.basicPremiumLevy = this.totalPremium * 0.03;
+            this.netPremium = this.totalPremium + this.basicPremiumLevy;
+
+            this.addingLoad = false;
+
+            this.computeLossOfUseIsLoading = false;
         }, 2000);
+    }
 
-    
-}
-
-// Discount Computation
-computeDiscount() {
-    this.computeDiscountIsLoading = true;
+    // Discount Computation
+    computeDiscount() {
+        this.computeDiscountIsLoading = true;
         setTimeout(() => {
-            if (this.premiumDiscountRateType == 'percentage') {this.premiumDiscount = (this.basicPremiumSubTotal + this.premiumLoadingsubTotal) * (this.premiumDiscountRate / 100);}
-            else {this.premiumDiscount = this.premiumDiscountRate;}
-        
-            
+            if (this.premiumDiscountRateType == 'percentage') {
+                this.premiumDiscount =
+                    (this.basicPremiumSubTotal + this.premiumLoadingsubTotal) *
+                    (this.premiumDiscountRate / 100);
+            } else {
+                this.premiumDiscount = this.premiumDiscountRate;
+            }
+
             this.premiumDiscountSubtotal = this.premiumDiscount;
-            this.totalPremium = this.basicPremiumSubTotal + this.premiumLoadingsubTotal - this.premiumDiscountSubtotal;
+            this.totalPremium =
+                this.basicPremiumSubTotal +
+                this.premiumLoadingsubTotal -
+                this.premiumDiscountSubtotal;
 
             this.basicPremiumLevy = this.totalPremium * 0.03;
-                this.netPremium = this.totalPremium + this.basicPremiumLevy;
-        
-            this.computeDiscountIsLoading = false;
-            }, 2000);
+            this.netPremium = this.totalPremium + this.basicPremiumLevy;
 
-    
-}
+            this.computeDiscountIsLoading = false;
+        }, 2000);
+    }
 }

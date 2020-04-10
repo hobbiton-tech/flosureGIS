@@ -23,6 +23,10 @@ const routes: Routes = [
         path: 'payments',
         component: PaymentsComponent,
     },
+    {
+        path: 'view-receipt/:id',
+        component: ViewReceiptsComponent,
+    },
 ];
 
 @NgModule({
@@ -38,7 +42,7 @@ const routes: Routes = [
         RouterModule.forChild(routes),
         PdfViewerModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
     ],
     providers: [AccountService],
 })
