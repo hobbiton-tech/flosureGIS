@@ -9,6 +9,7 @@ import { AccountService } from './services/account.service';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { ReceiptsComponent } from './components/receipts/receipts.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PaymentPlanComponent } from './components/payment-plan/payment-plan.component';
 
 const routes: Routes = [
     {
@@ -24,6 +25,10 @@ const routes: Routes = [
         component: PaymentsComponent,
     },
     {
+        path: 'payment-plan',
+        component: PaymentPlanComponent,
+    },
+    {
         path: 'view-receipt/:id',
         component: ViewReceiptsComponent,
     },
@@ -35,6 +40,7 @@ const routes: Routes = [
         ViewReceiptsComponent,
         PaymentsComponent,
         ReceiptsComponent,
+        PaymentPlanComponent,
     ],
     imports: [
         CommonModule,
