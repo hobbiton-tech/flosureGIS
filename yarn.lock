@@ -7437,6 +7437,11 @@ ng2-pdf-viewer@^6.1.2:
     pdfjs-dist "^2.2.228"
     tslib "^1.10.0"
 
+ngx-printer@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/ngx-printer/-/ngx-printer-0.5.0.tgz#c0fe095d20ddca82250379c35ae93cad159f102d"
+  integrity sha512-b6QDNtTG68HYorBBZVc88/+tpZTflazGKpQ2Vlfzlku1LDJiYYP56z8MaT42lPrSJifkP0j05ISGLu32Qm7tFg==
+
 nice-try@^1.0.4:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"

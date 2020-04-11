@@ -4,6 +4,9 @@ import { Policy } from 'src/app/underwriting/models/policy.model';
 import { IReceiptModel } from '../models/receipts.model';
 import { IReceiptDTO } from 'src/app/quotes/models/receipt.dto';
 import { ActivatedRoute } from '@angular/router';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
+import { NgxPrinterService } from 'ngx-printer/public_api';
 
 @Component({
     selector: 'app-view-receipts',
@@ -21,6 +24,9 @@ export class ViewReceiptsComponent implements OnInit {
     receiptURl: string;
     _id: string;
     loadingReceipt = false;
+    key: string;
+    printSrc: SafeUrl;
+
     constructor(
         private receiptService: AccountService,
         private route: ActivatedRoute
@@ -73,6 +79,7 @@ export class ViewReceiptsComponent implements OnInit {
 
             this.receiptService.generateReceipt(receipt).subscribe((data) => {
                 this.receiptURl = data.Location;
+                this.key = data.Key;
                 console.log('++++++++RECEIPT DATA++++++++');
                 console.log(data);
             });
@@ -81,5 +88,37 @@ export class ViewReceiptsComponent implements OnInit {
         });
         // console.log(this.isReceiptApproved);
     }
-    // printPage() {}
+
+    download() {
+        console.log('...........PDF URL..............');
+
+        console.log(this.receiptURl);
+
+        this.receiptService.getPDF(this.receiptURl).subscribe((x) => {
+            const newBlob = new Blob([x], { type: 'application/pdf' });
+            if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                window.navigator.msSaveOrOpenBlob(newBlob);
+                return;
+            }
+            const data = window.URL.createObjectURL(newBlob);
+
+            const link = document.createElement('a');
+            link.href = data;
+            link.download = this.key;
+            link.dispatchEvent(
+                new MouseEvent('click', {
+                    bubbles: true,
+                    cancelable: true,
+                    view: window,
+                })
+            );
+
+            setTimeout(function () {
+                window.URL.revokeObjectURL(data);
+                link.remove();
+            }, 100);
+        });
+    }
+
+    print() {}
 }
