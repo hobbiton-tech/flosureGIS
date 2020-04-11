@@ -20,6 +20,8 @@ import { Policy } from 'src/app/underwriting/models/policy.model';
 })
 export class ReceiptsComponent implements OnInit {
     receiptForm: FormGroup;
+    cancelForm: FormGroup;
+    reinstateForm: FormGroup;
     submitted = false;
     receiptsCount = 0;
     unreceiptedList: Policy[];
@@ -31,6 +33,7 @@ export class ReceiptsComponent implements OnInit {
     clientName = '';
     policy: Policy = new Policy();
     cancelReceipt: IReceiptModel = new IReceiptModel();
+    reinstateReceipt: IReceiptModel = new IReceiptModel();
     size = 'large';
 
     recStatus = 'Receipted';
@@ -43,6 +46,8 @@ export class ReceiptsComponent implements OnInit {
     cancelReceiptList = [];
 
     isVisible = false;
+    isCancelVisible = false;
+    isReinstateVisible = false;
     isOkLoading = false;
     policyNumber = '';
     user = '';
@@ -79,7 +84,6 @@ export class ReceiptsComponent implements OnInit {
         private receiptService: AccountService,
         private formBuilder: FormBuilder,
         private message: NzMessageService,
-        private http: HttpClient,
         private router: Router
     ) {
         this.receiptForm = this.formBuilder.group({
@@ -94,6 +98,13 @@ export class ReceiptsComponent implements OnInit {
             dateReceived: [''],
             todayDate: [this.today],
             remarks: [''],
+        });
+
+        this.cancelForm = this.formBuilder.group({
+            remarks: ['', Validators.required],
+        });
+        this.reinstateForm = this.formBuilder.group({
+            remarks: ['', Validators.required],
         });
     }
 
@@ -190,13 +201,40 @@ export class ReceiptsComponent implements OnInit {
     handleCancel(): void {
         this.isVisible = false;
     }
-
-    async onCancel(receipt: IReceiptModel) {
+    showCancelModal(receipt: IReceiptModel) {
+        this.isCancelVisible = true;
         this.cancelReceipt = receipt;
+    }
+
+    cancelCancellation() {
+        this.isCancelVisible = false;
+    }
+
+    async onCancel() {
         this.cancelReceipt.receiptStatus = 'Cancelled';
+        this.cancelReceipt.remarks = this.cancelForm.controls.remarks.value;
         console.log('<++++++++++++++++++CLAIN+++++++++>');
         console.log(this.cancelReceipt);
         await this.receiptService.updateReceipt(this.cancelReceipt);
+        this.isCancelVisible = false;
+    }
+
+    showReinstateModal(receipt: IReceiptModel) {
+        this.isReinstateVisible = true;
+        this.reinstateReceipt = receipt;
+    }
+
+    cancelReinstate() {
+        this.isReinstateVisible = false;
+    }
+
+    async onReinstate() {
+        this.reinstateReceipt.receiptStatus = 'Receipted';
+        this.reinstateReceipt.remarks = this.cancelForm.controls.remarks.value;
+        console.log('<++++++++++++++++++CLAIN+++++++++>');
+        console.log(this.reinstateReceipt);
+        await this.receiptService.updateReceipt(this.reinstateReceipt);
+        this.isReinstateVisible = false;
     }
 
     // pop Confirm

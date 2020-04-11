@@ -29,6 +29,7 @@ export class AccountService {
     receipts: Observable<IReceiptModel[]>;
     receipt: Observable<IReceiptModel>;
     receipted: IReceiptModel;
+    url: string;
 
     constructor(
         private firebase: AngularFirestore,
@@ -83,17 +84,11 @@ export class AccountService {
     }
 
     async updateReceipt(receipt: IReceiptModel): Promise<void> {
-        console.log('==============Cancel Receipt Data=============');
-
-        console.log(receipt);
-
         return this.receiptCollection
             .doc(`${receipt.id}`)
             .update(receipt)
             .then((res) => {
-                this.message.warning('Receipt Cancelled');
-                console.log('==========MESSAGE==========');
-                console.log(res);
+                this.message.warning('Receipt Status Updateted');
             })
             .catch((err) => {
                 console.log(err);
@@ -132,5 +127,24 @@ export class AccountService {
             'https://flosure-pdf-service.herokuapp.com/reciept',
             dto
         );
+    }
+
+    getPDF(uri: string): Observable<Blob> {
+        return this.http.get(uri, { responseType: 'blob' });
+    }
+
+    printPDF(uri: string) {
+        this.http
+            .get(uri, { responseType: 'blob' as 'json' })
+            .subscribe((res) => {
+                const myBlobPart: BlobPart = res as BlobPart;
+                const file = new Blob([myBlobPart], {
+                    type: 'your media type',
+                });
+                const fileURL = URL.createObjectURL(file);
+                console.log(fileURL);
+                window.open(fileURL);
+                this.url = fileURL;
+            });
     }
 }

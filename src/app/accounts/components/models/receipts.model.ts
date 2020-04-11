@@ -15,6 +15,7 @@ export class IReceiptModel {
     narration: string;
     receiptType: string;
     receiptStatus: ReceiptStatus;
+    remarks: string;
 }
 
 export type ReceiptStatus = 'Receipted' | 'Cancelled';
