@@ -11,13 +11,17 @@ import { PoliciesService } from '../../services/policies.service';
     styleUrls: ['./policy-details.component.scss'],
 })
 export class PolicyDetailsComponent implements OnInit {
+    isVisible = false;
     policyDetailsForm: FormGroup;
+    paymentPlanForm: FormGroup;
 
     policiesList: Policy[];
     policyNumber: string;
     policyData: Policy = new Policy();
     policy: Policy;
     displayPolicy: Policy;
+
+    paymentPlan = 'NotCreated';
 
     // risks
     risks: RiskModel[];
@@ -30,12 +34,24 @@ export class PolicyDetailsComponent implements OnInit {
     showDebitModal = false;
     showReceiptModal = false;
 
+    optionList = [
+        { label: 'Full Payment', value: 'fully' },
+        { label: 'Payment Plan', value: 'plan' },
+    ];
+    selectedValue = 'fully';
+
     constructor(
         private readonly router: Router,
         private route: ActivatedRoute,
         private formBuilder: FormBuilder,
         private policiesService: PoliciesService
-    ) {}
+    ) {
+        this.paymentPlanForm = this.formBuilder.group({
+            numberOfInstallments: ['', Validators.required],
+            initialInstallmentDate: ['', Validators.required],
+            initialInstallmentAmount: ['', Validators.required],
+        });
+    }
 
     ngOnInit(): void {
         // this.policiesService.getPolicies().subscribe(policies => {
@@ -133,5 +149,19 @@ export class PolicyDetailsComponent implements OnInit {
 
     goToClientsList(): void {
         this.router.navigateByUrl('/flosure/clients/clients-list');
+    }
+
+    showModal(policy: Policy): void {
+        this.isVisible = true;
+    }
+
+    handleOk(): void {
+        console.log('Button ok clicked!');
+        this.isVisible = false;
+    }
+
+    handleCancel(): void {
+        console.log('Button cancel clicked!');
+        this.isVisible = false;
     }
 }

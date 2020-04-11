@@ -12,5 +12,9 @@ export class IReceiptModel {
     sumInDigits: number;
     capturedBy: string;
     receivedFrom: string;
+    narration: string;
     receiptType: string;
+    receiptStatus: ReceiptStatus;
 }
+
+export type ReceiptStatus = 'Receipted' | 'Cancelled';
