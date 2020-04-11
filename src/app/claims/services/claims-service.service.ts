@@ -20,7 +20,6 @@ import { v4 } from 'uuid';
     providedIn: 'root',
 })
 export class ClaimsService {
-    // <<<<<<< HEAD
     private claimsCollection: AngularFirestoreCollection<Claim>;
     claims: Observable<Claim[]>;
     claim: Observable<Claim>;

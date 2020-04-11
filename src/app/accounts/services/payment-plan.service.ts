@@ -1,9 +1,34 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import {AngularFirestore,AngularFirestoreCollection,AngularFirestoreDocument,} from '@angular/fire/firestore';
+
+import * as _ from 'lodash';
+import { v4 } from 'uuid';
+import { PaymentPlan } from 'src/app/underwriting/models/policy.model';
+import { first } from 'rxjs/operators';
+import { IPaymentModel } from '../components/models/payment-plans.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PaymentPlanService {
+  private paymentPlansCollection: AngularFirestoreCollection<IPaymentModel>;
+  paymentPlans: Observable<IPaymentModel[]>;
+  paymentPlan: Observable<IPaymentModel>;
 
-  constructor() { }
+  constructor(private firebase: AngularFirestore) {
+    this.paymentPlansCollection = firebase.collection<IPaymentModel>('payments_plans');
+    this.paymentPlans = this.paymentPlansCollection.valueChanges();
+   }
+
+   async addPaymentPlan(paymentPlan: IPaymentModel) {
+     this.paymentPlans.pipe(first()).subscribe(async (paymentPlans) => {
+       paymentPlan.id = v4();
+       await this.paymentPlansCollection.doc(paymentPlan.id).set(paymentPlan);
+     })
+   }
+
+   getPaymentPlans(): Observable<IPaymentModel[]> {
+     return this.paymentPlans;
+   }
 }

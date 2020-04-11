@@ -736,8 +736,8 @@ export class QuoteDetailsComponent implements OnInit {
                     ...this.quoteDetailsForm.value,
                     receiptStatus: this.status,
                     risks: this.quoteData.risks,
-                    sumInsured: this.quoteData.sumInsured,
-                    netPremium: this.quoteData.netPremium,
+                    // sumInsured: this.quoteData.sumInsured,
+                    // netPremium: this.quoteData.netPremium,
                     paymentPlan: this.paymentPlan,
                     user: this.quoteData.user,
 
@@ -911,9 +911,6 @@ export class QuoteDetailsComponent implements OnInit {
             }) 
     }
 
-            this.computeBasicPremiumIsLoading = false;
-        }, 2000);
-    }
 
     // Loading computation
     computeRiotAndStrike() {
@@ -950,10 +947,6 @@ export class QuoteDetailsComponent implements OnInit {
         }, 2000);  
 }
 
-            this.computeIncreasedThirdPartyLimitIsLoading = false;
-        }, 2000);
-    }
-
     computeCarStereo() {
         this.computeCarStereoIsLoading = true;
         setTimeout(() => {
@@ -980,12 +973,7 @@ export class QuoteDetailsComponent implements OnInit {
         
         this.computeTerritorialExtensionIsLoading = false;
         this.selectedLoadingValue.value = '';
-        }, 2000);
-
-            this.addingLoad = false;
-
-            this.computeTerritorialExtensionIsLoading = false;
-        }, 2000);
+        }, 2000);    
     }
 
     computeLossOfUse() {

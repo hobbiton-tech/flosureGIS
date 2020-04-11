@@ -813,17 +813,13 @@ export class CreateQuoteComponent implements OnInit {
 
     computeIncreasedThirdPartyLimit() {
         this.computeIncreasedThirdPartyLimitIsLoading = true;
-
             setTimeout(() => {
-
                 this.loads.push({
                     loadType: 'Increased Third Party Limit',
                     amount: this.increasedThirdPartyLimitsAmount,
                 });
-        
                     this.addingLoad = false;
-                    
-            
+                      
             this.computeIncreasedThirdPartyLimitIsLoading = false;
             this.selectedLoadingValue.value = '';
             }, 2000);  
@@ -836,8 +832,6 @@ export class CreateQuoteComponent implements OnInit {
                     loadType: 'Car Stereo',
                     amount: this.carStereoAmount,
                 });
-               
-        
                     this.addingLoad = false;
                     
             
@@ -857,14 +851,6 @@ export class CreateQuoteComponent implements OnInit {
             this.computeTerritorialExtensionIsLoading = false;
             this.selectedLoadingValue.value = '';
             }, 2000);
-
-            this.basicPremiumLevy = this.totalPremium * 0.03;
-            this.netPremium = this.totalPremium + this.basicPremiumLevy;
-
-            this.addingLoad = false;
-
-            this.computeTerritorialExtensionIsLoading = false;
-        }, 2000);
     }
 
     computeLossOfUse() {

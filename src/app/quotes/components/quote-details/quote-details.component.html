@@ -156,7 +156,7 @@
                                 </div>
                                 <div nz-col nzSpan="12">
                                     <nz-form-item>
-                                        <button nz-button nzType="primary" (click)="showModal()" style="float: right;">Import</button>
+                                        <button nz-button nzType="primary" (click)="showModal()" style="float: right;">Import Fleet</button>
                                     </nz-form-item>
                                 </div>
                             </div>
@@ -590,27 +590,29 @@
                                             </div>
     
                                             <div nz-col nzSpan="8">
-                                                <div nz-col nzSpan="20" style="float: right;"
-                                                    *ngIf="!(loads === undefined || loads.length == 0)">
-                                                    <nz-card>
-                                                        <nz-divider nzText="Loads" nzOrientation="left"></nz-divider>
-                                                        <div *ngFor="let load of loads; let i = index;">
-                                                            <div>
-                                                                <div nz-row>
-                                                                    <div nz-col nzSpan="12">
-                                                                        <p>{{load.loadType}}</p>
-                                                                    </div>
-                                                                    <div nz-col nzSpan="12">
-                                                                        <a style="float: right;"
-                                                                            (click)="removeLoad(load, $event)">Remove
-                                                                            Load</a>
+                                                    <div nz-col nzSpan="20" style="float: right;">
+                                                        <nz-card>
+                                                            <nz-divider nzText="Loading" nzOrientation="left"></nz-divider>
+                                                            <div *ngIf="(loads === undefined || loads.length == 0)">
+                                                                <p>No Loading added</p>
+                                                            </div>
+                                                            <div *ngFor="let load of loads; let i = index;">
+                                                                <div>
+                                                                    <div nz-row>
+                                                                        <div nz-col nzSpan="12">
+                                                                            <p>{{load.loadType}}</p>
+                                                                        </div>
+                                                                        <div nz-col nzSpan="12">
+                                                                            <a style="float: right;"
+                                                                                (click)="removeLoad(load, $event)">Remove
+                                                                                Loading</a>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    </nz-card>
+                                                        </nz-card>
+                                                    </div>
                                                 </div>
-                                            </div>
     
     
                                             <div nz-col nzSpan="8">
@@ -1088,27 +1090,29 @@
                                             </div>
     
                                             <div nz-col nzSpan="8">
-                                                <div nz-col nzSpan="20" style="float: right;"
-                                                    *ngIf="!(loads === undefined || loads.length == 0)">
-                                                    <nz-card>
-                                                        <nz-divider nzText="Loads" nzOrientation="left"></nz-divider>
-                                                        <div *ngFor="let load of loads; let i = index;">
-                                                            <div>
-                                                                <div nz-row>
-                                                                    <div nz-col nzSpan="12">
-                                                                        <p>{{load.loadType}}</p>
-                                                                    </div>
-                                                                    <div nz-col nzSpan="12">
-                                                                        <a style="float: right;"
-                                                                            (click)="removeLoad(load, $event)">Remove
-                                                                            Load</a>
+                                                    <div nz-col nzSpan="20" style="float: right;">
+                                                        <nz-card>
+                                                            <nz-divider nzText="Loading" nzOrientation="left"></nz-divider>
+                                                            <div *ngIf="(loads === undefined || loads.length == 0)">
+                                                                <p>No Loading added</p>
+                                                            </div>
+                                                            <div *ngFor="let load of loads; let i = index;">
+                                                                <div>
+                                                                    <div nz-row>
+                                                                        <div nz-col nzSpan="12">
+                                                                            <p>{{load.loadType}}</p>
+                                                                        </div>
+                                                                        <div nz-col nzSpan="12">
+                                                                            <a style="float: right;"
+                                                                                (click)="removeLoad(load, $event)">Remove
+                                                                                Loading</a>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    </nz-card>
+                                                        </nz-card>
+                                                    </div>
                                                 </div>
-                                            </div>
     
     
                                             <div nz-col nzSpan="8">
@@ -1891,26 +1895,29 @@
                       </div>
 
                       <div nz-col nzSpan="8">
-                          <div nz-col nzSpan="20" style="float: right;"
-                              *ngIf="!(loads === undefined || loads.length == 0)">
-                              <nz-card>
-                                  <nz-divider nzText="Loads" nzOrientation="left"></nz-divider>
-                                  <div *ngFor="let load of loads; let i = index;">
-                                      <div>
-                                          <div nz-row>
-                                              <div nz-col nzSpan="12">
-                                                  <p>{{load.loadType}}</p>
-                                              </div>
-                                              <div nz-col nzSpan="12">
-                                                  <a style="float: right;"
-                                                      (click)="removeLoad(load, $event)">Remove Load</a>
-                                              </div>
-                                          </div>
-                                      </div>
-                                  </div>
-                              </nz-card>
-                          </div>
-                      </div>
+                            <div nz-col nzSpan="20" style="float: right;">
+                                <nz-card>
+                                    <nz-divider nzText="Loading" nzOrientation="left"></nz-divider>
+                                    <div *ngIf="(loads === undefined || loads.length == 0)">
+                                        <p>No Loading added</p>
+                                    </div>
+                                    <div *ngFor="let load of loads; let i = index;">
+                                        <div>
+                                            <div nz-row>
+                                                <div nz-col nzSpan="12">
+                                                    <p>{{load.loadType}}</p>
+                                                </div>
+                                                <div nz-col nzSpan="12">
+                                                    <a style="float: right;"
+                                                        (click)="removeLoad(load, $event)">Remove
+                                                        Loading</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </nz-card>
+                            </div>
+                        </div>
 
 
                       <div nz-col nzSpan="8">
@@ -2374,26 +2381,29 @@
                       </div>
 
                       <div nz-col nzSpan="8">
-                          <div nz-col nzSpan="20" style="float: right;"
-                              *ngIf="!(loads === undefined || loads.length == 0)">
-                              <nz-card>
-                                  <nz-divider nzText="Loads" nzOrientation="left"></nz-divider>
-                                  <div *ngFor="let load of loads; let i = index;">
-                                      <div>
-                                          <div nz-row>
-                                              <div nz-col nzSpan="12">
-                                                  <p>{{load.loadType}}</p>
-                                              </div>
-                                              <div nz-col nzSpan="12">
-                                                  <a style="float: right;"
-                                                      (click)="removeLoad(load, $event)">Remove Load</a>
-                                              </div>
-                                          </div>
-                                      </div>
-                                  </div>
-                              </nz-card>
-                          </div>
-                      </div>
+                            <div nz-col nzSpan="20" style="float: right;">
+                                <nz-card>
+                                    <nz-divider nzText="Loading" nzOrientation="left"></nz-divider>
+                                    <div *ngIf="(loads === undefined || loads.length == 0)">
+                                        <p>No Loading added</p>
+                                    </div>
+                                    <div *ngFor="let load of loads; let i = index;">
+                                        <div>
+                                            <div nz-row>
+                                                <div nz-col nzSpan="12">
+                                                    <p>{{load.loadType}}</p>
+                                                </div>
+                                                <div nz-col nzSpan="12">
+                                                    <a style="float: right;"
+                                                        (click)="removeLoad(load, $event)">Remove
+                                                        Loading</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </nz-card>
+                            </div>
+                        </div>
 
 
                       <div nz-col nzSpan="8">

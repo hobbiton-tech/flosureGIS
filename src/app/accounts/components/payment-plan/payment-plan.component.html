@@ -1,1 +1,66 @@
-<p>payment-plan works!</p>
+<div style="margin: 20px;">
+    <div style="margin-bottom: 20px; background: #fff;">
+        <nz-page-header>
+            <nz-page-header-title>Payment Plans</nz-page-header-title>
+            <nz-page-header-content>
+                <!-- <nz-descriptions [nzColumn]="3">
+                    <nz-descriptions-item nzTitle="Total Quotes" [nzSpan]="1">{{quotesCount}}</nz-descriptions-item>
+                </nz-descriptions> -->
+            </nz-page-header-content>
+        </nz-page-header>
+    </div>
+    <nz-card>
+        <div style="margin-bottom: 20px; width: 50%;">
+            <nz-input-group [nzSuffix]="suffixIconSearch">
+                <input
+                    type="text"
+                    nz-input
+                    placeholder="Search by client"
+                    [(ngModel)]="searchString"
+                    (ngModelChange)="search($event)"
+                />
+            </nz-input-group>
+            <ng-template #suffixIconSearch>
+                <i nz-icon nzType="search"></i>
+            </ng-template>
+        </div>
+        <nz-table
+            #quotesTable
+            [nzSize]="'small'"
+            [nzBordered]="true"
+        >
+            <thead>
+                <tr>
+                    <th>Client Name</th>
+                    <th>Amount Due</th>
+                    <th>Amount Paid</th>
+                    <th>No of Vehicles</th>
+                    <th>No of Installments</th>
+                    <th>No of Paid installments</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr
+                    *ngFor="let quote of quotesTable.data"
+                    (click)="viewPaymentPlanDetails()"
+                    style="cursor: pointer;"
+                >
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </nz-card>
+</div>
+

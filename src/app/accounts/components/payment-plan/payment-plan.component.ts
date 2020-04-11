@@ -7,9 +7,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PaymentPlanComponent implements OnInit {
 
+  //search value for filtering payment plan table
+  searchString: string;
+
   constructor() { }
 
   ngOnInit(): void {
   }
+
+  //view details of payment plan
+  viewPaymentPlanDetails() {}
+
+  //search payment plan table
+  search($event) {}
 
 }
