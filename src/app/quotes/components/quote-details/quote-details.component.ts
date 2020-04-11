@@ -136,6 +136,8 @@ export class QuoteDetailsComponent implements OnInit {
     quoteURL = '';
     showQuoteModal = false;
 
+    paymentPlan = 'NotCreated';
+
     constructor(
         private formBuilder: FormBuilder,
         private policiesService: PoliciesService,
@@ -341,6 +343,7 @@ export class QuoteDetailsComponent implements OnInit {
                     risks: this.quoteData.risks,
                     sumInsured: this.quoteData.sumInsured,
                     netPremium: this.quoteData.netPremium,
+                    paymentPlan: this.paymentPlan,
                     user: this.quoteData.user,
                 };
 

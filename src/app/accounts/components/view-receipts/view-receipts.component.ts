@@ -79,10 +79,7 @@ export class ViewReceiptsComponent implements OnInit {
 
             console.log(this.receipt);
         });
-
-        // this.isReceiptApproved = true;
-
-        // console.log('reerewrew');
         // console.log(this.isReceiptApproved);
     }
+    // printPage() {}
 }

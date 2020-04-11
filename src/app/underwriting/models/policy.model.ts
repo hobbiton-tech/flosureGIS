@@ -23,6 +23,7 @@ export class Policy {
     netPremium: number;
     underwritingYear: string;
     receiptStatus: ReceiptStatus;
+    paymentPlan: PaymentPlan;
 }
 
 export class RiskModel {
@@ -47,3 +48,4 @@ export type ProductType = 'Private' | 'Commercial' | 'Bus/Taxi';
 export type PolicyStatus = 'Lapsed' | 'Active' | 'Cancelled' | 'Expired';
 export type InsuranceType = 'ThirdParty' | 'Comprehensive';
 export type ReceiptStatus = 'Unreceipted' | 'Receipted';
+export type PaymentPlan = 'Created' | 'NotCreated';

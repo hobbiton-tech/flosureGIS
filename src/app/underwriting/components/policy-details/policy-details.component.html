@@ -23,7 +23,127 @@
             nzTitle="Policy Number: {{ policyData.policyNumber }}"
             [nzSubtitle]="policyData.client"
         >
-            <nz-page-header-extra> </nz-page-header-extra>
+            <nz-page-header-extra>
+                <button
+                    *ngIf="policyData.paymentPlan === 'NotCreated'"
+                    nz-button
+                    nzType="primary"
+                    (click)="showModal(policyData)"
+                >
+                    Create Payment Plan
+                </button>
+                <nz-modal
+                    [(nzVisible)]="isVisible"
+                    nzTitle="Payment Plan"
+                    (nzOnCancel)="handleCancel()"
+                    (nzOnOk)="handleOk()"
+                    [nzWidth]="800"
+                >
+                    <div nz-row nzGutter="0">
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label
+                                    [nzSpan]="9"
+                                    nzFor="paymentPlan"
+                                    nzRequired
+                                    >Payment Plan</nz-form-label
+                                >
+                                <nz-form-control nzSpan="15">
+                                    <nz-select
+                                        name="paymentPlan"
+                                        nzShowSearch
+                                        nzAllowClear
+                                        [(ngModel)]="selectedValue"
+                                        nzPlaceHolder="Choose Payment Plan"
+                                    >
+                                        <nz-option
+                                            *ngFor="let option of optionList"
+                                            [nzValue]="option.value"
+                                            [nzLabel]="option.label"
+                                        ></nz-option>
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                    <div *ngIf="selectedValue === 'fully'">
+                        <div nz-row nzGutter="0">
+                            <div
+                                nz-col
+                                [nzSpan]="12"
+                                style="margin-left: 20px;"
+                            >
+                                <p>Click Ok to Proceed To Receipt</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="selectedValue === 'plan'">
+                        <div nz-row nzGutter="0" style="margin-left: 20px;">
+                            <form
+                                nz-form
+                                [nzLayout]="'inline'"
+                                [formGroup]="paymentPlanForm"
+                            >
+                                <nz-form-item>
+                                    <nz-form-label
+                                        [nzSpan]="12"
+                                        nzRequired
+                                        nzFor="numberOfInstallments"
+                                        >Number Of Installments</nz-form-label
+                                    >
+                                    <nz-form-control
+                                        [nzSpan]="12"
+                                        nzErrorTip="Please input your username!"
+                                    >
+                                        <input
+                                            id="numberOfInstallments"
+                                            type="number"
+                                            nz-input
+                                            formControlName="numberOfInstallments"
+                                        />
+                                    </nz-form-control>
+                                </nz-form-item>
+
+                                <nz-form-item>
+                                    <nz-form-label
+                                        [nzSm]="12"
+                                        [nzXs]="24"
+                                        nzRequired
+                                        >Initial Installment Date</nz-form-label
+                                    >
+                                    <nz-form-control [nzSm]="12" [nzXs]="24">
+                                        <nz-date-picker
+                                            formControlName="initialInstallmentDate"
+                                        ></nz-date-picker>
+                                    </nz-form-control>
+                                </nz-form-item>
+
+                                <nz-form-item>
+                                    <nz-form-label
+                                        [nzSpan]="12"
+                                        nzRequired
+                                        nzFor="initialInstallmentAmount"
+                                        >Initial Installment
+                                        Amount</nz-form-label
+                                    >
+                                    <nz-form-control
+                                        [nzSpan]="12"
+                                        nzErrorTip="Please input your username!"
+                                    >
+                                        <input
+                                            id="initialInstallmentAmount"
+                                            type="number"
+                                            nz-input
+                                            formControlName="initialInstallmentAmount"
+                                        />
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </form>
+                        </div>
+                    </div>
+                </nz-modal>
+            </nz-page-header-extra>
         </nz-page-header>
     </div>
 
@@ -152,7 +272,7 @@
                             >Currency</nz-form-label
                         >
                         <nz-form-control nzSpan="17">
-                                <input
+                            <input
                                 nz-input
                                 [disabled]="!isEditmode"
                                 formControlName="currency"
@@ -172,7 +292,7 @@
                             />
                         </nz-form-control>
                     </nz-form-item>
-                    
+
                     <nz-form-item>
                         <nz-form-label nzSpan="7" nzRequired
                             >Premium</nz-form-label
@@ -186,17 +306,17 @@
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
-                            <nz-form-label nzSpan="7" nzRequired
-                                >Quarter</nz-form-label
-                            >
-                            <nz-form-control nzSpan="17">
-                                <input
-                                    nz-input
-                                    [disabled]="!isEditmode"
-                                    formControlName="quarter"
-                                />
-                            </nz-form-control>
-                        </nz-form-item>
+                        <nz-form-label nzSpan="7" nzRequired
+                            >Quarter</nz-form-label
+                        >
+                        <nz-form-control nzSpan="17">
+                            <input
+                                nz-input
+                                [disabled]="!isEditmode"
+                                formControlName="quarter"
+                            />
+                        </nz-form-control>
+                    </nz-form-item>
                 </div>
                 <div nz-col nzSpan="12">
                     <nz-form-item>
@@ -209,7 +329,6 @@
                                 nz-input
                                 [disabled]="!isEditmode"
                                 formControlName="startDate"
-                                
                             />
                         </nz-form-control>
                     </nz-form-item>
@@ -223,7 +342,6 @@
                                 nz-input
                                 [disabled]="!isEditmode"
                                 formControlName="endDate"
-                                
                             />
                         </nz-form-control>
                     </nz-form-item>
@@ -261,7 +379,6 @@
                                 nz-input
                                 [disabled]="!isEditmode"
                                 formControlName="expiryDate"
-                                
                             />
                         </nz-form-control>
                     </nz-form-item>

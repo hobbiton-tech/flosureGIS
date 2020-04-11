@@ -39,7 +39,11 @@
                 nzOrientation="left"
             ></nz-divider>
 
-            <pdf-viewer [src]="receiptURl" [original-size]="false"></pdf-viewer>
+            <pdf-viewer
+                #page
+                [src]="receiptURl"
+                [original-size]="false"
+            ></pdf-viewer>
         </nz-card>
     </div>
 </nz-spin>
