@@ -9,6 +9,7 @@ import { v4 } from 'uuid';
 import { IReceiptDTO } from 'src/app/quotes/models/receipt.dto';
 import { getTranslationDeclStmts } from '@angular/compiler/src/render3/view/template';
 import { combineLatest } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'app-receipts',
@@ -20,9 +21,14 @@ export class ReceiptsComponent implements OnInit {
     receiptsCount = 0;
     unreceiptedList: MotorQuotationModel[];
     receiptedList: IReceiptModel[];
+    receiptObj: IReceiptModel = new IReceiptModel();
+    receipt: IReceiptModel;
     today = new Date();
     clientName = '';
     quote: MotorQuotationModel = new MotorQuotationModel();
+    size = 'large';
+
+    receiptNum = '';
 
     receiptList = [];
 
@@ -30,6 +36,7 @@ export class ReceiptsComponent implements OnInit {
     isOkLoading = false;
     quoteNumber = '';
     user = '';
+    _id = '';
 
     // modal
     isReceiptVisible = false;
@@ -69,14 +76,17 @@ export class ReceiptsComponent implements OnInit {
 
     async handleOk() {
         this.isOkLoading = true;
+        this._id = v4();
         const receipt: IReceiptModel = {
-            id: v4(),
+            id: this._id,
             ...this.receiptForm.value,
             onBehalfOf: this.clientName,
             capturedBy: this.user,
             policyNumber: this.quoteNumber,
             todayDate: new Date(),
         };
+
+        this.receiptNum = this._id;
         await this.receiptService
             .addReceipt(receipt)
             .then((mess) => {
@@ -109,7 +119,8 @@ export class ReceiptsComponent implements OnInit {
     constructor(
         private receiptService: AccountService,
         private formBuilder: FormBuilder,
-        private message: NzMessageService
+        private message: NzMessageService,
+        private http: HttpClient
     ) {
         this.receiptForm = this.formBuilder.group({
             receivedFrom: ['', Validators.required],
@@ -148,33 +159,81 @@ export class ReceiptsComponent implements OnInit {
         });
     }
 
+    generateID(id) {
+        console.log('++++++++++++ID++++++++++++');
+        this._id = id;
+        console.log(this._id);
+        this.generateDocuments();
+    }
+
     generateDocuments(): void {
-        const receipt: IReceiptDTO = {
-            recieptNumber: this.receiptForm.controls.recieptNumber.value,
-            tPin: this.receiptForm.controls.tpinNumber.value,
-            recievedFrom: this.receiptForm.controls.recievedFrom.value,
-            onBehalfOf: this.clientName,
-            address: this.receiptForm.controls.address.value,
-            sumInWords: this.receiptForm.controls.recieptNumber.value,
-            dateRecieved: this.receiptForm.controls.dateReceived.value,
-            agentID: '',
-            paymentMethod: this.receiptForm.controls.paymentMethod.value,
-            paymentRef: '',
-            policyNumber: this.quoteNumber,
-            remarks: '',
-            todayDate: this.receiptForm.controls.todayDate.value,
-            time: '',
-            accountNumber: '',
-            sumInDigits: this.receiptForm.controls.sumInDigits.value,
-            capturedBy: this.user,
-        };
+        this.receiptService.getReciepts().subscribe((receipts) => {
+            this.receiptObj = receipts.filter((x) => x.id === this._id)[0];
+            this.receiptedList = receipts;
+            this.receipt = this.receiptedList.filter(
+                (x) => x.id === this._id
+            )[0];
 
-        const receipt$ = this.receiptService.generateReceipt(receipt);
+            const receipt: IReceiptDTO = {
+                recieptNumber: this.receipt.receiptNumber,
+                tPin: this.receipt.tpinNumber,
+                recievedFrom: this.receipt.receivedFrom,
+                onBehalfOf: this.receipt.onBehalfOf,
+                address: 'this.receipt.address',
+                sumInWords: 'sum in words',
+                agentID: this.receipt.capturedBy,
+                paymentMethod: this.receipt.paymentMethod,
+                paymentRef: this.receipt.receiptNumber,
+                policyNumber: this.receipt.policyNumber,
+                remarks: this.receipt.receiptType,
+                todayDate: this.receipt.todayDate,
+                time: this.receipt.receiptNumber,
+                accountNumber: 'this.receipt.address',
+                dateRecieved: this.receipt.todayDate,
+                sumInDigits: this.receipt.sumInDigits,
+                capturedBy: this.receipt.receiptNumber,
+            };
 
-        combineLatest([receipt$]).subscribe(([receipt]) => {
-            this.receiptURl = receipt.Location;
+            this.receiptService.generateReceipt(receipt).subscribe((data) => {
+                this.receiptURl = data.Location;
+            });
+
+            console.log(this.receipt);
         });
 
+        //   const receipt: IReceiptDTO = {
+        //       recieptNumber: this.receiptForm.controls.recieptNumber.value,
+        //       tPin: this.receiptForm.controls.tpinNumber.value,
+        //       recievedFrom: this.receiptForm.controls.recievedFrom.value,
+        //       onBehalfOf: this.clientName,
+        //       address: this.receiptForm.controls.address.value,
+        //       sumInWords: this.receiptForm.controls.recieptNumber.value,
+        //       dateRecieved: this.receiptForm.controls.dateReceived.value,
+        //       agentID: '',
+        //       paymentMethod: this.receiptForm.controls.paymentMethod.value,
+        //       paymentRef: '',
+        //       policyNumber: this.quoteNumber,
+        //       remarks: '',
+        //       todayDate: this.receiptForm.controls.todayDate.value,
+        //       time: '',
+        //       accountNumber: '',
+        //       sumInDigits: this.receiptForm.controls.sumInDigits.value,
+        //       capturedBy: this.user,
+        // };
+
+        // const receipt$ = this.receiptService.generateReceipt(receipt);
+
+        // combineLatest([receipt$]).subscribe(([receipt]) => {
+        //     this.receiptURl = receipt.Location;
+        // });
+
         this.isReceiptApproved = true;
+
+        console.log('reerewrew');
+        console.log(this.isReceiptApproved);
+
+        // this.http.get(
+        //     'https://flosurepdfs.s3.us-east-2.amazonaws.com/%27String%27-cd4f17da-423c-48a3-be90-79883ab6682c.pdf%22'
+        // );
     }
 }

@@ -9,7 +9,7 @@
             <nz-page-header-content>
                 <nz-descriptions [nzColumn]="3">
                     <nz-descriptions-item
-                        nzTitle="Total Receipts"
+                        nzTitle="Total Unreceipted Receipts"
                         [nzSpan]="1"
                         >{{ receiptsCount }}</nz-descriptions-item
                     >
@@ -276,7 +276,16 @@
                                         receipt.todayDate.seconds * 1000 | date
                                     }}
                                 </td>
-                                <td></td>
+                                <td>
+                                    <button
+                                        nz-button
+                                        nzType="default"
+                                        nzSize="small"
+                                        (click)="generateID(receipt.id)"
+                                    >
+                                        Print
+                                    </button>
+                                </td>
                             </tr>
                         </tbody>
                     </nz-table>
@@ -315,7 +324,14 @@
             >
                 View
             </button>
-            <button nz-button nzType="default" nzSize="small">Print</button>
+            <button
+                nz-button
+                nzType="default"
+                nzSize="small"
+                (click)="generateDocuments()"
+            >
+                Print
+            </button>
         </div>
     </ng-template>
 
@@ -325,12 +341,13 @@
         nzTitle="Receipt Receipt"
         (nzOnCancel)="showReceiptModal = false"
         (nzOnOk)="showReceiptModal = false"
+        nzWidth="1000"
     >
         <div style="margin: 20px;">
             <nz-card style="width: 100%;" nzTitle="Receipt" [nzExtra]="actions">
                 <pdf-viewer
                     [src]="receiptURl"
-                    [original-size]="false"
+                    [original-size]="true"
                 ></pdf-viewer>
             </nz-card>
             <ng-template #actions>

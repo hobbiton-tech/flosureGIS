@@ -1,7 +1,7 @@
 export class IReceiptModel {
     id: string;
     receiptNumber: string;
-    tpinNumber: string;
+    tpinNumber: number;
     onBehalfOf: string;
     address: string;
     sumInWords: string;
@@ -9,7 +9,7 @@ export class IReceiptModel {
     paymentMethod: string;
     policyNumber: string;
     todayDate: string;
-    sumInDigits: string;
+    sumInDigits: number;
     capturedBy: string;
     receivedFrom: string;
     receiptType: string;
