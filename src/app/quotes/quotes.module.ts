@@ -11,6 +11,7 @@ import { QuoteDetailsComponent } from './components/quote-details/quote-details.
 import 'firebase/firestore';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { HttpClientModule } from '@angular/common/http';
+import { RiskDetailsComponent } from './components/risk-details/risk-details.component';
 
 const routes: Routes = [
     {
@@ -32,6 +33,7 @@ const routes: Routes = [
         QuotesComponent,
         CreateQuoteComponent,
         QuoteDetailsComponent,
+        RiskDetailsComponent,
     ],
     imports: [
         CommonModule,
