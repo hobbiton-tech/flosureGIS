@@ -25,18 +25,7 @@ export class MotorQuotationModel {
     startDate: Date | ITimestamp;
     endDate: Date | ITimestamp;
     status: QuoteStatus;
-    sumInsured: number;
-    premiumRate: number;
-    basicPremium: number;
-    premiumLevy: number;
     basicPremiumSubTotal: number;
-    loads: LoadModel[];
-    loadingSubTotal: number;
-    discount: number;
-    discountRate: number;
-    discountSubTotal: number;
-    totalPremium: number;
-    netPremium: number;
     receiptStatus: ReceiptStatus;
     quarter: string;
 }
@@ -47,6 +36,9 @@ export class LoadModel {
 }
 
 export class RiskModel {
+    riskStartDate: Date | ITimestamp;
+    riskEndDate: Date | ITimestamp;
+    riskQuarter: number;
     regNumber: string;
     vehicleMake: string;
     vehicleModel: string;
@@ -56,6 +48,16 @@ export class RiskModel {
     estimatedValue?: number;
     productType: ProductType;
     insuranceType: InsuranceType;
+    sumInsured?: number;
+    premiumRate?: number;
+    basicPremium: number;
+    loads: LoadModel[];
+    loadingTotal: number;
+    discount: number;
+    discountSubTotal: number;
+    discountRate: number;
+    premiumLevy: number;
+    netPremium: number;
 }
 
 export class MessageModel {
