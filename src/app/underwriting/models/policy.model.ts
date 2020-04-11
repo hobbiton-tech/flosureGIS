@@ -1,4 +1,5 @@
 export class Policy {
+    id: string;
     policyNumber: string;
     product: string;
     startDate: Date | ITimestamp;
@@ -21,6 +22,8 @@ export class Policy {
     risks: RiskModel[];
     netPremium: number;
     underwritingYear: string;
+    receiptStatus: ReceiptStatus;
+    paymentPlan: PaymentPlan;
 }
 
 export class RiskModel {
@@ -44,3 +47,5 @@ export type Currency = 'ZMW' | 'Dollar';
 export type ProductType = 'Private' | 'Commercial' | 'Bus/Taxi';
 export type PolicyStatus = 'Lapsed' | 'Active' | 'Cancelled' | 'Expired';
 export type InsuranceType = 'ThirdParty' | 'Comprehensive';
+export type ReceiptStatus = 'Unreceipted' | 'Receipted';
+export type PaymentPlan = 'Created' | 'NotCreated';

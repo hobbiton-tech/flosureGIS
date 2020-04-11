@@ -13,6 +13,7 @@ export interface IReceiptDTO {
     remarks: string;
     todayDate: string;
     time: string;
+    narration: string;
     accountNumber: string;
     sumInDigits: number;
     capturedBy: string;

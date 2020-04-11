@@ -151,7 +151,7 @@ export class QuoteDetailsComponent implements OnInit {
     // loads added to loading
     loads: LoadModel[] = [];
 
-    //loading feedback
+    // loading feedback
     computeBasicPremiumIsLoading = false;
     computeIncreasedThirdPartyLimitIsLoading = false;
     computeRiotAndStrikeIsLoading = false;
@@ -162,6 +162,10 @@ export class QuoteDetailsComponent implements OnInit {
     computePremiumIsLoading = false;
 
     addLoadIsLoading = false;
+
+
+    status = 'Unreceipted';
+
 
     optionList = [
         { label: 'Motor Comprehensive', value: 'Comprehensive' },
@@ -221,6 +225,8 @@ export class QuoteDetailsComponent implements OnInit {
 
     quoteURL = '';
     showQuoteModal = false;
+
+    paymentPlan = 'NotCreated';
 
     constructor(
         private formBuilder: FormBuilder,
@@ -728,10 +734,13 @@ export class QuoteDetailsComponent implements OnInit {
                 // convert to policy
                 const policy: Policy = {
                     ...this.quoteDetailsForm.value,
+                    receiptStatus: this.status,
                     risks: this.quoteData.risks,
-                    // sumInsured: this.quoteData.sumInsured,
-                    // netPremium: this.quoteData.netPremium,
-                    user: this.quoteData.user
+                    sumInsured: this.quoteData.sumInsured,
+                    netPremium: this.quoteData.netPremium,
+                    paymentPlan: this.paymentPlan,
+                    user: this.quoteData.user,
+
                 };
 
                 // const policy = this.quoteDetailsForm.value as Policy;
@@ -855,6 +864,7 @@ export class QuoteDetailsComponent implements OnInit {
 
     // Premium computation methods
     // Basic Premum Computation
+
     computePremium() {
         this.computePremiumIsLoading = true;
         const request: IRateRequest = {
@@ -901,27 +911,32 @@ export class QuoteDetailsComponent implements OnInit {
             }) 
     }
 
-// Loading computation
-computeRiotAndStrike() {
-    this.computeRiotAndStrikeIsLoading = true;
+            this.computeBasicPremiumIsLoading = false;
+        }, 2000);
+    }
+
+    // Loading computation
+    computeRiotAndStrike() {
+        this.computeRiotAndStrikeIsLoading = true;
         setTimeout(() => {
+
             console.log(this.riotAndStrikeRate)
     
             this.loads.push({
                 loadType: 'Riot And Strike',
                 amount: this.riotAndStrikeAmount,
             });
+
             this.addingLoad = false;
         
         this.computeRiotAndStrikeIsLoading = false;
         this.selectedLoadingValue.value = '';
         }, 2000);
-}
+    }
 
-computeIncreasedThirdPartyLimit() {
-    this.computeIncreasedThirdPartyLimitIsLoading = true;
+    computeIncreasedThirdPartyLimit() {
+        this.computeIncreasedThirdPartyLimitIsLoading = true;
         setTimeout(() => {
-
             this.loads.push({
                 loadType: 'Increased Third Party Limit',
                 amount: this.increasedThirdPartyLimitsAmount,
@@ -935,8 +950,12 @@ computeIncreasedThirdPartyLimit() {
         }, 2000);  
 }
 
-computeCarStereo() {
-    this.computeCarStereoIsLoading = true;
+            this.computeIncreasedThirdPartyLimitIsLoading = false;
+        }, 2000);
+    }
+
+    computeCarStereo() {
+        this.computeCarStereoIsLoading = true;
         setTimeout(() => {
             this.loads.push({
                 loadType: 'Car Stereo',
@@ -952,8 +971,8 @@ computeCarStereo() {
         }, 2000);
 }
 
-computeTerritorialExtension() {
-    this.computeTerritorialExtensionIsLoading = true;
+    computeTerritorialExtension() {
+        this.computeTerritorialExtensionIsLoading = true;
         setTimeout(() => {
             this.loads.push({ loadType: 'Territorial Extension', amount: 1750 });
     
@@ -963,17 +982,21 @@ computeTerritorialExtension() {
         this.selectedLoadingValue.value = '';
         }, 2000);
 
-    
-}
+            this.addingLoad = false;
 
-computeLossOfUse() {
-    this.computeLossOfUseIsLoading = true;
+            this.computeTerritorialExtensionIsLoading = false;
+        }, 2000);
+    }
+
+    computeLossOfUse() {
+        this.computeLossOfUseIsLoading = true;
         setTimeout(() => {
         
             this.loads.push({
                 loadType: 'Loss Of Use',
                 amount: this.lossOfUseAmount,
             });
+
                 this.addingLoad = false;
         
         this.computeLossOfUseIsLoading = false;

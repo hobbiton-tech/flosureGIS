@@ -1,99 +1,49 @@
-<!-- <div style="margin: 10px;">
-    <div style="margin-bottom: 20px; background: #fff;">
-        <nz-page-header>
-            <nz-page-header-title>Receipts</nz-page-header-title>
-            <nz-page-header-subtitle
-                >List of all receipts</nz-page-header-subtitle
-            >
-            <nz-page-header-extra>
-
-            </nz-page-header-extra>
-            <nz-page-header-content>
-                <nz-descriptions [nzColumn]="3">
-                    <nz-descriptions-item
-                        nzTitle="Total Policies"
-                        [nzSpan]="1"
-                        >{{ receiptsCount }}</nz-descriptions-item
-                    >
-
-                </nz-descriptions>
-            </nz-page-header-content>
-        </nz-page-header>
-    </div>
-    <nz-card>
-        <div style="margin-bottom: 10px; width: 50%">
-            <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input
-                    type="text"
-                    nz-input
-                    placeholder="Search by client, receipt number"
-                />
-            </nz-input-group>
-            <ng-template #suffixIconSearch>
-                <i nz-icon nzType="search"></i>
-            </ng-template>
-        </div>
-
-        <nz-table
-            #receiptsTable
-            [nzData]="receiptsList"
-            [nzSize]="'small'"
-            [nzBordered]="true"
-        >
-            <thead>
-                <tr>
-                    <th>Receipt Number</th>
-                    <th>Product</th>
-                    <th>Cover From</th>
-                    <th>Cover To</th>
-                    <th>Client Name</th>
-                    <th>Sum Insured</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr
-                    *ngFor="let receipt of receiptsTable.data"
-                    (click)="showReceiptModal = true"
-                >
-                    <td>{{ receipt.policyNumber }}</td>
-                    <td>{{ receipt.product }}</td>
-                    <td>{{ receipt.startDate.seconds | date }}</td>
-                    <td>{{ receipt.endDate.seconds * 1000 | date }}</td>
-                    <td>{{ receipt.client }}</td>
-                    <td>{{ receipt.sumInsured }}</td>
-                </tr>
-            </tbody>
-        </nz-table>
-    </nz-card>
-</div>
-
-<nz-modal
-    [(nzVisible)]="showReceiptModal"
-    nzTitle="Policy Receipt"
-    (nzOnCancel)="showReceiptModal = false"
-    (nzOnOk)="showReceiptModal = false"
+<nz-spin
+    [nzSize]="'large'"
+    [nzSpinning]="loadingReceipt"
+    [nzTip]="'Loading PDF'"
 >
-    <div style="margin: 20px;">
-        <nz-card style="width: 100%" nzTitle="Receipt" [nzExtra]="actions">
+    <div style="margin: 15px;">
+        <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                Finance
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                Receipts
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                View Receipts
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+        <nz-page-header nzBackIcon [nzTitle]="title">
+            <ng-template #title>
+                <div style="display: flex; align-items: center;">
+                    <span style="margin-right: 8px;">Receipt </span>
+                </div>
+            </ng-template>
+            <nz-page-header-extra>
+                <button nz-button nzType="primary">
+                    Print
+                </button>
+                <button nz-button nzType="primary">
+                    Email
+                </button>
+                <button nz-button nzType="primary">
+                    Download
+                </button>
+            </nz-page-header-extra>
+        </nz-page-header>
+        <nz-card>
+            <nz-divider
+                nzText="Receipt Details"
+                nzOrientation="left"
+            ></nz-divider>
+
             <pdf-viewer
-                [src]="'/assets/docs/receipt.pdf'"
+                #page
+                [src]="receiptURl"
                 [original-size]="false"
             ></pdf-viewer>
         </nz-card>
-        <ng-template #actions>
-            <div>
-                <button
-                    nz-button
-                    nzType="primary"
-                    nzSize="medium"
-                    style="margin-right: 8px;"
-                >
-                    Print
-                </button>
-                <button nz-button nzType="default" nzSize="medium">
-                    Email
-                </button>
-            </div>
-        </ng-template>
     </div>
-</nz-modal> -->
+</nz-spin>

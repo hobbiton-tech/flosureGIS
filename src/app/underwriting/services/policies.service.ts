@@ -7,6 +7,7 @@ import {
 } from '@angular/fire/firestore';
 import 'firebase/firestore';
 import { filter, first } from 'rxjs/operators';
+import { v4 } from 'uuid';
 
 @Injectable({
     providedIn: 'root',
@@ -38,7 +39,9 @@ export class PoliciesService {
                 policies.length
             );
 
-            await this.policiesCollection.doc(policy.policyNumber).set(policy);
+            policy.id = v4();
+
+            await this.policiesCollection.doc(policy.id).set(policy);
         });
     }
 
