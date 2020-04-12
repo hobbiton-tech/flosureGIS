@@ -18,6 +18,9 @@ export class PaymentPlanComponent implements OnInit {
   //view details of payment plan
   viewPaymentPlanDetails() {}
 
+  //add new payment plan
+  addPaymentPlan() {}
+
   //search payment plan table
   search($event) {}
 

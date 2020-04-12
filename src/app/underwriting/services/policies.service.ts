@@ -25,7 +25,7 @@ export class PoliciesService {
         this.policies.pipe(first()).subscribe(async (policies) => {
             const today = new Date();
             policy.nameOfInsured = policy.client;
-            policy.dateOfIssue = today;
+            policy.dateOfIssue = today.getDay() + '-' + today.getMonth() + '-' + today.getFullYear();
             policy.timeOfIssue = today.getHours() + ':' + today.getMinutes();
             policy.expiryDate = policy.endDate;
             policy.status = 'Active';

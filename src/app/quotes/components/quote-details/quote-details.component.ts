@@ -790,11 +790,15 @@ export class QuoteDetailsComponent implements OnInit {
                 this.quote.status = 'Approved';
                 await this.quotesService.updateQuote(this.quote);
 
+                
+
                 // convert to policy
                 const policy: Policy = {
                     ...this.quoteDetailsForm.value,
                     receiptStatus: this.status,
                     risks: this.quoteData.risks,
+                    sumInsured: this.sumArray(this.quoteData.risks, 'sumInsured'),
+                    netPremium: this.sumArray(this.quoteData.risks, 'netPremium'),
                     // sumInsured: this.quoteData.sumInsured,
                     // netPremium: this.quoteData.netPremium,
                     paymentPlan: this.paymentPlan,
@@ -809,6 +813,12 @@ export class QuoteDetailsComponent implements OnInit {
                 this.approvingQuote = false;
             }
         );
+    }
+
+          sumArray(items, prop){
+        return items.reduce( function(a, b){
+            return a + b[prop];
+        }, 0);
     }
 
     // filter by search
@@ -1015,6 +1025,7 @@ export class QuoteDetailsComponent implements OnInit {
             this.selectedLoadingValue.value = '';
         }, 2000);
     }
+
 
     computeCarStereo() {
         this.computeCarStereoIsLoading = true;

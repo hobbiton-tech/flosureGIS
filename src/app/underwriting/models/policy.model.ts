@@ -15,7 +15,7 @@ export class Policy {
     status: PolicyStatus;
     timeOfIssue: string | ITimestamp;;
     expiryDate: Date | ITimestamp;
-    dateOfIssue: Date | ITimestamp;
+    dateOfIssue: string | ITimestamp;
     quarter: string;
     user: string;
     town: string;
