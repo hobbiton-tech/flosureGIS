@@ -6,7 +6,7 @@ import { IReceiptDTO } from 'src/app/quotes/models/receipt.dto';
 import { ActivatedRoute } from '@angular/router';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
-import { NgxPrinterService } from 'ngx-printer/public_api';
+// import { NgxPrinterService } from 'ngx-printer/public_api';
 
 @Component({
     selector: 'app-view-receipts',

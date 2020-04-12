@@ -257,24 +257,14 @@ export class QuoteDetailsComponent implements OnInit {
 
                 this.quotesLoading = false;
 
-                // fill quotation details
-                this.quoteDetailsForm
-                    .get('clientCode')
-                    .setValue(this.quoteData.clientCode);
-                this.quoteDetailsForm
-                    .get('currency')
-                    .setValue(this.quoteData.currency);
-                this.quoteDetailsForm
-                    .get('startDate')
-                    .setValue(
-                        (this.quoteData.startDate as ITimestamp).seconds * 1000
-                    );
-                this.quoteDetailsForm
-                    .get('quarter')
-                    .setValue(this.quoteData.quarter);
-                this.quoteDetailsForm
-                    .get('endDate')
-                    .setValue(this.quoteData.endDate);
+
+                //fill quotation details
+                this.quoteDetailsForm.get("client").setValue(this.quoteData.client);
+                this.quoteDetailsForm.get("currency").setValue(this.quoteData.currency);
+                this.quoteDetailsForm.get("startDate").setValue((this.quoteData.startDate as ITimestamp).seconds * 1000);
+                this.quoteDetailsForm.get("quarter").setValue(this.quoteData.quarter);
+                this.quoteDetailsForm.get("endDate").setValue(this.quoteData.endDate);
+
 
                 this.risks = this.quoteData.risks;
 
@@ -311,7 +301,7 @@ export class QuoteDetailsComponent implements OnInit {
         this.premiumDiscountRateType = 'percentage';
 
         this.quoteDetailsForm = this.formBuilder.group({
-            clientCode: ['', Validators.required],
+            client: ['', Validators.required],
             startDate: ['', Validators.required],
             endDate: [''],
             currency: [`${this.quote.currency}`, Validators.required],
@@ -802,6 +792,7 @@ export class QuoteDetailsComponent implements OnInit {
                 };
 
                 // const policy = this.quoteDetailsForm.value as Policy;
+                console.log(policy);
                 this.policiesService.addPolicy(policy);
 
                 this.isQuoteApproved = true;
@@ -983,9 +974,8 @@ export class QuoteDetailsComponent implements OnInit {
             });
     }
 
-    // this.computeBasicPremiumIsLoading = false;
-    //         }, 2000;)
-    //     }
+
+
 
     // Loading computation
     computeRiotAndStrike() {
@@ -1015,10 +1005,7 @@ export class QuoteDetailsComponent implements OnInit {
 
             this.addingLoad = false;
 
-            this.computeIncreasedThirdPartyLimitIsLoading = false;
-            this.selectedLoadingValue.value = '';
-        }, 2000);
-    }
+
 
     computeCarStereo() {
         this.computeCarStereoIsLoading = true;
@@ -1038,21 +1025,15 @@ export class QuoteDetailsComponent implements OnInit {
     computeTerritorialExtension() {
         this.computeTerritorialExtensionIsLoading = true;
         setTimeout(() => {
-            this.loads.push({
-                loadType: 'Territorial Extension',
-                amount: 1750,
-            });
 
-            this.addingLoad = false;
+            this.loads.push({ loadType: 'Territorial Extension', amount: 1750 });
+    
+                this.addingLoad = false;
+        
+        this.computeTerritorialExtensionIsLoading = false;
+        this.selectedLoadingValue.value = '';
+        }, 2000);    
 
-            this.computeTerritorialExtensionIsLoading = false;
-            this.selectedLoadingValue.value = '';
-        }, 2000);
-
-        this.addingLoad = false;
-
-        // this.computeTerritorialExtensionIsLoading = false;
-        // }, 2000;)
     }
 
     computeLossOfUse() {

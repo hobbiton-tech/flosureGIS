@@ -250,7 +250,7 @@ export class CreateQuoteComponent implements OnInit {
     ngOnInit(): void {
         this.quoteForm = this.formBuilder.group({
             quoteNumber: [this.quoteService.generateQuoteNumber('ran', 10)],
-            clientCode: ['', Validators.required],
+            client: ['', Validators.required],
             messageCode: ['ewrewre', Validators.required],
             underwritingYear: [''],
             currency: ['', Validators.required],
@@ -861,86 +861,90 @@ export class CreateQuoteComponent implements OnInit {
     computeRiotAndStrike() {
         this.computeRiotAndStrikeIsLoading = true;
 
-        setTimeout(() => {
-            console.log(this.riotAndStrikeRate);
-
-            this.loads.push({
-                loadType: 'Riot And Strike',
-                amount: this.riotAndStrikeAmount,
-            });
-            this.addingLoad = false;
-
+            setTimeout(() => {
+                console.log(this.riotAndStrikeRate)
+        
+                this.loads.push({
+                    loadType: 'Riot And Strike',
+                    amount: 0,
+                });
+                this.addingLoad = false;
+            
             this.computeRiotAndStrikeIsLoading = false;
             this.selectedLoadingValue.value = '';
-        }, 2000);
+            console.log(this.loads)
+            }, 2000);
+
+
     }
 
     computeIncreasedThirdPartyLimit() {
         this.computeIncreasedThirdPartyLimitIsLoading = true;
 
-        setTimeout(() => {
-            this.loads.push({
-                loadType: 'Increased Third Party Limit',
-                amount: this.increasedThirdPartyLimitsAmount,
-            });
-
-            this.addingLoad = false;
-
+            setTimeout(() => {
+                this.loads.push({
+                    loadType: 'Increased Third Party Limit',
+                    amount: 0,
+                });
+                    this.addingLoad = false;
+                      
             this.computeIncreasedThirdPartyLimitIsLoading = false;
             this.selectedLoadingValue.value = '';
-        }, 2000);
+            console.log(this.loads)
+            }, 2000);  
+
     }
 
     computeCarStereo() {
         this.computeCarStereoIsLoading = true;
-        setTimeout(() => {
-            this.loads.push({
-                loadType: 'Car Stereo',
-                amount: this.carStereoAmount,
-            });
 
-            this.addingLoad = false;
-
+            setTimeout(() => {
+                this.loads.push({
+                    loadType: 'Car Stereo',
+                    amount: 0,
+                });
+                    this.addingLoad = false;
+                    
+            
             this.computeCarStereoIsLoading = false;
             this.selectedLoadingValue.value = '';
-        }, 2000);
+            console.log(this.loads)
+            }, 2000);
+
     }
 
     computeTerritorialExtension() {
         this.computeTerritorialExtensionIsLoading = true;
 
-        setTimeout(() => {
-            this.loads.push({
-                loadType: 'Territorial Extension',
-                amount: 1750,
-            });
 
-            this.addingLoad = false;
-
+            setTimeout(() => {
+                this.loads.push({ loadType: 'Territorial Extension', amount: 0 });
+        
+                    this.addingLoad = false;
+            
             this.computeTerritorialExtensionIsLoading = false;
             this.selectedLoadingValue.value = '';
-        }, 2000);
+            console.log(this.loads)
+            }, 2000);
 
-        this.basicPremiumLevy = this.totalPremium * 0.03;
-        this.netPremium = this.totalPremium + this.basicPremiumLevy;
-
-        this.addingLoad = false;
-
-        this.computeTerritorialExtensionIsLoading = false;
     }
 
     computeLossOfUse() {
         this.computeLossOfUseIsLoading = true;
-        setTimeout(() => {
-            this.loads.push({
-                loadType: 'Loss Of Use',
-                amount: this.lossOfUseAmount,
-            });
-            this.addingLoad = false;
 
+            setTimeout(() => {
+            
+                this.loads.push({
+                    loadType: 'Loss Of Use',
+                    amount: 0,
+                });
+                    this.addingLoad = false;
+            
             this.computeLossOfUseIsLoading = false;
             this.selectedLoadingValue.value = '';
-        }, 2000);
+            console.log(this.loads)
+            }, 2000);
+
     }
 
     removeLoad(i: LoadModel, e: MouseEvent): void {
@@ -949,7 +953,10 @@ export class CreateQuoteComponent implements OnInit {
             const index = this.loads.indexOf(i);
             this.loads.splice(index, 1);
         }
-    }
+
+        console.log(this.loads);
+      }
+
 
     // Discount Computation
     computeDiscount() {

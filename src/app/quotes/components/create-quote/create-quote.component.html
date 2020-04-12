@@ -13,14 +13,16 @@
     <form nz-form style="margin-top: 20px" [formGroup]="quoteForm" novalidate>
         <nz-card nzTitle="Policy Details" style="margin-bottom: 5px;" [nzExtra]="switchTemplate">
             <ng-template #switchTemplate>
-                <nz-switch [ngModel]="agentMode" [ngModelOptions]="{standalone: true}" nzCheckedChildren="Agent Mode" nzUnCheckedChildren="User Mode" [nzControl]="false" (click)="switchMode()" [nzLoading]="switchLoading"></nz-switch>
+                <nz-switch [ngModel]="agentMode" [ngModelOptions]="{standalone: true}" nzCheckedChildren="Agent Mode"
+                    nzUnCheckedChildren="User Mode" [nzControl]="false" (click)="switchMode()"
+                    [nzLoading]="switchLoading"></nz-switch>
             </ng-template>
             <div nz-row nzGutter="0">
                 <div nz-col nzSpan="12">
                     <nz-form-item>
                         <nz-form-label nzSpan="7" nzRequired>Client Name</nz-form-label>
                         <nz-form-control nzSpan="17">
-                            <nz-select formControlName="clientCode" nzPlaceHolder="Select or create client">
+                            <nz-select formControlName="client" nzPlaceHolder="Select or create client">
                                 <div *ngFor="let client of clients">
                                     <nz-option [nzValue]="
                                             client.clientType === 'Individual'
@@ -58,9 +60,11 @@
                 </div>
                 <div nz-col nzSpan="12">
                     <nz-form-item>
-                        <nz-form-label nzRequired nzSpan="7">Select Start Date</nz-form-label>
+                        <nz-form-label nzRequired nzSpan="7">Start Date</nz-form-label>
                         <nz-form-control nzSpan="17">
-                            <nz-date-picker formControlName="startDate" nzFormat="dd-MM-yyyy" [nzDisabledDate]="disabledStartDate" (ngModelChange)="handlePolicyEndDateCalculation()"></nz-date-picker>
+                            <nz-date-picker formControlName="startDate" nzFormat="dd-MM-yyyy"
+                                [nzDisabledDate]="disabledStartDate" (ngModelChange)="handlePolicyEndDateCalculation()">
+                            </nz-date-picker>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -69,7 +73,8 @@
                     <nz-form-item>
                         <nz-form-label nzSpan="7" nzRequired>Quarter</nz-form-label>
                         <nz-form-control nzSpan="5">
-                            <nz-select formControlName="quarter" nzPlaceHolder="Select quarter" (ngModelChange)="handlePolicyEndDateCalculation()">
+                            <nz-select formControlName="quarter" nzPlaceHolder="Select quarter"
+                                (ngModelChange)="handlePolicyEndDateCalculation()">
                                 <nz-option nzValue="1" nzLabel="1"></nz-option>
                                 <nz-option nzValue="2" nzLabel="2"></nz-option>
                                 <nz-option nzValue="3" nzLabel="3"></nz-option>
@@ -80,7 +85,8 @@
                     <nz-form-item>
                         <nz-form-label nzRequired nzSpan="7">End Date</nz-form-label>
                         <nz-form-control nzSpan="17">
-                            <nz-date-picker formControlName="endDate" nzFormat="dd-MM-yyyy" nzPlaceHolder="End" nzDisabled="true"></nz-date-picker>
+                            <nz-date-picker formControlName="endDate" nzFormat="dd-MM-yyyy" nzPlaceHolder="End"
+                                nzDisabled="true"></nz-date-picker>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -94,14 +100,19 @@
         <div nz-row nzGutter="0" style="margin-top: 20px;">
             <div nz-col>
                 <nz-collapse>
-                    <nz-collapse-panel nzHeader="Add Risk" [nzActive]="isAddRiskPanelOpen" (nzActiveChange)="resetForms()">
+                    <nz-collapse-panel nzHeader="Add Risk" [nzActive]="isAddRiskPanelOpen"
+                        (nzActiveChange)="resetForms()">
                         <div nz-row nzGutter="0" style="margin-bottom: 30px;">
                             <div nz-col nzSpan="12">
                                 <nz-form-item>
-                                    <nz-form-label [nzSpan]="7" nzFor="insuranceType" nzRequired>Insurance Type</nz-form-label>
+                                    <nz-form-label [nzSpan]="7" nzFor="insuranceType" nzRequired>Insurance Type
+                                    </nz-form-label>
                                     <nz-form-control nzSpan="17">
-                                        <nz-select name="insuranceType" [(ngModel)]="selectedValue" [compareWith]="compareFn" (ngModelChange)="log($event)" nzAllowClear nzPlaceHolder="Choose">
-                                            <nz-option *ngFor="let option of optionList" [nzValue]="option" [nzLabel]="option.label"></nz-option>
+                                        <nz-select name="insuranceType" [(ngModel)]="selectedValue"
+                                            [compareWith]="compareFn" (ngModelChange)="log($event)" nzAllowClear
+                                            nzPlaceHolder="Choose">
+                                            <nz-option *ngFor="let option of optionList" [nzValue]="option"
+                                                [nzLabel]="option.label"></nz-option>
                                         </nz-select>
                                     </nz-form-control>
                                 </nz-form-item>
@@ -109,7 +120,8 @@
                             </div>
                             <div nz-col nzSpan="12">
                                 <nz-form-item>
-                                    <button nz-button nzType="primary" (click)="showModal()" style="float: right;">Import</button>
+                                    <button nz-button nzType="primary" (click)="showModal()"
+                                        style="float: right;">Import Fleet</button>
                                 </nz-form-item>
                             </div>
                         </div>
@@ -120,14 +132,20 @@
                                 <div nz-row nzGutter="0">
                                     <div nz-col nzSpan="8">
                                         <nz-form-item>
-                                            <nz-form-label [nzSpan]="7" nzFor="vehicleMake" nzRequired>Vehicle Make</nz-form-label>
+                                            <nz-form-label [nzSpan]="7" nzFor="vehicleMake" nzRequired>Vehicle Make
+                                            </nz-form-label>
                                             <nz-form-control nzSpan="17">
-                                                <nz-select nzPlaceHolder="Select vehicle make" nzAllowClear nzShowSearch nzServerSearch [(ngModel)]="selectedVehicleMake" formControlName="vehicleMake" (nzOnSearch)="onVehicleMakeSearch($event)">
+                                                <nz-select nzPlaceHolder="Select vehicle make" nzAllowClear nzShowSearch
+                                                    nzServerSearch [(ngModel)]="selectedVehicleMake"
+                                                    formControlName="vehicleMake"
+                                                    (nzOnSearch)="onVehicleMakeSearch($event)">
                                                     <ng-container *ngFor="let o of vehicleMakeOptionList">
-                                                        <nz-option *ngIf="!isVehicleMakeLoading" [nzValue]="o" [nzLabel]="o"></nz-option>
+                                                        <nz-option *ngIf="!isVehicleMakeLoading" [nzValue]="o"
+                                                            [nzLabel]="o"></nz-option>
                                                     </ng-container>
                                                     <nz-option *ngIf="isVehicleMakeLoading" nzDisabled nzCustomContent>
-                                                        <i nz-icon nzType="loading" class="loading-icon"></i> Loading Data...
+                                                        <i nz-icon nzType="loading" class="loading-icon"></i> Loading
+                                                        Data...
                                                     </nz-option>
                                                 </nz-select>
                                             </nz-form-control>
@@ -136,27 +154,34 @@
                                             <nz-form-label [nzSpan]="7" nzFor="vehicleModel" nzRequired>Vehicle Model
                                             </nz-form-label>
                                             <nz-form-control nzSpan="17">
-                                                <nz-select nzPlaceHolder="Select vehicle model" nzAllowClear nzShowSearch nzServerSearch [(ngModel)]="selectedVehicleModel" formControlName="vehicleModel" (nzOnSearch)="onVehicleModelSearch($event)">
+                                                <nz-select nzPlaceHolder="Select vehicle model" nzAllowClear
+                                                    nzShowSearch nzServerSearch [(ngModel)]="selectedVehicleModel"
+                                                    formControlName="vehicleModel"
+                                                    (nzOnSearch)="onVehicleModelSearch($event)">
                                                     <ng-container *ngFor="let o of vehicleModelOptionList">
-                                                        <nz-option *ngIf="!isVehicleModelLoading" [nzValue]="o" [nzLabel]="o"></nz-option>
+                                                        <nz-option *ngIf="!isVehicleModelLoading" [nzValue]="o"
+                                                            [nzLabel]="o"></nz-option>
                                                     </ng-container>
                                                     <nz-option *ngIf="isVehicleModelLoading" nzDisabled nzCustomContent>
-                                                        <i nz-icon nzType="loading" class="loading-icon"></i> Loading Data...
+                                                        <i nz-icon nzType="loading" class="loading-icon"></i> Loading
+                                                        Data...
                                                     </nz-option>
                                                 </nz-select>
                                             </nz-form-control>
                                         </nz-form-item>
                                         <nz-form-item>
-                                            <nz-form-label [nzSpan]="7" nzFor="regNumber" nzRequired>Registration Number
+                                            <nz-form-label [nzSpan]="7" nzFor="regNumber" nzRequired>Reg Number
                                             </nz-form-label>
                                             <nz-form-control nzSpan="17">
-                                                <input nz-input name="regNumber" formControlName="regNumber" type="text" id="regNumber" />
+                                                <input nz-input name="regNumber" formControlName="regNumber" type="text"
+                                                    id="regNumber" />
                                             </nz-form-control>
                                         </nz-form-item>
                                         <nz-form-item>
                                             <nz-form-label [nzSpan]="7" nzFor="color" nzRequired>Color</nz-form-label>
                                             <nz-form-control nzSpan="17">
-                                                <input nz-input name="color" formControlName="color" type="text" id="color" />
+                                                <input nz-input name="color" formControlName="color" type="text"
+                                                    id="color" />
                                             </nz-form-control>
                                         </nz-form-item>
                                     </div>
@@ -165,20 +190,24 @@
                                             <nz-form-label [nzSpan]="7" nzFor="engineNumber" nzRequired>Engine Number
                                             </nz-form-label>
                                             <nz-form-control nzSpan="17">
-                                                <input nz-input name="engineNumber" formControlName="engineNumber" type="text" id="engineNumber" />
+                                                <input nz-input name="engineNumber" formControlName="engineNumber"
+                                                    type="text" id="engineNumber" />
                                             </nz-form-control>
                                         </nz-form-item>
                                         <nz-form-item>
                                             <nz-form-label [nzSpan]="7" nzFor="chassisNumber" nzRequired>Chassis Number
                                             </nz-form-label>
                                             <nz-form-control nzSpan="17">
-                                                <input nz-input name="chassisNumber" formControlName="chassisNumber" type="text" id="chassisNumber" />
+                                                <input nz-input name="chassisNumber" formControlName="chassisNumber"
+                                                    type="text" id="chassisNumber" />
                                             </nz-form-control>
                                         </nz-form-item>
                                         <nz-form-item>
                                             <nz-form-label [nzSpan]="7" nzFor="productType">Product Type</nz-form-label>
                                             <nz-form-control nzSpan="17">
-                                                <nz-select nzShowSearch nzAllowClear formControlName="productType" nzPlaceHolder="Select a product type" name="productType" id="productType">
+                                                <nz-select nzShowSearch nzAllowClear formControlName="productType"
+                                                    nzPlaceHolder="Select a product type" name="productType"
+                                                    id="productType">
                                                     <nz-option nzLabel="Private" nzValue="Private"></nz-option>
                                                     <nz-option nzLabel="Commercial" nzValue="Commercial"></nz-option>
                                                     <nz-option nzLabel="Bus/Taxi" nzValue="Bus/Taxi"></nz-option>
@@ -196,7 +225,7 @@
                                     </div>
                                     <div nz-col nzSpan="8">
                                         <nz-form-item>
-                                            <nz-form-label nzRequired nzSpan="7">Select Start Date</nz-form-label>
+                                            <nz-form-label nzRequired nzSpan="7">Start Date</nz-form-label>
                                             <nz-form-control nzSpan="17">
                                                 <nz-date-picker formControlName="riskStartDate"
                                                     [nzDisabledDate]="disabledStartDate" nzFormat="dd-MM-yyyy"
@@ -543,20 +572,25 @@
                                         </div>
 
                                         <div nz-col nzSpan="8">
-                                            <div nz-col nzSpan="20" style="float: right;"
-                                                *ngIf="!(loads === undefined || loads.length == 0)">
+                                            <div nz-col nzSpan="20" style="float: right;">
                                                 <nz-card>
-                                                    <nz-divider nzText="Loads" nzOrientation="left"></nz-divider>
+                                                    <nz-divider nzText="Loading" nzOrientation="left"></nz-divider>
+                                                    <div *ngIf="(loads === undefined || loads.length == 0)">
+                                                        <p>No Loading added</p>
+                                                    </div>
                                                     <div *ngFor="let load of loads; let i = index;">
                                                         <div>
                                                             <div nz-row>
-                                                                <div nz-col nzSpan="12">
-                                                                    <p>{{load.loadType}}</p>
+                                                                <div nz-col nzSpan="10">
+                                                                    <p>{{load.loadType}}:</p>
                                                                 </div>
-                                                                <div nz-col nzSpan="12">
+                                                                <div nz-col nzSpan="6">
+                                                                    <p style="margin-left: 4px;"> {{load.amount | number:'1.2-2'}}</p>
+                                                                </div>
+                                                                <div nz-col nzSpan="8">
                                                                     <a style="float: right;"
                                                                         (click)="removeLoad(load, $event)">Remove
-                                                                        Load</a>
+                                                                        Loading</a>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -569,13 +603,20 @@
                                         <div nz-col nzSpan="8">
                                             <div nz-col nzSpan="20" style="float: right;">
                                                 <nz-card>
-                                                        <nz-descriptions nzBordered nzSize="small" nzSpan="6" style="margin-top: 5px;" [nzColumn]="1" [nzBordered]="true" nzSize="middle">
-                                                                <nz-descriptions-item nzTitle="Basic Premium">{{basicPremium}}</nz-descriptions-item>
-                                                                <nz-descriptions-item nzTitle="Loading">{{premiumLoadingTotal}}</nz-descriptions-item>
-                                                                <nz-descriptions-item nzTitle="Discount">{{premiumDiscount}}</nz-descriptions-item>
-                                                                 <nz-descriptions-item nzTitle="Levy">{{0}}</nz-descriptions-item>
-                                                                <nz-descriptions-item nzTitle="Net Premium">{{netPremium | number:'1.2-2'}}</nz-descriptions-item>
-                                                            </nz-descriptions>
+                                                    <nz-descriptions nzBordered nzSize="small" nzSpan="6"
+                                                        style="margin-top: 5px;" [nzColumn]="1" [nzBordered]="true"
+                                                        nzSize="middle">
+                                                        <nz-descriptions-item nzTitle="Basic Premium">{{basicPremium | number:'1.2-2'}}
+                                                        </nz-descriptions-item>
+                                                        <nz-descriptions-item nzTitle="Loading">{{premiumLoadingTotal | number:'1.2-2'}}
+                                                        </nz-descriptions-item>
+                                                        <nz-descriptions-item nzTitle="Discount">{{premiumDiscount | number:'1.2-2'}}
+                                                        </nz-descriptions-item>
+                                                        <nz-descriptions-item nzTitle="Levy">{{0 | number:'1.2-2'}}
+                                                        </nz-descriptions-item>
+                                                        <nz-descriptions-item nzTitle="Net Premium">
+                                                            {{netPremium | number:'1.2-2'}}</nz-descriptions-item>
+                                                    </nz-descriptions>
                                                 </nz-card>
                                             </div>
                                         </div>
@@ -583,7 +624,8 @@
                                 </div>
 
                                 <div style=" text-align: center;  margin-top: 10px; margin-bottom: 10px;">
-                                    <button nz-button nzType="primary" [disabled]="!validateriskComprehensiveFormDetails()"
+                                    <button nz-button nzType="primary"
+                                        [disabled]="!validateriskComprehensiveFormDetails()"
                                         (click)="addComprehensiveRisk()">
                                         Add Risk
                                     </button>
@@ -640,7 +682,7 @@
                                             </nz-form-control>
                                         </nz-form-item>
                                         <nz-form-item>
-                                            <nz-form-label [nzSpan]="7" nzFor="regNumber" nzRequired>Registration Number
+                                            <nz-form-label [nzSpan]="7" nzFor="regNumber" nzRequired>Reg Number
                                             </nz-form-label>
                                             <nz-form-control nzSpan="17">
                                                 <input nz-input name="regNumber" formControlName="regNumber" type="text"
@@ -695,7 +737,7 @@
                                     </div>
                                     <div nz-col nzSpan="8">
                                         <nz-form-item>
-                                            <nz-form-label nzRequired nzSpan="7">Select Start Date</nz-form-label>
+                                            <nz-form-label nzRequired nzSpan="7">Start Date</nz-form-label>
                                             <nz-form-control nzSpan="17">
                                                 <nz-date-picker formControlName="riskStartDate"
                                                     [nzDisabledDate]="disabledStartDate" nzFormat="dd-MM-yyyy"
@@ -1029,7 +1071,8 @@
                                             <nz-form-item>
                                                 <nz-form-control [nzXs]="{ span: 24, offset: 4 }"
                                                     [nzSm]="{ span: 20, offset: 7 }">
-                                                    <button nz-button nzType="primary" (click)="computeThirdPartyPremium()"
+                                                    <button nz-button nzType="primary"
+                                                        (click)="computeThirdPartyPremium()"
                                                         [nzLoading]="computePremiumIsLoading">Compute Premium</button>
                                                 </nz-form-control>
                                             </nz-form-item>
@@ -1041,20 +1084,25 @@
                                         </div>
 
                                         <div nz-col nzSpan="8">
-                                            <div nz-col nzSpan="20" style="float: right;"
-                                                *ngIf="!(loads === undefined || loads.length == 0)">
+                                            <div nz-col nzSpan="20" style="float: right;">
                                                 <nz-card>
-                                                    <nz-divider nzText="Loads" nzOrientation="left"></nz-divider>
+                                                    <nz-divider nzText="Loading" nzOrientation="left"></nz-divider>
+                                                    <div *ngIf="(loads === undefined || loads.length == 0)">
+                                                        <p>No Loading added</p>
+                                                    </div>
                                                     <div *ngFor="let load of loads; let i = index;">
                                                         <div>
                                                             <div nz-row>
-                                                                <div nz-col nzSpan="12">
-                                                                    <p>{{load.loadType}}</p>
+                                                                <div nz-col nzSpan="10">
+                                                                    <p>{{load.loadType}}:</p>
                                                                 </div>
-                                                                <div nz-col nzSpan="12">
+                                                                <div nz-col nzSpan="6">
+                                                                    <p style="margin-left: 4px;"> {{load.amount | number:'1.2-2'}}</p>
+                                                                </div>
+                                                                <div nz-col nzSpan="8">
                                                                     <a style="float: right;"
                                                                         (click)="removeLoad(load, $event)">Remove
-                                                                        Load</a>
+                                                                        Loading</a>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1067,13 +1115,20 @@
                                         <div nz-col nzSpan="8">
                                             <div nz-col nzSpan="20" style="float: right;">
                                                 <nz-card>
-                                                        <nz-descriptions nzBordered nzSize="small" nzSpan="6" style="margin-top: 5px;" [nzColumn]="1" [nzBordered]="true" nzSize="middle">
-                                                                <nz-descriptions-item nzTitle="Basic Premium">{{basicPremium}}</nz-descriptions-item>
-                                                                <nz-descriptions-item nzTitle="Loading">{{premiumLoadingTotal}}</nz-descriptions-item>
-                                                                <nz-descriptions-item nzTitle="Discount">{{premiumDiscount}}</nz-descriptions-item>
-                                                                 <nz-descriptions-item nzTitle="Levy">{{0}}</nz-descriptions-item>
-                                                                <nz-descriptions-item nzTitle="Net Premium">{{netPremium | number:'1.2-2'}}</nz-descriptions-item>
-                                                            </nz-descriptions>
+                                                    <nz-descriptions nzBordered nzSize="small" nzSpan="6"
+                                                        style="margin-top: 5px;" [nzColumn]="1" [nzBordered]="true"
+                                                        nzSize="middle">
+                                                        <nz-descriptions-item nzTitle="Basic Premium">{{basicPremium | number:'1.2-2'}}
+                                                        </nz-descriptions-item>
+                                                        <nz-descriptions-item nzTitle="Loading">{{premiumLoadingTotal | number:'1.2-2'}}
+                                                        </nz-descriptions-item>
+                                                        <nz-descriptions-item nzTitle="Discount">{{premiumDiscount | number:'1.2-2'}}
+                                                        </nz-descriptions-item>
+                                                        <nz-descriptions-item nzTitle="Levy">{{0 | number:'1.2-2'}}
+                                                        </nz-descriptions-item>
+                                                        <nz-descriptions-item nzTitle="Net Premium">
+                                                            {{netPremium | number:'1.2-2'}}</nz-descriptions-item>
+                                                    </nz-descriptions>
                                                 </nz-card>
                                             </div>
                                         </div>
@@ -1277,7 +1332,7 @@
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
-                                <nz-form-label [nzSpan]="7" nzFor="regNumber" nzRequired>Registration Number
+                                <nz-form-label [nzSpan]="7" nzFor="regNumber" nzRequired>Reg Number
                                 </nz-form-label>
                                 <nz-form-control nzSpan="17">
                                     <input nz-input name="regNumber" formControlName="regNumber" type="text"
@@ -1332,7 +1387,7 @@
                         </div>
                         <div nz-col nzSpan="8">
                             <nz-form-item>
-                                <nz-form-label nzRequired nzSpan="7">Select Start Date</nz-form-label>
+                                <nz-form-label nzRequired nzSpan="7">Start Date</nz-form-label>
                                 <nz-form-control nzSpan="17">
                                     <nz-date-picker formControlName="riskStartDate" [nzDisabledDate]="disabledStartDate"
                                         nzFormat="dd-MM-yyyy" nzPlaceHolder="Start"
@@ -1399,38 +1454,38 @@
                                 <!-- Loading starts here -->
                                 <div *ngIf="selectedValue?.value === 'Comprehensive'">
                                     <div *ngIf="isRiskDetailsEditmode">
-                                            <nz-form-item>
-                                                    <nz-form-label [nzSpan]="7" nzFor="load">Add Load
-                                                    </nz-form-label>
-                                                    <nz-form-control nzSpan="17">
-                                                        <nz-select name="load" nzPlaceHolder="Select Load"
-                                                            [(ngModel)]="selectedLoadingValue" [compareWith]="compareFn"
-                                                            nzAllowClear style="width: 100%;" [ngModelOptions]="{standalone: true}"
-                                                            nzAllowClear nzLabel="select load"
-                                                            [nzDisabled]="!isRiskDetailsEditmode">
-                                                            <nz-option *ngFor="let option of motorComprehensiveloadingOptions"
-                                                                [nzValue]="option" [nzLabel]="option.label"></nz-option>
-                                                        </nz-select>
-                                                    </nz-form-control>
-                                                </nz-form-item>
-                                    </div>    
+                                        <nz-form-item>
+                                            <nz-form-label [nzSpan]="7" nzFor="load">Add Load
+                                            </nz-form-label>
+                                            <nz-form-control nzSpan="17">
+                                                <nz-select name="load" nzPlaceHolder="Select Load"
+                                                    [(ngModel)]="selectedLoadingValue" [compareWith]="compareFn"
+                                                    nzAllowClear style="width: 100%;"
+                                                    [ngModelOptions]="{standalone: true}" nzAllowClear
+                                                    nzLabel="select load" [nzDisabled]="!isRiskDetailsEditmode">
+                                                    <nz-option *ngFor="let option of motorComprehensiveloadingOptions"
+                                                        [nzValue]="option" [nzLabel]="option.label"></nz-option>
+                                                </nz-select>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
                                 </div>
                                 <div *ngIf="selectedValue?.value === 'ThirdParty'">
                                     <div *ngIf="isRiskDetailsEditmode">
-                                            <nz-form-item>
-                                                    <nz-form-label [nzSpan]="7" nzFor="load">Add Load
-                                                    </nz-form-label>
-                                                    <nz-form-control nzSpan="17">
-                                                        <nz-select name="load" nzPlaceHolder="Select Load"
-                                                            [(ngModel)]="selectedLoadingValue" [compareWith]="compareFn"
-                                                            nzAllowClear style="width: 100%;" [ngModelOptions]="{standalone: true}"
-                                                            nzAllowClear nzLabel="select load"
-                                                            [nzDisabled]="!isRiskDetailsEditmode">
-                                                            <nz-option *ngFor="let option of motorThirdPartyloadingOptions"
-                                                                [nzValue]="option" [nzLabel]="option.label"></nz-option>
-                                                        </nz-select>
-                                                    </nz-form-control>
-                                                </nz-form-item>
+                                        <nz-form-item>
+                                            <nz-form-label [nzSpan]="7" nzFor="load">Add Load
+                                            </nz-form-label>
+                                            <nz-form-control nzSpan="17">
+                                                <nz-select name="load" nzPlaceHolder="Select Load"
+                                                    [(ngModel)]="selectedLoadingValue" [compareWith]="compareFn"
+                                                    nzAllowClear style="width: 100%;"
+                                                    [ngModelOptions]="{standalone: true}" nzAllowClear
+                                                    nzLabel="select load" [nzDisabled]="!isRiskDetailsEditmode">
+                                                    <nz-option *ngFor="let option of motorThirdPartyloadingOptions"
+                                                        [nzValue]="option" [nzLabel]="option.label"></nz-option>
+                                                </nz-select>
+                                            </nz-form-control>
+                                        </nz-form-item>
                                     </div>
                                 </div>
                                 <div *ngIf="selectedLoadingValue.value === 'increasedThirdPartyLimits'">
@@ -1682,19 +1737,25 @@
                             </div>
 
                             <div nz-col nzSpan="8">
-                                <div nz-col nzSpan="20" style="float: right;"
-                                    *ngIf="!(loads === undefined || loads.length == 0)">
+                                <div nz-col nzSpan="20" style="float: right;">
                                     <nz-card>
-                                        <nz-divider nzText="Loads" nzOrientation="left"></nz-divider>
+                                        <nz-divider nzText="Loading" nzOrientation="left"></nz-divider>
+                                        <div *ngIf="(loads === undefined || loads.length == 0)">
+                                            <p>No Loading added</p>
+                                        </div>
                                         <div *ngFor="let load of loads; let i = index;">
                                             <div>
                                                 <div nz-row>
-                                                    <div nz-col nzSpan="12">
-                                                        <p>{{load.loadType}}</p>
+                                                    <div nz-col nzSpan="10">
+                                                        <p>{{load.loadType}}:</p>
                                                     </div>
-                                                    <div nz-col nzSpan="12">
+                                                    <div nz-col nzSpan="6">
+                                                        <p style="margin-left: 4px;"> {{load.amount | number:'1.2-2'}}</p>
+                                                    </div>
+                                                    <div nz-col nzSpan="8">
                                                         <a style="float: right;"
-                                                            (click)="removeLoad(load, $event)">Remove Load</a>
+                                                            (click)="removeLoad(load, $event)">Remove
+                                                            Loading</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1707,13 +1768,18 @@
                             <div nz-col nzSpan="8">
                                 <div nz-col nzSpan="20" style="float: right;">
                                     <nz-card>
-                                            <nz-descriptions nzBordered nzSize="small" nzSpan="6" style="margin-top: 5px;" [nzColumn]="1" [nzBordered]="true" nzSize="middle">
-                                                    <nz-descriptions-item nzTitle="Basic Premium">{{basicPremium}}</nz-descriptions-item>
-                                                    <nz-descriptions-item nzTitle="Loading">{{premiumLoadingTotal}}</nz-descriptions-item>
-                                                    <nz-descriptions-item nzTitle="Discount">{{premiumDiscount}}</nz-descriptions-item>
-                                                     <nz-descriptions-item nzTitle="Levy">{{0}}</nz-descriptions-item>
-                                                    <nz-descriptions-item nzTitle="Net Premium">{{netPremium | number:'1.2-2'}}</nz-descriptions-item>
-                                                </nz-descriptions>
+                                        <nz-descriptions nzBordered nzSize="small" nzSpan="6" style="margin-top: 5px;"
+                                            [nzColumn]="1" [nzBordered]="true" nzSize="middle">
+                                            <nz-descriptions-item nzTitle="Basic Premium">{{basicPremium | number:'1.2-2'}}
+                                            </nz-descriptions-item>
+                                            <nz-descriptions-item nzTitle="Loading">{{premiumLoadingTotal | number:'1.2-2'}}
+                                            </nz-descriptions-item>
+                                            <nz-descriptions-item nzTitle="Discount">{{premiumDiscount | number:'1.2-2'}}
+                                            </nz-descriptions-item>
+                                            <nz-descriptions-item nzTitle="Levy">{{0 | number:'1.2-2'}}</nz-descriptions-item>
+                                            <nz-descriptions-item nzTitle="Net Premium">{{netPremium | number:'1.2-2'}}
+                                            </nz-descriptions-item>
+                                        </nz-descriptions>
                                     </nz-card>
                                 </div>
                             </div>
@@ -1767,7 +1833,7 @@
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
-                                <nz-form-label [nzSpan]="7" nzFor="regNumber" nzRequired>Registration Number
+                                <nz-form-label [nzSpan]="7" nzFor="regNumber" nzRequired>Reg Number
                                 </nz-form-label>
                                 <nz-form-control nzSpan="17">
                                     <input nz-input name="regNumber" formControlName="regNumber" type="text"
@@ -1822,7 +1888,7 @@
                         </div>
                         <div nz-col nzSpan="8">
                             <nz-form-item>
-                                <nz-form-label nzRequired nzSpan="7">Select Start Date</nz-form-label>
+                                <nz-form-label nzRequired nzSpan="7">Start Date</nz-form-label>
                                 <nz-form-control nzSpan="17">
                                     <nz-date-picker formControlName="riskStartDate" [nzDisabledDate]="disabledStartDate"
                                         nzFormat="dd-MM-yyyy" nzPlaceHolder="Start"
@@ -1889,80 +1955,81 @@
                                 <!-- Loading starts here -->
                                 <div *ngIf="selectedValue?.value === 'Comprehensive'">
                                     <div *ngIf="isRiskDetailsEditmode">
-                                            <nz-form-item>
-                                                    <nz-form-label [nzSpan]="7" nzFor="load">Add Load
-                                                    </nz-form-label>
-                                                    <nz-form-control nzSpan="17">
-                                                        <nz-select name="load" nzPlaceHolder="Select Load"
-                                                            [(ngModel)]="selectedLoadingValue" [compareWith]="compareFn"
-                                                            nzAllowClear style="width: 100%;" [ngModelOptions]="{standalone: true}"
-                                                            nzAllowClear nzLabel="select load"
-                                                            [nzDisabled]="!isRiskDetailsEditmode">
-                                                            <nz-option *ngFor="let option of motorComprehensiveloadingOptions"
-                                                                [nzValue]="option" [nzLabel]="option.label"></nz-option>
-                                                        </nz-select>
-                                                    </nz-form-control>
-                                                </nz-form-item>
+                                        <nz-form-item>
+                                            <nz-form-label [nzSpan]="7" nzFor="load">Add Load
+                                            </nz-form-label>
+                                            <nz-form-control nzSpan="17">
+                                                <nz-select name="load" nzPlaceHolder="Select Load"
+                                                    [(ngModel)]="selectedLoadingValue" [compareWith]="compareFn"
+                                                    nzAllowClear style="width: 100%;"
+                                                    [ngModelOptions]="{standalone: true}" nzAllowClear
+                                                    nzLabel="select load" [nzDisabled]="!isRiskDetailsEditmode">
+                                                    <nz-option *ngFor="let option of motorComprehensiveloadingOptions"
+                                                        [nzValue]="option" [nzLabel]="option.label"></nz-option>
+                                                </nz-select>
+                                            </nz-form-control>
+                                        </nz-form-item>
                                     </div>
                                 </div>
                                 <div *ngIf="isRiskDetailsEditmode">
-                                <div *ngIf="selectedValue?.value === 'ThirdParty'">
-                                            <nz-form-item>
-                                                    <nz-form-label [nzSpan]="7" nzFor="load">Add Load
-                                                    </nz-form-label>
-                                                    <nz-form-control nzSpan="17">
-                                                        <nz-select name="load" [(ngModel)]="selectedLoadingValue"
-                                                            [compareWith]="compareFn" nzAllowClear style="width: 100%;"
-                                                            [ngModelOptions]="{standalone: true}" nzAllowClear nzLabel="select load"
-                                                            [nzDisabled]="!isRiskDetailsEditmode">
-                                                            <nz-option *ngFor="let option of motorThirdPartyloadingOptions"
-                                                                [nzValue]="option" [nzLabel]="option.label"></nz-option>
-                                                        </nz-select>
-                                                    </nz-form-control>
-                                                </nz-form-item>
-                                </div>
-                                <div *ngIf="selectedLoadingValue.value === 'increasedThirdPartyLimits'">
-                                    <nz-form-item>
-                                        <nz-form-label [nzSpan]="7" nzFor="increasedThirdPartyLimitsRate">
-                                            Increase to
-                                        </nz-form-label>
-                                        <nz-form-control nzSpan="17">
-                                            <input nz-input [(ngModel)]="increasedThirdPartyLimitValue"
-                                                [ngModelOptions]="{standalone: true}"
-                                                [disabled]="!isRiskDetailsEditmode" />
-                                        </nz-form-control>
-                                    </nz-form-item>
-                                    <nz-form-item>
-                                        <nz-form-label [nzSpan]="7" nzFor="increasedThirdPartyLimitsRate">
-                                            Rate
-                                        </nz-form-label>
-                                        <nz-form-control nzSpan="17">
-                                            <nz-input-group nzCompact>
-                                                <nz-select [(ngModel)]="increasedThirdPartyLimitsRateType"
-                                                    style="width: 40%;" [ngModelOptions]="{standalone: true}"
-                                                    [nzDisabled]="!isRiskDetailsEditmode">
-                                                    <nz-option [nzLabel]="'%'" nzValue="percentage">
-                                                    </nz-option>
-
+                                    <div *ngIf="selectedValue?.value === 'ThirdParty'">
+                                        <nz-form-item>
+                                            <nz-form-label [nzSpan]="7" nzFor="load">Add Load
+                                            </nz-form-label>
+                                            <nz-form-control nzSpan="17">
+                                                <nz-select name="load" [(ngModel)]="selectedLoadingValue"
+                                                    [compareWith]="compareFn" nzAllowClear style="width: 100%;"
+                                                    [ngModelOptions]="{standalone: true}" nzAllowClear
+                                                    nzLabel="select load" [nzDisabled]="!isRiskDetailsEditmode">
+                                                    <nz-option *ngFor="let option of motorThirdPartyloadingOptions"
+                                                        [nzValue]="option" [nzLabel]="option.label"></nz-option>
                                                 </nz-select>
-                                                <input nz-input style="width: 60%;" name="increasedThirdPartyLimitsRate"
-                                                    [(ngModel)]="increasedThirdPartyLimitsRate"
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div *ngIf="selectedLoadingValue.value === 'increasedThirdPartyLimits'">
+                                        <nz-form-item>
+                                            <nz-form-label [nzSpan]="7" nzFor="increasedThirdPartyLimitsRate">
+                                                Increase to
+                                            </nz-form-label>
+                                            <nz-form-control nzSpan="17">
+                                                <input nz-input [(ngModel)]="increasedThirdPartyLimitValue"
                                                     [ngModelOptions]="{standalone: true}"
                                                     [disabled]="!isRiskDetailsEditmode" />
-                                            </nz-input-group>
-                                        </nz-form-control>
-                                    </nz-form-item>
-                                    <nz-form-item>
-                                        <nz-form-control [nzXs]="{ span: 24, offset: 4 }"
-                                            [nzSm]="{ span: 20, offset: 7 }">
-                                            <button nz-button nzType="primary"
-                                                (click)="computeIncreasedThirdPartyLimit()"
-                                                [nzLoading]="computeIncreasedThirdPartyLimitIsLoading">Add
-                                                Load</button>
-                                        </nz-form-control>
-                                    </nz-form-item>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                        <nz-form-item>
+                                            <nz-form-label [nzSpan]="7" nzFor="increasedThirdPartyLimitsRate">
+                                                Rate
+                                            </nz-form-label>
+                                            <nz-form-control nzSpan="17">
+                                                <nz-input-group nzCompact>
+                                                    <nz-select [(ngModel)]="increasedThirdPartyLimitsRateType"
+                                                        style="width: 40%;" [ngModelOptions]="{standalone: true}"
+                                                        [nzDisabled]="!isRiskDetailsEditmode">
+                                                        <nz-option [nzLabel]="'%'" nzValue="percentage">
+                                                        </nz-option>
+
+                                                    </nz-select>
+                                                    <input nz-input style="width: 60%;"
+                                                        name="increasedThirdPartyLimitsRate"
+                                                        [(ngModel)]="increasedThirdPartyLimitsRate"
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        [disabled]="!isRiskDetailsEditmode" />
+                                                </nz-input-group>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                        <nz-form-item>
+                                            <nz-form-control [nzXs]="{ span: 24, offset: 4 }"
+                                                [nzSm]="{ span: 20, offset: 7 }">
+                                                <button nz-button nzType="primary"
+                                                    (click)="computeIncreasedThirdPartyLimit()"
+                                                    [nzLoading]="computeIncreasedThirdPartyLimitIsLoading">Add
+                                                    Load</button>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
                                 </div>
-                            </div>
                                 <div *ngIf="selectedLoadingValue.value === 'riotAndStrike'">
                                     <nz-form-item>
                                         <nz-form-label [nzSpan]="7" nzFor="riotAndStrikeRate">Rate
@@ -2172,19 +2239,25 @@
                             </div>
 
                             <div nz-col nzSpan="8">
-                                <div nz-col nzSpan="20" style="float: right;"
-                                    *ngIf="!(loads === undefined || loads.length == 0)">
+                                <div nz-col nzSpan="20" style="float: right;">
                                     <nz-card>
-                                        <nz-divider nzText="Loads" nzOrientation="left"></nz-divider>
+                                        <nz-divider nzText="Loading" nzOrientation="left"></nz-divider>
+                                        <div *ngIf="(loads === undefined || loads.length == 0)">
+                                            <p>No Loading added</p>
+                                        </div>
                                         <div *ngFor="let load of loads; let i = index;">
                                             <div>
                                                 <div nz-row>
-                                                    <div nz-col nzSpan="12">
-                                                        <p>{{load.loadType}}</p>
+                                                    <div nz-col nzSpan="10">
+                                                        <p>{{load.loadType}}:</p>
                                                     </div>
-                                                    <div nz-col nzSpan="12">
+                                                    <div nz-col nzSpan="6">
+                                                        <p style="margin-left: 4px;"> {{load.amount | number:'1.2-2'}}</p>
+                                                    </div>
+                                                    <div nz-col nzSpan="8">
                                                         <a style="float: right;"
-                                                            (click)="removeLoad(load, $event)">Remove Load</a>
+                                                            (click)="removeLoad(load, $event)">Remove
+                                                            Loading</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -2197,13 +2270,18 @@
                             <div nz-col nzSpan="8">
                                 <div nz-col nzSpan="20" style="float: right;">
                                     <nz-card>
-                                            <nz-descriptions nzBordered nzSize="small" nzSpan="6" style="margin-top: 5px;" [nzColumn]="1" [nzBordered]="true" nzSize="middle">
-                                                    <nz-descriptions-item nzTitle="Basic Premium">{{basicPremium}}</nz-descriptions-item>
-                                                    <nz-descriptions-item nzTitle="Loading">{{premiumLoadingTotal}}</nz-descriptions-item>
-                                                    <nz-descriptions-item nzTitle="Discount">{{premiumDiscount}}</nz-descriptions-item>
-                                                     <nz-descriptions-item nzTitle="Levy">{{0}}</nz-descriptions-item>
-                                                    <nz-descriptions-item nzTitle="Net Premium">{{netPremium | number:'1.2-2'}}</nz-descriptions-item>
-                                                </nz-descriptions>
+                                        <nz-descriptions nzBordered nzSize="small" nzSpan="6" style="margin-top: 5px;"
+                                            [nzColumn]="1" [nzBordered]="true" nzSize="middle">
+                                            <nz-descriptions-item nzTitle="Basic Premium">{{basicPremium | number:'1.2-2'}}
+                                            </nz-descriptions-item>
+                                            <nz-descriptions-item nzTitle="Loading">{{premiumLoadingTotal | number:'1.2-2'}}
+                                            </nz-descriptions-item>
+                                            <nz-descriptions-item nzTitle="Discount">{{premiumDiscount | number:'1.2-2'}}
+                                            </nz-descriptions-item>
+                                            <nz-descriptions-item nzTitle="Levy">{{0 | number:'1.2-2'}}</nz-descriptions-item>
+                                            <nz-descriptions-item nzTitle="Net Premium">{{netPremium | number:'1.2-2'}}
+                                            </nz-descriptions-item>
+                                        </nz-descriptions>
                                     </nz-card>
                                 </div>
                             </div>

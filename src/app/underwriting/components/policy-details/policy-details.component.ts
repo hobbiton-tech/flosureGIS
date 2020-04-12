@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Policy, RiskModel, ITimestamp } from '../../models/policy.model';
 import { PoliciesService } from '../../services/policies.service';
+import { DatePipe } from '@angular/common';
 // import { generatePolicies } from '../../data/policy.data';
 
 @Component({
