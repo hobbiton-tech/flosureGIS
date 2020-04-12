@@ -17,11 +17,13 @@ import { IQuoteDTO } from '../../models/quote.dto';
 import { ICertificateDTO } from '../../models/certificate.dto';
 import { combineLatest, BehaviorSubject, Observable } from 'rxjs';
 import * as XLSX from 'xlsx';
-import { IIndividualClient, ICorporateClient } from 'src/app/clients/models/client.model';
+import {
+    IIndividualClient,
+    ICorporateClient,
+} from 'src/app/clients/models/client.model';
 import { UploadChangeParam, NzMessageService } from 'ng-zorro-antd';
 import { debounceTime, switchMap, map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-
 
 type AOA = any[][];
 
@@ -59,23 +61,22 @@ export class QuoteDetailsComponent implements OnInit {
     riskThirdPartyForm: FormGroup;
     riskComprehensiveForm: FormGroup;
     clients: Array<IIndividualClient & ICorporateClient>;
-    
 
-    //vehicle make drop down
+    // vehicle make drop down
     vehicleMakeUrl = 'https://api.randomuser.me/?results=5';
     searchChange$ = new BehaviorSubject('');
     vehicleMakeOptionList: string[] = [];
     selectedVehicleMake: string;
     isVehicleMakeLoading = false;
 
-    //vehicle model drop down
+    // vehicle model drop down
     vehicleModelUrl = 'https://api.randomuser.me/?results=5';
     // searchChange$ = new BehaviorSubject('');
     vehicleModelOptionList: string[] = [];
     selectedVehicleModel: string;
     isVehicleModelLoading = false;
 
-    //excel template data
+    // excel template data
     data: AOA = [
         [1, 2],
         [3, 4],
@@ -91,17 +92,17 @@ export class QuoteDetailsComponent implements OnInit {
     quotesLoading = true;
     risks: RiskModel[] = [];
 
-    //selected risk in risk table
+    // selected risk in risk table
     selectedRisk: RiskModel;
 
-    //risk details modal
+    // risk details modal
     quoteRiskDetailsModalVisible = false;
 
-    //Edit risk details
+    // Edit risk details
     isRiskDetailsEditmode = false;
 
-    //close add risk panel
-    isAddRiskPanelOpen: boolean
+    // close add risk panel
+    isAddRiskPanelOpen: boolean;
 
     /// Premium Computation
     // Basic Premium
@@ -163,9 +164,7 @@ export class QuoteDetailsComponent implements OnInit {
 
     addLoadIsLoading = false;
 
-
     status = 'Unreceipted';
-
 
     optionList = [
         { label: 'Motor Comprehensive', value: 'Comprehensive' },
@@ -188,7 +187,7 @@ export class QuoteDetailsComponent implements OnInit {
         {
             label: 'Increased Third Party Limit',
             value: 'increasedThirdPartyLimits',
-        }
+        },
     ];
 
     selectedLoadingValue = {
@@ -255,8 +254,9 @@ export class QuoteDetailsComponent implements OnInit {
                 this.displayQuote = this.quote;
 
                 this.isQuoteApproved = this.quote.status === 'Approved';
-                
+
                 this.quotesLoading = false;
+
 
                 //fill quotation details
                 this.quoteDetailsForm.get("client").setValue(this.quoteData.client);
@@ -264,6 +264,7 @@ export class QuoteDetailsComponent implements OnInit {
                 this.quoteDetailsForm.get("startDate").setValue((this.quoteData.startDate as ITimestamp).seconds * 1000);
                 this.quoteDetailsForm.get("quarter").setValue(this.quoteData.quarter);
                 this.quoteDetailsForm.get("endDate").setValue(this.quoteData.endDate);
+
 
                 this.risks = this.quoteData.risks;
 
@@ -345,128 +346,164 @@ export class QuoteDetailsComponent implements OnInit {
             >;
         });
 
-         //vehicle make loading
-         const getVehicleMakeList = (name: string) =>
-         this.http
-         .get(`${this.vehicleMakeUrl}`)
-         .pipe(map((res: any) => res.results))
-         .pipe(
-           map((list: any) => {
-             return list.map((item: any) => `${name}`);
-           })
-         );
- 
-         const vehicleMakeOptionList$: Observable<string[]> = this.searchChange$
-       .asObservable()
-       .pipe(debounceTime(500))
-       .pipe(switchMap(getVehicleMakeList));
-       vehicleMakeOptionList$.subscribe(data => {
-       this.vehicleMakeOptionList = data;
-       this.isVehicleMakeLoading = false;
-     });
- 
-            //vehicle model loading
-            const getVehicleModelList = (name: string) =>
+        // vehicle make loading
+        const getVehicleMakeList = (name: string) =>
             this.http
-            .get(`${this.vehicleModelUrl}`)
-            .pipe(map((res: any) => res.results))
-            .pipe(
-              map((list: any) => {
-                return list.map((item: any) => `${name}`);
-              })
-            );
-    
-            const vehicleModelOptionList$: Observable<string[]> = this.searchChange$
-          .asObservable()
-          .pipe(debounceTime(500))
-          .pipe(switchMap(getVehicleModelList));
-          vehicleModelOptionList$.subscribe(data => {
-          this.vehicleModelOptionList = data;
-          this.isVehicleModelLoading = false;
+                .get(`${this.vehicleMakeUrl}`)
+                .pipe(map((res: any) => res.results))
+                .pipe(
+                    map((list: any) => {
+                        return list.map((item: any) => `${name}`);
+                    })
+                );
+
+        const vehicleMakeOptionList$: Observable<
+            string[]
+        > = this.searchChange$
+            .asObservable()
+            .pipe(debounceTime(500))
+            .pipe(switchMap(getVehicleMakeList));
+        vehicleMakeOptionList$.subscribe((data) => {
+            this.vehicleMakeOptionList = data;
+            this.isVehicleMakeLoading = false;
+        });
+
+        // vehicle model loading
+        const getVehicleModelList = (name: string) =>
+            this.http
+                .get(`${this.vehicleModelUrl}`)
+                .pipe(map((res: any) => res.results))
+                .pipe(
+                    map((list: any) => {
+                        return list.map((item: any) => `${name}`);
+                    })
+                );
+
+        const vehicleModelOptionList$: Observable<
+            string[]
+        > = this.searchChange$
+            .asObservable()
+            .pipe(debounceTime(500))
+            .pipe(switchMap(getVehicleModelList));
+        vehicleModelOptionList$.subscribe((data) => {
+            this.vehicleModelOptionList = data;
+            this.isVehicleModelLoading = false;
         });
     }
 
     resetForms() {
         this.riskComprehensiveForm.reset();
         this.riskThirdPartyForm.reset();
-                this.sumInsured = 0,
-                this.premiumRate = 0,
-                this.basicPremium = 0,
-                this.loads = [],
-                this.premiumLoadingTotal = 0,
-                this.premiumDiscountRate = 0,
-                this.netPremium = 0
-        }
+        (this.sumInsured = 0),
+            (this.premiumRate = 0),
+            (this.basicPremium = 0),
+            (this.loads = []),
+            (this.premiumLoadingTotal = 0),
+            (this.premiumDiscountRate = 0),
+            (this.netPremium = 0);
+    }
 
-    //End date calculation
+    // End date calculation
     handleComprehensiveRiskEndDateCalculation(): void {
-        if (this.riskComprehensiveForm.get('riskStartDate').value != '' && this.riskComprehensiveForm.get('riskQuarter').value != '') {
+        if (
+            this.riskComprehensiveForm.get('riskStartDate').value !== '' &&
+            this.riskComprehensiveForm.get('riskQuarter').value !== ''
+        ) {
             const request: IRateRequest = {
                 sumInsured: 0,
                 premiumRate: 0,
-                startDate:  this.riskComprehensiveForm.get('riskStartDate').value,
-                quarter: Number(this.riskComprehensiveForm.get('riskQuarter').value),
+                startDate: this.riskComprehensiveForm.get('riskStartDate')
+                    .value,
+                quarter: Number(
+                    this.riskComprehensiveForm.get('riskQuarter').value
+                ),
                 discount: 0,
                 carStereo: 0,
                 carStereoRate: 0,
-                lossOfUseDays: 0 ,
+                lossOfUseDays: 0,
                 lossOfUseRate: 0,
                 thirdPartyLimit: 0,
                 thirdPartyLimitRate: 0,
                 riotAndStrike: 0,
-                levy:0
-            }
-                this.http.post<IRateResult>(`https://flosure-premium-rates.herokuapp.com/rates/comprehensive`, request).subscribe(data => {
-                    this.riskComprehensiveForm.get('riskEndDate').setValue(data.endDate);
-                })  
-        } 
+                levy: 0,
+            };
+            this.http
+                .post<IRateResult>(
+                    `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                    request
+                )
+                .subscribe((data) => {
+                    this.riskComprehensiveForm
+                        .get('riskEndDate')
+                        .setValue(data.endDate);
+                });
+        }
     }
 
     handleThirdPartyRiskEndDateCalculation(): void {
-        if (this.riskThirdPartyForm.get('riskStartDate').value != '' && this.riskThirdPartyForm.get('riskQuarter').value != '') {
+        if (
+            this.riskThirdPartyForm.get('riskStartDate').value !== '' &&
+            this.riskThirdPartyForm.get('riskQuarter').value !== ''
+        ) {
             const request: IRateRequest = {
                 sumInsured: 0,
                 premiumRate: 0,
-                startDate:  this.riskThirdPartyForm.get('riskStartDate').value,
-                quarter: Number(this.riskThirdPartyForm.get('riskQuarter').value),
+                startDate: this.riskThirdPartyForm.get('riskStartDate').value,
+                quarter: Number(
+                    this.riskThirdPartyForm.get('riskQuarter').value
+                ),
                 discount: 0,
                 carStereo: 0,
                 carStereoRate: 0,
-                lossOfUseDays: 0 ,
+                lossOfUseDays: 0,
                 lossOfUseRate: 0,
                 thirdPartyLimit: 0,
                 thirdPartyLimitRate: 0,
                 riotAndStrike: 0,
-                levy:0
-            }
-                this.http.post<IRateResult>(`https://flosure-premium-rates.herokuapp.com/rates/comprehensive`, request).subscribe(data => {
-                    this.riskThirdPartyForm.get('riskEndDate').setValue(data.endDate);
-                })  
-        } 
+                levy: 0,
+            };
+            this.http
+                .post<IRateResult>(
+                    `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                    request
+                )
+                .subscribe((data) => {
+                    this.riskThirdPartyForm
+                        .get('riskEndDate')
+                        .setValue(data.endDate);
+                });
+        }
     }
 
     handlePolicyEndDateCalculation(): void {
-        if (this.quoteDetailsForm.get('startDate').value != '' && this.quoteDetailsForm.get('quarter').value != '') {
+        if (
+            this.quoteDetailsForm.get('startDate').value !== '' &&
+            this.quoteDetailsForm.get('quarter').value !== ''
+        ) {
             const request: IRateRequest = {
                 sumInsured: 0,
                 premiumRate: 0,
-                startDate:  this.quoteDetailsForm.get('startDate').value,
+                startDate: this.quoteDetailsForm.get('startDate').value,
                 quarter: Number(this.quoteDetailsForm.get('quarter').value),
                 discount: 0,
                 carStereo: 0,
                 carStereoRate: 0,
-                lossOfUseDays: 0 ,
+                lossOfUseDays: 0,
                 lossOfUseRate: 0,
                 thirdPartyLimit: 0,
                 thirdPartyLimitRate: 0,
                 riotAndStrike: 0,
-                levy:0
-            }
-                this.http.post<IRateResult>(`https://flosure-premium-rates.herokuapp.com/rates/comprehensive`, request).subscribe(data => {
+                levy: 0,
+            };
+            this.http
+                .post<IRateResult>(
+                    `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                    request
+                )
+                .subscribe((data) => {
                     this.quoteDetailsForm.get('endDate').setValue(data.endDate);
-                })  
-            
-        } 
+                });
+        }
     }
 
     addThirdPartyRisk(): void {
@@ -481,35 +518,35 @@ export class QuoteDetailsComponent implements OnInit {
             discountRate: this.premiumDiscountRate,
             premiumLevy: 0.03,
             netPremium: this.netPremium,
-            insuranceType: this.selectedValue.value
+            insuranceType: this.selectedValue.value,
         });
-        this.risks = [...this.risks, ...some]; 
+        this.risks = [...this.risks, ...some];
 
-        //reset form after submitting
+        // reset form after submitting
         this.riskThirdPartyForm.reset();
-            this.sumInsured = 0,
-            this.premiumRate = 0,
-            this.basicPremium = 0,
-            this.loads = [],
-            this.premiumLoadingTotal = 0,
-            this.premiumDiscountRate = 0,
-            this.netPremium = 0
+        (this.sumInsured = 0),
+            (this.premiumRate = 0),
+            (this.basicPremium = 0),
+            (this.loads = []),
+            (this.premiumLoadingTotal = 0),
+            (this.premiumDiscountRate = 0),
+            (this.netPremium = 0);
 
         this.isAddRiskPanelOpen = false;
         console.log(this.risks);
     }
 
-    //reset third party risk form
+    // reset third party risk form
     resetThirdPartyRiskForm(e: MouseEvent) {
         e.preventDefault();
-    this.riskComprehensiveForm.reset();
-            this.sumInsured = 0,
-            this.premiumRate = 0,
-            this.basicPremium = 0,
-            this.loads = [],
-            this.premiumLoadingTotal = 0,
-            this.premiumDiscountRate = 0,
-            this.netPremium = 0
+        this.riskComprehensiveForm.reset();
+        (this.sumInsured = 0),
+            (this.premiumRate = 0),
+            (this.basicPremium = 0),
+            (this.loads = []),
+            (this.premiumLoadingTotal = 0),
+            (this.premiumDiscountRate = 0),
+            (this.netPremium = 0);
     }
 
     addComprehensiveRisk(): void {
@@ -524,74 +561,86 @@ export class QuoteDetailsComponent implements OnInit {
             discountRate: this.premiumDiscountRate,
             premiumLevy: 0.03,
             netPremium: this.netPremium,
-            insuranceType: this.selectedValue.value
+            insuranceType: this.selectedValue.value,
         });
-        this.risks = [...this.risks, ...some]; 
+        this.risks = [...this.risks, ...some];
 
-        //reset form after submitting
+        // reset form after submitting
         this.riskComprehensiveForm.reset();
-            this.sumInsured = 0,
-            this.premiumRate = 0,
-            this.basicPremium = 0,
-            this.loads = [],
-            this.premiumLoadingTotal = 0,
-            this.premiumDiscountRate = 0,
-            this.netPremium = 0
+        (this.sumInsured = 0),
+            (this.premiumRate = 0),
+            (this.basicPremium = 0),
+            (this.loads = []),
+            (this.premiumLoadingTotal = 0),
+            (this.premiumDiscountRate = 0),
+            (this.netPremium = 0);
 
         this.isAddRiskPanelOpen = false;
     }
 
-    //reset comprehensive risk form
+    // reset comprehensive risk form
     resetComprehensiveRiskForm(e: MouseEvent) {
         e.preventDefault();
-    this.riskComprehensiveForm.reset();
-            this.sumInsured = 0,
-            this.premiumRate = 0,
-            this.basicPremium = 0,
-            this.loads = [],
-            this.premiumLoadingTotal = 0,
-            this.premiumDiscountRate = 0,
-            this.netPremium = 0
+        this.riskComprehensiveForm.reset();
+        (this.sumInsured = 0),
+            (this.premiumRate = 0),
+            (this.basicPremium = 0),
+            (this.loads = []),
+            (this.premiumLoadingTotal = 0),
+            (this.premiumDiscountRate = 0),
+            (this.netPremium = 0);
     }
 
-    //view details of the risk
+    // view details of the risk
     viewRiskDetails(risk: RiskModel) {
         this.selectedRisk = risk;
-        console.log(this.selectedRisk)
+        console.log(this.selectedRisk);
         this.quoteRiskDetailsModalVisible = true;
 
         console.log(risk);
-        
+
         // this.riskComprehensiveForm.get('vehicleMake').setValue(risk.vehicleMake);
         // this.riskComprehensiveForm.get('vehicleModel').setValue(risk.vehicleModel);
         this.riskComprehensiveForm.get('regNumber').setValue(risk.regNumber);
-        this.riskComprehensiveForm.get('engineNumber').setValue(risk.engineNumber);
-        this.riskComprehensiveForm.get('chassisNumber').setValue(risk.chassisNumber);
-        this.riskComprehensiveForm.get('productType').setValue(risk.productType);
-        this.riskComprehensiveForm.get('riskStartDate').setValue((risk.riskStartDate as ITimestamp).seconds * 1000);
-        this.riskComprehensiveForm.get('riskQuarter').setValue(risk.riskQuarter);
-        this.riskComprehensiveForm.get('riskEndDate').setValue(risk.riskEndDate);
+        this.riskComprehensiveForm
+            .get('engineNumber')
+            .setValue(risk.engineNumber);
+        this.riskComprehensiveForm
+            .get('chassisNumber')
+            .setValue(risk.chassisNumber);
+        this.riskComprehensiveForm
+            .get('productType')
+            .setValue(risk.productType);
+        this.riskComprehensiveForm
+            .get('riskStartDate')
+            .setValue((risk.riskStartDate as ITimestamp).seconds * 1000);
+        this.riskComprehensiveForm
+            .get('riskQuarter')
+            .setValue(risk.riskQuarter);
+        this.riskComprehensiveForm
+            .get('riskEndDate')
+            .setValue(risk.riskEndDate);
         this.riskComprehensiveForm.get('color').setValue(risk.color);
-       
-        this.selectedVehicleMake = risk.vehicleMake
-        this.selectedVehicleModel = risk.vehicleModel
+
+        this.selectedVehicleMake = risk.vehicleMake;
+        this.selectedVehicleModel = risk.vehicleModel;
         this.sumInsured = risk.sumInsured;
         this.premiumRate = risk.premiumRate;
         this.loads = risk.loads;
         this.basicPremium = risk.basicPremium;
-        this.premiumDiscountRate = risk.discountRate
+        this.premiumDiscountRate = risk.discountRate;
         this.premiumDiscount = risk.discountRate;
         this.premiumLoadingTotal = risk.loadingTotal;
         this.basicPremiumLevy = risk.premiumLevy;
         this.netPremium = risk.netPremium;
     }
 
-    //remove risk from risks table
+    // remove risk from risks table
     removeRisk(regNumber: string): void {
-        this.risks = this.risks.filter(risk => risk.regNumber !== regNumber);
-      }
+        this.risks = this.risks.filter((risk) => risk.regNumber !== regNumber);
+    }
 
-      closeRiskDetails(){
+    closeRiskDetails() {
         this.quoteRiskDetailsModalVisible = false;
     }
 
@@ -740,7 +789,6 @@ export class QuoteDetailsComponent implements OnInit {
                     // netPremium: this.quoteData.netPremium,
                     paymentPlan: this.paymentPlan,
                     user: this.quoteData.user,
-
                 };
 
                 // const policy = this.quoteDetailsForm.value as Policy;
@@ -781,19 +829,19 @@ export class QuoteDetailsComponent implements OnInit {
         });
     }
 
-    //vehicle make loading
+    // vehicle make loading
     onVehicleMakeSearch(value: string): void {
         this.isVehicleMakeLoading = true;
         this.searchChange$.next(value);
-      }
+    }
 
-      //vehicle model loading
+    // vehicle model loading
     onVehicleModelSearch(value: string): void {
         this.isVehicleModelLoading = true;
         this.searchChange$.next(value);
-      }
+    }
 
-    //import excel fleet methods
+    // import excel fleet methods
     showModal(): void {
         this.isVisible = true;
     }
@@ -870,65 +918,80 @@ export class QuoteDetailsComponent implements OnInit {
         this.computePremiumIsLoading = true;
         const request: IRateRequest = {
             sumInsured: Number(this.sumInsured),
-            premiumRate: (Number(this.premiumRate)/100),
-            startDate:  this.riskComprehensiveForm.get('riskStartDate').value,
-            quarter: Number(this.riskComprehensiveForm.get('riskQuarter').value),
-            discount: (Number(this.premiumDiscountRate)/100),
+            premiumRate: Number(this.premiumRate) / 100,
+            startDate: this.riskComprehensiveForm.get('riskStartDate').value,
+            quarter: Number(
+                this.riskComprehensiveForm.get('riskQuarter').value
+            ),
+            discount: Number(this.premiumDiscountRate) / 100,
             carStereo: Number(this.carStereoValue),
-            carStereoRate: (Number(this.carStereoRate)/100),
+            carStereoRate: Number(this.carStereoRate) / 100,
             lossOfUseDays: Number(this.lossOfUseDays),
-            lossOfUseRate: (Number(this.lossOfUseDailyRate)/100),
-            thirdPartyLimit: (Number(this.increasedThirdPartyLimitValue)),
-            thirdPartyLimitRate: (Number(this.increasedThirdPartyLimitsRate)/100),
-            riotAndStrike: (Number(this.riotAndStrikeRate)/100),
-            levy: 0.03
-        }
-            this.http.post<IRateResult>(`https://flosure-premium-rates.herokuapp.com/rates/comprehensive`, request).subscribe(data => {
+            lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+            thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
+            thirdPartyLimitRate:
+                Number(this.increasedThirdPartyLimitsRate) / 100,
+            riotAndStrike: Number(this.riotAndStrikeRate) / 100,
+            levy: 0.03,
+        };
+        this.http
+            .post<IRateResult>(
+                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                request
+            )
+            .subscribe((data) => {
                 this.netPremium = Number(data.premium);
                 this.computePremiumIsLoading = false;
-            }) 
+            });
     }
 
     computeThirdPartyPremium() {
         this.computePremiumIsLoading = true;
         const request: IRateRequest = {
             sumInsured: Number(this.sumInsured),
-            premiumRate: (Number(this.premiumRate)/100),
-            startDate:  this.riskThirdPartyForm.get('riskStartDate').value,
+            premiumRate: Number(this.premiumRate) / 100,
+            startDate: this.riskThirdPartyForm.get('riskStartDate').value,
             quarter: Number(this.riskThirdPartyForm.get('riskQuarter').value),
-            discount: (Number(this.premiumDiscountRate)/100),
+            discount: Number(this.premiumDiscountRate) / 100,
             carStereo: Number(this.carStereoValue),
-            carStereoRate: (Number(this.carStereoRate)/100),
+            carStereoRate: Number(this.carStereoRate) / 100,
             lossOfUseDays: Number(this.lossOfUseDays),
-            lossOfUseRate: (Number(this.lossOfUseDailyRate)/100),
-            thirdPartyLimit: (Number(this.increasedThirdPartyLimitValue)),
-            thirdPartyLimitRate: (Number(this.increasedThirdPartyLimitsRate)/100),
-            riotAndStrike: (Number(this.riotAndStrikeRate)/100),
-            levy: 0.03
-        }
-            this.http.post<IRateResult>(`https://flosure-premium-rates.herokuapp.com/rates/comprehensive`, request).subscribe(data => {
+            lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+            thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
+            thirdPartyLimitRate:
+                Number(this.increasedThirdPartyLimitsRate) / 100,
+            riotAndStrike: Number(this.riotAndStrikeRate) / 100,
+            levy: 0.03,
+        };
+        this.http
+            .post<IRateResult>(
+                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                request
+            )
+            .subscribe((data) => {
                 this.netPremium = Number(data.premium);
                 this.computePremiumIsLoading = false;
-            }) 
+            });
     }
+
+
 
 
     // Loading computation
     computeRiotAndStrike() {
         this.computeRiotAndStrikeIsLoading = true;
         setTimeout(() => {
+            console.log(this.riotAndStrikeRate);
 
-            console.log(this.riotAndStrikeRate)
-    
             this.loads.push({
                 loadType: 'Riot And Strike',
                 amount: this.riotAndStrikeAmount,
             });
 
             this.addingLoad = false;
-        
-        this.computeRiotAndStrikeIsLoading = false;
-        this.selectedLoadingValue.value = '';
+
+            this.computeRiotAndStrikeIsLoading = false;
+            this.selectedLoadingValue.value = '';
         }, 2000);
     }
 
@@ -939,14 +1002,10 @@ export class QuoteDetailsComponent implements OnInit {
                 loadType: 'Increased Third Party Limit',
                 amount: this.increasedThirdPartyLimitsAmount,
             });
-    
-                this.addingLoad = false;
-                
-        
-        this.computeIncreasedThirdPartyLimitIsLoading = false;
-        this.selectedLoadingValue.value = '';
-        }, 2000);  
-}
+
+            this.addingLoad = false;
+
+
 
     computeCarStereo() {
         this.computeCarStereoIsLoading = true;
@@ -955,19 +1014,18 @@ export class QuoteDetailsComponent implements OnInit {
                 loadType: 'Car Stereo',
                 amount: this.carStereoAmount,
             });
-           
-    
-                this.addingLoad = false;
-                
-        
-        this.computeCarStereoIsLoading = false;
-        this.selectedLoadingValue.value = '';
+
+            this.addingLoad = false;
+
+            this.computeCarStereoIsLoading = false;
+            this.selectedLoadingValue.value = '';
         }, 2000);
-}
+    }
 
     computeTerritorialExtension() {
         this.computeTerritorialExtensionIsLoading = true;
         setTimeout(() => {
+
             this.loads.push({ loadType: 'Territorial Extension', amount: 1750 });
     
                 this.addingLoad = false;
@@ -975,48 +1033,48 @@ export class QuoteDetailsComponent implements OnInit {
         this.computeTerritorialExtensionIsLoading = false;
         this.selectedLoadingValue.value = '';
         }, 2000);    
+
     }
 
     computeLossOfUse() {
         this.computeLossOfUseIsLoading = true;
         setTimeout(() => {
-        
             this.loads.push({
                 loadType: 'Loss Of Use',
                 amount: this.lossOfUseAmount,
             });
 
-                this.addingLoad = false;
-        
-        this.computeLossOfUseIsLoading = false;
-        this.selectedLoadingValue.value = '';
+            this.addingLoad = false;
+
+            this.computeLossOfUseIsLoading = false;
+            this.selectedLoadingValue.value = '';
         }, 2000);
-}
-
-//remove load
-removeLoad(i: LoadModel, e: MouseEvent): void {
-    e.preventDefault();
-    if (this.loads.length > 0) {
-      const index = this.loads.indexOf(i);
-      this.loads.splice(index, 1);
     }
-  }
 
-// Discount Computation
-computeDiscount() {
-    this.computeDiscountIsLoading = true;
-}
+    // remove load
+    removeLoad(i: LoadModel, e: MouseEvent): void {
+        e.preventDefault();
+        if (this.loads.length > 0) {
+            const index = this.loads.indexOf(i);
+            this.loads.splice(index, 1);
+        }
+    }
 
-//Add risk validation
-validateriskComprehensiveFormDetails(): boolean {
-    if (this.riskComprehensiveForm.valid){
-        if (this.sumInsured && this.sumInsured != 0){
-            if (this.premiumRate && this.premiumRate != 0){
-                if (this.netPremium > 0) {
-                    return true;
-                }  
+    // Discount Computation
+    computeDiscount() {
+        this.computeDiscountIsLoading = true;
+    }
+
+    // Add risk validation
+    validateriskComprehensiveFormDetails(): boolean {
+        if (this.riskComprehensiveForm.valid) {
+            if (this.sumInsured && this.sumInsured !== 0) {
+                if (this.premiumRate && this.premiumRate !== 0) {
+                    if (this.netPremium > 0) {
+                        return true;
+                    }
+                }
             }
         }
     }
-}
 }
