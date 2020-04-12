@@ -257,14 +257,24 @@ export class QuoteDetailsComponent implements OnInit {
 
                 this.quotesLoading = false;
 
-
-                //fill quotation details
-                this.quoteDetailsForm.get("client").setValue(this.quoteData.client);
-                this.quoteDetailsForm.get("currency").setValue(this.quoteData.currency);
-                this.quoteDetailsForm.get("startDate").setValue((this.quoteData.startDate as ITimestamp).seconds * 1000);
-                this.quoteDetailsForm.get("quarter").setValue(this.quoteData.quarter);
-                this.quoteDetailsForm.get("endDate").setValue(this.quoteData.endDate);
-
+                // fill quotation details
+                this.quoteDetailsForm
+                    .get('client')
+                    .setValue(this.quoteData.client);
+                this.quoteDetailsForm
+                    .get('currency')
+                    .setValue(this.quoteData.currency);
+                this.quoteDetailsForm
+                    .get('startDate')
+                    .setValue(
+                        (this.quoteData.startDate as ITimestamp).seconds * 1000
+                    );
+                this.quoteDetailsForm
+                    .get('quarter')
+                    .setValue(this.quoteData.quarter);
+                this.quoteDetailsForm
+                    .get('endDate')
+                    .setValue(this.quoteData.endDate);
 
                 this.risks = this.quoteData.risks;
 
@@ -974,9 +984,6 @@ export class QuoteDetailsComponent implements OnInit {
             });
     }
 
-
-
-
     // Loading computation
     computeRiotAndStrike() {
         this.computeRiotAndStrikeIsLoading = true;
@@ -1004,8 +1011,10 @@ export class QuoteDetailsComponent implements OnInit {
             });
 
             this.addingLoad = false;
-
-
+            this.computeIncreasedThirdPartyLimitIsLoading = false;
+            this.selectedLoadingValue.value = '';
+        }, 2000);
+    }
 
     computeCarStereo() {
         this.computeCarStereoIsLoading = true;
@@ -1025,15 +1034,16 @@ export class QuoteDetailsComponent implements OnInit {
     computeTerritorialExtension() {
         this.computeTerritorialExtensionIsLoading = true;
         setTimeout(() => {
+            this.loads.push({
+                loadType: 'Territorial Extension',
+                amount: 1750,
+            });
 
-            this.loads.push({ loadType: 'Territorial Extension', amount: 1750 });
-    
-                this.addingLoad = false;
-        
-        this.computeTerritorialExtensionIsLoading = false;
-        this.selectedLoadingValue.value = '';
-        }, 2000);    
+            this.addingLoad = false;
 
+            this.computeTerritorialExtensionIsLoading = false;
+            this.selectedLoadingValue.value = '';
+        }, 2000);
     }
 
     computeLossOfUse() {
