@@ -5,6 +5,7 @@ export class Policy {
     startDate: Date | ITimestamp;
     endDate: Date | ITimestamp;
     client: string;
+    clientCode: string;
     nameOfInsured: string;
     sumInsured: number;
     branch: string;
@@ -12,16 +13,16 @@ export class Policy {
     currency: Currency;
     preparedBy: string;
     status: PolicyStatus;
-    timeOfIssue: string;
+    timeOfIssue: string | ITimestamp;;
     expiryDate: Date | ITimestamp;
-    dateOfIssue: string | ITimestamp;
+    dateOfIssue: Date | ITimestamp;
     quarter: string;
     user: string;
     town: string;
     productType: ProductType;
     risks: RiskModel[];
     netPremium: number;
-    underwritingYear: string;
+    underwritingYear: Date | ITimestamp;;
     receiptStatus: ReceiptStatus;
     paymentPlan: PaymentPlan;
 }

@@ -259,7 +259,7 @@ export class QuoteDetailsComponent implements OnInit {
                 this.quotesLoading = false;
 
                 //fill quotation details
-                this.quoteDetailsForm.get("clientCode").setValue(this.quoteData.clientCode);
+                this.quoteDetailsForm.get("client").setValue(this.quoteData.client);
                 this.quoteDetailsForm.get("currency").setValue(this.quoteData.currency);
                 this.quoteDetailsForm.get("startDate").setValue((this.quoteData.startDate as ITimestamp).seconds * 1000);
                 this.quoteDetailsForm.get("quarter").setValue(this.quoteData.quarter);
@@ -300,7 +300,7 @@ export class QuoteDetailsComponent implements OnInit {
         this.premiumDiscountRateType = 'percentage';
 
         this.quoteDetailsForm = this.formBuilder.group({
-            clientCode: ['', Validators.required],
+            client: ['', Validators.required],
             startDate: ['', Validators.required],
             endDate: [''],
             currency: [`${this.quote.currency}`, Validators.required],
@@ -744,6 +744,7 @@ export class QuoteDetailsComponent implements OnInit {
                 };
 
                 // const policy = this.quoteDetailsForm.value as Policy;
+                console.log(policy);
                 this.policiesService.addPolicy(policy);
 
                 this.isQuoteApproved = true;

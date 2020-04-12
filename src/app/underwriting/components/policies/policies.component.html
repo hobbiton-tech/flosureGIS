@@ -58,8 +58,8 @@
                     style="cursor:pointer;"
                 >
                     <td>{{ policy.policyNumber }}</td>
-                    <td>{{ policy.startDate}}</td>
-                    <td>{{ policy.endDate}}</td>
+                    <td>{{ policy.startDate |  date}}</td>
+                    <td>{{ policy.endDate | date}}</td>
                     <td>{{ policy.client }}</td>
                     <td>{{ policy.user }}</td>
                     <td>{{ policy.status }}</td>

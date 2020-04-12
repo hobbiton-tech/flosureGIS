@@ -251,7 +251,7 @@ export class CreateQuoteComponent implements OnInit {
     ngOnInit(): void {
         this.quoteForm = this.formBuilder.group({
             quoteNumber: [this.quoteService.generateQuoteNumber('ran', 10)],
-            clientCode: ['', Validators.required],
+            client: ['', Validators.required],
             messageCode: ['ewrewre', Validators.required],
             underwritingYear: [''],
             currency: ['', Validators.required],
@@ -801,12 +801,13 @@ export class CreateQuoteComponent implements OnInit {
         
                 this.loads.push({
                     loadType: 'Riot And Strike',
-                    amount: this.riotAndStrikeAmount,
+                    amount: 0,
                 });
                 this.addingLoad = false;
             
             this.computeRiotAndStrikeIsLoading = false;
             this.selectedLoadingValue.value = '';
+            console.log(this.loads)
             }, 2000);
 
     }
@@ -816,12 +817,13 @@ export class CreateQuoteComponent implements OnInit {
             setTimeout(() => {
                 this.loads.push({
                     loadType: 'Increased Third Party Limit',
-                    amount: this.increasedThirdPartyLimitsAmount,
+                    amount: 0,
                 });
                     this.addingLoad = false;
                       
             this.computeIncreasedThirdPartyLimitIsLoading = false;
             this.selectedLoadingValue.value = '';
+            console.log(this.loads)
             }, 2000);  
     }
 
@@ -830,13 +832,14 @@ export class CreateQuoteComponent implements OnInit {
             setTimeout(() => {
                 this.loads.push({
                     loadType: 'Car Stereo',
-                    amount: this.carStereoAmount,
+                    amount: 0,
                 });
                     this.addingLoad = false;
                     
             
             this.computeCarStereoIsLoading = false;
             this.selectedLoadingValue.value = '';
+            console.log(this.loads)
             }, 2000);
     }
 
@@ -844,12 +847,13 @@ export class CreateQuoteComponent implements OnInit {
         this.computeTerritorialExtensionIsLoading = true;
 
             setTimeout(() => {
-                this.loads.push({ loadType: 'Territorial Extension', amount: 1750 });
+                this.loads.push({ loadType: 'Territorial Extension', amount: 0 });
         
                     this.addingLoad = false;
             
             this.computeTerritorialExtensionIsLoading = false;
             this.selectedLoadingValue.value = '';
+            console.log(this.loads)
             }, 2000);
     }
 
@@ -859,12 +863,13 @@ export class CreateQuoteComponent implements OnInit {
             
                 this.loads.push({
                     loadType: 'Loss Of Use',
-                    amount: this.lossOfUseAmount,
+                    amount: 0,
                 });
                     this.addingLoad = false;
             
             this.computeLossOfUseIsLoading = false;
             this.selectedLoadingValue.value = '';
+            console.log(this.loads)
             }, 2000);
     }
 
@@ -874,6 +879,7 @@ export class CreateQuoteComponent implements OnInit {
           const index = this.loads.indexOf(i);
           this.loads.splice(index, 1);
         }
+        console.log(this.loads);
       }
 
     // Discount Computation

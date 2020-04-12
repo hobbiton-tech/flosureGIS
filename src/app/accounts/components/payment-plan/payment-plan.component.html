@@ -15,7 +15,7 @@
                 <input
                     type="text"
                     nz-input
-                    placeholder="Search by client"
+                    placeholder="Search by client, clientID"
                     [(ngModel)]="searchString"
                     (ngModelChange)="search($event)"
                 />
@@ -32,15 +32,9 @@
             <thead>
                 <tr>
                     <th>Client Name</th>
-                    <th>Amount Due</th>
-                    <th>Amount Paid</th>
-                    <th>No of Vehicles</th>
-                    <th>No of Installments</th>
-                    <th>No of Paid installments</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Status</th>
-                    <th>Action</th>
+                    <th>Client ID</th>
+                    <th>Number of Policies</th>
+                    <th>Total Premium</th>
                 </tr>
             </thead>
             <tbody>
@@ -49,11 +43,6 @@
                     (click)="viewPaymentPlanDetails()"
                     style="cursor: pointer;"
                 >
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
