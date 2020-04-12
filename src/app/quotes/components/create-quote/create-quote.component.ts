@@ -498,7 +498,7 @@ export class CreateQuoteComponent implements OnInit {
         const some: RiskModel[] = [];
         some.push({
             ...this.riskThirdPartyForm.value,
-            sumInsured: this.sumInsured,
+            sumInsured: Number(this.sumInsured),
             premiumRate: this.premiumRate,
             basicPremium: this.basicPremium,
             loads: this.loads,
@@ -542,7 +542,7 @@ export class CreateQuoteComponent implements OnInit {
         const some: RiskModel[] = [];
         some.push({
             ...this.riskComprehensiveForm.value,
-            sumInsured: this.sumInsured,
+            sumInsured: Number(this.sumInsured),
             premiumRate: this.premiumRate,
             basicPremium: this.basicPremium,
             loads: this.loads,
