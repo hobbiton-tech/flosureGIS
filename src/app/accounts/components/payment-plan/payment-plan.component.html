@@ -4,7 +4,7 @@
             <nz-page-header-title>Payment Plans</nz-page-header-title>
             <nz-page-header-content>
                 <nz-descriptions [nzColumn]="3">
-                    <nz-descriptions-item nzTitle="Total Payment Plans" [nzSpan]="1"></nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Total Payment Plans" [nzSpan]="1">{{paymentPlansCount}}</nz-descriptions-item>
                 </nz-descriptions>
             </nz-page-header-content>
         </nz-page-header>
@@ -45,7 +45,8 @@
                     </div>
 
                     <nz-table
-                        #agentsTable
+                        #paymentPlansTable
+                        [nzData] = "dispalyPaymentPlansList"
                         [nzSize]="'small'"
                         [nzBordered]="true"
                         style="background-color: white;"
@@ -60,12 +61,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr (click)="viewPaymentPlanDetails()" style="cursor: pointer;">
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                            <tr  
+                            style="cursor: pointer;" *ngFor="let paymentPlan of paymentPlansTable.data" (click)="viewPaymentPlanDetails(paymentPlan)" >
+                                <td>{{paymentPlan.clientName}}</td>
+                                <td>{{paymentPlan.clientId}}</td>
+                                <td>{{paymentPlan.numberOfPolicies}}</td>
+                                <td>{{paymentPlan.totalPremium}}</td>
+                                <td>{{paymentPlan.status}}</td>
                             </tr>
                         </tbody>
                     </nz-table>

@@ -1,0 +1,46 @@
+<div style="margin: 15px;">
+    <nz-page-header nzBackIcon>
+       
+        
+    </nz-page-header>
+
+
+    <nz-card style="margin-bottom: 5px;">
+        <!-- Payment-plan-policy-installments Table Search bar and Table details start here -->
+        <div style="margin-bottom: 20px; margin-top: 20px; width: 50%;">
+            <nz-input-group [nzSuffix]="suffixIconSearch">
+                <input type="text" nz-input placeholder="Search by" />
+            </nz-input-group>
+            <ng-template #suffixIconSearch>
+                <i nz-icon nzType="search"></i>
+            </ng-template>
+        </div>
+        <nz-table #paymentPlanPolicyInstallmentsTable [nzSize]="'small'" [nzBordered]="true" [nzData]="paymentPlanPolicyInstallments">
+            <thead>
+                <tr>
+                    <th>Installment Amount</th>
+                    <th>Installment Date</th>
+                    <th>Actual Paid Date</th>
+                    <th>Balance</th>
+                    <th>Installment Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let paymentPlanPolicyInstallment of paymentPlanPolicyInstallmentsTable.data" style="cursor: pointer;">
+                <td>{{paymentPlanPolicyInstallment.installmentAmount}}</td>
+                <td>{{paymentPlanPolicyInstallment.installmentDate | date}}</td>
+                <td>{{paymentPlanPolicyInstallment.actualPaidDate | date}}</td>
+                <td>{{paymentPlanPolicyInstallment.balance}}</td>
+                <td>{{paymentPlanPolicyInstallment.installmentStatus}}</td>
+                <td>
+                        <button nz-button nzType="primary" (click)="receiptInstallment()">Receipt</button>
+                </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </nz-card>
+    </div>
+
+
+

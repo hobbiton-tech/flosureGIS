@@ -1,34 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {
-    FormGroup,
-    FormBuilder,
-    Validators,
-    FormControl,
-} from '@angular/forms';
+import { FormGroup,FormBuilder,Validators,FormControl} from '@angular/forms';
 import { Router } from '@angular/router';
 import { QuotesService } from '../../services/quotes.service';
 import { ClientsService } from 'src/app/clients/services/clients.service';
-import {
-    ICorporateClient,
-    IIndividualClient,
-} from 'src/app/clients/models/client.model';
-import {
-    RiskModel,
-    Quote,
-    MotorQuotationModel,
-    Load,
-    LoadModel,
-} from '../../models/quote.model';
-import {
-    map,
-    tap,
-    filter,
-    scan,
-    retry,
-    catchError,
-    debounceTime,
-    switchMap,
-} from 'rxjs/operators';
+import { ICorporateClient, IIndividualClient } from 'src/app/clients/models/client.model';
+import { RiskModel, Quote, MotorQuotationModel, Load, LoadModel} from '../../models/quote.model';
+import { map,tap,filter,scan, retry, catchError,debounceTime,switchMap} from 'rxjs/operators';
 import { NzMessageService, UploadChangeParam } from 'ng-zorro-antd';
 import * as XLSX from 'xlsx';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -217,6 +194,13 @@ export class CreateQuoteComponent implements OnInit {
         label: '',
         value: '',
     };
+
+    //motor third party rates
+    motorThirdPartyRates = {
+        'pirvate' : {Q1: 165, Q2: 280, Q3: 370, Q4: 464},
+        'commercial' : {Q1: 199, Q2: 340, Q3: 452, Q4: 566},
+        'bus/taxi' : {Q1: 270, Q2: 464, Q3: 618, Q4: 772}
+    }
 
     startValue: Date | null = null;
     endValue: Date | null = null;
