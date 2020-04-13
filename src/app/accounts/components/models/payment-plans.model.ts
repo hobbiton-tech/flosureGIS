@@ -29,7 +29,7 @@ export class InstallmentsModel {
     balance: number;
 }
 
-export type PaymentPlanStatus = 'Fully Paid' | 'Partially Paid' | 'Paid';
-export type PolicyPlanStatus = 'Fully Paid' | 'Partially Paid' | 'Paid';
+export type PaymentPlanStatus = 'Fully Paid' | 'Partially Paid' | 'UnPaid';
+export type PolicyPlanStatus = 'Fully Paid' | 'Partially Paid' | 'UnPaid';
 
-export type InstallmentStatus = 'Fully Paid' | 'Partially Paid' | 'Paid';
+export type InstallmentStatus = 'Fully Paid' | 'Partially Paid' | 'UnPaid';
