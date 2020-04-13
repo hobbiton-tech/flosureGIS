@@ -5,9 +5,9 @@ import { PaymentPlanService } from '../../services/payment-plan.service';
 
 
 @Component({
-  selector: 'app-payment-plan',
-  templateUrl: './payment-plan.component.html',
-  styleUrls: ['./payment-plan.component.scss']
+    selector: 'app-payment-plan',
+    templateUrl: './payment-plan.component.html',
+    styleUrls: ['./payment-plan.component.scss'],
 })
 export class PaymentPlanComponent implements OnInit {
   paymentPlansList: IPaymentModel[];
@@ -16,8 +16,10 @@ export class PaymentPlanComponent implements OnInit {
   //number of payment plans
   paymentPlansCount = 0;
 
-  //search value for filtering payment plan table
-  searchString: string;
+    //search value for filtering payment plan table
+    searchString: string;
+
+    constructor() {}
 
   constructor(
     private router: Router,
@@ -55,4 +57,7 @@ export class PaymentPlanComponent implements OnInit {
     })
   }
 
+
+    // search payment plan table
+    search($event) {}
 }

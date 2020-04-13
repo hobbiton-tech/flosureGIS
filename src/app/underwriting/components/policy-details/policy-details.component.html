@@ -36,15 +36,13 @@
                     [(nzVisible)]="isVisible"
                     nzTitle="Payment Plan"
                     (nzOnCancel)="handleCancel()"
-                    (nzOnOk)="handleOk()"
+                    (nzOnOk)="handleOk(policyData)"
                     [nzWidth]="800"
                 >
                     <div nz-row nzGutter="0">
                         <div nz-col [nzSpan]="12">
                             <nz-form-item>
-                                <nz-form-label
-                                    [nzSpan]="9"
-                                    nzFor="paymentPlan"
+                                <nz-form-label [nzSpan]="9" nzFor="paymentPlan"
                                     >Payment Plan</nz-form-label
                                 >
                                 <nz-form-control nzSpan="15">
@@ -112,12 +110,12 @@
                                     >
                                     <nz-form-control [nzSm]="12" [nzXs]="24">
                                         <nz-date-picker
-                                            formControlName="initialInstallmentDate"
+                                            formControlName="startDate"
                                         ></nz-date-picker>
                                     </nz-form-control>
                                 </nz-form-item>
 
-                                <nz-form-item>
+                                <!-- <nz-form-item>
                                     <nz-form-label
                                         [nzSpan]="12"
                                         nzRequired
@@ -136,7 +134,7 @@
                                             formControlName="initialInstallmentAmount"
                                         />
                                     </nz-form-control>
-                                </nz-form-item>
+                                </nz-form-item> -->
                             </form>
                         </div>
                     </div>
@@ -253,7 +251,7 @@
             <div nz-row nzGutter="0">
                 <div nz-col nzSpan="12">
                     <nz-form-item>
-                        <nz-form-label nzSpan="7" 
+                        <nz-form-label nzSpan="7"
                             >Name of Insured</nz-form-label
                         >
                         <nz-form-control nzSpan="17">
@@ -266,9 +264,7 @@
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
-                        <nz-form-label nzSpan="7" 
-                            >Currency</nz-form-label
-                        >
+                        <nz-form-label nzSpan="7">Currency</nz-form-label>
                         <nz-form-control nzSpan="17">
                             <input
                                 nz-input
@@ -278,9 +274,7 @@
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
-                        <nz-form-label nzSpan="7" 
-                            >Sum Insured</nz-form-label
-                        >
+                        <nz-form-label nzSpan="7">Sum Insured</nz-form-label>
                         <nz-form-control nzSpan="17">
                             <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
                             <input
@@ -292,9 +286,7 @@
                     </nz-form-item>
 
                     <nz-form-item>
-                        <nz-form-label nzSpan="7" 
-                            >Premium</nz-form-label
-                        >
+                        <nz-form-label nzSpan="7">Premium</nz-form-label>
                         <nz-form-control nzSpan="17">
                             <input
                                 nz-input
@@ -304,9 +296,7 @@
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
-                        <nz-form-label nzSpan="7" 
-                            >Quarter</nz-form-label
-                        >
+                        <nz-form-label nzSpan="7">Quarter</nz-form-label>
                         <nz-form-control nzSpan="17">
                             <input
                                 nz-input
@@ -318,9 +308,7 @@
                 </div>
                 <div nz-col nzSpan="12">
                     <nz-form-item>
-                        <nz-form-label nzSpan="7" 
-                            >Start Date</nz-form-label
-                        >
+                        <nz-form-label nzSpan="7">Start Date</nz-form-label>
                         <nz-form-control nzSpan="17">
                             <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
                             <!-- <input
@@ -328,13 +316,14 @@
                                 [disabled]="!isEditmode"
                                 formControlName="startDate"
                             /> -->
-                            <nz-date-picker formControlName="startDate" [nzDisabled]="!isEditmode"></nz-date-picker>
+                            <nz-date-picker
+                                formControlName="startDate"
+                                [nzDisabled]="!isEditmode"
+                            ></nz-date-picker>
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
-                        <nz-form-label nzSpan="7" 
-                            >End Date</nz-form-label
-                        >
+                        <nz-form-label nzSpan="7">End Date</nz-form-label>
                         <nz-form-control nzSpan="17">
                             <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
                             <!-- <input
@@ -342,14 +331,15 @@
                                 [disabled]="!isEditmode"
                                 formControlName="endDate"
                             /> -->
-                            <nz-date-picker formControlName="endDate" [nzDisabled]="!isEditmode"></nz-date-picker>
+                            <nz-date-picker
+                                formControlName="endDate"
+                                [nzDisabled]="!isEditmode"
+                            ></nz-date-picker>
                         </nz-form-control>
                     </nz-form-item>
 
                     <nz-form-item>
-                        <nz-form-label nzSpan="7" 
-                            >Date Of Issue</nz-form-label
-                        >
+                        <nz-form-label nzSpan="7">Date Of Issue</nz-form-label>
                         <nz-form-control nzSpan="5">
                             <input
                                 nz-input
@@ -360,9 +350,7 @@
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
-                        <nz-form-label nzSpan="7" 
-                            >Time Of Issue</nz-form-label
-                        >
+                        <nz-form-label nzSpan="7">Time Of Issue</nz-form-label>
                         <nz-form-control nzSpan="5">
                             <input
                                 nz-input
@@ -372,16 +360,17 @@
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
-                        <nz-form-label nzSpan="7" 
-                            >Expiry Date</nz-form-label
-                        >
+                        <nz-form-label nzSpan="7">Expiry Date</nz-form-label>
                         <nz-form-control nzSpan="17">
                             <!-- <input
                                 nz-input
                                 [disabled]="!isEditmode"
                                 formControlName="expiryDate"
                             /> -->
-                            <nz-date-picker formControlName="expiryDate" [nzDisabled]="!isEditmode"></nz-date-picker>
+                            <nz-date-picker
+                                formControlName="expiryDate"
+                                [nzDisabled]="!isEditmode"
+                            ></nz-date-picker>
                         </nz-form-control>
                     </nz-form-item>
                     <!-- <nz-form-item>
@@ -428,8 +417,8 @@
                         <td>{{ policy.chassisNumber }}</td>
                         <td>{{ policy.color }}</td>
                         <td>{{ policy.productType }}</td>
-                        <td>{{ policy.sumInsured | number:'1.2-2' }}</td>
-                        <td>{{ policy.netPremium | number:'1.2-2'}}</td>
+                        <td>{{ policy.sumInsured | number: '1.2-2' }}</td>
+                        <td>{{ policy.netPremium | number: '1.2-2' }}</td>
                     </tr>
                 </tbody>
             </nz-table>
