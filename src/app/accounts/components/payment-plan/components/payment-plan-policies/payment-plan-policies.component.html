@@ -1,0 +1,58 @@
+<div style="margin: 15px;">
+        <div style="margin-bottom: 20px; background: #fff;">
+                <nz-page-header>
+                    <nz-page-header-title>Payment Plan Policies</nz-page-header-title>
+                    <nz-page-header-content>
+                        <nz-descriptions [nzColumn]="3">
+                        <nz-descriptions-item nzTitle="Policies under payment plan" [nzSpan]="1">{{paymentPlanPoliciesCount}}</nz-descriptions-item>
+                        </nz-descriptions>
+                    </nz-page-header-content>
+                </nz-page-header>
+            </div>
+ 
+      <nz-card style="margin-bottom: 5px;">
+            <!-- Payment-plan policies Table Search bar and Table details start here -->
+            <div style="margin-bottom: 20px; margin-top: 20px; width: 50%;">
+                <nz-input-group [nzSuffix]="suffixIconSearch">
+                    <input type="text" nz-input placeholder="Search by" />
+                </nz-input-group>
+                <ng-template #suffixIconSearch>
+                    <i nz-icon nzType="search"></i>
+                </ng-template>
+            </div>
+            
+            <nz-table #paymentPlanPoliciesTable [nzSize]="'small'" [nzBordered]="true" [nzData]="paymentPlanPolicies">
+                <thead>
+                    <tr>
+                        <th>Policy Number</th>
+                        <th>Premium</th>
+                        <th>Amount Due</th>
+                        <th>Amount Paid</th>
+                        <th>Amount Outstanding</th>
+                        <th>Paid Installments</th>
+                        <th>Remaining Installments</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let paymentPlanPolicy of paymentPlanPoliciesTable.data; let i = index;" style="cursor: pointer;" (click)="viewPaymentPlanPolicyInstallments(paymentPlanPolicy)">
+                        <td>{{paymentPlanPolicy.policyNumber}}</td>
+                        <td>{{paymentPlanPolicy.premium | number:'1.2-2'}}</td>
+                        <td>{{paymentPlanPolicy.amountDue | number:'1.2-2'}}</td>
+                        <td>{{paymentPlanPolicy.amountPaid | number:'1.2-2'}}</td>
+                        <td>{{paymentPlanPolicy.amountOutstanding | number:'1.2-2'}}</td>
+                        <td>{{paymentPlanPolicy.numberOfPaidInstallments | number}}</td>
+                        <td>{{paymentPlanPolicy.remainingInstallments | number}}</td>
+                        <td>{{paymentPlanPolicy.startDate.seconds * 1000 | date}}</td>
+                        <td>{{paymentPlanPolicy.endDate | date}}</td>
+                        <td>{{paymentPlanPolicy.policyPlanStatus}}</td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </nz-card>
+        </div>
+  
+
+ 
