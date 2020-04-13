@@ -1,27 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-payment-plan',
-  templateUrl: './payment-plan.component.html',
-  styleUrls: ['./payment-plan.component.scss']
+    selector: 'app-payment-plan',
+    templateUrl: './payment-plan.component.html',
+    styleUrls: ['./payment-plan.component.scss'],
 })
 export class PaymentPlanComponent implements OnInit {
+    //search value for filtering payment plan table
+    searchString: string;
 
-  //search value for filtering payment plan table
-  searchString: string;
+    constructor() {}
 
-  constructor() { }
+    ngOnInit(): void {}
 
-  ngOnInit(): void {
-  }
+    //view details of payment plan
+    viewPaymentPlanDetails() {}
 
-  //view details of payment plan
-  viewPaymentPlanDetails() {}
+    // add new payment plan
+    addPaymentPlan() {}
 
-  //add new payment plan
-  addPaymentPlan() {}
-
-  //search payment plan table
-  search($event) {}
-
+    // search payment plan table
+    search($event) {}
 }

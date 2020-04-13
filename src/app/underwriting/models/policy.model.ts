@@ -13,7 +13,7 @@ export class Policy {
     currency: Currency;
     preparedBy: string;
     status: PolicyStatus;
-    timeOfIssue: string | ITimestamp;;
+    timeOfIssue: string | ITimestamp;
     expiryDate: Date | ITimestamp;
     dateOfIssue: string | ITimestamp;
     quarter: string;
@@ -22,7 +22,7 @@ export class Policy {
     productType: ProductType;
     risks: RiskModel[];
     netPremium: number;
-    underwritingYear: Date | ITimestamp;;
+    underwritingYear: Date | ITimestamp;
     receiptStatus: ReceiptStatus;
     paymentPlan: PaymentPlan;
 }

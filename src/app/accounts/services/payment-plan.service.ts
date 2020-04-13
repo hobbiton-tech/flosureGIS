@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import {AngularFirestore,AngularFirestoreCollection,AngularFirestoreDocument,} from '@angular/fire/firestore';
+import {
+    AngularFirestore,
+    AngularFirestoreCollection,
+    AngularFirestoreDocument,
+} from '@angular/fire/firestore';
 
 import * as _ from 'lodash';
 import { v4 } from 'uuid';
@@ -9,26 +13,36 @@ import { first } from 'rxjs/operators';
 import { IPaymentModel } from '../components/models/payment-plans.model';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root',
 })
 export class PaymentPlanService {
-  private paymentPlansCollection: AngularFirestoreCollection<IPaymentModel>;
-  paymentPlans: Observable<IPaymentModel[]>;
-  paymentPlan: Observable<IPaymentModel>;
+    private paymentPlansCollection: AngularFirestoreCollection<IPaymentModel>;
+    paymentPlans: Observable<IPaymentModel[]>;
+    paymentPlan: Observable<IPaymentModel>;
 
-  constructor(private firebase: AngularFirestore) {
-    this.paymentPlansCollection = firebase.collection<IPaymentModel>('payments_plans');
-    this.paymentPlans = this.paymentPlansCollection.valueChanges();
-   }
+    constructor(private firebase: AngularFirestore) {
+        this.paymentPlansCollection = firebase.collection<IPaymentModel>(
+            'payments_plans'
+        );
+        this.paymentPlans = this.paymentPlansCollection.valueChanges();
+    }
 
-   async addPaymentPlan(paymentPlan: IPaymentModel) {
-     this.paymentPlans.pipe(first()).subscribe(async (paymentPlans) => {
-       paymentPlan.id = v4();
-       await this.paymentPlansCollection.doc(paymentPlan.id).set(paymentPlan);
-     })
-   }
+    async addPaymentPlan(paymentPlan: IPaymentModel) {
+        this.paymentPlans.pipe(first()).subscribe(async (paymentPlans) => {
+            await this.paymentPlansCollection
+                .doc(paymentPlan.id)
+                .set(paymentPlan)
+                .then((mess) => {
+                    console.log('------PAYMENT PLAN DATA-------');
+                    console.log(paymentPlan);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        });
+    }
 
-   getPaymentPlans(): Observable<IPaymentModel[]> {
-     return this.paymentPlans;
-   }
+    getPaymentPlans(): Observable<IPaymentModel[]> {
+        return this.paymentPlans;
+    }
 }
