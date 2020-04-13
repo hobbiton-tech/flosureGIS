@@ -239,8 +239,8 @@ export class PolicyDetailsComponent implements OnInit {
             this.paymentPlanForm.reset();
             this.policyUpdate.paymentPlan = 'Created';
             this.receiptService.updatePolicy(this.policyUpdate);
-        } else {
-            console.log('Fully ok clicked!');
+        } else if (this.selectedValue === 'fully') {
+            this.router.navigateByUrl('/flosure/accounts/receipts');
         }
 
         this.isVisible = false;

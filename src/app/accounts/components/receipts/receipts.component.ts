@@ -189,6 +189,7 @@ export class ReceiptsComponent implements OnInit {
             }, 30);
 
             this.policy.receiptStatus = 'Receipted';
+            this.policy.paymentPlan = 'Created';
             console.log('<++++++++++++++++++CLAIN+++++++++>');
             console.log(this.policy);
 
