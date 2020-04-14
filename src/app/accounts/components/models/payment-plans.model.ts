@@ -3,7 +3,7 @@ export class IPaymentModel {
     clientName: string;
     clientId: string;
     numberOfPolicies: number;
-    totalPremium: string;
+    totalPremium: number;
     status: PaymentPlanStatus;
     policyPaymentPlan: PolicyPaymentPlan[];
 }
