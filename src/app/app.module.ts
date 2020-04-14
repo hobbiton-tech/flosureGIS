@@ -18,6 +18,7 @@ import { AngularFireStorageModule, BUCKET } from '@angular/fire/storage';
 import { environment } from '../environments/environment';
 import 'firebase/storage';
 import { RatesComponent } from './app/settings/components/rates/rates.component';
+import { GraphQLModule } from './graphql.module';
 
 registerLocaleData(en);
 
@@ -44,7 +45,8 @@ const firebaseConfig = {
         ReactiveFormsModule,
         AngularFireModule.initializeApp(firebaseConfig),
         AngularFireDatabaseModule,
-        AngularFireStorageModule
+        AngularFireStorageModule,
+        GraphQLModule
     ],
     providers: [
         { provide: NZ_I18N, useValue: en_US }

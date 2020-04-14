@@ -12,6 +12,7 @@ import 'firebase/firestore';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { HttpClientModule } from '@angular/common/http';
 import { RiskDetailsComponent } from './components/risk-details/risk-details.component';
+import { QuotesGraphqlService } from './services/quotes.graphql.service';
 
 const routes: Routes = [
     {
@@ -45,6 +46,6 @@ const routes: Routes = [
         RouterModule.forChild(routes),
     ],
     exports: [QuotesComponent, CreateQuoteComponent],
-    providers: [QuotesService],
+    providers: [QuotesService, QuotesGraphqlService],
 })
 export class QuotesModule {}
