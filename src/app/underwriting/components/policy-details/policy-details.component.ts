@@ -202,7 +202,7 @@ export class PolicyDetailsComponent implements OnInit {
                     installmentAmount: iAmount,
                     installmentDate: fDate,
                     balance: iAmount,
-                    installmentStatus: 'Unpaid',
+                    installmentStatus: 'UnPaid',
                 });
             }
             console.log('////////////Installments Array////////////////');
@@ -231,7 +231,7 @@ export class PolicyDetailsComponent implements OnInit {
                 clientId: '',
                 numberOfPolicies: 1,
                 totalPremium: policyData.netPremium,
-                status: 'Unpaid',
+                status: 'UnPaid',
                 policyPaymentPlan: policyPlan,
             };
             // add payment plan

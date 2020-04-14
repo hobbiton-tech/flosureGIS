@@ -73,7 +73,7 @@ export class ViewReceiptsComponent implements OnInit {
                 narration: this.receipt.narration,
                 accountNumber: 'this.receipt.address',
                 dateRecieved: this.receipt.todayDate,
-                sumInDigits: this.receipt.sumInDigits,
+                sumInDigits: Number(this.receipt.sumInDigits.toFixed(2)),
                 capturedBy: this.receipt.receiptNumber,
             };
 

@@ -42,7 +42,13 @@ interface IRateResult {
     sumInsured: string;
     endDate: string;
     quarter: string;
-    premium: string;
+    totalPremium: string;
+    riotAndStrikePremium: string;
+    basicPremium: string;
+    thirdPartyLoadingPremium: string;
+    carStereoPremium: string;
+    lossOfUsePremium: string;
+    discount: string;
 }
 
 interface IRateRequest {
@@ -140,7 +146,9 @@ export class CreateQuoteComponent implements OnInit {
     premiumRate: number;
     premiumRateType: string;
 
+    LevyRate: number = 3;
     basicPremiumLevy: number;
+
     // Loading
     addingLoad: boolean;
     premiumLoadingTotal: number;
@@ -430,6 +438,7 @@ export class CreateQuoteComponent implements OnInit {
     }
 
     handleThirdPartyRiskEndDateCalculation(): void {
+        this.handleBasicPremiumCalculationThirdParty();
         if (
             this.riskThirdPartyForm.get('riskStartDate').value != '' &&
             this.riskThirdPartyForm.get('riskQuarter').value != ''
@@ -495,6 +504,94 @@ export class CreateQuoteComponent implements OnInit {
         }
     }
 
+    handleBasicPremiumCalculation(): void {
+        if (this.sumInsured != 0 && this.premiumRate != 0) {
+            const request: IRateRequest = {
+                sumInsured: Number(this.sumInsured),
+                premiumRate: Number(this.premiumRate) / 100,
+                startDate: this.riskComprehensiveForm.get('riskStartDate')
+                    .value,
+                quarter: Number(
+                    this.riskComprehensiveForm.get('riskQuarter').value
+                ),
+                discount: 0,
+                carStereo: 0,
+                carStereoRate: 0,
+                lossOfUseDays: 0,
+                lossOfUseRate: 0,
+                thirdPartyLimit: 0,
+                thirdPartyLimitRate: 0,
+                riotAndStrike: 0,
+                levy: 0,
+            };
+            this.http
+                .post<IRateResult>(
+                    `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                    request
+                )
+                .subscribe((data) => {
+                    this.basicPremium = Number(data.basicPremium);
+                    this.handleNetPremium();
+                });
+        }
+    }
+
+    handleBasicPremiumCalculationThirdParty(): void {
+        if (
+            this.riskThirdPartyForm.get('productType').value != '' &&
+            this.riskThirdPartyForm.get('riskQuarter').value != ''
+        ) {
+            if (this.riskThirdPartyForm.get('productType').value == 'Private') {
+                if (this.riskThirdPartyForm.get('riskQuarter').value == 1) {
+                    this.basicPremium = 165;
+                }
+                if (this.riskThirdPartyForm.get('riskQuarter').value == 2) {
+                    this.basicPremium = 280;
+                }
+                if (this.riskThirdPartyForm.get('riskQuarter').value == 3) {
+                    this.basicPremium = 370;
+                }
+                if (this.riskThirdPartyForm.get('riskQuarter').value == 4) {
+                    this.basicPremium = 464;
+                }
+            }
+            if (
+                this.riskThirdPartyForm.get('productType').value == 'Commercial'
+            ) {
+                if (this.riskThirdPartyForm.get('riskQuarter').value == 1) {
+                    this.basicPremium = 199;
+                }
+                if (this.riskThirdPartyForm.get('riskQuarter').value == 2) {
+                    this.basicPremium = 340;
+                }
+                if (this.riskThirdPartyForm.get('riskQuarter').value == 3) {
+                    this.basicPremium = 452;
+                }
+                if (this.riskThirdPartyForm.get('riskQuarter').value == 4) {
+                    this.basicPremium = 566;
+                }
+            }
+            if (
+                this.riskThirdPartyForm.get('productType').value == 'Bus/Taxi'
+            ) {
+                if (this.riskThirdPartyForm.get('riskQuarter').value == 1) {
+                    this.basicPremium = 270;
+                }
+                if (this.riskThirdPartyForm.get('riskQuarter').value == 2) {
+                    this.basicPremium = 464;
+                }
+                if (this.riskThirdPartyForm.get('riskQuarter').value == 3) {
+                    this.basicPremium = 618;
+                }
+                if (this.riskThirdPartyForm.get('riskQuarter').value == 4) {
+                    this.basicPremium = 772;
+                }
+            }
+        }
+
+        this.handleNetPremium();
+    }
+
     onSubmit() {
         const some = this.quoteForm.value;
         this.quoteService.addMotorQuotation(some);
@@ -508,13 +605,13 @@ export class CreateQuoteComponent implements OnInit {
         const some: RiskModel[] = [];
         some.push({
             ...this.riskThirdPartyForm.value,
-            sumInsured: Number(this.sumInsured),
-            premiumRate: this.premiumRate,
+            sumInsured: 0,
+            premiumRate: 0,
             basicPremium: this.basicPremium,
             loads: this.loads,
             loadingTotal: this.premiumLoadingTotal,
             discountRate: this.premiumDiscountRate,
-            premiumLevy: 0.03,
+            premiumLevy: this.basicPremiumLevy,
             netPremium: this.netPremium,
             insuranceType: this.selectedValue.value,
         });
@@ -558,7 +655,7 @@ export class CreateQuoteComponent implements OnInit {
             loads: this.loads,
             loadingTotal: this.premiumLoadingTotal,
             discountRate: this.premiumDiscountRate,
-            premiumLevy: 0.03,
+            premiumLevy: this.basicPremiumLevy,
             netPremium: this.netPremium,
             insuranceType: this.selectedValue.value,
         });
@@ -845,7 +942,140 @@ export class CreateQuoteComponent implements OnInit {
     // Premium computation methods
     // Basic Premum Computation
 
-    computePremium() {
+    handleDiscount() {
+        //following methods check if the repective loads are in the loads array
+        const riotAndStrikeInLoads = this.loads.some(
+            (item) => item.loadType === 'Riot And Strike'
+        );
+        const increaseThirdPartyLimitInLoads = this.loads.some(
+            (item) => item.loadType === 'Increased Third Party Limit'
+        );
+        const carStereoInLoads = this.loads.some(
+            (item) => item.loadType === 'Car Stereo'
+        );
+        const territorialExtensionInLoads = this.loads.some(
+            (item) => item.loadType === 'Territorial Extension'
+        );
+        const lossOfUseInLoads = this.loads.some(
+            (item) => item.loadType === 'Loss Of Use'
+        );
+
+        //if the checked loading are not in loads array set there values to Zero!
+        if (!riotAndStrikeInLoads) {
+            this.riotAndStrikeRate = 0;
+        }
+        if (!increaseThirdPartyLimitInLoads) {
+            this.increasedThirdPartyLimitsRate = 0;
+            this.increasedThirdPartyLimitValue = 0;
+        }
+        if (!carStereoInLoads) {
+            this.carStereoValue = 0;
+            this.carStereoRate = 0;
+        }
+        if (!lossOfUseInLoads) {
+            this.lossOfUseDailyRate = 0;
+            this.lossOfUseDays = 0;
+        }
+
+        if (this.premiumDiscountRate != 0) {
+            const request: IRateRequest = {
+                sumInsured: Number(this.sumInsured),
+                premiumRate: Number(this.premiumRate) / 100,
+                startDate: this.riskComprehensiveForm.get('riskStartDate')
+                    .value,
+                quarter: Number(
+                    this.riskComprehensiveForm.get('riskQuarter').value
+                ),
+                discount: Number(this.premiumDiscountRate) / 100,
+                carStereo: Number(this.carStereoValue),
+                carStereoRate: Number(this.carStereoRate) / 100,
+                lossOfUseDays: Number(this.lossOfUseDays),
+                lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+                thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
+                thirdPartyLimitRate:
+                    Number(this.increasedThirdPartyLimitsRate) / 100,
+                riotAndStrike: Number(this.riotAndStrikeRate) / 100,
+                levy: 0.03,
+            };
+            this.http
+                .post<IRateResult>(
+                    `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                    request
+                )
+                .subscribe((data) => {
+                    this.premiumDiscount = Number(data.discount);
+                    this.handleNetPremium();
+                });
+        }
+    }
+
+    handleDiscountThirdParty() {
+        //following methods check if the repective loads are in the loads array
+        const riotAndStrikeInLoads = this.loads.some(
+            (item) => item.loadType === 'Riot And Strike'
+        );
+        const increaseThirdPartyLimitInLoads = this.loads.some(
+            (item) => item.loadType === 'Increased Third Party Limit'
+        );
+        const carStereoInLoads = this.loads.some(
+            (item) => item.loadType === 'Car Stereo'
+        );
+        const territorialExtensionInLoads = this.loads.some(
+            (item) => item.loadType === 'Territorial Extension'
+        );
+        const lossOfUseInLoads = this.loads.some(
+            (item) => item.loadType === 'Loss Of Use'
+        );
+
+        //if the checked loading are not in loads array set there values to Zero!
+        if (!riotAndStrikeInLoads) {
+            this.riotAndStrikeRate = 0;
+        }
+        if (!increaseThirdPartyLimitInLoads) {
+            this.increasedThirdPartyLimitsRate = 0;
+            this.increasedThirdPartyLimitValue = 0;
+        }
+        if (!carStereoInLoads) {
+            this.carStereoValue = 0;
+            this.carStereoRate = 0;
+        }
+        if (!lossOfUseInLoads) {
+            this.lossOfUseDailyRate = 0;
+            this.lossOfUseDays = 0;
+        }
+
+        if (this.premiumDiscountRate != 0) {
+            const request: IRateRequest = {
+                sumInsured: Number(this.sumInsured),
+                premiumRate: Number(this.premiumRate) / 100,
+                startDate: this.riskThirdPartyForm.get('riskStartDate').value,
+                quarter: Number(
+                    this.riskThirdPartyForm.get('riskQuarter').value
+                ),
+                discount: Number(this.premiumDiscountRate) / 100,
+                carStereo: Number(this.carStereoValue),
+                carStereoRate: Number(this.carStereoRate) / 100,
+                lossOfUseDays: Number(this.lossOfUseDays),
+                lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+                thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
+                thirdPartyLimitRate:
+                    Number(this.increasedThirdPartyLimitsRate) / 100,
+                riotAndStrike: Number(this.riotAndStrikeRate) / 100,
+                levy: 0.03,
+            };
+            this.http
+                .post<IRateResult>(
+                    `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                    request
+                )
+                .subscribe((data) => {
+                    this.premiumDiscount = Number(data.discount);
+                    this.handleNetPremium();
+                });
+        }
+    }
+
+    computeThirdPartyPremium() {
         this.computePremiumIsLoading = true;
         const request: IRateRequest = {
             sumInsured: Number(this.sumInsured),
@@ -871,16 +1101,93 @@ export class CreateQuoteComponent implements OnInit {
                 request
             )
             .subscribe((data) => {
-                this.netPremium = Number(data.premium);
+                this.netPremium = Number(data.totalPremium);
+                this.handleNetPremium();
                 this.computePremiumIsLoading = false;
             });
     }
 
-    computeThirdPartyPremium() {
-        this.computePremiumIsLoading = true;
+    // Loading computation
+    computeRiotAndStrike() {
+        this.computeRiotAndStrikeIsLoading = true;
+
         const request: IRateRequest = {
             sumInsured: Number(this.sumInsured),
             premiumRate: Number(this.premiumRate) / 100,
+            startDate: this.riskComprehensiveForm.get('riskStartDate').value,
+            quarter: Number(
+                this.riskComprehensiveForm.get('riskQuarter').value
+            ),
+            discount: Number(this.premiumDiscountRate) / 100,
+            carStereo: Number(this.carStereoValue),
+            carStereoRate: Number(this.carStereoRate) / 100,
+            lossOfUseDays: Number(this.lossOfUseDays),
+            lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+            thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
+            thirdPartyLimitRate:
+                Number(this.increasedThirdPartyLimitsRate) / 100,
+            riotAndStrike: Number(this.riotAndStrikeRate) / 100,
+            levy: 0.03,
+        };
+        this.http
+            .post<IRateResult>(
+                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                request
+            )
+            .subscribe((data) => {
+                this.loads.push({
+                    loadType: 'Riot And Strike',
+                    amount: Number(data.riotAndStrikePremium),
+                });
+                this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+                this.handleNetPremium();
+                this.computeRiotAndStrikeIsLoading = false;
+            });
+    }
+
+    computeIncreasedThirdPartyLimit() {
+        this.computeIncreasedThirdPartyLimitIsLoading = true;
+
+        const request: IRateRequest = {
+            sumInsured: Number(this.sumInsured),
+            premiumRate: Number(this.premiumRate) / 100,
+            startDate: this.riskComprehensiveForm.get('riskStartDate').value,
+            quarter: Number(
+                this.riskComprehensiveForm.get('riskQuarter').value
+            ),
+            discount: Number(this.premiumDiscountRate) / 100,
+            carStereo: Number(this.carStereoValue),
+            carStereoRate: Number(this.carStereoRate) / 100,
+            lossOfUseDays: Number(this.lossOfUseDays),
+            lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+            thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
+            thirdPartyLimitRate:
+                Number(this.increasedThirdPartyLimitsRate) / 100,
+            riotAndStrike: Number(this.riotAndStrikeRate) / 100,
+            levy: 0.03,
+        };
+        this.http
+            .post<IRateResult>(
+                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                request
+            )
+            .subscribe((data) => {
+                this.loads.push({
+                    loadType: 'Increased Third Party Limit',
+                    amount: Number(data.thirdPartyLoadingPremium),
+                });
+                this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+                this.handleNetPremium();
+                this.computeIncreasedThirdPartyLimitIsLoading = false;
+            });
+    }
+
+    computeIncreasedThirdPartyLimitThirdParty() {
+        this.computeIncreasedThirdPartyLimitIsLoading = true;
+
+        const request: IRateRequest = {
+            sumInsured: 0,
+            premiumRate: 0,
             startDate: this.riskThirdPartyForm.get('riskStartDate').value,
             quarter: Number(this.riskThirdPartyForm.get('riskQuarter').value),
             discount: Number(this.premiumDiscountRate) / 100,
@@ -900,90 +1207,125 @@ export class CreateQuoteComponent implements OnInit {
                 request
             )
             .subscribe((data) => {
-                this.netPremium = Number(data.premium);
-                this.computePremiumIsLoading = false;
+                this.loads.push({
+                    loadType: 'Increased Third Party Limit',
+                    amount: Number(data.thirdPartyLoadingPremium),
+                });
+                this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+                this.handleNetPremium();
+                this.computeIncreasedThirdPartyLimitIsLoading = false;
             });
-    }
-
-    // Loading computation
-    computeRiotAndStrike() {
-        this.computeRiotAndStrikeIsLoading = true;
-
-        setTimeout(() => {
-            console.log(this.riotAndStrikeRate);
-
-            this.loads.push({
-                loadType: 'Riot And Strike',
-                amount: 0,
-            });
-            this.addingLoad = false;
-
-            this.computeRiotAndStrikeIsLoading = false;
-            this.selectedLoadingValue.value = '';
-            console.log(this.loads);
-        }, 2000);
-    }
-
-    computeIncreasedThirdPartyLimit() {
-        this.computeIncreasedThirdPartyLimitIsLoading = true;
-
-        setTimeout(() => {
-            this.loads.push({
-                loadType: 'Increased Third Party Limit',
-                amount: 0,
-            });
-            this.addingLoad = false;
-
-            this.computeIncreasedThirdPartyLimitIsLoading = false;
-            this.selectedLoadingValue.value = '';
-            console.log(this.loads);
-        }, 2000);
     }
 
     computeCarStereo() {
         this.computeCarStereoIsLoading = true;
 
-        setTimeout(() => {
-            this.loads.push({
-                loadType: 'Car Stereo',
-                amount: 0,
+        const request: IRateRequest = {
+            sumInsured: Number(this.sumInsured),
+            premiumRate: Number(this.premiumRate) / 100,
+            startDate: this.riskComprehensiveForm.get('riskStartDate').value,
+            quarter: Number(
+                this.riskComprehensiveForm.get('riskQuarter').value
+            ),
+            discount: Number(this.premiumDiscountRate) / 100,
+            carStereo: Number(this.carStereoValue),
+            carStereoRate: Number(this.carStereoRate) / 100,
+            lossOfUseDays: Number(this.lossOfUseDays),
+            lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+            thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
+            thirdPartyLimitRate:
+                Number(this.increasedThirdPartyLimitsRate) / 100,
+            riotAndStrike: Number(this.riotAndStrikeRate) / 100,
+            levy: 0.03,
+        };
+        this.http
+            .post<IRateResult>(
+                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                request
+            )
+            .subscribe((data) => {
+                this.loads.push({
+                    loadType: 'Car Stereo',
+                    amount: Number(data.carStereoPremium),
+                });
+                this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+                this.handleNetPremium();
+                this.computeCarStereoIsLoading = false;
             });
-            this.addingLoad = false;
-
-            this.computeCarStereoIsLoading = false;
-            this.selectedLoadingValue.value = '';
-            console.log(this.loads);
-        }, 2000);
     }
 
     computeTerritorialExtension() {
         this.computeTerritorialExtensionIsLoading = true;
 
-        setTimeout(() => {
-            this.loads.push({ loadType: 'Territorial Extension', amount: 0 });
-
-            this.addingLoad = false;
-
-            this.computeTerritorialExtensionIsLoading = false;
-            this.selectedLoadingValue.value = '';
-            console.log(this.loads);
-        }, 2000);
+        const request: IRateRequest = {
+            sumInsured: Number(this.sumInsured),
+            premiumRate: Number(this.premiumRate) / 100,
+            startDate: this.riskComprehensiveForm.get('riskStartDate').value,
+            quarter: Number(
+                this.riskComprehensiveForm.get('riskQuarter').value
+            ),
+            discount: Number(this.premiumDiscountRate) / 100,
+            carStereo: Number(this.carStereoValue),
+            carStereoRate: Number(this.carStereoRate) / 100,
+            lossOfUseDays: Number(this.lossOfUseDays),
+            lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+            thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
+            thirdPartyLimitRate:
+                Number(this.increasedThirdPartyLimitsRate) / 100,
+            riotAndStrike: Number(this.riotAndStrikeRate) / 100,
+            levy: 0.03,
+        };
+        this.http
+            .post<IRateResult>(
+                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                request
+            )
+            .subscribe((data) => {
+                this.loads.push({
+                    loadType: 'Territorial Extension',
+                    amount: 0,
+                });
+                this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+                this.handleNetPremium();
+                this.computeTerritorialExtensionIsLoading = false;
+            });
     }
 
     computeLossOfUse() {
         this.computeLossOfUseIsLoading = true;
 
-        setTimeout(() => {
-            this.loads.push({
-                loadType: 'Loss Of Use',
-                amount: 0,
+        const request: IRateRequest = {
+            sumInsured: Number(this.sumInsured),
+            premiumRate: Number(this.premiumRate) / 100,
+            startDate: this.riskComprehensiveForm.get('riskStartDate').value,
+            quarter: Number(
+                this.riskComprehensiveForm.get('riskQuarter').value
+            ),
+            discount: Number(this.premiumDiscountRate) / 100,
+            carStereo: Number(this.carStereoValue),
+            carStereoRate: Number(this.carStereoRate) / 100,
+            lossOfUseDays: Number(this.lossOfUseDays),
+            lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+            thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
+            thirdPartyLimitRate:
+                Number(this.increasedThirdPartyLimitsRate) / 100,
+            riotAndStrike: Number(this.riotAndStrikeRate) / 100,
+            levy: 0.03,
+        };
+        this.http
+            .post<IRateResult>(
+                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                request
+            )
+            .subscribe((data) => {
+                this.loads.push({
+                    loadType: 'Loss Of Use',
+                    amount: Number(data.lossOfUsePremium),
+                });
+                this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+                this.handleNetPremium();
+                this.computeLossOfUseIsLoading = false;
             });
-            this.addingLoad = false;
-
-            this.computeLossOfUseIsLoading = false;
-            this.selectedLoadingValue.value = '';
-            console.log(this.loads);
-        }, 2000);
     }
 
     removeLoad(i: LoadModel, e: MouseEvent): void {
@@ -991,7 +1333,9 @@ export class CreateQuoteComponent implements OnInit {
         if (this.loads.length > 0) {
             const index = this.loads.indexOf(i);
             this.loads.splice(index, 1);
+            this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
         }
+        this.handleNetPremium();
 
         console.log(this.loads);
     }
@@ -1012,5 +1356,26 @@ export class CreateQuoteComponent implements OnInit {
                 }
             }
         }
+    }
+
+    //sum up specific values in array
+    sumArray(items, prop) {
+        return items.reduce(function (a, b) {
+            return a + b[prop];
+        }, 0);
+    }
+
+    //following method adds basic premium + loading - discount then applies levy then finds net premium
+    handleNetPremium() {
+        this.basicPremiumLevy =
+            (this.LevyRate / 100) *
+            (this.basicPremium +
+                this.premiumLoadingTotal -
+                this.premiumDiscount);
+        this.netPremium =
+            this.basicPremium +
+            this.premiumLoadingTotal -
+            this.premiumDiscount +
+            this.basicPremiumLevy;
     }
 }
