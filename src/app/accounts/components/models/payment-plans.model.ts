@@ -18,13 +18,15 @@ export class PolicyPaymentPlan {
     amountPaid: number;
     amountOutstanding: number;
     policyPlanStatus: PolicyPlanStatus;
+    remainingInstallments: number;
+    premium: number;
     installments: InstallmentsModel[];
 }
 
 export class InstallmentsModel {
     installmentAmount: number;
     installmentDate: Date;
-    actualPaidDate: Date;
+    actualPaidDate?: Date;
     installmentStatus: InstallmentStatus;
     balance: number;
 }

@@ -232,14 +232,7 @@
                                                     </nz-select>
                                                 </nz-form-control>
                                             </nz-form-item>
-                                            <!-- <nz-form-item>
-                                                <nz-form-label [nzSpan]="7" nzFor="estimatedValue" nzRequired>Sum Insured
-                                                </nz-form-label>
-                                                <nz-form-control nzSpan="17">
-                                                    <input nz-input name="sumInsured" ="sumInsured"
-                                                        type="text" id="sumInsured" />
-                                                </nz-form-control>
-                                            </nz-form-item> -->
+
                                         </div>
                                         <div nz-col nzSpan="8">
                                             <nz-form-item>
@@ -284,7 +277,7 @@
                                                     <nz-form-control nzSpan="17">
                                                         <input nz-input nzPlaceHolder="" name="sumInsured"
                                                             [(ngModel)]="sumInsured"
-                                                            [ngModelOptions]="{standalone: true}" />
+                                                            [ngModelOptions]="{standalone: true}" (ngModelChange)="handleBasicPremiumCalculation()"/>
                                                     </nz-form-control>
                                                 </nz-form-item>
                                                 <nz-form-item>
@@ -301,7 +294,7 @@
                                                             </nz-select>
                                                             <input nz-input nzPlaceHolder="" name="premiumRate"
                                                                 [(ngModel)]="premiumRate" style="width: 80%;"
-                                                                [ngModelOptions]="{standalone: true}" />
+                                                                [ngModelOptions]="{standalone: true}" (ngModelChange)="handleBasicPremiumCalculation()"/>
                                                         </nz-input-group>
                                                     </nz-form-control>
                                                 </nz-form-item>
@@ -571,17 +564,17 @@
                                                             </nz-select>
                                                             <input nz-input nzPlaceHolder="" name="premiumDiscountRate"
                                                                 [(ngModel)]="premiumDiscountRate" style="width: 80%;"
-                                                                [ngModelOptions]="{standalone: true}" />
+                                                                [ngModelOptions]="{standalone: true}" (ngModelChange)="handleDiscount()"/>
                                                         </nz-input-group>
                                                     </nz-form-control>
                                                 </nz-form-item>
-                                                <nz-form-item>
+                                                <!-- <nz-form-item>
                                                     <nz-form-control [nzXs]="{ span: 24, offset: 4 }"
                                                         [nzSm]="{ span: 20, offset: 7 }">
                                                         <button nz-button nzType="primary" (click)="computePremium()"
                                                             [nzLoading]="computePremiumIsLoading">Compute Premium</button>
                                                     </nz-form-control>
-                                                </nz-form-item>
+                                                </nz-form-item> -->
                                                 <!-- <nz-form-item>
                                                                 <nz-form-control [nzXs]="{ span: 24, offset: 4 }" [nzSm]="{ span: 20, offset: 7 }">
                                                                     <button nz-button nzType="primary" (click)="computeBasicPremium()" [nzLoading]="computeBasicPremiumIsLoading">Compute</button>
@@ -625,7 +618,7 @@
                                                                     <nz-descriptions-item nzTitle="Basic Premium">{{basicPremium | number:'1.2-2'}}</nz-descriptions-item>
                                                                     <nz-descriptions-item nzTitle="Loading">{{premiumLoadingTotal | number:'1.2-2'}}</nz-descriptions-item>
                                                                     <nz-descriptions-item nzTitle="Discount">{{premiumDiscount | number:'1.2-2'}}</nz-descriptions-item>
-                                                                     <nz-descriptions-item nzTitle="Levy">{{0 | number:'1.2-2'}}</nz-descriptions-item>
+                                                                     <nz-descriptions-item nzTitle="Levy">{{basicPremiumLevy | number:'1.2-2'}}</nz-descriptions-item>
                                                                     <nz-descriptions-item nzTitle="Net Premium">{{netPremium | number:'1.2-2'}}</nz-descriptions-item>
                                                                 </nz-descriptions>
                                                     </nz-card>
@@ -729,7 +722,7 @@
                                                 <nz-form-control nzSpan="17">
                                                     <nz-select nzShowSearch nzAllowClear formControlName="productType"
                                                         nzPlaceHolder="Select a product type" name="productType"
-                                                        id="productType">
+                                                        id="productType" (ngModelChange)="handleBasicPremiumCalculationThirdParty()">
                                                         <nz-option nzLabel="Private" nzValue="Private"></nz-option>
                                                         <nz-option nzLabel="Commercial" nzValue="Commercial"></nz-option>
                                                         <nz-option nzLabel="Bus/Taxi" nzValue="Bus/Taxi"></nz-option>
@@ -783,32 +776,29 @@
                                         <nz-divider nzText="Premium Computation" nzOrientation="left"></nz-divider>
                                         <div nz-row nzGutter="0">
                                             <div nz-col nzSpan="8">
-                                                <nz-form-item>
+                                                <!-- <nz-form-item>
                                                     <nz-form-label nzSpan="7" nzRequired>Sum Insured</nz-form-label>
                                                     <nz-form-control nzSpan="17">
                                                         <input nz-input nzPlaceHolder="" name="sumInsured"
                                                             [(ngModel)]="sumInsured"
                                                             [ngModelOptions]="{standalone: true}" />
                                                     </nz-form-control>
-                                                </nz-form-item>
-                                                <nz-form-item>
+                                                </nz-form-item> -->
+                                                <!-- <nz-form-item>
                                                     <nz-form-label nzSpan="7" nzRequired>Premium rate</nz-form-label>
                                                     <nz-form-control nzSpan="17">
                                                         <nz-input-group nzCompact>
                                                             <nz-select [(ngModel)]="premiumRateType" style="width: 20%;"
                                                                 [ngModelOptions]="{standalone: true}">
                                                                 <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
-                                                                <!-- <nz-option *ngIf="quoteForm.get('currency').value === 'ZMW'"
-                                                                            [nzLabel]="'K'" nzValue="figure"></nz-option>
-                                                                        <nz-option *ngIf="quoteForm.get('currency').value === 'Dollar'"
-                                                                            [nzLabel]="'$'" nzValue="figure"></nz-option> -->
+                                                                
                                                             </nz-select>
                                                             <input nz-input nzPlaceHolder="" name="premiumRate"
                                                                 [(ngModel)]="premiumRate" style="width: 80%;"
                                                                 [ngModelOptions]="{standalone: true}" />
                                                         </nz-input-group>
                                                     </nz-form-control>
-                                                </nz-form-item>
+                                                </nz-form-item> -->
     
                                                 <!-- Loading starts here -->
                                                 <div *ngIf="selectedValue?.value === 'Comprehensive'">
@@ -884,181 +874,7 @@
                                                         </nz-form-control>
                                                     </nz-form-item>
                                                 </div>
-                                                <div *ngIf="selectedLoadingValue.value === 'riotAndStrike'">
-                                                    <nz-form-item>
-                                                        <nz-form-label [nzSpan]="7" nzFor="riotAndStrikeRate">Rate
-                                                        </nz-form-label>
-                                                        <nz-form-control nzSpan="17">
-                                                            <nz-input-group nzCompact>
-                                                                <nz-select [(ngModel)]="riotAndStrikeRateType"
-                                                                    style="width: 40%;"
-                                                                    [ngModelOptions]="{standalone: true}">
-                                                                    <nz-option [nzLabel]="'%'" nzValue="percentage">
-                                                                    </nz-option>
-                                                                    <!-- <nz-option
-                                                                                    *ngIf="quoteDetailsForm.get('currency').value === 'ZMW'"
-                                                                                    [nzLabel]="'K'" nzValue="figure"></nz-option>
-                                                                                <nz-option
-                                                                                    *ngIf="quoteDetailsForm.get('currency').value === 'Dollar'"
-                                                                                    [nzLabel]="'$'" nzValue="figure"></nz-option> -->
-                                                                </nz-select>
-                                                                <input nz-input nzPlaceHolder="" name="riotAndStrikeRate"
-                                                                    [(ngModel)]="riotAndStrikeRate" style="width: 60%;"
-                                                                    [ngModelOptions]="{standalone: true}" />
-                                                            </nz-input-group>
-                                                        </nz-form-control>
-                                                    </nz-form-item>
-                                                    <nz-form-item>
-                                                        <nz-form-control [nzXs]="{ span: 24, offset: 4 }"
-                                                            [nzSm]="{ span: 20, offset: 7 }">
-                                                            <button nz-button nzType="primary"
-                                                                (click)="computeRiotAndStrike()"
-                                                                [nzLoading]="computeRiotAndStrikeIsLoading">Add
-                                                                Load</button>
-                                                        </nz-form-control>
-                                                    </nz-form-item>
-                                                </div>
-                                                <div *ngIf="selectedLoadingValue.value === 'carStereo'">
-                                                    <div nz-row nzGutter="2">
-                                                        <div nz-col nzSpan="25">
-                                                            <nz-form-item>
-                                                                <nz-form-label [nzSpan]="7" nzFor="carStereoValue">Car
-                                                                    Stereo Value</nz-form-label>
-                                                                <nz-form-control nzSpan="17">
-                                                                    <input nz-input nzPlaceHolder="" name="carStereoValue"
-                                                                        [(ngModel)]="carStereoValue"
-                                                                        [ngModelOptions]="{standalone: true}" />
-                                                                </nz-form-control>
-                                                            </nz-form-item>
-                                                            <nz-form-item>
-                                                                <nz-form-label [nzSpan]="7" nzFor="carStereoRate">Rate
-                                                                </nz-form-label>
-                                                                <nz-form-control nzSpan="17">
-                                                                    <nz-input-group nzCompact>
-                                                                        <nz-select [(ngModel)]="carStereoRateType"
-                                                                            style="width: 40%;"
-                                                                            [ngModelOptions]="{standalone: true}">
-                                                                            <nz-option [nzLabel]="'%'" nzValue="percentage">
-                                                                            </nz-option>
-                                                                            <!-- <nz-option
-                                                                                            *ngIf="quoteDetailsForm.get('currency').value === 'ZMW'"
-                                                                                            [nzLabel]="'K'" nzValue="figure">
-                                                                                        </nz-option>
-                                                                                        <nz-option
-                                                                                            *ngIf="quoteDetailsForm.get('currency').value === 'Dollar'"
-                                                                                            [nzLabel]="'$'" nzValue="figure">
-                                                                                        </nz-option> -->
-                                                                        </nz-select>
-                                                                        <input nz-input nzPlaceHolder=""
-                                                                            name="carStereoRate" [(ngModel)]="carStereoRate"
-                                                                            style="width: 60%;"
-                                                                            [ngModelOptions]="{standalone: true}" />
-                                                                    </nz-input-group>
-                                                                </nz-form-control>
-                                                            </nz-form-item>
-                                                            <nz-form-item>
-                                                                <nz-form-control [nzXs]="{ span: 24, offset: 4 }"
-                                                                    [nzSm]="{ span: 20, offset: 7 }">
-                                                                    <button nz-button nzType="primary"
-                                                                        (click)="computeCarStereo()"
-                                                                        [nzLoading]="computeCarStereoIsLoading">Add
-                                                                        Load</button>
-                                                                </nz-form-control>
-                                                            </nz-form-item>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div *ngIf="selectedLoadingValue.value === 'territorailExtension'">
-                                                    <div nz-row nzGutter="0">
-                                                        <div nz-col nzSpan="25">
-                                                            <nz-form-item>
-                                                                <nz-form-label [nzSpan]="7"
-                                                                    nzFor="territorailExtensionRate">Rate</nz-form-label>
-                                                                <nz-form-control nzSpan="17">
-                                                                    <nz-input-group nzCompact>
-                                                                        <nz-select
-                                                                            [(ngModel)]="territorailExtensionRateType"
-                                                                            style="width: 40%;"
-                                                                            [ngModelOptions]="{standalone: true}">
-                                                                            <nz-option [nzLabel]="'%'" nzValue="percentage">
-                                                                            </nz-option>
-                                                                            <!-- <nz-option
-                                                                                            *ngIf="quoteDetailsForm.get('currency').value === 'ZMW'"
-                                                                                            [nzLabel]="'K'" nzValue="figure">
-                                                                                        </nz-option>
-                                                                                        <nz-option
-                                                                                            *ngIf="quoteDetailsForm.get('currency').value === 'Dollar'"
-                                                                                            [nzLabel]="'$'" nzValue="figure">
-                                                                                        </nz-option> -->
-                                                                        </nz-select>
-                                                                        <input nz-input style="width: 60%;" />
-                                                                    </nz-input-group>
-                                                                </nz-form-control>
-                                                            </nz-form-item>
-                                                            <nz-form-item>
-                                                                <nz-form-control [nzXs]="{ span: 24, offset: 4 }"
-                                                                    [nzSm]="{ span: 20, offset: 7 }">
-                                                                    <button nz-button nzType="primary"
-                                                                        (click)="computeTerritorialExtension()"
-                                                                        [nzLoading]="computeTerritorialExtensionIsLoading">Add
-                                                                        Load</button>
-                                                                </nz-form-control>
-                                                            </nz-form-item>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div *ngIf="selectedLoadingValue.value === 'lossOfUse'">
-                                                    <div nz-row nzGutter="0">
-                                                        <div nz-col nzSpan="25">
-                                                            <nz-form-item>
-                                                                <nz-form-label [nzSpan]="7" nzFor="lossOfUseDailyRate">Daily
-                                                                    Rate</nz-form-label>
-                                                                <nz-form-control nzSpan="17">
-                                                                    <nz-input-group nzCompact>
-                                                                        <nz-select [(ngModel)]="lossOfUseDailyRateType"
-                                                                            style="width: 40%;"
-                                                                            [ngModelOptions]="{standalone: true}">
-                                                                            <nz-option [nzLabel]="'%'" nzValue="percentage">
-                                                                            </nz-option>
-                                                                            <!-- <nz-option
-                                                                                            *ngIf="riskComprehensiveForm.get('currency').value === 'ZMW'"
-                                                                                            [nzLabel]="'K'" nzValue="figure">
-                                                                                        </nz-option>
-                                                                                        <nz-option
-                                                                                            *ngIf="riskComprehensiveForm.get('currency').value === 'Dollar'"
-                                                                                            [nzLabel]="'$'" nzValue="figure">
-                                                                                        </nz-option> -->
-                                                                        </nz-select>
-                                                                        <input nz-input nzPlaceHolder=""
-                                                                            name="lossOfUseDailyRate"
-                                                                            [(ngModel)]="lossOfUseDailyRate"
-                                                                            style="width: 60%;"
-                                                                            [ngModelOptions]="{standalone: true}" />
-                                                                    </nz-input-group>
-                                                                </nz-form-control>
-                                                            </nz-form-item>
-                                                            <nz-form-item>
-                                                                <nz-form-label [nzSpan]="7" nzFor="lossOfUseDays">Number Of
-                                                                    Days</nz-form-label>
-                                                                <nz-form-control nzSpan="17">
-                                                                    <input nz-input id="lossOfUseDays" nzPlaceHolder=""
-                                                                        name="lossOfUseDays" [(ngModel)]="lossOfUseDays"
-                                                                        [ngModelOptions]="{standalone: true}" />
-                                                                </nz-form-control>
-                                                            </nz-form-item>
-                                                            <nz-form-item>
-                                                                <nz-form-control [nzXs]="{ span: 24, offset: 4 }"
-                                                                    [nzSm]="{ span: 20, offset: 7 }">
-                                                                    <button nz-button nzType="primary"
-                                                                        (click)="computeLossOfUse()"
-                                                                        [nzLoading]="computeLossOfUseIsLoading">Add
-                                                                        Load</button>
-                                                                </nz-form-control>
-                                                            </nz-form-item>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- Loading Ends here -->
+                                                 <!-- Loading Ends here -->
     
                                                 <nz-form-item>
                                                     <nz-form-label nzSpan="7">Discount Rate</nz-form-label>
@@ -1074,7 +890,7 @@
                                                             </nz-select>
                                                             <input nz-input nzPlaceHolder="" name="premiumDiscountRate"
                                                                 [(ngModel)]="premiumDiscountRate" style="width: 80%;"
-                                                                [ngModelOptions]="{standalone: true}" />
+                                                                [ngModelOptions]="{standalone: true}" (ngModelChange)="handleDiscountThirdParty()"/>
                                                         </nz-input-group>
                                                     </nz-form-control>
                                                 </nz-form-item>
@@ -1128,7 +944,7 @@
                                                                     <nz-descriptions-item nzTitle="Basic Premium">{{basicPremium | number:'1.2-2'}}</nz-descriptions-item>
                                                                     <nz-descriptions-item nzTitle="Loading">{{premiumLoadingTotal | number:'1.2-2'}}</nz-descriptions-item>
                                                                     <nz-descriptions-item nzTitle="Discount">{{premiumDiscount | number:'1.2-2'}}</nz-descriptions-item>
-                                                                     <nz-descriptions-item nzTitle="Levy">{{0 | number:'1.2-2'}}</nz-descriptions-item>
+                                                                     <nz-descriptions-item nzTitle="Levy">{{basicPremiumLevy | number:'1.2-2'}}</nz-descriptions-item>
                                                                     <nz-descriptions-item nzTitle="Net Premium">{{netPremium | number:'1.2-2'}}</nz-descriptions-item>
                                                                 </nz-descriptions>
                                                     </nz-card>
@@ -1414,7 +1230,7 @@
 
   <!-- Risk Deatils Modal starts here-->
   <nz-modal [(nzVisible)]="quoteRiskDetailsModalVisible" [nzTitle]="riskTitle" [nzContent]="riskContent"
-  (nzOnCancel)="closeRiskDetails()" nzWidth="100%">
+  (nzOnCancel)="closeRiskDetails()" (nzOnOk)="closeRiskDetails()" nzWidth="100%">
   <ng-template #riskTitle>
       Risk Details
   </ng-template>
@@ -1587,7 +1403,7 @@
                               <nz-form-label nzSpan="7" nzRequired>Sum Insured</nz-form-label>
                               <nz-form-control nzSpan="17">
                                   <input nz-input nzPlaceHolder="" name="sumInsured" [(ngModel)]="sumInsured"
-                                      [ngModelOptions]="{standalone: true}" [disabled]="!isRiskDetailsEditmode" />
+                                      [ngModelOptions]="{standalone: true}" [disabled]="!isRiskDetailsEditmode" (ngModelChange)="handleBasicPremiumCalculation()"/>
                               </nz-form-control>
                           </nz-form-item>
                           <nz-form-item>
@@ -1606,7 +1422,7 @@
                                       <input nz-input nzPlaceHolder="" name="premiumRate"
                                           [(ngModel)]="premiumRate" style="width: 80%;"
                                           [ngModelOptions]="{standalone: true}"
-                                          [disabled]="!isRiskDetailsEditmode" />
+                                          [disabled]="!isRiskDetailsEditmode" (ngModelChange)="handleBasicPremiumCalculation()"/>
                                   </nz-input-group>
                               </nz-form-control>
                           </nz-form-item>
@@ -1881,18 +1697,18 @@
                                       <input nz-input nzPlaceHolder="" name="premiumDiscountRate"
                                           [(ngModel)]="premiumDiscountRate" style="width: 80%;"
                                           [ngModelOptions]="{standalone: true}"
-                                          [disabled]="!isRiskDetailsEditmode" />
+                                          [disabled]="!isRiskDetailsEditmode" (ngModelChange)="handleDiscount()"/>
                                   </nz-input-group>
                               </nz-form-control>
                           </nz-form-item>
-                          <div *ngIf= "isRiskDetailsEditmode">
+                          <!-- <div *ngIf= "isRiskDetailsEditmode">
                           <nz-form-item>
                               <nz-form-control [nzXs]="{ span: 24, offset: 4 }" [nzSm]="{ span: 20, offset: 7 }">
                                   <button nz-button nzType="primary" (click)="computePremium()"
                                       [nzLoading]="computePremiumIsLoading">Compute Premium</button>
                               </nz-form-control>
                           </nz-form-item>
-                          </div>
+                          </div> -->
                           <!-- <nz-form-item>
                                           <nz-form-control [nzXs]="{ span: 24, offset: 4 }" [nzSm]="{ span: 20, offset: 7 }">
                                               <button nz-button nzType="primary" (click)="computeBasicPremium()" [nzLoading]="computeBasicPremiumIsLoading">Compute</button>
@@ -1916,7 +1732,7 @@
                                             <div nz-col nzSpan="6">
                                                 <p style="margin-left: 4px;"> {{load.amount | number:'1.2-2'}}</p>
                                             </div>
-                                            <div nz-col nzSpan="8">
+                                            <div nz-col nzSpan="8" *ngIf="isRiskDetailsEditmode">
                                                 <a style="float: right;"
                                                     (click)="removeLoad(load, $event)">Remove
                                                     Loading</a>
@@ -1936,7 +1752,7 @@
                                               <nz-descriptions-item nzTitle="Basic Premium">{{basicPremium | number:'1.2-2'}}</nz-descriptions-item>
                                               <nz-descriptions-item nzTitle="Loading">{{premiumLoadingTotal | number:'1.2-2'}}</nz-descriptions-item>
                                               <nz-descriptions-item nzTitle="Discount">{{premiumDiscount | number:'1.2-2'}}</nz-descriptions-item>
-                                               <nz-descriptions-item nzTitle="Levy">{{0 | number:'1.2-2'}}</nz-descriptions-item>
+                                               <nz-descriptions-item nzTitle="Levy">{{basicPremiumLevy | number:'1.2-2'}}</nz-descriptions-item>
                                               <nz-descriptions-item nzTitle="Net Premium">{{netPremium | number:'1.2-2'}}</nz-descriptions-item>
                                           </nz-descriptions>
                               </nz-card>
@@ -2029,7 +1845,7 @@
                           <nz-form-control nzSpan="17">
                               <nz-select nzShowSearch nzAllowClear formControlName="productType"
                                   nzPlaceHolder="Select a product type" name="productType" id="productType"
-                                  [nzDisabled]="!isRiskDetailsEditmode">
+                                  [nzDisabled]="!isRiskDetailsEditmode" (ngModelChange)="handleBasicPremiumCalculationThirdParty()">
                                   <nz-option nzLabel="Private" nzValue="Private"></nz-option>
                                   <nz-option nzLabel="Commercial" nzValue="Commercial"></nz-option>
                                   <nz-option nzLabel="Bus/Taxi" nzValue="Bus/Taxi"></nz-option>
@@ -2083,14 +1899,14 @@
                   <nz-divider nzText="Premium Computation" nzOrientation="left"></nz-divider>
                   <div nz-row nzGutter="0">
                       <div nz-col nzSpan="8">
-                          <nz-form-item>
+                          <!-- <nz-form-item>
                               <nz-form-label nzSpan="7" nzRequired>Sum Insured</nz-form-label>
                               <nz-form-control nzSpan="17">
                                   <input nz-input nzPlaceHolder="" name="sumInsured" [(ngModel)]="sumInsured"
                                       [ngModelOptions]="{standalone: true}" [disabled]="!isRiskDetailsEditmode" />
                               </nz-form-control>
-                          </nz-form-item>
-                          <nz-form-item>
+                          </nz-form-item> -->
+                          <!-- <nz-form-item>
                               <nz-form-label nzSpan="7" nzRequired>Premium rate</nz-form-label>
                               <nz-form-control nzSpan="17">
                                   <nz-input-group nzCompact>
@@ -2098,10 +1914,7 @@
                                           [ngModelOptions]="{standalone: true}"
                                           [nzDisabled]="!isRiskDetailsEditmode">
                                           <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
-                                          <!-- <nz-option *ngIf="quoteForm.get('currency').value === 'ZMW'"
-                                                      [nzLabel]="'K'" nzValue="figure"></nz-option>
-                                                  <nz-option *ngIf="quoteForm.get('currency').value === 'Dollar'"
-                                                      [nzLabel]="'$'" nzValue="figure"></nz-option> -->
+                                          
                                       </nz-select>
                                       <input nz-input nzPlaceHolder="" name="premiumRate"
                                           [(ngModel)]="premiumRate" style="width: 80%;"
@@ -2109,7 +1922,7 @@
                                           [disabled]="!isRiskDetailsEditmode" />
                                   </nz-input-group>
                               </nz-form-control>
-                          </nz-form-item>
+                          </nz-form-item> -->
 
                           <!-- Loading starts here -->
                           <div *ngIf="isRiskDetailsEditmode">
@@ -2185,179 +1998,6 @@
                                   </nz-form-control>
                               </nz-form-item>
                           </div>
-                          <div *ngIf="selectedLoadingValue.value === 'riotAndStrike'">
-                              <nz-form-item>
-                                  <nz-form-label [nzSpan]="7" nzFor="riotAndStrikeRate">Rate
-                                  </nz-form-label>
-                                  <nz-form-control nzSpan="17">
-                                      <nz-input-group nzCompact>
-                                          <nz-select [(ngModel)]="riotAndStrikeRateType" style="width: 40%;"
-                                              [ngModelOptions]="{standalone: true}"
-                                              [nzDisabled]="!isRiskDetailsEditmode">
-                                              <nz-option [nzLabel]="'%'" nzValue="percentage">
-                                              </nz-option>
-                                              <!-- <nz-option
-                                                              *ngIf="quoteDetailsForm.get('currency').value === 'ZMW'"
-                                                              [nzLabel]="'K'" nzValue="figure"></nz-option>
-                                                          <nz-option
-                                                              *ngIf="quoteDetailsForm.get('currency').value === 'Dollar'"
-                                                              [nzLabel]="'$'" nzValue="figure"></nz-option> -->
-                                          </nz-select>
-                                          <input nz-input nzPlaceHolder="" name="riotAndStrikeRate"
-                                              [(ngModel)]="riotAndStrikeRate" style="width: 60%;"
-                                              [ngModelOptions]="{standalone: true}"
-                                              [disabled]="!isRiskDetailsEditmode" />
-                                      </nz-input-group>
-                                  </nz-form-control>
-                              </nz-form-item>
-                              <nz-form-item>
-                                  <nz-form-control [nzXs]="{ span: 24, offset: 4 }"
-                                      [nzSm]="{ span: 20, offset: 7 }">
-                                      <button nz-button nzType="primary" (click)="computeRiotAndStrike()"
-                                          [nzLoading]="computeRiotAndStrikeIsLoading">Add
-                                          Load</button>
-                                  </nz-form-control>
-                              </nz-form-item>
-                          </div>
-                          <div *ngIf="selectedLoadingValue.value === 'carStereo'">
-                              <div nz-row nzGutter="2">
-                                  <div nz-col nzSpan="25">
-                                      <nz-form-item>
-                                          <nz-form-label [nzSpan]="7" nzFor="carStereoValue">Car
-                                              Stereo Value</nz-form-label>
-                                          <nz-form-control nzSpan="17">
-                                              <input nz-input nzPlaceHolder="" name="carStereoValue"
-                                                  [(ngModel)]="carStereoValue"
-                                                  [ngModelOptions]="{standalone: true}"
-                                                  [disabled]="!isRiskDetailsEditmode" />
-                                          </nz-form-control>
-                                      </nz-form-item>
-                                      <nz-form-item>
-                                          <nz-form-label [nzSpan]="7" nzFor="carStereoRate">Rate
-                                          </nz-form-label>
-                                          <nz-form-control nzSpan="17">
-                                              <nz-input-group nzCompact>
-                                                  <nz-select [(ngModel)]="carStereoRateType" style="width: 40%;"
-                                                      [ngModelOptions]="{standalone: true}"
-                                                      [nzDisabled]="!isRiskDetailsEditmode">
-                                                      <nz-option [nzLabel]="'%'" nzValue="percentage">
-                                                      </nz-option>
-                                                      <!-- <nz-option
-                                                                      *ngIf="quoteDetailsForm.get('currency').value === 'ZMW'"
-                                                                      [nzLabel]="'K'" nzValue="figure">
-                                                                  </nz-option>
-                                                                  <nz-option
-                                                                      *ngIf="quoteDetailsForm.get('currency').value === 'Dollar'"
-                                                                      [nzLabel]="'$'" nzValue="figure">
-                                                                  </nz-option> -->
-                                                  </nz-select>
-                                                  <input nz-input nzPlaceHolder="" name="carStereoRate"
-                                                      [(ngModel)]="carStereoRate" style="width: 60%;"
-                                                      [ngModelOptions]="{standalone: true}"
-                                                      [disabled]="!isRiskDetailsEditmode" />
-                                              </nz-input-group>
-                                          </nz-form-control>
-                                      </nz-form-item>
-                                      <nz-form-item>
-                                          <nz-form-control [nzXs]="{ span: 24, offset: 4 }"
-                                              [nzSm]="{ span: 20, offset: 7 }">
-                                              <button nz-button nzType="primary" (click)="computeCarStereo()"
-                                                  [nzLoading]="computeCarStereoIsLoading">Add
-                                                  Load</button>
-                                          </nz-form-control>
-                                      </nz-form-item>
-                                  </div>
-                              </div>
-                          </div>
-                          <div *ngIf="selectedLoadingValue.value === 'territorailExtension'">
-                              <div nz-row nzGutter="0">
-                                  <div nz-col nzSpan="25">
-                                      <nz-form-item>
-                                          <nz-form-label [nzSpan]="7" nzFor="territorailExtensionRate">Rate
-                                          </nz-form-label>
-                                          <nz-form-control nzSpan="17">
-                                              <nz-input-group nzCompact>
-                                                  <nz-select [(ngModel)]="territorailExtensionRateType"
-                                                      style="width: 40%;" [ngModelOptions]="{standalone: true}"
-                                                      [nzDisabled]="!isRiskDetailsEditmode">
-                                                      <nz-option [nzLabel]="'%'" nzValue="percentage">
-                                                      </nz-option>
-                                                      <!-- <nz-option
-                                                                      *ngIf="quoteDetailsForm.get('currency').value === 'ZMW'"
-                                                                      [nzLabel]="'K'" nzValue="figure">
-                                                                  </nz-option>
-                                                                  <nz-option
-                                                                      *ngIf="quoteDetailsForm.get('currency').value === 'Dollar'"
-                                                                      [nzLabel]="'$'" nzValue="figure">
-                                                                  </nz-option> -->
-                                                  </nz-select>
-                                                  <input nz-input style="width: 60%;"
-                                                      [disabled]="!isRiskDetailsEditmode" />
-                                              </nz-input-group>
-                                          </nz-form-control>
-                                      </nz-form-item>
-                                      <nz-form-item>
-                                          <nz-form-control [nzXs]="{ span: 24, offset: 4 }"
-                                              [nzSm]="{ span: 20, offset: 7 }">
-                                              <button nz-button nzType="primary"
-                                                  (click)="computeTerritorialExtension()"
-                                                  [nzLoading]="computeTerritorialExtensionIsLoading">Add
-                                                  Load</button>
-                                          </nz-form-control>
-                                      </nz-form-item>
-                                  </div>
-                              </div>
-                          </div>
-                          <div *ngIf="selectedLoadingValue.value === 'lossOfUse'">
-                              <div nz-row nzGutter="0">
-                                  <div nz-col nzSpan="25">
-                                      <nz-form-item>
-                                          <nz-form-label [nzSpan]="7" nzFor="lossOfUseDailyRate">Daily Rate
-                                          </nz-form-label>
-                                          <nz-form-control nzSpan="17">
-                                              <nz-input-group nzCompact>
-                                                  <nz-select [(ngModel)]="lossOfUseDailyRateType"
-                                                      style="width: 40%;" [ngModelOptions]="{standalone: true}"
-                                                      [nzDisabled]="!isRiskDetailsEditmode">
-                                                      <nz-option [nzLabel]="'%'" nzValue="percentage">
-                                                      </nz-option>
-                                                      <!-- <nz-option
-                                                                      *ngIf="riskComprehensiveForm.get('currency').value === 'ZMW'"
-                                                                      [nzLabel]="'K'" nzValue="figure">
-                                                                  </nz-option>
-                                                                  <nz-option
-                                                                      *ngIf="riskComprehensiveForm.get('currency').value === 'Dollar'"
-                                                                      [nzLabel]="'$'" nzValue="figure">
-                                                                  </nz-option> -->
-                                                  </nz-select>
-                                                  <input nz-input nzPlaceHolder="" name="lossOfUseDailyRate"
-                                                      [(ngModel)]="lossOfUseDailyRate" style="width: 60%;"
-                                                      [ngModelOptions]="{standalone: true}"
-                                                      [disabled]="!isRiskDetailsEditmode" />
-                                              </nz-input-group>
-                                          </nz-form-control>
-                                      </nz-form-item>
-                                      <nz-form-item>
-                                          <nz-form-label [nzSpan]="7" nzFor="lossOfUseDays">Number Of
-                                              Days</nz-form-label>
-                                          <nz-form-control nzSpan="17">
-                                              <input nz-input id="lossOfUseDays" nzPlaceHolder=""
-                                                  name="lossOfUseDays" [(ngModel)]="lossOfUseDays"
-                                                  [ngModelOptions]="{standalone: true}"
-                                                  [disabled]="!isRiskDetailsEditmode" />
-                                          </nz-form-control>
-                                      </nz-form-item>
-                                      <nz-form-item>
-                                          <nz-form-control [nzXs]="{ span: 24, offset: 4 }"
-                                              [nzSm]="{ span: 20, offset: 7 }">
-                                              <button nz-button nzType="primary" (click)="computeLossOfUse()"
-                                                  [nzLoading]="computeLossOfUseIsLoading">Add
-                                                  Load</button>
-                                          </nz-form-control>
-                                      </nz-form-item>
-                                  </div>
-                              </div>
-                          </div>
                           </div>
                           <!-- Loading Ends here -->
 
@@ -2377,16 +2017,16 @@
                                       <input nz-input nzPlaceHolder="" name="premiumDiscountRate"
                                           [(ngModel)]="premiumDiscountRate" style="width: 80%;"
                                           [ngModelOptions]="{standalone: true}"
-                                          [disabled]="!isRiskDetailsEditmode" />
+                                          [disabled]="!isRiskDetailsEditmode" (ngModelChange)="handleDiscountThirdParty()"/>
                                   </nz-input-group>
                               </nz-form-control>
                           </nz-form-item>
-                          <nz-form-item>
+                          <!-- <nz-form-item>
                               <nz-form-control [nzXs]="{ span: 24, offset: 4 }" [nzSm]="{ span: 20, offset: 7 }">
                                   <button nz-button nzType="primary" (click)="computePremium()"
                                       [nzLoading]="computePremiumIsLoading">Compute Premium</button>
                               </nz-form-control>
-                          </nz-form-item>
+                          </nz-form-item> -->
                       </div>
 
                       <div nz-col nzSpan="8">
@@ -2405,7 +2045,7 @@
                                             <div nz-col nzSpan="6">
                                                 <p style="margin-left: 4px;"> {{load.amount | number:'1.2-2'}}</p>
                                             </div>
-                                            <div nz-col nzSpan="8">
+                                            <div nz-col nzSpan="8" *ngIf="isRiskDetailsEditmode">
                                                 <a style="float: right;"
                                                     (click)="removeLoad(load, $event)">Remove
                                                     Loading</a>
@@ -2425,7 +2065,7 @@
                                               <nz-descriptions-item nzTitle="Basic Premium">{{basicPremium | number:'1.2-2'}}</nz-descriptions-item>
                                               <nz-descriptions-item nzTitle="Loading">{{premiumLoadingTotal | number:'1.2-2'}}</nz-descriptions-item>
                                               <nz-descriptions-item nzTitle="Discount">{{premiumDiscount | number:'1.2-2'}}</nz-descriptions-item>
-                                               <nz-descriptions-item nzTitle="Levy">{{0 | number:'1.2-2'}}</nz-descriptions-item>
+                                               <nz-descriptions-item nzTitle="Levy">{{basicPremiumLevy | number:'1.2-2'}}</nz-descriptions-item>
                                               <nz-descriptions-item nzTitle="Net Premium">{{netPremium | number:'1.2-2'}}</nz-descriptions-item>
                                           </nz-descriptions>
                               </nz-card>

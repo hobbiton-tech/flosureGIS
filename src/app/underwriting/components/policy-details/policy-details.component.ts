@@ -4,6 +4,15 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Policy, RiskModel, ITimestamp } from '../../models/policy.model';
 import { PoliciesService } from '../../services/policies.service';
 import { DatePipe } from '@angular/common';
+import { Message } from '@angular/compiler/src/i18n/i18n_ast';
+import {
+    IPaymentModel,
+    PolicyPaymentPlan,
+    InstallmentsModel,
+} from 'src/app/accounts/components/models/payment-plans.model';
+import { v4 } from 'uuid';
+import { PaymentPlanService } from 'src/app/accounts/services/payment-plan.service';
+import { AccountService } from 'src/app/accounts/services/account.service';
 // import { generatePolicies } from '../../data/policy.data';
 
 @Component({
@@ -21,6 +30,7 @@ export class PolicyDetailsComponent implements OnInit {
     policyData: Policy = new Policy();
     policy: Policy;
     displayPolicy: Policy;
+    policyUpdate: Policy = new Policy();
 
     paymentPlan = 'NotCreated';
 
@@ -40,16 +50,19 @@ export class PolicyDetailsComponent implements OnInit {
         { label: 'Payment Plan', value: 'plan' },
     ];
     selectedValue = 'fully';
+    formattedDate: any;
 
     constructor(
         private readonly router: Router,
         private route: ActivatedRoute,
         private formBuilder: FormBuilder,
-        private policiesService: PoliciesService
+        private policiesService: PoliciesService,
+        private paymentPlanService: PaymentPlanService,
+        private receiptService: AccountService
     ) {
         this.paymentPlanForm = this.formBuilder.group({
             numberOfInstallments: ['', Validators.required],
-            initialInstallmentDate: ['', Validators.required],
+            startDate: ['', Validators.required],
             initialInstallmentAmount: ['', Validators.required],
         });
     }
@@ -156,8 +169,80 @@ export class PolicyDetailsComponent implements OnInit {
         this.isVisible = true;
     }
 
-    handleOk(): void {
-        console.log('Button ok clicked!');
+    handleOk(policyData): void {
+        if (this.selectedValue === 'plan') {
+            console.log(policyData);
+            this.policyUpdate = policyData;
+            // Get enddate
+            const eDate = this.paymentPlanForm.controls.startDate.value;
+            eDate.setMonth(
+                eDate.getMonth() +
+                    this.paymentPlanForm.controls.numberOfInstallments.value
+            );
+            this.formattedDate = eDate.toISOString().slice(0, 10);
+            console.log('!!!!!!!!!!!End Date!!!!!!!!!!!');
+
+            console.log(this.formattedDate);
+            // Create installments
+            const iAmount =
+                policyData.netPremium /
+                this.paymentPlanForm.controls.numberOfInstallments.value;
+            const installment: InstallmentsModel[] = [];
+
+            for (
+                let i = 0;
+                i < this.paymentPlanForm.controls.numberOfInstallments.value;
+                i++
+            ) {
+                const iDate = this.paymentPlanForm.controls.startDate.value;
+                iDate.setMonth(eDate.getMonth() + i);
+                const fDate = iDate.toISOString().slice(0, 10);
+
+                installment.push({
+                    installmentAmount: iAmount,
+                    installmentDate: fDate,
+                    balance: iAmount,
+                    installmentStatus: 'UnPaid',
+                });
+            }
+            console.log('////////////Installments Array////////////////');
+            console.log(installment);
+
+            // initialize Policy plan
+            const policyPlan: PolicyPaymentPlan[] = [];
+            policyPlan.push({
+                ...this.paymentPlanForm.value,
+                policyNumber: policyData.policyNumber,
+                amountDue: policyData.netPremium,
+                premium: policyData.netPremium,
+                amountPaid: 0,
+                numberOfPaidInstallments: 0,
+                amountOutstanding: policyData.netPremium,
+                policyPlanStatus: 'Unpaid',
+                endDate: this.formattedDate,
+                remainingInstallments: this.paymentPlanForm.controls
+                    .numberOfInstallments.value,
+                installments: installment,
+            });
+            // Payment Plan
+            const plan: IPaymentModel = {
+                id: v4(),
+                clientName: policyData.client,
+                clientId: '',
+                numberOfPolicies: 1,
+                totalPremium: policyData.netPremium,
+                status: 'UnPaid',
+                policyPaymentPlan: policyPlan,
+            };
+            // add payment plan
+            this.paymentPlanService.addPaymentPlan(plan);
+            this.paymentPlanForm.reset();
+            this.policyUpdate.paymentPlan = 'Created';
+            this.receiptService.updatePolicy(this.policyUpdate);
+        } else if (this.selectedValue === 'fully') {
+            this.router.navigateByUrl('/flosure/accounts/receipts');
+        }
+
         this.isVisible = false;
     }
 
