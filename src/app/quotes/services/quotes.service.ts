@@ -38,20 +38,6 @@ export interface IReceiptDocument {
     receiptUrl: string;
 }
 
-export interface ICertififcateDocument {
-    id: string;
-    clientId: string;
-    certificateNumber: string;
-    certificateUrl: string;
-}
-
-export interface IDebitNoteDocument {
-    id: string;
-    clientId: string;
-    debitNoteNumber: string;
-    debitNoteUrl: string;
-}
-
 @Injectable({
     providedIn: 'root',
 })

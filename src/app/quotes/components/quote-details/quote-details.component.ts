@@ -24,6 +24,7 @@ import {
 import { UploadChangeParam, NzMessageService } from 'ng-zorro-antd';
 import { debounceTime, switchMap, map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
+import { QuotesGraphqlService } from '../../services/quotes.graphql.service';
 
 type AOA = any[][];
 
@@ -232,6 +233,7 @@ export class QuoteDetailsComponent implements OnInit {
         private policiesService: PoliciesService,
         private router: Router,
         private quotesService: QuotesService,
+        private gqlQuotesService: QuotesGraphqlService,
         private readonly clientsService: ClientsService,
         private route: ActivatedRoute,
         private msg: NzMessageService,
@@ -277,26 +279,6 @@ export class QuoteDetailsComponent implements OnInit {
                     .setValue(this.quoteData.endDate);
 
                 this.risks = this.quoteData.risks;
-
-                // Basic Premium
-                // this.sumInsured = this.quoteData.sumInsured;
-                // this.premiumRate = this.quoteData.premiumRate;
-                // this.basicPremium = this.quoteData.basicPremium;
-                // this.basicPremiumLevy = this.quoteData.premiumLevy;
-                // this.basicPremiumSubTotal = this.quoteData.basicPremiumSubTotal;
-
-                // Loads
-                // this.loads = this.quoteData.loads;
-                // this.premiumLoadingsubTotal = this.quoteData.loadingSubTotal;
-
-                // discount
-                // this.premiumDiscountRate = this.quoteData.discountRate;
-                // this.premiumDiscount = this.quoteData.discount;
-                // this.premiumDiscountSubtotal = this.quoteData.discountSubTotal;
-
-                // total premium
-                // this.totalPremium = this.quoteData.netPremium;
-                // this.netPremium = this.totalPremium + this.basicPremiumLevy;
                 this.premiumLoadingTotal = 0;
             });
         });
@@ -400,6 +382,9 @@ export class QuoteDetailsComponent implements OnInit {
             this.isVehicleModelLoading = false;
         });
     }
+
+    compareFn = (o1: any, o2: any) =>
+        o1 && o2 ? o2.value === o2.value : o1 === o2;
 
     resetForms() {
         this.riskComprehensiveForm.reset();
@@ -654,9 +639,6 @@ export class QuoteDetailsComponent implements OnInit {
         this.quoteRiskDetailsModalVisible = false;
     }
 
-    compareFn = (o1: any, o2: any) =>
-        o1 && o2 ? o1.value === o2.value : o1 === o2;
-
     handleOk(): void {
         this.isConfirmLoading = true;
         setTimeout(() => {
@@ -696,6 +678,7 @@ export class QuoteDetailsComponent implements OnInit {
 
     generateDocuments(): void {
         this.approvingQuote = true;
+
         const debitNote: IDebitNoteDTO = {
             companyTelephone: 'Joshua Silwembe',
             companyEmail: 'joshua.silwembe@hobbiton.co.zm',
@@ -747,76 +730,66 @@ export class QuoteDetailsComponent implements OnInit {
             town: 'string',
         };
 
-        const quote: IQuoteDTO = {
-            quoteNumber: 'string',
-            revisionNumber: 'string',
-            startDate: new Date(),
-            endDate: new Date(),
-            client: 'string',
-            status: 'Confirmed',
-            preparedBy: 'string',
-            motorQuotationModelId: 'string',
-            dateCreated: new Date(),
-            clientCode: 'string',
-            messageCode: 'string',
-            coverCode: 'string',
-            currency: 'string',
-            riskModelId: 'stirng',
-            regNumber: 'string',
-            vehicleMake: 'string',
-            vehicleModel: 'string',
-            engineNumber: 'string',
-            chassisNumber: 'string',
-            color: 'string',
-            estimatedValue: 0,
-            productType: 'Commercial',
-            messageModelId: 'string',
-            description: 'string',
-            coverModelId: 'string',
-        };
-
         const debit$ = this.quotesService.generateDebitNote(debitNote);
         const cert$ = this.quotesService.generateCertificate(certificate);
-        const quote$ = this.quotesService.generateQuote(quote);
 
-        combineLatest([debit$, cert$, quote$]).subscribe(
-            async ([debit, cert, quote]) => {
-                this.debitNoteURL = debit.Location;
-                this.policyCertificateURl = cert.Location;
-                this.quoteURL = quote.Location;
+        combineLatest([debit$, cert$]).subscribe(async ([debit, cert]) => {
+            this.debitNoteURL = debit.Location;
+            this.policyCertificateURl = cert.Location;
 
-                // await this.quotesService.addQuoteDocuments()
+            // await this.quotesService.addQuoteDocuments()
 
-                this.quote.status = 'Approved';
-                await this.quotesService.updateQuote(this.quote);
+            this.quote.status = 'Approved';
+            await this.quotesService.updateQuote(this.quote);
 
-                
+            // convert to policy
+            const policy: Policy = {
+                ...this.quoteDetailsForm.value,
+                receiptStatus: this.status,
+                risks: this.quoteData.risks,
+                sumInsured: this.sumArray(this.quoteData.risks, 'sumInsured'),
+                netPremium: this.sumArray(this.quoteData.risks, 'netPremium'),
+                paymentPlan: this.paymentPlan,
+                user: this.quoteData.user,
+            };
 
-                // convert to policy
-                const policy: Policy = {
-                    ...this.quoteDetailsForm.value,
-                    receiptStatus: this.status,
-                    risks: this.quoteData.risks,
-                    sumInsured: this.sumArray(this.quoteData.risks, 'sumInsured'),
-                    netPremium: this.sumArray(this.quoteData.risks, 'netPremium'),
-                    // sumInsured: this.quoteData.sumInsured,
-                    // netPremium: this.quoteData.netPremium,
-                    paymentPlan: this.paymentPlan,
-                    user: this.quoteData.user,
-                };
+            await this.gqlQuotesService
+                .addCertificate({
+                    clientId: 'jgieoej',
+                    policyNumber: policy.policyNumber,
+                    certificateUrl: cert.Location,
+                })
+                .then((res) => {
+                    // console.log('GQL', res);
+                    res.subscribe((x) => {
+                        console.log('GLQ', x);
+                    });
+                });
 
-                // const policy = this.quoteDetailsForm.value as Policy;
-                console.log(policy);
-                this.policiesService.addPolicy(policy);
+            await this.gqlQuotesService
+                .addDebitNote({
+                    clientId: 'girjogjai',
+                    policyNumber: policy.policyNumber,
+                    debitNoteUrl: debit.Location,
+                })
+                .then((res) => {
+                    res.subscribe((x) => {
+                        console.log('GLQ', x);
+                    });
+                    // console.log('GQL', res);
+                });
 
-                this.isQuoteApproved = true;
-                this.approvingQuote = false;
-            }
-        );
+            // const policy = this.quoteDetailsForm.value as Policy;
+            console.log(policy);
+            this.policiesService.addPolicy(policy);
+
+            this.isQuoteApproved = true;
+            this.approvingQuote = false;
+        });
     }
 
-          sumArray(items, prop){
-        return items.reduce( function(a, b){
+    sumArray(items, prop) {
+        return items.reduce(function (a, b) {
             return a + b[prop];
         }, 0);
     }
@@ -1025,7 +998,6 @@ export class QuoteDetailsComponent implements OnInit {
             this.selectedLoadingValue.value = '';
         }, 2000);
     }
-
 
     computeCarStereo() {
         this.computeCarStereoIsLoading = true;

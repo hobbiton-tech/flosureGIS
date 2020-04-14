@@ -1,15 +1,40 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup,FormBuilder,Validators,FormControl} from '@angular/forms';
+import {
+    FormGroup,
+    FormBuilder,
+    Validators,
+    FormControl,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { QuotesService } from '../../services/quotes.service';
 import { ClientsService } from 'src/app/clients/services/clients.service';
-import { ICorporateClient, IIndividualClient } from 'src/app/clients/models/client.model';
-import { RiskModel, Quote, MotorQuotationModel, Load, LoadModel} from '../../models/quote.model';
-import { map,tap,filter,scan, retry, catchError,debounceTime,switchMap} from 'rxjs/operators';
+import {
+    ICorporateClient,
+    IIndividualClient,
+} from 'src/app/clients/models/client.model';
+import {
+    RiskModel,
+    Quote,
+    MotorQuotationModel,
+    Load,
+    LoadModel,
+} from '../../models/quote.model';
+import {
+    map,
+    tap,
+    filter,
+    scan,
+    retry,
+    catchError,
+    debounceTime,
+    switchMap,
+} from 'rxjs/operators';
 import { NzMessageService, UploadChangeParam } from 'ng-zorro-antd';
 import * as XLSX from 'xlsx';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpRequest } from '@angular/common/http';
+import { IQuoteDTO } from '../../models/quote.dto';
+import { QuotesGraphqlService } from '../../services/quotes.graphql.service';
 
 type AOA = any[][];
 
@@ -46,6 +71,7 @@ export class CreateQuoteComponent implements OnInit {
         private formBuilder: FormBuilder,
         private readonly router: Router,
         private readonly quoteService: QuotesService,
+        private readonly gqlquoteService: QuotesGraphqlService,
         private readonly clientsService: ClientsService,
         private msg: NzMessageService,
         private http: HttpClient
@@ -197,10 +223,10 @@ export class CreateQuoteComponent implements OnInit {
 
     //motor third party rates
     motorThirdPartyRates = {
-        'pirvate' : {Q1: 165, Q2: 280, Q3: 370, Q4: 464},
-        'commercial' : {Q1: 199, Q2: 340, Q3: 452, Q4: 566},
-        'bus/taxi' : {Q1: 270, Q2: 464, Q3: 618, Q4: 772}
-    }
+        pirvate: { Q1: 165, Q2: 280, Q3: 370, Q4: 464 },
+        commercial: { Q1: 199, Q2: 340, Q3: 452, Q4: 566 },
+        'bus/taxi': { Q1: 270, Q2: 464, Q3: 618, Q4: 772 },
+    };
 
     startValue: Date | null = null;
     endValue: Date | null = null;
@@ -658,12 +684,50 @@ export class CreateQuoteComponent implements OnInit {
     async addQuote(): Promise<void> {
         const quote: MotorQuotationModel = {
             ...this.quoteForm.value,
+            // clientCode
             user: this.agentMode
                 ? this.quoteForm.get('user').value
                 : 'Charles Malama',
             risks: this.risks,
         };
         console.log(quote);
+
+        const quoteDto: IQuoteDTO = {
+            quoteNumber: quote.quoteNumber,
+            revisionNumber: '00001',
+            startDate: quote.startDate as Date,
+            endDate: quote.endDate as Date,
+            client: quote.client,
+            status: 'Draft',
+            preparedBy: 'Charles Malama',
+            motorQuotationModelId: quote.id,
+            dateCreated: new Date(),
+            clientCode: quote.clientCode,
+            messageCode: '123001',
+            coverCode: quote.coverCode,
+            currency: quote.currency,
+            riskModelId: '023001',
+            regNumber: quote.risks[0].regNumber,
+            vehicleMake: quote.risks[0].vehicleMake,
+            vehicleModel: quote.risks[0].vehicleModel,
+            engineNumber: quote.risks[0].engineNumber,
+            chassisNumber: quote.risks[0].chassisNumber,
+            color: quote.risks[0].color,
+            estimatedValue: quote.risks[0].estimatedValue,
+            productType: quote.risks[0].productType,
+            messageModelId: '02501',
+            description: '',
+            coverModelId: '0948398',
+        };
+
+        this.quoteService.generateQuote(quoteDto).subscribe((res) => {
+            this.gqlquoteService.addQuote({
+                clientId: quote.clientCode,
+                quoteNumber: quote.quoteNumber,
+                quoteUrl: res.Location,
+            });
+        });
+
         await this.quoteService
             .addMotorQuotation(quote)
             .then((success) => {
@@ -845,90 +909,81 @@ export class CreateQuoteComponent implements OnInit {
     computeRiotAndStrike() {
         this.computeRiotAndStrikeIsLoading = true;
 
-            setTimeout(() => {
-                console.log(this.riotAndStrikeRate)
-        
-                this.loads.push({
-                    loadType: 'Riot And Strike',
-                    amount: 0,
-                });
-                this.addingLoad = false;
-            
+        setTimeout(() => {
+            console.log(this.riotAndStrikeRate);
+
+            this.loads.push({
+                loadType: 'Riot And Strike',
+                amount: 0,
+            });
+            this.addingLoad = false;
+
             this.computeRiotAndStrikeIsLoading = false;
             this.selectedLoadingValue.value = '';
-            console.log(this.loads)
-            }, 2000);
-
-
+            console.log(this.loads);
+        }, 2000);
     }
 
     computeIncreasedThirdPartyLimit() {
         this.computeIncreasedThirdPartyLimitIsLoading = true;
 
-            setTimeout(() => {
-                this.loads.push({
-                    loadType: 'Increased Third Party Limit',
-                    amount: 0,
-                });
-                    this.addingLoad = false;
-                      
+        setTimeout(() => {
+            this.loads.push({
+                loadType: 'Increased Third Party Limit',
+                amount: 0,
+            });
+            this.addingLoad = false;
+
             this.computeIncreasedThirdPartyLimitIsLoading = false;
             this.selectedLoadingValue.value = '';
-            console.log(this.loads)
-            }, 2000);  
-
+            console.log(this.loads);
+        }, 2000);
     }
 
     computeCarStereo() {
         this.computeCarStereoIsLoading = true;
 
-            setTimeout(() => {
-                this.loads.push({
-                    loadType: 'Car Stereo',
-                    amount: 0,
-                });
-                    this.addingLoad = false;
-                    
-            
+        setTimeout(() => {
+            this.loads.push({
+                loadType: 'Car Stereo',
+                amount: 0,
+            });
+            this.addingLoad = false;
+
             this.computeCarStereoIsLoading = false;
             this.selectedLoadingValue.value = '';
-            console.log(this.loads)
-            }, 2000);
-
+            console.log(this.loads);
+        }, 2000);
     }
 
     computeTerritorialExtension() {
         this.computeTerritorialExtensionIsLoading = true;
 
+        setTimeout(() => {
+            this.loads.push({ loadType: 'Territorial Extension', amount: 0 });
 
-            setTimeout(() => {
-                this.loads.push({ loadType: 'Territorial Extension', amount: 0 });
-        
-                    this.addingLoad = false;
-            
+            this.addingLoad = false;
+
             this.computeTerritorialExtensionIsLoading = false;
             this.selectedLoadingValue.value = '';
-            console.log(this.loads)
-            }, 2000);
-
+            console.log(this.loads);
+        }, 2000);
     }
 
     computeLossOfUse() {
         this.computeLossOfUseIsLoading = true;
 
-            setTimeout(() => {
-            
-                this.loads.push({
-                    loadType: 'Loss Of Use',
-                    amount: 0,
-                });
-                    this.addingLoad = false;
-            
+        setTimeout(() => {
+            this.loads.push({
+                loadType: 'Loss Of Use',
+                amount: 0,
+            });
+            this.addingLoad = false;
+
             this.computeLossOfUseIsLoading = false;
             this.selectedLoadingValue.value = '';
-            console.log(this.loads)
-            }, 2000);
-
+            console.log(this.loads);
+        }, 2000);
     }
 
     removeLoad(i: LoadModel, e: MouseEvent): void {
@@ -939,8 +994,7 @@ export class CreateQuoteComponent implements OnInit {
         }
 
         console.log(this.loads);
-      }
-
+    }
 
     // Discount Computation
     computeDiscount() {
