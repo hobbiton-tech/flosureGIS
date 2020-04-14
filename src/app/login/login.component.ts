@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
                     this.loginForm.controls.password.value
                 )
                 .then((res) => {
-                    this.isLoggingIn = false;
+                    // this.isLoggingIn = false;
                     this.router.navigateByUrl('/flosure/dashboard');
                 })
                 .catch((err) => {
