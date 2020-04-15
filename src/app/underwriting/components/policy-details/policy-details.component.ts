@@ -3,8 +3,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Policy, RiskModel, ITimestamp } from '../../models/policy.model';
 import { PoliciesService } from '../../services/policies.service';
-import { DatePipe } from '@angular/common';
-import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import {
     IPaymentModel,
     PolicyPaymentPlan,
@@ -13,7 +11,6 @@ import {
 import { v4 } from 'uuid';
 import { PaymentPlanService } from 'src/app/accounts/services/payment-plan.service';
 import { AccountService } from 'src/app/accounts/services/account.service';
-// import { generatePolicies } from '../../data/policy.data';
 
 @Component({
     selector: 'app-policy-details',
@@ -35,7 +32,7 @@ export class PolicyDetailsComponent implements OnInit {
     paymentPlan = 'NotCreated';
 
     // risks
-    risks: RiskModel[];
+    risks: RiskModel[] = [];
 
     searchString: string;
 
@@ -44,6 +41,12 @@ export class PolicyDetailsComponent implements OnInit {
     showCertModal = false;
     showDebitModal = false;
     showReceiptModal = false;
+
+    // PDFS
+    isCertificatePDFVisible = false;
+    isDebitNotePDFVisible = false;
+    isSchedulePDFVisible = false;
+    isClausesPDFVisible = false;
 
     optionList = [
         { label: 'Full Payment', value: 'fully' },
@@ -68,12 +71,6 @@ export class PolicyDetailsComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        // this.policiesService.getPolicies().subscribe(policies => {
-        //     this.policyData = policies.filter(x => x.policyNumber === this.policyNumber)[0];
-        //     this.policiesList = policies;
-        // });
-
-        // get policy number from url parameter
         this.route.params.subscribe((param) => {
             this.policyNumber = param.policyNumber;
             this.policiesService.getPolicies().subscribe((policies) => {
@@ -144,8 +141,6 @@ export class PolicyDetailsComponent implements OnInit {
             this.policyDetailsForm
                 .get('quarter')
                 .setValue(this.policyData.quarter);
-            // this.policyDetailsForm.get('town').setValue(this.policyData.town);
-            // this.policyDetailsForm.get('branch').setValue(this.policyData.branch);
         });
     }
 
@@ -171,7 +166,6 @@ export class PolicyDetailsComponent implements OnInit {
 
     handleOk(policyData): void {
         if (this.selectedValue === 'plan') {
-            console.log(policyData);
             this.policyUpdate = policyData;
             // Get enddate
             const eDate = this.paymentPlanForm.controls.startDate.value;
@@ -180,9 +174,6 @@ export class PolicyDetailsComponent implements OnInit {
                     this.paymentPlanForm.controls.numberOfInstallments.value
             );
             this.formattedDate = eDate.toISOString().slice(0, 10);
-            console.log('!!!!!!!!!!!End Date!!!!!!!!!!!');
-
-            console.log(this.formattedDate);
             // Create installments
             const iAmount =
                 policyData.netPremium /
@@ -205,8 +196,6 @@ export class PolicyDetailsComponent implements OnInit {
                     installmentStatus: 'UnPaid',
                 });
             }
-            console.log('////////////Installments Array////////////////');
-            console.log(installment);
 
             // initialize Policy plan
             const policyPlan: PolicyPaymentPlan[] = [];
@@ -247,7 +236,6 @@ export class PolicyDetailsComponent implements OnInit {
     }
 
     handleCancel(): void {
-        console.log('Button cancel clicked!');
         this.isVisible = false;
     }
 }
