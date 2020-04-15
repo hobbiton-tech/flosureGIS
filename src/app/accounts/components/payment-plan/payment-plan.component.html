@@ -51,7 +51,9 @@
                                                 <nz-select
                                                     formControlName="clientName"
                                                     nzPlaceHolder="Select client"
-                                                    [(ngModel)]="selectedClient"
+                                                    (ngModelChange)="
+                                                        clientChange($event)
+                                                    "
                                                 >
                                                     <div
                                                         *ngFor="
@@ -204,31 +206,34 @@
                 [nzBordered]="true"
                 style="background-color: white;"
             >
-               
                 <tbody>
-                  
+                    <thead>
+                        <tr>
+                            <th>Client Name</th>
+                            <th>Client ID</th>
+                            <th>Number of Policies</th>
+                            <th>Total Premium</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                </tbody>
 
-                        <thead>
-                            <tr>
-                                <th>Client Name</th>
-                                <th>Client ID</th>
-                                <th>Number of Policies</th>
-                                <th>Total Premium</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr  
-                            style="cursor: pointer;" *ngFor="let paymentPlan of paymentPlansTable.data" (click)="viewPaymentPlanDetails(paymentPlan)" >
-                                <td>{{paymentPlan.clientName}}</td>
-                                <td>{{paymentPlan.clientId}}</td>
-                                <td>{{paymentPlan.numberOfPolicies}}</td>
-                                <td>{{paymentPlan.totalPremium | number:'1.2-2'}}</td>
-                                <td>{{paymentPlan.status}}</td>
-                            </tr>
-                        </tbody>
-                    </nz-table>
-                </nz-card>
-
+                <tbody>
+                    <tr
+                        style="cursor: pointer;"
+                        *ngFor="let paymentPlan of paymentPlansTable.data"
+                        (click)="viewPaymentPlanDetails(paymentPlan)"
+                    >
+                        <td>{{ paymentPlan.clientName }}</td>
+                        <td>{{ paymentPlan.clientId }}</td>
+                        <td>{{ paymentPlan.numberOfPolicies }}</td>
+                        <td>
+                            {{ paymentPlan.totalPremium | number: '1.2-2' }}
+                        </td>
+                        <td>{{ paymentPlan.status }}</td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </nz-card>
     </nz-card>
 </div>

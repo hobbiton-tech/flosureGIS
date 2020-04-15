@@ -82,31 +82,21 @@ export class PaymentPlanComponent implements OnInit {
             this.clients = [...clients[0], ...clients[1]] as Array<
                 IIndividualClient & ICorporateClient
             >;
-            this.policyService.getPolicies().subscribe((policies) => {
-                this.listOfPolicies = _.filter(
-                    policies,
-                    (x) =>
-                        x.paymentPlan === 'NotCreated' &&
-                        x.client ===
-                            this.selectedClient.firstName +
-                                ' ' +
-                                this.selectedClient.lastName
-                );
-                this.isLoading = false;
-            });
         });
 
-        // this.policyService.getPolicies().subscribe((policies) => {
-        //     this.policies = _.filter(
-        //         policies,
-        //         (x) => x.paymentPlan === 'NotCreated'
-        //     );
-        //     this.isLoading = false;
-        // });
+        this.policyService.getPolicies().subscribe((policies) => {
+            this.listOfPolicies = _.filter(
+                policies,
+                (x) => x.paymentPlan === 'NotCreated'
+            );
+            this.isLoading = false;
+        });
     }
 
-    clientChange(value: string) {
+    clientChange(value: any) {
+        console.log('----------this.selectedClient----------');
         console.log(value);
+        // this.listOfPolicies = this.policies.filter((x) => x.client === value);
     }
 
     // view policies of payment plan
