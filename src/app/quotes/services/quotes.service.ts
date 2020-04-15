@@ -31,6 +31,13 @@ export interface IAmazonS3Result {
     Bucket: string;
 }
 
+export interface IReceiptDocument {
+    id: string;
+    clientId: string;
+    receiptNumber: string;
+    receiptUrl: string;
+}
+
 @Injectable({
     providedIn: 'root',
 })
@@ -76,10 +83,9 @@ export class QuotesService {
             );
 
             await this.motorQuoteCollection
-            .doc(quotation.id)
-            .set(quotation)
-                .then(mess => {
-                })
+                .doc(quotation.id)
+                .set(quotation)
+                .then((mess) => {})
                 .catch((err) => {
                     console.log(err);
                 });

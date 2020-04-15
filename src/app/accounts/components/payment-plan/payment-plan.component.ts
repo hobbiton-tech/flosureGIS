@@ -6,6 +6,7 @@ import {
     PolicyPaymentPlan,
 } from '../models/payment-plans.model';
 import { PaymentPlanService } from '../../services/payment-plan.service';
+
 import { v4 } from 'uuid';
 import { Policy } from 'src/app/underwriting/models/policy.model';
 import { PoliciesService } from 'src/app/underwriting/services/policies.service';
@@ -19,6 +20,7 @@ import {
     ICorporateClient,
 } from 'src/app/clients/models/client.model';
 
+
 @Component({
     selector: 'app-payment-plan',
     templateUrl: './payment-plan.component.html',
@@ -27,6 +29,7 @@ import {
 export class PaymentPlanComponent implements OnInit {
     paymentPlansList: IPaymentModel[];
     dispalyPaymentPlansList: IPaymentModel[];
+
     policies: any;
 
     listOfPolicies: any[];
@@ -34,9 +37,11 @@ export class PaymentPlanComponent implements OnInit {
     paymentPlansCount = 0;
     listOfSelectedValue = [];
 
+
     policyUpdate: Policy = new Policy();
     clients: Array<IIndividualClient & ICorporateClient>;
     selectedClient: IIndividualClient & ICorporateClient;
+
 
     isVisible = false;
     size = 'default';
@@ -237,4 +242,5 @@ export class PaymentPlanComponent implements OnInit {
         this.paymentPlanForm.reset();
         this.isVisible = false;
     }
+
 }

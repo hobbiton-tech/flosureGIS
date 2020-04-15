@@ -24,6 +24,7 @@
     "@types/faker": "^4.1.9",
     "@types/lodash": "^4.14.149",
     "@types/uuid": "^7.0.2",
+    "apollo-angular": "^1.9.0",
     "chance": "^1.1.4",
     "date-fns": "^2.11.0",
     "datejs": "^1.0.0-rc3",
@@ -39,7 +40,13 @@
     "tslib": "^1.10.0",
     "uuid": "^7.0.2",
     "xlsx": "^0.15.6",
-    "zone.js": "~0.10.2"
+    "zone.js": "~0.10.2",
+    "apollo-angular-link-http": "^1.10.0",
+    "apollo-link": "^1.2.11",
+    "apollo-client": "^2.6.0",
+    "apollo-cache-inmemory": "^1.6.0",
+    "graphql-tag": "^2.10.0",
+    "graphql": "^14.6.0"
   },
   "devDependencies": {
     "@angular-devkit/architect": "^0.900.0-0 || ^0.900.0",

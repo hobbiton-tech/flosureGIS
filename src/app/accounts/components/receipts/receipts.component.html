@@ -67,13 +67,13 @@
                             >
                                 <td>{{ unreceipted.policyNumber }}</td>
                                 <td>
-                                    {{ unreceipted.startDate }}
+                                    {{ unreceipted.startDate | date }}
                                 </td>
                                 <td>
-                                    {{ unreceipted.endDate }}
+                                    {{ unreceipted.endDate | date }}
                                 </td>
                                 <td>{{ unreceipted.client }}</td>
-                                <td>{{ unreceipted.netPremium }}</td>
+                                <td>{{ unreceipted.netPremium | number:'1.2-2' }}</td>
                                 <td>
                                     <nz-badge
                                         [nzStatus]="
@@ -359,7 +359,7 @@
                             >
                                 <td>{{ receipt.receiptNumber }}</td>
                                 <td>{{ receipt.onBehalfOf }}</td>
-                                <td>{{ receipt.sumInDigits }}</td>
+                                <td>{{ receipt.sumInDigits  | number:'1.2-2'}}</td>
                                 <td>{{ receipt.receiptType }}</td>
 
                                 <td>
@@ -490,7 +490,7 @@
                             >
                                 <td>{{ receipt.receiptNumber }}</td>
                                 <td>{{ receipt.onBehalfOf }}</td>
-                                <td>{{ receipt.sumInDigits }}</td>
+                                <td>{{ receipt.sumInDigits | number:'1.2-2'}}</td>
                                 <td>{{ receipt.receiptType }}</td>
 
                                 <td>

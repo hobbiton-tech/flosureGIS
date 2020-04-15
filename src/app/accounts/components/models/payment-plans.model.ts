@@ -20,7 +20,7 @@ export class PolicyPaymentPlan {
     policyPlanStatus: PolicyPlanStatus;
     remainingInstallments: number;
     premium: number;
-    installments: PolicyPaymentPlan[];
+    installments: InstallmentsModel[];
 }
 
 export class InstallmentsModel {
@@ -31,7 +31,7 @@ export class InstallmentsModel {
     balance: number;
 }
 
-export type PaymentPlanStatus = 'Fully Paid' | 'Partially Paid' | 'Unpaid';
-export type PolicyPlanStatus = 'Fully Paid' | 'Partially Paid' | 'Unpaid';
+export type PaymentPlanStatus = 'Fully Paid' | 'Partially Paid' | 'UnPaid';
+export type PolicyPlanStatus = 'Fully Paid' | 'Partially Paid' | 'UnPaid';
 
-export type InstallmentStatus = 'Fully Paid' | 'Partially Paid' | 'Unpaid';
+export type InstallmentStatus = 'Fully Paid' | 'Partially Paid' | 'UnPaid';
