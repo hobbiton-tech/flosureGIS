@@ -222,6 +222,9 @@ export class QuoteDetailsComponent implements OnInit {
     isConfirmLoading = false;
     showDocumentModal = false;
 
+    // Quote PDFs modal
+    isViewQuotePDFVisible = false;
+
     searchString: string;
 
     // generated PDFs
@@ -802,6 +805,9 @@ export class QuoteDetailsComponent implements OnInit {
             this.debitNoteURL = debit.Location;
             this.policyCertificateURl = cert.Location;
 
+            console.log('DEBIT', debit.Location)
+            console.log('CERT', cert.Location)
+
             // await this.quotesService.addQuoteDocuments()
 
             this.quote.status = 'Approved';
@@ -818,10 +824,15 @@ export class QuoteDetailsComponent implements OnInit {
                 user: this.quoteData.user,
             };
 
+            
+            // const policy = this.quoteDetailsForm.value as Policy;
+            console.log(policy);
+            await this.policiesService.addPolicy(policy);
+
             await this.gqlQuotesService
                 .addCertificate({
-                    clientId: 'jgieoej',
-                    policyNumber: policy.policyNumber,
+                    clientId: localStorage.getItem('clientId'), // Added from the policy service
+                    policyNumber: localStorage.getItem('policyNumber'), // Added in the policy service.
                     certificateUrl: cert.Location,
                 })
                 .then((res) => {
@@ -833,8 +844,8 @@ export class QuoteDetailsComponent implements OnInit {
 
             await this.gqlQuotesService
                 .addDebitNote({
-                    clientId: 'girjogjai',
-                    policyNumber: policy.policyNumber,
+                    clientId: localStorage.getItem('clientId'), // Added from the policy service,
+                    policyNumber: localStorage.getItem('policyNumber'), // Added in the policy service.
                     debitNoteUrl: debit.Location,
                 })
                 .then((res) => {
@@ -844,9 +855,6 @@ export class QuoteDetailsComponent implements OnInit {
                     // console.log('GQL', res);
                 });
 
-            // const policy = this.quoteDetailsForm.value as Policy;
-            console.log(policy);
-            this.policiesService.addPolicy(policy);
 
             this.isQuoteApproved = true;
             this.approvingQuote = false;

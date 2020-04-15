@@ -21,7 +21,7 @@ export class PoliciesService {
         this.policies = this.policiesCollection.valueChanges();
     }
 
-    async addPolicy(policy: Policy): Promise<void> {
+    async addPolicy(policy: Policy) {
         this.policies.pipe(first()).subscribe(async (policies) => {
             const today = new Date();
             policy.nameOfInsured = policy.client;
@@ -33,10 +33,16 @@ export class PoliciesService {
                 'BR202000030',
                 policies.length
             );
-
             policy.id = v4();
+            // This is the easiest way I found to track the policy number / client Id
+            // for the PDFs generation.
+            localStorage.removeItem('policyNumber'); 
+            localStorage.setItem('policyNumber', policy.policyNumber);
+            
+            localStorage.removeItem('clientId');
+            localStorage.setItem('clientId', policy.nameOfInsured); // TODO: Need to change to client code.
 
-            await this.policiesCollection.doc(policy.id).set(policy);
+            this.policiesCollection.doc(policy.id).set(policy);
         });
     }
 

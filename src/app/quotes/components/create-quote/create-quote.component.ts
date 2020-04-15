@@ -819,9 +819,13 @@ export class CreateQuoteComponent implements OnInit {
 
         this.quoteService.generateQuote(quoteDto).subscribe((res) => {
             this.gqlquoteService.addQuote({
-                clientId: quote.clientCode,
+                clientId: 'some', // System can't keep track of this guy
                 quoteNumber: quote.quoteNumber,
                 quoteUrl: res.Location,
+            }).then(res => {
+                res.subscribe(x => {
+                    console.log(x);
+                })
             });
         });
 

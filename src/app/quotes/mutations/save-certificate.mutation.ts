@@ -10,13 +10,13 @@ export class SaveCertificateMutation extends Mutation {
         mutation addCerficate(
             $clientId: String!
             $policyNumber: String!
-            $cetificateUrl: String!
+            $certificateUrl: String!
         ) {
             insert_certificate(
                 objects: {
                     client_id: $clientId
                     policy_number: $policyNumber
-                    certificate_url: $certificateURl
+                    certificate_url: $certificateUrl
                 }
             ) {
                 returning {
