@@ -19,6 +19,7 @@ import { environment } from '../environments/environment';
 import 'firebase/storage';
 import { RatesComponent } from './app/settings/components/rates/rates.component';
 import { GraphQLModule } from './graphql.module';
+import { SlackService } from './slack.service';
 
 registerLocaleData(en);
 
@@ -30,11 +31,16 @@ const firebaseConfig = {
     storageBucket: 'flosure-backend.appspot.com',
     messagingSenderId: '167483416678',
     appId: '1:167483416678:web:dcd089c936275ee33f4da7',
-    measurementId: 'G-4565Y5EHD4'
+    measurementId: 'G-4565Y5EHD4',
 };
 
 @NgModule({
-    declarations: [AppComponent, NavigationComponent, LoginComponent, RatesComponent],
+    declarations: [
+        AppComponent,
+        NavigationComponent,
+        LoginComponent,
+        RatesComponent,
+    ],
     imports: [
         BrowserModule,
         AppRoutingModule,
@@ -46,12 +52,9 @@ const firebaseConfig = {
         AngularFireModule.initializeApp(firebaseConfig),
         AngularFireDatabaseModule,
         AngularFireStorageModule,
-        GraphQLModule
+        GraphQLModule,
     ],
-    providers: [
-        { provide: NZ_I18N, useValue: en_US }
-        //{provide: BUCKET, useValue: 'documents'}
-    ],
-    bootstrap: [AppComponent]
+    providers: [{ provide: NZ_I18N, useValue: en_US }, SlackService],
+    bootstrap: [AppComponent],
 })
 export class AppModule {}

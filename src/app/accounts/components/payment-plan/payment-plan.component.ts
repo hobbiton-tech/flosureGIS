@@ -20,7 +20,6 @@ import {
     ICorporateClient,
 } from 'src/app/clients/models/client.model';
 
-
 @Component({
     selector: 'app-payment-plan',
     templateUrl: './payment-plan.component.html',
@@ -37,11 +36,9 @@ export class PaymentPlanComponent implements OnInit {
     paymentPlansCount = 0;
     listOfSelectedValue = [];
 
-
     policyUpdate: Policy = new Policy();
     clients: Array<IIndividualClient & ICorporateClient>;
     selectedClient: IIndividualClient & ICorporateClient;
-
 
     isVisible = false;
     size = 'default';
@@ -157,9 +154,6 @@ export class PaymentPlanComponent implements OnInit {
     }
 
     handleOk(): void {
-        console.log('............Policy Numbers............');
-        console.log(this.listOfSelectedValue);
-
         // Get enddate
         for (const policy of this.listOfSelectedValue) {
             this.policyUpdate = policy;
@@ -169,9 +163,6 @@ export class PaymentPlanComponent implements OnInit {
                     this.paymentPlanForm.controls.numberOfInstallments.value
             );
             this.formattedDate = eDate.toISOString().slice(0, 10);
-            console.log('!!!!!!!!!!!End Date!!!!!!!!!!!');
-
-            console.log(this.formattedDate);
             // Create installments
             const iAmount =
                 policy.netPremium /
@@ -191,11 +182,9 @@ export class PaymentPlanComponent implements OnInit {
                     installmentAmount: iAmount,
                     installmentDate: fDate,
                     balance: iAmount,
-                    installmentStatus: 'Unpaid',
+                    installmentStatus: 'UnPaid',
                 });
             }
-            console.log('////////////Installments Array////////////////');
-            console.log(installment);
 
             // initialize Policy plan
             const policyPlan: PolicyPaymentPlan[] = [];
@@ -218,14 +207,7 @@ export class PaymentPlanComponent implements OnInit {
             this.netPremium = this.netPremium + policy.netPremium;
             this.policyPlan = policyPlan;
             this.policyUpdate.paymentPlan = 'Created';
-            console.log(';;;;;;;;;;Update Data;;;;;;;;;;;;');
-            console.log(this.policyUpdate);
-            // this.receiptService.updatePolicy(this.policyUpdate);
         }
-
-        console.log('-----------------------');
-        console.log(this.policyPlan);
-
         // Payment Plan
         const plan: IPaymentModel = {
             id: v4(),
@@ -233,7 +215,7 @@ export class PaymentPlanComponent implements OnInit {
             clientId: '',
             numberOfPolicies: 1,
             totalPremium: this.netPremium,
-            status: 'Unpaid',
+            status: 'UnPaid',
             policyPaymentPlan: this.policyPlan,
         };
 
@@ -242,5 +224,4 @@ export class PaymentPlanComponent implements OnInit {
         this.paymentPlanForm.reset();
         this.isVisible = false;
     }
-
 }
