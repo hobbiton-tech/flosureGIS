@@ -93,7 +93,7 @@ export class PaymentPlanComponent implements OnInit {
         });
     }
 
-    clientChange(value: any) {
+    clientChange(value) {
         console.log('----------this.selectedClient----------');
         console.log(value);
         // this.listOfPolicies = this.policies.filter((x) => x.client === value);

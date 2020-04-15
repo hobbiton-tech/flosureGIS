@@ -21,7 +21,6 @@ import { Policy } from 'src/app/underwriting/models/policy.model';
     styleUrls: ['./payment-plan-policy-installments.component.scss'],
 })
 export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
-
     receiptForm: FormGroup;
     cancelForm: FormGroup;
     reinstateForm: FormGroup;
@@ -38,34 +37,34 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
     installmentsList: InstallmentsModel[];
     displayInstallmentsList: InstallmentsModel[];
 
-    //payment plan Id
+    // payment plan Id
     paymentPlanId: string;
 
-    //policy number
+    // policy number
     policyNumber: string;
 
-    //payment plan data
+    // payment plan data
     paymentPlanData: IPaymentModel = new IPaymentModel();
 
-    //payment plan policy data
+    // payment plan policy data
     paymentPlanPolicyData: PolicyPaymentPlan = new PolicyPaymentPlan();
 
-    //payment plan policy installment data
+    // payment plan policy installment data
     paymentPlanPolicyInstallmentData: InstallmentsModel = new InstallmentsModel();
 
-    //payment plan policies
+    // payment plan policies
     paymentPlanPolicies: PolicyPaymentPlan[] = [];
 
-    //payment plan policy installments
+    // payment plan policy installments
     paymentPlanPolicyInstallments = [];
 
-    //search value for filtering installment table
+    // search value for filtering installment table
     searchString: string;
 
-    //payment plan policy installments
+    // payment plan policy installments
     paymentPlanPolicyInstallmentsCount = 0;
 
-    //Recipting
+    // Recipting
     isVisible = false;
     isCancelVisible = false;
     isReinstateVisible = false;
@@ -121,7 +120,6 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
         });
     }
 
-
     ngOnInit(): void {
         this.route.params.subscribe((param) => {
             this.paymentPlanId = param.id;
@@ -134,17 +132,17 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
                         (x) => x.id === this.paymentPlanId
                     )[0];
 
-
-                    this.paymentPlanPolicyData = this.paymentPlanPolicies.filter(
+                    this.paymentPlanPolicyData = this.paymentPlanData.policyPaymentPlan.filter(
                         (x) => x.policyNumber === this.policyNumber
                     )[0];
-                    this.paymentPlanPolicyInstallments = this.paymentPlanPolicyData.installments;
-                    this.paymentPlanPolicyInstallmentsCount = this.paymentPlanPolicyInstallments.length;
 
+                    this.paymentPlanPolicyInstallments = this.paymentPlanPolicyData.installments;
+                    console.log('000000000Installments0000000000');
+                    console.log(this.paymentPlanPolicyInstallments);
+                    this.paymentPlanPolicyInstallmentsCount = this.paymentPlanPolicyData.installments.length;
                 });
         });
     }
-
 
     showModal(paymentPlanPolicyInstallment: InstallmentsModel): void {
         this.isVisible = true;
@@ -161,7 +159,7 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
 
     receiptInstallment() {}
 
-    //modal cancel
+    // modal cancel
     handleCancel(): void {
         this.isVisible = false;
     }
@@ -211,5 +209,4 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
         // this.isConfirmLoading = true;
         // this.generateDocuments();
     }
-
 }
