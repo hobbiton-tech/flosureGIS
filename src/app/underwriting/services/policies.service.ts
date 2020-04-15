@@ -8,6 +8,8 @@ import {
 import 'firebase/firestore';
 import { filter, first } from 'rxjs/operators';
 import { v4 } from 'uuid';
+import { debounceTime, map, switchMap } from 'rxjs/operators';
+import { isTemplateRef } from 'ng-zorro-antd';
 
 @Injectable({
     providedIn: 'root',
@@ -25,7 +27,12 @@ export class PoliciesService {
         this.policies.pipe(first()).subscribe(async (policies) => {
             const today = new Date();
             policy.nameOfInsured = policy.client;
-            policy.dateOfIssue = today.getDay() + '-' + today.getMonth() + '-' + today.getFullYear();
+            policy.dateOfIssue =
+                today.getDay() +
+                '-' +
+                today.getMonth() +
+                '-' +
+                today.getFullYear();
             policy.timeOfIssue = today.getHours() + ':' + today.getMinutes();
             policy.expiryDate = policy.endDate;
             policy.status = 'Active';
@@ -46,12 +53,16 @@ export class PoliciesService {
         });
     }
 
-    getPolicies(): Observable<Policy[]> {
+    getPolicyNumber() {
         return this.policies;
     }
 
     getClientsPolicies(clientId: string): Observable<Policy[]> {
         return this.policies.pipe(filter((policy) => clientId === clientId));
+    }
+
+    getPolicies(): Observable<Policy[]> {
+        return this.policies;
     }
 
     countGenerator(number) {

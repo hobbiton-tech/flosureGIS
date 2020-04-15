@@ -4,7 +4,9 @@ import {
     IPaymentModel,
     PolicyPaymentPlan,
 } from '../../../models/payment-plans.model';
+
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { PaymentPlanService } from 'src/app/accounts/services/payment-plan.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AccountService } from 'src/app/accounts/services/account.service';
@@ -19,6 +21,7 @@ import { Policy } from 'src/app/underwriting/models/policy.model';
     styleUrls: ['./payment-plan-policy-installments.component.scss'],
 })
 export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
+
     receiptForm: FormGroup;
     cancelForm: FormGroup;
     reinstateForm: FormGroup;
@@ -118,6 +121,7 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
         });
     }
 
+
     ngOnInit(): void {
         this.route.params.subscribe((param) => {
             this.paymentPlanId = param.id;
@@ -130,14 +134,17 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
                         (x) => x.id === this.paymentPlanId
                     )[0];
 
+
                     this.paymentPlanPolicyData = this.paymentPlanPolicies.filter(
                         (x) => x.policyNumber === this.policyNumber
                     )[0];
                     this.paymentPlanPolicyInstallments = this.paymentPlanPolicyData.installments;
                     this.paymentPlanPolicyInstallmentsCount = this.paymentPlanPolicyInstallments.length;
+
                 });
         });
     }
+
 
     showModal(paymentPlanPolicyInstallment: InstallmentsModel): void {
         this.isVisible = true;
@@ -204,4 +211,5 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
         // this.isConfirmLoading = true;
         // this.generateDocuments();
     }
+
 }

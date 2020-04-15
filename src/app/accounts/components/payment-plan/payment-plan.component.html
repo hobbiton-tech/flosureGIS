@@ -4,53 +4,210 @@
             <nz-page-header-title>Payment Plans</nz-page-header-title>
             <nz-page-header-content>
                 <nz-descriptions [nzColumn]="3">
-                <nz-descriptions-item nzTitle="Total Payment Plans" [nzSpan]="1">{{paymentPlansCount}}</nz-descriptions-item>
+                    <nz-descriptions-item
+                        nzTitle="Total Payment Plans"
+                        [nzSpan]="1"
+                        >{{ paymentPlansCount }}</nz-descriptions-item
+                    >
                 </nz-descriptions>
             </nz-page-header-content>
-        </nz-page-header>
-    </div>
-
-    <nz-card [nzBordered]="false" style="margin-top: 20px;">
-        
-                <nz-card [nzBordered]="false">
-                    <div style="margin-bottom: 10px;">
-                        <div nz-row [nzGutter]="24">
-                            <div nz-col nzSpan="12">
-                                <div style="width: 75%;">
-                                    <nz-input-group
-                                        [nzSuffix]="suffixIconSearch"
-                                    >
-                                        <input
-                                            type="text"
-                                            nz-input
-                                            placeholder="Search by Client name, Client ID"
-                                        />
-                                    </nz-input-group>
-                                    <ng-template #suffixIconSearch>
-                                        <i nz-icon nzType="search"></i>
-                                    </ng-template>
-                                </div>
-                            </div>
-                            <div nz-col nzSpan="12">
-                                <button
+            <nz-page-header-extra>
+                <div nz-col nzSpan="12">
+                    <!-- <button
                                     nz-button
                                     nzType="primary"
                                     style="float: right;"
                                     (click)="addPaymentPlan()"
                                 >
                                     Add New Payment Plan
-                                </button>
-                            </div>
+                                </button> -->
+
+                    <button nz-button nzType="primary" (click)="showModal()">
+                        Add New Payment Plan
+                    </button>
+                    <nz-modal
+                        [(nzVisible)]="isVisible"
+                        nzTitle="Payment Plan"
+                        style="float: right;"
+                        (nzOnCancel)="handleCancel()"
+                        (nzOnOk)="handleOk()"
+                        [nzWidth]="800"
+                    >
+                        <div nz-row nzGutter="0" style="margin-left: 20px;">
+                            <form
+                                nz-form
+                                [nzLayout]="'inline'"
+                                [formGroup]="paymentPlanForm"
+                            >
+                                <div nz-row nzGutter="0">
+                                    <div nz-col [nzSpan]="12">
+                                        <nz-form-item>
+                                            <nz-form-label
+                                                nzSpan="12"
+                                                nzRequired
+                                                >Client Name</nz-form-label
+                                            >
+                                            <nz-form-control nzSpan="12">
+                                                <nz-select
+                                                    formControlName="clientName"
+                                                    nzPlaceHolder="Select client"
+                                                    [(ngModel)]="selectedClient"
+                                                >
+                                                    <div
+                                                        *ngFor="
+                                                            let client of clients
+                                                        "
+                                                    >
+                                                        <nz-option
+                                                            [nzValue]="
+                                                                client.clientType ===
+                                                                'Individual'
+                                                                    ? client.firstName +
+                                                                      ' ' +
+                                                                      client.lastName
+                                                                    : client.companyName
+                                                            "
+                                                            [nzLabel]="
+                                                                client.clientType ===
+                                                                'Individual'
+                                                                    ? client.firstName +
+                                                                      ' ' +
+                                                                      client.lastName
+                                                                    : client.companyName
+                                                            "
+                                                        ></nz-option>
+                                                    </div>
+                                                </nz-select>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div nz-col [nzSpan]="12">
+                                        <nz-form-item>
+                                            <nz-form-label
+                                                [nzSpan]="12"
+                                                nzFor="policyNumber"
+                                                >Pollicy</nz-form-label
+                                            >
+                                            <nz-form-control nzSpan="12">
+                                                <nz-select
+                                                    nzMode="multiple"
+                                                    nzPlaceHolder="Please select"
+                                                >
+                                                    <nz-option
+                                                        *ngFor="
+                                                            let option of listOfPolicies
+                                                        "
+                                                        [nzLabel]="
+                                                            option.policyNumber
+                                                        "
+                                                        [nzValue]="option"
+                                                    ></nz-option>
+                                                </nz-select>
+                                                <!-- <nz-select
+                                                    nzMode="multiple"
+                                                    name="policyNumber"
+                                                    nzShowSearch
+                                                    nzAllowClear
+                                                    [nzSize]="size"
+                                                    formControlName="policyNumber"
+                                                    nzPlaceHolder="Choose Payment Plan"
+                                                >
+                                                    <nz-option
+                                                        *ngFor="
+                                                            let option of policies
+                                                        "
+                                                        [nzValue]="option"
+                                                        [nzLabel]="
+                                                            option.policyNumber
+                                                        "
+                                                    ></nz-option>
+                                                </nz-select> -->
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                </div>
+                                <div nz-row nzGutter="0">
+                                    <div nz-col [nzSpan]="12">
+                                        <nz-form-item>
+                                            <nz-form-label
+                                                [nzSm]="12"
+                                                [nzXs]="24"
+                                                nzRequired
+                                                >Initial Installment
+                                                Date</nz-form-label
+                                            >
+                                            <nz-form-control
+                                                [nzSm]="12"
+                                                [nzXs]="24"
+                                            >
+                                                <nz-date-picker
+                                                    formControlName="startDate"
+                                                ></nz-date-picker>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div nz-col [nzSpan]="12">
+                                        <nz-form-item>
+                                            <nz-form-label
+                                                [nzSpan]="12"
+                                                nzFor="numberOfInstallments"
+                                                >Number Of
+                                                Installments</nz-form-label
+                                            >
+                                            <nz-form-control
+                                                [nzSpan]="12"
+                                                nzErrorTip="Please input your username!"
+                                            >
+                                                <input
+                                                    id="numberOfInstallments"
+                                                    type="number"
+                                                    nz-input
+                                                    formControlName="numberOfInstallments"
+                                                />
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </nz-modal>
+                </div>
+            </nz-page-header-extra>
+        </nz-page-header>
+    </div>
+
+    <nz-card [nzBordered]="false" style="margin-top: 20px;">
+        <nz-card [nzBordered]="false">
+            <div style="margin-bottom: 10px;">
+                <div nz-row [nzGutter]="24">
+                    <div nz-col nzSpan="12">
+                        <div style="width: 75%;">
+                            <nz-input-group [nzSuffix]="suffixIconSearch">
+                                <input
+                                    type="text"
+                                    nz-input
+                                    placeholder="Search by Client name, Client ID"
+                                />
+                            </nz-input-group>
+                            <ng-template #suffixIconSearch>
+                                <i nz-icon nzType="search"></i>
+                            </ng-template>
                         </div>
                     </div>
+                </div>
+            </div>
 
-                    <nz-table
-                        #paymentPlansTable
-                        [nzData] = "dispalyPaymentPlansList"
-                        [nzSize]="'small'"
-                        [nzBordered]="true"
-                        style="background-color: white;"
-                    >
+            <nz-table
+                #paymentPlansTable
+                [nzData]="dispalyPaymentPlansList"
+                [nzSize]="'small'"
+                [nzBordered]="true"
+                style="background-color: white;"
+            >
+               
+                <tbody>
+                  
+
                         <thead>
                             <tr>
                                 <th>Client Name</th>
@@ -72,6 +229,6 @@
                         </tbody>
                     </nz-table>
                 </nz-card>
+
     </nz-card>
 </div>
-
