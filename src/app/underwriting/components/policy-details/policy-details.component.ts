@@ -33,14 +33,11 @@ export class PolicyDetailsComponent implements OnInit {
 
     // risks
     risks: RiskModel[] = [];
+    risksLoading = true;
 
     searchString: string;
 
     isEditmode = false;
-
-    showCertModal = false;
-    showDebitModal = false;
-    showReceiptModal = false;
 
     // PDFS
     isCertificatePDFVisible = false;
@@ -82,6 +79,8 @@ export class PolicyDetailsComponent implements OnInit {
                     (x) => x.policyNumber === this.policyNumber
                 )[0];
                 this.displayPolicy = this.policy;
+                this.risks = this.displayPolicy.risks;
+                this.risksLoading = false;
             });
         });
 
