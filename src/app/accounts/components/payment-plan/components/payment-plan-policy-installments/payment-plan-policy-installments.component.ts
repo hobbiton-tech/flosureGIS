@@ -172,55 +172,85 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
     async handleOk() {
         this.submitted = true;
         const amount = this.receiptForm.controls.sumInDigits.value;
-        let d = 0;
+        this.isOkLoading = true;
+        this._id = v4();
+        const receipt: IReceiptModel = {
+            id: this._id,
+            ...this.receiptForm.value,
+            onBehalfOf: this.clientName,
+            capturedBy: this.user,
+            policyNumber: this.policyNumber,
+            receiptStatus: this.recStatus,
+            sumInDigits: this.installmentAmount,
+            todayDate: new Date(),
+        };
+        this.receiptNum = this._id;
+        await this.receiptService
+            .addReceipt(receipt)
+            .then((mess) => {
+                this.message.success('Receipt Successfully created');
+            })
+            .catch((err) => {
+                this.message.warning('Receipt Failed');
+            });
+        this.receiptForm.reset();
+        setTimeout(() => {
+            this.isVisible = false;
+            this.isOkLoading = false;
+        }, 30);
+        this.policy.receiptStatus = 'Receipted';
+        await this.receiptService.updatePolicy(this.policy);
+        this.generateID(this._id);
 
         if (this.receiptForm.valid) {
             // this.isOkLoading = true;
-            for (const p of this.paymentPlanPolicyInstallments) {
-                d = this.installmentAmount - amount;
-                if (p.balance === amount) {
-                    p.balance = d;
-                    p.installmentStatus = 'Fully Paid';
+            const p = this.paymentPlanPolicyInstallments;
+            let d = amount;
+            for (let i = 0; i < p.length; i++) {
+                console.log(d);
 
-                    break;
-
-                    //       this._id = v4();
-                    //       const receipt: IReceiptModel = {
-                    //     id: this._id,
-                    //     ...this.receiptForm.value,
-                    //     onBehalfOf: this.clientName,
-                    //     capturedBy: this.user,
-                    //     policyNumber: this.policyNumber,
-                    //     receiptStatus: this.recStatus,
-                    //     sumInDigits: amount,
-                    //     todayDate: new Date(),
-                    // };
-                    //       this.receiptNum = this._id;
-                    //       await this.receiptService
-                    //     .addReceipt(receipt)
-                    //       this.receiptForm.reset();
-                    //       setTimeout(() => {
-                    //     this.isVisible = false;
-                    //     this.isOkLoading = false;
-                    // }, 30);
-                    //       this.policy.receiptStatus = 'Receipted';
-                    //       await this.receiptService.updatePolicy(this.policy);
-                    //       this.generateID(this._id);
-
-                    console.log(d);
-                } else if (amount > p.balance) {
-                    p.balance = d;
-                    p.installmentStatus = 'Fully Paid';
-                } else if (amount < p.balance) {
-                    p.balance = d;
-                    p.installmentStatus = 'Partially Paid';
-
-                    break;
-                } else {
-                    p.installmentStatus = 'Fully Paid';
+                if (d > p[i].balance && p[i].balance !== 0) {
+                    d = d - p[i].balance;
+                    p[i].balance = 0;
+                    // this.isVisible = false;
                 }
-                console.log(this.paymentPlanData);
+                if (d < p[i].balance && p[i].balance !== 0) {
+                    p[i].balance = p[i].balance - d;
+                    break;
+                }
+
+                if (d === p[i].balance && p[i].balance !== 0) {
+                    p[i].balance = p[i].balance - d;
+                    break;
+                }
             }
+            console.log(p);
+
+            // for (const p of this.paymentPlanPolicyInstallments) {
+            //     let b = p.balance;
+            //     if (p.balance === amount && b !== 0) {
+            //         d = amount - p.balance;
+            //         p.balance = d;
+            //         p.installmentStatus = 'Fully Paid';
+            //         console.log(this.paymentPlanData);
+            //         break;
+            //         console.log(d);
+            //     } else if (amount < p.balance && b !== 0) {
+            //         d = amount - p.balance;
+            //         p.balance = d;
+            //         p.installmentStatus = 'Partially Paid';
+            //         console.log(this.paymentPlanData);
+            //         break;
+            //     } else if (amount > p.balance && b !== 0) {
+            //         let ind = this.paymentPlanPolicyInstallments.indexOf(p) + 1;
+            //         console.log(p.balance[ind]);
+            //         break;
+            //     } else {
+            //         console.log(this.paymentPlanData);
+            //         console.log('Balance is equal to Zero');
+            //         break;
+            //     }
+            // }
             // this.isOkLoading = true;
             // this._id = v4();
             // const receipt: IReceiptModel = {
