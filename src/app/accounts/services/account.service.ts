@@ -59,13 +59,10 @@ export class AccountService {
                 .doc(receipt.id)
                 .set(receipt)
                 .then((mess) => {
-                    // view message
-                    console.log('<========Receipt Details==========>');
-
-                    console.log(receipt);
+                    this.message.success('Receipt Successfully created');
                 })
                 .catch((err) => {
-                    console.log('<========Qoutation Error Details==========>');
+                    this.message.warning('Receipt Failed');
                     console.log(err);
                 });
         });
