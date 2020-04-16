@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {
     InstallmentsModel,
     IPaymentModel,
-    PolicyPaymentPlan,
+    PolicyPaymentPlan
 } from '../../../models/payment-plans.model';
 
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,10 +18,9 @@ import { Policy } from 'src/app/underwriting/models/policy.model';
 @Component({
     selector: 'app-payment-plan-policy-installments',
     templateUrl: './payment-plan-policy-installments.component.html',
-    styleUrls: ['./payment-plan-policy-installments.component.scss'],
+    styleUrls: ['./payment-plan-policy-installments.component.scss']
 })
 export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
-
     receiptForm: FormGroup;
     cancelForm: FormGroup;
     reinstateForm: FormGroup;
@@ -79,16 +78,16 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
         { label: 'Third Party Recovery', value: 'Third Party Recovery' },
         {
             label: 'Imprest Retirement Receipt',
-            value: 'Imprest Retirement Receipt',
+            value: 'Imprest Retirement Receipt'
         },
         { label: 'Third Party Recovery', value: 'Third Party Recovery' },
-        { label: 'General Receipt', value: 'General Receipt' },
+        { label: 'General Receipt', value: 'General Receipt' }
     ];
 
     paymentMethodList = [
         { label: 'Cash', value: 'cash' },
         { label: 'EFT', value: 'eft' },
-        { label: 'Bank Transfer', value: 'bank transfer' },
+        { label: 'Bank Transfer', value: 'bank transfer' }
     ];
 
     constructor(
@@ -110,41 +109,37 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
             sumInWords: [''],
             dateReceived: [''],
             todayDate: [this.today],
-            remarks: [''],
+            remarks: ['']
         });
 
         this.cancelForm = this.formBuilder.group({
-            remarks: ['', Validators.required],
+            remarks: ['', Validators.required]
         });
         this.reinstateForm = this.formBuilder.group({
-            remarks: ['', Validators.required],
+            remarks: ['', Validators.required]
         });
     }
 
-
     ngOnInit(): void {
-        this.route.params.subscribe((param) => {
+        this.route.params.subscribe(param => {
             this.paymentPlanId = param.id;
             this.policyNumber = param.policyNumber;
 
             this.paymentPlanService
                 .getPaymentPlans()
-                .subscribe((paymentPlans) => {
+                .subscribe(paymentPlans => {
                     this.paymentPlanData = paymentPlans.filter(
-                        (x) => x.id === this.paymentPlanId
+                        x => x.id === this.paymentPlanId
                     )[0];
-
-
-                    this.paymentPlanPolicyData = this.paymentPlanPolicies.filter(
-                        (x) => x.policyNumber === this.policyNumber
+                    this.paymentPlanPolicyData = this.paymentPlanData.policyPaymentPlan.filter(
+                        x => x.policyNumber === this.policyNumber
                     )[0];
                     this.paymentPlanPolicyInstallments = this.paymentPlanPolicyData.installments;
-                    this.paymentPlanPolicyInstallmentsCount = this.paymentPlanPolicyInstallments.length;
 
+                    this.paymentPlanPolicyInstallmentsCount = this.paymentPlanPolicyInstallments.length;
                 });
         });
     }
-
 
     showModal(paymentPlanPolicyInstallment: InstallmentsModel): void {
         this.isVisible = true;
@@ -179,16 +174,16 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
                 policyNumber: this.policyNumber,
                 receiptStatus: this.recStatus,
                 sumInDigits: this.installmentAmount,
-                todayDate: new Date(),
+                todayDate: new Date()
             };
 
             this.receiptNum = this._id;
             await this.receiptService
                 .addReceipt(receipt)
-                .then((mess) => {
+                .then(mess => {
                     this.message.success('Receipt Successfully created');
                 })
-                .catch((err) => {
+                .catch(err => {
                     this.message.warning('Receipt Failed');
                 });
             this.receiptForm.reset();
@@ -211,5 +206,4 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
         // this.isConfirmLoading = true;
         // this.generateDocuments();
     }
-
 }
