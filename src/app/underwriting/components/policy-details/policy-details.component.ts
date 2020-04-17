@@ -28,6 +28,7 @@ export class PolicyDetailsComponent implements OnInit {
     policy: Policy;
     displayPolicy: Policy;
     policyUpdate: Policy = new Policy();
+    isLoading = false;
 
     paymentPlan = 'NotCreated';
 
