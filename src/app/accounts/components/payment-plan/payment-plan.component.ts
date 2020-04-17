@@ -34,7 +34,7 @@ export class PaymentPlanComponent implements OnInit {
     listOfPolicies: any[];
     // number of payment plans
     paymentPlansCount = 0;
-    listOfSelectedValue = [];
+    policyNumber = [];
 
     policyUpdate: Policy = new Policy();
     clients: Array<IIndividualClient & ICorporateClient>;
@@ -64,10 +64,14 @@ export class PaymentPlanComponent implements OnInit {
     ) {
         this.paymentPlanForm = this.formBuilder.group({
             numberOfInstallments: ['', Validators.required],
+            clientName: ['', Validators.required],
             policyNumber: ['', Validators.required],
             startDate: ['', Validators.required],
             initialInstallmentAmount: ['', Validators.required],
         });
+
+        console.log('----------this.selectedClient----------');
+        console.log(this.listOfPolicies);
     }
 
     ngOnInit(): void {
@@ -85,18 +89,32 @@ export class PaymentPlanComponent implements OnInit {
         });
 
         this.policyService.getPolicies().subscribe((policies) => {
-            this.listOfPolicies = _.filter(
+            this.policies = _.filter(
                 policies,
                 (x) => x.paymentPlan === 'NotCreated'
             );
             this.isLoading = false;
+            console.log('-------POLICIES--------');
+            console.log(this.policies);
         });
+
+        console.log('-------Value--------');
+        console.log(this.selectedValue);
+    }
+    compareFn = (o1: any, o2: any) =>
+        o1 && o2 ? o1.value === o2.value : o1 === o2;
+
+    log(value): void {
+        this.listOfPolicies = this.policies.filter((x) => x.client === value);
+        console.log(value);
     }
 
     clientChange(value) {
-        console.log('----------this.selectedClient----------');
-        console.log(value);
+        // this.listOfPolicies = this.policies.filter(
+        //     (x) => x.client === this.selectedValue
+        // )[0];
         // this.listOfPolicies = this.policies.filter((x) => x.client === value);
+        console.log('Project One');
     }
 
     // view policies of payment plan
@@ -145,7 +163,10 @@ export class PaymentPlanComponent implements OnInit {
 
     handleOk(): void {
         // Get enddate
-        for (const policy of this.listOfSelectedValue) {
+        console.log('---------GGGGGGGHHHHHHHHH---------');
+        console.log(this.policyNumber);
+
+        for (const policy of this.policyNumber) {
             this.policyUpdate = policy;
             const eDate = this.paymentPlanForm.controls.startDate.value;
             eDate.setMonth(

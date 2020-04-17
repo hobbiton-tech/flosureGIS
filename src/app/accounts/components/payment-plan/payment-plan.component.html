@@ -51,9 +51,11 @@
                                                 <nz-select
                                                     formControlName="clientName"
                                                     nzPlaceHolder="Select client"
+                                                    [compareWith]="compareFn"
                                                     (ngModelChange)="
-                                                        clientChange($event)
+                                                        log($event)
                                                     "
+                                                    nzAllowClear
                                                 >
                                                     <div
                                                         *ngFor="
@@ -92,6 +94,8 @@
                                             >
                                             <nz-form-control nzSpan="12">
                                                 <nz-select
+                                                    formControlName="policyNumber"
+                                                    [(ngModel)]="policyNumber"
                                                     nzMode="multiple"
                                                     nzPlaceHolder="Please select"
                                                 >
