@@ -62,8 +62,8 @@
                     </td>
                     <td>
                         {{
-                            paymentPlanPolicyInstallment.actualPaidDate
-                                .seconds * 1000 | date
+                            paymentPlanPolicyInstallment.actualPaidDate * 1000
+                                | date
                         }}
                     </td>
                     <td>
