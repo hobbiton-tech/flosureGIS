@@ -13,6 +13,8 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { HttpClientModule } from '@angular/common/http';
 import { RiskDetailsComponent } from './components/risk-details/risk-details.component';
 import { QuotesGraphqlService } from './services/quotes.graphql.service';
+import { QuoteComponent } from './documents/quote/quote.component';
+import { QuoteDocumentComponent } from './documents/quote-document/quote-document.component';
 
 const routes: Routes = [
     {
@@ -35,6 +37,8 @@ const routes: Routes = [
         CreateQuoteComponent,
         QuoteDetailsComponent,
         RiskDetailsComponent,
+        QuoteComponent,
+        QuoteDocumentComponent,
     ],
     imports: [
         CommonModule,

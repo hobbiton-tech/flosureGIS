@@ -324,41 +324,63 @@
                                             <div nz-row nzGutter="0">
                                                 <div nz-col nzSpan="8">
                                                     <nz-form-item>
-                                                        <nz-form-label nzSpan="7" nzRequired>Sum
-                                                            Insured</nz-form-label>
-                                                        <nz-form-control nzSpan="17">
-                                                            <input nz-input nzPlaceHolder="" name="sumInsured"
-                                                                [(ngModel)]="
+                                                        <nz-form-label nzSpan="7">Basic Premium Type</nz-form-label>
+                                                        <nz-form-control nzSpan="7">
+                                                            <nz-select [(ngModel)]="selectedBasicPremiunTypeValue"
+                                                                nzAllowClear nzPlaceHolder="Select input type"
+                                                                [ngModelOptions]="{standalone: true}">
+                                                                <nz-option nzValue="rate" nzLabel="Rate"></nz-option>
+                                                                <nz-option nzValue="amount" nzLabel="Amount">
+                                                                </nz-option>
+                                                            </nz-select>
+                                                        </nz-form-control>
+                                                    </nz-form-item>
+                                                    <div *ngIf="selectedBasicPremiunTypeValue == 'amount'">
+                                                        <nz-form-item>
+                                                            <nz-form-label nzSpan="7" nzRequired>Amount</nz-form-label>
+                                                            <nz-form-control nzSpan="17">
+                                                                <input nz-input nzPlaceHolder=""
+                                                                    name="basicPremiumAmount"
+                                                                    [(ngModel)]="basicPremiumAmount"
+                                                                    [ngModelOptions]="{standalone: true}"
+                                                                    (ngModelChange)="handleBasicPremiumAmount()" />
+                                                            </nz-form-control>
+                                                        </nz-form-item>
+                                                    </div>
+                                                    <div *ngIf="selectedBasicPremiunTypeValue == 'rate'">
+                                                        <nz-form-item>
+                                                            <nz-form-label nzSpan="7" nzRequired>Sum
+                                                                Insured</nz-form-label>
+                                                            <nz-form-control nzSpan="17">
+                                                                <input nz-input nzPlaceHolder="" name="sumInsured"
+                                                                    [(ngModel)]="
                                                                     sumInsured
                                                                 " [ngModelOptions]="{
                                                                     standalone: true
                                                                 }" (ngModelChange)="
                                                                     handleBasicPremiumCalculation()
                                                                 " />
-                                                        </nz-form-control>
-                                                    </nz-form-item>
-                                                    <nz-form-item>
-                                                        <nz-form-label nzSpan="7" nzRequired>Premium
-                                                            rate</nz-form-label>
-                                                        <nz-form-control nzSpan="17">
-                                                            <nz-input-group nzCompact>
-                                                                <nz-select [(ngModel)]="
+                                                            </nz-form-control>
+                                                        </nz-form-item>
+
+                                                        <nz-form-item>
+                                                            <nz-form-label nzSpan="7" nzRequired>Premium
+                                                                rate</nz-form-label>
+                                                            <nz-form-control nzSpan="17">
+                                                                <nz-input-group nzCompact>
+                                                                    <nz-select [(ngModel)]="
                                                                         premiumRateType
                                                                     " style="
                                                                         width: 20%;
                                                                     " [ngModelOptions]="{
                                                                         standalone: true
                                                                     }">
-                                                                    <nz-option [nzLabel]="
+                                                                        <nz-option [nzLabel]="
                                                                             '%'
                                                                         " nzValue="percentage"></nz-option>
-                                                                    <!-- <nz-option *ngIf="quoteForm.get('currency').value === 'ZMW'"
-                                                                            [nzLabel]="'K'" nzValue="figure"></nz-option>
-                                                                        <nz-option *ngIf="quoteForm.get('currency').value === 'Dollar'"
-                                                                            [nzLabel]="'$'" nzValue="figure"></nz-option> -->
-                                                                </nz-select>
-                                                                <input nz-input nzPlaceHolder="" name="premiumRate"
-                                                                    [(ngModel)]="
+                                                                    </nz-select>
+                                                                    <input nz-input nzPlaceHolder="" name="premiumRate"
+                                                                        [(ngModel)]="
                                                                         premiumRate
                                                                     " style="
                                                                         width: 80%;
@@ -367,9 +389,10 @@
                                                                     }" (ngModelChange)="
                                                                         handleBasicPremiumCalculation()
                                                                     " />
-                                                            </nz-input-group>
-                                                        </nz-form-control>
-                                                    </nz-form-item>
+                                                                </nz-input-group>
+                                                            </nz-form-control>
+                                                        </nz-form-item>
+                                                    </div>
 
                                                     <!-- Loading starts here -->
                                                     <div *ngIf="
@@ -435,48 +458,78 @@
                                                             'increasedThirdPartyLimits'
                                                         ">
                                                         <nz-form-item>
-                                                            <nz-form-label [nzSpan]="7"
-                                                                nzFor="increasedThirdPartyLimitsRate">
-                                                                Increase to
-                                                            </nz-form-label>
-                                                            <nz-form-control nzSpan="17">
-                                                                <input nz-input [(ngModel)]="
+                                                            <nz-form-label nzSpan="7">Loading Input Type</nz-form-label>
+                                                            <nz-form-control nzSpan="7">
+                                                                <nz-select
+                                                                    [(ngModel)]="selectedIncreaseThirdPartyLimitInputTypeValue"
+                                                                    nzAllowClear nzPlaceHolder="Select input type"
+                                                                    [ngModelOptions]="{standalone: true}">
+                                                                    <nz-option nzValue="rate" nzLabel="Rate">
+                                                                    </nz-option>
+                                                                    <nz-option nzValue="amount" nzLabel="Amount">
+                                                                    </nz-option>
+                                                                </nz-select>
+                                                            </nz-form-control>
+                                                        </nz-form-item>
+                                                        <div
+                                                            *ngIf="selectedIncreaseThirdPartyLimitInputTypeValue == 'amount'">
+                                                            <nz-form-item>
+                                                                <nz-form-label nzSpan="7" nzRequired>Amount
+                                                                </nz-form-label>
+                                                                <nz-form-control nzSpan="17">
+                                                                    <input nz-input nzPlaceHolder=""
+                                                                        name="increasedThirdPartyLimitAmount"
+                                                                        [(ngModel)]="increasedThirdPartyLimitAmount"
+                                                                        [ngModelOptions]="{standalone: true}" />
+                                                                </nz-form-control>
+                                                            </nz-form-item>
+                                                        </div>
+                                                        <div
+                                                            *ngIf="selectedIncreaseThirdPartyLimitInputTypeValue == 'rate'">
+                                                            <nz-form-item>
+                                                                <nz-form-label [nzSpan]="7"
+                                                                    nzFor="increasedThirdPartyLimitsRate">
+                                                                    Increase to
+                                                                </nz-form-label>
+                                                                <nz-form-control nzSpan="17">
+                                                                    <input nz-input [(ngModel)]="
                                                                         increasedThirdPartyLimitValue
                                                                     " [ngModelOptions]="{
                                                                         standalone: true
                                                                     }" />
-                                                            </nz-form-control>
-                                                        </nz-form-item>
-                                                        <nz-form-item>
-                                                            <nz-form-label [nzSpan]="7"
-                                                                nzFor="increasedThirdPartyLimitsRate">
-                                                                Rate
-                                                            </nz-form-label>
-                                                            <nz-form-control nzSpan="17">
-                                                                <nz-input-group nzCompact>
-                                                                    <nz-select [(ngModel)]="
+                                                                </nz-form-control>
+                                                            </nz-form-item>
+                                                            <nz-form-item>
+                                                                <nz-form-label [nzSpan]="7"
+                                                                    nzFor="increasedThirdPartyLimitsRate">
+                                                                    Rate
+                                                                </nz-form-label>
+                                                                <nz-form-control nzSpan="17">
+                                                                    <nz-input-group nzCompact>
+                                                                        <nz-select [(ngModel)]="
                                                                             increasedThirdPartyLimitsRateType
                                                                         " style="
                                                                             width: 40%;
                                                                         " [ngModelOptions]="{
                                                                             standalone: true
                                                                         }">
-                                                                        <nz-option [nzLabel]="
+                                                                            <nz-option [nzLabel]="
                                                                                 '%'
                                                                             " nzValue="percentage">
-                                                                        </nz-option>
-                                                                    </nz-select>
-                                                                    <input nz-input style="
+                                                                            </nz-option>
+                                                                        </nz-select>
+                                                                        <input nz-input style="
                                                                             width: 60%;
                                                                         " name="increasedThirdPartyLimitsRate"
-                                                                        [(ngModel)]="
+                                                                            [(ngModel)]="
                                                                             increasedThirdPartyLimitsRate
                                                                         " [ngModelOptions]="{
                                                                             standalone: true
                                                                         }" />
-                                                                </nz-input-group>
-                                                            </nz-form-control>
-                                                        </nz-form-item>
+                                                                    </nz-input-group>
+                                                                </nz-form-control>
+                                                            </nz-form-item>
+                                                        </div>
                                                         <nz-form-item>
                                                             <nz-form-control [nzXs]="{
                                                                     span: 24,
@@ -485,8 +538,7 @@
                                                                     span: 20,
                                                                     offset: 7
                                                                 }">
-                                                                <button nz-button nzType="primary" (click)="
-                                                                        computeIncreasedThirdPartyLimit()
+                                                                <button nz-button nzType="primary" (click)="selectedIncreaseThirdPartyLimitInputTypeValue === 'rate' ? computeIncreasedThirdPartyLimit() : handleIncreasedThirdPartyLimitAmount()
                                                                     " [nzLoading]="
                                                                         computeIncreasedThirdPartyLimitIsLoading
                                                                     ">
@@ -500,39 +552,62 @@
                                                             'riotAndStrike'
                                                         ">
                                                         <nz-form-item>
-                                                            <nz-form-label [nzSpan]="7" nzFor="riotAndStrikeRate">Rate
-                                                            </nz-form-label>
-                                                            <nz-form-control nzSpan="17">
-                                                                <nz-input-group nzCompact>
-                                                                    <nz-select [(ngModel)]="
+                                                            <nz-form-label nzSpan="7">Loading Input Type</nz-form-label>
+                                                            <nz-form-control nzSpan="7">
+                                                                <nz-select
+                                                                    [(ngModel)]="selectedRiotAndStrikeInputTypeValue"
+                                                                    nzAllowClear nzPlaceHolder="Select input type"
+                                                                    [ngModelOptions]="{standalone: true}">
+                                                                    <nz-option nzValue="rate" nzLabel="Rate">
+                                                                    </nz-option>
+                                                                    <nz-option nzValue="amount" nzLabel="Amount">
+                                                                    </nz-option>
+                                                                </nz-select>
+                                                            </nz-form-control>
+                                                        </nz-form-item>
+                                                        <div *ngIf="selectedRiotAndStrikeInputTypeValue == 'amount'">
+                                                            <nz-form-item>
+                                                                <nz-form-label nzSpan="7" nzRequired>Amount
+                                                                </nz-form-label>
+                                                                <nz-form-control nzSpan="17">
+                                                                    <input nz-input nzPlaceHolder=""
+                                                                        name="riotAndStrikeAmount"
+                                                                        [(ngModel)]="riotAndStrikeAmount"
+                                                                        [ngModelOptions]="{standalone: true}" />
+                                                                </nz-form-control>
+                                                            </nz-form-item>
+                                                        </div>
+                                                        <div *ngIf="selectedRiotAndStrikeInputTypeValue == 'rate'">
+                                                            <nz-form-item>
+                                                                <nz-form-label [nzSpan]="7" nzFor="riotAndStrikeRate">
+                                                                    Rate
+                                                                </nz-form-label>
+                                                                <nz-form-control nzSpan="17">
+                                                                    <nz-input-group nzCompact>
+                                                                        <nz-select [(ngModel)]="
                                                                             riotAndStrikeRateType
                                                                         " style="
                                                                             width: 40%;
                                                                         " [ngModelOptions]="{
                                                                             standalone: true
                                                                         }">
-                                                                        <nz-option [nzLabel]="
+                                                                            <nz-option [nzLabel]="
                                                                                 '%'
                                                                             " nzValue="percentage">
-                                                                        </nz-option>
-                                                                        <!-- <nz-option
-                                                                                    *ngIf="quoteDetailsForm.get('currency').value === 'ZMW'"
-                                                                                    [nzLabel]="'K'" nzValue="figure"></nz-option>
-                                                                                <nz-option
-                                                                                    *ngIf="quoteDetailsForm.get('currency').value === 'Dollar'"
-                                                                                    [nzLabel]="'$'" nzValue="figure"></nz-option> -->
-                                                                    </nz-select>
-                                                                    <input nz-input nzPlaceHolder=""
-                                                                        name="riotAndStrikeRate" [(ngModel)]="
+                                                                            </nz-option>
+                                                                        </nz-select>
+                                                                        <input nz-input nzPlaceHolder=""
+                                                                            name="riotAndStrikeRate" [(ngModel)]="
                                                                             riotAndStrikeRate
                                                                         " style="
                                                                             width: 60%;
                                                                         " [ngModelOptions]="{
                                                                             standalone: true
                                                                         }" />
-                                                                </nz-input-group>
-                                                            </nz-form-control>
-                                                        </nz-form-item>
+                                                                    </nz-input-group>
+                                                                </nz-form-control>
+                                                            </nz-form-item>
+                                                        </div>
                                                         <nz-form-item>
                                                             <nz-form-control [nzXs]="{
                                                                     span: 24,
@@ -541,12 +616,11 @@
                                                                     span: 20,
                                                                     offset: 7
                                                                 }">
-                                                                <button nz-button nzType="primary" (click)="
-                                                                        computeRiotAndStrike()
+                                                                <button nz-button nzType="primary" (click)="selectedRiotAndStrikeInputTypeValue === 'rate' ? computeRiotAndStrike() : handleRiotAndStrikeAmount()
                                                                     " [nzLoading]="
                                                                         computeRiotAndStrikeIsLoading
                                                                     ">
-                                                                    Add Load
+                                                                    Add Loading
                                                                 </button>
                                                             </nz-form-control>
                                                         </nz-form-item>
@@ -558,58 +632,82 @@
                                                         <div nz-row nzGutter="2">
                                                             <div nz-col nzSpan="25">
                                                                 <nz-form-item>
-                                                                    <nz-form-label [nzSpan]="
+                                                                    <nz-form-label nzSpan="7">Loading Input Type
+                                                                    </nz-form-label>
+                                                                    <nz-form-control nzSpan="7">
+                                                                        <nz-select
+                                                                            [(ngModel)]="selectedCarStereoInputTypeValue"
+                                                                            nzAllowClear
+                                                                            nzPlaceHolder="Select input type"
+                                                                            [ngModelOptions]="{standalone: true}">
+                                                                            <nz-option nzValue="rate" nzLabel="Rate">
+                                                                            </nz-option>
+                                                                            <nz-option nzValue="amount"
+                                                                                nzLabel="Amount">
+                                                                            </nz-option>
+                                                                        </nz-select>
+                                                                    </nz-form-control>
+                                                                </nz-form-item>
+                                                                <div
+                                                                    *ngIf="selectedCarStereoInputTypeValue == 'amount'">
+                                                                    <nz-form-item>
+                                                                        <nz-form-label nzSpan="7" nzRequired>Amount
+                                                                        </nz-form-label>
+                                                                        <nz-form-control nzSpan="17">
+                                                                            <input nz-input nzPlaceHolder=""
+                                                                                name="carStereoAmount"
+                                                                                [(ngModel)]="carStereoAmount"
+                                                                                [ngModelOptions]="{standalone: true}" />
+                                                                        </nz-form-control>
+                                                                    </nz-form-item>
+                                                                </div>
+                                                                <div *ngIf="selectedCarStereoInputTypeValue == 'rate'">
+                                                                    <nz-form-item>
+                                                                        <nz-form-label [nzSpan]="
                                                                             7
                                                                         " nzFor="carStereoValue">Car
-                                                                        Stereo
-                                                                        Value</nz-form-label>
-                                                                    <nz-form-control nzSpan="17">
-                                                                        <input nz-input nzPlaceHolder=""
-                                                                            name="carStereoValue" [(ngModel)]="
+                                                                            Stereo
+                                                                            Value</nz-form-label>
+                                                                        <nz-form-control nzSpan="17">
+                                                                            <input nz-input nzPlaceHolder=""
+                                                                                name="carStereoValue" [(ngModel)]="
                                                                                 carStereoValue
                                                                             " [ngModelOptions]="{
                                                                                 standalone: true
                                                                             }" />
-                                                                    </nz-form-control>
-                                                                </nz-form-item>
-                                                                <nz-form-item>
-                                                                    <nz-form-label [nzSpan]="
+                                                                        </nz-form-control>
+                                                                    </nz-form-item>
+                                                                    <nz-form-item>
+                                                                        <nz-form-label [nzSpan]="
                                                                             7
                                                                         " nzFor="carStereoRate">Rate
-                                                                    </nz-form-label>
-                                                                    <nz-form-control nzSpan="17">
-                                                                        <nz-input-group nzCompact>
-                                                                            <nz-select [(ngModel)]="
+                                                                        </nz-form-label>
+                                                                        <nz-form-control nzSpan="17">
+                                                                            <nz-input-group nzCompact>
+                                                                                <nz-select [(ngModel)]="
                                                                                     carStereoRateType
                                                                                 " style="
                                                                                     width: 40%;
                                                                                 " [ngModelOptions]="{
                                                                                     standalone: true
                                                                                 }">
-                                                                                <nz-option [nzLabel]="
+                                                                                    <nz-option [nzLabel]="
                                                                                         '%'
                                                                                     " nzValue="percentage">
-                                                                                </nz-option>
-                                                                                <!-- <nz-option
-                                                                                            *ngIf="quoteDetailsForm.get('currency').value === 'ZMW'"
-                                                                                            [nzLabel]="'K'" nzValue="figure">
-                                                                                        </nz-option>
-                                                                                        <nz-option
-                                                                                            *ngIf="quoteDetailsForm.get('currency').value === 'Dollar'"
-                                                                                            [nzLabel]="'$'" nzValue="figure">
-                                                                                        </nz-option> -->
-                                                                            </nz-select>
-                                                                            <input nz-input nzPlaceHolder=""
-                                                                                name="carStereoRate" [(ngModel)]="
+                                                                                    </nz-option>
+                                                                                </nz-select>
+                                                                                <input nz-input nzPlaceHolder=""
+                                                                                    name="carStereoRate" [(ngModel)]="
                                                                                     carStereoRate
                                                                                 " style="
                                                                                     width: 60%;
                                                                                 " [ngModelOptions]="{
                                                                                     standalone: true
                                                                                 }" />
-                                                                        </nz-input-group>
-                                                                    </nz-form-control>
-                                                                </nz-form-item>
+                                                                            </nz-input-group>
+                                                                        </nz-form-control>
+                                                                    </nz-form-item>
+                                                                </div>
                                                                 <nz-form-item>
                                                                     <nz-form-control [nzXs]="{
                                                                             span: 24,
@@ -618,13 +716,12 @@
                                                                             span: 20,
                                                                             offset: 7
                                                                         }">
-                                                                        <button nz-button nzType="primary" (click)="
-                                                                                computeCarStereo()
+                                                                        <button nz-button nzType="primary" (click)="selectedCarStereoInputTypeValue === 'rate' ? computeCarStereo() : handleCarStereoAmount()
                                                                             " [nzLoading]="
                                                                                 computeCarStereoIsLoading
                                                                             ">
                                                                             Add
-                                                                            Load
+                                                                            Loading
                                                                         </button>
                                                                     </nz-form-control>
                                                                 </nz-form-item>
@@ -698,24 +795,55 @@
                                                         <div nz-row nzGutter="0">
                                                             <div nz-col nzSpan="25">
                                                                 <nz-form-item>
-                                                                    <nz-form-label [nzSpan]="
+                                                                    <nz-form-label nzSpan="7">Loading Input Type
+                                                                    </nz-form-label>
+                                                                    <nz-form-control nzSpan="7">
+                                                                        <nz-select
+                                                                            [(ngModel)]="selectedLossOfUseInputTypeValue"
+                                                                            nzAllowClear
+                                                                            nzPlaceHolder="Select input type"
+                                                                            [ngModelOptions]="{standalone: true}">
+                                                                            <nz-option nzValue="rate" nzLabel="Rate">
+                                                                            </nz-option>
+                                                                            <nz-option nzValue="amount"
+                                                                                nzLabel="Amount">
+                                                                            </nz-option>
+                                                                        </nz-select>
+                                                                    </nz-form-control>
+                                                                </nz-form-item>
+                                                                <div
+                                                                    *ngIf="selectedLossOfUseInputTypeValue == 'amount'">
+                                                                    <nz-form-item>
+                                                                        <nz-form-label nzSpan="7" nzRequired>Amount
+                                                                        </nz-form-label>
+                                                                        <nz-form-control nzSpan="17">
+                                                                            <input nz-input nzPlaceHolder=""
+                                                                                name="lossOfUseAmount"
+                                                                                [(ngModel)]="lossOfUseAmount"
+                                                                                [ngModelOptions]="{standalone: true}" />
+                                                                        </nz-form-control>
+                                                                    </nz-form-item>
+                                                                </div>
+                                                                <div *ngIf="selectedLossOfUseInputTypeValue == 'rate'">
+                                                                    <nz-form-item>
+                                                                        <nz-form-label [nzSpan]="
                                                                             7
                                                                         " nzFor="lossOfUseDailyRate">Daily
-                                                                        Rate</nz-form-label>
-                                                                    <nz-form-control nzSpan="17">
-                                                                        <nz-input-group nzCompact>
-                                                                            <nz-select [(ngModel)]="
+                                                                            Rate</nz-form-label>
+                                                                        <nz-form-control nzSpan="17">
+                                                                            <nz-input-group nzCompact>
+                                                                                <nz-select [(ngModel)]="
                                                                                     lossOfUseDailyRateType
                                                                                 " style="
                                                                                     width: 40%;
                                                                                 " [ngModelOptions]="{
                                                                                     standalone: true
                                                                                 }">
-                                                                                <nz-option [nzLabel]="
+                                                                                    <nz-option [nzLabel]="
                                                                                         '%'
                                                                                     " nzValue="percentage">
-                                                                                </nz-option>
-                                                                                <!-- <nz-option
+                                                                                    </nz-option>
+                                                                                    <!-- <nz-option
                                                                                             *ngIf="riskComprehensiveForm.get('currency').value === 'ZMW'"
                                                                                             [nzLabel]="'K'" nzValue="figure">
                                                                                         </nz-option>
@@ -723,34 +851,36 @@
                                                                                             *ngIf="riskComprehensiveForm.get('currency').value === 'Dollar'"
                                                                                             [nzLabel]="'$'" nzValue="figure">
                                                                                         </nz-option> -->
-                                                                            </nz-select>
-                                                                            <input nz-input nzPlaceHolder=""
-                                                                                name="lossOfUseDailyRate" [(ngModel)]="
+                                                                                </nz-select>
+                                                                                <input nz-input nzPlaceHolder=""
+                                                                                    name="lossOfUseDailyRate"
+                                                                                    [(ngModel)]="
                                                                                     lossOfUseDailyRate
                                                                                 " style="
                                                                                     width: 60%;
                                                                                 " [ngModelOptions]="{
                                                                                     standalone: true
                                                                                 }" />
-                                                                        </nz-input-group>
-                                                                    </nz-form-control>
-                                                                </nz-form-item>
-                                                                <nz-form-item>
-                                                                    <nz-form-label [nzSpan]="
+                                                                            </nz-input-group>
+                                                                        </nz-form-control>
+                                                                    </nz-form-item>
+                                                                    <nz-form-item>
+                                                                        <nz-form-label [nzSpan]="
                                                                             7
                                                                         " nzFor="lossOfUseDays">Number
-                                                                        Of
-                                                                        Days</nz-form-label>
-                                                                    <nz-form-control nzSpan="17">
-                                                                        <input nz-input id="lossOfUseDays"
-                                                                            nzPlaceHolder="" name="lossOfUseDays"
-                                                                            [(ngModel)]="
+                                                                            Of
+                                                                            Days</nz-form-label>
+                                                                        <nz-form-control nzSpan="17">
+                                                                            <input nz-input id="lossOfUseDays"
+                                                                                nzPlaceHolder="" name="lossOfUseDays"
+                                                                                [(ngModel)]="
                                                                                 lossOfUseDays
                                                                             " [ngModelOptions]="{
                                                                                 standalone: true
                                                                             }" />
-                                                                    </nz-form-control>
-                                                                </nz-form-item>
+                                                                        </nz-form-control>
+                                                                    </nz-form-item>
+                                                                </div>
                                                                 <nz-form-item>
                                                                     <nz-form-control [nzXs]="{
                                                                             span: 24,
@@ -759,8 +889,7 @@
                                                                             span: 20,
                                                                             offset: 7
                                                                         }">
-                                                                        <button nz-button nzType="primary" (click)="
-                                                                                computeLossOfUse()
+                                                                        <button nz-button nzType="primary" (click)="selectedLossOfUseInputTypeValue === 'rate' ? computeLossOfUse() : handleLossOfUseAmount()
                                                                             " [nzLoading]="
                                                                                 computeLossOfUseIsLoading
                                                                             ">
@@ -789,10 +918,6 @@
                                                                     <nz-option [nzLabel]="
                                                                             '%'
                                                                         " nzValue="percentage"></nz-option>
-                                                                    <!-- <nz-option *ngIf="quoteForm.get('currency').value === 'ZMW'"
-                                                                            [nzLabel]="'NCD(%)'" nzValue="figure"></nz-option>
-                                                                        <nz-option *ngIf="quoteForm.get('currency').value === 'Dollar'"
-                                                                            [nzLabel]="'NCD(%)'" nzValue="figure"></nz-option> -->
                                                                 </nz-select>
                                                                 <input nz-input nzPlaceHolder=""
                                                                     name="premiumDiscountRate" [(ngModel)]="
@@ -1119,29 +1244,30 @@
                                             <nz-divider nzText="Premium Computation" nzOrientation="left"></nz-divider>
                                             <div nz-row nzGutter="0">
                                                 <div nz-col nzSpan="8">
-                                                    <!-- <nz-form-item>
-                                                    <nz-form-label nzSpan="7" nzRequired>Sum Insured</nz-form-label>
-                                                    <nz-form-control nzSpan="17">
-                                                        <input nz-input nzPlaceHolder="" name="sumInsured"
-                                                            [(ngModel)]="sumInsured"
-                                                            [ngModelOptions]="{standalone: true}" />
-                                                    </nz-form-control>
-                                                </nz-form-item> -->
-                                                    <!-- <nz-form-item>
-                                                    <nz-form-label nzSpan="7" nzRequired>Premium rate</nz-form-label>
-                                                    <nz-form-control nzSpan="17">
-                                                        <nz-input-group nzCompact>
-                                                            <nz-select [(ngModel)]="premiumRateType" style="width: 20%;"
+                                                    <nz-form-item>
+                                                        <nz-form-label nzSpan="7">Basic Premium Type</nz-form-label>
+                                                        <nz-form-control nzSpan="7">
+                                                            <nz-select [(ngModel)]="selectedBasicPremiunTypeValue"
+                                                                nzAllowClear nzPlaceHolder="Select input type"
                                                                 [ngModelOptions]="{standalone: true}">
-                                                                <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
-                                                                
+                                                                <nz-option nzValue="rate" nzLabel="Rate"></nz-option>
+                                                                <nz-option nzValue="amount" nzLabel="Amount">
+                                                                </nz-option>
                                                             </nz-select>
-                                                            <input nz-input nzPlaceHolder="" name="premiumRate"
-                                                                [(ngModel)]="premiumRate" style="width: 80%;"
-                                                                [ngModelOptions]="{standalone: true}" />
-                                                        </nz-input-group>
-                                                    </nz-form-control>
-                                                </nz-form-item> -->
+                                                        </nz-form-control>
+                                                    </nz-form-item>
+                                                    <div *ngIf="selectedBasicPremiunTypeValue == 'amount'">
+                                                        <nz-form-item>
+                                                            <nz-form-label nzSpan="7" nzRequired>Amount</nz-form-label>
+                                                            <nz-form-control nzSpan="17">
+                                                                <input nz-input nzPlaceHolder=""
+                                                                    name="basicPremiumAmount"
+                                                                    [(ngModel)]="basicPremiumAmount"
+                                                                    [ngModelOptions]="{standalone: true}"
+                                                                    (ngModelChange)="handleBasicPremiumAmount()" />
+                                                            </nz-form-control>
+                                                        </nz-form-item>
+                                                    </div>
 
                                                     <!-- Loading starts here -->
                                                     <div *ngIf="
@@ -1149,7 +1275,7 @@
                                                             'Comprehensive'
                                                         ">
                                                         <nz-form-item>
-                                                            <nz-form-label [nzSpan]="7" nzFor="load">Add Load
+                                                            <nz-form-label [nzSpan]="7" nzFor="load">Add Loading
                                                             </nz-form-label>
                                                             <nz-form-control nzSpan="17">
                                                                 <nz-select name="load" nzPlaceHolder="Select Load"
@@ -1206,48 +1332,78 @@
                                                             'increasedThirdPartyLimits'
                                                         ">
                                                         <nz-form-item>
-                                                            <nz-form-label [nzSpan]="7"
-                                                                nzFor="increasedThirdPartyLimitsRate">
-                                                                Increase to
-                                                            </nz-form-label>
-                                                            <nz-form-control nzSpan="17">
-                                                                <input nz-input [(ngModel)]="
+                                                            <nz-form-label nzSpan="7">Loading Input Type</nz-form-label>
+                                                            <nz-form-control nzSpan="7">
+                                                                <nz-select
+                                                                    [(ngModel)]="selectedIncreaseThirdPartyLimitInputTypeValue"
+                                                                    nzAllowClear nzPlaceHolder="Select input type"
+                                                                    [ngModelOptions]="{standalone: true}">
+                                                                    <nz-option nzValue="rate" nzLabel="Rate">
+                                                                    </nz-option>
+                                                                    <nz-option nzValue="amount" nzLabel="Amount">
+                                                                    </nz-option>
+                                                                </nz-select>
+                                                            </nz-form-control>
+                                                        </nz-form-item>
+                                                        <div
+                                                            *ngIf="selectedIncreaseThirdPartyLimitInputTypeValue == 'amount'">
+                                                            <nz-form-item>
+                                                                <nz-form-label nzSpan="7" nzRequired>Amount
+                                                                </nz-form-label>
+                                                                <nz-form-control nzSpan="17">
+                                                                    <input nz-input nzPlaceHolder=""
+                                                                        name="increasedThirdPartyLimitAmount"
+                                                                        [(ngModel)]="increasedThirdPartyLimitAmount"
+                                                                        [ngModelOptions]="{standalone: true}" />
+                                                                </nz-form-control>
+                                                            </nz-form-item>
+                                                        </div>
+                                                        <div
+                                                            *ngIf="selectedIncreaseThirdPartyLimitInputTypeValue == 'rate'">
+                                                            <nz-form-item>
+                                                                <nz-form-label [nzSpan]="7"
+                                                                    nzFor="increasedThirdPartyLimitsRate">
+                                                                    Increase to
+                                                                </nz-form-label>
+                                                                <nz-form-control nzSpan="17">
+                                                                    <input nz-input [(ngModel)]="
                                                                         increasedThirdPartyLimitValue
                                                                     " [ngModelOptions]="{
                                                                         standalone: true
                                                                     }" />
-                                                            </nz-form-control>
-                                                        </nz-form-item>
-                                                        <nz-form-item>
-                                                            <nz-form-label [nzSpan]="7"
-                                                                nzFor="increasedThirdPartyLimitsRate">
-                                                                Rate
-                                                            </nz-form-label>
-                                                            <nz-form-control nzSpan="17">
-                                                                <nz-input-group nzCompact>
-                                                                    <nz-select [(ngModel)]="
+                                                                </nz-form-control>
+                                                            </nz-form-item>
+                                                            <nz-form-item>
+                                                                <nz-form-label [nzSpan]="7"
+                                                                    nzFor="increasedThirdPartyLimitsRate">
+                                                                    Rate
+                                                                </nz-form-label>
+                                                                <nz-form-control nzSpan="17">
+                                                                    <nz-input-group nzCompact>
+                                                                        <nz-select [(ngModel)]="
                                                                             increasedThirdPartyLimitsRateType
                                                                         " style="
                                                                             width: 40%;
                                                                         " [ngModelOptions]="{
                                                                             standalone: true
                                                                         }">
-                                                                        <nz-option [nzLabel]="
+                                                                            <nz-option [nzLabel]="
                                                                                 '%'
                                                                             " nzValue="percentage">
-                                                                        </nz-option>
-                                                                    </nz-select>
-                                                                    <input nz-input style="
+                                                                            </nz-option>
+                                                                        </nz-select>
+                                                                        <input nz-input style="
                                                                             width: 60%;
                                                                         " name="increasedThirdPartyLimitsRate"
-                                                                        [(ngModel)]="
+                                                                            [(ngModel)]="
                                                                             increasedThirdPartyLimitsRate
                                                                         " [ngModelOptions]="{
                                                                             standalone: true
                                                                         }" />
-                                                                </nz-input-group>
-                                                            </nz-form-control>
-                                                        </nz-form-item>
+                                                                    </nz-input-group>
+                                                                </nz-form-control>
+                                                            </nz-form-item>
+                                                        </div>
                                                         <nz-form-item>
                                                             <nz-form-control [nzXs]="{
                                                                     span: 24,
@@ -1256,12 +1412,11 @@
                                                                     span: 20,
                                                                     offset: 7
                                                                 }">
-                                                                <button nz-button nzType="primary" (click)="
-                                                                        computeIncreasedThirdPartyLimit()
+                                                                <button nz-button nzType="primary" (click)="selectedIncreaseThirdPartyLimitInputTypeValue === 'rate' ? computeIncreasedThirdPartyLimitThirdParty() : handleIncreasedThirdPartyLimitAmount()
                                                                     " [nzLoading]="
                                                                         computeIncreasedThirdPartyLimitIsLoading
                                                                     ">
-                                                                    Add Load
+                                                                    Add Loading
                                                                 </button>
                                                             </nz-form-control>
                                                         </nz-form-item>
@@ -1517,200 +1672,9 @@
                     </thead>
                 </nz-table>
             </ng-template>
-            <!--  Risks Table Search bar and Table details ends here -->
-
-            <!-- Add quote and reset quote form buttons starts here -->
-            <!-- <div style="text-align: center; margin-top: 15px; margin-bottom: 10px;">
-                <button nz-button nzType="primary" (click)="addQuote()" [disabled]="!quoteForm.valid">
-                    Create Quote
-                </button>
-                <button nz-button nzType="default">Reset Form</button>
-            </div> -->
-            <!-- Add quote and reset quote form buttons ends here -->
         </nz-card>
         <!-- Risk Details ends here -->
 
-        <!-- <nz-card *ngIf="isQuoteApproved">
-        <nz-divider
-            [nzText]="'Documents'"
-            [nzOrientation]="'left'"
-        ></nz-divider>
-        <div nz-row [nzGutter]="8">
-            <div nz-col [nzSpan]="8">
-                <nz-card
-                    nzTitle="Certificate"
-                    [nzExtra]="expansionView1"
-                    [nzHoverable]="true"
-                    (nzClick)="showCertModal = true"
-                >
-                    <pdf-viewer
-                        [src]="policyCertificateURl"
-                        [original-size]="false"
-                    ></pdf-viewer>
-                </nz-card>
-            </div>
-            <div nz-col [nzSpan]="8">
-                <nz-card
-                    nzTitle="Debit Note"
-                    [nzExtra]="expansionView2"
-                    [nzHoverable]="true"
-                    (nzClick)="showDebitModal = true"
-                >
-                    <pdf-viewer
-                        [src]="debitNoteURL"
-                        [original-size]="false"
-                    ></pdf-viewer>
-                </nz-card>
-            </div>
-            <div nz-col [nzSpan]="8">
-                <nz-card
-                    nzTitle="Policy Schedule"
-                    [nzExtra]="expansionView3"
-                    [nzHoverable]="true"
-                    (nzClick)="showQuoteModal = true"
-                >
-                    <pdf-viewer
-                        [src]="quoteURL"
-                        [original-size]="false"
-                    ></pdf-viewer>
-                </nz-card>
-            </div>
-        </div>
-        </nz-card> -->
-
-        <!-- <ng-template #expansionView1>
-    <div>
-        <button
-            nz-button
-            nzType="primary"
-            nzSize="small"
-            style="margin-right: 5px;"
-            (click)="showCertModal = true"
-        >
-            View
-        </button>
-        <button nz-button nzType="default" nzSize="small">Print</button>
-    </div>
-</ng-template>
-<ng-template #expansionView2>
-    <div>
-        <button
-            nz-button
-            nzType="primary"
-            nzSize="small"
-            style="margin-right: 5px;"
-            (click)="showDebitModal = true"
-        >
-            View
-        </button>
-        <button nz-button nzType="default" nzSize="small">Print</button>
-    </div>
-</ng-template>
-<ng-template #expansionView3>
-    <div>
-        <button
-            nz-button
-            nzType="primary"
-            nzSize="small"
-            style="margin-right: 5px;"
-            (click)="showQuoteModal = true"
-        >
-            View
-        </button>
-        <button nz-button nzType="default" nzSize="small">Print</button>
-    </div>
-</ng-template> -->
-
-        <!-- Document Modals -->
-        <!-- <nz-modal
-    [(nzVisible)]="showCertModal"
-    nzTitle="Policy Receipt"
-    (nzOnCancel)="showCertModal = false"
-    (nzOnOk)="showCertModal = false"
->
-    <div style="margin: 20px;">
-        <nz-card style="width: 100%" nzTitle="Receipt" [nzExtra]="actions">
-            <pdf-viewer
-                [src]="policyCertificateURl"
-                [original-size]="false"
-            ></pdf-viewer>
-        </nz-card>
-        <ng-template #actions>
-            <div>
-                <button
-                    nz-button
-                    nzType="primary"
-                    nzSize="medium"
-                    style="margin-right: 8px;"
-                >
-                    Print
-                </button>
-                <button nz-button nzType="default" nzSize="medium">
-                    Email
-                </button>
-            </div>
-        </ng-template>
-    </div>
-</nz-modal>
-<nz-modal
-    [(nzVisible)]="showDebitModal"
-    nzTitle="Debit Note"
-    (nzOnCancel)="showDebitModal = false"
-    (nzOnOk)="showDebitModal = false"
->
-    <div style="margin: 20px;">
-        <nz-card style="width: 100%" nzTitle="Receipt" [nzExtra]="actions">
-            <pdf-viewer
-                [src]="debitNoteURL"
-                [original-size]="false"
-            ></pdf-viewer>
-        </nz-card>
-        <ng-template #actions>
-            <div>
-                <button
-                    nz-button
-                    nzType="primary"
-                    nzSize="medium"
-                    style="margin-right: 8px;"
-                >
-                    Print
-                </button>
-                <button nz-button nzType="default" nzSize="medium">
-                    Email
-                </button>
-            </div>
-        </ng-template>
-    </div>
-</nz-modal>
-<nz-modal
-    [(nzVisible)]="showQuoteModal"
-    nzTitle="Quote"
-    (nzOnCancel)="showQuoteModal = false"
-    (nzOnOk)="showQuoteModal = false"
->
-    <div style="margin: 20px;">
-        <nz-card style="width: 100%" nzTitle="Receipt" [nzExtra]="actions">
-            <pdf-viewer [src]="quoteURL" [original-size]="false"></pdf-viewer>
-        </nz-card>
-        <ng-template #actions>
-            <div>
-                <button
-                    nz-button
-                    nzType="primary"
-                    nzSize="medium"
-                    style="margin-right: 8px;"
-                >
-                    Print
-                </button>
-                <button nz-button nzType="default" nzSize="medium">
-                    Email
-                </button>
-            </div>
-        </ng-template>
-    </div>
-</nz-modal> -->
-
-        <!-- Risk Deatils Modal starts here-->
         <nz-modal [(nzVisible)]="quoteRiskDetailsModalVisible" [nzTitle]="riskTitle" [nzContent]="riskContent"
             (nzOnCancel)="closeRiskDetails()" (nzOnOk)="closeRiskDetails()" nzWidth="100%">
             <ng-template #riskTitle>
@@ -1852,14 +1816,6 @@
                                         </nz-select>
                                     </nz-form-control>
                                 </nz-form-item>
-                                <!-- <nz-form-item>
-                          <nz-form-label [nzSpan]="7" nzFor="estimatedValue" nzRequired>Sum Insured
-                          </nz-form-label>
-                          <nz-form-control nzSpan="17">
-                              <input nz-input name="sumInsured" ="sumInsured"
-                                  type="text" id="sumInsured" />
-                          </nz-form-control>
-                      </nz-form-item> -->
                             </div>
                             <div nz-col nzSpan="8">
                                 <nz-form-item>
@@ -1904,46 +1860,65 @@
                             <div nz-row nzGutter="0">
                                 <div nz-col nzSpan="8">
                                     <nz-form-item>
-                                        <nz-form-label nzSpan="7" nzRequired>Sum Insured</nz-form-label>
-                                        <nz-form-control nzSpan="17">
-                                            <input nz-input nzPlaceHolder="" name="sumInsured" [(ngModel)]="sumInsured"
-                                                [ngModelOptions]="{
+                                        <nz-form-label nzSpan="7">Basic Premium Type</nz-form-label>
+                                        <nz-form-control nzSpan="7">
+                                            <nz-select [(ngModel)]="selectedBasicPremiunTypeValue" nzAllowClear
+                                                nzPlaceHolder="Select input type" [ngModelOptions]="{standalone: true}">
+                                                <nz-option nzValue="rate" nzLabel="Rate"></nz-option>
+                                                <nz-option nzValue="amount" nzLabel="Amount"></nz-option>
+                                            </nz-select>
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                    <div *ngIf="selectedBasicPremiunTypeValue == 'amount'">
+                                        <nz-form-item>
+                                            <nz-form-label nzSpan="7" nzRequired>Amount</nz-form-label>
+                                            <nz-form-control nzSpan="17">
+                                                <input nz-input nzPlaceHolder="" name="basicPremiumAmount"
+                                                    [(ngModel)]="basicPremiumAmount"
+                                                    [ngModelOptions]="{standalone: true}"
+                                                    (ngModelChange)="handleBasicPremiumAmount()" />
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div *ngIf="selectedBasicPremiunTypeValue == 'rate'">
+                                        <nz-form-item>
+                                            <nz-form-label nzSpan="7" nzRequired>Sum Insured</nz-form-label>
+                                            <nz-form-control nzSpan="17">
+                                                <input nz-input nzPlaceHolder="" name="sumInsured"
+                                                    [(ngModel)]="sumInsured" [ngModelOptions]="{
                                                     standalone: true
                                                 }" [disabled]="
                                                     !isRiskDetailsEditmode
                                                 " (ngModelChange)="
                                                     handleBasicPremiumCalculation()
                                                 " />
-                                        </nz-form-control>
-                                    </nz-form-item>
-                                    <nz-form-item>
-                                        <nz-form-label nzSpan="7" nzRequired>Premium rate</nz-form-label>
-                                        <nz-form-control nzSpan="17">
-                                            <nz-input-group nzCompact>
-                                                <nz-select [(ngModel)]="
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                        <nz-form-item>
+                                            <nz-form-label nzSpan="7" nzRequired>Premium rate</nz-form-label>
+                                            <nz-form-control nzSpan="17">
+                                                <nz-input-group nzCompact>
+                                                    <nz-select [(ngModel)]="
                                                         premiumRateType
                                                     " style="width: 20%;" [ngModelOptions]="{
                                                         standalone: true
                                                     }" [nzDisabled]="
                                                         !isRiskDetailsEditmode
                                                     ">
-                                                    <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
-                                                    <!-- <nz-option *ngIf="quoteForm.get('currency').value === 'ZMW'"
-                                                      [nzLabel]="'K'" nzValue="figure"></nz-option>
-                                                  <nz-option *ngIf="quoteForm.get('currency').value === 'Dollar'"
-                                                      [nzLabel]="'$'" nzValue="figure"></nz-option> -->
-                                                </nz-select>
-                                                <input nz-input nzPlaceHolder="" name="premiumRate"
-                                                    [(ngModel)]="premiumRate" style="width: 80%;" [ngModelOptions]="{
+                                                        <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
+                                                    </nz-select>
+                                                    <input nz-input nzPlaceHolder="" name="premiumRate"
+                                                        [(ngModel)]="premiumRate" style="width: 80%;" [ngModelOptions]="{
                                                         standalone: true
                                                     }" [disabled]="
                                                         !isRiskDetailsEditmode
                                                     " (ngModelChange)="
                                                         handleBasicPremiumCalculation()
                                                     " />
-                                            </nz-input-group>
-                                        </nz-form-control>
-                                    </nz-form-item>
+                                                </nz-input-group>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
 
                                     <!-- Loading starts here -->
                                     <div *ngIf="
@@ -2008,46 +1983,71 @@
                                                 'increasedThirdPartyLimits'
                                             ">
                                             <nz-form-item>
-                                                <nz-form-label [nzSpan]="7" nzFor="increasedThirdPartyLimitsRate">
-                                                    Increase to
-                                                </nz-form-label>
-                                                <nz-form-control nzSpan="17">
-                                                    <input nz-input [(ngModel)]="
+                                                <nz-form-label nzSpan="7">Loading Input Type</nz-form-label>
+                                                <nz-form-control nzSpan="7">
+                                                    <nz-select
+                                                        [(ngModel)]="selectedIncreaseThirdPartyLimitInputTypeValue"
+                                                        nzAllowClear nzPlaceHolder="Select input type"
+                                                        [ngModelOptions]="{standalone: true}">
+                                                        <nz-option nzValue="rate" nzLabel="Rate"></nz-option>
+                                                        <nz-option nzValue="amount" nzLabel="Amount"></nz-option>
+                                                    </nz-select>
+                                                </nz-form-control>
+                                            </nz-form-item>
+                                            <div *ngIf="selectedIncreaseThirdPartyLimitInputTypeValue == 'amount'">
+                                                <nz-form-item>
+                                                    <nz-form-label nzSpan="7" nzRequired>Amount</nz-form-label>
+                                                    <nz-form-control nzSpan="17">
+                                                        <input nz-input nzPlaceHolder=""
+                                                            name="increasedThirdPartyLimitAmount"
+                                                            [(ngModel)]="increasedThirdPartyLimitAmount"
+                                                            [ngModelOptions]="{standalone: true}" />
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                            </div>
+                                            <div *ngIf="selectedIncreaseThirdPartyLimitInputTypeValue == 'rate'">
+                                                <nz-form-item>
+                                                    <nz-form-label [nzSpan]="7" nzFor="increasedThirdPartyLimitsRate">
+                                                        Increase to
+                                                    </nz-form-label>
+                                                    <nz-form-control nzSpan="17">
+                                                        <input nz-input [(ngModel)]="
                                                             increasedThirdPartyLimitValue
                                                         " [ngModelOptions]="{
                                                             standalone: true
                                                         }" [disabled]="
                                                             !isRiskDetailsEditmode
                                                         " />
-                                                </nz-form-control>
-                                            </nz-form-item>
-                                            <nz-form-item>
-                                                <nz-form-label [nzSpan]="7" nzFor="increasedThirdPartyLimitsRate">
-                                                    Rate
-                                                </nz-form-label>
-                                                <nz-form-control nzSpan="17">
-                                                    <nz-input-group nzCompact>
-                                                        <nz-select [(ngModel)]="
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                                <nz-form-item>
+                                                    <nz-form-label [nzSpan]="7" nzFor="increasedThirdPartyLimitsRate">
+                                                        Rate
+                                                    </nz-form-label>
+                                                    <nz-form-control nzSpan="17">
+                                                        <nz-input-group nzCompact>
+                                                            <nz-select [(ngModel)]="
                                                                 increasedThirdPartyLimitsRateType
                                                             " style="width: 40%;" [ngModelOptions]="{
                                                                 standalone: true
                                                             }" [nzDisabled]="
                                                                 !isRiskDetailsEditmode
                                                             ">
-                                                            <nz-option [nzLabel]="'%'" nzValue="percentage">
-                                                            </nz-option>
-                                                        </nz-select>
-                                                        <input nz-input style="width: 60%;"
-                                                            name="increasedThirdPartyLimitsRate" [(ngModel)]="
+                                                                <nz-option [nzLabel]="'%'" nzValue="percentage">
+                                                                </nz-option>
+                                                            </nz-select>
+                                                            <input nz-input style="width: 60%;"
+                                                                name="increasedThirdPartyLimitsRate" [(ngModel)]="
                                                                 increasedThirdPartyLimitsRate
                                                             " [ngModelOptions]="{
                                                                 standalone: true
                                                             }" [disabled]="
                                                                 !isRiskDetailsEditmode
                                                             " />
-                                                    </nz-input-group>
-                                                </nz-form-control>
-                                            </nz-form-item>
+                                                        </nz-input-group>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                            </div>
                                             <nz-form-item>
                                                 <nz-form-control [nzXs]="{
                                                         span: 24,
@@ -2056,12 +2056,11 @@
                                                         span: 20,
                                                         offset: 7
                                                     }">
-                                                    <button nz-button nzType="primary" (click)="
-                                                            computeIncreasedThirdPartyLimit()
+                                                    <button nz-button nzType="primary" (click)="selectedIncreaseThirdPartyLimitInputTypeValue === 'rate' ? computeIncreasedThirdPartyLimit() : handleIncreasedThirdPartyLimitAmount()
                                                         " [nzLoading]="
                                                             computeIncreasedThirdPartyLimitIsLoading
                                                         ">
-                                                        Add Load
+                                                        Add Loading
                                                     </button>
                                                 </nz-form-control>
                                             </nz-form-item>
@@ -2071,37 +2070,60 @@
                                                 'riotAndStrike'
                                             ">
                                             <nz-form-item>
-                                                <nz-form-label [nzSpan]="7" nzFor="riotAndStrikeRate">Rate
-                                                </nz-form-label>
-                                                <nz-form-control nzSpan="17">
-                                                    <nz-input-group nzCompact>
-                                                        <nz-select [(ngModel)]="
+                                                <nz-form-label nzSpan="7">Loading Input Type</nz-form-label>
+                                                <nz-form-control nzSpan="7">
+                                                    <nz-select [(ngModel)]="selectedRiotAndStrikeInputTypeValue"
+                                                        nzAllowClear nzPlaceHolder="Select input type"
+                                                        [ngModelOptions]="{standalone: true}">
+                                                        <nz-option nzValue="rate" nzLabel="Rate"></nz-option>
+                                                        <nz-option nzValue="amount" nzLabel="Amount"></nz-option>
+                                                    </nz-select>
+                                                </nz-form-control>
+                                            </nz-form-item>
+                                            <div *ngIf="selectedRiotAndStrikeInputTypeValue == 'amount'">
+                                                <nz-form-item>
+                                                    <nz-form-label nzSpan="7" nzRequired>Amount</nz-form-label>
+                                                    <nz-form-control nzSpan="17">
+                                                        <input nz-input nzPlaceHolder="" name="riotAndStrikeAmount"
+                                                            [(ngModel)]="riotAndStrikeAmount"
+                                                            [ngModelOptions]="{standalone: true}" />
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                            </div>
+                                            <div *ngIf="selectedRiotAndStrikeInputTypeValue == 'rate'">
+                                                <nz-form-item>
+                                                    <nz-form-label [nzSpan]="7" nzFor="riotAndStrikeRate">Rate
+                                                    </nz-form-label>
+                                                    <nz-form-control nzSpan="17">
+                                                        <nz-input-group nzCompact>
+                                                            <nz-select [(ngModel)]="
                                                                 riotAndStrikeRateType
                                                             " style="width: 40%;" [ngModelOptions]="{
                                                                 standalone: true
                                                             }" [nzDisabled]="
                                                                 !isRiskDetailsEditmode
                                                             ">
-                                                            <nz-option [nzLabel]="'%'" nzValue="percentage">
-                                                            </nz-option>
-                                                            <!-- <nz-option
+                                                                <nz-option [nzLabel]="'%'" nzValue="percentage">
+                                                                </nz-option>
+                                                                <!-- <nz-option
                                                               *ngIf="quoteDetailsForm.get('currency').value === 'ZMW'"
                                                               [nzLabel]="'K'" nzValue="figure"></nz-option>
                                                           <nz-option
                                                               *ngIf="quoteDetailsForm.get('currency').value === 'Dollar'"
                                                               [nzLabel]="'$'" nzValue="figure"></nz-option> -->
-                                                        </nz-select>
-                                                        <input nz-input nzPlaceHolder="" name="riotAndStrikeRate"
-                                                            [(ngModel)]="
+                                                            </nz-select>
+                                                            <input nz-input nzPlaceHolder="" name="riotAndStrikeRate"
+                                                                [(ngModel)]="
                                                                 riotAndStrikeRate
                                                             " style="width: 60%;" [ngModelOptions]="{
                                                                 standalone: true
                                                             }" [disabled]="
                                                                 !isRiskDetailsEditmode
                                                             " />
-                                                    </nz-input-group>
-                                                </nz-form-control>
-                                            </nz-form-item>
+                                                        </nz-input-group>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                            </div>
                                             <nz-form-item>
                                                 <nz-form-control [nzXs]="{
                                                         span: 24,
@@ -2110,8 +2132,7 @@
                                                         span: 20,
                                                         offset: 7
                                                     }">
-                                                    <button nz-button nzType="primary" (click)="
-                                                            computeRiotAndStrike()
+                                                    <button nz-button nzType="primary" (click)="selectedRiotAndStrikeInputTypeValue === 'rate' ? computeRiotAndStrike() : handleRiotAndStrikeAmount()
                                                         " [nzLoading]="
                                                             computeRiotAndStrikeIsLoading
                                                         ">
@@ -2127,25 +2148,51 @@
                                             <div nz-row nzGutter="2">
                                                 <div nz-col nzSpan="25">
                                                     <nz-form-item>
-                                                        <nz-form-label [nzSpan]="7" nzFor="carStereoValue">Car Stereo
-                                                            Value</nz-form-label>
-                                                        <nz-form-control nzSpan="17">
-                                                            <input nz-input nzPlaceHolder="" name="carStereoValue"
-                                                                [(ngModel)]="
+                                                        <nz-form-label nzSpan="7">Loading Input Type</nz-form-label>
+                                                        <nz-form-control nzSpan="7">
+                                                            <nz-select [(ngModel)]="selectedCarStereoInputTypeValue"
+                                                                nzAllowClear nzPlaceHolder="Select input type"
+                                                                [ngModelOptions]="{standalone: true}">
+                                                                <nz-option nzValue="rate" nzLabel="Rate">
+                                                                </nz-option>
+                                                                <nz-option nzValue="amount" nzLabel="Amount">
+                                                                </nz-option>
+                                                            </nz-select>
+                                                        </nz-form-control>
+                                                    </nz-form-item>
+                                                    <div *ngIf="selectedCarStereoInputTypeValue == 'amount'">
+                                                        <nz-form-item>
+                                                            <nz-form-label nzSpan="7" nzRequired>Amount
+                                                            </nz-form-label>
+                                                            <nz-form-control nzSpan="17">
+                                                                <input nz-input nzPlaceHolder="" name="carStereoAmount"
+                                                                    [(ngModel)]="carStereoAmount"
+                                                                    [ngModelOptions]="{standalone: true}" />
+                                                            </nz-form-control>
+                                                        </nz-form-item>
+                                                    </div>
+                                                    <div *ngIf="selectedCarStereoInputTypeValue == 'rate'">
+                                                        <nz-form-item>
+                                                            <nz-form-label [nzSpan]="7" nzFor="carStereoValue">Car
+                                                                Stereo
+                                                                Value</nz-form-label>
+                                                            <nz-form-control nzSpan="17">
+                                                                <input nz-input nzPlaceHolder="" name="carStereoValue"
+                                                                    [(ngModel)]="
                                                                     carStereoValue
                                                                 " [ngModelOptions]="{
                                                                     standalone: true
                                                                 }" [disabled]="
                                                                     !isRiskDetailsEditmode
                                                                 " />
-                                                        </nz-form-control>
-                                                    </nz-form-item>
-                                                    <nz-form-item>
-                                                        <nz-form-label [nzSpan]="7" nzFor="carStereoRate">Rate
-                                                        </nz-form-label>
-                                                        <nz-form-control nzSpan="17">
-                                                            <nz-input-group nzCompact>
-                                                                <nz-select [(ngModel)]="
+                                                            </nz-form-control>
+                                                        </nz-form-item>
+                                                        <nz-form-item>
+                                                            <nz-form-label [nzSpan]="7" nzFor="carStereoRate">Rate
+                                                            </nz-form-label>
+                                                            <nz-form-control nzSpan="17">
+                                                                <nz-input-group nzCompact>
+                                                                    <nz-select [(ngModel)]="
                                                                         carStereoRateType
                                                                     " style="
                                                                         width: 40%;
@@ -2154,21 +2201,13 @@
                                                                     }" [nzDisabled]="
                                                                         !isRiskDetailsEditmode
                                                                     ">
-                                                                    <nz-option [nzLabel]="
+                                                                        <nz-option [nzLabel]="
                                                                             '%'
                                                                         " nzValue="percentage">
-                                                                    </nz-option>
-                                                                    <!-- <nz-option
-                                                                      *ngIf="quoteDetailsForm.get('currency').value === 'ZMW'"
-                                                                      [nzLabel]="'K'" nzValue="figure">
-                                                                  </nz-option>
-                                                                  <nz-option
-                                                                      *ngIf="quoteDetailsForm.get('currency').value === 'Dollar'"
-                                                                      [nzLabel]="'$'" nzValue="figure">
-                                                                  </nz-option> -->
-                                                                </nz-select>
-                                                                <input nz-input nzPlaceHolder="" name="carStereoRate"
-                                                                    [(ngModel)]="
+                                                                        </nz-option>
+                                                                    </nz-select>
+                                                                    <input nz-input nzPlaceHolder=""
+                                                                        name="carStereoRate" [(ngModel)]="
                                                                         carStereoRate
                                                                     " style="
                                                                         width: 60%;
@@ -2177,9 +2216,10 @@
                                                                     }" [disabled]="
                                                                         !isRiskDetailsEditmode
                                                                     " />
-                                                            </nz-input-group>
-                                                        </nz-form-control>
-                                                    </nz-form-item>
+                                                                </nz-input-group>
+                                                            </nz-form-control>
+                                                        </nz-form-item>
+                                                    </div>
                                                     <nz-form-item>
                                                         <nz-form-control [nzXs]="{
                                                                 span: 24,
@@ -2188,8 +2228,7 @@
                                                                 span: 20,
                                                                 offset: 7
                                                             }">
-                                                            <button nz-button nzType="primary" (click)="
-                                                                    computeCarStereo()
+                                                            <button nz-button nzType="primary" (click)="selectedCarStereoInputTypeValue === 'rate' ? computeCarStereo() : handleCarStereoAmount()
                                                                 " [nzLoading]="
                                                                     computeCarStereoIsLoading
                                                                 ">
@@ -2225,14 +2264,6 @@
                                                                             '%'
                                                                         " nzValue="percentage">
                                                                     </nz-option>
-                                                                    <!-- <nz-option
-                                                                      *ngIf="quoteDetailsForm.get('currency').value === 'ZMW'"
-                                                                      [nzLabel]="'K'" nzValue="figure">
-                                                                  </nz-option>
-                                                                  <nz-option
-                                                                      *ngIf="quoteDetailsForm.get('currency').value === 'Dollar'"
-                                                                      [nzLabel]="'$'" nzValue="figure">
-                                                                  </nz-option> -->
                                                                 </nz-select>
                                                                 <input nz-input style="
                                                                         width: 60%;
@@ -2267,12 +2298,37 @@
                                             <div nz-row nzGutter="0">
                                                 <div nz-col nzSpan="25">
                                                     <nz-form-item>
-                                                        <nz-form-label [nzSpan]="7" nzFor="lossOfUseDailyRate">Daily
-                                                            Rate
-                                                        </nz-form-label>
-                                                        <nz-form-control nzSpan="17">
-                                                            <nz-input-group nzCompact>
-                                                                <nz-select [(ngModel)]="
+                                                        <nz-form-label nzSpan="7">Loading Input Type</nz-form-label>
+                                                        <nz-form-control nzSpan="7">
+                                                            <nz-select [(ngModel)]="selectedLossOfUseInputTypeValue"
+                                                                nzAllowClear nzPlaceHolder="Select input type"
+                                                                [ngModelOptions]="{standalone: true}">
+                                                                <nz-option nzValue="rate" nzLabel="Rate">
+                                                                </nz-option>
+                                                                <nz-option nzValue="amount" nzLabel="Amount">
+                                                                </nz-option>
+                                                            </nz-select>
+                                                        </nz-form-control>
+                                                    </nz-form-item>
+                                                    <div *ngIf="selectedLossOfUseInputTypeValue == 'amount'">
+                                                        <nz-form-item>
+                                                            <nz-form-label nzSpan="7" nzRequired>Amount
+                                                            </nz-form-label>
+                                                            <nz-form-control nzSpan="17">
+                                                                <input nz-input nzPlaceHolder="" name="lossOfUseAmount"
+                                                                    [(ngModel)]="lossOfUseAmount"
+                                                                    [ngModelOptions]="{standalone: true}" />
+                                                            </nz-form-control>
+                                                        </nz-form-item>
+                                                    </div>
+                                                    <div *ngIf="selectedLossOfUseInputTypeValue == 'rate'">
+                                                        <nz-form-item>
+                                                            <nz-form-label [nzSpan]="7" nzFor="lossOfUseDailyRate">Daily
+                                                                Rate
+                                                            </nz-form-label>
+                                                            <nz-form-control nzSpan="17">
+                                                                <nz-input-group nzCompact>
+                                                                    <nz-select [(ngModel)]="
                                                                         lossOfUseDailyRateType
                                                                     " style="
                                                                         width: 40%;
@@ -2281,21 +2337,13 @@
                                                                     }" [nzDisabled]="
                                                                         !isRiskDetailsEditmode
                                                                     ">
-                                                                    <nz-option [nzLabel]="
+                                                                        <nz-option [nzLabel]="
                                                                             '%'
                                                                         " nzValue="percentage">
-                                                                    </nz-option>
-                                                                    <!-- <nz-option
-                                                                      *ngIf="riskComprehensiveForm.get('currency').value === 'ZMW'"
-                                                                      [nzLabel]="'K'" nzValue="figure">
-                                                                  </nz-option>
-                                                                  <nz-option
-                                                                      *ngIf="riskComprehensiveForm.get('currency').value === 'Dollar'"
-                                                                      [nzLabel]="'$'" nzValue="figure">
-                                                                  </nz-option> -->
-                                                                </nz-select>
-                                                                <input nz-input nzPlaceHolder=""
-                                                                    name="lossOfUseDailyRate" [(ngModel)]="
+                                                                        </nz-option>
+                                                                    </nz-select>
+                                                                    <input nz-input nzPlaceHolder=""
+                                                                        name="lossOfUseDailyRate" [(ngModel)]="
                                                                         lossOfUseDailyRate
                                                                     " style="
                                                                         width: 60%;
@@ -2304,23 +2352,24 @@
                                                                     }" [disabled]="
                                                                         !isRiskDetailsEditmode
                                                                     " />
-                                                            </nz-input-group>
-                                                        </nz-form-control>
-                                                    </nz-form-item>
-                                                    <nz-form-item>
-                                                        <nz-form-label [nzSpan]="7" nzFor="lossOfUseDays">Number Of
-                                                            Days</nz-form-label>
-                                                        <nz-form-control nzSpan="17">
-                                                            <input nz-input id="lossOfUseDays" nzPlaceHolder=""
-                                                                name="lossOfUseDays" [(ngModel)]="
+                                                                </nz-input-group>
+                                                            </nz-form-control>
+                                                        </nz-form-item>
+                                                        <nz-form-item>
+                                                            <nz-form-label [nzSpan]="7" nzFor="lossOfUseDays">Number Of
+                                                                Days</nz-form-label>
+                                                            <nz-form-control nzSpan="17">
+                                                                <input nz-input id="lossOfUseDays" nzPlaceHolder=""
+                                                                    name="lossOfUseDays" [(ngModel)]="
                                                                     lossOfUseDays
                                                                 " [ngModelOptions]="{
                                                                     standalone: true
                                                                 }" [disabled]="
                                                                     !isRiskDetailsEditmode
                                                                 " />
-                                                        </nz-form-control>
-                                                    </nz-form-item>
+                                                            </nz-form-control>
+                                                        </nz-form-item>
+                                                    </div>
                                                     <nz-form-item>
                                                         <nz-form-control [nzXs]="{
                                                                 span: 24,
@@ -2329,8 +2378,7 @@
                                                                 span: 20,
                                                                 offset: 7
                                                             }">
-                                                            <button nz-button nzType="primary" (click)="
-                                                                    computeLossOfUse()
+                                                            <button nz-button nzType="primary" (click)="selectedLossOfUseInputTypeValue === 'rate' ? computeLossOfUse() : handleLossOfUseAmount()
                                                                 " [nzLoading]="
                                                                     computeLossOfUseIsLoading
                                                                 ">
@@ -2356,10 +2404,6 @@
                                                         !isRiskDetailsEditmode
                                                     ">
                                                     <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
-                                                    <!-- <nz-option *ngIf="quoteForm.get('currency').value === 'ZMW'"
-                                                      [nzLabel]="'NCD(%)'" nzValue="figure"></nz-option>
-                                                  <nz-option *ngIf="quoteForm.get('currency').value === 'Dollar'"
-                                                      [nzLabel]="'NCD(%)'" nzValue="figure"></nz-option> -->
                                                 </nz-select>
                                                 <input nz-input nzPlaceHolder="" name="premiumDiscountRate" [(ngModel)]="
                                                         premiumDiscountRate
@@ -2373,19 +2417,6 @@
                                             </nz-input-group>
                                         </nz-form-control>
                                     </nz-form-item>
-                                    <!-- <div *ngIf= "isRiskDetailsEditmode">
-                          <nz-form-item>
-                              <nz-form-control [nzXs]="{ span: 24, offset: 4 }" [nzSm]="{ span: 20, offset: 7 }">
-                                  <button nz-button nzType="primary" (click)="computePremium()"
-                                      [nzLoading]="computePremiumIsLoading">Compute Premium</button>
-                              </nz-form-control>
-                          </nz-form-item>
-                          </div> -->
-                                    <!-- <nz-form-item>
-                                          <nz-form-control [nzXs]="{ span: 24, offset: 4 }" [nzSm]="{ span: 20, offset: 7 }">
-                                              <button nz-button nzType="primary" (click)="computeBasicPremium()" [nzLoading]="computeBasicPremiumIsLoading">Compute</button>
-                                          </nz-form-control>
-                                      </nz-form-item> -->
                                 </div>
 
                                 <div nz-col nzSpan="8">
@@ -2584,14 +2615,6 @@
                                         </nz-select>
                                     </nz-form-control>
                                 </nz-form-item>
-                                <!-- <nz-form-item>
-                          <nz-form-label [nzSpan]="7" nzFor="estimatedValue" nzRequired>Sum Insured
-                          </nz-form-label>
-                          <nz-form-control nzSpan="17">
-                              <input nz-input name="sumInsured" ="sumInsured"
-                                  type="text" id="sumInsured" />
-                          </nz-form-control>
-                      </nz-form-item> -->
                             </div>
                             <div nz-col nzSpan="8">
                                 <nz-form-item>
@@ -2635,31 +2658,6 @@
                             <nz-divider nzText="Premium Computation" nzOrientation="left"></nz-divider>
                             <div nz-row nzGutter="0">
                                 <div nz-col nzSpan="8">
-                                    <!-- <nz-form-item>
-                              <nz-form-label nzSpan="7" nzRequired>Sum Insured</nz-form-label>
-                              <nz-form-control nzSpan="17">
-                                  <input nz-input nzPlaceHolder="" name="sumInsured" [(ngModel)]="sumInsured"
-                                      [ngModelOptions]="{standalone: true}" [disabled]="!isRiskDetailsEditmode" />
-                              </nz-form-control>
-                          </nz-form-item> -->
-                                    <!-- <nz-form-item>
-                              <nz-form-label nzSpan="7" nzRequired>Premium rate</nz-form-label>
-                              <nz-form-control nzSpan="17">
-                                  <nz-input-group nzCompact>
-                                      <nz-select [(ngModel)]="premiumRateType" style="width: 20%;"
-                                          [ngModelOptions]="{standalone: true}"
-                                          [nzDisabled]="!isRiskDetailsEditmode">
-                                          <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
-                                          
-                                      </nz-select>
-                                      <input nz-input nzPlaceHolder="" name="premiumRate"
-                                          [(ngModel)]="premiumRate" style="width: 80%;"
-                                          [ngModelOptions]="{standalone: true}"
-                                          [disabled]="!isRiskDetailsEditmode" />
-                                  </nz-input-group>
-                              </nz-form-control>
-                          </nz-form-item> -->
-
                                     <!-- Loading starts here -->
                                     <div *ngIf="isRiskDetailsEditmode">
                                         <div *ngIf="
@@ -2667,7 +2665,7 @@
                                                 'Comprehensive'
                                             ">
                                             <nz-form-item>
-                                                <nz-form-label [nzSpan]="7" nzFor="load">Add Load
+                                                <nz-form-label [nzSpan]="7" nzFor="load">Add Loading
                                                 </nz-form-label>
                                                 <nz-form-control nzSpan="17">
                                                     <nz-select name="load" nzPlaceHolder="Select Load" [(ngModel)]="
@@ -2693,7 +2691,7 @@
                                                 'ThirdParty'
                                             ">
                                             <nz-form-item>
-                                                <nz-form-label [nzSpan]="7" nzFor="load">Add Load
+                                                <nz-form-label [nzSpan]="7" nzFor="load">Add Loading
                                                 </nz-form-label>
                                                 <nz-form-control nzSpan="17">
                                                     <nz-select name="load" [(ngModel)]="
@@ -2719,46 +2717,71 @@
                                                 'increasedThirdPartyLimits'
                                             ">
                                             <nz-form-item>
-                                                <nz-form-label [nzSpan]="7" nzFor="increasedThirdPartyLimitsRate">
-                                                    Increase to
-                                                </nz-form-label>
-                                                <nz-form-control nzSpan="17">
-                                                    <input nz-input [(ngModel)]="
+                                                <nz-form-label nzSpan="7">Loading Input Type</nz-form-label>
+                                                <nz-form-control nzSpan="7">
+                                                    <nz-select
+                                                        [(ngModel)]="selectedIncreaseThirdPartyLimitInputTypeValue"
+                                                        nzAllowClear nzPlaceHolder="Select input type"
+                                                        [ngModelOptions]="{standalone: true}">
+                                                        <nz-option nzValue="rate" nzLabel="Rate"></nz-option>
+                                                        <nz-option nzValue="amount" nzLabel="Amount"></nz-option>
+                                                    </nz-select>
+                                                </nz-form-control>
+                                            </nz-form-item>
+                                            <div *ngIf="selectedIncreaseThirdPartyLimitInputTypeValue == 'amount'">
+                                                <nz-form-item>
+                                                    <nz-form-label nzSpan="7" nzRequired>Amount</nz-form-label>
+                                                    <nz-form-control nzSpan="17">
+                                                        <input nz-input nzPlaceHolder=""
+                                                            name="increasedThirdPartyLimitAmount"
+                                                            [(ngModel)]="increasedThirdPartyLimitAmount"
+                                                            [ngModelOptions]="{standalone: true}" />
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                            </div>
+                                            <div *ngIf="selectedIncreaseThirdPartyLimitInputTypeValue == 'rate'">
+                                                <nz-form-item>
+                                                    <nz-form-label [nzSpan]="7" nzFor="increasedThirdPartyLimitsRate">
+                                                        Increase to
+                                                    </nz-form-label>
+                                                    <nz-form-control nzSpan="17">
+                                                        <input nz-input [(ngModel)]="
                                                             increasedThirdPartyLimitValue
                                                         " [ngModelOptions]="{
                                                             standalone: true
                                                         }" [disabled]="
                                                             !isRiskDetailsEditmode
                                                         " />
-                                                </nz-form-control>
-                                            </nz-form-item>
-                                            <nz-form-item>
-                                                <nz-form-label [nzSpan]="7" nzFor="increasedThirdPartyLimitsRate">
-                                                    Rate
-                                                </nz-form-label>
-                                                <nz-form-control nzSpan="17">
-                                                    <nz-input-group nzCompact>
-                                                        <nz-select [(ngModel)]="
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                                <nz-form-item>
+                                                    <nz-form-label [nzSpan]="7" nzFor="increasedThirdPartyLimitsRate">
+                                                        Rate
+                                                    </nz-form-label>
+                                                    <nz-form-control nzSpan="17">
+                                                        <nz-input-group nzCompact>
+                                                            <nz-select [(ngModel)]="
                                                                 increasedThirdPartyLimitsRateType
                                                             " style="width: 40%;" [ngModelOptions]="{
                                                                 standalone: true
                                                             }" [nzDisabled]="
                                                                 !isRiskDetailsEditmode
                                                             ">
-                                                            <nz-option [nzLabel]="'%'" nzValue="percentage">
-                                                            </nz-option>
-                                                        </nz-select>
-                                                        <input nz-input style="width: 60%;"
-                                                            name="increasedThirdPartyLimitsRate" [(ngModel)]="
+                                                                <nz-option [nzLabel]="'%'" nzValue="percentage">
+                                                                </nz-option>
+                                                            </nz-select>
+                                                            <input nz-input style="width: 60%;"
+                                                                name="increasedThirdPartyLimitsRate" [(ngModel)]="
                                                                 increasedThirdPartyLimitsRate
                                                             " [ngModelOptions]="{
                                                                 standalone: true
                                                             }" [disabled]="
                                                                 !isRiskDetailsEditmode
                                                             " />
-                                                    </nz-input-group>
-                                                </nz-form-control>
-                                            </nz-form-item>
+                                                        </nz-input-group>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                            </div>
                                             <nz-form-item>
                                                 <nz-form-control [nzXs]="{
                                                         span: 24,
@@ -2767,12 +2790,11 @@
                                                         span: 20,
                                                         offset: 7
                                                     }">
-                                                    <button nz-button nzType="primary" (click)="
-                                                            computeIncreasedThirdPartyLimit()
+                                                    <button nz-button nzType="primary" (click)="selectedIncreaseThirdPartyLimitInputTypeValue === 'rate' ? computeIncreasedThirdPartyLimitThirdParty() : handleIncreasedThirdPartyLimitAmount()
                                                         " [nzLoading]="
                                                             computeIncreasedThirdPartyLimitIsLoading
                                                         ">
-                                                        Add Load
+                                                        Add Loading
                                                     </button>
                                                 </nz-form-control>
                                             </nz-form-item>
@@ -2792,10 +2814,6 @@
                                                         !isRiskDetailsEditmode
                                                     ">
                                                     <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
-                                                    <!-- <nz-option *ngIf="quoteForm.get('currency').value === 'ZMW'"
-                                                      [nzLabel]="'NCD(%)'" nzValue="figure"></nz-option>
-                                                  <nz-option *ngIf="quoteForm.get('currency').value === 'Dollar'"
-                                                      [nzLabel]="'NCD(%)'" nzValue="figure"></nz-option> -->
                                                 </nz-select>
                                                 <input nz-input nzPlaceHolder="" name="premiumDiscountRate" [(ngModel)]="
                                                         premiumDiscountRate
@@ -2809,12 +2827,6 @@
                                             </nz-input-group>
                                         </nz-form-control>
                                     </nz-form-item>
-                                    <!-- <nz-form-item>
-                              <nz-form-control [nzXs]="{ span: 24, offset: 4 }" [nzSm]="{ span: 20, offset: 7 }">
-                                  <button nz-button nzType="primary" (click)="computePremium()"
-                                      [nzLoading]="computePremiumIsLoading">Compute Premium</button>
-                              </nz-form-control>
-                          </nz-form-item> -->
                                 </div>
 
                                 <div nz-col nzSpan="8">
@@ -2910,19 +2922,20 @@
         <!-- Risk Deatils Modal ends here-->
 
         <!-- Quote PDFs Modal-->
-        <nz-modal nzWidth="900" [(nzVisible)]="isViewQuotePDFVisible"
-            (nzOnCancel)="isViewQuotePDFVisible = false" (nzOnOk)="isViewQuotePDFVisible = false">
-            <nz-card style="width: 100%" [nzBordered]="false" nzTitle="Quote Document" [nzExtra]="pdfQuoteActions">
-                <pdf-viewer [src]="'/assets/docs/quote.pdf'" [original-size]="true">
-                </pdf-viewer>
+        <nz-modal [(nzVisible)]="isViewQuotePDFVisible" nzTitle="Goldern Lotus Insurance"
+            (nzOnCancel)="isViewQuotePDFVisible = false" (nzOnOk)="isViewQuotePDFVisible = false" nzWidth="800">
+            <nz-card style="width: 100%" [nzBordered]="true" nzTitle="Quote Document" [nzExtra]="pdfQuoteActions">
+                <!-- <pdf-viewer [src]="'/assets/docs/quote.pdf'" [original-size]="true">
+                </pdf-viewer> -->
+                <app-quote-document></app-quote-document>
             </nz-card>
             <ng-template #pdfQuoteActions>
                 <div style="display: flex;">
                     <div style="margin-right: 8px;">
-                        <button nz-button nzSize="medium">Print</button>
+                        <button nz-button nzSize="medium" nzType="primary">Print</button>
                     </div>
                     <div>
-                        <button nz-button nzSize="medium">Email</button>
+                        <button nz-button nzSize="medium" nzType="primary">Email</button>
                     </div>
                 </div>
             </ng-template>
