@@ -1517,200 +1517,9 @@
                     </thead>
                 </nz-table>
             </ng-template>
-            <!--  Risks Table Search bar and Table details ends here -->
-
-            <!-- Add quote and reset quote form buttons starts here -->
-            <!-- <div style="text-align: center; margin-top: 15px; margin-bottom: 10px;">
-                <button nz-button nzType="primary" (click)="addQuote()" [disabled]="!quoteForm.valid">
-                    Create Quote
-                </button>
-                <button nz-button nzType="default">Reset Form</button>
-            </div> -->
-            <!-- Add quote and reset quote form buttons ends here -->
         </nz-card>
         <!-- Risk Details ends here -->
 
-        <!-- <nz-card *ngIf="isQuoteApproved">
-        <nz-divider
-            [nzText]="'Documents'"
-            [nzOrientation]="'left'"
-        ></nz-divider>
-        <div nz-row [nzGutter]="8">
-            <div nz-col [nzSpan]="8">
-                <nz-card
-                    nzTitle="Certificate"
-                    [nzExtra]="expansionView1"
-                    [nzHoverable]="true"
-                    (nzClick)="showCertModal = true"
-                >
-                    <pdf-viewer
-                        [src]="policyCertificateURl"
-                        [original-size]="false"
-                    ></pdf-viewer>
-                </nz-card>
-            </div>
-            <div nz-col [nzSpan]="8">
-                <nz-card
-                    nzTitle="Debit Note"
-                    [nzExtra]="expansionView2"
-                    [nzHoverable]="true"
-                    (nzClick)="showDebitModal = true"
-                >
-                    <pdf-viewer
-                        [src]="debitNoteURL"
-                        [original-size]="false"
-                    ></pdf-viewer>
-                </nz-card>
-            </div>
-            <div nz-col [nzSpan]="8">
-                <nz-card
-                    nzTitle="Policy Schedule"
-                    [nzExtra]="expansionView3"
-                    [nzHoverable]="true"
-                    (nzClick)="showQuoteModal = true"
-                >
-                    <pdf-viewer
-                        [src]="quoteURL"
-                        [original-size]="false"
-                    ></pdf-viewer>
-                </nz-card>
-            </div>
-        </div>
-        </nz-card> -->
-
-        <!-- <ng-template #expansionView1>
-    <div>
-        <button
-            nz-button
-            nzType="primary"
-            nzSize="small"
-            style="margin-right: 5px;"
-            (click)="showCertModal = true"
-        >
-            View
-        </button>
-        <button nz-button nzType="default" nzSize="small">Print</button>
-    </div>
-</ng-template>
-<ng-template #expansionView2>
-    <div>
-        <button
-            nz-button
-            nzType="primary"
-            nzSize="small"
-            style="margin-right: 5px;"
-            (click)="showDebitModal = true"
-        >
-            View
-        </button>
-        <button nz-button nzType="default" nzSize="small">Print</button>
-    </div>
-</ng-template>
-<ng-template #expansionView3>
-    <div>
-        <button
-            nz-button
-            nzType="primary"
-            nzSize="small"
-            style="margin-right: 5px;"
-            (click)="showQuoteModal = true"
-        >
-            View
-        </button>
-        <button nz-button nzType="default" nzSize="small">Print</button>
-    </div>
-</ng-template> -->
-
-        <!-- Document Modals -->
-        <!-- <nz-modal
-    [(nzVisible)]="showCertModal"
-    nzTitle="Policy Receipt"
-    (nzOnCancel)="showCertModal = false"
-    (nzOnOk)="showCertModal = false"
->
-    <div style="margin: 20px;">
-        <nz-card style="width: 100%" nzTitle="Receipt" [nzExtra]="actions">
-            <pdf-viewer
-                [src]="policyCertificateURl"
-                [original-size]="false"
-            ></pdf-viewer>
-        </nz-card>
-        <ng-template #actions>
-            <div>
-                <button
-                    nz-button
-                    nzType="primary"
-                    nzSize="medium"
-                    style="margin-right: 8px;"
-                >
-                    Print
-                </button>
-                <button nz-button nzType="default" nzSize="medium">
-                    Email
-                </button>
-            </div>
-        </ng-template>
-    </div>
-</nz-modal>
-<nz-modal
-    [(nzVisible)]="showDebitModal"
-    nzTitle="Debit Note"
-    (nzOnCancel)="showDebitModal = false"
-    (nzOnOk)="showDebitModal = false"
->
-    <div style="margin: 20px;">
-        <nz-card style="width: 100%" nzTitle="Receipt" [nzExtra]="actions">
-            <pdf-viewer
-                [src]="debitNoteURL"
-                [original-size]="false"
-            ></pdf-viewer>
-        </nz-card>
-        <ng-template #actions>
-            <div>
-                <button
-                    nz-button
-                    nzType="primary"
-                    nzSize="medium"
-                    style="margin-right: 8px;"
-                >
-                    Print
-                </button>
-                <button nz-button nzType="default" nzSize="medium">
-                    Email
-                </button>
-            </div>
-        </ng-template>
-    </div>
-</nz-modal>
-<nz-modal
-    [(nzVisible)]="showQuoteModal"
-    nzTitle="Quote"
-    (nzOnCancel)="showQuoteModal = false"
-    (nzOnOk)="showQuoteModal = false"
->
-    <div style="margin: 20px;">
-        <nz-card style="width: 100%" nzTitle="Receipt" [nzExtra]="actions">
-            <pdf-viewer [src]="quoteURL" [original-size]="false"></pdf-viewer>
-        </nz-card>
-        <ng-template #actions>
-            <div>
-                <button
-                    nz-button
-                    nzType="primary"
-                    nzSize="medium"
-                    style="margin-right: 8px;"
-                >
-                    Print
-                </button>
-                <button nz-button nzType="default" nzSize="medium">
-                    Email
-                </button>
-            </div>
-        </ng-template>
-    </div>
-</nz-modal> -->
-
-        <!-- Risk Deatils Modal starts here-->
         <nz-modal [(nzVisible)]="quoteRiskDetailsModalVisible" [nzTitle]="riskTitle" [nzContent]="riskContent"
             (nzOnCancel)="closeRiskDetails()" (nzOnOk)="closeRiskDetails()" nzWidth="100%">
             <ng-template #riskTitle>
@@ -1852,14 +1661,6 @@
                                         </nz-select>
                                     </nz-form-control>
                                 </nz-form-item>
-                                <!-- <nz-form-item>
-                          <nz-form-label [nzSpan]="7" nzFor="estimatedValue" nzRequired>Sum Insured
-                          </nz-form-label>
-                          <nz-form-control nzSpan="17">
-                              <input nz-input name="sumInsured" ="sumInsured"
-                                  type="text" id="sumInsured" />
-                          </nz-form-control>
-                      </nz-form-item> -->
                             </div>
                             <div nz-col nzSpan="8">
                                 <nz-form-item>
@@ -1928,10 +1729,6 @@
                                                         !isRiskDetailsEditmode
                                                     ">
                                                     <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
-                                                    <!-- <nz-option *ngIf="quoteForm.get('currency').value === 'ZMW'"
-                                                      [nzLabel]="'K'" nzValue="figure"></nz-option>
-                                                  <nz-option *ngIf="quoteForm.get('currency').value === 'Dollar'"
-                                                      [nzLabel]="'$'" nzValue="figure"></nz-option> -->
                                                 </nz-select>
                                                 <input nz-input nzPlaceHolder="" name="premiumRate"
                                                     [(ngModel)]="premiumRate" style="width: 80%;" [ngModelOptions]="{
@@ -2158,14 +1955,6 @@
                                                                             '%'
                                                                         " nzValue="percentage">
                                                                     </nz-option>
-                                                                    <!-- <nz-option
-                                                                      *ngIf="quoteDetailsForm.get('currency').value === 'ZMW'"
-                                                                      [nzLabel]="'K'" nzValue="figure">
-                                                                  </nz-option>
-                                                                  <nz-option
-                                                                      *ngIf="quoteDetailsForm.get('currency').value === 'Dollar'"
-                                                                      [nzLabel]="'$'" nzValue="figure">
-                                                                  </nz-option> -->
                                                                 </nz-select>
                                                                 <input nz-input nzPlaceHolder="" name="carStereoRate"
                                                                     [(ngModel)]="
@@ -2225,14 +2014,6 @@
                                                                             '%'
                                                                         " nzValue="percentage">
                                                                     </nz-option>
-                                                                    <!-- <nz-option
-                                                                      *ngIf="quoteDetailsForm.get('currency').value === 'ZMW'"
-                                                                      [nzLabel]="'K'" nzValue="figure">
-                                                                  </nz-option>
-                                                                  <nz-option
-                                                                      *ngIf="quoteDetailsForm.get('currency').value === 'Dollar'"
-                                                                      [nzLabel]="'$'" nzValue="figure">
-                                                                  </nz-option> -->
                                                                 </nz-select>
                                                                 <input nz-input style="
                                                                         width: 60%;
@@ -2285,14 +2066,6 @@
                                                                             '%'
                                                                         " nzValue="percentage">
                                                                     </nz-option>
-                                                                    <!-- <nz-option
-                                                                      *ngIf="riskComprehensiveForm.get('currency').value === 'ZMW'"
-                                                                      [nzLabel]="'K'" nzValue="figure">
-                                                                  </nz-option>
-                                                                  <nz-option
-                                                                      *ngIf="riskComprehensiveForm.get('currency').value === 'Dollar'"
-                                                                      [nzLabel]="'$'" nzValue="figure">
-                                                                  </nz-option> -->
                                                                 </nz-select>
                                                                 <input nz-input nzPlaceHolder=""
                                                                     name="lossOfUseDailyRate" [(ngModel)]="
@@ -2373,19 +2146,6 @@
                                             </nz-input-group>
                                         </nz-form-control>
                                     </nz-form-item>
-                                    <!-- <div *ngIf= "isRiskDetailsEditmode">
-                          <nz-form-item>
-                              <nz-form-control [nzXs]="{ span: 24, offset: 4 }" [nzSm]="{ span: 20, offset: 7 }">
-                                  <button nz-button nzType="primary" (click)="computePremium()"
-                                      [nzLoading]="computePremiumIsLoading">Compute Premium</button>
-                              </nz-form-control>
-                          </nz-form-item>
-                          </div> -->
-                                    <!-- <nz-form-item>
-                                          <nz-form-control [nzXs]="{ span: 24, offset: 4 }" [nzSm]="{ span: 20, offset: 7 }">
-                                              <button nz-button nzType="primary" (click)="computeBasicPremium()" [nzLoading]="computeBasicPremiumIsLoading">Compute</button>
-                                          </nz-form-control>
-                                      </nz-form-item> -->
                                 </div>
 
                                 <div nz-col nzSpan="8">
@@ -2584,14 +2344,6 @@
                                         </nz-select>
                                     </nz-form-control>
                                 </nz-form-item>
-                                <!-- <nz-form-item>
-                          <nz-form-label [nzSpan]="7" nzFor="estimatedValue" nzRequired>Sum Insured
-                          </nz-form-label>
-                          <nz-form-control nzSpan="17">
-                              <input nz-input name="sumInsured" ="sumInsured"
-                                  type="text" id="sumInsured" />
-                          </nz-form-control>
-                      </nz-form-item> -->
                             </div>
                             <div nz-col nzSpan="8">
                                 <nz-form-item>
@@ -2635,31 +2387,6 @@
                             <nz-divider nzText="Premium Computation" nzOrientation="left"></nz-divider>
                             <div nz-row nzGutter="0">
                                 <div nz-col nzSpan="8">
-                                    <!-- <nz-form-item>
-                              <nz-form-label nzSpan="7" nzRequired>Sum Insured</nz-form-label>
-                              <nz-form-control nzSpan="17">
-                                  <input nz-input nzPlaceHolder="" name="sumInsured" [(ngModel)]="sumInsured"
-                                      [ngModelOptions]="{standalone: true}" [disabled]="!isRiskDetailsEditmode" />
-                              </nz-form-control>
-                          </nz-form-item> -->
-                                    <!-- <nz-form-item>
-                              <nz-form-label nzSpan="7" nzRequired>Premium rate</nz-form-label>
-                              <nz-form-control nzSpan="17">
-                                  <nz-input-group nzCompact>
-                                      <nz-select [(ngModel)]="premiumRateType" style="width: 20%;"
-                                          [ngModelOptions]="{standalone: true}"
-                                          [nzDisabled]="!isRiskDetailsEditmode">
-                                          <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
-                                          
-                                      </nz-select>
-                                      <input nz-input nzPlaceHolder="" name="premiumRate"
-                                          [(ngModel)]="premiumRate" style="width: 80%;"
-                                          [ngModelOptions]="{standalone: true}"
-                                          [disabled]="!isRiskDetailsEditmode" />
-                                  </nz-input-group>
-                              </nz-form-control>
-                          </nz-form-item> -->
-
                                     <!-- Loading starts here -->
                                     <div *ngIf="isRiskDetailsEditmode">
                                         <div *ngIf="
@@ -2792,10 +2519,6 @@
                                                         !isRiskDetailsEditmode
                                                     ">
                                                     <nz-option [nzLabel]="'%'" nzValue="percentage"></nz-option>
-                                                    <!-- <nz-option *ngIf="quoteForm.get('currency').value === 'ZMW'"
-                                                      [nzLabel]="'NCD(%)'" nzValue="figure"></nz-option>
-                                                  <nz-option *ngIf="quoteForm.get('currency').value === 'Dollar'"
-                                                      [nzLabel]="'NCD(%)'" nzValue="figure"></nz-option> -->
                                                 </nz-select>
                                                 <input nz-input nzPlaceHolder="" name="premiumDiscountRate" [(ngModel)]="
                                                         premiumDiscountRate
@@ -2809,12 +2532,6 @@
                                             </nz-input-group>
                                         </nz-form-control>
                                     </nz-form-item>
-                                    <!-- <nz-form-item>
-                              <nz-form-control [nzXs]="{ span: 24, offset: 4 }" [nzSm]="{ span: 20, offset: 7 }">
-                                  <button nz-button nzType="primary" (click)="computePremium()"
-                                      [nzLoading]="computePremiumIsLoading">Compute Premium</button>
-                              </nz-form-control>
-                          </nz-form-item> -->
                                 </div>
 
                                 <div nz-col nzSpan="8">
@@ -2910,19 +2627,20 @@
         <!-- Risk Deatils Modal ends here-->
 
         <!-- Quote PDFs Modal-->
-        <nz-modal nzWidth="900" [(nzVisible)]="isViewQuotePDFVisible"
-            (nzOnCancel)="isViewQuotePDFVisible = false" (nzOnOk)="isViewQuotePDFVisible = false">
-            <nz-card style="width: 100%" [nzBordered]="false" nzTitle="Quote Document" [nzExtra]="pdfQuoteActions">
-                <pdf-viewer [src]="'/assets/docs/quote.pdf'" [original-size]="true">
-                </pdf-viewer>
+        <nz-modal [(nzVisible)]="isViewQuotePDFVisible" nzTitle="Goldern Lotus Insurance"
+            (nzOnCancel)="isViewQuotePDFVisible = false" (nzOnOk)="isViewQuotePDFVisible = false" nzWidth="800">
+            <nz-card style="width: 100%" [nzBordered]="true" nzTitle="Quote Document" [nzExtra]="pdfQuoteActions">
+                <!-- <pdf-viewer [src]="'/assets/docs/quote.pdf'" [original-size]="true">
+                </pdf-viewer> -->
+                <app-quote-document></app-quote-document>
             </nz-card>
             <ng-template #pdfQuoteActions>
                 <div style="display: flex;">
                     <div style="margin-right: 8px;">
-                        <button nz-button nzSize="medium">Print</button>
+                        <button nz-button nzSize="medium" nzType="primary">Print</button>
                     </div>
                     <div>
-                        <button nz-button nzSize="medium">Email</button>
+                        <button nz-button nzSize="medium" nzType="primary">Email</button>
                     </div>
                 </div>
             </ng-template>

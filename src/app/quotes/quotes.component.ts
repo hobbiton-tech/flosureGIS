@@ -26,8 +26,6 @@ export class QuotesComponent implements OnInit {
 
             this.displayQuotesList = this.quotesList;
         });
-
-        
     }
 
     viewDetails(quotation: MotorQuotationModel): void {
@@ -41,15 +39,27 @@ export class QuotesComponent implements OnInit {
             this.displayQuotesList = this.quotesList;
         }
 
-        this.displayQuotesList = this.quotesList.filter(quote => {
-            return(
-            quote.quoteNumber.toLowerCase().includes(value.toLowerCase())
-            || quote.clientCode.toLowerCase().includes(value.toLowerCase())
-            || quote.startDate.toString().toLowerCase().includes(value.toLowerCase())
-            || quote.endDate.toString().toLowerCase().includes(value.toLowerCase())
-            || quote.status.toString().toLowerCase().includes(value.toLowerCase())
+        this.displayQuotesList = this.quotesList.filter((quote) => {
+            return (
+                quote.quoteNumber.toLowerCase().includes(value.toLowerCase()) ||
+                quote.clientCode.toLowerCase().includes(value.toLowerCase()) ||
+                quote.startDate
+                    .toString()
+                    .toLowerCase()
+                    .includes(value.toLowerCase()) ||
+                quote.endDate
+                    .toString()
+                    .toLowerCase()
+                    .includes(value.toLowerCase()) ||
+                quote.status
+                    .toString()
+                    .toLowerCase()
+                    .includes(value.toLowerCase())
             );
+        });
+    }
 
-        })
+    onCreateQuoteClicked(): void {
+        this.router.navigateByUrl('/flosure/quotes/create-quote');
     }
 }
