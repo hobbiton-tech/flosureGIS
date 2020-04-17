@@ -14,6 +14,7 @@ import { NzMessageService } from 'ng-zorro-antd';
 import { IReceiptModel } from '../../../models/receipts.model';
 import { v4 } from 'uuid';
 import { Policy } from 'src/app/underwriting/models/policy.model';
+import { PoliciesService } from 'src/app/underwriting/services/policies.service';
 
 @Component({
     selector: 'app-payment-plan-policy-installments',
@@ -28,7 +29,7 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
     today = new Date();
 
     //
-    clientName = 'Joshua Silwembe';
+    clientName = '';
     recStatus = 'Receipted';
     installmentAmount = 0;
     receiptNum = '';
@@ -94,6 +95,7 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
         private route: ActivatedRoute,
         private paymentPlanService: PaymentPlanService,
         private receiptService: AccountService,
+        private policyService: PoliciesService,
         private formBuilder: FormBuilder,
         private message: NzMessageService,
         private router: Router
@@ -137,12 +139,13 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
                     )[0];
 
                     this.paymentPlanPolicyInstallments = this.paymentPlanPolicyData.installments;
-                    console.log('000000000Installments0000000000');
-                    console.log(this.paymentPlanPolicyInstallments);
                     this.paymentPlanPolicyInstallmentsCount = this.paymentPlanPolicyData.installments.length;
-                    console.log('000000000Number0000000000');
-                    console.log(this.paymentPlanPolicyInstallmentsCount);
                 });
+            this.policyService.getPolicies().subscribe((policies) => {
+                this.policy = policies.filter(
+                    (x) => x.policyNumber === this.policyNumber
+                )[0];
+            });
         });
     }
 
@@ -154,7 +157,7 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
         // this.policy = unreceipted;
         this.receiptForm
             .get('sumInDigits')
-            .setValue(paymentPlanPolicyInstallment.installmentAmount);
+            .setValue(paymentPlanPolicyInstallment.balance);
         this.installmentAmount = paymentPlanPolicyInstallment.installmentAmount;
     }
 
@@ -171,120 +174,99 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
 
     async handleOk() {
         this.submitted = true;
-        const amount = this.receiptForm.controls.sumInDigits.value;
-        this.isOkLoading = true;
-        this._id = v4();
-        const receipt: IReceiptModel = {
-            id: this._id,
-            ...this.receiptForm.value,
-            onBehalfOf: this.clientName,
-            capturedBy: this.user,
-            policyNumber: this.policyNumber,
-            receiptStatus: this.recStatus,
-            sumInDigits: this.installmentAmount,
-            todayDate: new Date(),
-        };
-        this.receiptNum = this._id;
-        await this.receiptService
-            .addReceipt(receipt)
-            .then((mess) => {
-                this.message.success('Receipt Successfully created');
-            })
-            .catch((err) => {
-                this.message.warning('Receipt Failed');
-            });
-        this.receiptForm.reset();
-        setTimeout(() => {
-            this.isVisible = false;
-            this.isOkLoading = false;
-        }, 30);
-        this.policy.receiptStatus = 'Receipted';
-        await this.receiptService.updatePolicy(this.policy);
-        this.generateID(this._id);
 
         if (this.receiptForm.valid) {
-            // this.isOkLoading = true;
+            const amount = this.receiptForm.controls.sumInDigits.value;
+            let count = 0;
+            this.isOkLoading = true;
+            this._id = v4();
+            const receipt: IReceiptModel = {
+                id: this._id,
+                ...this.receiptForm.value,
+                onBehalfOf: this.paymentPlanData.clientName,
+                capturedBy: this.user,
+                policyNumber: this.policyNumber,
+                receiptStatus: this.recStatus,
+                sumInDigits: amount,
+                todayDate: new Date(),
+            };
+            this.receiptNum = this._id;
+            await this.receiptService.addReceipt(receipt);
+
             const p = this.paymentPlanPolicyInstallments;
             let d = amount;
+            this.paymentPlanPolicyData.amountDue =
+                this.paymentPlanPolicyData.amountDue - amount;
+            this.paymentPlanPolicyData.amountOutstanding =
+                this.paymentPlanPolicyData.amountOutstanding - amount;
+            this.paymentPlanPolicyData.amountPaid =
+                this.paymentPlanPolicyData.amountPaid + amount;
+            if (this.paymentPlanPolicyData.amountDue !== 0) {
+                this.paymentPlanPolicyData.policyPlanStatus = 'Partially Paid';
+            } else if (this.paymentPlanPolicyData.amountDue >= 0) {
+                this.paymentPlanPolicyData.policyPlanStatus = 'Fully Paid';
+            }
             for (let i = 0; i < p.length; i++) {
                 console.log(d);
 
                 if (d > p[i].balance && p[i].balance !== 0) {
                     d = d - p[i].balance;
                     p[i].balance = 0;
+                    p[i].installmentStatus = 'Fully Paid';
+                    p[i].actualPaidDate = this.today;
+                    count++;
+                    this.paymentPlanPolicyData.numberOfPaidInstallments =
+                        this.paymentPlanPolicyData.numberOfPaidInstallments +
+                        count;
+                    this.paymentPlanPolicyData.remainingInstallments =
+                        this.paymentPlanPolicyData.remainingInstallments -
+                        count;
                     // this.isVisible = false;
                 }
                 if (d < p[i].balance && p[i].balance !== 0) {
                     p[i].balance = p[i].balance - d;
+                    p[i].installmentStatus = 'Partially Paid';
+                    p[i].actualPaidDate = this.today;
+                    console.log(count);
+
                     break;
                 }
 
                 if (d === p[i].balance && p[i].balance !== 0) {
                     p[i].balance = p[i].balance - d;
+                    p[i].installmentStatus = 'Fully Paid';
+                    p[i].actualPaidDate = this.today;
+                    count++;
+                    this.paymentPlanPolicyData.numberOfPaidInstallments =
+                        this.paymentPlanPolicyData.numberOfPaidInstallments +
+                        count;
+                    this.paymentPlanPolicyData.remainingInstallments =
+                        this.paymentPlanPolicyData.remainingInstallments -
+                        count;
+                    console.log(count);
                     break;
                 }
             }
-            console.log(p);
-
-            // for (const p of this.paymentPlanPolicyInstallments) {
-            //     let b = p.balance;
-            //     if (p.balance === amount && b !== 0) {
-            //         d = amount - p.balance;
-            //         p.balance = d;
-            //         p.installmentStatus = 'Fully Paid';
-            //         console.log(this.paymentPlanData);
-            //         break;
-            //         console.log(d);
-            //     } else if (amount < p.balance && b !== 0) {
-            //         d = amount - p.balance;
-            //         p.balance = d;
-            //         p.installmentStatus = 'Partially Paid';
-            //         console.log(this.paymentPlanData);
-            //         break;
-            //     } else if (amount > p.balance && b !== 0) {
-            //         let ind = this.paymentPlanPolicyInstallments.indexOf(p) + 1;
-            //         console.log(p.balance[ind]);
-            //         break;
-            //     } else {
-            //         console.log(this.paymentPlanData);
-            //         console.log('Balance is equal to Zero');
-            //         break;
-            //     }
-            // }
-            // this.isOkLoading = true;
-            // this._id = v4();
-            // const receipt: IReceiptModel = {
-            //     id: this._id,
-            //     ...this.receiptForm.value,
-            //     onBehalfOf: this.clientName,
-            //     capturedBy: this.user,
-            //     policyNumber: this.policyNumber,
-            //     receiptStatus: this.recStatus,
-            //     sumInDigits: this.installmentAmount,
-            //     todayDate: new Date(),
-            // };
-            // this.receiptNum = this._id;
-            // await this.receiptService
-            //     .addReceipt(receipt)
-            //     .then((mess) => {
-            //         this.message.success('Receipt Successfully created');
-            //     })
-            //     .catch((err) => {
-            //         this.message.warning('Receipt Failed');
-            //     });
-            // this.receiptForm.reset();
-            // setTimeout(() => {
-            //     this.isVisible = false;
-            //     this.isOkLoading = false;
-            // }, 30);
-            // this.policy.receiptStatus = 'Receipted';
-            // await this.receiptService.updatePolicy(this.policy);
-            // this.generateID(this._id);
+            this.receiptForm.reset();
+            setTimeout(() => {
+                this.isVisible = false;
+                this.isOkLoading = false;
+            }, 30);
+            this.policy.receiptStatus = 'Receipted';
+            console.log('<++++++++++++++++++CLAIN+++++++++>');
+            console.log(this.policy);
+            await this.receiptService.updatePolicy(this.policy);
+            await this.paymentPlanService.updatePaymentPlan(
+                this.paymentPlanData
+            );
+            this.generateID(this._id);
         }
     }
 
     generateID(id) {
+        console.log('++++++++++++ID++++++++++++');
         this._id = id;
+        console.log(this._id);
         this.router.navigateByUrl('/flosure/accounts/view-receipt/' + this._id);
         // this.isConfirmLoading = true;
         // this.generateDocuments();

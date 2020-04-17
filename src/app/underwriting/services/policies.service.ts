@@ -17,6 +17,7 @@ import { isTemplateRef } from 'ng-zorro-antd';
 export class PoliciesService {
     private policiesCollection: AngularFirestoreCollection<Policy>;
     policies: Observable<Policy[]>;
+    policy: any;
 
     constructor(private firebase: AngularFirestore) {
         this.policiesCollection = firebase.collection<Policy>('policies');
@@ -43,14 +44,33 @@ export class PoliciesService {
             policy.id = v4();
             // This is the easiest way I found to track the policy number / client Id
             // for the PDFs generation.
-            localStorage.removeItem('policyNumber'); 
+            localStorage.removeItem('policyNumber');
             localStorage.setItem('policyNumber', policy.policyNumber);
-            
+
             localStorage.removeItem('clientId');
             localStorage.setItem('clientId', policy.nameOfInsured); // TODO: Need to change to client code.
 
             this.policiesCollection.doc(policy.id).set(policy);
         });
+    }
+
+    // get single risk
+    getPolicy(policyNumber: string): Promise<void> {
+        this.firebase
+            .collection('policies')
+            .ref.where('policyNumber', '==', policyNumber)
+            .get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    console.log(doc.data());
+                    this.policy = doc.data();
+                });
+            })
+            .catch((error) => {
+                console.log('Error getting documents: ', error);
+            });
+
+        return this.policy;
     }
 
     getPolicyNumber() {
