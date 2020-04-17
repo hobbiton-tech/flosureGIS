@@ -398,36 +398,21 @@
 
 <!-- Certificate-->
 <nz-modal
-    nzWidth="1200"
+    nzWidth="700"
     [(nzVisible)]="isCertificatePDFVisible"
     (nzOnCancel)="isCertificatePDFVisible = false"
     (nzOnOk)="isCertificatePDFVisible = false"
 >
-    <nz-card
-        style="width: 100%;"
-        [nzBordered]="false"
-        nzTitle="Certificate Document"
-        [nzExtra]="pdfCertActions"
-    >
-        <app-policy-certificate-document></app-policy-certificate-document>
+    <nz-card [nzBordered]="false" nzTitle="Policy Certificate Document">
+        <app-policy-certificate-document
+            [clientName]="clientName"
+            [clientNumber]="clientNumber"
+            [policyRisk]="policyRisk"
+            [issueDate]="issueDate"
+            [issueTime]="issueTime"
+        >
+        </app-policy-certificate-document>
     </nz-card>
-    <ng-template #pdfCertActions>
-        <div style="display: flex;">
-            <div style="margin-right: 8px;">
-                <button nz-button nzSize="medium" nzType="primary">
-                    Download
-                </button>
-            </div>
-            <div style="margin-right: 8px;">
-                <button nz-button nzSize="medium" nzType="primary">
-                    Print
-                </button>
-            </div>
-            <div>
-                <button nz-button nzSize="medium">Email</button>
-            </div>
-        </div>
-    </ng-template>
 </nz-modal>
 
 <!-- Debit Note-->
@@ -443,7 +428,21 @@
         nzTitle="Debit Document"
         [nzExtra]="pdfDebitActions"
     >
-        <app-policy-debit-note-document></app-policy-debit-note-document>
+        <app-policy-debit-note-document
+            [clientName]="clientName"
+            [clientNumber]="clientNumber"
+            [clientEmail]="clientEmail"
+            [agency]="agency"
+            [policyNumber]="policyNumber"
+            [classOfBusiness]="classOfBusiness"
+            [coverFrom]="coverForm"
+            [coverTo]="coverTo"
+            [basicPremium]="basicPremium"
+            [loadingAmount]="loadingAmount"
+            [discountAmount]="discountAmount"
+            [totalAmount]="totalAmount"
+        >
+        </app-policy-debit-note-document>
     </nz-card>
     <ng-template #pdfDebitActions>
         <div style="display: flex;">
@@ -505,29 +504,13 @@
     (nzOnCancel)="isClausesPDFVisible = false"
     (nzOnOk)="isClausesPDFVisible = false"
 >
+    <!-- <app-policy-clauses-document></app-policy-clauses-document> -->
+
     <nz-card
         style="width: 100%;"
         [nzBordered]="false"
-        nzTitle="Clauses Document"
-        [nzExtra]="pdfClausesActions"
+        nzTitle="Policy Clauses Document"
     >
         <app-policy-clauses-document></app-policy-clauses-document>
     </nz-card>
-    <ng-template #pdfClausesActions>
-        <div style="display: flex;">
-            <div style="margin-right: 8px;">
-                <button nz-button nzSize="medium" nzType="primary">
-                    Download
-                </button>
-            </div>
-            <div style="margin-right: 8px;">
-                <button nz-button nzSize="medium" nzType="primary">
-                    Print
-                </button>
-            </div>
-            <div>
-                <button nz-button nzSize="medium">Email</button>
-            </div>
-        </div>
-    </ng-template>
 </nz-modal>

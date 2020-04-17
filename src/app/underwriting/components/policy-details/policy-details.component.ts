@@ -40,10 +40,26 @@ export class PolicyDetailsComponent implements OnInit {
     isEditmode = false;
 
     // PDFS
-    isCertificatePDFVisible = false;
+    isCertificatePDFVisible = true;
     isDebitNotePDFVisible = false;
     isSchedulePDFVisible = false;
     isClausesPDFVisible = false;
+
+    // For Modal
+    clientName: string;
+    clientNumber: string;
+    clientEmail: string;
+    policyRisk: RiskModel;
+    issueDate: string;
+    issueTime: string;
+    agency: string;
+    classOfBusiness: string;
+    coverForm: string;
+    coverTo: string;
+    basicPremium: string;
+    loadingAmount: string;
+    discountAmount: string;
+    totalAmount: string;
 
     optionList = [
         { label: 'Full Payment', value: 'fully' },
@@ -80,6 +96,21 @@ export class PolicyDetailsComponent implements OnInit {
                 )[0];
                 this.displayPolicy = this.policy;
                 this.risks = this.displayPolicy.risks;
+
+                this.policyRisk = this.displayPolicy.risks[0];
+                this.clientName = this.displayPolicy.client;
+                this.clientNumber = '+260976748392';
+                this.clientEmail = this.clientName + '@gmail.com'; // TODO: Track client data
+                this.agency = 'Direct'; // TODO: Track this guy too
+                this.coverForm = this.displayPolicy.startDate.toString();
+                this.coverTo = this.displayPolicy.endDate.toString();
+                // this.basicPremium = this.displayPolicy
+                this.loadingAmount = '-';
+                this.discountAmount = '-';
+                this.totalAmount = this.displayPolicy.netPremium.toString();
+                this.issueDate = this.displayPolicy.dateOfIssue.toString();
+                this.issueTime = this.displayPolicy.dateOfIssue.toString();
+
                 this.risksLoading = false;
             });
         });
