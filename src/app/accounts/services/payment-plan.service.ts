@@ -42,6 +42,18 @@ export class PaymentPlanService {
         });
     }
 
+    async updatePaymentPlan(paymentPlan: IPaymentModel): Promise<void> {
+        return this.paymentPlansCollection
+            .doc(`${paymentPlan.id}`)
+            .update(paymentPlan)
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
     getPaymentPlans(): Observable<IPaymentModel[]> {
         return this.paymentPlans;
     }
