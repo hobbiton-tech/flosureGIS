@@ -14,10 +14,10 @@
     >
         Download
     </button>
-    <button nz-button nzType="primary">Print</button>
+    <button nz-button nzType="primary" [useExistingCss]="true" [printSectionId]="'printSection'"ngxPrint>Print</button>
 </div>
 <nz-spin [nzSpinning]="generatingPDF">
-    <div>
+    <div id="printSection">
         <svg
             id="certificate"
             xmlns="http://www.w3.org/2000/svg"
