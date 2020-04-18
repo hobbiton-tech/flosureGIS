@@ -273,7 +273,7 @@
                                 ></i>
                                 <p>Click to View</p>
                             </div>
-                        </nz-card>
+                        </nz-spin>
                     </div>
                     <div nz-col [nzSpan]="6">
                         <nz-card
@@ -419,13 +419,14 @@
 <!-- Debit Note-->
 <nz-modal
     nzWidth="800"
+    nzTitle="Golden Lotus"
     [(nzVisible)]="isDebitNotePDFVisible"
     (nzOnCancel)="isDebitNotePDFVisible = false"
     (nzOnOk)="isDebitNotePDFVisible = false"
 >
     <nz-card
         style="width: 100%;"
-        [nzBordered]="false"
+        [nzBordered]="true"
         nzTitle="Debit Document"
         [nzExtra]="pdfDebitActions"
     >
@@ -466,41 +467,25 @@
 
 <!-- Schedule-->
 <nz-modal
-    nzWidth="800"
+    nzWidth="700"
+    nzTitle="Golden Lotus"
     [(nzVisible)]="isSchedulePDFVisible"
     (nzOnCancel)="isSchedulePDFVisible = false"
     (nzOnOk)="isSchedulePDFVisible = false"
 >
     <nz-card
         style="width: 100%;"
-        [nzBordered]="false"
+        [nzBordered]="true"
         nzTitle="Schedule Document"
-        [nzExtra]="pdfScheduleActions"
     >
         <app-policy-certificate-document></app-policy-certificate-document>
     </nz-card>
-    <ng-template #pdfScheduleActions>
-        <div style="display: flex;">
-            <div style="margin-right: 8px;">
-                <button nz-button nzSize="medium" nzType="primary">
-                    Download
-                </button>
-            </div>
-            <div style="margin-right: 8px;">
-                <button nz-button nzSize="medium" nzType="primary">
-                    Print
-                </button>
-            </div>
-            <div>
-                <button nz-button nzSize="medium">Email</button>
-            </div>
-        </div>
-    </ng-template>
 </nz-modal>
 
 <!-- Clauses-->
 <nz-modal
-    nzWidth="800"
+    nzWidth="700"
+    nzTitle="Golden Lotus"
     [(nzVisible)]="isClausesPDFVisible"
     (nzOnCancel)="isClausesPDFVisible = false"
     (nzOnOk)="isClausesPDFVisible = false"
@@ -509,7 +494,7 @@
 
     <nz-card
         style="width: 100%;"
-        [nzBordered]="false"
+        [nzBordered]="true"
         nzTitle="Policy Clauses Document"
     >
         <app-policy-clauses-document></app-policy-clauses-document>
