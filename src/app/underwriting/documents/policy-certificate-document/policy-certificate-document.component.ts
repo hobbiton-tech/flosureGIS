@@ -50,16 +50,19 @@ export class PolicyCertificateDocumentComponent implements OnInit {
         this.generatingPDF = true;
         const div = document.getElementById('printSection');
         const options = {
-            // background: 'white',
-            // height: div.clientHeight,
-            width: 572,
-            height: 865,
-            // width: div.clientWidth,
+            scale: 1.32,
+            allowTaint: true,
+            onclone: (doc) => {
+                doc.querySelector('div').style.transform = 'none'
+            }
         };
 
         html2canvas(div, options).then((canvas) => {
             //Initialize JSPDF
-            let doc = new jsPDF('p', 'pt', 'a4');
+            let doc = new jsPDF({
+                unit: 'px',
+                format: 'a4'
+            });
             //Converting canvas to Image
             let imgData = canvas.toDataURL('image/PNG');
             //Add image Canvas to PDF
