@@ -41,7 +41,7 @@ export class PolicyDetailsComponent implements OnInit {
     isEditmode = false;
 
     // PDFS
-    isCertificatePDFVisible = true;
+    isCertificatePDFVisible = false;
     isDebitNotePDFVisible = false;
     isSchedulePDFVisible = false;
     isClausesPDFVisible = false;
