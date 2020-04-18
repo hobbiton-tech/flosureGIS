@@ -399,11 +399,12 @@
 <!-- Certificate-->
 <nz-modal
     nzWidth="700"
+    nzTitle="Golden Lotus"
     [(nzVisible)]="isCertificatePDFVisible"
     (nzOnCancel)="isCertificatePDFVisible = false"
     (nzOnOk)="isCertificatePDFVisible = false"
 >
-    <nz-card [nzBordered]="false" nzTitle="Policy Certificate Document">
+    <nz-card [nzBordered]="true" nzTitle="Policy Certificate Document">
         <app-policy-certificate-document
             [clientName]="clientName"
             [clientNumber]="clientNumber"
