@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { RiskModel } from '../../models/policy.model';
 import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import * as canvg from 'canvg';
+import { RiskModel } from 'src/app/quotes/models/quote.model';
 
 @Component({
     selector: 'app-policy-certificate-document',
@@ -14,7 +14,13 @@ export class PolicyCertificateDocumentComponent implements OnInit {
     clientName: string;
 
     @Input()
+    insuredName: string;
+
+    @Input()
     clientNumber: string;
+
+    @Input()
+    clientEmail: string;
 
     @Input()
     policyRisk: RiskModel;
@@ -25,15 +31,16 @@ export class PolicyCertificateDocumentComponent implements OnInit {
     @Input()
     issueTime: string;
 
+    @Input()
+    policyNumber: string;
+
     generatingPDF = false;
 
     constructor() {}
 
     ngOnInit(): void {}
 
-    gotToPrint(): void {
-
-    }
+    gotToPrint(): void {}
 
     convertToPDF(): void {
         let svg = document.getElementById('certificate');
@@ -42,7 +49,7 @@ export class PolicyCertificateDocumentComponent implements OnInit {
         // let some = canvg.Canvg.from(canvas.getContext('2d'), svg);
         let imageData = canvas.toDataURL('image/png');
         let doc = new jsPDF();
-        doc.addImage(imageData, 'PNG', 0, 0)
+        doc.addImage(imageData, 'PNG', 0, 0);
         doc.save('cerficate');
     }
 
@@ -53,15 +60,15 @@ export class PolicyCertificateDocumentComponent implements OnInit {
             scale: 1.32,
             allowTaint: true,
             onclone: (doc) => {
-                doc.querySelector('div').style.transform = 'none'
-            }
+                doc.querySelector('div').style.transform = 'none';
+            },
         };
 
         html2canvas(div, options).then((canvas) => {
             //Initialize JSPDF
             let doc = new jsPDF({
                 unit: 'px',
-                format: 'a4'
+                format: 'a4',
             });
             //Converting canvas to Image
             let imgData = canvas.toDataURL('image/PNG');

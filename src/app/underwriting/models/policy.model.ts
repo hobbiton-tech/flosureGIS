@@ -1,3 +1,5 @@
+import { RiskModel } from 'src/app/quotes/models/quote.model';
+
 export class Policy {
     id: string;
     policyNumber: string;
@@ -25,18 +27,6 @@ export class Policy {
     underwritingYear: Date | ITimestamp;
     receiptStatus: ReceiptStatus;
     paymentPlan: PaymentPlan;
-}
-
-export class RiskModel {
-    regNumber: string;
-    vehicleMake: string;
-    vehicleModel: string;
-    engineNumber: string;
-    chassisNumber: string;
-    color: string;
-    estimatedValue?: number;
-    productType: ProductType;
-    insuranceType: InsuranceType;
 }
 
 export interface ITimestamp {

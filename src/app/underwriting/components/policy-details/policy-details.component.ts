@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Policy, RiskModel, ITimestamp } from '../../models/policy.model';
+import { Policy, ITimestamp } from '../../models/policy.model';
 import { PoliciesService } from '../../services/policies.service';
 import {
     IPaymentModel,
@@ -11,6 +11,7 @@ import {
 import { v4 } from 'uuid';
 import { PaymentPlanService } from 'src/app/accounts/services/payment-plan.service';
 import { AccountService } from 'src/app/accounts/services/account.service';
+import { RiskModel } from 'src/app/quotes/models/quote.model';
 
 @Component({
     selector: 'app-policy-details',

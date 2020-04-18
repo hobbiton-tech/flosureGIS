@@ -283,7 +283,9 @@
                     transform="translate(321 523)"
                 >
                     <tspan x="0" y="0">Vehicle Reg No:</tspan>
-                    <tspan class="cls-11" y="0">BAP 3102 ZM</tspan>
+                    <tspan class="cls-11" y="0">
+                        {{ policyRisk.regNumber }}
+                    </tspan>
                 </text>
                 <text
                     id="Make:_Toyota"
@@ -292,7 +294,9 @@
                     transform="translate(312 542)"
                 >
                     <tspan x="0" y="0">Make:</tspan>
-                    <tspan class="cls-11" y="0">Toyota</tspan>
+                    <tspan class="cls-11" y="0">
+                        {{ policyRisk.vehicleMake }}
+                    </tspan>
                 </text>
                 <text
                     id="Model:_Corolla"
@@ -301,7 +305,9 @@
                     transform="translate(437 542)"
                 >
                     <tspan x="0" y="0">Model:</tspan>
-                    <tspan class="cls-11" y="0">Corolla</tspan>
+                    <tspan class="cls-11" y="0">
+                        {{ policyRisk.vehicleModel }}
+                    </tspan>
                 </text>
                 <text
                     id="Color:_COLD"
@@ -310,7 +316,9 @@
                     transform="translate(437 561)"
                 >
                     <tspan x="0" y="0">Color:</tspan>
-                    <tspan class="cls-11" y="0">COLD</tspan>
+                    <tspan class="cls-11" y="0">
+                        {{ ' ' + policyRisk.color }}
+                    </tspan>
                 </text>
                 <text
                     id="Engine_No:_INZ-A711230"
@@ -319,7 +327,9 @@
                     transform="translate(310 561)"
                 >
                     <tspan x="0" y="0">Engine No:</tspan>
-                    <tspan class="cls-11" y="0">INZ-A711230</tspan>
+                    <tspan class="cls-11" y="0">
+                        {{ policyRisk.engineNumber }}
+                    </tspan>
                 </text>
                 <text
                     id="Chassis_No:_Z0121-3181397"
@@ -328,7 +338,9 @@
                     transform="translate(310 580)"
                 >
                     <tspan x="0" y="0">Chassis No:</tspan>
-                    <tspan class="cls-11" y="0">Z0121-3181397</tspan>
+                    <tspan class="cls-11" y="0">
+                        {{ ' ' + policyRisk.chassisNumber }}
+                    </tspan>
                 </text>
                 <text
                     id="Date_of_Issue:_01_04_20"
@@ -337,7 +349,9 @@
                     transform="translate(321 599)"
                 >
                     <tspan x="0" y="0">Date of Issue:</tspan>
-                    <tspan class="cls-11" y="0">01/04/20</tspan>
+                    <tspan class="cls-11" y="0">
+                        {{ ' ' + issueDate | date }}
+                    </tspan>
                 </text>
                 <text
                     id="Time_of_Issue:_01:00"
@@ -346,7 +360,8 @@
                     transform="translate(437 599)"
                 >
                     <tspan x="0" y="0">Time of Issue:</tspan>
-                    <tspan class="cls-11" y="0">01:00</tspan>
+                    <!-- TODO: Add time to model -->
+                    <tspan class="cls-11" y="0">{{ ' ' + '01:00' }}</tspan>
                 </text>
                 <text
                     id="Expiry_Date:_30_06_20"
@@ -355,7 +370,9 @@
                     transform="translate(326 618)"
                 >
                     <tspan x="0" y="0">Expiry Date:</tspan>
-                    <tspan class="cls-11" y="0">30/06/20</tspan>
+                    <tspan class="cls-11" y="0">
+                        {{ ' ' + policyRisk.riskEndDate | date }}
+                    </tspan>
                 </text>
                 <text
                     id="Quarter:_4"
@@ -364,7 +381,9 @@
                     transform="translate(437 618)"
                 >
                     <tspan x="0" y="0">Quarter:</tspan>
-                    <tspan class="cls-11" y="0">4</tspan>
+                    <tspan class="cls-11" y="0">
+                        {{ ' ' + policyRisk.riskQuarter }}
+                    </tspan>
                 </text>
                 <text
                     id="Town:_Lusaka_Zambia"
@@ -373,7 +392,9 @@
                     transform="translate(345 637)"
                 >
                     <tspan x="0" y="0">Town:</tspan>
-                    <tspan class="cls-11" y="0">Lusaka Zambia</tspan>
+                    <tspan class="cls-11" y="0">
+                        {{ ' ' + 'Lusaka Zambia' }}
+                    </tspan>
                 </text>
                 <text
                     id="Insurer"
@@ -446,7 +467,7 @@
                     transform="translate(298 137)"
                 >
                     <tspan x="0" y="0" xml:space="preserve">
-                        Client Name: Isaac Musonda
+                        Client Name: {{ clientName }}
                     </tspan>
                 </text>
                 <text
@@ -455,7 +476,7 @@
                     class="cls-15"
                     transform="translate(27 157)"
                 >
-                    <tspan x="0" y="0">Policy No: 50392</tspan>
+                    <tspan x="0" y="0">Policy No: {{ policyNumber }}</tspan>
                 </text>
                 <text
                     id="Insured_Name:_Isaac_Musonda"
@@ -463,7 +484,7 @@
                     class="cls-15"
                     transform="translate(302 157)"
                 >
-                    <tspan x="0" y="0">Insured Name: Isaac Musonda</tspan>
+                    <tspan x="0" y="0">Insured Name: {{ insuredName }}</tspan>
                 </text>
                 <text
                     id="Cover_Type:_Comprehensive_Insurance"
@@ -472,7 +493,7 @@
                     transform="translate(27 177)"
                 >
                     <tspan x="0" y="0">
-                        Cover Type: Comprehensive Insurance
+                        Cover Type: {{ policyRisk.insuranceType }}
                     </tspan>
                 </text>
                 <text
@@ -482,7 +503,7 @@
                     transform="translate(298 177)"
                 >
                     <tspan x="0" y="0" xml:space="preserve">
-                        Client Email: -
+                        Client Email: {{ clientEmail }}
                     </tspan>
                 </text>
                 <text
@@ -491,7 +512,10 @@
                     class="cls-15"
                     transform="translate(27 197)"
                 >
-                    <tspan x="0" y="0">From: 26/04/2020</tspan>
+                    <tspan x="0" y="0">
+                        From:
+                        {{ policyRisk.riskStartDate.seconds * 1000 | date }}
+                    </tspan>
                 </text>
                 <text
                     id="Client_Phone:_260976372832"
@@ -499,7 +523,7 @@
                     class="cls-15"
                     transform="translate(302 197)"
                 >
-                    <tspan x="0" y="0">Client Phone: 260976372832</tspan>
+                    <tspan x="0" y="0">Client Phone: {{ clientNumber }}</tspan>
                 </text>
                 <text
                     id="To:_30_06_2020"
@@ -507,7 +531,9 @@
                     class="cls-15"
                     transform="translate(27 217)"
                 >
-                    <tspan x="0" y="0">To: 30/06/2020</tspan>
+                    <tspan x="0" y="0">
+                        To: {{ policyRisk.riskEndDate | date }}
+                    </tspan>
                 </text>
                 <text
                     id="Sum_Insured:_ZMW_350_000"
@@ -516,7 +542,7 @@
                     transform="translate(298 217)"
                 >
                     <tspan x="0" y="0" xml:space="preserve">
-                        Sum Insured: ZMW 350,000
+                        Sum Insured: ZMW {{ policyRisk.sumInsured | number }}
                     </tspan>
                 </text>
                 <text
@@ -717,7 +743,7 @@
                     class="cls-18"
                     transform="translate(33 319)"
                 >
-                    <tspan x="0" y="0">ABV 8982</tspan>
+                    <tspan x="0" y="0">{{ policyRisk.regNumber }}</tspan>
                 </text>
                 <text
                     id="Toyota_Corolla"
@@ -725,21 +751,27 @@
                     class="cls-18"
                     transform="translate(132 319)"
                 >
-                    <tspan x="0" y="0">Toyota Corolla</tspan>
+                    <tspan x="0" y="0">
+                        {{
+                            policyRisk.vehicleModel +
+                                ' ' +
+                                policyRisk.vehicleMake
+                        }}
+                    </tspan>
                 </text>
                 <text
                     id="IRZ-3043911"
                     class="cls-18"
                     transform="translate(215 319)"
                 >
-                    <tspan x="0" y="0">IRZ-3043911</tspan>
+                    <tspan x="0" y="0">{{ policyRisk.engineNumber }}</tspan>
                 </text>
                 <text
                     id="RZH127111604"
                     class="cls-18"
                     transform="translate(290 319)"
                 >
-                    <tspan x="0" y="0">RZH127111604</tspan>
+                    <tspan x="0" y="0">{{ policyRisk.chassisNumber }}</tspan>
                 </text>
                 <text
                     id="_2003"
@@ -747,10 +779,11 @@
                     class="cls-18"
                     transform="translate(395 319)"
                 >
-                    <tspan x="0" y="0">2003</tspan>
+                    <!-- TODO: CHECK!! -->
+                    <tspan x="0" y="0">{{ '2003' }}</tspan>
                 </text>
                 <text id="Gold" class="cls-18" transform="translate(508 319)">
-                    <tspan x="0" y="0">Gold</tspan>
+                    <tspan x="0" y="0">{{ policyRisk.color }}</tspan>
                 </text>
             </g>
         </svg>
