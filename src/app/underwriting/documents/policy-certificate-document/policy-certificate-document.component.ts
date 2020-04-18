@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import * as canvg from 'canvg';
-import { RiskModel } from 'src/app/quotes/models/quote.model';
+import { RiskModel, ITimestamp } from 'src/app/quotes/models/quote.model';
 
 @Component({
     selector: 'app-policy-certificate-document',
@@ -90,5 +90,9 @@ export class PolicyCertificateDocumentComponent implements OnInit {
             doc.save(fileName);
             this.generatingPDF = false;
         });
+    }
+
+    convertRiskDate(risk: RiskModel): number {
+        return (risk.riskStartDate as ITimestamp).seconds * 1000;
     }
 }

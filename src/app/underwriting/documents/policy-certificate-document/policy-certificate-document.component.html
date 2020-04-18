@@ -514,7 +514,7 @@
                 >
                     <tspan x="0" y="0">
                         From:
-                        {{ policyRisk.riskStartDate.seconds * 1000 | date }}
+                        {{ convertRiskDate(policyRisk) * 1000 | date }}
                     </tspan>
                 </text>
                 <text
