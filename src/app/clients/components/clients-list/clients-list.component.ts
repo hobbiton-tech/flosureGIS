@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {
     IIndividualClient,
     ICorporateClient,
-} from '../../models/client.model';
+} from '../../models/clients.model';
 import { Router } from '@angular/router';
 import { ClientsService } from '../../services/clients.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -34,8 +34,9 @@ export class ClientsListComponent implements OnInit {
     //search string when filtering clients
     searchString: string;
 
-    /*name of the excel-file which will be downloaded. */ 
-    fileName= 'ClientsSheet.xlsx';
+    /*name of the excel-file which will be downloaded. */
+
+    fileName = 'ClientsSheet.xlsx';
 
     constructor(
         private router: Router,
@@ -95,31 +96,50 @@ export class ClientsListComponent implements OnInit {
             this.displayClientList = this.clientList;
         }
 
-        this.displayClientList = this.clientList.filter(client => {
-
+        this.displayClientList = this.clientList.filter((client) => {
             if (client.clientType === 'Individual') {
-                return (client.clientID.toLowerCase().includes(value.toLowerCase())
-            || client.clientType.toLocaleLowerCase().includes(value.toLowerCase()) 
-            || client.status.toLocaleLowerCase().includes(value.toLowerCase())
-            || client.firstName.toLowerCase().includes(value.toLowerCase())
-            || client.lastName.toLowerCase().includes(value.toLowerCase()));
+                return (
+                    client.clientID
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    client.clientType
+                        .toLocaleLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    client.status
+                        .toLocaleLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    client.firstName
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    client.lastName.toLowerCase().includes(value.toLowerCase())
+                );
             } else {
-                return client.clientID.toLowerCase().includes(value.toLowerCase())
-            || client.clientType.toLocaleLowerCase().includes(value.toLowerCase()) 
-            || client.status.toLocaleLowerCase().includes(value.toLowerCase())
-            || client.companyName.toLowerCase().includes(value.toLowerCase());
+                return (
+                    client.clientID
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    client.clientType
+                        .toLocaleLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    client.status
+                        .toLocaleLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    client.companyName
+                        .toLowerCase()
+                        .includes(value.toLowerCase())
+                );
             }
-        })
+        });
     }
 
-    downloadClientsList() {   
-       let element = document.getElementById('clientsTable'); 
-       const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+    downloadClientsList() {
+        let element = document.getElementById('clientsTable');
+        const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
 
-       const wb: XLSX.WorkBook = XLSX.utils.book_new();
-       XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
 
-       /* save to file */
-       XLSX.writeFile(wb, this.fileName);
+        /* save to file */
+        XLSX.writeFile(wb, this.fileName);
     }
 }

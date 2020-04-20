@@ -1,7 +1,7 @@
 <div style="margin: 15px;">
     <div style="margin-bottom: 20px; background: #fff;">
         <nz-page-header nzBackIcon>
-            <nz-page-header-title>Policy Installments</nz-page-header-title>
+            <nz-page-header-title>Installments</nz-page-header-title>
             <nz-page-header-content>
                 <nz-descriptions [nzColumn]="3">
                     <nz-descriptions-item
@@ -15,9 +15,132 @@
             </nz-page-header-content>
         </nz-page-header>
     </div>
+    <div style="margin-bottom: 5px; margin-top: 5px;">
+        <div nz-row [nzGutter]="8">
+            <div nz-col [nzSpan]="12">
+                <nz-card nzTitle="Client Details">
+                    <nz-list nzBordered>
+                        <nz-list-item>
+                            <span nz-typography><mark>Client Name</mark></span>
+                            <div style="margin-left: 155px;">
+                                {{ clientN.companyName }}
+                            </div>
+                        </nz-list-item>
+                        <nz-list-item>
+                            <span nz-typography
+                                ><mark>Registration Number</mark></span
+                            >
+                            <div style="margin-left: 100px;">
+                                {{ clientN.registrationNumber }}
+                            </div>
+                        </nz-list-item>
+                        <nz-list-item>
+                            <span nz-typography><mark>Address</mark></span>
+                            <div style="margin-left: 175px;">
+                                {{ clientN.address }}
+                            </div>
+                        </nz-list-item>
+                        <nz-list-item>
+                            <span nz-typography><mark>Email</mark></span>
+                            <div style="margin-left: 190px;">
+                                {{ clientN.email }}
+                            </div>
+                        </nz-list-item>
+                        <nz-list-item>
+                            <span nz-typography><mark>Phone Number</mark></span>
+                            <div style="margin-left: 150px;">
+                                {{ clientN.phone }}
+                            </div>
+                        </nz-list-item>
+                    </nz-list>
+                </nz-card>
+            </div>
+            <div nz-col [nzSpan]="12">
+                <nz-card nzTitle="Account Details">
+                    <nz-list nzBordered>
+                        <nz-list-item>
+                            <span nz-typography><mark>Account Name</mark></span>
+                            <div style="margin-left: 155px;">
+                                {{ clientN.accountName }}
+                            </div>
+                        </nz-list-item>
+                        <nz-list-item>
+                            <span nz-typography
+                                ><mark>Account Number</mark></span
+                            >
+                            <div style="margin-left: 150px;">
+                                {{ clientN.accountNumber }}
+                            </div>
+                        </nz-list-item>
+                        <nz-list-item>
+                            <span nz-typography><mark>Bank</mark></span>
+                            <div style="margin-left: 200px;">
+                                {{ clientN.bank }}
+                            </div>
+                        </nz-list-item>
+                        <nz-list-item>
+                            <span nz-typography><mark>Branch</mark></span>
+                            <div style="margin-left: 200px;">
+                                {{ clientN.branch }}
+                            </div>
+                        </nz-list-item>
+                    </nz-list>
+                </nz-card>
+            </div>
+        </div>
+    </div>
 
     <nz-card style="margin-bottom: 5px;">
-        <!-- Payment-plan-policy-installments Table Search bar and Table details start here -->
+        <nz-collapse>
+            <nz-collapse-panel [nzHeader]="'Policies'">
+                <!-- <div style="margin-bottom: 10px; width: 50%">
+            <nz-input-group [nzSuffix]="suffixIconSearch">
+                <input
+                    type="text"
+                    nz-input
+                    placeholder="Search by client, policy number, agent"
+                    [(ngModel)]="searchString"
+                    (ngModelChange)="search($event)"
+                />
+            </nz-input-group>
+            <ng-template #suffixIconSearch>
+                <i nz-icon nzType="search"></i>
+            </ng-template>
+        </div> -->
+
+                <nz-table
+                    #policiesTable
+                    [nzData]="displayPoliciesList"
+                    [nzSize]="'small'"
+                    [nzBordered]="true"
+                >
+                    <thead>
+                        <tr>
+                            <th>Policy Number</th>
+                            <th>Cover From</th>
+                            <th>Cover To</th>
+                            <th>Client Name</th>
+                            <th>Agent</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            *ngFor="let policy of policiesTable.data"
+                            (click)="viewPolicyDetails(policy)"
+                            style="cursor: pointer;"
+                        >
+                            <td>{{ policy.policyNumber }}</td>
+                            <td>{{ policy.startDate | date }}</td>
+                            <td>{{ policy.endDate | date }}</td>
+                            <td>{{ policy.client }}</td>
+                            <td>{{ policy.user }}</td>
+                            <td>{{ policy.status }}</td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </nz-collapse-panel>
+        </nz-collapse>
         <div style="margin-bottom: 20px; margin-top: 20px; width: 50%;">
             <nz-input-group [nzSuffix]="suffixIconSearch">
                 <input type="text" nz-input placeholder="Search by" />
@@ -57,13 +180,14 @@
                     </td>
                     <td>
                         {{
-                            paymentPlanPolicyInstallment.installmentDate | date
+                            paymentPlanPolicyInstallment.installmentDate * 1000
+                                | date: 'dd/MM/yyyy'
                         }}
                     </td>
                     <td>
                         {{
                             paymentPlanPolicyInstallment.actualPaidDate * 1000
-                                | date
+                                | date: 'dd/MM/yyyy'
                         }}
                     </td>
                     <td>
@@ -163,20 +287,19 @@
                                 id="sumInDigits"
                                 formControlName="sumInDigits"
                             />
-                            <!-- <span
+                            !--
+                            <span
                                 class="text-danger"
                                 *ngIf="
-                                    (receiptFormControl
-                                        .sumInDigits
-                                        .touched ||
+                                    (receiptFormControl.sumInDigits.touched ||
                                         submitted) &&
-                                    receiptFormControl
-                                        .sumInDigits.errors
+                                    receiptFormControl.sumInDigits.errors
                                         ?.required
                                 "
                             >
                                 Please enter sum in digits!
-                            </span> -->
+                            </span>
+                            --
                         </nz-form-control>
                     </nz-form-item>
                 </div>

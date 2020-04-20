@@ -2,12 +2,12 @@ import {
     Component,
     OnInit,
     ChangeDetectorRef,
-    AfterViewInit
+    AfterViewInit,
 } from '@angular/core';
 import {
     ICorporateClient,
-    IIndividualClient
-} from '../../models/client.model';
+    IIndividualClient,
+} from '../../models/clients.model';
 import { Router, ActivatedRoute } from '@angular/router';
 // import { AccountDetails } from '../../models/account-details.model';
 import { ClientsService } from '../../services/clients.service';
@@ -22,7 +22,7 @@ import { ITimestamp } from 'src/app/settings/components/insurance-companies/mode
 @Component({
     selector: 'app-client-details',
     templateUrl: './client-details.component.html',
-    styleUrls: ['./client-details.component.scss']
+    styleUrls: ['./client-details.component.scss'],
 })
 export class ClientDetailsComponent implements OnInit, AfterViewInit {
     isEditmode = false;
@@ -44,15 +44,14 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
     ) {}
 
     ngOnInit(): void {
-        this.router.params.subscribe(param => {
+        this.router.params.subscribe((param) => {
             this.id = param.id;
         });
 
-        this.clientsService.getAllClients().subscribe(clients => {
+        this.clientsService.getAllClients().subscribe((clients) => {
             console.log(clients);
-            // I don't know yet if this actually works. Still doing some research on intersection types.
             this.client = [...clients[1], ...clients[0]].filter(
-                x => x.id === this.id
+                (x) => x.id === this.id
             )[0] as IIndividualClient & ICorporateClient;
 
             console.log('CLIENTS', this.client);
@@ -85,7 +84,6 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
 
     getTimeStamp(client: ICorporateClient & IIndividualClient): number {
         const date = client.dateCreated as ITimestamp;
-        return date.seconds
-
+        return date.seconds;
     }
 }
