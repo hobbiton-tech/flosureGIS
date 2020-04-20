@@ -1,4 +1,4 @@
-import { Policy } from 'src/app/underwriting/models/policy.model';
+import { Policy, ITimestamp } from 'src/app/underwriting/models/policy.model';
 
 export class IPaymentModel {
     id: string;
@@ -28,8 +28,8 @@ export class IPaymentModel {
 
 export class InstallmentsModel {
     installmentAmount: number;
-    installmentDate: Date;
-    actualPaidDate?: Date;
+    installmentDate: Date | ITimestamp;
+    actualPaidDate?: Date | ITimestamp;
     installmentStatus: InstallmentStatus;
     balance: number;
 }

@@ -12,7 +12,7 @@ import { AccountService } from 'src/app/accounts/services/account.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { IReceiptModel } from '../../../models/receipts.model';
 import { v4 } from 'uuid';
-import { Policy } from 'src/app/underwriting/models/policy.model';
+import { Policy, ITimestamp } from 'src/app/underwriting/models/policy.model';
 import { PoliciesService } from 'src/app/underwriting/services/policies.service';
 import { ClientsService } from 'src/app/clients/services/clients.service';
 import {
@@ -80,6 +80,7 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
     // policyNumber = '';
     user = '';
     _id = '';
+    loadingReceipt = false;
     client: IIndividualClient & ICorporateClient;
 
     optionList = [
@@ -100,6 +101,8 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
     ];
 
     displayPoliciesList: Policy[];
+    clientI: IIndividualClient;
+    clientType: string;
 
     constructor(
         private route: ActivatedRoute,
@@ -138,6 +141,12 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
             this.paymentPlanId = param.id;
             this.policyNumber = param.policyNumber;
 
+            this.loadingReceipt = true;
+
+            setTimeout(() => {
+                this.loadingReceipt = false;
+            }, 3000);
+
             this.paymentPlanService
                 .getPaymentPlans()
                 .subscribe((paymentPlans) => {
@@ -167,7 +176,25 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
                                     x.companyName ===
                                     this.paymentPlanData.clientName
                             )[0];
-                            console.log(this.clientN);
+                            this.clientType = this.clientN.clientType;
+
+                            // this.client = [...clients[1], ...clients[0]].filter(
+                            //     (x) => x.f === this.id
+                            // )[0] as IIndividualClient & ICorporateClient;
+
+                            // console.log('CLIENTS', this.client);
+                        });
+
+                    this.clientsService
+                        .getIndividualClients()
+                        .subscribe((clients) => {
+                            console.log(clients);
+                            this.clientI = clients.filter(
+                                (x) =>
+                                    x.firstName + ' ' + x.lastName ===
+                                    this.paymentPlanData.clientName
+                            )[0];
+                            this.clientType = this.clientI.clientType;
 
                             // this.client = [...clients[1], ...clients[0]].filter(
                             //     (x) => x.f === this.id
@@ -306,5 +333,15 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
         this.router.navigateByUrl('/flosure/accounts/view-receipt/' + this._id);
         // this.isConfirmLoading = true;
         // this.generateDocuments();
+    }
+
+    getInstallmentDate(installment: InstallmentsModel) {
+        const date = installment.installmentDate as ITimestamp;
+        return date.seconds * 1000;
+    }
+
+    getActualDate(installment: InstallmentsModel): number {
+        const date = installment.actualPaidDate as ITimestamp;
+        return date.seconds * 1000;
     }
 }
