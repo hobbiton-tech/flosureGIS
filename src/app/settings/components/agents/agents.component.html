@@ -4,26 +4,20 @@
             Settings
         </nz-breadcrumb-item>
         <nz-breadcrumb-item>
-            Agents
+            Intermediaries
         </nz-breadcrumb-item>
     </nz-breadcrumb>
 
     <nz-card [nzBordered]="false" style="margin-top: 20px;">
         <nz-tabset>
-            <nz-tab nzTitle="Agents">
+            <nz-tab nzTitle="Intermediaries">
                 <nz-card [nzBordered]="false">
                     <div style="margin-bottom: 10px;">
                         <div nz-row [nzGutter]="24">
                             <div nz-col nzSpan="12">
                                 <div style="width: 75%;">
-                                    <nz-input-group
-                                        [nzSuffix]="suffixIconSearch"
-                                    >
-                                        <input
-                                            type="text"
-                                            nz-input
-                                            placeholder="Search by ID, name, date, branch"
-                                        />
+                                    <nz-input-group [nzSuffix]="suffixIconSearch">
+                                        <input type="text" nz-input placeholder="Search by ID, name, date, branch" />
                                     </nz-input-group>
                                     <ng-template #suffixIconSearch>
                                         <i nz-icon nzType="search"></i>
@@ -31,48 +25,38 @@
                                 </div>
                             </div>
                             <div nz-col nzSpan="12">
-                                <button
-                                    nz-button
-                                    nzType="primary"
-                                    style="float: right;"
-                                    (click)="openAddAgentsFormDrawer()"
-                                >
-                                    Add Agent
+                                <button nz-button nzType="primary" style="float: right;"
+                                    (click)="openAddAgentsFormDrawer()">
+                                    Add Intermediary
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                    <nz-table
-                        #agentsTable
-                        [nzData]="agentsList"
-                        [nzSize]="'small'"
-                        [nzBordered]="true"
-                        style="background-color: white;"
-                    >
+                    <nz-table #intermediaryTable [nzData]="displayIntermediariesList" [nzSize]="'small'"
+                        [nzBordered]="true" style="background-color: white;">
                         <thead>
                             <tr>
-                                <th>Agent ID</th>
-                                <th>Agent Name</th>
-                                <th>Agent Email</th>
-                                <th>Agent Phone Number</th>
-                                <th>Branch</th>
+                                <th>Intermediary ID</th>
+                                <th>Intermediary Name</th>
+                                <th>Intermediary Type</th>
+                                <th>Intermediary Email</th>
+                                <th>Intermediary Phone Number</th>
                                 <th>Date Created</th>
-                                <!-- <th>Action</th> -->
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let agent of agentsTable.data">
-                                <td>{{ agent.agentID }}</td>
+                            <tr *ngFor="let intermediary of intermediaryTable.data">
+                                <td>{{ intermediary.intermediaryId }}</td>
                                 <td>
-                                    {{ agent.firstName }} {{ agent.lastName }}
+                                    {{ intermediary.companyName ? intermediary.companyName : (intermediary.contactFirstName + ' ' + intermediary.contactLastName)}}
                                 </td>
-                                <td>{{ agent.email }}</td>
-                                <td>{{ agent.phone }}</td>
-                                <td>{{ agent.branch }}</td>
+                                <td>{{ intermediary.intermediaryType }}</td>
+                                <td>{{ intermediary.email ? intermediary.email : intermediary.contactEmail }}</td>
+                                <td>{{ intermediary.phone ? intermediary.phone : intermediary.contactPhone }}</td>
                                 <td>
                                     {{
-                                        agent.dateCreated.seconds * 1000 | date
+                                        intermediary.dateCreated.seconds * 1000 | date
                                     }}
                                 </td>
                             </tr>
@@ -82,9 +66,26 @@
             </nz-tab>
         </nz-tabset>
     </nz-card>
+
+    <nz-card nzTitle="Commission Setups" style="margin-top: 10px;">
+        <div style="padding:30px;">
+            <div nz-row [nzGutter]="12">
+                <div nz-col [nzSpan]="12">
+                    <nz-card nzTitle="Products">
+                        <p>Card content</p>
+                    </nz-card>
+                </div>
+                <div nz-col [nzSpan]="12">
+                    <nz-card nzTitle="Commission">
+                        <p>Card content</p>
+                    </nz-card>
+                </div>
+            </div>
+        </div>
+    </nz-card>
 </div>
 
-<app-add-agent
-    [isAddAgentsFormDrawerVisible]="addAgentsFormDrawerVisible"
-    (closeAddAgentsFormDrawerVisible)="addAgentsFormDrawerVisible = false"
-></app-add-agent>
+
+
+<app-add-agent [isAddAgentsFormDrawerVisible]="addAgentsFormDrawerVisible"
+    (closeAddAgentsFormDrawerVisible)="addAgentsFormDrawerVisible = false"></app-add-agent>

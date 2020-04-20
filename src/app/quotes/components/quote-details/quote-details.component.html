@@ -1,4 +1,4 @@
-<nz-spin [nzSize]="'large'" [nzSpinning]="approvingQuote" [nzTip]="'Approving Quote...'">
+<nz-spin [nzSize]="'large'" [nzSpinning]="approvingQuote" [nzTip]="'Converting Quote to Policy...'">
     <div style="margin: 15px;">
         <nz-breadcrumb>
             <nz-breadcrumb-item>
@@ -25,10 +25,10 @@
                     View Quote PDF
                 </button>
                 <button *ngIf="!isQuoteApproved" nz-button nzType="primary" (click)="generateDocuments()">
-                    Approve
+                    Covert to Policy
                 </button>
                 <button *ngIf="!isEditmode && !isQuoteApproved" nz-button nzType="primary" (click)="isEditmode = true">
-                    Edit Policy
+                    Edit Quote
                 </button>
                 <button *ngIf="isEditmode" nz-button nzType="primary" (click)="isEditmode = false">
                     Save Changes

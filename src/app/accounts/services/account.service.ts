@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
     AngularFirestore,
-    AngularFirestoreCollection,
+    AngularFirestoreCollection
 } from '@angular/fire/firestore';
 import 'firebase/firestore';
 import { filter, first } from 'rxjs/operators';
@@ -16,8 +16,12 @@ import { NzMessageService } from 'ng-zorro-antd';
 import { PoliciesComponent } from 'src/app/underwriting/components/policies/policies.component';
 import { Policy } from 'src/app/underwriting/models/policy.model';
 
+interface IReceiptNumberResult {
+    receiptNumber: string;
+}
+
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
 export class AccountService {
     private policyCollection: AngularFirestoreCollection<Policy>;
@@ -47,23 +51,29 @@ export class AccountService {
 
     // add receipt
     async addReceipt(receipt: IReceiptModel): Promise<void> {
-        this.receipts.pipe(first()).subscribe(async (receipts) => {
+        this.receipts.pipe(first()).subscribe(async receipts => {
             // receipt.id = v4();
 
-            receipt.receiptNumber = this.generateReceiptNumber(
-                'RR',
-                receipts.length
-            );
+            this.http
+                .get<IReceiptNumberResult>(
+                    'https://flosure-premium-rates.herokuapp.com/receipts'
+                )
+                .subscribe(async res => {
+                    receipt.receiptNumber = res.receiptNumber;
+                    console.log(res.receiptNumber);
 
-            await this.receiptCollection
-                .doc(receipt.id)
-                .set(receipt)
-                .then((mess) => {
-                    this.message.success('Receipt Successfully created');
-                })
-                .catch((err) => {
-                    this.message.warning('Receipt Failed');
-                    console.log(err);
+                    await this.receiptCollection
+                        .doc(receipt.id)
+                        .set(receipt)
+                        .then(mess => {
+                            this.message.success(
+                                'Receipt Successfully created'
+                            );
+                        })
+                        .catch(err => {
+                            this.message.warning('Receipt Failed');
+                            console.log(err);
+                        });
                 });
         });
     }
@@ -72,10 +82,10 @@ export class AccountService {
         return this.policyCollection
             .doc(`${policy.id}`)
             .update(policy)
-            .then((res) => {
+            .then(res => {
                 console.log(res);
             })
-            .catch((err) => {
+            .catch(err => {
                 console.log(err);
             });
     }
@@ -84,10 +94,10 @@ export class AccountService {
         return this.receiptCollection
             .doc(`${receipt.id}`)
             .update(receipt)
-            .then((res) => {
+            .then(res => {
                 this.message.warning('Receipt Status Updateted');
             })
-            .catch((err) => {
+            .catch(err => {
                 console.log(err);
             });
     }
@@ -112,7 +122,10 @@ export class AccountService {
         const brokerCod = brokerCode;
         const today = new Date();
         const dateString: string =
-            today.getFullYear().toString().substr(-2) +
+            today
+                .getFullYear()
+                .toString()
+                .substr(-2) +
             ('0' + (today.getMonth() + 1)).slice(-2) +
             +('0' + today.getDate()).slice(-2);
         const count = this.countGenerator(totalReceipts);
@@ -133,10 +146,10 @@ export class AccountService {
     printPDF(uri: string) {
         this.http
             .get(uri, { responseType: 'blob' as 'json' })
-            .subscribe((res) => {
+            .subscribe(res => {
                 const myBlobPart: BlobPart = res as BlobPart;
                 const file = new Blob([myBlobPart], {
-                    type: 'your media type',
+                    type: 'your media type'
                 });
                 const fileURL = URL.createObjectURL(file);
                 console.log(fileURL);

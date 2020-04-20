@@ -12,20 +12,21 @@ import { PaymentPlanService } from 'src/app/accounts/services/payment-plan.servi
     styleUrls: ['./payment-plan-policies.component.scss']
 })
 export class PaymentPlanPoliciesComponent implements OnInit {
-    //payment plan Id
+    // payment plan Id
     paymentPlanId: string;
 
-    //payment plan
+    // payment plan
     paymentPlan: string;
 
-    //payment plan data
+    // payment plan data
     paymentPlanData: IPaymentModel = new IPaymentModel();
 
-    //payment plan policies
+    // payment plan policies
     paymentPlanPolicies: PolicyPaymentPlan[] = [];
 
-    //number of ppolicies under payment plan
+    // number of ppolicies under payment plan
     paymentPlanPoliciesCount = 0;
+    loadingReceipt = false;
 
     constructor(
         private router: Router,
@@ -36,6 +37,12 @@ export class PaymentPlanPoliciesComponent implements OnInit {
     ngOnInit(): void {
         this.route.params.subscribe(param => {
             this.paymentPlanId = param.id;
+            this.loadingReceipt = true;
+
+            setTimeout(() => {
+                this.loadingReceipt = false;
+            }, 3000);
+
             this.paymentPlanService
                 .getPaymentPlans()
                 .subscribe(paymentPlans => {
@@ -45,12 +52,12 @@ export class PaymentPlanPoliciesComponent implements OnInit {
                     this.paymentPlanPoliciesCount = this.paymentPlanData.policyPaymentPlan.length;
 
                     this.paymentPlanPolicies = this.paymentPlanData.policyPaymentPlan;
-                    console.log(this.paymentPlanData.policyPaymentPlan);
+                    console.log(this.paymentPlanPolicies);
                 });
         });
     }
 
-    //view policy
+    // view policy
     viewPaymentPlanPolicyInstallments(paymentPlanPolicy: PolicyPaymentPlan) {
         this.router.navigateByUrl(
             '/flosure/accounts/payment-plan/' +

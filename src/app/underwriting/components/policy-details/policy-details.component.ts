@@ -28,19 +28,17 @@ export class PolicyDetailsComponent implements OnInit {
     policy: Policy;
     displayPolicy: Policy;
     policyUpdate: Policy = new Policy();
+    isLoading = false;
 
     paymentPlan = 'NotCreated';
 
     // risks
     risks: RiskModel[] = [];
+    risksLoading = true;
 
     searchString: string;
 
     isEditmode = false;
-
-    showCertModal = false;
-    showDebitModal = false;
-    showReceiptModal = false;
 
     // PDFS
     isCertificatePDFVisible = false;
@@ -54,6 +52,7 @@ export class PolicyDetailsComponent implements OnInit {
     ];
     selectedValue = 'fully';
     formattedDate: any;
+    planId: string;
 
     constructor(
         private readonly router: Router,
@@ -82,6 +81,8 @@ export class PolicyDetailsComponent implements OnInit {
                     (x) => x.policyNumber === this.policyNumber
                 )[0];
                 this.displayPolicy = this.policy;
+                this.risks = this.displayPolicy.risks;
+                this.risksLoading = false;
             });
         });
 
@@ -214,8 +215,9 @@ export class PolicyDetailsComponent implements OnInit {
                 installments: installment,
             });
             // Payment Plan
+            this.planId = v4();
             const plan: IPaymentModel = {
-                id: v4(),
+                id: this.planId,
                 clientName: policyData.client,
                 clientId: '',
                 numberOfPolicies: 1,
@@ -228,6 +230,9 @@ export class PolicyDetailsComponent implements OnInit {
             this.paymentPlanForm.reset();
             this.policyUpdate.paymentPlan = 'Created';
             this.receiptService.updatePolicy(this.policyUpdate);
+            this.router.navigateByUrl(
+                'flosure/accounts/payment-plan/' + this.planId
+            );
         } else if (this.selectedValue === 'fully') {
             this.router.navigateByUrl('/flosure/accounts/receipts');
         }

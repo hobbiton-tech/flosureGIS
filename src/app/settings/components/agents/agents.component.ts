@@ -1,16 +1,25 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { IAgent } from './models/agents.model';
+import { IAgent, IBroker, ISalesRepresentative } from './models/agents.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AgentsService } from './services/agents.service';
 
 @Component({
     selector: 'app-agents',
     templateUrl: './agents.component.html',
-    styleUrls: ['./agents.component.scss'],
+    styleUrls: ['./agents.component.scss']
 })
 export class AgentsComponent implements OnInit {
     addAgentsFormDrawerVisible = false;
-    agentsList: IAgent[];
+    intermediariesList: Array<IAgent & IBroker & ISalesRepresentative>;
+    displayIntermediariesList: Array<IAgent & IBroker & ISalesRepresentative>;
+
+    totalIntermediaries = 0;
+    agents: IAgent[];
+    totalAgents = 0;
+    broker: IBroker[];
+    totalBrokers = 0;
+    salesRepesentertives: ISalesRepresentative[];
+    totalSalesRepresentatives = 0;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -19,10 +28,19 @@ export class AgentsComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.agentService.getAgents().subscribe((agents) => {
-            this.agentsList = agents;
-            console.log('<=========Agent List=========>');
-            console.log(this.agentsList);
+        this.agentService.getAllIntermediaries().subscribe(intermediaries => {
+            this.totalAgents = intermediaries[0].length;
+            this.totalBrokers = intermediaries[1].length;
+            this.totalSalesRepresentatives = intermediaries[2].length;
+
+            this.intermediariesList = [
+                ...intermediaries[0],
+                ...intermediaries[1],
+                ...intermediaries[2]
+            ] as Array<IAgent & IBroker & ISalesRepresentative>;
+            this.displayIntermediariesList = this.intermediariesList;
+
+            this.totalIntermediaries = this.intermediariesList.length;
         });
     }
 

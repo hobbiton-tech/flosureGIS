@@ -1,10 +1,19 @@
 <div style="margin: 20px;">
     <div style="margin-bottom: 20px; background: #fff;">
         <nz-page-header>
-            <nz-page-header-title>Quotes</nz-page-header-title>
+            <nz-page-header-title>Motor Quotations</nz-page-header-title>
             <nz-page-header-subtitle
                 >List of all quotes</nz-page-header-subtitle
             >
+            <nz-page-header-extra>
+                <button
+                    nz-button
+                    nzType="primary"
+                    (click)="onCreateQuoteClicked()"
+                >
+                    Create new quote
+                </button>
+            </nz-page-header-extra>
             <nz-page-header-content>
                 <nz-descriptions [nzColumn]="3">
                     <nz-descriptions-item nzTitle="Total Quotes" [nzSpan]="1">{{
@@ -52,7 +61,7 @@
                 >
                     <td>{{ quote.quoteNumber }}</td>
                     <td>{{ quote.startDate.seconds * 1000 | date }}</td>
-                    <td>{{ quote.endDate | date}}</td>
+                    <td>{{ quote.endDate | date }}</td>
                     <td>{{ quote.client }}</td>
                     <td>
                         <nz-badge

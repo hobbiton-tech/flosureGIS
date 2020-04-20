@@ -8,6 +8,10 @@ import { PolicyDetailsComponent } from './components/policy-details/policy-detai
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { PolicyCertificateDocumentComponent } from './documents/policy-certificate-document/policy-certificate-document.component';
+import { PolicyClausesDocumentComponent } from './documents/policy-clauses-document/policy-clauses-document.component';
+import { PolicyScheduleDocumentComponent } from './documents/policy-schedule-document/policy-schedule-document.component';
+import { PolicyDebitNoteDocumentComponent } from './documents/policy-debit-note-document/policy-debit-note-document.component';
 
 const routes: Routes = [
     {
@@ -32,7 +36,11 @@ const routes: Routes = [
     declarations: [
         EndorsementsComponent,
         PoliciesComponent,
-        PolicyDetailsComponent
+        PolicyDetailsComponent,
+        PolicyCertificateDocumentComponent,
+        PolicyClausesDocumentComponent,
+        PolicyScheduleDocumentComponent,
+        PolicyDebitNoteDocumentComponent
     ],
     imports: [
         CommonModule,

@@ -292,7 +292,7 @@ export class CreateQuoteComponent implements OnInit {
 
     ngOnInit(): void {
         this.quoteForm = this.formBuilder.group({
-            quoteNumber: [this.quoteService.generateQuoteNumber('ran', 10)],
+            quoteNumber: [this.quoteService.generateQuoteNumber()],
             client: ['', Validators.required],
             messageCode: ['ewrewre', Validators.required],
             underwritingYear: [''],
@@ -647,6 +647,8 @@ export class CreateQuoteComponent implements OnInit {
             (this.premiumLoadingTotal = 0),
             (this.premiumDiscountRate = 0),
             (this.netPremium = 0);
+        this.basicPremiumLevy = 0;
+        this.premiumDiscount = 0;
 
         this.isAddRiskPanelOpen = false;
         console.log(this.risks);
@@ -663,6 +665,8 @@ export class CreateQuoteComponent implements OnInit {
             (this.premiumLoadingTotal = 0),
             (this.premiumDiscountRate = 0),
             (this.netPremium = 0);
+        this.basicPremiumLevy = 0;
+        this.premiumDiscount = 0;
     }
 
     // add comprehesive risk
@@ -691,6 +695,8 @@ export class CreateQuoteComponent implements OnInit {
             (this.premiumLoadingTotal = 0),
             (this.premiumDiscountRate = 0),
             (this.netPremium = 0);
+        this.basicPremiumLevy = 0;
+        this.premiumDiscount = 0;
 
         this.isAddRiskPanelOpen = false;
     }
@@ -706,6 +712,8 @@ export class CreateQuoteComponent implements OnInit {
             (this.premiumLoadingTotal = 0),
             (this.premiumDiscountRate = 0),
             (this.netPremium = 0);
+        this.basicPremiumLevy = 0;
+        this.premiumDiscount = 0;
     }
 
     resetForms() {
@@ -718,6 +726,8 @@ export class CreateQuoteComponent implements OnInit {
             (this.premiumLoadingTotal = 0),
             (this.premiumDiscountRate = 0),
             (this.netPremium = 0);
+        this.basicPremiumLevy = 0;
+        this.premiumDiscount = 0;
     }
 
     // view details of the risk

@@ -61,7 +61,10 @@
                         }}
                     </td>
                     <td>
-                        {{ paymentPlanPolicyInstallment.actualPaidDate | date }}
+                        {{
+                            paymentPlanPolicyInstallment.actualPaidDate * 1000
+                                | date
+                        }}
                     </td>
                     <td>
                         {{
@@ -73,13 +76,22 @@
                         {{ paymentPlanPolicyInstallment.installmentStatus }}
                     </td>
                     <td>
-                        <button
-                            nz-button
-                            nzType="primary"
-                            (click)="showModal(paymentPlanPolicyInstallment)"
+                        <div
+                            *ngIf="
+                                paymentPlanPolicyInstallment.installmentStatus !==
+                                'Fully Paid'
+                            "
                         >
-                            Receipt
-                        </button>
+                            <button
+                                nz-button
+                                nzType="primary"
+                                (click)="
+                                    showModal(paymentPlanPolicyInstallment)
+                                "
+                            >
+                                Receipt
+                            </button>
+                        </div>
                     </td>
                 </tr>
             </tbody>

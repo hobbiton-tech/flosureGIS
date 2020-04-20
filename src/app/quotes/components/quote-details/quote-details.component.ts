@@ -837,6 +837,7 @@ export class QuoteDetailsComponent implements OnInit {
             // convert to policy
             const policy: Policy = {
                 ...this.quoteDetailsForm.value,
+                policyNumber: this.quoteNumber.replace('Q', 'P'),
                 receiptStatus: this.status,
                 risks: this.quoteData.risks,
                 sumInsured: this.sumArray(this.quoteData.risks, 'sumInsured'),
