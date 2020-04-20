@@ -391,6 +391,24 @@
                         ></nz-date-picker>
                     </nz-form-control>
                 </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label
+                        [nzSpan]="12"
+                        nzFor="initialInstallmentAmount"
+                        >Initial Installment Amount</nz-form-label
+                    >
+                    <nz-form-control
+                        [nzSpan]="12"
+                        nzErrorTip="Please input your username!"
+                    >
+                        <input
+                            id="initialInstallmentAmountt"
+                            type="number"
+                            nz-input
+                            formControlName="initialInstallmentAmount"
+                        />
+                    </nz-form-control>
+                </nz-form-item>
             </form>
         </div>
     </div>

@@ -154,6 +154,9 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
                         (x) => x.id === this.paymentPlanId
                     )[0];
 
+                    console.log('---------POLICY DATA---------');
+                    console.log(this.paymentPlanData);
+
                     // this.paymentPlanPolicyData = this.paymentPlanData.policyPaymentPlan.filter(
                     //     (x) => x.policyNumber === this.policyNumber
                     // )[0];
