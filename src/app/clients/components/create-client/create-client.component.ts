@@ -118,19 +118,24 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
     }
 
     submitCorporateClient(): void {
-        for (let i in this.corporateClientForm.controls) {
-            /// validation;
-            this.corporateClientForm.controls[i].markAsDirty();
-            this.corporateClientForm.updateValueAndValidity();
-        }
+        this.addCorporateClient(this.corporateClientForm.value).then(res => {
+            console.log('Added Corporate.');
+            this.corporateClientForm.reset();
+        });
 
-        if (this.corporateClientForm.valid) {
-            this.addCorporateClient(this.corporateClientForm.value).then(
-                res => {
-                    console.log('Added Corporate.');
-                    this.corporateClientForm.reset();
-                }
-            );
-        }
+        // for (let i in this.corporateClientForm.controls) {
+        //     /// validation;
+        //     this.corporateClientForm.controls[i].markAsDirty();
+        //     this.corporateClientForm.updateValueAndValidity();
+        // }
+
+        // if (this.corporateClientForm.valid) {
+        //     this.addCorporateClient(this.corporateClientForm.value).then(
+        //         res => {
+        //             console.log('Added Corporate.');
+        //             this.corporateClientForm.reset();
+        //         }
+        //     );
+        // }
     }
 }
