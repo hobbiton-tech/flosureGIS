@@ -1304,7 +1304,7 @@
                                                             'ThirdParty'
                                                         ">
                                                         <nz-form-item>
-                                                            <nz-form-label [nzSpan]="7" nzFor="load">Add Load
+                                                            <nz-form-label [nzSpan]="7" nzFor="load">Add Loading
                                                             </nz-form-label>
                                                             <nz-form-control nzSpan="17">
                                                                 <nz-select name="load" [(ngModel)]="
@@ -1643,11 +1643,11 @@
                         <td>{{ risk.sumInsured | number }}</td>
                         <td>{{ risk.netPremium | number: '1.2-2' }}</td>
                         <td>
-                            <button nz-button nzType="primary" (click)="viewRiskDetails(risk)">
+                            <button nz-button nzType="primary" nzSize="small" (click)="viewRiskDetails(risk)">
                                 View
                             </button>
                             <nz-divider nzType="vertical" *ngIf="!isQuoteApproved"></nz-divider>
-                            <button nz-button nzType="danger" nz-popconfirm nzTitle="Delete Risk?"
+                            <button nz-button nzType="danger" nzSize="small" nz-popconfirm nzTitle="Delete Risk?"
                                 (nzOnConfirm)="removeRisk(risk.regNumber)" *ngIf="!isQuoteApproved">
                                 Delete
                             </button>
@@ -1655,7 +1655,8 @@
                     </tr>
                 </tbody>
             </nz-table>
-            <ng-template id="risksTemplateTable">
+            
+            <div *ngIf="!isTabletemplate">
                 <nz-table [nzData]="risks" [nzSize]="'small'" [nzBordered]="true" id="risksTemplateTable">
                     <thead>
                         <tr>
@@ -1667,11 +1668,12 @@
                             <th>chassisNumber</th>
                             <th>color</th>
                             <th>productType</th>
-                            <th>Sum Insured</th>
+                            <th>SumInsured</th>
+                            <th>netPremium</th>
                         </tr>
                     </thead>
                 </nz-table>
-            </ng-template>
+            </div>
         </nz-card>
         <!-- Risk Details ends here -->
 

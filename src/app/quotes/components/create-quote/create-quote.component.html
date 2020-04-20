@@ -1134,7 +1134,8 @@
                 </tr>
             </tbody>
         </nz-table>
-        <ng-template id="risksTemplateTable">
+
+        <div *ngIf="!isTabletemplate">
             <nz-table [nzData]="risks" [nzSize]="'small'" [nzBordered]="true" id="risksTemplateTable">
                 <thead>
                     <tr>
@@ -1146,11 +1147,12 @@
                         <th>chassisNumber</th>
                         <th>color</th>
                         <th>productType</th>
-                        <th>Sum Insured</th>
+                        <th>SumInsured</th>
+                        <th>netPremium</th>
                     </tr>
                 </thead>
             </nz-table>
-        </ng-template>
+        </div>
         <!--  Risks Table Search bar and Table details ends here -->
 
         <!-- Add quote and reset quote form buttons starts here -->

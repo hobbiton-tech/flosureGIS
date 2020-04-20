@@ -83,6 +83,9 @@ export class QuoteDetailsComponent implements OnInit {
     selectedVehicleModel: string;
     isVehicleModelLoading = false;
 
+    //set risk tamplate table not vivible
+    isTabletemplate = true;
+
     // excel template data
     data: AOA = [
         [1, 2],
@@ -933,8 +936,24 @@ export class QuoteDetailsComponent implements OnInit {
     }
 
     handleDownloadTemplate() {
-        const element = document.getElementById('risksTable');
-        const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+        const headings = [
+            [
+                'insuranceType',
+                'registrationNumber',
+                'vehicleMake',
+                'vehicleModel',
+                'engineNumber',
+                'chassisNumber',
+                'color',
+                'productType',
+                'sumInsured',
+                'netPremium'
+            ]
+        ];
+        const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(headings);
+
+        // const element = document.getElementById('risksTemplateTable');
+        // const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
 
         const wb: XLSX.WorkBook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
