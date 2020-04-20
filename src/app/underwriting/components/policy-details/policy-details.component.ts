@@ -1,26 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Policy, RiskModel, ITimestamp } from '../../models/policy.model';
+import { Policy, ITimestamp } from '../../models/policy.model';
 import { PoliciesService } from '../../services/policies.service';
 import {
     IPaymentModel,
-    PolicyPaymentPlan,
-    InstallmentsModel,
+    InstallmentsModel
 } from 'src/app/accounts/components/models/payment-plans.model';
 import { v4 } from 'uuid';
 import { PaymentPlanService } from 'src/app/accounts/services/payment-plan.service';
 import { AccountService } from 'src/app/accounts/services/account.service';
+import { RiskModel } from 'src/app/quotes/models/quote.model';
 
 @Component({
     selector: 'app-policy-details',
     templateUrl: './policy-details.component.html',
-    styleUrls: ['./policy-details.component.scss'],
+    styleUrls: ['./policy-details.component.scss']
 })
 export class PolicyDetailsComponent implements OnInit {
     isVisible = false;
     policyDetailsForm: FormGroup;
     paymentPlanForm: FormGroup;
+    policydata: Policy[] = [];
 
     policiesList: Policy[];
     policyNumber: string;
@@ -46,13 +47,32 @@ export class PolicyDetailsComponent implements OnInit {
     isSchedulePDFVisible = false;
     isClausesPDFVisible = false;
 
+    // For Modal
+    clientName: string;
+    clientNumber: string;
+    clientEmail: string;
+    policyRisk: RiskModel;
+    issueDate: string;
+    issueTime: string;
+    agency: string;
+    classOfBusiness: string;
+    coverForm: string;
+    coverTo: string;
+    basicPremium: string;
+    loadingAmount: string;
+    discountAmount: string;
+    totalAmount: string;
+
     optionList = [
         { label: 'Full Payment', value: 'fully' },
-        { label: 'Payment Plan', value: 'plan' },
+        { label: 'Payment Plan', value: 'plan' }
     ];
     selectedValue = 'fully';
     formattedDate: any;
     planId: string;
+    // clientName: any;
+    netPremium: any;
+    formattedeDate: string;
 
     constructor(
         private readonly router: Router,
@@ -65,23 +85,38 @@ export class PolicyDetailsComponent implements OnInit {
         this.paymentPlanForm = this.formBuilder.group({
             numberOfInstallments: ['', Validators.required],
             startDate: ['', Validators.required],
-            initialInstallmentAmount: ['', Validators.required],
+            initialInstallmentAmount: ['', Validators.required]
         });
     }
 
     ngOnInit(): void {
-        this.route.params.subscribe((param) => {
+        this.route.params.subscribe(param => {
             this.policyNumber = param.policyNumber;
-            this.policiesService.getPolicies().subscribe((policies) => {
+            this.policiesService.getPolicies().subscribe(policies => {
                 this.policyData = policies.filter(
-                    (x) => x.policyNumber === this.policyNumber
+                    x => x.policyNumber === this.policyNumber
                 )[0];
                 this.policiesList = policies;
                 this.policy = this.policiesList.filter(
-                    (x) => x.policyNumber === this.policyNumber
+                    x => x.policyNumber === this.policyNumber
                 )[0];
                 this.displayPolicy = this.policy;
                 this.risks = this.displayPolicy.risks;
+
+                this.policyRisk = this.displayPolicy.risks[0];
+                this.clientName = this.displayPolicy.client;
+                this.clientNumber = '+260976748392';
+                this.clientEmail = this.clientName + '@gmail.com'; // TODO: Track client data
+                this.agency = 'Direct'; // TODO: Track this guy too
+                this.coverForm = this.displayPolicy.startDate.toString();
+                this.coverTo = this.displayPolicy.endDate.toString();
+                // this.basicPremium = this.displayPolicy
+                this.loadingAmount = '-';
+                this.discountAmount = '-';
+                this.totalAmount = this.displayPolicy.netPremium.toString();
+                this.issueDate = this.displayPolicy.dateOfIssue.toString();
+                this.issueTime = this.displayPolicy.dateOfIssue.toString();
+
                 this.risksLoading = false;
             });
         });
@@ -101,13 +136,13 @@ export class PolicyDetailsComponent implements OnInit {
             dateOfIssue: ['', Validators.required],
             expiryDate: ['', Validators.required],
             quarter: ['', Validators.required],
-            town: ['', Validators.required],
+            town: ['', Validators.required]
         });
 
         // set values of fields
-        this.policiesService.getPolicies().subscribe((policies) => {
+        this.policiesService.getPolicies().subscribe(policies => {
             this.policyData = policies.filter(
-                (x) => x.policyNumber === this.policyNumber
+                x => x.policyNumber === this.policyNumber
             )[0];
             this.policyDetailsForm
                 .get('client')
@@ -167,72 +202,164 @@ export class PolicyDetailsComponent implements OnInit {
 
     handleOk(policyData): void {
         if (this.selectedValue === 'plan') {
+            let pAmount = 0;
+            let policyCount = 0;
+            const policyPlan: Policy[] = [];
+            policyPlan.push({
+                ...policyData
+            });
+
             this.policyUpdate = policyData;
-            // Get enddate
-            const eDate = this.paymentPlanForm.controls.startDate.value;
+
+            pAmount = pAmount + policyData.netPremium;
+            policyCount++;
+
+            this.clientName = policyData.client;
+            this.netPremium = this.netPremium + policyData.netPremium;
+            // this.policyPlan = policyPlan;
+            this.policyUpdate.paymentPlan = 'Created';
+            this.receiptService.updatePolicy(this.policyUpdate);
+
+            const eDate = new Date(
+                this.paymentPlanForm.controls.startDate.value
+            );
             eDate.setMonth(
                 eDate.getMonth() +
                     this.paymentPlanForm.controls.numberOfInstallments.value
             );
-            this.formattedDate = eDate.toISOString().slice(0, 10);
+            this.formattedeDate = eDate.toISOString().slice(0, 10);
+
+            const dAmount =
+                pAmount -
+                this.paymentPlanForm.controls.initialInstallmentAmount.value;
+
             // Create installments
             const iAmount =
-                policyData.netPremium /
+                dAmount /
                 this.paymentPlanForm.controls.numberOfInstallments.value;
             const installment: InstallmentsModel[] = [];
 
-            for (
-                let i = 0;
-                i < this.paymentPlanForm.controls.numberOfInstallments.value;
-                i++
-            ) {
-                const iDate = this.paymentPlanForm.controls.startDate.value;
-                iDate.setMonth(eDate.getMonth() + i);
-                const fDate = iDate.toISOString().slice(0, 10);
+            // for (
+            //     let i = 0;
+            //     i < this.paymentPlanForm.controls.numberOfInstallments.value;
+            //     i++
+            // )
+            const iDate = new Date(
+                this.paymentPlanForm.controls.startDate.value
+            );
+            while (iDate <= eDate) {
+                iDate.setMonth(iDate.getMonth() + 1);
+                this.formattedDate = iDate.toISOString().slice(0, 10);
 
                 installment.push({
                     installmentAmount: iAmount,
-                    installmentDate: fDate,
+                    installmentDate: this.formattedDate,
                     balance: iAmount,
-                    installmentStatus: 'UnPaid',
+                    installmentStatus: 'UnPaid'
                 });
             }
-
-            // initialize Policy plan
-            const policyPlan: PolicyPaymentPlan[] = [];
-            policyPlan.push({
-                ...this.paymentPlanForm.value,
-                policyNumber: policyData.policyNumber,
-                amountDue: policyData.netPremium,
-                premium: policyData.netPremium,
-                amountPaid: 0,
-                numberOfPaidInstallments: 0,
-                amountOutstanding: policyData.netPremium,
-                policyPlanStatus: 'Unpaid',
-                endDate: this.formattedDate,
-                remainingInstallments: this.paymentPlanForm.controls
-                    .numberOfInstallments.value,
-                installments: installment,
-            });
             // Payment Plan
+            const pDate = new Date(
+                this.paymentPlanForm.controls.startDate.value
+            );
+            console.log('THis', this.policyData);
+
             this.planId = v4();
             const plan: IPaymentModel = {
+                ...this.paymentPlanForm.value,
                 id: this.planId,
-                clientName: policyData.client,
                 clientId: '',
-                numberOfPolicies: 1,
-                totalPremium: policyData.netPremium,
+                clientName: policyData.client,
+                numberOfPolicies: policyCount,
+                totalPremium: pAmount,
                 status: 'UnPaid',
                 policyPaymentPlan: policyPlan,
+                remainingInstallments: this.paymentPlanForm.controls
+                    .numberOfInstallments.value,
+                amountPaid: 0,
+                numberOfPaidInstallments: 0,
+                amountOutstanding: dAmount,
+                installments: installment,
+                startDate: pDate,
+                endDate: this.formattedeDate
             };
+
+            console.log('..........Payment Plan..........');
+            console.log(plan);
+
             // add payment plan
             this.paymentPlanService.addPaymentPlan(plan);
             this.paymentPlanForm.reset();
-            this.policyUpdate.paymentPlan = 'Created';
-            this.receiptService.updatePolicy(this.policyUpdate);
-            this.router.navigateByUrl(
-                'flosure/accounts/payment-plan/' + this.planId
-            );
+            this.isVisible = false;
+
+            this.router.navigateByUrl('flosure/accounts/payment-plan');
+
+            //  this.policyUpdate = policyData;
+            // Get enddate
+            //  const eDate = this.paymentPlanForm.controls.startDate.value;
+            //  eDate.setMonth(
+            //         eDate.getMonth() +
+            //             this.paymentPlanForm.controls.numberOfInstallments.value
+            //     );
+            //  this.formattedDate = eDate.toISOString().slice(0, 10);
+            //     // Create installments
+            //  const iAmount =
+            //         policyData.netPremium /
+            //         this.paymentPlanForm.controls.numberOfInstallments.value;
+            //  const installment: InstallmentsModel[] = [];
+
+            //  for (
+            //         let i = 0;
+            //         i < this.paymentPlanForm.controls.numberOfInstallments.value;
+            //         i++
+            //     ) {
+            //         const iDate = this.paymentPlanForm.controls.startDate.value;
+            //         iDate.setMonth(eDate.getMonth() + i);
+            //         const fDate = iDate.toISOString().slice(0, 10);
+
+            //         installment.push({
+            //             installmentAmount: iAmount,
+            //             installmentDate: fDate,
+            //             balance: iAmount,
+            //             installmentStatus: 'UnPaid',
+            //         });
+            //     }
+
+            // initialize Policy plan
+            //  const policyPlan: Policy[] = [];
+            //  policyPlan.push({
+            //         ...this.paymentPlanForm.value,
+            //         policyNumber: policyData.policyNumber,
+            //         amountDue: policyData.netPremium,
+            //         premium: policyData.netPremium,
+            //         amountPaid: 0,
+            //         numberOfPaidInstallments: 0,
+            //         amountOutstanding: policyData.netPremium,
+            //         policyPlanStatus: 'Unpaid',
+            //         endDate: this.formattedDate,
+            //         remainingInstallments: this.paymentPlanForm.controls
+            //             .numberOfInstallments.value,
+            //         installments: installment,
+            //     });
+            // Payment Plan
+            //  this.planId = v4();
+            //     // const plan: IPaymentModel = {
+            //     //     id: this.planId,
+            //     //     clientName: policyData.client,
+            //     //     clientId: '',
+            //     //     numberOfPolicies: 1,
+            //     //     totalPremium: policyData.netPremium,
+            //     //     status: 'UnPaid',
+            //     //     policyPaymentPlan: policyPlan,
+            //     // };
+            //     // // add payment plan
+            //     // this.paymentPlanService.addPaymentPlan(plan);
+            //  this.paymentPlanForm.reset();
+            //  this.policyUpdate.paymentPlan = 'Created';
+            //  this.receiptService.updatePolicy(this.policyUpdate);
+            //  this.router.navigateByUrl(
+            //         'flosure/accounts/payment-plan/' + this.planId
+            //     );
         } else if (this.selectedValue === 'fully') {
             this.router.navigateByUrl('/flosure/accounts/receipts');
         }

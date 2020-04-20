@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { EndorsementsComponent } from './components/endorsements/endorsements.component';
 import { PolicyDetailsComponent } from './components/policy-details/policy-details.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { NgxPrintModule } from 'ngx-print'
 
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { PolicyCertificateDocumentComponent } from './documents/policy-certificate-document/policy-certificate-document.component';
@@ -48,7 +49,8 @@ const routes: Routes = [
         FormsModule,
         ReactiveFormsModule,
         RouterModule.forChild(routes),
-        PdfViewerModule
+        PdfViewerModule,
+        NgxPrintModule
     ]
 })
 export class UnderWritingModule {}

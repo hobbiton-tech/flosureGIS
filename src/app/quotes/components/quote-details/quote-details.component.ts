@@ -20,7 +20,7 @@ import * as XLSX from 'xlsx';
 import {
     IIndividualClient,
     ICorporateClient
-} from 'src/app/clients/models/client.model';
+} from 'src/app/clients/models/clients.model';
 import { UploadChangeParam, NzMessageService } from 'ng-zorro-antd';
 import { debounceTime, switchMap, map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';

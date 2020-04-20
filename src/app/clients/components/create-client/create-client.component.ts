@@ -6,7 +6,10 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { IIndividualClient, ICorporateClient } from '../../models/client.model';
+import {
+    IIndividualClient,
+    ICorporateClient
+} from '../../models/clients.model';
 import { ClientsService } from '../../services/clients.service';
 
 @Component({

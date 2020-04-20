@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
-import { IIndividualClient, ICorporateClient } from '../models/client.model';
+import { IIndividualClient, ICorporateClient } from '../models/clients.model';
 import {
     AngularFirestore,
     AngularFirestoreCollection,

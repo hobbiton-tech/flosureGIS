@@ -1,287 +1,453 @@
-<div style="margin: 15px;">
-    <div style="margin-bottom: 20px; background: #fff;">
-        <nz-page-header nzBackIcon>
-            <nz-page-header-title>Policy Installments</nz-page-header-title>
-            <nz-page-header-content>
-                <nz-descriptions [nzColumn]="3">
-                    <nz-descriptions-item
-                        nzTitle="Total installments"
-                        [nzSpan]="1"
-                        >{{
-                            paymentPlanPolicyInstallmentsCount
-                        }}</nz-descriptions-item
-                    >
-                </nz-descriptions>
-            </nz-page-header-content>
-        </nz-page-header>
-    </div>
+<nz-spin
+    [nzSize]="'large'"
+    [nzSpinning]="loadingReceipt"
+    [nzTip]="'Loading Installments'"
+>
+    <div style="margin: 15px;">
+        <div style="margin-bottom: 20px; background: #fff;">
+            <nz-page-header nzBackIcon>
+                <nz-page-header-title>Installments</nz-page-header-title>
+                <nz-page-header-content>
+                    <nz-descriptions [nzColumn]="3">
+                        <nz-descriptions-item
+                            nzTitle="Total installments"
+                            [nzSpan]="1"
+                            >{{
+                                paymentPlanPolicyInstallmentsCount
+                            }}</nz-descriptions-item
+                        >
+                    </nz-descriptions>
+                </nz-page-header-content>
+            </nz-page-header>
+        </div>
+        <div style="margin-bottom: 5px; margin-top: 5px;">
+            <div nz-row [nzGutter]="8">
+                <div nz-col [nzSpan]="12">
+                    <nz-card nzTitle="Client Details">
+                        <nz-descriptions
+                            nzBordered
+                            nzSize="small"
+                            nzSpan="6"
+                            style="margin-top: 5px;"
+                            [nzColumn]="1"
+                            [nzBordered]="true"
+                            nzSize="middle"
+                            *ngIf="clientType === 'Corporate'"
+                        >
+                            <nz-descriptions-item nzTitle="Client Name">
+                                {{ clientN.companyName }}
+                            </nz-descriptions-item>
+                            <nz-descriptions-item nzTitle="Registration Number">
+                                {{ clientN.registrationNumber }}
+                            </nz-descriptions-item>
+                            <nz-descriptions-item nzTitle="Address">
+                                {{ clientN.address }}
+                            </nz-descriptions-item>
+                            <nz-descriptions-item nzTitle="Email">
+                                {{ clientN.email }}
+                            </nz-descriptions-item>
+                            <nz-descriptions-item nzTitle="Phone Number">
+                                {{ clientN.phone }}</nz-descriptions-item
+                            >
+                        </nz-descriptions>
 
-    <nz-card style="margin-bottom: 5px;">
-        <!-- Payment-plan-policy-installments Table Search bar and Table details start here -->
-        <div style="margin-bottom: 20px; margin-top: 20px; width: 50%;">
+                        <nz-descriptions
+                            nzBordered
+                            nzSize="small"
+                            nzSpan="6"
+                            style="margin-top: 5px;"
+                            [nzColumn]="1"
+                            [nzBordered]="true"
+                            nzSize="middle"
+                            *ngIf="clientType === 'Individual'"
+                        >
+                            <nz-descriptions-item nzTitle="Client Name">
+                                {{ clientI.firstName }}{{ clientI.lastName }}
+                            </nz-descriptions-item>
+                            <nz-descriptions-item nzTitle="Registration Number">
+                                {{ clientI.idNumber }}
+                            </nz-descriptions-item>
+                            <nz-descriptions-item nzTitle="Address">
+                                {{ clientI.address }}
+                            </nz-descriptions-item>
+                            <nz-descriptions-item nzTitle="Email">
+                                {{ clientI.email }}
+                            </nz-descriptions-item>
+                            <nz-descriptions-item nzTitle="Phone Number">
+                                {{ clientI.phone }}</nz-descriptions-item
+                            >
+                        </nz-descriptions>
+                    </nz-card>
+                </div>
+                <div nz-col [nzSpan]="12">
+                    <nz-card nzTitle="Account Details">
+                        <nz-descriptions
+                            nzBordered
+                            nzSize="small"
+                            nzSpan="6"
+                            style="margin-top: 5px;"
+                            [nzColumn]="1"
+                            [nzBordered]="true"
+                            nzSize="middle"
+                        >
+                            <nz-descriptions-item nzTitle="Total Premium">
+                                {{
+                                    paymentPlanData.totalPremium
+                                        | number: '1.2-2'
+                                }}
+                            </nz-descriptions-item>
+                            <nz-descriptions-item nzTitle="Amount Paid">
+                                {{
+                                    paymentPlanData.amountPaid | number: '1.2-2'
+                                }}
+                            </nz-descriptions-item>
+                            <nz-descriptions-item nzTitle="Amount Outstanding">
+                                {{
+                                    paymentPlanData.amountOutstanding
+                                        | number: '1.2-2'
+                                }}
+                            </nz-descriptions-item>
+                            <nz-descriptions-item
+                                nzTitle="Remaining Installments"
+                            >
+                                {{ paymentPlanData.remainingInstallments }}
+                            </nz-descriptions-item>
+                            <nz-descriptions-item
+                                nzTitle="Number of Paid Installments"
+                            >
+                                {{
+                                    paymentPlanData.numberOfPaidInstallments
+                                }}</nz-descriptions-item
+                            >
+                        </nz-descriptions>
+                    </nz-card>
+                </div>
+            </div>
+        </div>
+
+        <nz-card style="margin-bottom: 5px;">
+            <nz-collapse>
+                <nz-collapse-panel [nzHeader]="'Policies'">
+                    <!-- <div style="margin-bottom: 10px; width: 50%">
             <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Search by" />
+                <input
+                    type="text"
+                    nz-input
+                    placeholder="Search by client, policy number, agent"
+                    [(ngModel)]="searchString"
+                    (ngModelChange)="search($event)"
+                />
             </nz-input-group>
             <ng-template #suffixIconSearch>
                 <i nz-icon nzType="search"></i>
             </ng-template>
-        </div>
-        <nz-table
-            #paymentPlanPolicyInstallmentsTable
-            [nzSize]="'small'"
-            [nzBordered]="true"
-            [nzData]="paymentPlanPolicyInstallments"
-        >
-            <thead>
-                <tr>
-                    <th>Installment Amount</th>
-                    <th>Installment Date</th>
-                    <th>Actual Paid Date</th>
-                    <th>Balance</th>
-                    <th>Installment Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr
-                    *ngFor="
-                        let paymentPlanPolicyInstallment of paymentPlanPolicyInstallmentsTable.data
-                    "
-                    style="cursor: pointer;"
-                >
-                    <td>
-                        {{
-                            paymentPlanPolicyInstallment.installmentAmount
-                                | number: '1.2-2'
-                        }}
-                    </td>
-                    <td>
-                        {{
-                            paymentPlanPolicyInstallment.installmentDate | date
-                        }}
-                    </td>
-                    <td>
-                        {{
-                            paymentPlanPolicyInstallment.actualPaidDate * 1000
-                                | date
-                        }}
-                    </td>
-                    <td>
-                        {{
-                            paymentPlanPolicyInstallment.balance
-                                | number: '1.2-2'
-                        }}
-                    </td>
-                    <td>
-                        {{ paymentPlanPolicyInstallment.installmentStatus }}
-                    </td>
-                    <td>
-                        <div
-                            *ngIf="
-                                paymentPlanPolicyInstallment.installmentStatus !==
-                                'Fully Paid'
-                            "
-                        >
-                            <button
-                                nz-button
-                                nzType="primary"
-                                (click)="
-                                    showModal(paymentPlanPolicyInstallment)
+        </div> -->
+
+                    <nz-table
+                        #policiesTable
+                        [nzData]="displayPoliciesList"
+                        [nzSize]="'small'"
+                        [nzBordered]="true"
+                    >
+                        <thead>
+                            <tr>
+                                <th>Policy Number</th>
+                                <th>Cover From</th>
+                                <th>Cover To</th>
+                                <th>Client Name</th>
+                                <th>Agent</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let policy of policiesTable.data"
+                                (click)="viewPolicyDetails(policy)"
+                                style="cursor: pointer;"
+                            >
+                                <td>{{ policy.policyNumber }}</td>
+                                <td>{{ policy.startDate | date }}</td>
+                                <td>{{ policy.endDate | date }}</td>
+                                <td>{{ policy.client }}</td>
+                                <td>{{ policy.user }}</td>
+                                <td>{{ policy.status }}</td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-collapse-panel>
+            </nz-collapse>
+            <div style="margin-bottom: 20px; margin-top: 20px; width: 50%;">
+                <nz-input-group [nzSuffix]="suffixIconSearch">
+                    <input type="text" nz-input placeholder="Search by" />
+                </nz-input-group>
+                <ng-template #suffixIconSearch>
+                    <i nz-icon nzType="search"></i>
+                </ng-template>
+            </div>
+            <nz-table
+                #paymentPlanPolicyInstallmentsTable
+                [nzSize]="'small'"
+                [nzBordered]="true"
+                [nzData]="paymentPlanPolicyInstallments"
+            >
+                <thead>
+                    <tr>
+                        <th>Installment Amount</th>
+                        <th>Installment Date</th>
+                        <th>Actual Paid Date</th>
+                        <th>Balance</th>
+                        <th>Installment Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        *ngFor="
+                            let paymentPlanPolicyInstallment of paymentPlanPolicyInstallmentsTable.data
+                        "
+                        style="cursor: pointer;"
+                    >
+                        <td>
+                            {{
+                                paymentPlanPolicyInstallment.installmentAmount
+                                    | number: '1.2-2'
+                            }}
+                        </td>
+                        <td>
+                            {{
+                                paymentPlanPolicyInstallment.installmentDate
+                                    | date: 'dd/MM/yyyy'
+                            }}
+                        </td>
+                        <td>
+                            {{
+                                paymentPlanPolicyInstallment.actualPaidDate
+                                    | date: 'dd/MM/yyyy'
+                            }}
+                        </td>
+                        <td>
+                            {{
+                                paymentPlanPolicyInstallment.balance
+                                    | number: '1.2-2'
+                            }}
+                        </td>
+                        <td>
+                            {{ paymentPlanPolicyInstallment.installmentStatus }}
+                        </td>
+                        <td>
+                            <div
+                                *ngIf="
+                                    paymentPlanPolicyInstallment.installmentStatus !==
+                                    'Fully Paid'
                                 "
                             >
-                                Receipt
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </nz-table>
-    </nz-card>
-</div>
+                                <button
+                                    nz-button
+                                    nzType="primary"
+                                    (click)="
+                                        showModal(paymentPlanPolicyInstallment)
+                                    "
+                                >
+                                    Receipt
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </nz-card>
+    </div>
 
-<nz-modal
-    [(nzVisible)]="isVisible"
-    nzTitle="Capture Form"
-    (nzOnCancel)="handleCancel()"
-    (nzOnOk)="handleOk()"
-    [nzOkLoading]="isOkLoading"
-    [nzWidth]="'1200'"
->
-    <nz-card
-        style="width: 90%; margin: 0 auto;"
-        [nzBordered]="true"
-        nzTitle="Receipt Details"
+    <nz-modal
+        [(nzVisible)]="isVisible"
+        nzTitle="Capture Form"
+        (nzOnCancel)="handleCancel()"
+        (nzOnOk)="handleOk()"
+        [nzOkLoading]="isOkLoading"
+        [nzWidth]="'1200'"
     >
-        <form [formGroup]="receiptForm" nz-form>
-            <div nz-row>
-                <div nz-col [nzSpan]="12">
-                    <nz-form-item>
-                        <nz-form-label [nzSpan]="8" nzFor="receivedFrom"
-                            >Received From</nz-form-label
-                        >
-                        <nz-form-control
-                            [nzSpan]="16"
-                            nzErrorTip="Please enter Depositor's name!"
-                        >
-                            <input
-                                nz-input
-                                formControlName="receivedFrom"
-                                name="receivedFrom"
-                                type="text"
-                                id="receivedFrom"
+        <nz-card
+            style="width: 90%; margin: 0 auto;"
+            [nzBordered]="true"
+            nzTitle="Receipt Details"
+        >
+            <form [formGroup]="receiptForm" nz-form>
+                <div nz-row>
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="8" nzFor="receivedFrom"
+                                >Received From</nz-form-label
+                            >
+                            <nz-form-control
+                                [nzSpan]="16"
+                                nzErrorTip="Please enter Depositor's name!"
+                            >
+                                <input
+                                    nz-input
+                                    formControlName="receivedFrom"
+                                    name="receivedFrom"
+                                    type="text"
+                                    id="receivedFrom"
+                                    nzRequired
+                                    placeholder="Received From"
+                                />
+                                <span
+                                    class="text-danger"
+                                    *ngIf="
+                                        (receiptFormControl.receivedFrom
+                                            .touched ||
+                                            submitted) &&
+                                        receiptFormControl.receivedFrom.errors
+                                            ?.required
+                                    "
+                                >
+                                    Please enter Depositor's name!
+                                </span>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label
+                                [nzSpan]="8"
+                                nzFor="sumInDigits"
                                 nzRequired
-                                placeholder="Received From"
-                            />
-                            <span
-                                class="text-danger"
-                                *ngIf="
-                                    (receiptFormControl.receivedFrom.touched ||
-                                        submitted) &&
-                                    receiptFormControl.receivedFrom.errors
-                                        ?.required
-                                "
+                                >Amount</nz-form-label
                             >
-                                Please enter Depositor's name!
-                            </span>
-                        </nz-form-control>
-                    </nz-form-item>
+                            <nz-form-control [nzSpan]="16">
+                                <input
+                                    nz-input
+                                    name="sumInDigits"
+                                    type="number"
+                                    id="sumInDigits"
+                                    formControlName="sumInDigits"
+                                />
+                                !--
+                                <span
+                                    class="text-danger"
+                                    *ngIf="
+                                        (receiptFormControl.sumInDigits
+                                            .touched ||
+                                            submitted) &&
+                                        receiptFormControl.sumInDigits.errors
+                                            ?.required
+                                    "
+                                >
+                                    Please enter sum in digits!
+                                </span>
+                                --
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
                 </div>
 
-                <div nz-col [nzSpan]="12">
-                    <nz-form-item>
-                        <nz-form-label
-                            [nzSpan]="8"
-                            nzFor="sumInDigits"
-                            nzRequired
-                            >Amount</nz-form-label
-                        >
-                        <nz-form-control [nzSpan]="16">
-                            <input
-                                nz-input
-                                name="sumInDigits"
-                                type="number"
-                                id="sumInDigits"
-                                formControlName="sumInDigits"
-                            />
-                            <!-- <span
-                                class="text-danger"
-                                *ngIf="
-                                    (receiptFormControl
-                                        .sumInDigits
-                                        .touched ||
-                                        submitted) &&
-                                    receiptFormControl
-                                        .sumInDigits.errors
-                                        ?.required
-                                "
+                <div nz-row>
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label
+                                [nzSpan]="6"
+                                nzFor="receiptType"
+                                nzRequired
+                                >Receipt Type</nz-form-label
                             >
-                                Please enter sum in digits!
-                            </span> -->
-                        </nz-form-control>
-                    </nz-form-item>
+                            <nz-form-control nzSpan="18">
+                                <nz-select
+                                    name="receiptType"
+                                    formControlName="receiptType"
+                                    nzAllowClear
+                                    nzPlaceHolder="Choose"
+                                >
+                                    <nz-option
+                                        *ngFor="let option of optionList"
+                                        [nzValue]="option.value"
+                                        [nzLabel]="option.label"
+                                    ></nz-option>
+                                </nz-select>
+                                <span
+                                    class="text-danger"
+                                    *ngIf="
+                                        (receiptFormControl.receiptType
+                                            .touched ||
+                                            submitted) &&
+                                        receiptFormControl.receiptType.errors
+                                            ?.required
+                                    "
+                                >
+                                    Please choose receipt type!
+                                </span>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label
+                                [nzSpan]="8"
+                                nzFor="paymentMethod"
+                                nzRequired
+                                >Payment Method</nz-form-label
+                            >
+                            <nz-form-control [nzSpan]="16">
+                                <nz-select
+                                    name="paymentMethod"
+                                    formControlName="paymentMethod"
+                                    nzAllowClear
+                                    nzPlaceHolder="Choose payment Method"
+                                >
+                                    <nz-option
+                                        *ngFor="let method of paymentMethodList"
+                                        [nzValue]="method.value"
+                                        [nzLabel]="method.label"
+                                    ></nz-option>
+                                </nz-select>
+                                <span
+                                    class="text-danger"
+                                    *ngIf="
+                                        (receiptFormControl.paymentMethod
+                                            .touched ||
+                                            submitted) &&
+                                        receiptFormControl.paymentMethod.errors
+                                            ?.required
+                                    "
+                                >
+                                    Please choose payment method!
+                                </span>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
                 </div>
-            </div>
-
-            <div nz-row>
-                <div nz-col [nzSpan]="12">
-                    <nz-form-item>
-                        <nz-form-label
-                            [nzSpan]="6"
-                            nzFor="receiptType"
-                            nzRequired
-                            >Receipt Type</nz-form-label
-                        >
-                        <nz-form-control nzSpan="18">
-                            <nz-select
-                                name="receiptType"
-                                formControlName="receiptType"
-                                nzAllowClear
-                                nzPlaceHolder="Choose"
+                <div nz-row>
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label
+                                [nzSpan]="6"
+                                nzFor="narration"
+                                nzRequired
+                                >Narration</nz-form-label
                             >
-                                <nz-option
-                                    *ngFor="let option of optionList"
-                                    [nzValue]="option.value"
-                                    [nzLabel]="option.label"
-                                ></nz-option>
-                            </nz-select>
-                            <span
-                                class="text-danger"
-                                *ngIf="
-                                    (receiptFormControl.receiptType.touched ||
-                                        submitted) &&
-                                    receiptFormControl.receiptType.errors
-                                        ?.required
-                                "
-                            >
-                                Please choose receipt type!
-                            </span>
-                        </nz-form-control>
-                    </nz-form-item>
+                            <nz-form-control nzSpan="18">
+                                <textarea
+                                    formControlName="narration"
+                                    nz-input
+                                    rows="2"
+                                    placeholder="Write Your Narration Here"
+                                ></textarea>
+                                <span
+                                    class="text-danger"
+                                    *ngIf="
+                                        (receiptFormControl.narration.touched ||
+                                            submitted) &&
+                                        receiptFormControl.narration.errors
+                                            ?.required
+                                    "
+                                >
+                                    Please enter your Narration!
+                                </span>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
                 </div>
-                <div nz-col [nzSpan]="12">
-                    <nz-form-item>
-                        <nz-form-label
-                            [nzSpan]="8"
-                            nzFor="paymentMethod"
-                            nzRequired
-                            >Payment Method</nz-form-label
-                        >
-                        <nz-form-control [nzSpan]="16">
-                            <nz-select
-                                name="paymentMethod"
-                                formControlName="paymentMethod"
-                                nzAllowClear
-                                nzPlaceHolder="Choose payment Method"
-                            >
-                                <nz-option
-                                    *ngFor="let method of paymentMethodList"
-                                    [nzValue]="method.value"
-                                    [nzLabel]="method.label"
-                                ></nz-option>
-                            </nz-select>
-                            <span
-                                class="text-danger"
-                                *ngIf="
-                                    (receiptFormControl.paymentMethod.touched ||
-                                        submitted) &&
-                                    receiptFormControl.paymentMethod.errors
-                                        ?.required
-                                "
-                            >
-                                Please choose payment method!
-                            </span>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-            </div>
-            <div nz-row>
-                <div nz-col [nzSpan]="12">
-                    <nz-form-item>
-                        <nz-form-label [nzSpan]="6" nzFor="narration" nzRequired
-                            >Narration</nz-form-label
-                        >
-                        <nz-form-control nzSpan="18">
-                            <textarea
-                                formControlName="narration"
-                                nz-input
-                                rows="2"
-                                placeholder="Write Your Narration Here"
-                            ></textarea>
-                            <span
-                                class="text-danger"
-                                *ngIf="
-                                    (receiptFormControl.narration.touched ||
-                                        submitted) &&
-                                    receiptFormControl.narration.errors
-                                        ?.required
-                                "
-                            >
-                                Please enter your Narration!
-                            </span>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-            </div>
-        </form>
-    </nz-card>
-</nz-modal>
+            </form>
+        </nz-card>
+    </nz-modal>
+</nz-spin>

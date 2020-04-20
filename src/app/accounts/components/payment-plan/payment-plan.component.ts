@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import {
     IPaymentModel,
     InstallmentsModel,
-    PolicyPaymentPlan,
 } from '../models/payment-plans.model';
 import { PaymentPlanService } from '../../services/payment-plan.service';
 
@@ -18,7 +17,7 @@ import { ClientsService } from 'src/app/clients/services/clients.service';
 import {
     IIndividualClient,
     ICorporateClient,
-} from 'src/app/clients/models/client.model';
+} from 'src/app/clients/models/clients.model';
 
 @Component({
     selector: 'app-payment-plan',
@@ -55,6 +54,7 @@ export class PaymentPlanComponent implements OnInit {
     clientName: any;
     netPremium = 0;
     policyPlan: any;
+    formattedeDate: string;
     constructor(
         private router: Router,
         private paymentPlanService: PaymentPlanService,
@@ -165,70 +165,87 @@ export class PaymentPlanComponent implements OnInit {
         // Get enddate
         console.log('---------GGGGGGGHHHHHHHHH---------');
         console.log(this.policyNumber);
+        let pAmount = 0;
+        let policyCount = 0;
 
         for (const policy of this.policyNumber) {
             this.policyUpdate = policy;
-            const eDate = this.paymentPlanForm.controls.startDate.value;
-            eDate.setMonth(
-                eDate.getMonth() +
-                    this.paymentPlanForm.controls.numberOfInstallments.value
-            );
-            this.formattedDate = eDate.toISOString().slice(0, 10);
-            // Create installments
-            const iAmount =
-                policy.netPremium /
-                this.paymentPlanForm.controls.numberOfInstallments.value;
-            const installment: InstallmentsModel[] = [];
 
-            for (
-                let i = 0;
-                i < this.paymentPlanForm.controls.numberOfInstallments.value;
-                i++
-            ) {
-                const iDate = this.paymentPlanForm.controls.startDate.value;
-                iDate.setMonth(eDate.getMonth() + i);
-                const fDate = iDate.toISOString().slice(0, 10);
+            pAmount = pAmount + policy.netPremium;
+            policyCount++;
 
-                installment.push({
-                    installmentAmount: iAmount,
-                    installmentDate: fDate,
-                    balance: iAmount,
-                    installmentStatus: 'UnPaid',
-                });
-            }
-
-            // initialize Policy plan
-            const policyPlan: PolicyPaymentPlan[] = [];
-            policyPlan.push({
-                ...this.paymentPlanForm.value,
-                policyNumber: policy.policyNumber,
-                amountDue: policy.netPremium,
-                premium: policy.netPremium,
-                amountPaid: 0,
-                numberOfPaidInstallments: 0,
-                amountOutstanding: policy.netPremium,
-                policyPlanStatus: 'Unpaid',
-                endDate: this.formattedDate,
-                remainingInstallments: this.paymentPlanForm.controls
-                    .numberOfInstallments.value,
-                installments: installment,
-            });
+            // // initialize Policy plan
+            // const policyPlan: PolicyPaymentPlan[] = [];
+            // policyPlan.push({
+            //     policyNumber: policy.policyNumber,
+            //     premium: policy.netPremium,
+            //     startDate: policy.startDate,
+            //     endDate: policy.endDate,
+            // });
 
             this.clientName = policy.client;
             this.netPremium = this.netPremium + policy.netPremium;
-            this.policyPlan = policyPlan;
+            // this.policyPlan = policyPlan;
             this.policyUpdate.paymentPlan = 'Created';
+            this.receiptService.updatePolicy(this.policyUpdate);
+        }
+
+        const eDate = new Date(this.paymentPlanForm.controls.startDate.value);
+        eDate.setMonth(
+            eDate.getMonth() +
+                this.paymentPlanForm.controls.numberOfInstallments.value
+        );
+        this.formattedeDate = eDate.toISOString().slice(0, 10);
+
+        const dAmount =
+            pAmount -
+            this.paymentPlanForm.controls.initialInstallmentAmount.value;
+
+        // Create installments
+        const iAmount =
+            dAmount / this.paymentPlanForm.controls.numberOfInstallments.value;
+        const installment: InstallmentsModel[] = [];
+
+        // for (
+        //     let i = 0;
+        //     i < this.paymentPlanForm.controls.numberOfInstallments.value;
+        //     i++
+        // )
+        const iDate = new Date(this.paymentPlanForm.controls.startDate.value);
+        while (iDate <= eDate) {
+            iDate.setMonth(iDate.getMonth() + 1);
+            this.formattedDate = iDate.toISOString().slice(0, 10);
+
+            installment.push({
+                installmentAmount: iAmount,
+                installmentDate: this.formattedDate,
+                balance: iAmount,
+                installmentStatus: 'UnPaid',
+            });
         }
         // Payment Plan
+        const pDate = new Date(this.paymentPlanForm.controls.startDate.value);
+
         const plan: IPaymentModel = {
+            ...this.paymentPlanForm.value,
             id: v4(),
-            clientName: this.paymentPlanForm.controls.clientName.value,
             clientId: '',
-            numberOfPolicies: 1,
-            totalPremium: this.netPremium,
+            numberOfPolicies: policyCount,
+            totalPremium: pAmount,
             status: 'UnPaid',
-            policyPaymentPlan: this.policyPlan,
+            policyPaymentPlan: this.policyNumber,
+            remainingInstallments: this.paymentPlanForm.controls
+                .numberOfInstallments.value,
+            amountPaid: 0,
+            numberOfPaidInstallments: 0,
+            amountOutstanding: dAmount,
+            installments: installment,
+            startDate: pDate,
+            endDate: this.formattedeDate,
         };
+
+        console.log('..........Payment Plan..........');
+        console.log(plan);
 
         // add payment plan
         this.paymentPlanService.addPaymentPlan(plan);

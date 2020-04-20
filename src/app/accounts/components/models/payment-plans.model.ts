@@ -1,3 +1,5 @@
+import { Policy, ITimestamp } from 'src/app/underwriting/models/policy.model';
+
 export class IPaymentModel {
     id: string;
     clientName: string;
@@ -5,28 +7,29 @@ export class IPaymentModel {
     numberOfPolicies: number;
     totalPremium: number;
     status: PaymentPlanStatus;
-    policyPaymentPlan: PolicyPaymentPlan[];
-}
-
-export class PolicyPaymentPlan {
-    policyNumber: string;
-    startDate: Date;
-    endDate: Date;
-    numberOfInstallments: number;
-    numberOfPaidInstallments: number;
-    amountDue: number;
+    policyPaymentPlan: Policy[];
+    installments: InstallmentsModel[];
+    remainingInstallments: number;
     amountPaid: number;
     amountOutstanding: number;
-    policyPlanStatus: PolicyPlanStatus;
-    remainingInstallments: number;
-    premium: number;
-    installments: InstallmentsModel[];
+    numberOfInstallments: number;
+    numberOfPaidInstallments: number;
+    startDate: Date;
+    endDate: Date;
+    initialInstallmentAmount: number;
 }
+
+// export class PolicyPaymentPlan {
+//     policyNumber: string;
+//     startDate: Date;
+//     endDate: Date;
+//     premium: number;
+// }
 
 export class InstallmentsModel {
     installmentAmount: number;
-    installmentDate: Date;
-    actualPaidDate?: Date;
+    installmentDate: Date | ITimestamp;
+    actualPaidDate?: Date | ITimestamp;
     installmentStatus: InstallmentStatus;
     balance: number;
 }

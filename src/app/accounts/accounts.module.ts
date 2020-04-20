@@ -30,12 +30,12 @@ const routes: Routes = [
         path: 'payment-plan',
         component: PaymentPlanComponent,
     },
+    // {
+    //     path: 'payment-plan/:id',
+    //     component: PaymentPlanPoliciesComponent,
+    // },
     {
         path: 'payment-plan/:id',
-        component: PaymentPlanPoliciesComponent,
-    },
-    {
-        path: 'payment-plan/:id/:policyNumber',
         component: PaymentPlanPolicyInstallmentsComponent,
     },
     {

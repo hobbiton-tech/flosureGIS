@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {
     InstallmentsModel,
-    IPaymentModel,
-    PolicyPaymentPlan
+    IPaymentModel
 } from '../../../models/payment-plans.model';
 
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,8 +12,14 @@ import { AccountService } from 'src/app/accounts/services/account.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { IReceiptModel } from '../../../models/receipts.model';
 import { v4 } from 'uuid';
-import { Policy } from 'src/app/underwriting/models/policy.model';
+import { Policy, ITimestamp } from 'src/app/underwriting/models/policy.model';
 import { PoliciesService } from 'src/app/underwriting/services/policies.service';
+import { ClientsService } from 'src/app/clients/services/clients.service';
+import {
+    IIndividualClient,
+    ICorporateClient
+} from 'src/app/clients/models/clients.model';
+import * as _ from 'lodash';
 
 @Component({
     selector: 'app-payment-plan-policy-installments',
@@ -48,13 +53,15 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
     paymentPlanData: IPaymentModel = new IPaymentModel();
 
     // payment plan policy data
-    paymentPlanPolicyData: PolicyPaymentPlan = new PolicyPaymentPlan();
+    paymentPlanPolicyData: Policy = new Policy();
 
     // payment plan policy installment data
     paymentPlanPolicyInstallmentData: InstallmentsModel = new InstallmentsModel();
 
+    clientN: ICorporateClient;
+
     // payment plan policies
-    paymentPlanPolicies: PolicyPaymentPlan[] = [];
+    paymentPlanPolicies: Policy[] = [];
 
     // payment plan policy installments
     paymentPlanPolicyInstallments = [];
@@ -73,6 +80,8 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
     // policyNumber = '';
     user = '';
     _id = '';
+    loadingReceipt = false;
+    client: IIndividualClient & ICorporateClient;
 
     optionList = [
         { label: 'Premium Payment', value: 'Premium Payment' },
@@ -91,6 +100,10 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
         { label: 'Bank Transfer', value: 'bank transfer' }
     ];
 
+    displayPoliciesList: Policy[];
+    clientI: IIndividualClient;
+    clientType: string;
+
     constructor(
         private route: ActivatedRoute,
         private paymentPlanService: PaymentPlanService,
@@ -98,7 +111,8 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
         private policyService: PoliciesService,
         private formBuilder: FormBuilder,
         private message: NzMessageService,
-        private router: Router
+        private router: Router,
+        private clientsService: ClientsService
     ) {
         this.receiptForm = this.formBuilder.group({
             receivedFrom: ['', Validators.required],
@@ -127,6 +141,12 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
             this.paymentPlanId = param.id;
             this.policyNumber = param.policyNumber;
 
+            this.loadingReceipt = true;
+
+            setTimeout(() => {
+                this.loadingReceipt = false;
+            }, 3000);
+
             this.paymentPlanService
                 .getPaymentPlans()
                 .subscribe(paymentPlans => {
@@ -134,12 +154,57 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
                         x => x.id === this.paymentPlanId
                     )[0];
 
-                    this.paymentPlanPolicyData = this.paymentPlanData.policyPaymentPlan.filter(
-                        x => x.policyNumber === this.policyNumber
-                    )[0];
+                    console.log('---------POLICY DATA---------');
+                    console.log(this.paymentPlanData);
 
-                    this.paymentPlanPolicyInstallments = this.paymentPlanPolicyData.installments;
-                    this.paymentPlanPolicyInstallmentsCount = this.paymentPlanPolicyData.installments.length;
+                    // this.paymentPlanPolicyData = this.paymentPlanData.policyPaymentPlan.filter(
+                    //     (x) => x.policyNumber === this.policyNumber
+                    // )[0];
+
+                    this.paymentPlanPolicyInstallments = this.paymentPlanData.installments;
+                    this.paymentPlanPolicyInstallmentsCount = this.paymentPlanData.installments.length;
+
+                    this.displayPoliciesList = this.paymentPlanData.policyPaymentPlan;
+
+                    console.log(this.paymentPlanData.policyPaymentPlan);
+
+                    console.log(this.paymentPlanPolicyInstallments);
+
+                    this.clientsService
+                        .getCorporateClients()
+                        .subscribe(clients => {
+                            console.log(clients);
+                            this.clientN = clients.filter(
+                                x =>
+                                    x.companyName ===
+                                    this.paymentPlanData.clientName
+                            )[0];
+                            this.clientType = this.clientN.clientType;
+
+                            // this.client = [...clients[1], ...clients[0]].filter(
+                            //     (x) => x.f === this.id
+                            // )[0] as IIndividualClient & ICorporateClient;
+
+                            // console.log('CLIENTS', this.client);
+                        });
+
+                    this.clientsService
+                        .getIndividualClients()
+                        .subscribe(clients => {
+                            console.log(clients);
+                            this.clientI = clients.filter(
+                                x =>
+                                    x.firstName + ' ' + x.lastName ===
+                                    this.paymentPlanData.clientName
+                            )[0];
+                            this.clientType = this.clientI.clientType;
+
+                            // this.client = [...clients[1], ...clients[0]].filter(
+                            //     (x) => x.f === this.id
+                            // )[0] as IIndividualClient & ICorporateClient;
+
+                            // console.log('CLIENTS', this.client);
+                        });
                 });
             this.policyService.getPolicies().subscribe(policies => {
                 this.policy = policies.filter(
@@ -147,6 +212,12 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
                 )[0];
             });
         });
+    }
+
+    viewPolicyDetails(policy: Policy): void {
+        this.router.navigateByUrl(
+            '/flosure/underwriting/policy-details/' + policy.policyNumber
+        );
     }
 
     showModal(paymentPlanPolicyInstallment: InstallmentsModel): void {
@@ -195,16 +266,15 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
 
             const p = this.paymentPlanPolicyInstallments;
             let d = amount;
-            this.paymentPlanPolicyData.amountDue =
-                this.paymentPlanPolicyData.amountDue - amount;
-            this.paymentPlanPolicyData.amountOutstanding =
-                this.paymentPlanPolicyData.amountOutstanding - amount;
-            this.paymentPlanPolicyData.amountPaid =
-                this.paymentPlanPolicyData.amountPaid + amount;
-            if (this.paymentPlanPolicyData.amountDue !== 0) {
-                this.paymentPlanPolicyData.policyPlanStatus = 'Partially Paid';
-            } else if (this.paymentPlanPolicyData.amountDue >= 0) {
-                this.paymentPlanPolicyData.policyPlanStatus = 'Fully Paid';
+
+            this.paymentPlanData.amountOutstanding =
+                this.paymentPlanData.amountOutstanding - amount;
+            this.paymentPlanData.amountPaid =
+                this.paymentPlanData.amountPaid + amount;
+            if (this.paymentPlanData.amountOutstanding !== 0) {
+                this.paymentPlanData.status = 'Partially Paid';
+            } else if (this.paymentPlanData.amountOutstanding >= 0) {
+                this.paymentPlanData.status = 'Fully Paid';
             }
             for (let i = 0; i < p.length; i++) {
                 console.log(d);
@@ -215,12 +285,10 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
                     p[i].installmentStatus = 'Fully Paid';
                     p[i].actualPaidDate = this.today;
                     count++;
-                    this.paymentPlanPolicyData.numberOfPaidInstallments =
-                        this.paymentPlanPolicyData.numberOfPaidInstallments +
-                        count;
-                    this.paymentPlanPolicyData.remainingInstallments =
-                        this.paymentPlanPolicyData.remainingInstallments -
-                        count;
+                    this.paymentPlanData.numberOfPaidInstallments =
+                        this.paymentPlanData.numberOfPaidInstallments + count;
+                    this.paymentPlanData.remainingInstallments =
+                        this.paymentPlanData.remainingInstallments - count;
                     // this.isVisible = false;
                 }
                 if (d < p[i].balance && p[i].balance !== 0) {
@@ -237,12 +305,10 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
                     p[i].installmentStatus = 'Fully Paid';
                     p[i].actualPaidDate = this.today;
                     count++;
-                    this.paymentPlanPolicyData.numberOfPaidInstallments =
-                        this.paymentPlanPolicyData.numberOfPaidInstallments +
-                        count;
-                    this.paymentPlanPolicyData.remainingInstallments =
-                        this.paymentPlanPolicyData.remainingInstallments -
-                        count;
+                    this.paymentPlanData.numberOfPaidInstallments =
+                        this.paymentPlanData.numberOfPaidInstallments + count;
+                    this.paymentPlanData.remainingInstallments =
+                        this.paymentPlanData.remainingInstallments - count;
                     console.log(count);
                     break;
                 }
@@ -270,5 +336,15 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
         this.router.navigateByUrl('/flosure/accounts/view-receipt/' + this._id);
         // this.isConfirmLoading = true;
         // this.generateDocuments();
+    }
+
+    getInstallmentDate(installment: InstallmentsModel) {
+        const date = installment.installmentDate as ITimestamp;
+        return date.seconds * 1000;
+    }
+
+    getActualDate(installment: InstallmentsModel): number {
+        const date = installment.actualPaidDate as ITimestamp;
+        return date.seconds * 1000;
     }
 }

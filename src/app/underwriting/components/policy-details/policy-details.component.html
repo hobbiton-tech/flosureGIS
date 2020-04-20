@@ -391,6 +391,24 @@
                         ></nz-date-picker>
                     </nz-form-control>
                 </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label
+                        [nzSpan]="12"
+                        nzFor="initialInstallmentAmount"
+                        >Initial Installment Amount</nz-form-label
+                    >
+                    <nz-form-control
+                        [nzSpan]="12"
+                        nzErrorTip="Please input your username!"
+                    >
+                        <input
+                            id="initialInstallmentAmountt"
+                            type="number"
+                            nz-input
+                            formControlName="initialInstallmentAmount"
+                        />
+                    </nz-form-control>
+                </nz-form-item>
             </form>
         </div>
     </div>
@@ -398,52 +416,56 @@
 
 <!-- Certificate-->
 <nz-modal
-    nzWidth="1200"
+    nzWidth="700"
+    nzTitle="Golden Lotus"
     [(nzVisible)]="isCertificatePDFVisible"
     (nzOnCancel)="isCertificatePDFVisible = false"
     (nzOnOk)="isCertificatePDFVisible = false"
 >
-    <nz-card
-        style="width: 100%;"
-        [nzBordered]="false"
-        nzTitle="Certificate Document"
-        [nzExtra]="pdfCertActions"
-    >
-        <app-policy-certificate-document></app-policy-certificate-document>
+    <nz-card [nzBordered]="true" nzTitle="Policy Certificate Document">
+        <app-policy-certificate-document
+            [clientName]="clientName"
+            [clientNumber]="clientNumber"
+            [clientEmail]="''"
+            [insuredName]="clientName"
+            [policyRisk]="policyRisk"
+            [policyNumber]="policyNumber"
+            [issueDate]="issueDate"
+            [issueTime]="issueTime"
+        >
+        </app-policy-certificate-document>
     </nz-card>
-    <ng-template #pdfCertActions>
-        <div style="display: flex;">
-            <div style="margin-right: 8px;">
-                <button nz-button nzSize="medium" nzType="primary">
-                    Download
-                </button>
-            </div>
-            <div style="margin-right: 8px;">
-                <button nz-button nzSize="medium" nzType="primary">
-                    Print
-                </button>
-            </div>
-            <div>
-                <button nz-button nzSize="medium">Email</button>
-            </div>
-        </div>
-    </ng-template>
 </nz-modal>
 
 <!-- Debit Note-->
 <nz-modal
     nzWidth="800"
+    nzTitle="Golden Lotus"
     [(nzVisible)]="isDebitNotePDFVisible"
     (nzOnCancel)="isDebitNotePDFVisible = false"
     (nzOnOk)="isDebitNotePDFVisible = false"
 >
     <nz-card
         style="width: 100%;"
-        [nzBordered]="false"
+        [nzBordered]="true"
         nzTitle="Debit Document"
         [nzExtra]="pdfDebitActions"
     >
-        <app-policy-debit-note-document></app-policy-debit-note-document>
+        <app-policy-debit-note-document
+            [clientName]="clientName"
+            [clientNumber]="clientNumber"
+            [clientEmail]="clientEmail"
+            [agency]="agency"
+            [policyNumber]="policyNumber"
+            [classOfBusiness]="classOfBusiness"
+            [coverFrom]="coverForm"
+            [coverTo]="coverTo"
+            [basicPremium]="basicPremium"
+            [loadingAmount]="loadingAmount"
+            [discountAmount]="discountAmount"
+            [totalAmount]="totalAmount"
+        >
+        </app-policy-debit-note-document>
     </nz-card>
     <ng-template #pdfDebitActions>
         <div style="display: flex;">
@@ -466,68 +488,36 @@
 
 <!-- Schedule-->
 <nz-modal
-    nzWidth="800"
+    nzWidth="700"
+    nzTitle="Golden Lotus"
     [(nzVisible)]="isSchedulePDFVisible"
     (nzOnCancel)="isSchedulePDFVisible = false"
     (nzOnOk)="isSchedulePDFVisible = false"
 >
     <nz-card
         style="width: 100%;"
-        [nzBordered]="false"
+        [nzBordered]="true"
         nzTitle="Schedule Document"
-        [nzExtra]="pdfScheduleActions"
     >
         <app-policy-certificate-document></app-policy-certificate-document>
     </nz-card>
-    <ng-template #pdfScheduleActions>
-        <div style="display: flex;">
-            <div style="margin-right: 8px;">
-                <button nz-button nzSize="medium" nzType="primary">
-                    Download
-                </button>
-            </div>
-            <div style="margin-right: 8px;">
-                <button nz-button nzSize="medium" nzType="primary">
-                    Print
-                </button>
-            </div>
-            <div>
-                <button nz-button nzSize="medium">Email</button>
-            </div>
-        </div>
-    </ng-template>
 </nz-modal>
 
 <!-- Clauses-->
 <nz-modal
-    nzWidth="800"
+    nzWidth="700"
+    nzTitle="Golden Lotus"
     [(nzVisible)]="isClausesPDFVisible"
     (nzOnCancel)="isClausesPDFVisible = false"
     (nzOnOk)="isClausesPDFVisible = false"
 >
+    <!-- <app-policy-clauses-document></app-policy-clauses-document> -->
+
     <nz-card
         style="width: 100%;"
-        [nzBordered]="false"
-        nzTitle="Clauses Document"
-        [nzExtra]="pdfClausesActions"
+        [nzBordered]="true"
+        nzTitle="Policy Clauses Document"
     >
         <app-policy-clauses-document></app-policy-clauses-document>
     </nz-card>
-    <ng-template #pdfClausesActions>
-        <div style="display: flex;">
-            <div style="margin-right: 8px;">
-                <button nz-button nzSize="medium" nzType="primary">
-                    Download
-                </button>
-            </div>
-            <div style="margin-right: 8px;">
-                <button nz-button nzSize="medium" nzType="primary">
-                    Print
-                </button>
-            </div>
-            <div>
-                <button nz-button nzSize="medium">Email</button>
-            </div>
-        </div>
-    </ng-template>
 </nz-modal>
