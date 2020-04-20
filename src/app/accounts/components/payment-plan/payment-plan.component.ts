@@ -187,6 +187,7 @@ export class PaymentPlanComponent implements OnInit {
             this.netPremium = this.netPremium + policy.netPremium;
             // this.policyPlan = policyPlan;
             this.policyUpdate.paymentPlan = 'Created';
+            this.receiptService.updatePolicy(this.policyUpdate);
         }
 
         const eDate = new Date(this.paymentPlanForm.controls.startDate.value);
