@@ -5,7 +5,6 @@ import { Policy, ITimestamp } from '../../models/policy.model';
 import { PoliciesService } from '../../services/policies.service';
 import {
     IPaymentModel,
-    PolicyPaymentPlan,
     InstallmentsModel,
 } from 'src/app/accounts/components/models/payment-plans.model';
 import { v4 } from 'uuid';
@@ -231,7 +230,7 @@ export class PolicyDetailsComponent implements OnInit {
             }
 
             // initialize Policy plan
-            const policyPlan: PolicyPaymentPlan[] = [];
+            const policyPlan: Policy[] = [];
             policyPlan.push({
                 ...this.paymentPlanForm.value,
                 policyNumber: policyData.policyNumber,
@@ -248,17 +247,17 @@ export class PolicyDetailsComponent implements OnInit {
             });
             // Payment Plan
             this.planId = v4();
-            const plan: IPaymentModel = {
-                id: this.planId,
-                clientName: policyData.client,
-                clientId: '',
-                numberOfPolicies: 1,
-                totalPremium: policyData.netPremium,
-                status: 'UnPaid',
-                policyPaymentPlan: policyPlan,
-            };
-            // add payment plan
-            this.paymentPlanService.addPaymentPlan(plan);
+            // const plan: IPaymentModel = {
+            //     id: this.planId,
+            //     clientName: policyData.client,
+            //     clientId: '',
+            //     numberOfPolicies: 1,
+            //     totalPremium: policyData.netPremium,
+            //     status: 'UnPaid',
+            //     policyPaymentPlan: policyPlan,
+            // };
+            // // add payment plan
+            // this.paymentPlanService.addPaymentPlan(plan);
             this.paymentPlanForm.reset();
             this.policyUpdate.paymentPlan = 'Created';
             this.receiptService.updatePolicy(this.policyUpdate);

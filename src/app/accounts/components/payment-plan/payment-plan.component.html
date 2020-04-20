@@ -109,25 +109,6 @@
                                                         [nzValue]="option"
                                                     ></nz-option>
                                                 </nz-select>
-                                                <!-- <nz-select
-                                                    nzMode="multiple"
-                                                    name="policyNumber"
-                                                    nzShowSearch
-                                                    nzAllowClear
-                                                    [nzSize]="size"
-                                                    formControlName="policyNumber"
-                                                    nzPlaceHolder="Choose Payment Plan"
-                                                >
-                                                    <nz-option
-                                                        *ngFor="
-                                                            let option of policies
-                                                        "
-                                                        [nzValue]="option"
-                                                        [nzLabel]="
-                                                            option.policyNumber
-                                                        "
-                                                    ></nz-option>
-                                                </nz-select> -->
                                             </nz-form-control>
                                         </nz-form-item>
                                     </div>
@@ -146,9 +127,15 @@
                                                 [nzSm]="12"
                                                 [nzXs]="24"
                                             >
-                                                <nz-date-picker
+                                                <input
+                                                    id="startDate"
+                                                    type="date"
+                                                    nz-input
                                                     formControlName="startDate"
-                                                ></nz-date-picker>
+                                                />
+                                                <!-- <nz-date-picker
+                                                    formControlName="startDate"
+                                                ></nz-date-picker> -->
                                             </nz-form-control>
                                         </nz-form-item>
                                     </div>
@@ -169,6 +156,29 @@
                                                     type="number"
                                                     nz-input
                                                     formControlName="numberOfInstallments"
+                                                />
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                </div>
+                                <div nz-row nzGutter="0">
+                                    <div nz-col [nzSpan]="12">
+                                        <nz-form-item>
+                                            <nz-form-label
+                                                [nzSpan]="12"
+                                                nzFor="initialInstallmentAmount"
+                                                >Initial Installment
+                                                Amount</nz-form-label
+                                            >
+                                            <nz-form-control
+                                                [nzSpan]="12"
+                                                nzErrorTip="Please input your username!"
+                                            >
+                                                <input
+                                                    id="initialInstallmentAmountt"
+                                                    type="number"
+                                                    nz-input
+                                                    formControlName="initialInstallmentAmount"
                                                 />
                                             </nz-form-control>
                                         </nz-form-item>
@@ -217,6 +227,13 @@
                             <th>Client ID</th>
                             <th>Number of Policies</th>
                             <th>Total Premium</th>
+                            <th>Initial Payment</th>
+                            <th>Amount Outstanding</th>
+                            <th>Amount Paid</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Number of Paid Installments</th>
+                            <th>Number of Remaining Installments</th>
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -234,6 +251,20 @@
                         <td>
                             {{ paymentPlan.totalPremium | number: '1.2-2' }}
                         </td>
+                        <td>
+                            {{
+                                paymentPlan.initialInstallmentAmount
+                                    | number: '1.2-2'
+                            }}
+                        </td>
+                        <td>{{ paymentPlan.amountOutstanding }}</td>
+                        <td>{{ paymentPlan.amountPaid }}</td>
+                        <td>
+                            {{ paymentPlan.startDate * 1000 | date }}
+                        </td>
+                        <td>{{ paymentPlan.endDate * 1000 | date }}</td>
+                        <td>{{ paymentPlan.numberOfPaidInstallments }}</td>
+                        <td>{{ paymentPlan.remainingInstallments }}</td>
                         <td>{{ paymentPlan.status }}</td>
                     </tr>
                 </tbody>
