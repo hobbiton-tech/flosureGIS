@@ -1,11 +1,7 @@
 <div style="background: #ececec; padding: 30px;">
     <div nz-row [nzGutter]="8">
         <div nz-col [nzSpan]="8">
-            <nz-card
-                [nzTitle]="'Total Clients'"
-                [nzExtra]="tClients"
-                [nzHoverable]="true"
-            >
+            <nz-card [nzTitle]="'Total Clients'" [nzExtra]="tClients" [nzHoverable]="true">
                 <nz-statistic [nzValueTemplate]="clientStats"></nz-statistic>
                 <ng-template #tClients>
                     <a routerLink="/flosure/clients/clients-list">View</a>
@@ -13,11 +9,7 @@
             </nz-card>
         </div>
         <div nz-col [nzSpan]="8">
-            <nz-card
-                [nzTitle]="'Pending Claims'"
-                [nzExtra]="pClaims"
-                [nzHoverable]="true"
-            >
+            <nz-card [nzTitle]="'Pending Claims'" [nzExtra]="pClaims" [nzHoverable]="true">
                 <nz-statistic [nzValueTemplate]="claimsStats"></nz-statistic>
                 <ng-template #pClaims>
                     <a routerLink="/flosure/claims/claim-transactions">View</a>
@@ -25,11 +17,7 @@
             </nz-card>
         </div>
         <div nz-col [nzSpan]="8">
-            <nz-card
-                [nzTitle]="'Active Policies'"
-                [nzExtra]="aPolicies"
-                [nzHoverable]="true"
-            >
+            <nz-card [nzTitle]="'Active Policies'" [nzExtra]="aPolicies" [nzHoverable]="true">
                 <nz-statistic [nzValueTemplate]="activePolicy"></nz-statistic>
                 <ng-template #aPolicies>
                     <a routerLink="/flosure/underwriting/policies">View</a>
@@ -39,11 +27,7 @@
     </div>
     <div nz-row [nzGutter]="8" style="padding-top: 10px;">
         <div nz-col [nzSpan]="8">
-            <nz-card
-                [nzTitle]="'Expired Policies'"
-                [nzExtra]="ePolicies"
-                [nzHoverable]="true"
-            >
+            <nz-card [nzTitle]="'Expired Policies'" [nzExtra]="ePolicies" [nzHoverable]="true">
                 <nz-statistic [nzValueTemplate]="expiredPolicy"></nz-statistic>
                 <ng-template #ePolicies>
                     <a routerLink="/flosure/underwriting/policies">View</a>
@@ -51,11 +35,7 @@
             </nz-card>
         </div>
         <div nz-col [nzSpan]="8">
-            <nz-card
-                [nzTitle]="'Total Policies'"
-                [nzExtra]="tPolicies"
-                [nzHoverable]="true"
-            >
+            <nz-card [nzTitle]="'Total Policies'" [nzExtra]="tPolicies" [nzHoverable]="true">
                 <nz-statistic [nzValueTemplate]="policiesStats"></nz-statistic>
                 <ng-template #tPolicies>
                     <a routerLink="/flosure/underwriting/policies">View</a>
@@ -63,10 +43,8 @@
             </nz-card>
         </div>
         <div nz-col [nzSpan]="8">
-            <nz-card [nzTitle]="'Gross Written Premium (ZMw)'">
-                <nz-statistic
-                    [nzValue]="commissionEarned | number"
-                ></nz-statistic>
+            <nz-card [nzTitle]="'Gross Written Premium (ZMW)'">
+                <nz-statistic [nzValue]="commissionEarned | number"></nz-statistic>
             </nz-card>
         </div>
     </div>
@@ -77,25 +55,16 @@
                 <nz-tab nzTitle="Active Policies">
                     <div style="margin-bottom: 10px; width: 50%;">
                         <nz-input-group [nzSuffix]="suffixIconSearch">
-                            <input
-                                type="text"
-                                nz-input
-                                placeholder="Search by client, policy number, agent"
-                                [(ngModel)]="searchString"
-                                (ngModelChange)="searchActivePolicies($event)"
-                            />
+                            <input type="text" nz-input placeholder="Search by client, policy number, agent"
+                                [(ngModel)]="searchString" (ngModelChange)="searchActivePolicies($event)" />
                         </nz-input-group>
                         <ng-template #suffixIconSearch>
                             <i nz-icon nzType="search"></i>
                         </ng-template>
                     </div>
 
-                    <nz-table
-                        #activePoliciesTable
-                        [nzData]="displayActivePoliciesList"
-                        [nzSize]="'small'"
-                        [nzBordered]="true"
-                    >
+                    <nz-table #activePoliciesTable [nzData]="displayActivePoliciesList" [nzSize]="'small'"
+                        [nzBordered]="true">
                         <thead>
                             <tr>
                                 <th>Policy Number</th>
@@ -108,11 +77,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr
-                                *ngFor="let policy of activePoliciesTable.data"
-                                (click)="viewPolicyDetails(policy)"
-                                style="cursor: pointer;"
-                            >
+                            <tr *ngFor="let policy of activePoliciesTable.data" (click)="viewPolicyDetails(policy)"
+                                style="cursor: pointer;">
                                 <td>{{ policy.policyNumber }}</td>
                                 <td>{{ policy.risks[0].insuranceType }}</td>
                                 <td>
@@ -131,25 +97,16 @@
                 <nz-tab nzTitle="Expiring Policies">
                     <div style="margin-bottom: 10px; width: 50%;">
                         <nz-input-group [nzSuffix]="suffixIconSearch">
-                            <input
-                                type="text"
-                                nz-input
-                                placeholder="Search by client, policy number, agent"
-                                [(ngModel)]="searchString"
-                                (ngModelChange)="searchExpiredPolicies($event)"
-                            />
+                            <input type="text" nz-input placeholder="Search by client, policy number, agent"
+                                [(ngModel)]="searchString" (ngModelChange)="searchExpiredPolicies($event)" />
                         </nz-input-group>
                         <ng-template #suffixIconSearch>
                             <i nz-icon nzType="search"></i>
                         </ng-template>
                     </div>
 
-                    <nz-table
-                        #expiredPoliciesTable
-                        [nzData]="displayExpiredPoliciesList"
-                        [nzSize]="'small'"
-                        [nzBordered]="true"
-                    >
+                    <nz-table #expiredPoliciesTable [nzData]="displayExpiredPoliciesList" [nzSize]="'small'"
+                        [nzBordered]="true">
                         <thead>
                             <tr>
                                 <th>Policy Number</th>
@@ -162,11 +119,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr
-                                *ngFor="let policy of expiredPoliciesTable.data"
-                                (click)="viewPolicyDetails(policy)"
-                                style="cursor: pointer;"
-                            >
+                            <tr *ngFor="let policy of expiredPoliciesTable.data" (click)="viewPolicyDetails(policy)"
+                                style="cursor: pointer;">
                                 <td>{{ policy.policyNumber }}</td>
                                 <td>{{ policy.productType }}</td>
                                 <td>
