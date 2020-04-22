@@ -272,7 +272,6 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
                 ...this.receiptForm.value,
                 onBehalfOf: this.paymentPlanData.clientName,
                 capturedBy: this.user,
-                receiptNumber: this.rcpt,
                 policyNumber: '',
                 receiptStatus: this.recStatus,
                 sumInDigits: amount,
@@ -283,7 +282,6 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
             planReceipt.push({
                 ...this.receiptForm.value,
                 id: this._id,
-                receiptNumber: this.rcpt,
                 onBehalfOf: this.paymentPlanData.clientName,
                 allocationStatus: 'Unallocated',
                 sumInDigits: amount,

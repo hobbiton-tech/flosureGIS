@@ -83,27 +83,41 @@ export class PaymentPlanService {
         paymentPlan: IPaymentModel
     ): Promise<void> {
         this.receipts.pipe(first()).subscribe(async (receipts) => {
-            // receipt.id = v4();
-            await this.receiptCollection
-                .doc(receipt.id)
-                .set(receipt)
-                .then((mess) => {
-                    this.message.success('Receipt Successfully created');
-                })
-                .catch((err) => {
-                    this.message.warning('Receipt Failed');
-                    console.log(err);
+            this.http
+                .get<IReceiptNumberResult>(
+                    'https://flosure-premium-rates.herokuapp.com/receipts'
+                )
+                .subscribe(async (res) => {
+                    receipt.receiptNumber = res.receiptNumber;
+                    console.log(res.receiptNumber);
+                    paymentPlan.planReceipt[0].receiptNumber =
+                        res.receiptNumber;
+
+                    await this.receiptCollection
+                        .doc(receipt.id)
+                        .set(receipt)
+                        .then((mess) => {
+                            this.message.success(
+                                'Receipt Successfully created'
+                            );
+                        })
+                        .catch((err) => {
+                            this.message.warning('Receipt Failed');
+                            console.log(err);
+                        });
+
+                    await this.paymentPlansCollection
+                        .doc(`${paymentPlan.id}`)
+                        .update(paymentPlan)
+                        .then((res) => {
+                            console.log(res);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
                 });
 
-            await this.paymentPlansCollection
-                .doc(`${paymentPlan.id}`)
-                .update(paymentPlan)
-                .then((res) => {
-                    console.log(res);
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
+            // receipt.id = v4();
         });
     }
 
