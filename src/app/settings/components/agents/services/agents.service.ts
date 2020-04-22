@@ -1,45 +1,110 @@
 import { Injectable } from '@angular/core';
-import { IAgent } from '../models/agents.model';
 import {
     AngularFirestore,
     AngularFirestoreCollection,
-    DocumentReference,
+    DocumentReference
 } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
+import { IAgent, IBroker, ISalesRepresentative } from '../models/agents.model';
 import { v4 } from 'uuid';
-import { first } from 'rxjs/operators';
+import { first, combineAll } from 'rxjs/operators';
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
 export class AgentsService {
     private agentsCollection: AngularFirestoreCollection<IAgent>;
+    private brokersCollection: AngularFirestoreCollection<IBroker>;
+    private salesRepresentativesCollection: AngularFirestoreCollection<
+        ISalesRepresentative
+    >;
 
     agents: Observable<IAgent[]>;
+    brokers: Observable<IBroker[]>;
+    salesRepresentatives: Observable<ISalesRepresentative[]>;
+
     constructor(private firebase: AngularFirestore) {
         this.agentsCollection = this.firebase.collection<IAgent>('agents');
-
         this.agents = this.agentsCollection.valueChanges();
+
+        this.brokersCollection = this.firebase.collection<IBroker>('brokers');
+        this.brokers = this.brokersCollection.valueChanges();
+
+        this.salesRepresentativesCollection = this.firebase.collection<
+            ISalesRepresentative
+        >('sales_representatives');
+        this.salesRepresentatives = this.salesRepresentativesCollection.valueChanges();
     }
 
     async addAgent(agent: IAgent): Promise<void> {
-        this.agents.pipe(first()).subscribe(async (agents) => {
-            agent.id = v4(); // Generates UUID of version 4.
-            agent.userType = 'Agent';
+        this.agents.pipe(first()).subscribe(async agents => {
+            agent.id = v4();
             agent.dateCreated = new Date();
-            agent.dateUpdated = new Date();
-            agent.agentID = this.generateAgentID(
+            agent.intermediaryId = this.generateIntermediaryID(
                 'Agent',
-                'INS202000030',
+                'GL',
                 agents.length
             );
 
-            await this.agentsCollection.add(agent);
+            await this.agentsCollection.doc(agent.id).set(agent);
         });
     }
 
     getAgents(): Observable<IAgent[]> {
         return this.agents;
+    }
+
+    async addBroker(broker: IBroker): Promise<void> {
+        this.brokers.pipe(first()).subscribe(async brokers => {
+            broker.id = v4();
+            broker.dateCreated = new Date();
+            broker.intermediaryId = this.generateIntermediaryID(
+                'Broker',
+                'GL',
+                brokers.length
+            );
+
+            await this.brokersCollection.doc(broker.id).set(broker);
+        });
+    }
+
+    getBrokers(): Observable<IBroker[]> {
+        return this.brokers;
+    }
+
+    async addSalesRepresentative(
+        salesRepresentative: ISalesRepresentative
+    ): Promise<void> {
+        this.salesRepresentatives
+            .pipe(first())
+            .subscribe(async salesRepresentatives => {
+                salesRepresentative.id = v4();
+                salesRepresentative.dateCreated = new Date();
+                salesRepresentative.intermediaryId = this.generateIntermediaryID(
+                    'Sales Representative',
+                    'GL',
+                    salesRepresentatives.length
+                );
+
+                await this.salesRepresentativesCollection
+                    .doc(salesRepresentative.id)
+                    .set(salesRepresentative);
+            });
+    }
+
+    getSalesRepresentatives(): Observable<ISalesRepresentative[]> {
+        return this.salesRepresentatives;
+    }
+
+    getAllIntermediaries(): Observable<
+        [IAgent[], IBroker[], ISalesRepresentative[]]
+    > {
+        // return combineLatest(this.agents, this.brokers, this.salesRepresentatives);
+        return combineLatest(
+            this.agents,
+            this.brokers,
+            this.salesRepresentatives
+        );
     }
 
     countGenerator(numb: string | number) {
@@ -49,17 +114,19 @@ export class AgentsService {
         return numb;
     }
 
-    generateAgentID(
-        userType: string,
+    generateIntermediaryID(
+        intermediaryType: string,
         insuranceCompanyName: string,
         totalAgents: number
     ) {
-        const userTyp = userType.substring(0, 3).toLocaleUpperCase();
+        const intermediaryTyp = intermediaryType
+            .substring(0, 3)
+            .toLocaleUpperCase();
         const insuranceCompanyNam = insuranceCompanyName
             .substring(0, 2)
             .toLocaleUpperCase();
         const count = this.countGenerator(totalAgents);
 
-        return userTyp + insuranceCompanyNam + count;
+        return intermediaryTyp + insuranceCompanyNam + count;
     }
 }

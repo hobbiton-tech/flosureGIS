@@ -1,20 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Policy, RiskModel, ITimestamp } from '../../models/policy.model';
+import { Policy, ITimestamp } from '../../models/policy.model';
 import { PoliciesService } from '../../services/policies.service';
 import {
     IPaymentModel,
-    InstallmentsModel,
+    InstallmentsModel
 } from 'src/app/accounts/components/models/payment-plans.model';
 import { v4 } from 'uuid';
 import { PaymentPlanService } from 'src/app/accounts/services/payment-plan.service';
 import { AccountService } from 'src/app/accounts/services/account.service';
+import { RiskModel } from 'src/app/quotes/models/quote.model';
 
 @Component({
     selector: 'app-policy-details',
     templateUrl: './policy-details.component.html',
-    styleUrls: ['./policy-details.component.scss'],
+    styleUrls: ['./policy-details.component.scss']
 })
 export class PolicyDetailsComponent implements OnInit {
     isVisible = false;
@@ -46,14 +47,30 @@ export class PolicyDetailsComponent implements OnInit {
     isSchedulePDFVisible = false;
     isClausesPDFVisible = false;
 
+    // For Modal
+    clientName: string;
+    clientNumber: string;
+    clientEmail: string;
+    policyRisk: RiskModel;
+    issueDate: string;
+    issueTime: string;
+    agency: string;
+    classOfBusiness: string;
+    coverForm: string;
+    coverTo: string;
+    basicPremium: string;
+    loadingAmount: string;
+    discountAmount: string;
+    totalAmount: string;
+
     optionList = [
         { label: 'Full Payment', value: 'fully' },
-        { label: 'Payment Plan', value: 'plan' },
+        { label: 'Payment Plan', value: 'plan' }
     ];
     selectedValue = 'fully';
     formattedDate: any;
     planId: string;
-    clientName: any;
+    // clientName: any;
     netPremium: any;
     formattedeDate: string;
 
@@ -68,23 +85,38 @@ export class PolicyDetailsComponent implements OnInit {
         this.paymentPlanForm = this.formBuilder.group({
             numberOfInstallments: ['', Validators.required],
             startDate: ['', Validators.required],
-            initialInstallmentAmount: ['', Validators.required],
+            initialInstallmentAmount: ['', Validators.required]
         });
     }
 
     ngOnInit(): void {
-        this.route.params.subscribe((param) => {
+        this.route.params.subscribe(param => {
             this.policyNumber = param.policyNumber;
-            this.policiesService.getPolicies().subscribe((policies) => {
+            this.policiesService.getPolicies().subscribe(policies => {
                 this.policyData = policies.filter(
-                    (x) => x.policyNumber === this.policyNumber
+                    x => x.policyNumber === this.policyNumber
                 )[0];
                 this.policiesList = policies;
                 this.policy = this.policiesList.filter(
-                    (x) => x.policyNumber === this.policyNumber
+                    x => x.policyNumber === this.policyNumber
                 )[0];
                 this.displayPolicy = this.policy;
                 this.risks = this.displayPolicy.risks;
+
+                this.policyRisk = this.displayPolicy.risks[0];
+                this.clientName = this.displayPolicy.client;
+                this.clientNumber = '+260976748392';
+                this.clientEmail = this.clientName + '@gmail.com'; // TODO: Track client data
+                this.agency = 'Direct'; // TODO: Track this guy too
+                this.coverForm = this.displayPolicy.startDate.toString();
+                this.coverTo = this.displayPolicy.endDate.toString();
+                // this.basicPremium = this.displayPolicy
+                this.loadingAmount = '-';
+                this.discountAmount = '-';
+                this.totalAmount = this.displayPolicy.netPremium.toString();
+                this.issueDate = this.displayPolicy.dateOfIssue.toString();
+                this.issueTime = this.displayPolicy.dateOfIssue.toString();
+
                 this.risksLoading = false;
             });
         });
@@ -104,13 +136,13 @@ export class PolicyDetailsComponent implements OnInit {
             dateOfIssue: ['', Validators.required],
             expiryDate: ['', Validators.required],
             quarter: ['', Validators.required],
-            town: ['', Validators.required],
+            town: ['', Validators.required]
         });
 
         // set values of fields
-        this.policiesService.getPolicies().subscribe((policies) => {
+        this.policiesService.getPolicies().subscribe(policies => {
             this.policyData = policies.filter(
-                (x) => x.policyNumber === this.policyNumber
+                x => x.policyNumber === this.policyNumber
             )[0];
             this.policyDetailsForm
                 .get('client')
@@ -174,7 +206,7 @@ export class PolicyDetailsComponent implements OnInit {
             let policyCount = 0;
             const policyPlan: Policy[] = [];
             policyPlan.push({
-                ...policyData,
+                ...policyData
             });
 
             this.policyUpdate = policyData;
@@ -223,7 +255,7 @@ export class PolicyDetailsComponent implements OnInit {
                     installmentAmount: iAmount,
                     installmentDate: this.formattedDate,
                     balance: iAmount,
-                    installmentStatus: 'UnPaid',
+                    installmentStatus: 'UnPaid'
                 });
             }
             // Payment Plan
@@ -249,7 +281,7 @@ export class PolicyDetailsComponent implements OnInit {
                 amountOutstanding: dAmount,
                 installments: installment,
                 startDate: pDate,
-                endDate: this.formattedeDate,
+                endDate: this.formattedeDate
             };
 
             console.log('..........Payment Plan..........');

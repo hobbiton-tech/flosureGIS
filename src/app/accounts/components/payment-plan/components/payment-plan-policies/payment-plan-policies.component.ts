@@ -6,7 +6,7 @@ import { PaymentPlanService } from 'src/app/accounts/services/payment-plan.servi
 @Component({
     selector: 'app-payment-plan-policies',
     templateUrl: './payment-plan-policies.component.html',
-    styleUrls: ['./payment-plan-policies.component.scss'],
+    styleUrls: ['./payment-plan-policies.component.scss']
 })
 export class PaymentPlanPoliciesComponent implements OnInit {
     ngOnInit() {}

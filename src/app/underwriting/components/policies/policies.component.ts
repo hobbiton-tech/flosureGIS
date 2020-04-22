@@ -16,19 +16,25 @@ export class PoliciesComponent implements OnInit {
 
     searchString: string;
 
-    constructor(private readonly route: Router, private policiesService: PoliciesService) {}
+    constructor(
+        private readonly route: Router,
+        private policiesService: PoliciesService
+    ) {}
 
     ngOnInit(): void {
         this.policiesService.getPolicies().subscribe(policies => {
             this.policiesList = policies;
             this.policiesCount = policies.length;
 
-            this.displayPoliciesList = this.policiesList
-        })
+            this.displayPoliciesList = this.policiesList;
+        });
     }
 
     viewPolicyDetails(policy: Policy): void {
-        this.route.navigateByUrl('/flosure/underwriting/policy-details/' + policy.policyNumber);
+        this.route.navigateByUrl(
+            '/flosure/underwriting/policy-details/' +
+                encodeURIComponent(policy.policyNumber)
+        );
     }
 
     search(value: string): void {
@@ -36,10 +42,18 @@ export class PoliciesComponent implements OnInit {
             this.displayPoliciesList = this.policiesList;
         }
 
-        this.displayPoliciesList = this.policiesList.filter(policy => {   
-                return (policy.policyNumber.toLowerCase().includes(value.toLowerCase())
-            || policy.client.toLocaleLowerCase().includes(value.toLowerCase()) 
-            || policy.preparedBy.toLocaleLowerCase().includes(value.toLowerCase()));
+        this.displayPoliciesList = this.policiesList.filter(policy => {
+            return (
+                policy.policyNumber
+                    .toLowerCase()
+                    .includes(value.toLowerCase()) ||
+                policy.client
+                    .toLocaleLowerCase()
+                    .includes(value.toLowerCase()) ||
+                policy.preparedBy
+                    .toLocaleLowerCase()
+                    .includes(value.toLowerCase())
+            );
         });
     }
 }

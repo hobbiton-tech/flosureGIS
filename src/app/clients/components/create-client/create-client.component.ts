@@ -2,17 +2,20 @@ import {
     Component,
     OnInit,
     AfterViewInit,
-    ChangeDetectorRef,
+    ChangeDetectorRef
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { IIndividualClient, ICorporateClient } from '../../models/client.model';
+import {
+    IIndividualClient,
+    ICorporateClient
+} from '../../models/clients.model';
 import { ClientsService } from '../../services/clients.service';
 
 @Component({
     selector: 'app-create-client',
     templateUrl: './create-client.component.html',
-    styleUrls: ['./create-client.component.scss'],
+    styleUrls: ['./create-client.component.scss']
 })
 export class CreateClientComponent implements OnInit, AfterViewInit {
     individualClientForm: FormGroup;
@@ -47,7 +50,7 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
             accountNumber: ['', Validators.required],
             accountType: ['', Validators.required],
             bank: ['', Validators.required],
-            branch: ['', Validators.required],
+            branch: ['', Validators.required]
         });
 
         this.corporateClientForm = this.formBuilder.group({
@@ -68,7 +71,7 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
             accountNumber: ['', Validators.required],
             accountType: ['', Validators.required],
             bank: ['', Validators.required],
-            branch: ['', Validators.required],
+            branch: ['', Validators.required]
         });
     }
 
@@ -106,7 +109,7 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
             !this.individualClientForm.valid
         ) {
             this.addIndividualClient(this.individualClientForm.value).then(
-                (res) => {
+                res => {
                     console.log('Added Individaul');
                     this.individualClientForm.reset();
                 }
@@ -115,19 +118,24 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
     }
 
     submitCorporateClient(): void {
-        for (let i in this.corporateClientForm.controls) {
-            /// validation;
-            this.corporateClientForm.controls[i].markAsDirty();
-            this.corporateClientForm.updateValueAndValidity();
-        }
+        this.addCorporateClient(this.corporateClientForm.value).then(res => {
+            console.log('Added Corporate.');
+            this.corporateClientForm.reset();
+        });
 
-        if (this.corporateClientForm.valid) {
-            this.addCorporateClient(this.corporateClientForm.value).then(
-                (res) => {
-                    console.log('Added Corporate.');
-                    this.corporateClientForm.reset();
-                }
-            );
-        }
+        // for (let i in this.corporateClientForm.controls) {
+        //     /// validation;
+        //     this.corporateClientForm.controls[i].markAsDirty();
+        //     this.corporateClientForm.updateValueAndValidity();
+        // }
+
+        // if (this.corporateClientForm.valid) {
+        //     this.addCorporateClient(this.corporateClientForm.value).then(
+        //         res => {
+        //             console.log('Added Corporate.');
+        //             this.corporateClientForm.reset();
+        //         }
+        //     );
+        // }
     }
 }
