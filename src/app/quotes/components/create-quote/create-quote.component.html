@@ -318,8 +318,8 @@
                                                     <nz-form-control nzSpan="10">
                                                         <nz-select name="load" nzPlaceHolder="Select Load"
                                                             [(ngModel)]="selectedLoadingValue" [compareWith]="compareFn"
-                                                            style="width: 100%;"
-                                                            [ngModelOptions]="{standalone: true}" 
+                                                            nzAllowClear style="width: 100%;"
+                                                            [ngModelOptions]="{standalone: true}" nzAllowClear
                                                             nzLabel="select load">
                                                             <nz-option
                                                                 *ngFor="let option of motorComprehensiveloadingOptions"
@@ -878,8 +878,8 @@
                                                     <nz-form-control nzSpan="10">
                                                         <nz-select name="load" nzPlaceHolder="Select Load"
                                                             [(ngModel)]="selectedLoadingValue" [compareWith]="compareFn"
-                                                             style="width: 100%;"
-                                                            [ngModelOptions]="{standalone: true}" 
+                                                            nzAllowClear style="width: 100%;"
+                                                            [ngModelOptions]="{standalone: true}" nzAllowClear
                                                             nzLabel="select load">
                                                             <nz-option
                                                                 *ngFor="let option of motorComprehensiveloadingOptions"
@@ -1054,7 +1054,7 @@
                     </nz-collapse-panel>
                 </nz-collapse>
             </div>
-        </!-->
+        </div>
 
 
         <!-- Risks Table Search bar and Table details start here -->
@@ -1389,8 +1389,8 @@
                                             <nz-form-control nzSpan="10">
                                                 <nz-select name="load" nzPlaceHolder="Select Load"
                                                     [(ngModel)]="selectedLoadingValue" [compareWith]="compareFn"
-                                                     style="width: 100%;"
-                                                    [ngModelOptions]="{standalone: true}" 
+                                                    nzAllowClear style="width: 100%;"
+                                                    [ngModelOptions]="{standalone: true}" nzAllowClear
                                                     nzLabel="select load" [nzDisabled]="!isRiskDetailsEditmode">
                                                     <nz-option *ngFor="let option of motorComprehensiveloadingOptions"
                                                         [nzValue]="option" [nzLabel]="option.label"></nz-option>
@@ -1407,8 +1407,8 @@
                                             <nz-form-control nzSpan="10">
                                                 <nz-select name="load" nzPlaceHolder="Select Load"
                                                     [(ngModel)]="selectedLoadingValue" [compareWith]="compareFn"
-                                                     style="width: 100%;"
-                                                    [ngModelOptions]="{standalone: true}" 
+                                                    nzAllowClear style="width: 100%;"
+                                                    [ngModelOptions]="{standalone: true}" nzAllowClear
                                                     nzLabel="select load" [nzDisabled]="!isRiskDetailsEditmode">
                                                     <nz-option *ngFor="let option of motorThirdPartyloadingOptions"
                                                         [nzValue]="option" [nzLabel]="option.label"></nz-option>
