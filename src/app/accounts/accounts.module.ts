@@ -12,6 +12,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PaymentPlanComponent } from './components/payment-plan/payment-plan.component';
 import { PaymentPlanPoliciesComponent } from './components/payment-plan/components/payment-plan-policies/payment-plan-policies.component';
 import { PaymentPlanPolicyInstallmentsComponent } from './components/payment-plan/components/payment-plan-policy-installments/payment-plan-policy-installments.component';
+import { ReceiptDocumentComponent } from './components/receipts/documents/receipt-document/receipt-document.component';
 
 const routes: Routes = [
     {
@@ -53,6 +54,7 @@ const routes: Routes = [
         PaymentPlanComponent,
         PaymentPlanPoliciesComponent,
         PaymentPlanPolicyInstallmentsComponent,
+        ReceiptDocumentComponent,
     ],
     imports: [
         CommonModule,
