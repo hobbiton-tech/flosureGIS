@@ -18,6 +18,11 @@
                         >
                     </nz-descriptions>
                 </nz-page-header-content>
+                <nz-page-header-extra>
+                    <button nz-button nzType="primary">
+                        Add Policy
+                    </button>
+                </nz-page-header-extra>
             </nz-page-header>
         </div>
         <div style="margin-bottom: 5px; margin-top: 5px;">
@@ -126,6 +131,76 @@
         </div>
 
         <nz-card style="margin-bottom: 5px;">
+            <div style="margin-bottom: 5px;">
+                <nz-collapse>
+                    <nz-collapse-panel [nzHeader]="'Receipts'">
+                        <!-- <div style="margin-bottom: 10px; width: 50%">
+            <nz-input-group [nzSuffix]="suffixIconSearch">
+                <input
+                    type="text"
+                    nz-input
+                    placeholder="Search by client, policy number, agent"
+                    [(ngModel)]="searchString"
+                    (ngModelChange)="search($event)"
+                />
+            </nz-input-group>
+            <ng-template #suffixIconSearch>
+                <i nz-icon nzType="search"></i>
+            </ng-template>
+        </div> -->
+
+                        <nz-table
+                            #receiptTable
+                            [nzData]="displayReceiptsList"
+                            [nzSize]="'small'"
+                            [nzBordered]="true"
+                        >
+                            <thead>
+                                <tr>
+                                    <th>Receipt Number</th>
+                                    <th>Client</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    *ngFor="let receipt of receiptTable.data"
+                                    (click)="viewPolicyDetails(policy)"
+                                    style="cursor: pointer;"
+                                >
+                                    <td>{{ receipt.receiptNumber }}</td>
+                                    <td>{{ receipt.onBehalfOf }}</td>
+                                    <td>
+                                        {{
+                                            receipt.sumInDigits
+                                                | number: '1.2-2'
+                                        }}
+                                    </td>
+                                    <td>{{ receipt.allocationStatus }}</td>
+                                    <!-- <td>
+                                    <div
+                                        *ngIf="
+                                            policy.allocationStatus !==
+                                            'Allocated'
+                                        "
+                                    >
+                                        <button
+                                            nz-button
+                                            nzType="primary"
+                                            (click)="showAllocationModal()"
+                                        >
+                                            Allocate
+                                        </button>
+                                    </div>
+                                </td> -->
+                                </tr>
+                            </tbody>
+                        </nz-table>
+                    </nz-collapse-panel>
+                </nz-collapse>
+            </div>
+
             <nz-collapse>
                 <nz-collapse-panel [nzHeader]="'Policies'">
                     <!-- <div style="margin-bottom: 10px; width: 50%">
@@ -157,6 +232,7 @@
                                 <th>Client Name</th>
                                 <th>Agent</th>
                                 <th>Status</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -170,7 +246,23 @@
                                 <td>{{ policy.endDate | date }}</td>
                                 <td>{{ policy.client }}</td>
                                 <td>{{ policy.user }}</td>
-                                <td>{{ policy.status }}</td>
+                                <td>{{ policy.allocationStatus }}</td>
+                                <td>
+                                    <div
+                                        *ngIf="
+                                            policy.allocationStatus !==
+                                            'Allocated'
+                                        "
+                                    >
+                                        <button
+                                            nz-button
+                                            nzType="primary"
+                                            (click)="showAllocationModal()"
+                                        >
+                                            Allocate
+                                        </button>
+                                    </div>
+                                </td>
                             </tr>
                         </tbody>
                     </nz-table>

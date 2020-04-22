@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import {
     IPaymentModel,
     InstallmentsModel,
+    PolicyPaymentPlan,
 } from '../models/payment-plans.model';
 import { PaymentPlanService } from '../../services/payment-plan.service';
 
@@ -18,6 +19,7 @@ import {
     IIndividualClient,
     ICorporateClient,
 } from 'src/app/clients/models/clients.model';
+import { AccountService } from '../../services/account.service';
 
 @Component({
     selector: 'app-payment-plan',
@@ -43,7 +45,6 @@ export class PaymentPlanComponent implements OnInit {
     size = 'default';
     searchChange$ = new BehaviorSubject('');
     isLoading = false;
-    receiptService: any;
     optionList: string[] = [];
 
     // search value for filtering payment plan table
@@ -53,13 +54,13 @@ export class PaymentPlanComponent implements OnInit {
     formattedDate: any;
     clientName: any;
     netPremium = 0;
-    policyPlan: any;
     formattedeDate: string;
     constructor(
         private router: Router,
         private paymentPlanService: PaymentPlanService,
         private policyService: PoliciesService,
         private readonly clientsService: ClientsService,
+        private accountService: AccountService,
         private formBuilder: FormBuilder
     ) {
         this.paymentPlanForm = this.formBuilder.group({
@@ -167,27 +168,33 @@ export class PaymentPlanComponent implements OnInit {
         console.log(this.policyNumber);
         let pAmount = 0;
         let policyCount = 0;
+        const policyPlan: PolicyPaymentPlan[] = [];
 
         for (const policy of this.policyNumber) {
             this.policyUpdate = policy;
+
+            console.log(this.policyUpdate);
 
             pAmount = pAmount + policy.netPremium;
             policyCount++;
 
             // // initialize Policy plan
-            // const policyPlan: PolicyPaymentPlan[] = [];
-            // policyPlan.push({
-            //     policyNumber: policy.policyNumber,
-            //     premium: policy.netPremium,
-            //     startDate: policy.startDate,
-            //     endDate: policy.endDate,
-            // });
+            policyPlan.push({
+                id: policy.id,
+                policyNumber: policy.policyNumber,
+                startDate: policy.startDate,
+                endDate: policy.endDate,
+                client: policy.client,
+                clientCode: '',
+                netPremium: policy.netPremium,
+                allocationStatus: 'Unallocated',
+            });
 
             this.clientName = policy.client;
             this.netPremium = this.netPremium + policy.netPremium;
             // this.policyPlan = policyPlan;
             this.policyUpdate.paymentPlan = 'Created';
-            this.receiptService.updatePolicy(this.policyUpdate);
+            this.accountService.updatePolicy(this.policyUpdate);
         }
 
         const eDate = new Date(this.paymentPlanForm.controls.startDate.value);
@@ -211,8 +218,13 @@ export class PaymentPlanComponent implements OnInit {
         //     i < this.paymentPlanForm.controls.numberOfInstallments.value;
         //     i++
         // )
+
         const iDate = new Date(this.paymentPlanForm.controls.startDate.value);
-        while (iDate <= eDate) {
+        for (
+            let i = 0;
+            i < this.paymentPlanForm.controls.numberOfInstallments.value;
+            i++
+        ) {
             iDate.setMonth(iDate.getMonth() + 1);
             this.formattedDate = iDate.toISOString().slice(0, 10);
 
@@ -233,7 +245,7 @@ export class PaymentPlanComponent implements OnInit {
             numberOfPolicies: policyCount,
             totalPremium: pAmount,
             status: 'UnPaid',
-            policyPaymentPlan: this.policyNumber,
+            policyPaymentPlan: policyPlan,
             remainingInstallments: this.paymentPlanForm.controls
                 .numberOfInstallments.value,
             amountPaid: 0,
