@@ -107,18 +107,9 @@ export class PaymentPlanService {
         });
     }
 
-    generateReceiptNumber(): string {
-        let receiptNumber = '';
-        this.http
-            .get<IReceiptNumberResult>(
-                'https://flosure-premium-rates.herokuapp.com/receipts'
-            )
-            .subscribe(async (res) => {
-                receiptNumber = res.receiptNumber;
-                console.log('-----------------res-------------');
-                console.log(res);
-            });
-
-        return receiptNumber;
+    generateReceiptNumber(): Promise<any> {
+        return this.http
+            .get<any>('https://flosure-premium-rates.herokuapp.com/receipts')
+            .toPromise();
     }
 }

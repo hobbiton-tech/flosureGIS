@@ -108,6 +108,8 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
     clientType: string;
     receiptNo: string;
     paymentPlanReceipts: PlanReceipt[];
+    rptNo: string;
+    rcpt: any;
 
     constructor(
         private route: ActivatedRoute,
@@ -125,10 +127,23 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
         this.reinstateForm = this.formBuilder.group({
             remarks: ['', Validators.required],
         });
+        this.receiptForm = this.formBuilder.group({
+            receivedFrom: ['', Validators.required],
+            sumInDigits: ['', Validators.required],
+            paymentMethod: ['', Validators.required],
+            tpinNumber: ['4324324324324324'],
+            address: [''],
+            receiptType: ['', Validators.required],
+            narration: ['', Validators.required],
+            sumInWords: [''],
+            dateReceived: [''],
+            todayDate: [this.today],
+            remarks: [''],
+        });
     }
 
     ngOnInit(): void {
-        this.route.params.subscribe((param) => {
+        this.route.params.subscribe(async (param) => {
             this.paymentPlanId = param.id;
             this.policyNumber = param.policyNumber;
 
@@ -204,24 +219,12 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
                 )[0];
             });
 
-            this.receiptForm = this.formBuilder.group({
-                receivedFrom: ['', Validators.required],
-                sumInDigits: ['', Validators.required],
-                paymentMethod: ['', Validators.required],
-                tpinNumber: ['4324324324324324'],
-                receiptNumber: [
-                    this.paymentPlanService.generateReceiptNumber(),
-                ],
-                address: [''],
-                receiptType: ['', Validators.required],
-                narration: ['', Validators.required],
-                sumInWords: [''],
-                dateReceived: [''],
-                todayDate: [this.today],
-                remarks: [''],
-            });
+            // this.paymentPlanService.generateReceiptNumber().subscribe((rct) => {
+            //     this.rptNo = rct.receiptNumber;
+            // });
+            this.rcpt = await this.paymentPlanService.generateReceiptNumber();
 
-            console.log(this.paymentPlanService.generateReceiptNumber());
+            console.log();
         });
     }
 
@@ -256,6 +259,8 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
 
     async handleOk() {
         this.submitted = true;
+        console.log('.........RPT No...........');
+        console.log(this.rptNo);
 
         if (this.receiptForm.valid) {
             const amount = this.receiptForm.controls.sumInDigits.value;
@@ -267,6 +272,7 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
                 ...this.receiptForm.value,
                 onBehalfOf: this.paymentPlanData.clientName,
                 capturedBy: this.user,
+                receiptNumber: this.rcpt,
                 policyNumber: '',
                 receiptStatus: this.recStatus,
                 sumInDigits: amount,
@@ -277,6 +283,7 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
             planReceipt.push({
                 ...this.receiptForm.value,
                 id: this._id,
+                receiptNumber: this.rcpt,
                 onBehalfOf: this.paymentPlanData.clientName,
                 allocationStatus: 'Unallocated',
                 sumInDigits: amount,
@@ -339,8 +346,7 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
                 this.isVisible = false;
                 this.isOkLoading = false;
             }, 30);
-            console.log('.........RPT No...........');
-            console.log(this.receiptNo);
+
             await this.paymentPlanService.addReceipt(
                 receipt,
                 this.paymentPlanData
