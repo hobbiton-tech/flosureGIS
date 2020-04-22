@@ -6,31 +6,34 @@ import { Routes, RouterModule } from '@angular/router';
 import { EndorsementsComponent } from './components/endorsements/endorsements.component';
 import { PolicyDetailsComponent } from './components/policy-details/policy-details.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { NgxPrintModule } from 'ngx-print'
+import { NgxPrintModule } from 'ngx-print';
 
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { PolicyCertificateDocumentComponent } from './documents/policy-certificate-document/policy-certificate-document.component';
 import { PolicyClausesDocumentComponent } from './documents/policy-clauses-document/policy-clauses-document.component';
 import { PolicyScheduleDocumentComponent } from './documents/policy-schedule-document/policy-schedule-document.component';
 import { PolicyDebitNoteDocumentComponent } from './documents/policy-debit-note-document/policy-debit-note-document.component';
+import { PolicyDetailsResolver } from './resolvers/policy-details.resolver';
+import { PoliciesService } from './services/policies.service';
 
 const routes: Routes = [
     {
         path: 'endorsements',
-        component: EndorsementsComponent
+        component: EndorsementsComponent,
     },
     {
         path: 'policies',
-        component: PoliciesComponent
+        component: PoliciesComponent,
     },
     {
         path: 'policy-details',
-        component: PolicyDetailsComponent
+        component: PolicyDetailsComponent,
     },
     {
-        path: 'policy-details/:policyNumber',
-        component: PolicyDetailsComponent
-    }
+        path: 'policy-details/:id',
+        component: PolicyDetailsComponent,
+        resolve: PolicyDetailsResolver,
+    },
 ];
 
 @NgModule({
@@ -41,7 +44,7 @@ const routes: Routes = [
         PolicyCertificateDocumentComponent,
         PolicyClausesDocumentComponent,
         PolicyScheduleDocumentComponent,
-        PolicyDebitNoteDocumentComponent
+        PolicyDebitNoteDocumentComponent,
     ],
     imports: [
         CommonModule,
@@ -50,7 +53,8 @@ const routes: Routes = [
         ReactiveFormsModule,
         RouterModule.forChild(routes),
         PdfViewerModule,
-        NgxPrintModule
-    ]
+        NgxPrintModule,
+    ],
+    providers: [PolicyDetailsResolver, PoliciesService],
 })
 export class UnderWritingModule {}

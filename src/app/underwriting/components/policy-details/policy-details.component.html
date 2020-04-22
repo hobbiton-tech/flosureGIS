@@ -1,39 +1,58 @@
-<nz-spin [nzSpinning]="risksLoading">
+<nz-spin [nzSpinning]="false">
     <div class="policy-detail">
         <div style="margin: 15px;">
             <nz-breadcrumb>
-                <nz-breadcrumb-item (click)="goToPoliciesList()" style="cursor: pointer;">
+                <nz-breadcrumb-item
+                    (click)="goToPoliciesList()"
+                    style="cursor: pointer;"
+                >
                     Policies
                 </nz-breadcrumb-item>
-                <nz-breadcrumb-item (click)="goToPoliciesList()" style="cursor: pointer;">
+                <nz-breadcrumb-item
+                    (click)="goToPoliciesList()"
+                    style="cursor: pointer;"
+                >
                     Policies List
                 </nz-breadcrumb-item>
                 <nz-breadcrumb-item>
                     Policy Details
                 </nz-breadcrumb-item>
             </nz-breadcrumb>
-            <nz-page-header (nzBack)="goToClientsList()" nzBackIcon
-                nzTitle="Policy Number: {{ policyData.policyNumber }}" [nzSubtitle]="policyData.client">
+            <nz-page-header
+                (nzBack)="goToClientsList()"
+                nzBackIcon
+                nzTitle="Policy Number: {{ policyData.policyNumber }}"
+                [nzSubtitle]="policyData.client"
+            >
                 <nz-page-header-extra>
-                    <button nz-button nzType="default" (click)="isCertificatePDFVisible = true">
-                        Certificate
-                    </button>
-                    <!-- <button
+                    <button
                         nz-button
                         nzType="default"
-                        (click)="isSchedulePDFVisible = true"
+                        (click)="isCertificatePDFVisible = true"
                     >
-                        Schedule
-                    </button> -->
-                    <button nz-button nzType="default" (click)="isDebitNotePDFVisible = true">
+                        Certificate
+                    </button>
+                    <button
+                        nz-button
+                        nzType="default"
+                        (click)="isDebitNotePDFVisible = true"
+                    >
                         Debit Note
                     </button>
-                    <button nz-button nzType="default" (click)="isDebitNotePDFVisible = true">
+                    <button
+                        nz-button
+                        nzType="default"
+                        (click)="isClausesPDFVisible = true"
+                    >
                         Clauses
                     </button>
 
-                    <button *ngIf="policyData.paymentPlan === 'NotCreated'" nz-button nzType="primary"
-                        (click)="showModal(policyData)">
+                    <button
+                        *ngIf="policyData.paymentPlan === 'NotCreated'"
+                        nz-button
+                        nzType="primary"
+                        (click)="showModal(policyData)"
+                    >
                         Create Payment Plan
                     </button>
                 </nz-page-header-extra>
@@ -42,41 +61,66 @@
     </div>
     <div style="margin: 15px;">
         <nz-card>
-            <nz-divider nzText="Policy Details" nzOrientation="left"></nz-divider>
+            <nz-divider
+                nzText="Policy Details"
+                nzOrientation="left"
+            ></nz-divider>
             <form nz-form [formGroup]="policyDetailsForm">
                 <div nz-row nzGutter="0">
                     <div nz-col nzSpan="12">
                         <nz-form-item>
-                            <nz-form-label nzSpan="7">Name of Insured</nz-form-label>
+                            <nz-form-label nzSpan="7"
+                                >Name of Insured</nz-form-label
+                            >
                             <nz-form-control nzSpan="17">
-                                <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
-                                <input nz-input [disabled]="!isEditmode" formControlName="nameOfInsured" />
+                                <input
+                                    nz-input
+                                    [disabled]="!isEditmode"
+                                    formControlName="nameOfInsured"
+                                />
                             </nz-form-control>
                         </nz-form-item>
                         <nz-form-item>
                             <nz-form-label nzSpan="7">Currency</nz-form-label>
                             <nz-form-control nzSpan="17">
-                                <input nz-input [disabled]="!isEditmode" formControlName="currency" />
+                                <input
+                                    nz-input
+                                    [disabled]="!isEditmode"
+                                    formControlName="currency"
+                                />
                             </nz-form-control>
                         </nz-form-item>
                         <nz-form-item>
-                            <nz-form-label nzSpan="7">Sum Insured</nz-form-label>
+                            <nz-form-label nzSpan="7"
+                                >Sum Insured</nz-form-label
+                            >
                             <nz-form-control nzSpan="17">
-                                <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
-                                <input nz-input [disabled]="!isEditmode" formControlName="sumInsured" />
+                                <input
+                                    nz-input
+                                    [disabled]="!isEditmode"
+                                    formControlName="sumInsured"
+                                />
                             </nz-form-control>
                         </nz-form-item>
 
                         <nz-form-item>
                             <nz-form-label nzSpan="7">Premium</nz-form-label>
                             <nz-form-control nzSpan="17">
-                                <input nz-input [disabled]="!isEditmode" formControlName="netPremium" />
+                                <input
+                                    nz-input
+                                    [disabled]="!isEditmode"
+                                    formControlName="netPremium"
+                                />
                             </nz-form-control>
                         </nz-form-item>
                         <nz-form-item>
                             <nz-form-label nzSpan="7">Quarter</nz-form-label>
                             <nz-form-control nzSpan="17">
-                                <input nz-input [disabled]="!isEditmode" formControlName="quarter" />
+                                <input
+                                    nz-input
+                                    [disabled]="!isEditmode"
+                                    formControlName="quarter"
+                                />
                             </nz-form-control>
                         </nz-form-item>
                     </div>
@@ -84,33 +128,55 @@
                         <nz-form-item>
                             <nz-form-label nzSpan="7">Start Date</nz-form-label>
                             <nz-form-control nzSpan="17">
-                                <nz-date-picker formControlName="startDate" [nzDisabled]="!isEditmode"></nz-date-picker>
+                                <nz-date-picker
+                                    formControlName="startDate"
+                                    [nzDisabled]="!isEditmode"
+                                ></nz-date-picker>
                             </nz-form-control>
                         </nz-form-item>
                         <nz-form-item>
                             <nz-form-label nzSpan="7">End Date</nz-form-label>
                             <nz-form-control nzSpan="17">
-                                <nz-date-picker formControlName="endDate" [nzDisabled]="!isEditmode"></nz-date-picker>
+                                <nz-date-picker
+                                    formControlName="endDate"
+                                    [nzDisabled]="!isEditmode"
+                                ></nz-date-picker>
                             </nz-form-control>
                         </nz-form-item>
 
                         <nz-form-item>
-                            <nz-form-label nzSpan="7">Date Of Issue</nz-form-label>
+                            <nz-form-label nzSpan="7"
+                                >Date Of Issue</nz-form-label
+                            >
                             <nz-form-control nzSpan="5">
-                                <input nz-input [disabled]="!isEditmode" formControlName="dateOfIssue" />
-                                <!-- <nz-date-picker formControlName="dateOfIssue" [nzDisabled]="!isEditmode"></nz-date-picker> -->
+                                <input
+                                    nz-input
+                                    [disabled]="!isEditmode"
+                                    formControlName="dateOfIssue"
+                                />
                             </nz-form-control>
                         </nz-form-item>
                         <nz-form-item>
-                            <nz-form-label nzSpan="7">Time Of Issue</nz-form-label>
+                            <nz-form-label nzSpan="7"
+                                >Time Of Issue</nz-form-label
+                            >
                             <nz-form-control nzSpan="5">
-                                <input nz-input [disabled]="!isEditmode" formControlName="timeOfIssue" />
+                                <input
+                                    nz-input
+                                    [disabled]="!isEditmode"
+                                    formControlName="timeOfIssue"
+                                />
                             </nz-form-control>
                         </nz-form-item>
                         <nz-form-item>
-                            <nz-form-label nzSpan="7">Expiry Date</nz-form-label>
+                            <nz-form-label nzSpan="7"
+                                >Expiry Date</nz-form-label
+                            >
                             <nz-form-control nzSpan="17">
-                                <nz-date-picker formControlName="expiryDate" [nzDisabled]="!isEditmode">
+                                <nz-date-picker
+                                    formControlName="expiryDate"
+                                    [nzDisabled]="!isEditmode"
+                                >
                                 </nz-date-picker>
                             </nz-form-control>
                         </nz-form-item>
@@ -154,49 +220,88 @@
             </div>
         </nz-card>
         <nz-card>
-            <nz-divider nzText="Policy Documents" nzOrientation="left"></nz-divider>
+            <nz-divider
+                nzText="Policy Documents"
+                nzOrientation="left"
+            ></nz-divider>
             <div>
                 <div nz-row [nzGutter]="8">
                     <div nz-col [nzSpan]="6">
-                        <nz-card nzTitle="Certificate" nzHoverable (click)="isCertificatePDFVisible = true">
+                        <nz-card
+                            nzTitle="Certificate"
+                            nzHoverable
+                            (click)="isCertificatePDFVisible = true"
+                        >
                             <div style="text-align: center;">
-                                <i nz-icon nzType="file-pdf" nzTheme="outline" style="
+                                <i
+                                    nz-icon
+                                    nzType="file-pdf"
+                                    nzTheme="outline"
+                                    style="
                                         font-size: 24px;
                                         margin-bottom: 15px;
-                                    "></i>
+                                    "
+                                ></i>
                                 <p>Click to View</p>
                             </div>
                         </nz-card>
                     </div>
                     <div nz-col [nzSpan]="6">
-                        <nz-card nzTitle="Debit Note" nzHoverable (click)="isDebitNotePDFVisible = true">
+                        <nz-card
+                            nzTitle="Debit Note"
+                            nzHoverable
+                            (click)="isDebitNotePDFVisible = true"
+                        >
                             <div style="text-align: center;">
-                                <i nz-icon nzType="file-pdf" nzTheme="outline" style="
+                                <i
+                                    nz-icon
+                                    nzType="file-pdf"
+                                    nzTheme="outline"
+                                    style="
                                         font-size: 24px;
                                         margin-bottom: 15px;
-                                    "></i>
+                                    "
+                                ></i>
                                 <p>Click to View</p>
                             </div>
                         </nz-card>
                     </div>
                     <div nz-col [nzSpan]="6">
-                        <nz-card nzTitle="Schedule" nzHoverable (click)="isSchedulePDFVisible = true">
+                        <nz-card
+                            nzTitle="Schedule"
+                            nzHoverable
+                            (click)="isSchedulePDFVisible = true"
+                        >
                             <div style="text-align: center;">
-                                <i nz-icon nzType="file-pdf" nzTheme="outline" style="
+                                <i
+                                    nz-icon
+                                    nzType="file-pdf"
+                                    nzTheme="outline"
+                                    style="
                                         font-size: 24px;
                                         margin-bottom: 15px;
-                                    "></i>
+                                    "
+                                ></i>
                                 <p>Click to View</p>
                             </div>
                         </nz-card>
                     </div>
                     <div nz-col [nzSpan]="6">
-                        <nz-card nzTitle="Clauses" nzHoverable (click)="isClausesPDFVisible = true">
+                        <nz-card
+                            nzTitle="Clauses"
+                            nzHoverable
+                            (click)="isClausesPDFVisible = true"
+                        >
                             <div style="text-align: center;">
-                                <i nz-icon nzType="file-pdf" nzTheme="outline" style="
+                                <i
+                                    nz-icon
+                                    nzType="file-pdf"
+                                    nzTheme="outline"
+                                    style="
                                         font-size: 24px;
                                         margin-bottom: 15px;
-                                    "></i>
+                                    "
+                                ></i>
                                 <p>Click to View</p>
                             </div>
                         </nz-card>
@@ -207,17 +312,32 @@
     </div>
 </nz-spin>
 
-<!--Payment plans modal-->
-<nz-modal [nzVisible]="isVisible" nzTitle="Payment Plan" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk(policyData)"
-    [nzWidth]="800">
+<nz-modal
+    [nzVisible]="isVisible"
+    nzTitle="Payment Plan"
+    (nzOnCancel)="handleCancel()"
+    (nzOnOk)="handleOk(policyData)"
+    [nzWidth]="800"
+>
     <div nz-row nzGutter="0">
         <div nz-col [nzSpan]="12">
             <nz-form-item>
-                <nz-form-label [nzSpan]="9" nzFor="paymentPlan">Payment Plan</nz-form-label>
+                <nz-form-label [nzSpan]="9" nzFor="paymentPlan"
+                    >Payment Plan</nz-form-label
+                >
                 <nz-form-control nzSpan="15">
-                    <nz-select name="paymentPlan" nzShowSearch nzAllowClear [(ngModel)]="selectedValue"
-                        nzPlaceHolder="Choose Payment Plan">
-                        <nz-option *ngFor="let option of optionList" [nzValue]="option.value" [nzLabel]="option.label">
+                    <nz-select
+                        name="paymentPlan"
+                        nzShowSearch
+                        nzAllowClear
+                        [(ngModel)]="selectedValue"
+                        nzPlaceHolder="Choose Payment Plan"
+                    >
+                        <nz-option
+                            *ngFor="let option of optionList"
+                            [nzValue]="option.value"
+                            [nzLabel]="option.label"
+                        >
                         </nz-option>
                     </nz-select>
                 </nz-form-control>
@@ -236,27 +356,48 @@
         <div nz-row nzGutter="0" style="margin-left: 20px;">
             <form nz-form [nzLayout]="'inline'" [formGroup]="paymentPlanForm">
                 <nz-form-item>
-                    <nz-form-label [nzSpan]="12" nzFor="numberOfInstallments">Number Of Installments
+                    <nz-form-label [nzSpan]="12" nzFor="numberOfInstallments"
+                        >Number Of Installments
                     </nz-form-label>
-                    <nz-form-control [nzSpan]="12" nzErrorTip="Please input your username!">
-                        <input id="numberOfInstallments" type="number" nz-input
-                            formControlName="numberOfInstallments" />
+                    <nz-form-control
+                        [nzSpan]="12"
+                        nzErrorTip="Please input your username!"
+                    >
+                        <input
+                            id="numberOfInstallments"
+                            type="number"
+                            nz-input
+                            formControlName="numberOfInstallments"
+                        />
                     </nz-form-control>
                 </nz-form-item>
 
                 <nz-form-item>
-                    <nz-form-label [nzSm]="12" [nzXs]="24" nzRequired>Initial Installment Date
+                    <nz-form-label [nzSm]="12" [nzXs]="24" nzRequired
+                        >Initial Installment Date
                     </nz-form-label>
                     <nz-form-control [nzSm]="12" [nzXs]="24">
-                        <nz-date-picker formControlName="startDate"></nz-date-picker>
+                        <nz-date-picker
+                            formControlName="startDate"
+                        ></nz-date-picker>
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
-                    <nz-form-label [nzSpan]="12" nzFor="initialInstallmentAmount">Initial Installment Amount
+                    <nz-form-label
+                        [nzSpan]="12"
+                        nzFor="initialInstallmentAmount"
+                        >Initial Installment Amount
                     </nz-form-label>
-                    <nz-form-control [nzSpan]="12" nzErrorTip="Please input your username!">
-                        <input id="initialInstallmentAmountt" type="number" nz-input
-                            formControlName="initialInstallmentAmount" />
+                    <nz-form-control
+                        [nzSpan]="12"
+                        nzErrorTip="Please input your username!"
+                    >
+                        <input
+                            id="initialInstallmentAmountt"
+                            type="number"
+                            nz-input
+                            formControlName="initialInstallmentAmount"
+                        />
                     </nz-form-control>
                 </nz-form-item>
             </form>
@@ -264,61 +405,89 @@
     </div>
 </nz-modal>
 
-<!-- Certificate-->
-<nz-modal nzWidth="700" nzTitle="Golden Lotus" [(nzVisible)]="isCertificatePDFVisible"
-    (nzOnCancel)="isCertificatePDFVisible = false" (nzOnOk)="isCertificatePDFVisible = false">
+<nz-modal
+    nzWidth="700"
+    nzTitle="Golden Lotus"
+    [(nzVisible)]="isCertificatePDFVisible"
+    (nzOnCancel)="isCertificatePDFVisible = false"
+    (nzOnOk)="isCertificatePDFVisible = false"
+>
     <nz-card [nzBordered]="true" nzTitle="Policy Certificate Document">
-        <app-policy-certificate-document [clientName]="clientName" [clientNumber]="clientNumber" [clientEmail]="''"
-            [insuredName]="clientName" [policyRisk]="policyRisk" [policyNumber]="policyNumber" [issueDate]="issueDate"
-            [issueTime]="issueTime">
+        <app-policy-certificate-document
+            *ngIf="!risksLoading"
+            [clientName]="clientName"
+            [clientNumber]="clientNumber"
+            [clientEmail]="''"
+            [insuredName]="clientName"
+            [policyRisk]="policyRisk"
+            [policyNumber]="policyNumber"
+            [issueDate]="issueDate"
+            [issueTime]="issueTime"
+            [policy]="policyData"
+        >
         </app-policy-certificate-document>
     </nz-card>
 </nz-modal>
 
-<!-- Debit Note-->
-<nz-modal nzWidth="800" nzTitle="Golden Lotus" [(nzVisible)]="isDebitNotePDFVisible"
-    (nzOnCancel)="isDebitNotePDFVisible = false" (nzOnOk)="isDebitNotePDFVisible = false">
-    <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Debit Document" [nzExtra]="pdfDebitActions">
-        <app-policy-debit-note-document [clientName]="clientName" [clientNumber]="clientNumber"
-            [clientEmail]="clientEmail" [agency]="agency" [policyNumber]="policyNumber"
-            [classOfBusiness]="classOfBusiness" [coverFrom]="coverForm" [coverTo]="coverTo"
-            [basicPremium]="basicPremium" [loadingAmount]="loadingAmount" [discountAmount]="discountAmount"
-            [totalAmount]="totalAmount">
+<nz-modal
+    style="width: 100%;"
+    nzWidth="800"
+    nzTitle="Golden Lotus"
+    [(nzVisible)]="isDebitNotePDFVisible"
+    (nzOnCancel)="isDebitNotePDFVisible = false"
+    (nzOnOk)="isDebitNotePDFVisible = false"
+>
+    <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Debit Document">
+        <app-policy-debit-note-document
+            *ngIf="!risksLoading"
+            [clientName]="clientName"
+            [clientNumber]="clientNumber"
+            [clientEmail]="clientEmail"
+            [agency]="agency"
+            [policyNumber]="policyNumber"
+            [classOfBusiness]="classOfBusiness"
+            [coverFrom]="coverForm"
+            [coverTo]="coverTo"
+            [basicPremium]="basicPremium"
+            [loadingAmount]="loadingAmount"
+            [discountAmount]="discountAmount"
+            [totalAmount]="totalAmount"
+            [risk]="policyRisk"
+            [policy]="policyData"
+        >
         </app-policy-debit-note-document>
     </nz-card>
-    <ng-template #pdfDebitActions>
-        <div style="display: flex;">
-            <div style="margin-right: 8px;">
-                <button nz-button nzSize="medium" nzType="primary">
-                    Download
-                </button>
-            </div>
-            <div style="margin-right: 8px;">
-                <button nz-button nzSize="medium" nzType="primary">
-                    Print
-                </button>
-            </div>
-            <div>
-                <button nz-button nzSize="medium">Email</button>
-            </div>
-        </div>
-    </ng-template>
 </nz-modal>
 
-<!-- Schedule-->
-<nz-modal nzWidth="700" nzTitle="Golden Lotus" [(nzVisible)]="isSchedulePDFVisible"
-    (nzOnCancel)="isSchedulePDFVisible = false" (nzOnOk)="isSchedulePDFVisible = false">
-    <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Schedule Document">
-        <app-policy-certificate-document></app-policy-certificate-document>
+<nz-modal
+    style="width: 100%;"
+    nzTitle="Golden Lotus"
+    [(nzVisible)]="isSchedulePDFVisible"
+    (nzOnCancel)="isSchedulePDFVisible = false"
+    (nzOnOk)="isSchedulePDFVisible = false"
+>
+    <nz-card
+        style="width: 100%;"
+        [nzBordered]="true"
+        nzTitle="Schedule Document"
+    >
+        <!-- <app-policy-certificate-document></app-policy-certificate-document> -->
     </nz-card>
 </nz-modal>
 
-<!-- Clauses-->
-<nz-modal nzWidth="700" nzTitle="Golden Lotus" [(nzVisible)]="isClausesPDFVisible"
-    (nzOnCancel)="isClausesPDFVisible = false" (nzOnOk)="isClausesPDFVisible = false">
-    <!-- <app-policy-clauses-document></app-policy-clauses-document> -->
-
-    <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Policy Clauses Document">
+<nz-modal
+    style="width: 100%;"
+    nzWidth="800"
+    nzTitle="Golden Lotus"
+    [(nzVisible)]="isClausesPDFVisible"
+    (nzOnCancel)="isClausesPDFVisible = false"
+    (nzOnOk)="isClausesPDFVisible = false"
+>
+    <nz-card
+        style="width: 100%;"
+        [nzBordered]="true"
+        nzTitle="Policy Clauses Document"
+    >
         <app-policy-clauses-document></app-policy-clauses-document>
     </nz-card>
 </nz-modal>
