@@ -40,19 +40,6 @@ export class PolicyCertificateDocumentComponent implements OnInit {
 
     ngOnInit(): void {}
 
-    gotToPrint(): void {}
-
-    convertToPDF(): void {
-        let svg = document.getElementById('certificate');
-        // svg = svg.replace(/\r?\n|\r/g, '').trim();
-        let canvas = document.createElement('canvas');
-        // let some = canvg.Canvg.from(canvas.getContext('2d'), svg);
-        let imageData = canvas.toDataURL('image/png');
-        let doc = new jsPDF();
-        doc.addImage(imageData, 'PNG', 0, 0);
-        doc.save('cerficate');
-    }
-
     htmlToPdf() {
         this.generatingPDF = true;
         const div = document.getElementById('printSection');

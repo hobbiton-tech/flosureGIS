@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {
     InstallmentsModel,
-    IPaymentModel
+    IPaymentModel,
+    PolicyPaymentPlan,
+    PlanReceipt,
 } from '../../../models/payment-plans.model';
 
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,14 +19,14 @@ import { PoliciesService } from 'src/app/underwriting/services/policies.service'
 import { ClientsService } from 'src/app/clients/services/clients.service';
 import {
     IIndividualClient,
-    ICorporateClient
+    ICorporateClient,
 } from 'src/app/clients/models/clients.model';
 import * as _ from 'lodash';
 
 @Component({
     selector: 'app-payment-plan-policy-installments',
     templateUrl: './payment-plan-policy-installments.component.html',
-    styleUrls: ['./payment-plan-policy-installments.component.scss']
+    styleUrls: ['./payment-plan-policy-installments.component.scss'],
 })
 export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
     receiptForm: FormGroup;
@@ -88,21 +90,24 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
         { label: 'Third Party Recovery', value: 'Third Party Recovery' },
         {
             label: 'Imprest Retirement Receipt',
-            value: 'Imprest Retirement Receipt'
+            value: 'Imprest Retirement Receipt',
         },
         { label: 'Third Party Recovery', value: 'Third Party Recovery' },
-        { label: 'General Receipt', value: 'General Receipt' }
+        { label: 'General Receipt', value: 'General Receipt' },
     ];
 
     paymentMethodList = [
         { label: 'Cash', value: 'cash' },
         { label: 'EFT', value: 'eft' },
-        { label: 'Bank Transfer', value: 'bank transfer' }
+        { label: 'Bank Transfer', value: 'bank transfer' },
     ];
 
-    displayPoliciesList: Policy[];
+    displayPoliciesList: PolicyPaymentPlan[];
+    displayReceiptsList: PlanReceipt[];
     clientI: IIndividualClient;
     clientType: string;
+    receiptNo: string;
+    paymentPlanReceipts: PlanReceipt[];
 
     constructor(
         private route: ActivatedRoute,
@@ -114,30 +119,16 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
         private router: Router,
         private clientsService: ClientsService
     ) {
-        this.receiptForm = this.formBuilder.group({
-            receivedFrom: ['', Validators.required],
-            sumInDigits: ['', Validators.required],
-            paymentMethod: ['', Validators.required],
-            tpinNumber: ['4324324324324324'],
-            address: [''],
-            receiptType: ['', Validators.required],
-            narration: ['', Validators.required],
-            sumInWords: [''],
-            dateReceived: [''],
-            todayDate: [this.today],
-            remarks: ['']
-        });
-
         this.cancelForm = this.formBuilder.group({
-            remarks: ['', Validators.required]
+            remarks: ['', Validators.required],
         });
         this.reinstateForm = this.formBuilder.group({
-            remarks: ['', Validators.required]
+            remarks: ['', Validators.required],
         });
     }
 
     ngOnInit(): void {
-        this.route.params.subscribe(param => {
+        this.route.params.subscribe((param) => {
             this.paymentPlanId = param.id;
             this.policyNumber = param.policyNumber;
 
@@ -149,9 +140,9 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
 
             this.paymentPlanService
                 .getPaymentPlans()
-                .subscribe(paymentPlans => {
+                .subscribe((paymentPlans) => {
                     this.paymentPlanData = paymentPlans.filter(
-                        x => x.id === this.paymentPlanId
+                        (x) => x.id === this.paymentPlanId
                     )[0];
 
                     console.log('---------POLICY DATA---------');
@@ -165,6 +156,7 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
                     this.paymentPlanPolicyInstallmentsCount = this.paymentPlanData.installments.length;
 
                     this.displayPoliciesList = this.paymentPlanData.policyPaymentPlan;
+                    this.displayReceiptsList = this.paymentPlanData.planReceipt;
 
                     console.log(this.paymentPlanData.policyPaymentPlan);
 
@@ -172,10 +164,10 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
 
                     this.clientsService
                         .getCorporateClients()
-                        .subscribe(clients => {
+                        .subscribe((clients) => {
                             console.log(clients);
                             this.clientN = clients.filter(
-                                x =>
+                                (x) =>
                                     x.companyName ===
                                     this.paymentPlanData.clientName
                             )[0];
@@ -190,10 +182,10 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
 
                     this.clientsService
                         .getIndividualClients()
-                        .subscribe(clients => {
+                        .subscribe((clients) => {
                             console.log(clients);
                             this.clientI = clients.filter(
-                                x =>
+                                (x) =>
                                     x.firstName + ' ' + x.lastName ===
                                     this.paymentPlanData.clientName
                             )[0];
@@ -206,11 +198,30 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
                             // console.log('CLIENTS', this.client);
                         });
                 });
-            this.policyService.getPolicies().subscribe(policies => {
+            this.policyService.getPolicies().subscribe((policies) => {
                 this.policy = policies.filter(
-                    x => x.policyNumber === this.policyNumber
+                    (x) => x.policyNumber === this.policyNumber
                 )[0];
             });
+
+            this.receiptForm = this.formBuilder.group({
+                receivedFrom: ['', Validators.required],
+                sumInDigits: ['', Validators.required],
+                paymentMethod: ['', Validators.required],
+                tpinNumber: ['4324324324324324'],
+                receiptNumber: [
+                    this.paymentPlanService.generateReceiptNumber(),
+                ],
+                address: [''],
+                receiptType: ['', Validators.required],
+                narration: ['', Validators.required],
+                sumInWords: [''],
+                dateReceived: [''],
+                todayDate: [this.today],
+                remarks: [''],
+            });
+
+            console.log(this.paymentPlanService.generateReceiptNumber());
         });
     }
 
@@ -256,13 +267,23 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
                 ...this.receiptForm.value,
                 onBehalfOf: this.paymentPlanData.clientName,
                 capturedBy: this.user,
-                policyNumber: this.policyNumber,
+                policyNumber: '',
                 receiptStatus: this.recStatus,
                 sumInDigits: amount,
-                todayDate: new Date()
+                todayDate: new Date(),
             };
+            let planReceipt: PlanReceipt[] = [];
+            planReceipt = this.displayReceiptsList;
+            planReceipt.push({
+                ...this.receiptForm.value,
+                id: this._id,
+                onBehalfOf: this.paymentPlanData.clientName,
+                allocationStatus: 'Unallocated',
+                sumInDigits: amount,
+                policyNumber: '',
+            });
             this.receiptNum = this._id;
-            await this.receiptService.addReceipt(receipt);
+            this.paymentPlanData.planReceipt = planReceipt;
 
             const p = this.paymentPlanPolicyInstallments;
             let d = amount;
@@ -318,13 +339,20 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
                 this.isVisible = false;
                 this.isOkLoading = false;
             }, 30);
-            this.policy.receiptStatus = 'Receipted';
-            console.log('<++++++++++++++++++CLAIN+++++++++>');
-            console.log(this.policy);
-            await this.receiptService.updatePolicy(this.policy);
-            await this.paymentPlanService.updatePaymentPlan(
+            console.log('.........RPT No...........');
+            console.log(this.receiptNo);
+            await this.paymentPlanService.addReceipt(
+                receipt,
                 this.paymentPlanData
             );
+            // this.policy.receiptStatus = 'Receipted';
+            // console.log('<++++++++++++++++++CLAIN+++++++++>');
+            // console.log(this.policy);
+            // await this.receiptService.updatePolicy(this.policy);
+
+            // await this.paymentPlanService.updatePaymentPlan(
+            //     this.paymentPlanData
+            // );
             this.generateID(this._id);
         }
     }
@@ -347,4 +375,6 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
         const date = installment.actualPaidDate as ITimestamp;
         return date.seconds * 1000;
     }
+
+    showAllocationModal() {}
 }
