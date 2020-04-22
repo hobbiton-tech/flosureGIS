@@ -35,6 +35,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpRequest } from '@angular/common/http';
 import { IQuoteDTO } from '../../models/quote.dto';
 import { QuotesGraphqlService } from '../../services/quotes.graphql.service';
+import { v4 } from 'uuid';
+import _ from 'lodash';
 
 type AOA = any[][];
 
@@ -133,6 +135,9 @@ export class CreateQuoteComponent implements OnInit {
 
     // selected risk in risk table
     selectedRisk: RiskModel;
+
+    // risk being edited
+    currentRiskEdit: RiskModel;
 
     premiumComputationForm: FormGroup;
 
@@ -629,6 +634,7 @@ export class CreateQuoteComponent implements OnInit {
         const some: RiskModel[] = [];
         some.push({
             ...this.riskThirdPartyForm.value,
+            riskId: v4(),
             sumInsured: 0,
             premiumRate: 0,
             basicPremium: this.basicPremium,
@@ -677,6 +683,7 @@ export class CreateQuoteComponent implements OnInit {
         const some: RiskModel[] = [];
         some.push({
             ...this.riskComprehensiveForm.value,
+            riskId: v4(),
             sumInsured: Number(this.sumInsured),
             premiumRate: this.premiumRate,
             basicPremium: this.basicPremium,
@@ -737,8 +744,6 @@ export class CreateQuoteComponent implements OnInit {
     viewRiskDetails(risk: RiskModel) {
         this.selectedRisk = risk;
         this.riskDetailsModalVisible = true;
-
-        console.log(risk);
 
         if (this.selectedValue.value === 'Comprehensive') {
             this.riskComprehensiveForm
@@ -810,8 +815,58 @@ export class CreateQuoteComponent implements OnInit {
     }
 
     // remove risk from risks table
-    removeRisk(regNumber: string): void {
-        this.risks = this.risks.filter(risk => risk.regNumber !== regNumber);
+    removeRisk(riskId: string): void {
+        this.risks = this.risks.filter(risk => risk.riskId !== riskId);
+    }
+
+    //save risks changes after editing
+    saveRisk(): void {
+        this.currentRiskEdit = this.selectedRisk;
+
+        if (this.selectedValue.value === 'Comprehensive') {
+            //comprehensive risk
+            const some: RiskModel = {
+                ...this.riskComprehensiveForm.value,
+                sumInsured: Number(this.sumInsured),
+                premiumRate: this.premiumRate,
+                basicPremium: this.basicPremium,
+                loads: this.loads,
+                loadingTotal: this.premiumLoadingTotal,
+                discountRate: this.premiumDiscountRate,
+                premiumLevy: this.basicPremiumLevy,
+                netPremium: this.netPremium,
+                insuranceType: this.selectedValue.value
+            };
+            this.currentRiskEdit = some;
+
+            var riskIndex = _.findIndex(this.risks, {
+                riskId: this.selectedRisk.riskId
+            });
+            this.risks.splice(riskIndex, 1, this.currentRiskEdit);
+            this.risks = this.risks;
+        } else {
+            //third party risk
+            const some: RiskModel = {
+                ...this.riskThirdPartyForm.value,
+                sumInsured: 0,
+                premiumRate: 0,
+                basicPremium: this.basicPremium,
+                loads: this.loads,
+                loadingTotal: this.premiumLoadingTotal,
+                discountRate: this.premiumDiscountRate,
+                premiumLevy: this.basicPremiumLevy,
+                netPremium: this.netPremium,
+                insuranceType: this.selectedValue.value
+            };
+            this.selectedRisk = some;
+
+            var riskIndex = _.findIndex(this.risks, {
+                riskId: this.selectedRisk.riskId
+            });
+            this.risks.splice(riskIndex, 1, this.currentRiskEdit);
+        }
+
+        this.isRiskDetailsEditmode = false;
     }
 
     deleteRow(id: string): void {}
@@ -938,8 +993,6 @@ export class CreateQuoteComponent implements OnInit {
 
             // get uploaded excel file and convert it to array
             // XMLHttpRequest
-            const url = 'assets/docs/risks.xlsx';
-            // const url = this.fileLocation;
             const oReq = new XMLHttpRequest();
             oReq.open('GET', this.fileLocation, true);
             oReq.responseType = 'arraybuffer';

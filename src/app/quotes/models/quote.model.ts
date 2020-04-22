@@ -36,6 +36,7 @@ export class LoadModel {
 }
 
 export class RiskModel {
+    riskId: string;
     riskStartDate: Date | ITimestamp;
     riskEndDate: Date | ITimestamp;
     riskQuarter: number;
@@ -87,6 +88,11 @@ export type ProductType = 'Private' | 'Commercial' | 'Bus/Taxi';
 
 export type QuoteStatus = 'Draft' | 'Approved';
 
-export type LoadType = 'Increased Third Party Limit' | 'Riot And Strike' | 'Car Stereo' | 'Territorial Extension' | 'Loss Of Use';
+export type LoadType =
+    | 'Increased Third Party Limit'
+    | 'Riot And Strike'
+    | 'Car Stereo'
+    | 'Territorial Extension'
+    | 'Loss Of Use';
 
 export type InsuranceType = 'ThirdParty' | 'Comprehensive';

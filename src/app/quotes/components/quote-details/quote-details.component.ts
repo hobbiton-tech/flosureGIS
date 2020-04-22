@@ -25,6 +25,7 @@ import { UploadChangeParam, NzMessageService } from 'ng-zorro-antd';
 import { debounceTime, switchMap, map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { QuotesGraphqlService } from '../../services/quotes.graphql.service';
+import _ from 'lodash';
 
 type AOA = any[][];
 
@@ -104,6 +105,9 @@ export class QuoteDetailsComponent implements OnInit {
 
     // selected risk in risk table
     selectedRisk: RiskModel;
+
+    // risk being edited
+    currentRiskEdit: RiskModel;
 
     // risk details modal
     quoteRiskDetailsModalVisible = false;
@@ -725,6 +729,57 @@ export class QuoteDetailsComponent implements OnInit {
     // remove risk from risks table
     removeRisk(regNumber: string): void {
         this.risks = this.risks.filter(risk => risk.regNumber !== regNumber);
+    }
+
+    //save risks changes after editing
+    saveRisk(): void {
+        this.currentRiskEdit = this.selectedRisk;
+        console.log(this.currentRiskEdit);
+
+        if (this.selectedValue.value === 'Comprehensive') {
+            //comprehensive risk
+            const some: RiskModel = {
+                ...this.riskComprehensiveForm.value,
+                sumInsured: Number(this.sumInsured),
+                premiumRate: this.premiumRate,
+                basicPremium: this.basicPremium,
+                loads: this.loads,
+                loadingTotal: this.premiumLoadingTotal,
+                discountRate: this.premiumDiscountRate,
+                premiumLevy: this.basicPremiumLevy,
+                netPremium: this.netPremium,
+                insuranceType: this.selectedValue.value
+            };
+            this.currentRiskEdit = some;
+
+            var riskIndex = _.findIndex(this.risks, {
+                riskId: this.selectedRisk.riskId
+            });
+            this.risks.splice(riskIndex, 1, this.currentRiskEdit);
+            this.risks = this.risks;
+        } else {
+            //third party risk
+            const some: RiskModel = {
+                ...this.riskThirdPartyForm.value,
+                sumInsured: 0,
+                premiumRate: 0,
+                basicPremium: this.basicPremium,
+                loads: this.loads,
+                loadingTotal: this.premiumLoadingTotal,
+                discountRate: this.premiumDiscountRate,
+                premiumLevy: this.basicPremiumLevy,
+                netPremium: this.netPremium,
+                insuranceType: this.selectedValue.value
+            };
+            this.selectedRisk = some;
+
+            var riskIndex = _.findIndex(this.risks, {
+                riskId: this.selectedRisk.riskId
+            });
+            this.risks.splice(riskIndex, 1, this.currentRiskEdit);
+        }
+
+        this.isRiskDetailsEditmode = false;
     }
 
     closeRiskDetails() {
