@@ -62,11 +62,9 @@ export class PolicyDebitNoteDocumentComponent implements OnInit {
         this.generatingPDF = true;
         const div = document.getElementById('debitPrintSection');
         const options = {
-            scale: 1.32,
-            allowTaint: true,
-            onclone: (doc) => {
-                doc.querySelector('div').style.transform = 'none';
-            },
+            background: 'white',
+            height: div.clientHeight,
+            width: div.clientWidth,
         };
 
         html2canvas(div, options).then((canvas) => {

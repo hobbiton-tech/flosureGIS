@@ -101,6 +101,10 @@ export class LoginComponent implements OnInit {
                     this.loginForm.controls.password.value
                 )
                 .then((res) => {
+                    localStorage.setItem(
+                        'user',
+                        this.loginForm.controls.email.value
+                    );
                     this.router.navigateByUrl('/flosure/dashboard');
                     this.slackServie.sendToSlack({
                         event: 'Login Event',

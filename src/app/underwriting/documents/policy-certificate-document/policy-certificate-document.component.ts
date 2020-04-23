@@ -46,12 +46,17 @@ export class PolicyCertificateDocumentComponent implements OnInit {
     htmlToPdf() {
         this.generatingPDF = true;
         const div = document.getElementById('printSection');
+        // const options = {
+        //     scale: 1.32,
+        //     allowTaint: true,
+        //     onclone: (doc) => {
+        //         doc.querySelector('div').style.transform = 'none';
+        //     },
+        // };
         const options = {
-            scale: 1.32,
-            allowTaint: true,
-            onclone: (doc) => {
-                doc.querySelector('div').style.transform = 'none';
-            },
+            background: 'white',
+            height: div.clientHeight,
+            width: div.clientWidth,
         };
 
         html2canvas(div, options).then((canvas) => {
