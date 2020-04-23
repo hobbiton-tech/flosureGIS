@@ -1,9 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {
-    FormGroup,
-    FormBuilder,
-    Validators,
-} from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { QuotesService } from '../../services/quotes.service';
 import { ClientsService } from 'src/app/clients/services/clients.service';
@@ -16,11 +12,7 @@ import {
     MotorQuotationModel,
     LoadModel,
 } from '../../models/quote.model';
-import {
-    map,
-    debounceTime,
-    switchMap,
-} from 'rxjs/operators';
+import { map, debounceTime, switchMap } from 'rxjs/operators';
 import { NzMessageService, UploadChangeParam } from 'ng-zorro-antd';
 import * as XLSX from 'xlsx';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -291,6 +283,7 @@ export class CreateQuoteComponent implements OnInit {
     };
 
     ngOnInit(): void {
+        let user = localStorage.getItem('user');
         this.quoteForm = this.formBuilder.group({
             quoteNumber: [this.quoteService.generateQuoteNumber()],
             client: ['', Validators.required],
@@ -300,7 +293,7 @@ export class CreateQuoteComponent implements OnInit {
             startDate: ['', Validators.required],
             endDate: [''],
             quarter: ['', Validators.required],
-            user: ['Charles Malama', Validators.required],
+            user: [user, Validators.required],
             status: ['Draft'],
             receiptStatus: ['Unreceipted'],
         });
@@ -877,7 +870,7 @@ export class CreateQuoteComponent implements OnInit {
             // clientCode
             user: this.agentMode
                 ? this.quoteForm.get('user').value
-                : 'Charles Malama',
+                : localStorage.getItem('user'),
             risks: this.risks,
         };
 

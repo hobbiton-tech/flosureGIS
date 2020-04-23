@@ -902,7 +902,8 @@ export class QuoteDetailsComponent implements OnInit {
                 sumInsured: this.sumArray(this.quoteData.risks, 'sumInsured'),
                 netPremium: this.sumArray(this.quoteData.risks, 'netPremium'),
                 paymentPlan: this.paymentPlan,
-                user: this.quoteData.user,
+                // user: this.quoteData.user,
+                user: localStorage.getItem('user'),
             };
 
             // const policy = this.quoteDetailsForm.value as Policy;

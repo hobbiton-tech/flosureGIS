@@ -14,6 +14,8 @@ export class PoliciesComponent implements OnInit {
     displayPoliciesList: Policy[];
     policiesCount: number = 0;
 
+    issuedBy = localStorage.getItem('user');
+
     searchString: string;
 
     constructor(
