@@ -69,7 +69,10 @@
                                         Received From: {{ receipt.receivedFrom
                                         }}<br />
                                         Date issued :
-                                        {{ receipt.todayDate | date }}<br />
+                                        {{
+                                            receipt.todayDate
+                                                | date: 'dd/MM/YYYY'
+                                        }}<br />
                                         <!-- April 5, 2020 <br /> -->
                                     </td>
                                 </tr>

@@ -35,6 +35,7 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
     reinstateForm: FormGroup;
     submitted = false;
     today = new Date();
+    isPolicyVisible = false;
 
     //
     clientName = '';
@@ -474,5 +475,9 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
         this.paymentPlanData.policyPaymentPlan = this.listOfPolicies;
         this.paymentPlanService.updatePaymentPlan(this.paymentPlanData);
         this.isAllocationVisible = false;
+    }
+
+    showPolicyModal() {
+        this.isPolicyVisible = true;
     }
 }

@@ -250,45 +250,45 @@ export class ReceiptsComponent implements OnInit {
         // this.generateDocuments();
     }
 
-    generateDocuments(): void {
-        this.receiptService.getReciepts().subscribe((receipts) => {
-            this.receiptObj = receipts.filter((x) => x.id === this._id)[0];
-            this.receiptedList = receipts;
-            this.receipt = this.receiptedList.filter(
-                (x) => x.id === this._id
-            )[0];
+    // generateDocuments(): void {
+    //     this.receiptService.getReciepts().subscribe((receipts) => {
+    //         this.receiptObj = receipts.filter((x) => x.id === this._id)[0];
+    //         this.receiptedList = receipts;
+    //         this.receipt = this.receiptedList.filter(
+    //             (x) => x.id === this._id
+    //         )[0];
 
-            const receipt: IReceiptDTO = {
-                recieptNumber: this.receipt.receiptNumber,
-                tPin: this.receipt.tpinNumber,
-                recievedFrom: this.receipt.receivedFrom,
-                onBehalfOf: this.receipt.onBehalfOf,
-                address: 'this.receipt.address',
-                sumInWords: 'sum in words',
-                agentID: this.receipt.capturedBy,
-                paymentMethod: this.receipt.paymentMethod,
-                paymentRef: this.receipt.receiptNumber,
-                policyNumber: this.receipt.policyNumber,
-                remarks: this.receipt.receiptType,
-                todayDate: this.receipt.todayDate,
-                time: this.receipt.receiptNumber,
-                narration: this.receipt.narration,
-                accountNumber: 'this.receipt.address',
-                dateRecieved: this.receipt.todayDate,
-                sumInDigits: this.receipt.sumInDigits,
-                capturedBy: this.receipt.receiptNumber,
-            };
+    //         const receipt: IReceiptDTO = {
+    //             recieptNumber: this.receipt.receiptNumber,
+    //             tPin: this.receipt.tpinNumber,
+    //             recievedFrom: this.receipt.receivedFrom,
+    //             onBehalfOf: this.receipt.onBehalfOf,
+    //             address: 'this.receipt.address',
+    //             sumInWords: 'sum in words',
+    //             agentID: this.receipt.capturedBy,
+    //             paymentMethod: this.receipt.paymentMethod,
+    //             paymentRef: this.receipt.receiptNumber,
+    //             policyNumber: this.receipt.policyNumber,
+    //             remarks: this.receipt.receiptType,
+    //             todayDate: this.receipt.todayDate,
+    //             time: this.receipt.receiptNumber,
+    //             narration: this.receipt.narration,
+    //             accountNumber: 'this.receipt.address',
+    //             dateRecieved: this.receipt.todayDate,
+    //             sumInDigits: this.receipt.sumInDigits,
+    //             capturedBy: this.receipt.receiptNumber,
+    //         };
 
-            this.receiptService.generateReceipt(receipt).subscribe((data) => {
-                this.receiptURl = data.Location;
-            });
+    //         this.receiptService.generateReceipt(receipt).subscribe((data) => {
+    //             this.receiptURl = data.Location;
+    //         });
 
-            console.log(this.receipt);
-        });
+    //         console.log(this.receipt);
+    //     });
 
-        this.isReceiptApproved = true;
+    //     this.isReceiptApproved = true;
 
-        console.log('reerewrew');
-        console.log(this.isReceiptApproved);
-    }
+    //     console.log('reerewrew');
+    //     console.log(this.isReceiptApproved);
+    // }
 }

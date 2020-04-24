@@ -19,7 +19,11 @@
                     </nz-descriptions>
                 </nz-page-header-content>
                 <nz-page-header-extra>
-                    <button nz-button nzType="primary">
+                    <button
+                        nz-button
+                        nzType="primary"
+                        (click)="showPolicyModal()"
+                    >
                         Add Policy
                     </button>
                 </nz-page-header-extra>
