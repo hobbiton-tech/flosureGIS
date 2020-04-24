@@ -187,6 +187,7 @@ export class PaymentPlanComponent implements OnInit {
                 client: policy.client,
                 clientCode: '',
                 netPremium: policy.netPremium,
+                allocatedAmount: 0,
                 allocationStatus: 'Unallocated',
             });
 

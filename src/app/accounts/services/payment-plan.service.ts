@@ -30,6 +30,7 @@ export class PaymentPlanService {
     receipt: Observable<IReceiptModel>;
     receipted: IReceiptModel;
     url: string;
+    rcptNumber: any;
 
     constructor(
         private firebase: AngularFirestore,
@@ -90,8 +91,14 @@ export class PaymentPlanService {
                 .subscribe(async (res) => {
                     receipt.receiptNumber = res.receiptNumber;
                     console.log(res.receiptNumber);
-                    paymentPlan.planReceipt[0].receiptNumber =
-                        res.receiptNumber;
+                    // paymentPlan.planReceipt[0].receiptNumber =
+                    //     res.receiptNumber;
+
+                    this.rcptNumber = paymentPlan.planReceipt.filter(
+                        (rcpt) => rcpt.id === receipt.id
+                    )[0];
+
+                    this.rcptNumber.receiptNumber = res.receiptNumber;
 
                     await this.receiptCollection
                         .doc(receipt.id)
@@ -109,8 +116,8 @@ export class PaymentPlanService {
                     await this.paymentPlansCollection
                         .doc(`${paymentPlan.id}`)
                         .update(paymentPlan)
-                        .then((res) => {
-                            console.log(res);
+                        .then((result) => {
+                            console.log(result);
                         })
                         .catch((err) => {
                             console.log(err);
