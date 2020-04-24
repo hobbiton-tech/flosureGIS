@@ -1,137 +1,171 @@
-<div class="invoice-box">
-    <table cellpadding="0" cellspacing="0">
-        <tr class="top">
-            <td colspan="3">
-                <table>
-                    <tr>
-                        <td class="title">
-                            <img
-                                src="https://i.ibb.co/VW3DckN/golden-lotus-logo.png"
-                                style="width: 100%; max-width: 300px;"
-                            />
-                        </td>
-                        <td></td>
-                        <td>
-                            Policy Number: GLI/RC/20/0416/0001<br />
-                            Date: April 21, 2020<br />
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
+<div
+    style="
+        display: flex;
+        margin-bottom: 15px;
+        align-items: flex-end;
+        width: 100%;
+    "
+>
+    <button
+        nz-button
+        nzType="primary"
+        style="margin-right: 8px;"
+        (click)="htmlToPdf()"
+    >
+        Download
+    </button>
+    <button
+        nz-button
+        nzType="primary"
+        [useExistingCss]="true"
+        [printSectionId]="'debitPrintSection'"
+        ngxPrint
+    >
+        Print
+    </button>
+</div>
+<div id="debitPrintSection">
+    <div class="invoice-box">
+        <table cellpadding="0" cellspacing="0">
+            <tr class="top">
+                <td colspan="3">
+                    <table>
+                        <tr>
+                            <td class="title">
+                                <img
+                                    src="assets/images/golden-lotus-transparent.png"
+                                    style="width: 100%; max-width: 300px;"
+                                />
+                            </td>
+                            <td></td>
+                            <td>
+                                Policy Number: {{ policy.policyNumber }}<br />
+                                Date: {{ policy.dateOfIssue | date }}<br />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
 
-        <tr class="information">
-            <td colspan="3">
-                <table>
-                    <tr>
-                        <td>
-                            Golden Lotus Insurance Co. Ltd<br />
-                            Plot 9711, Chudleigh,<br />
-                            Lusaka, Zambia.
-                        </td>
-                        <td>
-                            Charles Malama<br />
-                            +260976646340<br />
-                            charlesmalama@gmail.com
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
+            <tr class="information">
+                <td colspan="3">
+                    <table>
+                        <tr>
+                            <td>
+                                Golden Lotus Insurance Co. Ltd<br />
+                                Plot 9711, Chudleigh,<br />
+                                Lusaka, Zambia.
+                            </td>
+                            <td>
+                                {{ policy.client }}<br />
+                                {{ clientNumber }}<br />
+                                {{ clientEmail }}
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
 
-        <tr class="information">
-            <td colspan="3">
-                <strong>PREMIUM TAX INVOICE</strong>
-                <br />
-            </td>
-        </tr>
+            <tr class="information">
+                <td colspan="3">
+                    <strong>PREMIUM TAX INVOICE</strong>
+                    <br />
+                </td>
+            </tr>
 
-        <tr class="heading">
-            <td>
-                Agency
-            </td>
-            <td>
-                Agency Ref
-            </td>
-            <td>
-                Reference
-            </td>
-        </tr>
+            <tr class="heading">
+                <td>
+                    Agency
+                </td>
+                <td>
+                    Agency Ref
+                </td>
+                <td>
+                    Reference
+                </td>
+            </tr>
 
-        <tr class="details">
-            <td>
-                Direct
-            </td>
-            <td>
-                -
-            </td>
-            <td>
-                Policy Number: GLI/RC/20/0416/0001
-            </td>
-        </tr>
+            <tr class="details">
+                <td>
+                    Direct
+                </td>
+                <td>
+                    -
+                </td>
+                <td>Policy Number: {{ policy.policyNumber }}</td>
+            </tr>
 
-        <tr class="heading">
-            <td>Class of Business</td>
-            <td>
-                Cover From
-            </td>
-            <td>
-                Cover To
-            </td>
-        </tr>
+            <tr class="heading">
+                <td>Class of Business</td>
+                <td>
+                    Cover From
+                </td>
+                <td>
+                    Cover To
+                </td>
+            </tr>
 
-        <tr class="details">
-            <td>
-                Motor Individual
-            </td>
-            <td>
-                April 21, 2020
-            </td>
-            <td>
-                May 21, 2020
-            </td>
-        </tr>
+            <tr class="details">
+                <td>
+                    Motor Individual
+                </td>
+                <td>
+                    {{ policy.startDate | date }}
+                </td>
+                <td>
+                    {{ policy.endDate | date }}
+                </td>
+            </tr>
 
-        <tr class="heading">
-            <td>
-                Item
-            </td>
-            <td></td>
-            <td>
-                Amount
-            </td>
-        </tr>
+            <tr class="heading">
+                <td>
+                    Item
+                </td>
+                <td></td>
+                <td>
+                    Amount
+                </td>
+            </tr>
 
-        <tr class="item">
-            <td>
-                Basic Premium
-            </td>
-            <td></td>
-            <td>ZMW {{ 38940 | number }}</td>
-        </tr>
+            <tr class="item">
+                <td>
+                    Loading
+                </td>
+                <td></td>
+                <td>ZMW {{ risk.loadingTotal | number }}</td>
+            </tr>
 
-        <tr class="item">
-            <td>
-                Loading
-            </td>
-            <td></td>
-            <td>ZMW {{ 4839 | number }}</td>
-        </tr>
+            <tr class="item">
+                <td>
+                    Discount
+                </td>
+                <td></td>
+                <td>ZMW {{ risk.discount | number }}</td>
+            </tr>
 
-        <tr class="item">
-            <td>
-                Discount
-            </td>
-            <td></td>
-            <td>ZMW {{ 892 | number }}</td>
-        </tr>
+            <tr class="item">
+                <td>
+                    Basic Premium
+                </td>
+                <td></td>
+                <td>ZMW {{ risk.basicPremium | number }}</td>
+            </tr>
 
-        <tr class="total">
-            <td></td>
-            <td></td>
-            <td>
-                <strong>Total: {{ 4738492 | number }}</strong>
-            </td>
-        </tr>
-    </table>
+            <tr class="item">
+                <td>
+                    Levy
+                </td>
+                <td></td>
+                <td>ZMW {{ risk.premiumLevy | number }}</td>
+            </tr>
+
+            <tr class="total">
+                <td></td>
+                <td></td>
+                <td>
+                    <strong>Total: {{ policy.netPremium | number }}</strong>
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
