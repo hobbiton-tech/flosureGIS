@@ -1,23 +1,18 @@
 import { Injectable } from '@angular/core';
-import { MotorQuotationModel, RiskModel, Quote } from '../models/quote.model';
-import { Observable, from } from 'rxjs';
+import { MotorQuotationModel, RiskModel } from '../models/quote.model';
+import { Observable } from 'rxjs';
 import {
     AngularFirestore,
     AngularFirestoreCollection,
-    AngularFirestoreDocument,
-    DocumentReference
+    DocumentReference,
 } from '@angular/fire/firestore';
-import { map, flatMap, first } from 'rxjs/operators';
+import { first } from 'rxjs/operators';
 import { v4 } from 'uuid';
 import { IQuoteDTO } from '../models/quote.dto';
 import { IDebitNoteDTO } from '../models/debit-note.dto';
 import { ICertificateDTO } from '../models/certificate.dto';
 import { IReceiptDTO } from '../models/receipt.dto';
 import { HttpClient } from '@angular/common/http';
-import { IDocument } from 'src/app/claims/models/claim.model';
-import { request } from 'http';
-import { database } from 'firebase';
-import { stringify } from 'querystring';
 
 export interface IQuoteDocument {
     id: string;
@@ -46,7 +41,7 @@ interface IQuoteNumberResult {
 }
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class QuotesService {
     private motorQuoteCollection: AngularFirestoreCollection<
@@ -81,19 +76,19 @@ export class QuotesService {
 
     // add quotation
     async addMotorQuotation(quotation: MotorQuotationModel): Promise<void> {
-        this.quotations.pipe(first()).subscribe(async quotations => {
+        this.quotations.pipe(first()).subscribe(async () => {
             quotation.id = v4();
             this.http
                 .get<IQuoteNumberResult>(
                     'https://flosure-premium-rates.herokuapp.com/quotes'
                 )
-                .subscribe(async res => {
+                .subscribe(async (res) => {
                     quotation.quoteNumber = res.resultQuoteNumber;
                     await this.motorQuoteCollection
                         .doc(quotation.id)
                         .set(quotation)
-                        .then(mess => {})
-                        .catch(err => {
+                        .then(() => {})
+                        .catch((err) => {
                             console.log(err);
                         });
                 });
@@ -105,13 +100,13 @@ export class QuotesService {
     }
     // add risks
     async addRisk(risk: RiskModel): Promise<void> {
-        this.risks.pipe(first()).subscribe(async risks => {
+        this.risks.pipe(first()).subscribe(async () => {
             this.riskCollection
                 .add(risk)
-                .then(mess => {
+                .then(() => {
                     console.log(risk);
                 })
-                .catch(err => {
+                .catch((err) => {
                     console.log(err);
                 });
         });
@@ -123,12 +118,12 @@ export class QuotesService {
             .collection('risks')
             .ref.where('quoteNumber', '==', quoteNumber)
             .get()
-            .then(querySnapshot => {
-                querySnapshot.forEach(doc => {
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
                     console.log(doc.data());
                 });
             })
-            .catch(error => {
+            .catch((error) => {
                 console.log('Error getting documents: ', error);
             });
     }
@@ -141,13 +136,6 @@ export class QuotesService {
         return this.quotations;
     }
 
-    private countGenerator(numb) {
-        if (numb <= 99999) {
-            numb = ('000' + numb).slice(-4);
-        }
-        return numb;
-    }
-
     // Genereating quote number
     generateQuoteNumber(): string {
         var quotationNumber: string = '';
@@ -155,7 +143,7 @@ export class QuotesService {
             .get<IQuoteNumberResult>(
                 `https://flosure-premium-rates.herokuapp.com/quotes`
             )
-            .subscribe(data => {
+            .subscribe((data) => {
                 quotationNumber = data.resultQuoteNumber;
             });
         return quotationNumber;
@@ -181,10 +169,10 @@ export class QuotesService {
         return this.motorQuoteCollection
             .doc(`${quote.id}`)
             .update(quote)
-            .then(res => {
+            .then((res) => {
                 console.log(res);
             })
-            .catch(err => {
+            .catch((err) => {
                 console.log(err);
             });
     }

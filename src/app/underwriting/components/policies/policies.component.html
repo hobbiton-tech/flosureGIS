@@ -10,8 +10,10 @@
             </nz-page-header-extra>
             <nz-page-header-content>
                 <nz-descriptions [nzColumn]="3">
-                    <nz-descriptions-item nzTitle="Total Policies" [nzSpan]="1"
-                >{{policiesCount}}</nz-descriptions-item
+                    <nz-descriptions-item
+                        nzTitle="Total Policies"
+                        [nzSpan]="1"
+                        >{{ policiesCount }}</nz-descriptions-item
                     >
                     <!-- <nz-descriptions-item nzTitle="Draft Policies" [nzSpan]="1">130</nz-descriptions-item>
           <nz-descriptions-item nzTitle="Confirmed Policies" [nzSpan]="1">101</nz-descriptions-item> -->
@@ -20,7 +22,7 @@
         </nz-page-header>
     </div>
     <nz-card>
-        <div style="margin-bottom: 10px; width: 50%">
+        <div style="margin-bottom: 10px; width: 50%;">
             <nz-input-group [nzSuffix]="suffixIconSearch">
                 <input
                     type="text"
@@ -47,7 +49,7 @@
                     <th>Cover From</th>
                     <th>Cover To</th>
                     <th>Client Name</th>
-                    <th>Agent</th>
+                    <th>Approved By</th>
                     <th>Status</th>
                 </tr>
             </thead>
@@ -55,11 +57,11 @@
                 <tr
                     *ngFor="let policy of policiesTable.data"
                     (click)="viewPolicyDetails(policy)"
-                    style="cursor:pointer;"
+                    style="cursor: pointer;"
                 >
                     <td>{{ policy.policyNumber }}</td>
-                    <td>{{ policy.startDate |  date}}</td>
-                    <td>{{ policy.endDate | date}}</td>
+                    <td>{{ policy.startDate | date }}</td>
+                    <td>{{ policy.endDate | date }}</td>
                     <td>{{ policy.client }}</td>
                     <td>{{ policy.user }}</td>
                     <td>{{ policy.status }}</td>

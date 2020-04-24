@@ -32,7 +32,7 @@ export class PolicyClausesDocumentComponent implements OnInit {
             //Converting canvas to Image
             let imgData = canvas.toDataURL('image/PNG');
             //Add image Canvas to PDF
-            doc.addImage(imgData, 'PNG', 20, 20);
+            doc.addImage(imgData, 'PNG', 0, 0);
 
             let pdfOutput = doc.output();
             // using ArrayBuffer will allow you to put image inside PDF
