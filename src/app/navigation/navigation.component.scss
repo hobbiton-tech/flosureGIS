@@ -19,6 +19,7 @@ nz-sider {
   position: fixed;
   overflow: auto;
   height: 100vh;
+  z-index: 99999;
   // padding-top: 20px;
   // padding-bottom: 50px;
 }
@@ -26,4 +27,9 @@ nz-sider {
 
 nz-content {
   margin-left: 250px;
+}
+
+::ng-deep .ant-layout.ant-layout-has-sider > .ant-layout, .ant-layout.ant-layout-has-sider > .ant-layout-content {
+  overflow-x: scroll !important;
+  // width: fit-content;
 }

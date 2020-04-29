@@ -1,0 +1,14 @@
+<div style="width: max-content; z-index: -999999;">
+    <nz-progress [nzPercent]="progress$ | async" [nzStrokeLinecap]="'square'"></nz-progress>
+    <div style="margin: 15px; display: flex; flex-direction: row;">
+        <div>
+            <nz-card>
+                <p>quote-creation works!</p>
+                <a routerLink="./details">Add Details</a>
+            </nz-card>
+        </div>
+        <div >
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

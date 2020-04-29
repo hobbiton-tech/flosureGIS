@@ -20,6 +20,7 @@ import 'firebase/storage';
 import { RatesComponent } from './app/settings/components/rates/rates.component';
 import { GraphQLModule } from './graphql.module';
 import { SlackService } from './slack.service';
+import { ProgressTracker } from './quotes/services/progress-tracker.service';
 
 registerLocaleData(en);
 
@@ -54,7 +55,7 @@ const firebaseConfig = {
         AngularFireStorageModule,
         GraphQLModule,
     ],
-    providers: [{ provide: NZ_I18N, useValue: en_US }, SlackService],
+    providers: [{ provide: NZ_I18N, useValue: en_US }, SlackService, ProgressTracker],
     bootstrap: [AppComponent],
 })
 export class AppModule {}

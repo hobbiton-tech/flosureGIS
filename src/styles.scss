@@ -1,1 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+
+// ::ng-deep .ant-layout.ant-layout-has-sider > .ant-layout, .ant-layout.ant-layout-has-sider > .ant-layout-content {
+//     overflow-x: auto !important;
+// }
