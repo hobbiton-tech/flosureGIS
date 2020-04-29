@@ -1236,6 +1236,20 @@
     rxjs "6.5.3"
     webpack-sources "1.4.3"
 
+"@ngx-formly/core@^5.6.0":
+  version "5.6.0"
+  resolved "https://registry.yarnpkg.com/@ngx-formly/core/-/core-5.6.0.tgz#ef60fd5d3f93c4f2f6a08135ae8017094435a334"
+  integrity sha512-XzN1tdeLeL9eFffvetF2lVZAKaCnbrLoPWf5bEbol+T54iOLUE6GvE9nCYqRcR3ej2vCOMQFQgOKi/Ltm7aI+A==
+  dependencies:
+    tslib "^1.7.1"
+
+"@ngx-formly/ng-zorro-antd@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@ngx-formly/ng-zorro-antd/-/ng-zorro-antd-0.0.1.tgz#5c44c310616b3b4c8029ab8cfd2da5dbdde041ff"
+  integrity sha512-6K/mth46XTmNCdedq9vYe+yDkky/93WtjRRT2DTij+Wu7OrRXO/aZxdB+v+X2YxjOyxHPkmPpH7rRVN/m/mtMQ==
+  dependencies:
+    tslib "^1.9.0"
+
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@protobufjs/aspromise/-/aspromise-1.1.2.tgz#9b8b0cc663d669a7d8f6f5d0893a14d348f30fbf"

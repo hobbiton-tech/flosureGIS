@@ -6,6 +6,7 @@
   text-align: center;
   display: flex;
   flex-direction: column;
+  z-index: 2;
 }
 
 ::ng-deep .ant-layout-header {
@@ -19,7 +20,7 @@ nz-sider {
   position: fixed;
   overflow: auto;
   height: 100vh;
-  z-index: 99999;
+  z-index: 1;
   // padding-top: 20px;
   // padding-bottom: 50px;
 }

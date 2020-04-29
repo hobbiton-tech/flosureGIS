@@ -20,6 +20,8 @@
     "@angular/platform-browser": "~9.0.2",
     "@angular/platform-browser-dynamic": "~9.0.2",
     "@angular/router": "~9.0.2",
+    "@ngx-formly/core": "^5.6.0",
+    "@ngx-formly/ng-zorro-antd": "^0.0.1",
     "@types/chance": "^1.0.8",
     "@types/faker": "^4.1.9",
     "@types/html2canvas": "^0.0.35",
