@@ -38,7 +38,127 @@
                 nzText="Receipt Details"
                 nzOrientation="left"
             ></nz-divider>
+            <div class="invoice-box">
+                <table cellpadding="0" cellspacing="0">
+                    <tr class="top">
+                        <td colspan="6">
+                            <table>
+                                <tr>
+                                    <td class="title">
+                                        <img
+                                            src="assets/images/golden-lotus-transparent.png"
+                                            style="
+                                                width: 100%;
+                                                max-width: 300px;
+                                            "
+                                        />
+                                    </td>
+                                    <td>
+                                        <span style="font-weight: bold;"
+                                            >QUOT#:</span
+                                        >
+                                        <span
+                                            style="
+                                                font-weight: bold;
+                                                color: red;
+                                            "
+                                            >0000000123</span
+                                        ><br />
+                                        Date Created: <br />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr class="information">
+                        <td colspan="6">
+                            <table>
+                                <tr>
+                                    <td>
+                                        Golden Lotus Insurance Co. Ltd<br />
+                                        Plot 9711 Chudleigh<br />
+                                        Lusaka Zambia<br />
+                                        <span style="font-weight: bold;"
+                                            >TPN:</span
+                                        >
+                                        <span
+                                            style="
+                                                font-weight: bold;
+                                                color: red;
+                                            "
+                                            >82358383734</span
+                                        >
+                                    </td>
+                                    <td>
+                                        Acme Corp.<br />
+                                        John Doe<br />
+                                        john@example.com
+                                    </td>
+                                </tr>
+                            </table>
+                            <p id="title">MOTOR INSURANCE QUOTATION</p>
+                        </td>
+                    </tr>
 
+                    <tr class="heading">
+                        <td>
+                            INTEREST
+                        </td>
+                        <td class="td2">
+                            SUM INSURED(USD)
+                        </td>
+                        <td>
+                            DISCOUNT
+                        </td>
+                        <td>
+                            START DATE
+                        </td>
+                        <td>
+                            END DATE
+                        </td>
+                        <td>
+                            TOTAL
+                        </td>
+                    </tr>
+                    <tr class="details">
+                        <td>
+                            -na-
+                        </td>
+                        <td class="td2">
+                            300000
+                        </td>
+                        <td>
+                            0
+                        </td>
+                        <td>
+                            01/01/2020
+                        </td>
+                        <td>
+                            01/05/2020
+                        </td>
+                        <td>
+                            ZMW30000
+                        </td>
+                    </tr>
+                </table>
+
+                <p style="font-weight: bold; text-align: left;">
+                    Combined Third Party Liability Limits: ZMW 500,000.00
+                </p>
+                <br />
+                <p style="font-weight: bold;">Cover:</p>
+                <p style="font-weight: bold;">Total number of vehicles:</p>
+                <p style="font-weight: bold;">
+                    Currency:
+                </p>
+                <p style="font-weight: bold;">Product Type:</p>
+                <br />
+                <p style="font-weight: bold;">
+                    NOTE: THIS INSURANCE CEASES ON THE SALE OR CHANGE OF
+                    OWNERSHIP OF THE STATED VEHICLE. COVER RESTRICTED WITHIN
+                    ZAMBIA ONLY.
+                </p>
+            </div>
             <pdf-viewer
                 #page
                 [src]="receiptURl"
