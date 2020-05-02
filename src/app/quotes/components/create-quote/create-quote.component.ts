@@ -17,7 +17,9 @@ import {
     Quote,
     MotorQuotationModel,
     Load,
-    LoadModel
+    LoadModel,
+    DiscountModel,
+    DiscountType
 } from '../../models/quote.model';
 import {
     map,
@@ -37,6 +39,12 @@ import { IQuoteDTO } from '../../models/quote.dto';
 import { QuotesGraphqlService } from '../../services/quotes.graphql.service';
 import { v4 } from 'uuid';
 import _ from 'lodash';
+import {
+    IBroker,
+    ISalesRepresentative,
+    IAgent
+} from 'src/app/settings/components/agents/models/agents.model';
+import { AgentsService } from 'src/app/settings/components/agents/services/agents.service';
 
 type AOA = any[][];
 
@@ -50,6 +58,7 @@ interface IRateResult {
     thirdPartyLoadingPremium: string;
     carStereoPremium: string;
     lossOfUsePremium: string;
+    territorialExtensionPremium: string;
     discount: string;
 }
 
@@ -58,11 +67,14 @@ interface IRateRequest {
     premiumRate: number;
     startDate: Date;
     quarter: number;
+    appliedDiscount: number;
     discount: number;
     carStereo: number;
     carStereoRate: number;
     lossOfUseDays: number;
     lossOfUseRate: number;
+    territorialExtensionWeeks: number;
+    territorialExtensionCountries: number;
     thirdPartyLimit: number;
     thirdPartyLimitRate: number;
     riotAndStrike: number;
@@ -82,7 +94,8 @@ export class CreateQuoteComponent implements OnInit {
         private readonly gqlquoteService: QuotesGraphqlService,
         private readonly clientsService: ClientsService,
         private msg: NzMessageService,
-        private http: HttpClient
+        private http: HttpClient,
+        private readonly agentsService: AgentsService
     ) {}
 
     // conditional render of agent field based on mode(agent or user)
@@ -112,6 +125,7 @@ export class CreateQuoteComponent implements OnInit {
     computeLossOfUseIsLoading = false;
     computeDiscountIsLoading = false;
     computePremiumIsLoading = false;
+    handleDiscountIsLoading = false;
 
     addLoadIsLoading = false;
 
@@ -132,6 +146,11 @@ export class CreateQuoteComponent implements OnInit {
     riskComprehensiveForm: FormGroup;
     clients: Array<IIndividualClient & ICorporateClient>;
     premiumLoadingForm: FormGroup;
+
+    //intermediaries
+    brokers: IBroker[];
+    agents: IAgent[];
+    salesRepresentatives: ISalesRepresentative[];
 
     // selected risk in risk table
     selectedRisk: RiskModel;
@@ -172,7 +191,9 @@ export class CreateQuoteComponent implements OnInit {
     carStereoRateType: string;
     // carStereoAmount: number;
 
-    territorailExtensionRateType: string;
+    territorialExtensionRateType: string;
+    territorialExtensionWeeks: number;
+    territorialExtensionCountries: number;
 
     lossOfUseDailyRate: number;
     lossOfUseDailyRateType: string;
@@ -190,6 +211,9 @@ export class CreateQuoteComponent implements OnInit {
 
     // loads added to loading
     loads: LoadModel[] = [];
+
+    //dicounts added
+    discounts: DiscountModel[] = [];
 
     // risk upload modal
     isVisible = false;
@@ -226,8 +250,39 @@ export class CreateQuoteComponent implements OnInit {
 
     //selected loss of use input type
     selectedLossOfUseInputTypeValue = 'rate';
-    //car stereo amount
+    //loss of use amount
     lossOfUseAmount: number;
+
+    //selected territorial extension input type
+    selectedTerritorialExtensionInputTypeValue = 'rate';
+    //loss of use amount
+    territorialExtensionAmount: number;
+
+    //inexperienced driver amount
+    inexperiencedDriverAmount: number;
+
+    //under age driver amount
+    underAgeDriverAmount: number;
+
+    //selected no claim discount input type
+    selectedNoClaimsDiscountInputTypeValue = 'rate';
+    //no claim discount amount
+    noClaimsDiscountAmount: number;
+
+    //selected loyalty discount input type
+    selectedLoyaltyDiscountInputTypeValue = 'rate';
+    //loyalty discount amount
+    loyaltyDiscountAmount: number;
+
+    //selected valued client discount input type
+    selectedValuedClientDiscountInputTypeValue = 'rate';
+    //valued client discount amount
+    valuedClientDiscountAmount: number;
+
+    //selected low term agreement discount input type
+    selectedLowTermAgreementDiscountInputTypeValue = 'rate';
+    //low term agreement discount amount
+    lowTermAgreementDiscountAmount: number;
 
     todayYear = null;
 
@@ -247,8 +302,10 @@ export class CreateQuoteComponent implements OnInit {
         },
         { label: 'Riot and strike', value: 'riotAndStrike' },
         { label: 'Car Stereo', value: 'carStereo' },
-        // { label: 'Territorial Extension', value: 'territorailExtension'},
-        { label: 'Loss Of Use', value: 'lossOfUse' }
+        { label: 'Territorial Extension', value: 'territorailExtension' },
+        { label: 'Loss Of Use', value: 'lossOfUse' },
+        { label: 'Inexperienced Driver', value: 'inexperiencedDriver' },
+        { label: 'Under Age Driver', value: 'underAgeDriver' }
     ];
 
     motorThirdPartyloadingOptions = [
@@ -268,6 +325,25 @@ export class CreateQuoteComponent implements OnInit {
         commercial: { Q1: 199, Q2: 340, Q3: 452, Q4: 566 },
         'bus/taxi': { Q1: 270, Q2: 464, Q3: 618, Q4: 772 }
     };
+
+    //discounts
+    discountOptions = [
+        { label: 'No claims dicount', value: 'noClaimsDiscount' },
+        { label: 'Loyalty Discount', value: 'loyaltyDiscount' },
+        { label: 'Valued Client Discount', value: 'valuedClientDiscount' },
+        { label: 'Low Term Agreement', value: 'lowTermAgreementDiscount' }
+    ];
+
+    selectedDiscountValue = { label: '', value: '' };
+
+    selectedSourceOfBusiness:string;
+
+    sourceOfBusinessOptions = [
+        { label: 'Direct', value: 'direct' },
+        { label: 'Broker', value: 'broker' },
+        { label: 'Agent', value: 'agent' },
+        { label: 'Sales Representative', value: 'salesRepresentative' }
+    ];
 
     startValue: Date | null = null;
     endValue: Date | null = null;
@@ -310,7 +386,9 @@ export class CreateQuoteComponent implements OnInit {
             quarter: ['', Validators.required],
             user: ['Charles Malama', Validators.required],
             status: ['Draft'],
-            receiptStatus: ['Unreceipted']
+            receiptStatus: ['Unreceipted'],
+            sourceOfBusiness: ['', Validators.required],
+            intermediaryName: ['', Validators.required]
         });
 
         this.clientsService.getAllClients().subscribe(clients => {
@@ -319,6 +397,20 @@ export class CreateQuoteComponent implements OnInit {
             >;
         });
 
+        this.agentsService.getAgents().subscribe(agents => {
+            this.agents = agents;
+        });
+
+        this.agentsService.getBrokers().subscribe(brokers => {
+            this.brokers = brokers;
+        });
+
+        this.agentsService
+            .getSalesRepresentatives()
+            .subscribe(salesRepresentatives => {
+                this.salesRepresentatives = salesRepresentatives;
+            });
+
         this.riskComprehensiveForm = this.formBuilder.group({
             riskStartDate: ['', Validators.required],
             riskQuarter: ['', Validators.required],
@@ -326,9 +418,10 @@ export class CreateQuoteComponent implements OnInit {
             regNumber: ['', Validators.required],
             vehicleMake: ['', Validators.required],
             vehicleModel: ['', Validators.required],
-            engineNumber: ['', Validators.required],
+            engineNumber: [''],
             chassisNumber: ['', Validators.required],
-            color: ['', Validators.required],
+            yearOfManufacture: ['', Validators.required],
+            color: ['', [Validators.required]],
             // sumInsured: ['', Validators.required],
             productType: ['', Validators.required],
             insuranceType: ['Comprehensive']
@@ -341,8 +434,9 @@ export class CreateQuoteComponent implements OnInit {
             regNumber: ['', [Validators.required]],
             vehicleMake: ['', [Validators.required]],
             vehicleModel: ['', [Validators.required]],
-            engineNumber: ['', [Validators.required]],
+            engineNumber: [''],
             chassisNumber: ['', [Validators.required]],
+            yearOfManufacture: ['', Validators.required],
             color: ['', [Validators.required]],
             productType: ['', [Validators.required]],
             insuranceType: ['ThirdParty']
@@ -425,7 +519,7 @@ export class CreateQuoteComponent implements OnInit {
         this.increasedThirdPartyLimitsRateType = 'percentage';
         this.riotAndStrikeRateType = 'percentage';
         this.carStereoRateType = 'percentage';
-        this.territorailExtensionRateType = 'percentage';
+        this.territorialExtensionRateType = 'percentage';
         this.lossOfUseDailyRateType = 'percentage';
         this.premiumDiscountRateType = 'percentage';
     }
@@ -444,10 +538,13 @@ export class CreateQuoteComponent implements OnInit {
                     this.riskComprehensiveForm.get('riskQuarter').value
                 ),
                 discount: 0,
+                appliedDiscount: 0,
                 carStereo: 0,
                 carStereoRate: 0,
                 lossOfUseDays: 0,
                 lossOfUseRate: 0,
+                territorialExtensionWeeks: 0,
+                territorialExtensionCountries: 0,
                 thirdPartyLimit: 0,
                 thirdPartyLimitRate: 0,
                 riotAndStrike: 0,
@@ -479,11 +576,14 @@ export class CreateQuoteComponent implements OnInit {
                 quarter: Number(
                     this.riskThirdPartyForm.get('riskQuarter').value
                 ),
+                appliedDiscount: 0,
                 discount: 0,
                 carStereo: 0,
                 carStereoRate: 0,
                 lossOfUseDays: 0,
                 lossOfUseRate: 0,
+                territorialExtensionWeeks: 0,
+                territorialExtensionCountries: 0,
                 thirdPartyLimit: 0,
                 thirdPartyLimitRate: 0,
                 riotAndStrike: 0,
@@ -513,8 +613,11 @@ export class CreateQuoteComponent implements OnInit {
                 startDate: this.quoteForm.get('startDate').value,
                 quarter: Number(this.quoteForm.get('quarter').value),
                 discount: 0,
+                appliedDiscount: 0,
                 carStereo: 0,
                 carStereoRate: 0,
+                territorialExtensionWeeks: 0,
+                territorialExtensionCountries: 0,
                 lossOfUseDays: 0,
                 lossOfUseRate: 0,
                 thirdPartyLimit: 0,
@@ -544,8 +647,11 @@ export class CreateQuoteComponent implements OnInit {
                     this.riskComprehensiveForm.get('riskQuarter').value
                 ),
                 discount: 0,
+                appliedDiscount: 0,
                 carStereo: 0,
                 carStereoRate: 0,
+                territorialExtensionWeeks: 0,
+                territorialExtensionCountries: 0,
                 lossOfUseDays: 0,
                 lossOfUseRate: 0,
                 thirdPartyLimit: 0,
@@ -639,7 +745,9 @@ export class CreateQuoteComponent implements OnInit {
             premiumRate: 0,
             basicPremium: this.basicPremium,
             loads: this.loads,
+            discounts: this.discounts,
             loadingTotal: this.premiumLoadingTotal,
+            discountTotal: this.premiumDiscount,
             discountRate: this.premiumDiscountRate,
             premiumLevy: this.basicPremiumLevy,
             netPremium: this.netPremium,
@@ -688,7 +796,9 @@ export class CreateQuoteComponent implements OnInit {
             premiumRate: this.premiumRate,
             basicPremium: this.basicPremium,
             loads: this.loads,
+            discounts: this.discounts,
             loadingTotal: this.premiumLoadingTotal,
+            discountTotal: this.premiumDiscount,
             discountRate: this.premiumDiscountRate,
             premiumLevy: this.basicPremiumLevy,
             netPremium: this.netPremium,
@@ -709,6 +819,7 @@ export class CreateQuoteComponent implements OnInit {
         this.premiumDiscount = 0;
 
         this.isAddRiskPanelOpen = false;
+        console.log(this.risks);
     }
 
     // reset comprehensive risk form
@@ -753,6 +864,9 @@ export class CreateQuoteComponent implements OnInit {
                 .get('vehicleModel')
                 .setValue(risk.vehicleModel);
             this.riskComprehensiveForm
+                .get('yearOfManufacture')
+                .setValue(risk.yearOfManufacture);
+            this.riskComprehensiveForm
                 .get('regNumber')
                 .setValue(risk.regNumber);
             this.riskComprehensiveForm
@@ -781,6 +895,9 @@ export class CreateQuoteComponent implements OnInit {
             this.riskComprehensiveForm
                 .get('vehicleModel')
                 .setValue(risk.vehicleModel);
+            this.riskComprehensiveForm
+                .get('yearOfManufacture')
+                .setValue(risk.yearOfManufacture);
             this.riskThirdPartyForm.get('regNumber').setValue(risk.regNumber);
             this.riskThirdPartyForm
                 .get('engineNumber')
@@ -808,8 +925,10 @@ export class CreateQuoteComponent implements OnInit {
         this.sumInsured = risk.sumInsured;
         this.premiumRate = risk.premiumRate;
         this.loads = risk.loads;
+        this.discounts = risk.discounts;
         this.basicPremium = risk.basicPremium;
         this.premiumLoadingTotal = risk.loadingTotal;
+        this.premiumDiscount = risk.discountTotal;
         this.basicPremiumLevy = risk.premiumLevy;
         this.netPremium = risk.netPremium;
     }
@@ -1059,7 +1178,8 @@ export class CreateQuoteComponent implements OnInit {
     // Premium computation methods
     // Basic Premum Computation
 
-    handleDiscount() {
+    handleDiscount(discountType: DiscountType) {
+        this.handleDiscountIsLoading = true;
         //following methods check if the repective loads are in the loads array
         const riotAndStrikeInLoads = this.loads.some(
             item => item.loadType === 'Riot And Strike'
@@ -1094,39 +1214,47 @@ export class CreateQuoteComponent implements OnInit {
             this.lossOfUseDays = 0;
         }
 
-        if (this.premiumDiscountRate != 0) {
-            const request: IRateRequest = {
-                sumInsured: Number(this.sumInsured),
-                premiumRate: Number(this.premiumRate) / 100,
-                startDate: this.riskComprehensiveForm.get('riskStartDate')
-                    .value,
-                quarter: Number(
-                    this.riskComprehensiveForm.get('riskQuarter').value
-                ),
-                discount: Number(this.premiumDiscountRate) / 100,
-                carStereo: Number(this.carStereoValue),
-                carStereoRate: Number(this.carStereoRate) / 100,
-                lossOfUseDays: Number(this.lossOfUseDays),
-                lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
-                thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
-                thirdPartyLimitRate:
-                    Number(this.increasedThirdPartyLimitsRate) / 100,
-                riotAndStrike: Number(this.riotAndStrikeRate) / 100,
-                levy: 0.03
-            };
-            this.http
-                .post<IRateResult>(
-                    `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
-                    request
-                )
-                .subscribe(data => {
-                    this.premiumDiscount = Number(data.discount);
-                    this.handleNetPremium();
+        const request: IRateRequest = {
+            sumInsured: Number(this.sumInsured),
+            premiumRate: Number(this.premiumRate) / 100,
+            startDate: this.riskComprehensiveForm.get('riskStartDate').value,
+            quarter: Number(
+                this.riskComprehensiveForm.get('riskQuarter').value
+            ),
+            appliedDiscount: Number(this.premiumDiscount),
+            discount: Number(this.premiumDiscountRate) / 100,
+            carStereo: Number(this.carStereoValue),
+            carStereoRate: Number(this.carStereoRate) / 100,
+            lossOfUseDays: Number(this.lossOfUseDays),
+            lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+            territorialExtensionWeeks: Number(this.territorialExtensionWeeks),
+            territorialExtensionCountries: Number(
+                this.territorialExtensionCountries
+            ),
+            thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
+            thirdPartyLimitRate:
+                Number(this.increasedThirdPartyLimitsRate) / 100,
+            riotAndStrike: Number(this.riotAndStrikeRate) / 100,
+            levy: 0.03
+        };
+        this.http
+            .post<IRateResult>(
+                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                request
+            )
+            .subscribe(data => {
+                this.discounts.push({
+                    discountType: discountType,
+                    amount: Number(data.discount)
                 });
-        }
+                this.premiumDiscount = this.sumArray(this.discounts, 'amount');
+                this.handleNetPremium();
+                this.handleDiscountIsLoading = false;
+            });
     }
 
     handleDiscountThirdParty() {
+        this.handleDiscountIsLoading = true;
         //following methods check if the repective loads are in the loads array
         const riotAndStrikeInLoads = this.loads.some(
             item => item.loadType === 'Riot And Strike'
@@ -1169,11 +1297,18 @@ export class CreateQuoteComponent implements OnInit {
                 quarter: Number(
                     this.riskThirdPartyForm.get('riskQuarter').value
                 ),
+                appliedDiscount: this.premiumDiscount,
                 discount: Number(this.premiumDiscountRate) / 100,
                 carStereo: Number(this.carStereoValue),
                 carStereoRate: Number(this.carStereoRate) / 100,
                 lossOfUseDays: Number(this.lossOfUseDays),
                 lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+                territorialExtensionWeeks: Number(
+                    this.territorialExtensionWeeks
+                ),
+                territorialExtensionCountries: Number(
+                    this.territorialExtensionCountries
+                ),
                 thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
                 thirdPartyLimitRate:
                     Number(this.increasedThirdPartyLimitsRate) / 100,
@@ -1188,6 +1323,7 @@ export class CreateQuoteComponent implements OnInit {
                 .subscribe(data => {
                     this.premiumDiscount = Number(data.discount);
                     this.handleNetPremium();
+                    this.handleDiscountIsLoading = false;
                 });
         }
     }
@@ -1201,11 +1337,16 @@ export class CreateQuoteComponent implements OnInit {
             quarter: Number(
                 this.riskComprehensiveForm.get('riskQuarter').value
             ),
+            appliedDiscount: this.premiumDiscount,
             discount: Number(this.premiumDiscountRate) / 100,
             carStereo: Number(this.carStereoValue),
             carStereoRate: Number(this.carStereoRate) / 100,
             lossOfUseDays: Number(this.lossOfUseDays),
             lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+            territorialExtensionWeeks: Number(this.territorialExtensionWeeks),
+            territorialExtensionCountries: Number(
+                this.territorialExtensionCountries
+            ),
             thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
@@ -1235,11 +1376,16 @@ export class CreateQuoteComponent implements OnInit {
             quarter: Number(
                 this.riskComprehensiveForm.get('riskQuarter').value
             ),
+            appliedDiscount: this.premiumDiscount,
             discount: Number(this.premiumDiscountRate) / 100,
             carStereo: Number(this.carStereoValue),
             carStereoRate: Number(this.carStereoRate) / 100,
             lossOfUseDays: Number(this.lossOfUseDays),
             lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+            territorialExtensionWeeks: Number(this.territorialExtensionWeeks),
+            territorialExtensionCountries: Number(
+                this.territorialExtensionCountries
+            ),
             thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
@@ -1272,11 +1418,16 @@ export class CreateQuoteComponent implements OnInit {
             quarter: Number(
                 this.riskComprehensiveForm.get('riskQuarter').value
             ),
+            appliedDiscount: this.premiumDiscount,
             discount: Number(this.premiumDiscountRate) / 100,
             carStereo: Number(this.carStereoValue),
             carStereoRate: Number(this.carStereoRate) / 100,
             lossOfUseDays: Number(this.lossOfUseDays),
             lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+            territorialExtensionWeeks: Number(this.territorialExtensionWeeks),
+            territorialExtensionCountries: Number(
+                this.territorialExtensionCountries
+            ),
             thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
@@ -1307,11 +1458,16 @@ export class CreateQuoteComponent implements OnInit {
             premiumRate: 0,
             startDate: this.riskThirdPartyForm.get('riskStartDate').value,
             quarter: Number(this.riskThirdPartyForm.get('riskQuarter').value),
+            appliedDiscount: this.premiumDiscount,
             discount: Number(this.premiumDiscountRate) / 100,
             carStereo: Number(this.carStereoValue),
             carStereoRate: Number(this.carStereoRate) / 100,
             lossOfUseDays: Number(this.lossOfUseDays),
             lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+            territorialExtensionWeeks: Number(this.territorialExtensionWeeks),
+            territorialExtensionCountries: Number(
+                this.territorialExtensionCountries
+            ),
             thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
@@ -1345,10 +1501,15 @@ export class CreateQuoteComponent implements OnInit {
                 this.riskComprehensiveForm.get('riskQuarter').value
             ),
             discount: Number(this.premiumDiscountRate) / 100,
+            appliedDiscount: this.premiumDiscount,
             carStereo: Number(this.carStereoValue),
             carStereoRate: Number(this.carStereoRate) / 100,
             lossOfUseDays: Number(this.lossOfUseDays),
             lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+            territorialExtensionWeeks: Number(this.territorialExtensionWeeks),
+            territorialExtensionCountries: Number(
+                this.territorialExtensionCountries
+            ),
             thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
@@ -1382,10 +1543,15 @@ export class CreateQuoteComponent implements OnInit {
                 this.riskComprehensiveForm.get('riskQuarter').value
             ),
             discount: Number(this.premiumDiscountRate) / 100,
+            appliedDiscount: Number(this.premiumDiscount),
             carStereo: Number(this.carStereoValue),
             carStereoRate: Number(this.carStereoRate) / 100,
             lossOfUseDays: Number(this.lossOfUseDays),
             lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+            territorialExtensionWeeks: Number(this.territorialExtensionWeeks),
+            territorialExtensionCountries: Number(
+                this.territorialExtensionCountries
+            ),
             thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
@@ -1400,7 +1566,7 @@ export class CreateQuoteComponent implements OnInit {
             .subscribe(data => {
                 this.loads.push({
                     loadType: 'Territorial Extension',
-                    amount: 0
+                    amount: Number(data.territorialExtensionPremium)
                 });
                 this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
                 this.handleNetPremium();
@@ -1419,10 +1585,15 @@ export class CreateQuoteComponent implements OnInit {
                 this.riskComprehensiveForm.get('riskQuarter').value
             ),
             discount: Number(this.premiumDiscountRate) / 100,
+            appliedDiscount: this.premiumDiscount,
             carStereo: Number(this.carStereoValue),
             carStereoRate: Number(this.carStereoRate) / 100,
             lossOfUseDays: Number(this.lossOfUseDays),
             lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+            territorialExtensionWeeks: Number(this.territorialExtensionWeeks),
+            territorialExtensionCountries: Number(
+                this.territorialExtensionCountries
+            ),
             thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
@@ -1453,8 +1624,16 @@ export class CreateQuoteComponent implements OnInit {
             this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
         }
         this.handleNetPremium();
+    }
 
-        console.log(this.loads);
+    removeDiscount(i: DiscountModel, e: MouseEvent): void {
+        e.preventDefault();
+        if (this.discounts.length > 0) {
+            const index = this.discounts.indexOf(i);
+            this.discounts.splice(index, 1);
+            this.premiumDiscount = this.sumArray(this.discounts, 'amount');
+        }
+        this.handleNetPremium();
     }
 
     // Discount Computation
@@ -1545,6 +1724,76 @@ export class CreateQuoteComponent implements OnInit {
             amount: Number(this.lossOfUseAmount)
         });
         this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    //changes the quote loss of use loading to inputed amount
+    handleTerritorialExtensionAmount() {
+        this.loads.push({
+            loadType: 'Territorial Extension',
+            amount: Number(this.territorialExtensionAmount)
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    //changes the quote loss of use loading to inputed amount
+    handleInexperiencedDriverAmount() {
+        this.loads.push({
+            loadType: 'Inexperienced Driver',
+            amount: Number(this.inexperiencedDriverAmount)
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    //changes the quote loss of use loading to inputed amount
+    handleUnderAgeDriverAmount() {
+        this.loads.push({
+            loadType: 'Under Age Driver',
+            amount: Number(this.underAgeDriverAmount)
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    //adds inputted discount to total discount amount
+    handleNoClaimsDiscountAmount() {
+        this.discounts.push({
+            discountType: 'No Claims Discount',
+            amount: Number(this.noClaimsDiscountAmount)
+        });
+        this.premiumDiscount = this.sumArray(this.discounts, 'amount');
+        this.handleNetPremium();
+    }
+
+    //adds inputted discount to total discount amount
+    handleLoyaltyDiscountAmount() {
+        this.discounts.push({
+            discountType: 'Loyalty Discount',
+            amount: Number(this.loyaltyDiscountAmount)
+        });
+        this.premiumDiscount = this.sumArray(this.discounts, 'amount');
+        this.handleNetPremium();
+    }
+
+    //adds inputted discount to total discount amount
+    handleValuedClientDiscountAmount() {
+        this.discounts.push({
+            discountType: 'Valued Client Discount',
+            amount: Number(this.valuedClientDiscountAmount)
+        });
+        this.premiumDiscount = this.sumArray(this.discounts, 'amount');
+        this.handleNetPremium();
+    }
+
+    //adds inputted discount to total discount amount
+    handleLowTermAgreementDiscountAmount() {
+        this.discounts.push({
+            discountType: 'Low Term Agreement Discount',
+            amount: Number(this.lowTermAgreementDiscountAmount)
+        });
+        this.premiumDiscount = this.sumArray(this.discounts, 'amount');
         this.handleNetPremium();
     }
 }

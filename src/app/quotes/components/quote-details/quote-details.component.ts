@@ -3,7 +3,9 @@ import {
     Quote,
     MotorQuotationModel,
     RiskModel,
-    LoadModel
+    LoadModel,
+    DiscountType,
+    DiscountModel
 } from '../../models/quote.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Policy } from 'src/app/underwriting/models/policy.model';
@@ -26,6 +28,13 @@ import { debounceTime, switchMap, map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { QuotesGraphqlService } from '../../services/quotes.graphql.service';
 import _ from 'lodash';
+import { AgentsService } from 'src/app/settings/components/agents/services/agents.service';
+import {
+    IBroker,
+    IAgent,
+    ISalesRepresentative
+} from 'src/app/settings/components/agents/models/agents.model';
+import { ImageElement } from 'canvg';
 
 type AOA = any[][];
 
@@ -39,6 +48,7 @@ interface IRateResult {
     thirdPartyLoadingPremium: string;
     carStereoPremium: string;
     lossOfUsePremium: string;
+    territorialExtensionPremium: string;
     discount: string;
 }
 
@@ -47,11 +57,14 @@ interface IRateRequest {
     premiumRate: number;
     startDate: Date;
     quarter: number;
+    appliedDiscount: number;
     discount: number;
     carStereo: number;
     carStereoRate: number;
     lossOfUseDays: number;
     lossOfUseRate: number;
+    territorialExtensionWeeks: number;
+    territorialExtensionCountries: number;
     thirdPartyLimit: number;
     thirdPartyLimitRate: number;
     riotAndStrike: number;
@@ -69,6 +82,16 @@ export class QuoteDetailsComponent implements OnInit {
     riskThirdPartyForm: FormGroup;
     riskComprehensiveForm: FormGroup;
     clients: Array<IIndividualClient & ICorporateClient>;
+
+    //intermediaries
+    brokers: IBroker[];
+    agents: IAgent[];
+    salesRepresentatives: ISalesRepresentative[];
+    intermediaries: Array<IAgent & IBroker & ISalesRepresentative>;
+
+    broker: IBroker;
+    agent: IAgent;
+    salesRepresentative: ISalesRepresentative;
 
     // vehicle make drop down
     vehicleMakeUrl = 'https://api.randomuser.me/?results=5';
@@ -146,7 +169,9 @@ export class QuoteDetailsComponent implements OnInit {
     carStereoRateType: string;
     // carStereoAmount: number;
 
-    territorailExtensionRateType: string;
+    territorialExtensionRateType: string;
+    territorialExtensionWeeks: number;
+    territorialExtensionCountries: number;
 
     lossOfUseDailyRate: number;
     lossOfUseDailyRateType: string;
@@ -167,6 +192,9 @@ export class QuoteDetailsComponent implements OnInit {
 
     // loads added to loading
     loads: LoadModel[] = [];
+
+    //dicounts added
+    discounts: DiscountModel[] = [];
 
     // loading feedback
     computeBasicPremiumIsLoading = false;
@@ -207,6 +235,37 @@ export class QuoteDetailsComponent implements OnInit {
     //car stereo amount
     lossOfUseAmount: number;
 
+    //selected territorial extension input type
+    selectedTerritorialExtensionInputTypeValue = 'rate';
+    //loss of use amount
+    territorialExtensionAmount: number;
+
+    //inexperienced driver amount
+    inexperiencedDriverAmount: number;
+
+    //under age driver amount
+    underAgeDriverAmount: number;
+
+    //selected no claim discount input type
+    selectedNoClaimsDiscountInputTypeValue = 'rate';
+    //no claim discount amount
+    noClaimsDiscountAmount: number;
+
+    //selected loyalty discount input type
+    selectedLoyaltyDiscountInputTypeValue = 'rate';
+    //loyalty discount amount
+    loyaltyDiscountAmount: number;
+
+    //selected valued client discount input type
+    selectedValuedClientDiscountInputTypeValue = 'rate';
+    //valued client discount amount
+    valuedClientDiscountAmount: number;
+
+    //selected low term agreement discount input type
+    selectedLowTermAgreementDiscountInputTypeValue = 'rate';
+    //low term agreement discount amount
+    lowTermAgreementDiscountAmount: number;
+
     optionList = [
         { label: 'Motor Comprehensive', value: 'Comprehensive' },
         { label: 'Motor Third Party', value: 'ThirdParty' }
@@ -220,8 +279,10 @@ export class QuoteDetailsComponent implements OnInit {
         },
         { label: 'Riot and strike', value: 'riotAndStrike' },
         { label: 'Car Stereo', value: 'carStereo' },
-        // { label: 'Territorial Extension', value: 'territorailExtension'},
-        { label: 'Loss Of Use', value: 'lossOfUse' }
+        { label: 'Territorial Extension', value: 'territorailExtension' },
+        { label: 'Loss Of Use', value: 'lossOfUse' },
+        { label: 'Inexperienced Driver', value: 'inexperiencedDriver' },
+        { label: 'Under Age Driver', value: 'underAgeDriver' }
     ];
 
     motorThirdPartyloadingOptions = [
@@ -236,6 +297,25 @@ export class QuoteDetailsComponent implements OnInit {
         value: ''
     };
 
+    //discounts
+    discountOptions = [
+        { label: 'No claims dicount', value: 'noClaimsDiscount' },
+        { label: 'Loyalty Discount', value: 'loyaltyDiscount' },
+        { label: 'Valued Client Discount', value: 'valuedClientDiscount' },
+        { label: 'Low Term Agreement', value: 'lowTermAgreementDiscount' }
+    ];
+
+    selectedDiscountValue = { label: '', value: '' };
+
+    selectedSourceOfBusiness: string;
+
+    sourceOfBusinessOptions = [
+        { label: 'Direct', value: 'direct' },
+        { label: 'Broker', value: 'broker' },
+        { label: 'Agent', value: 'agent' },
+        { label: 'Sales Representative', value: 'salesRepresentative' }
+    ];
+
     quoteData: MotorQuotationModel = new MotorQuotationModel();
 
     isQuoteApproved = false;
@@ -245,6 +325,9 @@ export class QuoteDetailsComponent implements OnInit {
     quoteNumber: string;
     quote: MotorQuotationModel = new MotorQuotationModel();
     displayQuote: MotorQuotationModel;
+
+    //source of business details
+    sourceOfBusiness: string;
 
     selectedQuote: Quote;
     isEditmode = false;
@@ -280,7 +363,8 @@ export class QuoteDetailsComponent implements OnInit {
         private readonly clientsService: ClientsService,
         private route: ActivatedRoute,
         private msg: NzMessageService,
-        private http: HttpClient
+        private http: HttpClient,
+        private readonly agentsService: AgentsService
     ) {}
 
     ngOnInit(): void {
@@ -291,10 +375,25 @@ export class QuoteDetailsComponent implements OnInit {
                     x => x.quoteNumber === this.quoteNumber
                 )[0];
                 this.quotesList = quotes;
-                console.log(quotes);
                 this.quote = this.quotesList.filter(
                     x => x.quoteNumber === this.quoteNumber
                 )[0];
+
+                // if (this.quoteData.sourceOfBusiness == 'Agent') {
+                //     this.agent = this.intermediaries.filter(
+                //         x => x.intermediaryId == this.quoteData.intermediaryId
+                //     )[0];
+                // }
+                // if (this.quoteData.sourceOfBusiness == 'Broker') {
+                //     this.broker = this.intermediaries.filter(
+                //         x => x.intermediaryId == this.quoteData.intermediaryId
+                //     )[0];
+                // }
+                // if (this.quoteData.sourceOfBusiness == 'Sales Representative') {
+                //     this.salesRepresentative = this.intermediaries.filter(
+                //         x => x.intermediaryId == this.quoteData.intermediaryId
+                //     )[0];
+                // }
 
                 this.displayQuote = this.quote;
 
@@ -310,6 +409,31 @@ export class QuoteDetailsComponent implements OnInit {
                     .get('currency')
                     .setValue(this.quoteData.currency);
                 this.quoteDetailsForm
+                    .get('sourceOfBusiness')
+                    .setValue(this.quoteData.sourceOfBusiness, {
+                        onlySelf: true
+                    });
+                this.quoteDetailsForm
+                    .get('intermediaryName')
+                    .setValue(this.quoteData.intermediaryName);
+
+                if (this.quoteData.sourceOfBusiness == 'Agent') {
+                    this.quoteDetailsForm
+                        .get('intermediaryName')
+                        .setValue(this.quoteData.intermediaryName);
+                }
+                if (this.quoteData.sourceOfBusiness == 'Broker') {
+                    this.quoteDetailsForm
+                        .get('intermediaryName')
+                        .setValue(this.quoteData.intermediaryName);
+                }
+                if (this.quoteData.sourceOfBusiness == 'Sales Representative') {
+                    this.quoteDetailsForm
+                        .get('intermediaryName')
+                        .setValue(this.quoteData.intermediaryName);
+                }
+
+                this.quoteDetailsForm
                     .get('startDate')
                     .setValue(
                         (this.quoteData.startDate as ITimestamp).seconds * 1000
@@ -324,6 +448,34 @@ export class QuoteDetailsComponent implements OnInit {
                 this.risks = this.quoteData.risks;
                 this.premiumLoadingTotal = 0;
             });
+        });
+
+        this.clientsService.getAllClients().subscribe(clients => {
+            this.clients = [...clients[0], ...clients[1]] as Array<
+                IIndividualClient & ICorporateClient
+            >;
+        });
+
+        this.agentsService.getAgents().subscribe(agents => {
+            this.agents = agents;
+        });
+
+        this.agentsService.getBrokers().subscribe(brokers => {
+            this.brokers = brokers;
+        });
+
+        this.agentsService
+            .getSalesRepresentatives()
+            .subscribe(salesRepresentatives => {
+                this.salesRepresentatives = salesRepresentatives;
+            });
+
+        this.agentsService.getAllIntermediaries().subscribe(intermediaries => {
+            this.intermediaries = [
+                ...intermediaries[0],
+                ...intermediaries[1],
+                ...intermediaries[2]
+            ] as Array<IAgent & IBroker & ISalesRepresentative>;
         });
 
         // start of initialize computations
@@ -351,7 +503,6 @@ export class QuoteDetailsComponent implements OnInit {
         this.increasedThirdPartyLimitsRateType = 'percentage';
         this.riotAndStrikeRateType = 'percentage';
         this.carStereoRateType = 'percentage';
-        this.territorailExtensionRateType = 'percentage';
         this.lossOfUseDailyRateType = 'percentage';
         this.premiumDiscountRateType = 'percentage';
 
@@ -363,7 +514,9 @@ export class QuoteDetailsComponent implements OnInit {
             branch: ['', Validators.required],
             product: ['', Validators.required],
             quarter: ['', Validators.required],
-            underwritingYear: ['', Validators.required]
+            underwritingYear: ['', Validators.required],
+            sourceOfBusiness: ['', Validators.required],
+            intermediaryName: ['', Validators.required]
         });
 
         this.riskComprehensiveForm = this.formBuilder.group({
@@ -375,6 +528,7 @@ export class QuoteDetailsComponent implements OnInit {
             vehicleModel: ['', Validators.required],
             engineNumber: ['', Validators.required],
             chassisNumber: ['', Validators.required],
+            yearOfManufacture: ['', Validators.required],
             color: ['', Validators.required],
             // sumInsured: ['', Validators.required],
             productType: ['', Validators.required],
@@ -390,15 +544,10 @@ export class QuoteDetailsComponent implements OnInit {
             vehicleModel: ['', [Validators.required]],
             engineNumber: ['', [Validators.required]],
             chassisNumber: ['', [Validators.required]],
+            yearOfManufacture: ['', Validators.required],
             color: ['', [Validators.required]],
             productType: ['', [Validators.required]],
             insuranceType: ['ThirdParty']
-        });
-
-        this.clientsService.getAllClients().subscribe(clients => {
-            this.clients = [...clients[0], ...clients[1]] as Array<
-                IIndividualClient & ICorporateClient
-            >;
         });
 
         // vehicle make loading
@@ -472,8 +621,11 @@ export class QuoteDetailsComponent implements OnInit {
                     this.riskComprehensiveForm.get('riskQuarter').value
                 ),
                 discount: 0,
+                appliedDiscount: 0,
                 carStereo: 0,
                 carStereoRate: 0,
+                territorialExtensionWeeks: 0,
+                territorialExtensionCountries: 0,
                 lossOfUseDays: 0,
                 lossOfUseRate: 0,
                 thirdPartyLimit: 0,
@@ -508,8 +660,11 @@ export class QuoteDetailsComponent implements OnInit {
                     this.riskThirdPartyForm.get('riskQuarter').value
                 ),
                 discount: 0,
+                appliedDiscount: 0,
                 carStereo: 0,
                 carStereoRate: 0,
+                territorialExtensionWeeks: 0,
+                territorialExtensionCountries: 0,
                 lossOfUseDays: 0,
                 lossOfUseRate: 0,
                 thirdPartyLimit: 0,
@@ -541,8 +696,11 @@ export class QuoteDetailsComponent implements OnInit {
                 startDate: this.quoteDetailsForm.get('startDate').value,
                 quarter: Number(this.quoteDetailsForm.get('quarter').value),
                 discount: 0,
+                appliedDiscount: 0,
                 carStereo: 0,
                 carStereoRate: 0,
+                territorialExtensionWeeks: 0,
+                territorialExtensionCountries: 0,
                 lossOfUseDays: 0,
                 lossOfUseRate: 0,
                 thirdPartyLimit: 0,
@@ -572,8 +730,11 @@ export class QuoteDetailsComponent implements OnInit {
                     this.riskComprehensiveForm.get('riskQuarter').value
                 ),
                 discount: 0,
+                appliedDiscount: 0,
                 carStereo: 0,
                 carStereoRate: 0,
+                territorialExtensionWeeks: 0,
+                territorialExtensionCountries: 0,
                 lossOfUseDays: 0,
                 lossOfUseRate: 0,
                 thirdPartyLimit: 0,
@@ -602,6 +763,7 @@ export class QuoteDetailsComponent implements OnInit {
             basicPremium: this.basicPremium,
             loads: this.loads,
             loadingTotal: this.premiumLoadingTotal,
+            discountTotal: this.premiumDiscount,
             discountRate: this.premiumDiscountRate,
             premiumLevy: 0.03,
             netPremium: this.netPremium,
@@ -644,7 +806,9 @@ export class QuoteDetailsComponent implements OnInit {
             premiumRate: this.premiumRate,
             basicPremium: this.basicPremium,
             loads: this.loads,
+            discounts: this.discounts,
             loadingTotal: this.premiumLoadingTotal,
+            discountTotal: this.premiumDiscount,
             discountRate: this.premiumDiscountRate,
             premiumLevy: 0.03,
             netPremium: this.netPremium,
@@ -681,46 +845,81 @@ export class QuoteDetailsComponent implements OnInit {
     // view details of the risk
     viewRiskDetails(risk: RiskModel) {
         this.selectedRisk = risk;
-        console.log(this.selectedRisk);
         this.quoteRiskDetailsModalVisible = true;
 
-        console.log(risk);
-
-        this.riskComprehensiveForm
-            .get('vehicleMake')
-            .setValue(risk.vehicleMake);
-        this.riskComprehensiveForm
-            .get('vehicleModel')
-            .setValue(risk.vehicleModel);
-        this.riskComprehensiveForm.get('regNumber').setValue(risk.regNumber);
-        this.riskComprehensiveForm
-            .get('engineNumber')
-            .setValue(risk.engineNumber);
-        this.riskComprehensiveForm
-            .get('chassisNumber')
-            .setValue(risk.chassisNumber);
-        this.riskComprehensiveForm
-            .get('productType')
-            .setValue(risk.productType);
-        this.riskComprehensiveForm
-            .get('riskStartDate')
-            .setValue((risk.riskStartDate as ITimestamp).seconds * 1000);
-        this.riskComprehensiveForm
-            .get('riskQuarter')
-            .setValue(risk.riskQuarter);
-        this.riskComprehensiveForm
-            .get('riskEndDate')
-            .setValue(risk.riskEndDate);
-        this.riskComprehensiveForm.get('color').setValue(risk.color);
+        if (this.selectedValue.value === 'Comprehensive') {
+            this.riskComprehensiveForm
+                .get('vehicleMake')
+                .setValue(risk.vehicleMake);
+            this.riskComprehensiveForm
+                .get('vehicleModel')
+                .setValue(risk.vehicleModel);
+            this.riskComprehensiveForm
+                .get('yearOfManufacture')
+                .setValue(this.getYearOfManfTimeStamp(this.selectedRisk));
+            this.riskComprehensiveForm
+                .get('regNumber')
+                .setValue(risk.regNumber);
+            this.riskComprehensiveForm
+                .get('engineNumber')
+                .setValue(risk.engineNumber);
+            this.riskComprehensiveForm
+                .get('chassisNumber')
+                .setValue(risk.chassisNumber);
+            this.riskComprehensiveForm
+                .get('productType')
+                .setValue(risk.productType);
+            this.riskComprehensiveForm
+                .get('riskStartDate')
+                .setValue(risk.riskStartDate);
+            this.riskComprehensiveForm
+                .get('riskQuarter')
+                .setValue(risk.riskQuarter);
+            this.riskComprehensiveForm
+                .get('riskEndDate')
+                .setValue(risk.riskEndDate);
+            this.riskComprehensiveForm.get('color').setValue(risk.color);
+        } else {
+            this.riskComprehensiveForm
+                .get('vehicleMake')
+                .setValue(risk.vehicleMake);
+            this.riskComprehensiveForm
+                .get('vehicleModel')
+                .setValue(risk.vehicleModel);
+            this.riskComprehensiveForm
+                .get('yearOfManufacture')
+                .setValue(risk.yearOfManufacture);
+            this.riskThirdPartyForm.get('regNumber').setValue(risk.regNumber);
+            this.riskThirdPartyForm
+                .get('engineNumber')
+                .setValue(risk.engineNumber);
+            this.riskThirdPartyForm
+                .get('chassisNumber')
+                .setValue(risk.chassisNumber);
+            this.riskThirdPartyForm
+                .get('productType')
+                .setValue(risk.productType);
+            this.riskThirdPartyForm
+                .get('riskStartDate')
+                .setValue(risk.riskStartDate);
+            this.riskThirdPartyForm
+                .get('riskQuarter')
+                .setValue(risk.riskQuarter);
+            this.riskThirdPartyForm
+                .get('riskEndDate')
+                .setValue(risk.riskEndDate);
+            this.riskThirdPartyForm.get('color').setValue(risk.color);
+        }
 
         this.selectedVehicleMake = risk.vehicleMake;
         this.selectedVehicleModel = risk.vehicleModel;
         this.sumInsured = risk.sumInsured;
         this.premiumRate = risk.premiumRate;
         this.loads = risk.loads;
+        this.discounts = risk.discounts;
         this.basicPremium = risk.basicPremium;
         this.premiumDiscountRate = risk.discountRate;
-        this.premiumDiscount = risk.discountRate;
+        this.premiumDiscount = risk.discountTotal;
         this.premiumLoadingTotal = risk.loadingTotal;
         this.basicPremiumLevy = risk.premiumLevy;
         this.netPremium = risk.netPremium;
@@ -813,6 +1012,10 @@ export class QuoteDetailsComponent implements OnInit {
         }
     }
 
+    getYearOfManfTimeStamp(risk: RiskModel): number {
+        return (risk.yearOfManufacture as ITimestamp).seconds * 1000;
+    }
+
     getEndDateTimeStamp(quote: MotorQuotationModel): number {
         if (!this.quotesLoading) {
             return (quote.endDate as ITimestamp).seconds;
@@ -901,7 +1104,8 @@ export class QuoteDetailsComponent implements OnInit {
                 sumInsured: this.sumArray(this.quoteData.risks, 'sumInsured'),
                 netPremium: this.sumArray(this.quoteData.risks, 'netPremium'),
                 paymentPlan: this.paymentPlan,
-                user: this.quoteData.user
+                user: this.quoteData.user,
+                underwritingYear: new Date().getFullYear()
             };
 
             // const policy = this.quoteDetailsForm.value as Policy;
@@ -1084,10 +1288,15 @@ export class QuoteDetailsComponent implements OnInit {
                 this.riskComprehensiveForm.get('riskQuarter').value
             ),
             discount: Number(this.premiumDiscountRate) / 100,
+            appliedDiscount: Number(this.premiumDiscount),
             carStereo: Number(this.carStereoValue),
             carStereoRate: Number(this.carStereoRate) / 100,
             lossOfUseDays: Number(this.lossOfUseDays),
             lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+            territorialExtensionWeeks: Number(this.territorialExtensionWeeks),
+            territorialExtensionCountries: Number(
+                this.territorialExtensionCountries
+            ),
             thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
@@ -1113,10 +1322,15 @@ export class QuoteDetailsComponent implements OnInit {
             startDate: this.riskThirdPartyForm.get('riskStartDate').value,
             quarter: Number(this.riskThirdPartyForm.get('riskQuarter').value),
             discount: Number(this.premiumDiscountRate) / 100,
+            appliedDiscount: Number(this.premiumDiscount),
             carStereo: Number(this.carStereoValue),
             carStereoRate: Number(this.carStereoRate) / 100,
             lossOfUseDays: Number(this.lossOfUseDays),
             lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+            territorialExtensionWeeks: Number(this.territorialExtensionWeeks),
+            territorialExtensionCountries: Number(
+                this.territorialExtensionCountries
+            ),
             thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
@@ -1146,10 +1360,15 @@ export class QuoteDetailsComponent implements OnInit {
                 this.riskComprehensiveForm.get('riskQuarter').value
             ),
             discount: Number(this.premiumDiscountRate) / 100,
+            appliedDiscount: Number(this.premiumDiscount),
             carStereo: Number(this.carStereoValue),
             carStereoRate: Number(this.carStereoRate) / 100,
             lossOfUseDays: Number(this.lossOfUseDays),
             lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+            territorialExtensionWeeks: Number(this.territorialExtensionWeeks),
+            territorialExtensionCountries: Number(
+                this.territorialExtensionCountries
+            ),
             thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
@@ -1183,10 +1402,15 @@ export class QuoteDetailsComponent implements OnInit {
                 this.riskComprehensiveForm.get('riskQuarter').value
             ),
             discount: Number(this.premiumDiscountRate) / 100,
+            appliedDiscount: Number(this.premiumDiscount),
             carStereo: Number(this.carStereoValue),
             carStereoRate: Number(this.carStereoRate) / 100,
             lossOfUseDays: Number(this.lossOfUseDays),
             lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+            territorialExtensionWeeks: Number(this.territorialExtensionWeeks),
+            territorialExtensionCountries: Number(
+                this.territorialExtensionCountries
+            ),
             thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
@@ -1218,10 +1442,15 @@ export class QuoteDetailsComponent implements OnInit {
             startDate: this.riskThirdPartyForm.get('riskStartDate').value,
             quarter: Number(this.riskThirdPartyForm.get('riskQuarter').value),
             discount: Number(this.premiumDiscountRate) / 100,
+            appliedDiscount: Number(this.premiumDiscount),
             carStereo: Number(this.carStereoValue),
             carStereoRate: Number(this.carStereoRate) / 100,
             lossOfUseDays: Number(this.lossOfUseDays),
             lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+            territorialExtensionWeeks: Number(this.territorialExtensionWeeks),
+            territorialExtensionCountries: Number(
+                this.territorialExtensionCountries
+            ),
             thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
@@ -1255,10 +1484,15 @@ export class QuoteDetailsComponent implements OnInit {
                 this.riskComprehensiveForm.get('riskQuarter').value
             ),
             discount: Number(this.premiumDiscountRate) / 100,
+            appliedDiscount: Number(this.premiumDiscount),
             carStereo: Number(this.carStereoValue),
             carStereoRate: Number(this.carStereoRate) / 100,
             lossOfUseDays: Number(this.lossOfUseDays),
             lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+            territorialExtensionWeeks: Number(this.territorialExtensionWeeks),
+            territorialExtensionCountries: Number(
+                this.territorialExtensionCountries
+            ),
             thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
@@ -1292,10 +1526,15 @@ export class QuoteDetailsComponent implements OnInit {
                 this.riskComprehensiveForm.get('riskQuarter').value
             ),
             discount: Number(this.premiumDiscountRate) / 100,
+            appliedDiscount: Number(this.premiumDiscount),
             carStereo: Number(this.carStereoValue),
             carStereoRate: Number(this.carStereoRate) / 100,
             lossOfUseDays: Number(this.lossOfUseDays),
             lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+            territorialExtensionWeeks: Number(this.territorialExtensionWeeks),
+            territorialExtensionCountries: Number(
+                this.territorialExtensionCountries
+            ),
             thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
@@ -1310,7 +1549,7 @@ export class QuoteDetailsComponent implements OnInit {
             .subscribe(data => {
                 this.loads.push({
                     loadType: 'Territorial Extension',
-                    amount: 0
+                    amount: Number(data.territorialExtensionPremium)
                 });
                 this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
                 this.handleNetPremium();
@@ -1329,10 +1568,15 @@ export class QuoteDetailsComponent implements OnInit {
                 this.riskComprehensiveForm.get('riskQuarter').value
             ),
             discount: Number(this.premiumDiscountRate) / 100,
+            appliedDiscount: Number(this.premiumDiscount),
             carStereo: Number(this.carStereoValue),
             carStereoRate: Number(this.carStereoRate) / 100,
             lossOfUseDays: Number(this.lossOfUseDays),
             lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+            territorialExtensionWeeks: Number(this.territorialExtensionWeeks),
+            territorialExtensionCountries: Number(
+                this.territorialExtensionCountries
+            ),
             thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
@@ -1366,6 +1610,16 @@ export class QuoteDetailsComponent implements OnInit {
         this.handleNetPremium();
     }
 
+    removeDiscount(i: DiscountModel, e: MouseEvent): void {
+        e.preventDefault();
+        if (this.discounts.length > 0) {
+            const index = this.discounts.indexOf(i);
+            this.discounts.splice(index, 1);
+            this.premiumDiscount = this.sumArray(this.discounts, 'amount');
+        }
+        this.handleNetPremium();
+    }
+
     // Discount Computation
     computeDiscount() {
         this.computeDiscountIsLoading = true;
@@ -1384,7 +1638,7 @@ export class QuoteDetailsComponent implements OnInit {
         }
     }
 
-    handleDiscount() {
+    handleDiscount(discountType: DiscountType) {
         //following methods check if the repective loads are in the loads array
         const riotAndStrikeInLoads = this.loads.some(
             item => item.loadType === 'Riot And Strike'
@@ -1428,11 +1682,18 @@ export class QuoteDetailsComponent implements OnInit {
                 quarter: Number(
                     this.riskComprehensiveForm.get('riskQuarter').value
                 ),
+                appliedDiscount: Number(this.premiumDiscount),
                 discount: Number(this.premiumDiscountRate) / 100,
                 carStereo: Number(this.carStereoValue),
                 carStereoRate: Number(this.carStereoRate) / 100,
                 lossOfUseDays: Number(this.lossOfUseDays),
                 lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+                territorialExtensionWeeks: Number(
+                    this.territorialExtensionWeeks
+                ),
+                territorialExtensionCountries: Number(
+                    this.territorialExtensionCountries
+                ),
                 thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
                 thirdPartyLimitRate:
                     Number(this.increasedThirdPartyLimitsRate) / 100,
@@ -1495,10 +1756,17 @@ export class QuoteDetailsComponent implements OnInit {
                     this.riskThirdPartyForm.get('riskQuarter').value
                 ),
                 discount: Number(this.premiumDiscountRate) / 100,
+                appliedDiscount: Number(this.premiumDiscount),
                 carStereo: Number(this.carStereoValue),
                 carStereoRate: Number(this.carStereoRate) / 100,
                 lossOfUseDays: Number(this.lossOfUseDays),
                 lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+                territorialExtensionWeeks: Number(
+                    this.territorialExtensionWeeks
+                ),
+                territorialExtensionCountries: Number(
+                    this.territorialExtensionCountries
+                ),
                 thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
                 thirdPartyLimitRate:
                     Number(this.increasedThirdPartyLimitsRate) / 100,
@@ -1630,6 +1898,76 @@ export class QuoteDetailsComponent implements OnInit {
             amount: Number(this.lossOfUseAmount)
         });
         this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    //changes the quote loss of use loading to inputed amount
+    handleTerritorialExtensionAmount() {
+        this.loads.push({
+            loadType: 'Territorial Extension',
+            amount: Number(this.territorialExtensionAmount)
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    //changes the quote loss of use loading to inputed amount
+    handleInexperiencedDriverAmount() {
+        this.loads.push({
+            loadType: 'Inexperienced Driver',
+            amount: Number(this.inexperiencedDriverAmount)
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    //changes the quote loss of use loading to inputed amount
+    handleUnderAgeDriverAmount() {
+        this.loads.push({
+            loadType: 'Under Age Driver',
+            amount: Number(this.underAgeDriverAmount)
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    //adds inputted discount to total discount amount
+    handleNoClaimsDiscountAmount() {
+        this.discounts.push({
+            discountType: 'No Claims Discount',
+            amount: Number(this.noClaimsDiscountAmount)
+        });
+        this.premiumDiscount = this.sumArray(this.discounts, 'amount');
+        this.handleNetPremium();
+    }
+
+    //adds inputted discount to total discount amount
+    handleLoyaltyDiscountAmount() {
+        this.discounts.push({
+            discountType: 'Loyalty Discount',
+            amount: Number(this.loyaltyDiscountAmount)
+        });
+        this.premiumDiscount = this.sumArray(this.discounts, 'amount');
+        this.handleNetPremium();
+    }
+
+    //adds inputted discount to total discount amount
+    handleValuedClientDiscountAmount() {
+        this.discounts.push({
+            discountType: 'Valued Client Discount',
+            amount: Number(this.valuedClientDiscountAmount)
+        });
+        this.premiumDiscount = this.sumArray(this.discounts, 'amount');
+        this.handleNetPremium();
+    }
+
+    //adds inputted discount to total discount amount
+    handleLowTermAgreementDiscountAmount() {
+        this.discounts.push({
+            discountType: 'Low Term Agreement Discount',
+            amount: Number(this.lowTermAgreementDiscountAmount)
+        });
+        this.premiumDiscount = this.sumArray(this.discounts, 'amount');
         this.handleNetPremium();
     }
 }

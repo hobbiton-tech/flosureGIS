@@ -361,40 +361,41 @@ nzOrientation="left"
 >
     
 <nz-divider
-nzText="Personal Details"
+nzText="Company Details"
 nzOrientation="left"
 ></nz-divider>
 <div nz-row>
 
 <div nz-col [nzSpan]="12">
     <nz-form-item>
-        <nz-form-label [nzSpan]="8" nzFor="contactFirstName" nzRequired
-            >First Name</nz-form-label
+        <nz-form-label [nzSpan]="8" nzFor="companyName" nzRequired
+            >Company Name</nz-form-label
         >
         <nz-form-control [nzSpan]="14">
             <input
                 nz-input
-                formControlName="contactFirstName"
-                name="contactFirstName"
+                formControlName="companyName"
+                name="companyName"
                 type="text"
-                id="contactFirstName"
-                placeholder="First Name"
+                id="companyName"
+                placeholder="Company Name"
             />
         </nz-form-control>
     </nz-form-item>
+
 </div>
 <div nz-col [nzSpan]="12">
-    <nz-form-item>
-        <nz-form-label [nzSpan]="8" nzFor="contactLastName" nzRequired
-            >Last Name</nz-form-label
+     <nz-form-item>
+        <nz-form-label [nzSpan]="8" nzFor="tPinNumber" nzRequired
+            >TPIN Number</nz-form-label
         >
         <nz-form-control [nzSpan]="14">
             <input
                 nz-input
-                formControlName="contactLastName"
-                name="contactLastName"
-                id="contactLastName"
-                placeholder="Last Name"
+                formControlName="tPinNumber"
+                name="tPinNumber"
+                id="tPinNumber"
+                placeholder="TPIN Number"
             />
         </nz-form-control>
     </nz-form-item>
@@ -451,6 +452,103 @@ nzOrientation="left"
                 name="address"
                 id="address"
                 placeholder="Address"
+            />
+        </nz-form-control>
+    </nz-form-item>
+</div>
+</div>
+
+<nz-divider
+nzText="Corporate Contact Details"
+nzOrientation="left"
+></nz-divider>
+<div nz-row>
+
+<div nz-col [nzSpan]="12">
+    <nz-form-item>
+        <nz-form-label [nzSpan]="8" nzFor="contactFirstName" nzRequired
+            >Contact First Name</nz-form-label
+        >
+        <nz-form-control [nzSpan]="14">
+            <input
+                nz-input
+                formControlName="contactFirstName"
+                name="contactFirstName"
+                type="text"
+                id="contactFirstName"
+                placeholder="Contact First Name"
+            />
+        </nz-form-control>
+    </nz-form-item>
+</div>
+<div nz-col [nzSpan]="12">
+    <nz-form-item>
+        <nz-form-label [nzSpan]="8" nzFor="contactLastName" nzRequired
+            >Contact Last Name</nz-form-label
+        >
+        <nz-form-control [nzSpan]="14">
+            <input
+                nz-input
+                formControlName="contactLastName"
+                name="contactLastName"
+                id="contactLastName"
+                placeholder="Contact Last Name"
+            />
+        </nz-form-control>
+    </nz-form-item>
+</div>
+
+</div>
+<div nz-row>
+<div nz-col [nzSpan]="12">
+    <nz-form-item>
+        <nz-form-label [nzSpan]="8" nzFor="contactEmail" nzRequired
+            >Contact Email</nz-form-label
+        >
+        <nz-form-control [nzSpan]="14">
+            <input
+                nz-input
+                formControlName="contactEmail"
+                name="contactEmail"
+                type="contactEmail"
+                id="contactEmail"
+                placeholder="Contact Email Address"
+            />
+        </nz-form-control>
+    </nz-form-item>
+</div>
+
+<div nz-col [nzSpan]="12">
+    <nz-form-item>
+        <nz-form-label [nzSpan]="8" nzFor="contactPhone" nzRequired
+            >Contact phone</nz-form-label
+        >
+        <nz-form-control [nzSpan]="14">
+            <input
+                nz-input
+                formControlName="contactPhone"
+                name="contactPhone"
+                id="contactPhone"
+                placeholder="Contact phone number"
+            />
+        </nz-form-control>
+    </nz-form-item>
+</div>
+</div>
+
+<div nz-row>
+<div nz-col [nzSpan]="12">
+    <nz-form-item>
+        <nz-form-label [nzSpan]="8" nzFor="contactAddress" nzRequired
+            >Contact Address</nz-form-label
+        >
+        <nz-form-control [nzSpan]="14">
+            <input
+                nz-input
+                formControlName="contactAddress"
+                name="contactAddress"
+                id="contactAddress"
+                placeholder="Contact address"
             />
         </nz-form-control>
     </nz-form-item>
