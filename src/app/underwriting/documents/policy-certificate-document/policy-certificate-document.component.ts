@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import * as canvg from 'canvg';
 import { RiskModel, ITimestamp } from 'src/app/quotes/models/quote.model';
+import { Policy } from '../../models/policy.model';
 
 @Component({
     selector: 'app-policy-certificate-document',
@@ -34,34 +34,34 @@ export class PolicyCertificateDocumentComponent implements OnInit {
     @Input()
     policyNumber: string;
 
+    @Input()
+    policy: Policy;
+
     generatingPDF = false;
 
     constructor() {}
 
     ngOnInit(): void {}
 
-    gotToPrint(): void {}
-
-    convertToPDF(): void {
-        let svg = document.getElementById('certificate');
-        // svg = svg.replace(/\r?\n|\r/g, '').trim();
-        let canvas = document.createElement('canvas');
-        // let some = canvg.Canvg.from(canvas.getContext('2d'), svg);
-        let imageData = canvas.toDataURL('image/png');
-        let doc = new jsPDF();
-        doc.addImage(imageData, 'PNG', 0, 0);
-        doc.save('cerficate');
-    }
-
     htmlToPdf() {
         this.generatingPDF = true;
         const div = document.getElementById('printSection');
+        // const options = {
+        //     scale: 1.32,
+        //     allowTaint: true,
+        //     onclone: (doc) => {
+        //         doc.querySelector('div').style.transform = 'none';
+        //     },
+        // };
         const options = {
             scale: 1.32,
             allowTaint: true,
             onclone: doc => {
                 doc.querySelector('div').style.transform = 'none';
-            }
+            },
+            background: 'white',
+            height: div.clientHeight,
+            width: div.clientWidth,
         };
 
         html2canvas(div, options).then(canvas => {

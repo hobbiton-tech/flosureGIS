@@ -1,14 +1,3 @@
-export class Quote {
-    quoteNumber: number;
-    revisionNumber: number;
-    startDate: Date | ITimestamp;
-    endDate: Date | ITimestamp;
-    client: string;
-    status: QuoteStatus;
-    preparedBy: string;
-    risks: RiskModel[];
-}
-
 export class MotorQuotationModel {
     id: string;
     user: string;

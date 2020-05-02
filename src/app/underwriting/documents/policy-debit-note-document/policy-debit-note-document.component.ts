@@ -1,4 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
+import * as jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import { RiskModel } from 'src/app/quotes/models/quote.model';
+import { Policy } from '../../models/policy.model';
 
 @Component({
     selector: 'app-policy-debit-note-document',
@@ -42,7 +46,44 @@ export class PolicyDebitNoteDocumentComponent implements OnInit {
     @Input()
     totalAmount: string;
 
+    @Input()
+    risk: RiskModel;
+
+    @Input()
+    policy: Policy;
+
     constructor() {}
 
+    generatingPDF = false;
+
     ngOnInit(): void {}
+
+    htmlToPdf() {
+        this.generatingPDF = true;
+        const div = document.getElementById('debitPrintSection');
+        const options = {
+            background: 'white',
+            height: div.clientHeight,
+            width: div.clientWidth,
+        };
+
+        html2canvas(div, options).then((canvas) => {
+            let doc = new jsPDF({
+                unit: 'px',
+                format: 'a4',
+            });
+            let imgData = canvas.toDataURL('image/PNG');
+            doc.addImage(imgData, 'PNG', 0, 0);
+
+            let pdfOutput = doc.output();
+            let buffer = new ArrayBuffer(pdfOutput.length);
+            let array = new Uint8Array(buffer);
+            for (let i = 0; i < pdfOutput.length; i++) {
+                array[i] = pdfOutput.charCodeAt(i);
+            }
+            const fileName = 'policy-debitNote.pdf';
+            doc.save(fileName);
+            this.generatingPDF = false;
+        });
+    }
 }

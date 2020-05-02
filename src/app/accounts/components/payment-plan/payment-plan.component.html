@@ -257,8 +257,12 @@
                                     | number: '1.2-2'
                             }}
                         </td>
-                        <td>{{ paymentPlan.amountOutstanding }}</td>
-                        <td>{{ paymentPlan.amountPaid }}</td>
+                        <td>
+                            {{
+                                paymentPlan.amountOutstanding | number: '1.2-2'
+                            }}
+                        </td>
+                        <td>{{ paymentPlan.amountPaid | number: '1.2-2' }}</td>
                         <td>
                             {{ paymentPlan.startDate * 1000 | date }}
                         </td>
