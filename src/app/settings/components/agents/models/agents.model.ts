@@ -1,11 +1,17 @@
 export interface IAgent {
     id: string;
     intermediaryId: string;
-    firstName: string;
-    lastName: string;
+    companyName: string;
+    tPinNumber: string;
+    registrationNumber: string;
     email: string;
     phone: string;
     address: string;
+    contactFirstName: string;
+    contactLastName: string;
+    contactEmail: string;
+    contactPhone: string;
+    contactAddress: string;
     accountName: string;
     accountNumber: number;
     accountType: string;

@@ -21,11 +21,12 @@ import { AgentsComponent } from './components/agents/agents.component';
 import { AgentsService } from './components/agents/services/agents.service';
 import { AddAgentComponent } from './components/agents/add-agent/add-agent.component';
 import { AddTaxComponent } from './components/rates/components/add-tax/add-tax.component';
+import { ProductSetupsComponent } from './components/product-setups/product-setups.component';
 
 const routes: Routes = [
     {
         path: 'insurance-companies',
-        component: InsuranceCompaniesComponent,
+        component: InsuranceCompaniesComponent
     },
     {
         path: 'rates',
@@ -33,28 +34,32 @@ const routes: Routes = [
     },
     {
         path: 'add-insurance-company',
-        component: AddInsuranceCompanyComponent,
+        component: AddInsuranceCompanyComponent
     },
     {
         path: 'underwriting',
-        component: UnderwritingSetupsComponent,
+        component: UnderwritingSetupsComponent
     },
     {
         path: 'accounts',
-        component: AccountsComponent,
+        component: AccountsComponent
     },
     {
         path: 'organization-setups',
-        component: OrganizationalSetupsComponent,
+        component: OrganizationalSetupsComponent
     },
     {
         path: 'agents-setups',
-        component: AgentsComponent,
+        component: AgentsComponent
     },
     {
         path: 'add-agents',
-        component: AddAgentComponent,
+        component: AddAgentComponent
     },
+    {
+        path: 'product-setups',
+        component: ProductSetupsComponent
+    }
 ];
 
 @NgModule({
@@ -76,15 +81,16 @@ const routes: Routes = [
         AddRateComponent,
         AgentsComponent,
         AddAgentComponent,
-        AddTaxComponent
+        AddTaxComponent,
+        ProductSetupsComponent
     ],
     imports: [
         CommonModule,
         NgZorroAntdModule,
         FormsModule,
         ReactiveFormsModule,
-        RouterModule.forChild(routes),
+        RouterModule.forChild(routes)
     ],
-    providers: [AgentsService],
+    providers: [AgentsService]
 })
 export class SettingsModule {}
