@@ -14,7 +14,8 @@ import { IPaymentModel } from '../components/models/payment-plans.model';
 import { IReceiptModel } from '../components/models/receipts.model';
 import { HttpClient } from '@angular/common/http';
 import { NzMessageService } from 'ng-zorro-antd';
-import { Router } from '@angular/router';
+import { Router, Resolve } from '@angular/router';
+
 interface IReceiptNumberResult {
     receiptNumber: string;
 }
@@ -22,7 +23,7 @@ interface IReceiptNumberResult {
 @Injectable({
     providedIn: 'root',
 })
-export class PaymentPlanService {
+export class PaymentPlanService implements Resolve<any> {
     private paymentPlansCollection: AngularFirestoreCollection<IPaymentModel>;
     paymentPlans: Observable<IPaymentModel[]>;
     paymentPlan: Observable<IPaymentModel>;
@@ -48,6 +49,12 @@ export class PaymentPlanService {
         this.receiptCollection = firebase.collection<IReceiptModel>('receipts');
 
         this.receipts = this.receiptCollection.valueChanges();
+    }
+    resolve(
+        route: import('@angular/router').ActivatedRouteSnapshot,
+        state: import('@angular/router').RouterStateSnapshot
+    ) {
+        throw new Error('Method not implemented.');
     }
 
     async addPaymentPlan(paymentPlan: IPaymentModel) {
@@ -108,9 +115,6 @@ export class PaymentPlanService {
                         .doc(receipt.id)
                         .set(receipt)
                         .then(async (mess) => {
-                            this.message.success(
-                                'Receipt Successfully created'
-                            );
                             await this.paymentPlansCollection
                                 .doc(paymentPlan.id)
                                 .set(paymentPlan)
@@ -124,6 +128,9 @@ export class PaymentPlanService {
                                     console.log(err);
                                 });
                             this.generateID(receipt.id);
+                            this.message.success(
+                                'Receipt Successfully created'
+                            );
                         })
                         .catch((err) => {
                             this.message.warning('Receipt Failed');

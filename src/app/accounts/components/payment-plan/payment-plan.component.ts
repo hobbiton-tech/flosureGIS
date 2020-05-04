@@ -207,7 +207,7 @@ export class PaymentPlanComponent implements OnInit {
             eDate.getMonth() +
                 this.paymentPlanForm.controls.numberOfInstallments.value
         );
-        this.formattedeDate = eDate;
+        this.formattedeDate = eDate.toISOString();
 
         const dAmount =
             pAmount -
@@ -231,7 +231,7 @@ export class PaymentPlanComponent implements OnInit {
             i++
         ) {
             iDate.setMonth(iDate.getMonth() + 1);
-            this.formattedDate = iDate;
+            this.formattedDate = iDate.toISOString();
 
             installment.push({
                 installmentAmount: iAmount,
@@ -253,11 +253,12 @@ export class PaymentPlanComponent implements OnInit {
             policyPaymentPlan: policyPlan,
             remainingInstallments: this.paymentPlanForm.controls
                 .numberOfInstallments.value,
-            amountPaid: 0,
+            amountPaid: this.paymentPlanForm.controls.initialInstallmentAmount
+                .value,
             numberOfPaidInstallments: 0,
             amountOutstanding: dAmount,
             installments: installment,
-            startDate: pDate,
+            startDate: pDate.toISOString(),
             endDate: this.formattedeDate,
         };
 

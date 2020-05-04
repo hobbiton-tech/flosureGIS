@@ -13,6 +13,9 @@ import { PaymentPlanComponent } from './components/payment-plan/payment-plan.com
 import { PaymentPlanPoliciesComponent } from './components/payment-plan/components/payment-plan-policies/payment-plan-policies.component';
 import { PaymentPlanPolicyInstallmentsComponent } from './components/payment-plan/components/payment-plan-policy-installments/payment-plan-policy-installments.component';
 import { ReceiptDocumentComponent } from './components/receipts/documents/receipt-document/receipt-document.component';
+import { DirectClientComponent } from './components/receipts/components/direct-client/direct-client.component';
+import { BrokerClientComponent } from './components/receipts/components/broker-client/broker-client.component';
+import { AgentClientComponent } from './components/receipts/components/agent-client/agent-client.component';
 
 const routes: Routes = [
     {
@@ -43,6 +46,18 @@ const routes: Routes = [
         path: 'view-receipt/:id',
         component: ViewReceiptsComponent,
     },
+    {
+        path: 'direct-client',
+        component: DirectClientComponent,
+    },
+    {
+        path: 'broker',
+        component: BrokerClientComponent,
+    },
+    {
+        path: 'agent',
+        component: AgentClientComponent,
+    },
 ];
 
 @NgModule({
@@ -55,6 +70,9 @@ const routes: Routes = [
         PaymentPlanPoliciesComponent,
         PaymentPlanPolicyInstallmentsComponent,
         ReceiptDocumentComponent,
+        DirectClientComponent,
+        BrokerClientComponent,
+        AgentClientComponent,
     ],
     imports: [
         CommonModule,

@@ -15,9 +15,75 @@
                     >
                 </nz-descriptions>
             </nz-page-header-content>
+            <nz-page-header-extra>
+                <div nz-col nzSpan="12">
+                    <button
+                        nz-button
+                        nzType="primary"
+                        (click)="showClientTypeModal()"
+                    >
+                        Select Client Type
+                    </button>
+
+                    <nz-modal
+                        [(nzVisible)]="isVisibleClientType"
+                        nzTitle="Client Type"
+                        (nzOnCancel)="handleCancelClientType()"
+                        (nzOnOk)="handleOkClientType()"
+                        [nzOkLoading]="isOkClientTypeLoading"
+                    >
+                        <div nz-row>
+                            <div nz-col nzSpan="24">
+                                <nz-select [(ngModel)]="selectedType">
+                                    <nz-option
+                                        *ngFor="let option of typeOfClient"
+                                        [nzLabel]="option"
+                                        [nzValue]="option"
+                                        placeholder="Select Agent"
+                                    ></nz-option>
+                                </nz-select>
+                            </div>
+                        </div>
+                        <div
+                            *ngIf="selectedType === 'Agent'"
+                            nz-row
+                            style="margin-top: 5px;"
+                        >
+                            <div nz-col nzSpan="24">
+                                <nz-form-label
+                                    [nzSpan]="6"
+                                    nzFor="agent"
+                                    nzRequired
+                                    >Select Agent</nz-form-label
+                                >
+                                <nz-select [(ngModel)]="selectedAgent">
+                                    <nz-option
+                                        name="agent"
+                                        *ngFor="let option of typeOfClient"
+                                        [nzLabel]="option"
+                                        [nzValue]="option"
+                                        nzPlaceholder="Select Agent"
+                                    ></nz-option>
+                                </nz-select>
+                            </div>
+                        </div>
+                    </nz-modal>
+                </div>
+            </nz-page-header-extra>
         </nz-page-header>
     </div>
-    <nz-card [nzBordered]="false">
+    <div *ngIf="selectedType === 'Direct'">
+        <app-direct-client></app-direct-client>
+    </div>
+
+    <div *ngIf="selectedType === 'Agent'">
+        <app-agent-client></app-agent-client>
+    </div>
+
+    <div *ngIf="selectedType === 'Broker'">
+        <app-broker-client></app-broker-client>
+    </div>
+    <!-- <nz-card [nzBordered]="false">
         <nz-tabset>
             <nz-tab nzTitle="Unreceipted">
                 <nz-card [nzBordered]="false">
@@ -73,7 +139,11 @@
                                     {{ unreceipted.endDate | date }}
                                 </td>
                                 <td>{{ unreceipted.client }}</td>
-                                <td>{{ unreceipted.netPremium | number:'1.2-2' }}</td>
+                                <td>
+                                    {{
+                                        unreceipted.netPremium | number: '1.2-2'
+                                    }}
+                                </td>
                                 <td>
                                     <nz-badge
                                         [nzStatus]="
@@ -170,7 +240,7 @@
                                                     }}"
                                                     readonly
                                                 />
-                                                <!-- <span
+                                                !-- <span
                                                     class="text-danger"
                                                     *ngIf="
                                                         (receiptFormControl
@@ -183,7 +253,7 @@
                                                     "
                                                 >
                                                     Please enter sum in digits!
-                                                </span> -->
+                                                </span> --
                                             </nz-form-control>
                                         </nz-form-item>
                                     </div>
@@ -359,7 +429,9 @@
                             >
                                 <td>{{ receipt.receiptNumber }}</td>
                                 <td>{{ receipt.onBehalfOf }}</td>
-                                <td>{{ receipt.sumInDigits  | number:'1.2-2'}}</td>
+                                <td>
+                                    {{ receipt.sumInDigits | number: '1.2-2' }}
+                                </td>
                                 <td>{{ receipt.receiptType }}</td>
 
                                 <td>
@@ -389,7 +461,7 @@
                                         Cancel
                                     </button>
 
-                                    <!-- <button
+                                    !-- <button
                                         nz-popconfirm
                                         nzPopconfirmTitle="Are you sure you want to cancel the receipt?"
                                         nzPopconfirmPlacement="leftTop"
@@ -400,7 +472,7 @@
                                         nzSize="small"
                                     >
                                         Cancel
-                                    </button> -->
+                                    </button> --
                                 </td>
                             </tr>
                         </tbody>
@@ -490,7 +562,9 @@
                             >
                                 <td>{{ receipt.receiptNumber }}</td>
                                 <td>{{ receipt.onBehalfOf }}</td>
-                                <td>{{ receipt.sumInDigits | number:'1.2-2'}}</td>
+                                <td>
+                                    {{ receipt.sumInDigits | number: '1.2-2' }}
+                                </td>
                                 <td>{{ receipt.receiptType }}</td>
 
                                 <td>
@@ -566,5 +640,5 @@
                 </nz-card>
             </nz-tab>
         </nz-tabset>
-    </nz-card>
+    </nz-card> -->
 </div>

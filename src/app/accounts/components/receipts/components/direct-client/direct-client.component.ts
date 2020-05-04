@@ -1,24 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { MotorQuotationModel } from 'src/app/quotes/models/quote.model';
-import { AccountService } from '../../services/account.service';
-import * as _ from 'lodash';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { IReceiptModel } from '../models/receipts.model';
-import { NzMessageService } from 'ng-zorro-antd';
-import { v4 } from 'uuid';
-import { IReceiptDTO } from 'src/app/quotes/models/receipt.dto';
-import { getTranslationDeclStmts } from '@angular/compiler/src/render3/view/template';
-import { combineLatest } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
 import { Policy } from 'src/app/underwriting/models/policy.model';
+import { IReceiptModel } from '../../../models/receipts.model';
+import { AccountService } from 'src/app/accounts/services/account.service';
+import { NzMessageService } from 'ng-zorro-antd';
+import { Router } from '@angular/router';
+import _ from 'lodash';
+import { v4 } from 'uuid';
 
 @Component({
-    selector: 'app-receipts',
-    templateUrl: './receipts.component.html',
-    styleUrls: ['./receipts.component.scss'],
+    selector: 'app-direct-client',
+    templateUrl: './direct-client.component.html',
+    styleUrls: ['./direct-client.component.scss'],
 })
-export class ReceiptsComponent implements OnInit {
+export class DirectClientComponent implements OnInit {
     receiptForm: FormGroup;
     cancelForm: FormGroup;
     reinstateForm: FormGroup;
@@ -52,9 +47,6 @@ export class ReceiptsComponent implements OnInit {
     policyNumber = '';
     user = '';
     _id = '';
-    isVisibleClientType = false;
-    isOkClientTypeLoading = false;
-
     // modal
     isReceiptVisible = false;
     isConfirmLoading = false;
@@ -64,7 +56,6 @@ export class ReceiptsComponent implements OnInit {
     // generated PDFs
     receiptURl = '';
     showReceiptModal = false;
-
     optionList = [
         { label: 'Premium Payment', value: 'Premium Payment' },
         { label: 'Third Party Recovery', value: 'Third Party Recovery' },
@@ -81,12 +72,6 @@ export class ReceiptsComponent implements OnInit {
         { label: 'EFT', value: 'eft' },
         { label: 'Bank Transfer', value: 'bank transfer' },
     ];
-
-    typeOfClient = ['Direct', 'Agent', 'Broker'];
-
-    selectedType = 'Direct';
-    selectedAgent = '';
-
     constructor(
         private receiptService: AccountService,
         private formBuilder: FormBuilder,
@@ -190,10 +175,6 @@ export class ReceiptsComponent implements OnInit {
                     console.log(err);
                 });
             this.receiptForm.reset();
-            setTimeout(() => {
-                this.isVisible = false;
-                this.isOkLoading = false;
-            }, 30);
 
             this.policy.receiptStatus = 'Receipted';
             this.policy.paymentPlan = 'Created';
@@ -201,7 +182,10 @@ export class ReceiptsComponent implements OnInit {
             console.log(this.policy);
 
             await this.receiptService.updatePolicy(this.policy);
-
+            setTimeout(() => {
+                this.isVisible = false;
+                this.isOkLoading = false;
+            }, 3000);
             this.generateID(this._id);
         }
     }
@@ -256,62 +240,4 @@ export class ReceiptsComponent implements OnInit {
         // this.isConfirmLoading = true;
         // this.generateDocuments();
     }
-
-    showClientTypeModal(): void {
-        this.isVisibleClientType = true;
-    }
-
-    handleOkClientType(): void {
-        this.isOkClientTypeLoading = true;
-        setTimeout(() => {
-            this.isVisible = false;
-            this.isOkClientTypeLoading = false;
-        }, 3000);
-    }
-
-    handleCancelClientType(): void {
-        this.isVisibleClientType = false;
-    }
-
-    // generateDocuments(): void {
-    //     this.receiptService.getReciepts().subscribe((receipts) => {
-    //         this.receiptObj = receipts.filter((x) => x.id === this._id)[0];
-    //         this.receiptedList = receipts;
-    //         this.receipt = this.receiptedList.filter(
-    //             (x) => x.id === this._id
-    //         )[0];
-
-    //         const receipt: IReceiptDTO = {
-    //             recieptNumber: this.receipt.receiptNumber,
-    //             tPin: this.receipt.tpinNumber,
-    //             recievedFrom: this.receipt.receivedFrom,
-    //             onBehalfOf: this.receipt.onBehalfOf,
-    //             address: 'this.receipt.address',
-    //             sumInWords: 'sum in words',
-    //             agentID: this.receipt.capturedBy,
-    //             paymentMethod: this.receipt.paymentMethod,
-    //             paymentRef: this.receipt.receiptNumber,
-    //             policyNumber: this.receipt.policyNumber,
-    //             remarks: this.receipt.receiptType,
-    //             todayDate: this.receipt.todayDate,
-    //             time: this.receipt.receiptNumber,
-    //             narration: this.receipt.narration,
-    //             accountNumber: 'this.receipt.address',
-    //             dateRecieved: this.receipt.todayDate,
-    //             sumInDigits: this.receipt.sumInDigits,
-    //             capturedBy: this.receipt.receiptNumber,
-    //         };
-
-    //         this.receiptService.generateReceipt(receipt).subscribe((data) => {
-    //             this.receiptURl = data.Location;
-    //         });
-
-    //         console.log(this.receipt);
-    //     });
-
-    //     this.isReceiptApproved = true;
-
-    //     console.log('reerewrew');
-    //     console.log(this.isReceiptApproved);
-    // }
 }
