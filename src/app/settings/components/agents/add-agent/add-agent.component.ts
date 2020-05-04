@@ -38,11 +38,16 @@ export class AddAgentComponent implements OnInit {
         //agent form
         this.agentForm = this.formBuilder.group({
             intermediaryType: ['Agent'],
-            contactFirstName: ['', Validators.required],
-            contactLastName: ['', Validators.required],
+            companyName: ['', Validators.required],
+            tPinNumber: ['', Validators.required],
             email: ['', Validators.required],
             phone: ['', Validators.required],
             address: ['', Validators.required],
+            contactFirstName: ['', Validators.required],
+            contactLastName: ['', Validators.required],
+            contactEmail: ['', Validators.required],
+            contactPhone: ['', Validators.required],
+            contactAddress: ['', Validators.required],
             accountName: ['', Validators.required],
             accountNumber: ['', Validators.required],
             accountType: ['', Validators.required],

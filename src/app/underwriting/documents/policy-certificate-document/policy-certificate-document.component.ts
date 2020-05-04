@@ -7,7 +7,7 @@ import { Policy } from '../../models/policy.model';
 @Component({
     selector: 'app-policy-certificate-document',
     templateUrl: './policy-certificate-document.component.html',
-    styleUrls: ['./policy-certificate-document.component.scss'],
+    styleUrls: ['./policy-certificate-document.component.scss']
 })
 export class PolicyCertificateDocumentComponent implements OnInit {
     @Input()
@@ -54,16 +54,21 @@ export class PolicyCertificateDocumentComponent implements OnInit {
         //     },
         // };
         const options = {
+            scale: 1.32,
+            allowTaint: true,
+            onclone: doc => {
+                doc.querySelector('div').style.transform = 'none';
+            },
             background: 'white',
             height: div.clientHeight,
             width: div.clientWidth,
         };
 
-        html2canvas(div, options).then((canvas) => {
+        html2canvas(div, options).then(canvas => {
             //Initialize JSPDF
             let doc = new jsPDF({
                 unit: 'px',
-                format: 'a4',
+                format: 'a4'
             });
             //Converting canvas to Image
             let imgData = canvas.toDataURL('image/PNG');
