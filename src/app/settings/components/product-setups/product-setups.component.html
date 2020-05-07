@@ -1,24 +1,172 @@
 <div style="margin: 20px;">
     <nz-row nzGutter="24">
+        <!-- classes card starts here -->
         <nz-col nzSpan="6">
-            <nz-card nzTitle="Class">
-                <input nz-input placeholder="Search products..." />
-            </nz-card>
-        </nz-col>
-        <nz-col nzSpan="6">
-            <nz-card nzTitle="Products">
+            <nz-card nzTitle="Class" [nzExtra]="addClassButton">
+                <ng-template #addClassButton>
+                    <button nz-button nzType="primary" style="float: right;" (click)="openAddClassFormDrawer()">
+                        Add Class
+                    </button>
+                </ng-template>
+                <div>
+                    <nz-input-group [nzSuffix]="suffixIconSearch">
+                        <input type="text" nz-input placeholder="Search classes.." />
+                    </nz-input-group>
+                    <ng-template #suffixIconSearch>
+                        <i nz-icon nzType="search"></i>
+                    </ng-template>
+                </div>
+
+                <div style="margin-top: 10px;">
+                    <nz-table #classesTable [nzData]="classesList" [nzSize]="'small'" [nzBordered]="true"
+                        style="background-color: white;">
+                        <thead>
+                            <tr>
+                                <th>Class Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let class of classesTable.data" style="cursor: pointer;"
+                                (click)="changeSelectedClass(class)">
+                                <td>{{ class.className }}</td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
 
             </nz-card>
         </nz-col>
+        <!-- classes card ends here -->
+
+        <!-- products card starts here -->
         <nz-col nzSpan="6">
-            <nz-card nzTitle="Cover Types">
+            <nz-card nzTitle="Products" [nzExtra]="addProductButton">
+                <ng-template #addProductButton>
+                    <button nz-button nzType="primary" style="float: right;" (click)="openAddProductFormDrawer()">
+                        Add Product
+                    </button>
+                </ng-template>
+
+                <div>
+                    <nz-input-group [nzSuffix]="suffixIconSearch">
+                        <input type="text" nz-input placeholder="Search products.." />
+                    </nz-input-group>
+                    <ng-template #suffixIconSearch>
+                        <i nz-icon nzType="search"></i>
+                    </ng-template>
+                </div>
+
+                <div style="margin-top: 10px;">
+                    <nz-table #productsTable [nzData]="productsList" [nzSize]="'small'" [nzBordered]="true"
+                        style="background-color: white;">
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let product of productsTable.data" style="cursor: pointer;">
+                                <td>{{ product.productName }}</td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
 
             </nz-card>
         </nz-col>
+        <!-- products card ends here -->
+
+        <!-- cover types card starts here -->
         <nz-col nzSpan="6">
-            <nz-card nzTitle="Perils">
+            <nz-card nzTitle="Cover Types" [nzExtra]="addCoverTypeButton">
+                <ng-template #addCoverTypeButton>
+                    <button nz-button nzType="primary" style="float: right;" (click)="openAddCoverTypeFormDrawer()">
+                        Add Cover Type
+                    </button>
+                </ng-template>
+
+                <div>
+                    <nz-input-group [nzSuffix]="suffixIconSearch">
+                        <input type="text" nz-input placeholder="Search cover types.." />
+                    </nz-input-group>
+                    <ng-template #suffixIconSearch>
+                        <i nz-icon nzType="search"></i>
+                    </ng-template>
+                </div>
+
+                <div style="margin-top: 10px;">
+                    <nz-table #coverTypesTable [nzData]="" [nzSize]="'small'" [nzBordered]="true"
+                        style="background-color: white;">
+                        <thead>
+                            <tr>
+                                <th>Cover Type Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let coverType of coverTypesTable.data">
+                                <td>{{ coverType.coverTypeName }}</td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
 
             </nz-card>
         </nz-col>
+        <!-- cover types card ends here -->
+
+        <!-- perils card starts here -->
+        <nz-col nzSpan="6">
+            <nz-card nzTitle="Perils" [nzExtra]="addPerilButton">
+                <ng-template #addPerilButton>
+                    <button nz-button nzType="primary" style="float: right;" (click)="openAddPerilFormDrawer()">
+                        Add Peril
+                    </button>
+                </ng-template>
+
+                <div>
+                    <nz-input-group [nzSuffix]="suffixIconSearch">
+                        <input type="text" nz-input placeholder="Search perils.." />
+                    </nz-input-group>
+                    <ng-template #suffixIconSearch>
+                        <i nz-icon nzType="search"></i>
+                    </ng-template>
+                </div>
+
+                <div style="margin-top: 10px;">
+                    <nz-table #perilsTable [nzData]="" [nzSize]="'small'" [nzBordered]="true"
+                        style="background-color: white;">
+                        <thead>
+                            <tr>
+                                <th>Peril Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let peril of perilsTable.data">
+                                <td>{{ peril.perilName }}</td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+
+            </nz-card>
+        </nz-col>
+        <!-- perils card ends here -->
+
     </nz-row>
 </div>
+
+<!-- Drawers -->
+<app-add-class [isAddClassFormDrawerVisible]="addClassFormDrawerVisible"
+    (closeAddClassFormDrawerVisible)="addClassFormDrawerVisible = false">
+</app-add-class>
+
+<app-add-product [isAddProductFormDrawerVisible]="addProductFormDrawerVisible"
+    (closeAddProductFormDrawerVisible)="addProductFormDrawerVisible = false">
+</app-add-product>
+
+<app-add-cover-type [isAddCoverTypeFormDrawerVisible]="addCoverTypeFormDrawerVisible"
+    (closeAddCoverTypeFormDrawerVisible)="addCoverTypeFormDrawerVisible = false">
+</app-add-cover-type>
+
+<app-add-peril [isAddPerilFormDrawerVisible]="addPerilFormDrawerVisible"
+    (closeAddPerilFormDrawerVisible)="addPerilFormDrawerVisible = false"></app-add-peril>

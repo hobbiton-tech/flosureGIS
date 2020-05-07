@@ -1,0 +1,62 @@
+<!-- <nz-drawer [nzClosable]="false" [nzVisible]="isAddProductCommissionFormDrawerVisible" nzPlacement="left"
+    nzTitle="Product Commission" (nzOnClose)="closeDrawer()" [nzWidth]="600">
+
+    <form nz-form [formGroup]="productCommissionForm">
+        <div nz-row>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="8" nzFor="classCode" nzRequired>Intermediary Name</nz-form-label>
+                <nz-form-control [nzSpan]="14">
+                    <input nz-input formControlName="className" name="className" id="className" />
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+
+        <div nz-row>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="8" nzFor="classCode" nzRequired>Intermediary Type</nz-form-label>
+                <nz-form-control [nzSpan]="14">
+                    <input nz-input formControlName="className" name="className" id="className" placeholder="" />
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+
+        <div nz-row>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="8" nzFor="className" nzRequired>Product Class</nz-form-label>
+                <nz-form-control [nzSpan]="14">
+                    <nz-select formControlName="className" nzPlaceHolder="Select class" [(ngModel)]="selectedClass">
+                        <div *ngFor="let class of classesList">
+                            <nz-option [nzValue]="class.className" [nzLabel]="class.className"></nz-option>
+                        </div>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+
+        <div nz-row>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="8" nzFor="productName" nzRequired>Product Name</nz-form-label>
+                <nz-form-control [nzSpan]="14">
+                    <nz-select formControlName="productName" nzPlaceHolder="Select product">
+                        <div *ngFor="let product of productsList">
+                            <nz-option [nzValue]="product.productName" [nzLabel]="product.productName"></nz-option>
+                        </div>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+
+            <div nz-row>
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzFor="commission" nzRequired>Commission</nz-form-label>
+                    <nz-form-control [nzSpan]="14">
+                        <nz-input-group nzCompact>
+                            <input nz-input disabled="true" value="%" style="width: 30%;" />
+                            <input nz-input nzPlaceHolder="" name="commission" style="width: 70%;" type="number" />
+                        </nz-input-group>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+    </form>
+
+</nz-drawer> -->
