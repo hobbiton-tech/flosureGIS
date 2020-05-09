@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PoliciesComponent } from './components/policies/policies.component';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
@@ -15,11 +15,48 @@ import { PolicyScheduleDocumentComponent } from './documents/policy-schedule-doc
 import { PolicyDebitNoteDocumentComponent } from './documents/policy-debit-note-document/policy-debit-note-document.component';
 import { PolicyDetailsResolver } from './resolvers/policy-details.resolver';
 import { PoliciesService } from './services/policies.service';
+import { RevisionCoverComponent } from './components/endorsements/components/revision-cover/revision-cover.component';
+import { ExtensionCoverComponent } from './components/endorsements/components/extension-cover/extension-cover.component';
+import { CancellationCoverComponent } from './components/endorsements/components/cancellation-cover/cancellation-cover.component';
+import { ViewEndorsementsComponent } from './components/endorsements/components/view-endorsements/view-endorsements.component';
+// import { EndorsementResolver } from './resolvers/endorsement.resolver';
+import { EndorsementService } from './services/endorsements.service';
+import { EditPolicyComponent } from './components/endorsements/components/edit-policy/edit-policy.component';
+import { EditExtensionComponent } from './components/endorsements/components/edit-extension/edit-extension.component';
+import { EditCancellationComponent } from './components/endorsements/components/edit-cancellation/edit-cancellation.component';
 
 const routes: Routes = [
     {
         path: 'endorsements',
         component: EndorsementsComponent,
+    },
+    {
+        path: 'endorsements/revision-cover',
+        component: RevisionCoverComponent,
+    },
+    {
+        path: 'endorsements/view-endorsements',
+        component: ViewEndorsementsComponent,
+    },
+    {
+        path: 'endorsements/extension-cover',
+        component: ExtensionCoverComponent,
+    },
+    {
+        path: 'endorsements/cancellation-cover',
+        component: CancellationCoverComponent,
+    },
+    {
+        path: 'endorsements/edit-policy',
+        component: EditPolicyComponent,
+    },
+    {
+        path:'endorsements/edit-cancellation',
+        component: EditCancellationComponent,
+    },
+    {
+        path:'endorsements/edit-extension',
+        component: EditExtensionComponent,
     },
     {
         path: 'policies',
@@ -45,6 +82,13 @@ const routes: Routes = [
         PolicyClausesDocumentComponent,
         PolicyScheduleDocumentComponent,
         PolicyDebitNoteDocumentComponent,
+        RevisionCoverComponent,
+        ExtensionCoverComponent,
+        CancellationCoverComponent,
+        ViewEndorsementsComponent,
+        EditPolicyComponent,
+        EditExtensionComponent,
+        EditCancellationComponent,
     ],
     imports: [
         CommonModule,
@@ -55,6 +99,6 @@ const routes: Routes = [
         PdfViewerModule,
         NgxPrintModule,
     ],
-    providers: [PolicyDetailsResolver, PoliciesService],
+    providers: [PolicyDetailsResolver, PoliciesService, EndorsementService],
 })
 export class UnderWritingModule {}

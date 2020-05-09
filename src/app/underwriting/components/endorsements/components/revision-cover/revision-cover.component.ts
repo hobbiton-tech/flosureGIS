@@ -1,45 +1,43 @@
 import { Component, OnInit } from '@angular/core';
-// import { generatePolicies } from '../../data/policy.data';
+import { Policy } from 'src/app/underwriting/models/policy.model';
 import { Router } from '@angular/router';
-import { Policy } from '../../models/policy.model';
-import { PoliciesService } from '../../services/policies.service';
+import { PoliciesService } from 'src/app/underwriting/services/policies.service';
 
 @Component({
-    selector: 'app-policies',
-    templateUrl: './policies.component.html',
-    styleUrls: ['./policies.component.scss'],
+    selector: 'app-revision-cover',
+    templateUrl: './revision-cover.component.html',
+    styleUrls: ['./revision-cover.component.scss'],
 })
-export class PoliciesComponent implements OnInit {
+export class RevisionCoverComponent implements OnInit {
     policiesList: Policy[];
     displayPoliciesList: Policy[];
     policiesCount: number = 0;
 
-    issuedBy = localStorage.getItem('user');
-
     searchString: string;
 
     constructor(
-        private readonly route: Router,
+        private readonly router: Router,
         private policiesService: PoliciesService
     ) {}
 
     ngOnInit(): void {
         this.policiesService.getPolicies().subscribe((policies) => {
             this.policiesList = policies;
-            this.policiesCount = policies.length;
-
             this.displayPoliciesList = this.policiesList;
         });
     }
+  //   viewPolicyDetails(policy: Policy): void {
+  //     this.route.navigateByUrl(
+  //         '/flosure/underwriting/policy-details/' + policy.id
+  //     );
+  // }
 
-    viewPolicyDetails(policy: Policy): void {
-        this.route.navigateByUrl(
-            '/flosure/underwriting/policy-details/' + policy.id
-        );
+    editDetails(policy: Policy): void{
+      this.router.navigateByUrl(
+        'underwriting/endorsements/edit-extension/' + policy.id
+      );
     }
 
-
-  
     search(value: string): void {
         if (value === '' || !value) {
             this.displayPoliciesList = this.policiesList;
