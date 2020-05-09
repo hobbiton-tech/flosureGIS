@@ -1,8 +1,13 @@
 export class User {
-  userID: number;
+  userId: number;
   firstName: string;
-  lastName: string;
+  surname: string;
   email: string;
+  department: string;
+  branch: string;
+  role: string;
+  phoneNumber: string;
   password: string;
   roleID: string;
+  jobTitle: string;
 }

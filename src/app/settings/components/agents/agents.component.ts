@@ -62,7 +62,7 @@ export class AgentsComponent implements OnInit {
         { label: 'Direct', value: 'Direct' },
         { label: 'Broker', value: 'Broker' },
         { label: 'Agent', value: 'Agent' },
-        { label: 'Sales Representative', value: 'SalesRepresentative' }
+        { label: 'Sales Representative', value: 'Sales Representative' }
     ];
 
     constructor(
@@ -117,7 +117,11 @@ export class AgentsComponent implements OnInit {
 
         this.commissionSetupForm
             .get('intermediaryName')
-            .setValue(this.selectedIntermediary.companyName);
+            .setValue(
+                this.selectedIntermediary.companyName
+                    ? this.selectedIntermediary.companyName
+                    : this.selectedIntermediary.contactFirstName
+            );
         this.commissionSetupForm
             .get('intermediaryType')
             .setValue(this.selectedIntermediary.intermediaryType);
@@ -165,7 +169,11 @@ export class AgentsComponent implements OnInit {
                 this.displayCommissionList = commissions.filter(
                     x =>
                         x.intermediaryName ==
-                        this.selectedIntermediary.companyName
+                            this.selectedIntermediary.companyName ||
+                        x.intermediaryName ==
+                            this.selectedIntermediary.contactFirstName +
+                                ' ' +
+                                this.selectedIntermediary.contactLastName
                 );
 
                 console.log(this.displayCommissionList);
