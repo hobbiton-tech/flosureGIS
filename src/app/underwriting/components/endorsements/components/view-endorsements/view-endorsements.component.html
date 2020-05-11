@@ -1,0 +1,50 @@
+<div style="margin: 10px;">
+    <div style="margin-bottom: 20px; background: #fff;">
+        <nz-page-header>
+            <nz-page-header-title>View Endorsements</nz-page-header-title>
+            <nz-page-header-subtitle>List of all endorsements</nz-page-header-subtitle>
+            <nz-page-header-extra>
+            </nz-page-header-extra>
+            <nz-page-header-content>
+                <nz-descriptions [nzColumn]="3">
+                    <nz-descriptions-item nzTitle="Total Endorsements" [nzSpan]="1">{{ endorsementsCount}}
+                    </nz-descriptions-item>
+                </nz-descriptions>
+            </nz-page-header-content>
+        </nz-page-header>
+    </div>
+    <nz-card>
+        <div style="margin-bottom: 10px; width: 50%;">
+            <nz-input-group [nzSuffix]="suffixIconSearch">
+                <input type="text" nz-input placeholder="Search by policy number" [(ngModel)]="searchString"
+                    (ngModelChange)="search($event)" />
+            </nz-input-group>
+            <ng-template #suffixIconSearch>
+                <i nz-icon nzType="search"></i>
+            </ng-template>
+        </div>
+
+        <nz-table #endorsementsTable [nzData]="displayEndorsementsList" [nzSize]="'small'" [nzBordered]="true">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Remarks</th>
+                    <th>Date Created</th>
+                    <th>Effective Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let endorsement of endorsementsTable.data">
+                    <td>{{ endorsement.endorsementType }}</td>
+                    <td>{{ endorsement.endorsementRemarks}}</td>
+                    <td>{{ endorsement.createdDate.seconds * 1000 | date }}</td>
+                    <td>{{ endorsement.effectDate.seconds * 1000 | date }}</td>
+                    <td>{{ endorsement.status }}</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </nz-card>
+</div>
