@@ -1,7 +1,17 @@
 <div class="policy-details">
     <div style="margin: 15px;">
-        <nz-page-header nzBackIcon nzTitle="Policy Number: {{ policyData.policyNumber }}"
+        <!-- <nz-page-header nzBackIcon nzTitle="Policy Number: {{ policyData.policyNumber }}"
             [nzSubtitle]="policyData.client">
+        </nz-page-header> -->
+        <nz-page-header nzBackIcon [nzTitle]="title">
+            <ng-template #title>
+                <div style="display: flex; align-items: center;">
+                    <span style="margin-right: 8px;">Policy Number: {{ policyData.policyNumber }}</span>
+                    <nz-tag [nzColor]="isCancelledPolicy ? 'red' : 'orange'">
+                        {{ isCancelledPolicy? 'Cancelled' : 'Pending Cancellation' }}
+                    </nz-tag>
+                </div>
+            </ng-template>
         </nz-page-header>
     </div>
 </div>
@@ -141,7 +151,7 @@
                     <nz-form-item>
                         <nz-form-label nzSpan="7">Effect Date</nz-form-label>
                         <nz-form-control nzSpan="12">
-                            <nz-date-picker formControlName="effectDate"></nz-date-picker>
+                            <nz-date-picker formControlName="effectDate" [nzDisabled]="isCancelledPolicy"></nz-date-picker>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -149,7 +159,7 @@
                     <nz-form-item>
                         <nz-form-label nzSpan="7" nzRequired>Endorsement Remarks</nz-form-label>
                         <nz-form-control nzSpan="12">
-                            <textarea formControlName="endorsementRemarks" nz-input rows="2"
+                            <textarea formControlName="endorsementRemarks" nz-input rows="2" [disabled]="isCancelledPolicy"
                                 placeholder="remarks"></textarea>
                         </nz-form-control>
                     </nz-form-item>
@@ -158,10 +168,10 @@
             <div nz-row>
                 <div nz-col>
                     <div style="text-align: center; margin-top: 10px; margin-bottom: 10px; ">
-                        <button nz-button nzType="primary" (click)="endorsePolicy()">
+                        <button [disabled]="isCancelledPolicy" nz-button nzType="primary" (click)="endorsePolicy()" routerLink="/flosure/underwriting/endorsements/view-endorsements">
                             Endorse Policy
                         </button>
-                        <button nz-button nzType="default" style="margin-left: 15px;">
+                        <button [disabled]="isCancelledPolicy" nz-button nzType="default" style="margin-left: 15px;">
                             Cancel Endorsement
                         </button>
                     </div>

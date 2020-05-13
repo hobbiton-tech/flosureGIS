@@ -32,6 +32,12 @@ export class CancellationCoverComponent implements OnInit {
         );
     }
 
+    viewPolicyCancelledDetails(policy: Policy): void{
+        this.router.navigateByUrl(
+            '/flosure/underwriting/policy-cancellation-details/' + policy.id
+        );
+    }
+
     search(value: string): void {
         if (value === '' || !value) {
             this.displayPoliciesList = this.policiesList;

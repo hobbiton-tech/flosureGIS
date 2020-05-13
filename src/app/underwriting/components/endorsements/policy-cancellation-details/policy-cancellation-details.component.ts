@@ -30,6 +30,8 @@ export class PolicyCancellationDetailsComponent implements OnInit {
     //Editable fields
     isEditmode = false;
 
+    isCancelledPolicy = false;
+
     constructor(
         private route: ActivatedRoute,
         private formBuilder: FormBuilder,
@@ -64,6 +66,9 @@ export class PolicyCancellationDetailsComponent implements OnInit {
             this.policiesService.getPolicyById(id['id']).subscribe(policy => {
                 this.policyData = policy;
                 this.risks = policy.risks;
+
+
+                this.isCancelledPolicy = this.policyData.status === 'Cancelled';
 
                 //set values of  fields
                 this.policyCancellationDetailsForm
