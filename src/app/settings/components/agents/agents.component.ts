@@ -4,16 +4,17 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AgentsService } from './services/agents.service';
 import {
     IClass,
-    IProduct
+    IProduct,
 } from '../product-setups/models/product-setups-models.model';
 import { ProductSetupsServiceService } from '../product-setups/services/product-setups-service.service';
 import { CommisionSetupsService } from './services/commision-setups.service';
 import { ICommissionSetup } from './models/commission-setup.model';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-agents',
     templateUrl: './agents.component.html',
-    styleUrls: ['./agents.component.scss']
+    styleUrls: ['./agents.component.scss'],
 })
 export class AgentsComponent implements OnInit {
     addAgentsFormDrawerVisible = false;
@@ -62,10 +63,11 @@ export class AgentsComponent implements OnInit {
         { label: 'Direct', value: 'Direct' },
         { label: 'Broker', value: 'Broker' },
         { label: 'Agent', value: 'Agent' },
-        { label: 'Sales Representative', value: 'Sales Representative' }
+        { label: 'Sales Representative', value: 'Sales Representative' },
     ];
 
     constructor(
+        private readonly router: Router,
         private formBuilder: FormBuilder,
         private cdr: ChangeDetectorRef,
         private productSetupsService: ProductSetupsServiceService,
@@ -77,12 +79,12 @@ export class AgentsComponent implements OnInit {
             intermediaryType: ['', Validators.required],
             productClass: ['', Validators.required],
             productName: ['', Validators.required],
-            commission: ['', Validators.required]
+            commission: ['', Validators.required],
         });
     }
 
     ngOnInit(): void {
-        this.agentService.getAllIntermediaries().subscribe(intermediaries => {
+        this.agentService.getAllIntermediaries().subscribe((intermediaries) => {
             this.totalAgents = intermediaries[0].length;
             this.totalBrokers = intermediaries[1].length;
             this.totalSalesRepresentatives = intermediaries[2].length;
@@ -90,20 +92,20 @@ export class AgentsComponent implements OnInit {
             this.intermediariesList = [
                 ...intermediaries[0],
                 ...intermediaries[1],
-                ...intermediaries[2]
+                ...intermediaries[2],
             ] as Array<IAgent & IBroker & ISalesRepresentative>;
             this.displayIntermediariesList = this.intermediariesList;
 
             this.totalIntermediaries = this.intermediariesList.length;
         });
 
-        this.productSetupsService.getClasses().subscribe(classes => {
+        this.productSetupsService.getClasses().subscribe((classes) => {
             this.classesList = classes;
         });
 
         this.commissionSetupsService
             .getCommissionSetups()
-            .subscribe(commissions => {
+            .subscribe((commissions) => {
                 this.commissionsList = commissions;
             });
     }
@@ -165,9 +167,9 @@ export class AgentsComponent implements OnInit {
         this.loadProducts();
         this.commissionSetupsService
             .getCommissionSetups()
-            .subscribe(commissions => {
+            .subscribe((commissions) => {
                 this.displayCommissionList = commissions.filter(
-                    x =>
+                    (x) =>
                         x.intermediaryName ==
                             this.selectedIntermediary.companyName ||
                         x.intermediaryName ==
@@ -182,9 +184,9 @@ export class AgentsComponent implements OnInit {
 
     //loads products based on selected class
     loadProducts() {
-        this.productSetupsService.getClasses().subscribe(classes => {
+        this.productSetupsService.getClasses().subscribe((classes) => {
             this.selectedClass = classes.filter(
-                x =>
+                (x) =>
                     x.className ===
                     this.commissionSetupForm.get('productClass').value
             )[0];
@@ -195,7 +197,7 @@ export class AgentsComponent implements OnInit {
     async addCommissionSetup(commission: ICommissionSetup) {
         await this.commissionSetupsService
             .addCommissionSetup(commission)
-            .subscribe(res => {
+            .subscribe((res) => {
                 console.log(res);
             });
     }
@@ -209,7 +211,7 @@ export class AgentsComponent implements OnInit {
         if (this.commissionSetupForm.valid || !this.commissionSetupForm.valid) {
             console.log(this.commissionSetupForm.value);
             this.addCommissionSetup(this.commissionSetupForm.value).then(
-                res => {
+                (res) => {
                     //put some feedback here
                     this.isEditmode = false;
                     console.log(res);
@@ -225,5 +227,11 @@ export class AgentsComponent implements OnInit {
 
     cancelEditCommissionForm() {
         this.isEditmode = false;
+    }
+
+    editViewIntermediary(agent: IAgent | IBroker | ISalesRepresentative): void {
+        this.router.navigateByUrl(
+            '/flosure/underwriting/intermediary-view/' + agent.id
+        );
     }
 }

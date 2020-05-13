@@ -38,16 +38,17 @@
                         <thead>
                             <tr>
                                 <th>Intermediary Name</th>
-                                <th>Intermediary Type</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let intermediary of intermediaryTable.data" style="cursor: pointer;"
                                 (click)="changeSelectedIntermediary(intermediary)">
-                                <td>
-                                    {{ intermediary.companyName ? intermediary.companyName : (intermediary.contactFirstName + ' ' + intermediary.contactLastName)}}
-                                </td>
                                 <td>{{ intermediary.intermediaryType }}</td>
+                                <td>   <button nz-button nzType="primary" style="float: right;"
+                                    (click)="editViewIntermediary(intermediary)">
+                                    View
+                                </button></td>
                             </tr>
                         </tbody>
                     </nz-table>

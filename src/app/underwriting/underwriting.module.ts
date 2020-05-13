@@ -31,6 +31,7 @@ import { ViewRiskComponent } from './components/endorsements/policy-revision-det
 import { AddRiskComponent } from './components/endorsements/policy-revision-details/add-risk/add-risk.component';
 import { ViewExtensionRiskComponent } from './components/endorsements/policy-extension-details/view-extension-risk/view-extension-risk.component';
 import { ViewCancellationRiskComponent } from './components/endorsements/policy-cancellation-details/view-cancellation-risk/view-cancellation-risk.component';
+import { IntermediaryDetailsComponent } from './components/endorsements/intermediary-details/intermediary-details.component';
 
 const routes: Routes = [
     {
@@ -89,6 +90,10 @@ const routes: Routes = [
         path: 'policy-details/:id',
         component: PolicyDetailsComponent,
         resolve: PolicyDetailsResolver
+    },
+    {
+        path:'intermediary-view/:id',
+        component: IntermediaryDetailsComponent
     }
 ];
 
@@ -114,7 +119,8 @@ const routes: Routes = [
         ViewRiskComponent,
         AddRiskComponent,
         ViewExtensionRiskComponent,
-        ViewCancellationRiskComponent
+        ViewCancellationRiskComponent,
+        IntermediaryDetailsComponent
     ],
     imports: [
         CommonModule,
