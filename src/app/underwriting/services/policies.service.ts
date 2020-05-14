@@ -80,29 +80,29 @@ export class PoliciesService {
             localStorage.setItem('clientId', policy.nameOfInsured); // TODO: Need to change to client code.
             console.log('POLICY NUMBER>>>>', policy.id);
 
-            this.http
-                .put<Policy>(
-                    `http://localhost:3000/policy/${policy.id}`,
-                    policy
-                )
-                .subscribe(
-                    (data) => {
-                        this.msg.success('Policy Successfully Updated');
-                    },
-                    (error) => {
-                        this.msg.error('Failed');
-                    }
-                );
+            // this.http
+            //     .put<Policy>(
+            //         `http://localhost:3000/policy/${policy.id}`,
+            //         policy
+            //     )
+            //     .subscribe(
+            //         (data) => {
+            //             this.msg.success('Policy Successfully Updated');
+            //         },
+            //         (error) => {
+            //             this.msg.error('Failed');
+            //         }
+            //     );
 
-            // this.policiesCollection
-            //     .doc(policy.id)
-            //     .update(policy)
-            //     .then((res) => {
-            //         this.msg.success('Policy Successfully Updated');
-            //     })
-            //     .catch(() => {
-            //         this.msg.error('Failed');
-            //     });
+            this.policiesCollection
+                .doc(policy.id)
+                .update(policy)
+                .then((res) => {
+                    this.msg.success('Policy Successfully Updated');
+                })
+                .catch(() => {
+                    this.msg.error('Failed');
+                });
         });
     }
 
@@ -130,11 +130,11 @@ export class PoliciesService {
     }
 
     getPolicyById(policyId: string): Observable<Policy> {
-        return this.http.get<Policy>(
-            `http://localhost:3000/policy/${policyId}`
-        );
+        // return this.http.get<Policy>(
+        //     `http://localhost:3000/policy/${policyId}`
+        // );
 
-        // this.policiesCollection.doc<Policy>(policyId).valueChanges();
+        return this.policiesCollection.doc<Policy>(policyId).valueChanges();
     }
 
     getClientsPolicies(clientId: string): Observable<Policy[]> {
@@ -142,8 +142,8 @@ export class PoliciesService {
     }
 
     getPolicies(): Observable<Policy[]> {
-        return this.http.get<Policy[]>('http://localhost:3000/policy');
-        // this.policies;
+        // return this.http.get<Policy[]>('http://localhost:3000/policy');
+        return this.policies;
     }
 
     countGenerator(number) {

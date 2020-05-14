@@ -78,6 +78,8 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
     premiumComputationForm: FormGroup;
     policydata: Policy[] = [];
 
+    loadingPolicy = false;
+
     policiesList: Policy[];
     policyNumber: string;
     policyData: Policy = new Policy();
@@ -320,7 +322,7 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
     carStereoRate: number;
     lossOfUseDailyRate: number;
     lossOfUseDays: number;
-    //dicounts added
+    // dicounts added
     discounts: DiscountModel[] = [];
     LevyRate = 3;
     policyCertificateURl: string;
@@ -771,17 +773,17 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
             // add payment plan
             // this.paymentPlanService.addPaymentPlan(plan);
             this.paymentPlanForm.reset();
-            this.isVisible = false;
+            this.isPlanVisible = false;
             this.router.navigateByUrl('flosure/accounts/payment-plan');
         } else if (this.selectedPlanValue === 'fully') {
             this.router.navigateByUrl('/flosure/accounts/receipts');
         }
 
-        this.isVisible = false;
+        this.isPlanVisible = false;
     }
 
     handleCancel(): void {
-        this.isVisible = false;
+        this.isPlanVisible = false;
     }
 
     handleComprehensiveRiskEndDateCalculation(): void {
@@ -1221,7 +1223,7 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
             };
             this.currentRiskEdit = some;
 
-            let riskIndex = _.findIndex(this.risks, {
+            const riskIndex = _.findIndex(this.risks, {
                 riskId: this.selectedRisk.riskId,
             });
             this.risks.splice(riskIndex, 1, this.currentRiskEdit);
@@ -1242,7 +1244,7 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
             };
             this.selectedRisk = some;
 
-            let riskIndex = _.findIndex(this.risks, {
+            const riskIndex = _.findIndex(this.risks, {
                 riskId: this.selectedRisk.riskId,
             });
             this.risks.splice(riskIndex, 1, this.currentRiskEdit);
@@ -1258,6 +1260,7 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
     }
 
     async renewPolicy(): Promise<void> {
+        this.loadingPolicy = true;
         const debitNote: IDebitNoteDTO = {
             companyTelephone: 'Joshua Silwembe',
             companyEmail: 'joshua.silwembe@hobbiton.co.zm',
@@ -1340,6 +1343,10 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
             this.policyData.policyNumber = this.policyNumber;
             console.log('POLICY>>>>', this.policyData);
             await this.policiesService.updatePolicy(this.policyData);
+
+            setTimeout(() => {
+                this.loadingPolicy = false;
+            }, 3000);
         });
     }
 
