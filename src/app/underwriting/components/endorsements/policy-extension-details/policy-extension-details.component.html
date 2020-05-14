@@ -47,7 +47,7 @@
                     <nz-form-item>
                         <nz-form-label nzSpan="7">Start Date</nz-form-label>
                         <nz-form-control nzSpan="17">
-                            <nz-date-picker formControlName="startDate"></nz-date-picker>
+                            <nz-date-picker formControlName="startDate" [nzDisabled]="!isEditmode"></nz-date-picker>
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
@@ -59,14 +59,14 @@
 
                     <nz-form-item>
                         <nz-form-label nzSpan="7">Date Of Issue</nz-form-label>
-                        <nz-form-control nzSpan="5">
-                            <input nz-input [disabled]="!isEditmode" formControlName="dateOfIssue" />
+                        <nz-form-control nzSpan="17">
+                            <nz-date-picker formControlName="dateOfIssue" [nzDisabled]="!isEditmode"></nz-date-picker>
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
                         <nz-form-label nzSpan="7">Time Of Issue</nz-form-label>
-                        <nz-form-control nzSpan="5">
-                            <input nz-input [disabled]="!isEditmode" formControlName="timeOfIssue" />
+                        <nz-form-control nzSpan="17">
+                            <nz-time-picker formControlName="timeOfIssue" [nzDisabled]="!isEditmode"></nz-time-picker>
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
@@ -149,8 +149,7 @@
                     <nz-form-item>
                         <nz-form-label nzSpan="7" nzRequired>Endorsement Remarks</nz-form-label>
                         <nz-form-control nzSpan="12">
-                            <textarea formControlName="endorsementRemarks" nz-input rows="2"
-                                placeholder="remarks"></textarea>
+                            <textarea formControlName="remark" nz-input rows="2" placeholder="remarks"></textarea>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -173,4 +172,5 @@
 
 <!-- Modals -->
 <app-view-extension-risk [isViewRiskFormModalVisible]="viewRiskFormModalVisible" [riskData]="editedRisk"
-    (closeViewRiskFormVisible)="viewRiskFormModalVisible = false"></app-view-extension-risk>
+    (closeViewRiskFormVisible)="viewRiskFormModalVisible = false"
+    (sendEdittedRiskExtensionEmitter)="recieveEditedRisk($event)"></app-view-extension-risk>

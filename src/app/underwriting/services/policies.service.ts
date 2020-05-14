@@ -26,31 +26,60 @@ export class PoliciesService {
         private msg: NzMessageService,
         private http: HttpClient
     ) {
-
         this.policiesCollection = firebase.collection<Policy>('policies');
         this.policies = this.policiesCollection.valueChanges();
     }
 
     //postgres db
-    getPolicies(): Observable<Policy[]> {
-        return this.http.get<Policy[]>(
-            'https://flosure-postgres-api.herokuapp.com/policy'
-        );
+    ///////////////////////
+    createPolicy(policy: Policy): Observable<Policy> {
+        return this.http.post<Policy>('http://localhost:3000/policy', policy);
     }
 
-    getPolicyById(policyId: string): Observable<Policy> {
+    // getPolicies(): Observable<Policy[]> {
+    //     return this.http.get<Policy[]>('http://localhost:3000/policy');
+    // }
+
+    // getPolicyById(policyId: string): Observable<Policy> {
+    //     return this.http.get<Policy>(
+    //         `http://localhost:3000/policy/${policyId}`
+    //     );
+    //     return this.policiesCollection.doc<Policy>(policyId).valueChanges();
+    // }
+
+    // updatePolicy(policy: Policy, policyId: string): Observable<Policy> {
+    //     return this.http.put<Policy>(
+    //         `http://localhost:3000/policy/${policyId}`,
+    //         policy
+    //     );
+    // }
+
+    //backup policies
+    createBackupPolicy(policy: Policy): Observable<Policy> {
+        return this.http.post<Policy>('http://localhost:3000/policy', policy);
+    }
+
+    getBackupPolicies(): Observable<Policy[]> {
+        return this.http.get<Policy[]>('http://localhost:3000/policy');
+    }
+
+    getBackupPolicyById(policyId: string): Observable<Policy> {
         return this.http.get<Policy>(
-            `https://flosure-postgres-api.herokuapp.com/policy/${policyId}`
+            `http://localhost:3000/policy/${policyId}`
         );
         // return this.policiesCollection.doc<Policy>(policyId).valueChanges();
     }
 
-    updatePolicy(policy: Policy, policyId: string): Observable<Policy> {
+    updateBackupPolicy(policy: Policy, policyId: string): Observable<Policy> {
+        console.log('policy details:');
+        console.log(policy);
         return this.http.put<Policy>(
-            `https://flosure-postgres-api.herokuapp.com/policy/${policyId}`,
+            `http://localhost:3000/policy/${policyId}`,
             policy
         );
     }
+
+    ////////////////////////////////////////////
 
     async addPolicy(policy: Policy) {
         this.policies.pipe(first()).subscribe(async policies => {
@@ -84,7 +113,7 @@ export class PoliciesService {
     }
 
     updatePolicy(policy: Policy) {
-        this.policies.pipe(first()).subscribe(async (policies) => {
+        this.policies.pipe(first()).subscribe(async policies => {
             const today = new Date();
             policy.client = policy.nameOfInsured;
             policy.dateOfIssue =
@@ -109,10 +138,10 @@ export class PoliciesService {
                     policy
                 )
                 .subscribe(
-                    (data) => {
+                    data => {
                         this.msg.success('Policy Successfully Updated');
                     },
-                    (error) => {
+                    error => {
                         this.msg.error('Failed');
                     }
                 );
@@ -168,7 +197,6 @@ export class PoliciesService {
         return this.http.get<Policy[]>('http://localhost:3000/policy');
         // this.policies;
     }
-
 
     countGenerator(number) {
         if (number <= 9999) {

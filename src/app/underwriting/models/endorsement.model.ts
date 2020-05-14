@@ -1,10 +1,14 @@
+import { Policy } from './policy.model';
+
 export class Endorsement {
-    endorsementId: string;
-    endorsementType: EndorsementType;
-    endorsementRemarks: string;
-    createdDate: Date | ITimestamp;
-    effectiveDate: Date | ITimestamp;
+    id: string;
+    type: EndorsementType;
+    remark: string;
+    dateCreated: Date | ITimestamp;
+    dateUpdated: Date | ITimestamp;
+    effectDate: Date | ITimestamp;
     status: EndorsementStatus;
+    policy: Policy;
 }
 
 export interface ITimestamp {
@@ -12,8 +16,8 @@ export interface ITimestamp {
     milliseconds: number;
 }
 
-export type EndorsementStatus = 'Approved' | 'Not Approved';
+export type EndorsementStatus = 'Approved' | 'Pending';
 export type EndorsementType =
-    | 'Revision of cover'
-    | 'Extension of cover'
-    | 'cancellation';
+    | 'Revision Of Cover'
+    | 'Extension Of Cover'
+    | 'cancellation Of Cover';

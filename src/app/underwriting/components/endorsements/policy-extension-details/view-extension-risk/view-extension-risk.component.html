@@ -23,6 +23,7 @@
                                             selectedVehicleMake
                                         "
                                         formControlName="vehicleMake"
+                                        nzDisabled="true"
                                     >
                                         <ng-container
                                             *ngFor="
@@ -71,6 +72,7 @@
                                             selectedVehicleModel
                                         "
                                         formControlName="vehicleModel"
+                                        nzDisabled="true"
                                     >
                                         <ng-container
                                             *ngFor="
@@ -106,7 +108,7 @@
                                 <nz-form-label nzRequired nzSpan="10">Year Of Manf</nz-form-label>
                                 <nz-form-control nzSpan="10">
                                     <nz-year-picker formControlName="yearOfManufacture"
-                                        nzPlaceHolder="Select year"></nz-year-picker>
+                                        nzPlaceHolder="Select year" nzDisabled="true"></nz-year-picker>
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
@@ -114,7 +116,7 @@
                                 </nz-form-label>
                                 <nz-form-control nzSpan="10">
                                     <input nz-input name="regNumber" formControlName="regNumber" type="text"
-                                        id="regNumber" />
+                                        id="regNumber" disabled="true"/>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -129,6 +131,7 @@
                                         formControlName="engineNumber"
                                         type="text"
                                         id="engineNumber"
+                                        disabled="true"
                                     />
                                 </nz-form-control>
                             </nz-form-item>
@@ -146,6 +149,7 @@
                                         formControlName="chassisNumber"
                                         type="text"
                                         id="chassisNumber"
+                                        disabled="true"
                                     />
                                 </nz-form-control>
                             </nz-form-item>
@@ -153,7 +157,7 @@
                                 <nz-form-label [nzSpan]="10" nzFor="color" nzRequired>Color</nz-form-label>
                                 <nz-form-control nzSpan="10">
                                     <input nz-input name="color" formControlName="color" type="text"
-                                        id="color" />
+                                        id="color" disabled="true"/>
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
@@ -167,6 +171,7 @@
                                         nzPlaceHolder="Select a product type"
                                         name="productType"
                                         id="productType"
+                                        nzDisabled="true"
                                     >
                                         <nz-option
                                             nzLabel="Private"
@@ -192,11 +197,10 @@
                                 <nz-form-control nzSpan="17">
                                     <nz-date-picker
                                         formControlName="riskStartDate"
-                                        [nzDisabledDate]="
-                                            disabledStartDate
-                                        "
+                                        
                                         nzFormat="dd-MM-yyyy"
                                         nzPlaceHolder="Start"
+                                        nzDisabled="true"
                                         
                                     >
                                     </nz-date-picker>
@@ -210,7 +214,7 @@
                                     <nz-select
                                         nzPlaceHolder="Select quarter"
                                         formControlName="riskQuarter"
-                                        
+                                        nzDisabled="true"
                                     >
                                         <nz-option
                                             nzValue="1"
@@ -240,7 +244,6 @@
                                         formControlName="riskEndDate"
                                         nzFormat="dd-MM-yyyy"
                                         nzPlaceHolder="End"
-                                        nzDisabled="true"
                                     >
                                     </nz-date-picker>
                                 </nz-form-control>
@@ -269,6 +272,7 @@
                                             [ngModelOptions]="{
                                                 standalone: true
                                             }"
+                                            nzDisabled="true"
                                         >
                                             <nz-option
                                                 nzValue="rate"
@@ -292,7 +296,7 @@
                                         <nz-form-control nzSpan="10">
                                             <input nz-input nzPlaceHolder="" name="sumInsured" type="number"
                                                 [(ngModel)]="sumInsured"
-                                                [ngModelOptions]="{standalone: true}" />
+                                                [ngModelOptions]="{standalone: true}" disabled="true"/>
                                         </nz-form-control>
                                     </nz-form-item>
                                     <nz-form-item>
@@ -300,7 +304,7 @@
                                         <nz-form-control nzSpan="10">
                                             <input nz-input nzPlaceHolder="" name="basicPremiumAmount"
                                                 type="number" [(ngModel)]="basicPremiumAmount"
-                                                [ngModelOptions]="{standalone: true}" />
+                                                [ngModelOptions]="{standalone: true}" disabled="true"/>
                                         </nz-form-control>
                                     </nz-form-item>
                                 </div>
@@ -315,7 +319,7 @@
                                         <nz-form-control nzSpan="10">
                                             <input nz-input nzPlaceHolder="" name="sumInsured" type="number"
                                                 [(ngModel)]="sumInsured"
-                                                [ngModelOptions]="{standalone: true}" />
+                                                [ngModelOptions]="{standalone: true}" disabled="true"/>
                                         </nz-form-control>
                                     </nz-form-item>
                                     <nz-form-item>
@@ -327,7 +331,7 @@
                                                 <input nz-input nzPlaceHolder="" name="premiumRate"
                                                     [(ngModel)]="premiumRate" style="width: 70%;"
                                                     [ngModelOptions]="{standalone: true}"
-                                                    type="number" />
+                                                    type="number" disabled="true"/>
                                             </nz-input-group>
                                         </nz-form-control>
                                     </nz-form-item>
@@ -350,7 +354,7 @@
                                             <nz-select name="load" nzPlaceHolder="Select Load"
                                                 [(ngModel)]="selectedLoadingValue" [compareWith]="compareFn"
                                                 nzAllowClear style="width: 100%;"
-                                                [ngModelOptions]="{standalone: true}">
+                                                [ngModelOptions]="{standalone: true}" nzDisabled="true">
                                                 <nz-option
                                                     *ngFor="
                                                         let option of motorComprehensiveloadingOptions
@@ -395,6 +399,7 @@
                                                     standalone: true
                                                 }"
                                                 nzLabel="select load"
+                                                nzDisabled="true"
                                             >
                                                 <nz-option
                                                     *ngFor="
@@ -1018,7 +1023,7 @@
                                         <nz-select name="load" nzPlaceHolder="Select Discount"
                                             [(ngModel)]="selectedDiscountValue" [compareWith]="compareFn"
                                             nzAllowClear style="width: 100%;"
-                                            [ngModelOptions]="{standalone: true}" nzLabel="select discount">
+                                            [ngModelOptions]="{standalone: true}" nzLabel="select discount" nzDisabled="true">
                                             <nz-option *ngFor="let option of discountOptions"
                                                 [nzValue]="option" [nzLabel]="option.label"></nz-option>
                                         </nz-select>
@@ -1384,6 +1389,32 @@
                             </div>
                         </div>
                     </div>
+
+                    <div
+                style="
+                    text-align: center;
+                    margin-top: 10px;
+                    margin-bottom: 10px;
+                "
+            >
+                <button
+                    nz-button
+                    nzType="primary"
+                    (click)="editRisk()"
+                >
+                    Save
+                </button>
+                <button
+                style="margin-left: 15px;"
+                    nz-button
+                    nzType="default"
+                    (click)="
+                        resetComprehensiveRiskForm($event)
+                    "
+                >
+                    Reset Form
+                </button>
+            </div>
                 </form>
             <!-- Risk details end here -->
 

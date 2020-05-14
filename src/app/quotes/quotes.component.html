@@ -60,7 +60,7 @@
                     style="cursor: pointer;"
                 >
                     <td>{{ quote.quoteNumber }}</td>
-                    <td>{{ quote.startDate.seconds * 1000 | date }}</td>
+                    <td>{{ quote.startDate | date }}</td>
                     <td>{{ quote.endDate | date }}</td>
                     <td>{{ quote.client }}</td>
                     <td>

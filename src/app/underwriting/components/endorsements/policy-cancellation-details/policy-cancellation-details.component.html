@@ -2,6 +2,15 @@
     <div style="margin: 15px;">
         <nz-page-header nzBackIcon nzTitle="Policy Number: {{ policyData.policyNumber }}"
             [nzSubtitle]="policyData.client">
+            <!-- <div *ngIf="policyData.status == 'Cancelled'">
+                <nz-tag nzColor="red">Cancelled</nz-tag>
+            </div> -->
+            <nz-page-header-extra>
+                <button nz-button nzType="default" (click)="isCreditNotePDFVisible = true"
+                    *ngIf="policyData.status == 'Cancelled'">
+                    Credit Note
+                </button>
+            </nz-page-header-extra>
         </nz-page-header>
     </div>
 </div>
@@ -59,14 +68,14 @@
 
                     <nz-form-item>
                         <nz-form-label nzSpan="7">Date Of Issue</nz-form-label>
-                        <nz-form-control nzSpan="5">
-                            <input nz-input [disabled]="!isEditmode" formControlName="dateOfIssue" />
+                        <nz-form-control nzSpan="17">
+                            <nz-date-picker formControlName="dateOfIssue" [nzDisabled]="!isEditmode"></nz-date-picker>
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
                         <nz-form-label nzSpan="7">Time Of Issue</nz-form-label>
-                        <nz-form-control nzSpan="5">
-                            <input nz-input [disabled]="!isEditmode" formControlName="timeOfIssue" />
+                        <nz-form-control nzSpan="17">
+                            <nz-time-picker formControlName="timeOfIssue" [nzDisabled]="!isEditmode"></nz-time-picker>
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
@@ -149,8 +158,7 @@
                     <nz-form-item>
                         <nz-form-label nzSpan="7" nzRequired>Endorsement Remarks</nz-form-label>
                         <nz-form-control nzSpan="12">
-                            <textarea formControlName="endorsementRemarks" nz-input rows="2"
-                                placeholder="remarks"></textarea>
+                            <textarea formControlName="remark" nz-input rows="2" placeholder="remarks"></textarea>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -158,8 +166,8 @@
             <div nz-row>
                 <div nz-col>
                     <div style="text-align: center; margin-top: 10px; margin-bottom: 10px; ">
-                        <button nz-button nzType="primary" (click)="endorsePolicy()">
-                            Endorse Policy
+                        <button nz-button nzType="danger" (click)="endorsePolicy()">
+                            Cancel Policy
                         </button>
                         <button nz-button nzType="default" style="margin-left: 15px;">
                             Cancel Endorsement
@@ -174,3 +182,16 @@
 <!-- Modals -->
 <app-view-cancellation-risk [isViewRiskFormModalVisible]="viewRiskFormModalVisible" [riskData]="editedRisk"
     (closeViewRiskFormVisible)="viewRiskFormModalVisible = false"></app-view-cancellation-risk>
+
+<nz-modal style="width: 100%;" nzWidth="800" nzTitle="Golden Lotus" [(nzVisible)]="isCreditNotePDFVisible"
+    (nzOnCancel)="isCreditNotePDFVisible = false" (nzOnOk)="isCreditNotePDFVisible = false"
+    (nzAfterOpen)="policyCancellationBalance()">
+    <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Credit Document">
+        <app-policy-credit-note-document [clientName]="clientName" [clientNumber]="clientNumber"
+            [creditNoteAmount]="creditNoteAmount" [clientEmail]="clientEmail" [agency]="agency"
+            [policyNumber]="policyNumber" [classOfBusiness]="classOfBusiness" [coverFrom]="coverForm"
+            [coverTo]="coverTo" [basicPremium]="basicPremium" [loadingAmount]="loadingAmount"
+            [discountAmount]="discountAmount" [totalAmount]="totalAmount" [risk]="policyRisk" [policy]="policyData">
+        </app-policy-credit-note-document>
+    </nz-card>
+</nz-modal>

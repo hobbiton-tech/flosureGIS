@@ -9,11 +9,11 @@ import {
 import { BehaviorSubject } from 'rxjs';
 
 @Component({
-    selector: 'app-view-cancellation-risk',
-    templateUrl: './view-cancellation-risk.component.html',
-    styleUrls: ['./view-cancellation-risk.component.scss']
+    selector: 'app-view-backup-policy-risks',
+    templateUrl: './view-backup-policy-risks.component.html',
+    styleUrls: ['./view-backup-policy-risks.component.scss']
 })
-export class ViewCancellationRiskComponent implements OnInit {
+export class ViewBackupPolicyRisksComponent implements OnInit {
     @Input()
     riskData: RiskModel;
 
@@ -297,7 +297,7 @@ export class ViewCancellationRiskComponent implements OnInit {
                 .setValue(risk.vehicleModel);
             this.riskDetailsForm
                 .get('yearOfManufacture')
-                .setValue(risk.yearOfManufacture);
+                .setValue(this.getYearOfManfTimeStamp(risk));
             this.riskDetailsForm.get('regNumber').setValue(risk.regNumber);
             this.riskDetailsForm
                 .get('engineNumber')
@@ -308,9 +308,11 @@ export class ViewCancellationRiskComponent implements OnInit {
             this.riskDetailsForm.get('productType').setValue(risk.productType);
             this.riskDetailsForm
                 .get('riskStartDate')
-                .setValue(risk.riskStartDate);
+                .setValue(this.getStartDateTimeStamp(risk));
             this.riskDetailsForm.get('riskQuarter').setValue(risk.riskQuarter);
-            this.riskDetailsForm.get('riskEndDate').setValue(risk.riskEndDate);
+            this.riskDetailsForm
+                .get('riskEndDate')
+                .setValue(this.getEndDateTimeStamp(risk));
             this.riskDetailsForm.get('color').setValue(risk.color);
         }
 

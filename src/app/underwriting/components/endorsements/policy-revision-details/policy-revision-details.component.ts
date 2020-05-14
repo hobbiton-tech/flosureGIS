@@ -1,4 +1,10 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    Input,
+    ChangeDetectorRef,
+    ComponentFactoryResolver
+} from '@angular/core';
 import {
     FormGroup,
     FormBuilder,
@@ -7,11 +13,12 @@ import {
 } from '@angular/forms';
 import { Policy } from 'src/app/underwriting/models/policy.model';
 import { RiskModel } from 'src/app/quotes/models/quote.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PoliciesService } from 'src/app/underwriting/services/policies.service';
 import _ from 'lodash';
 import { Endorsement } from 'src/app/underwriting/models/endorsement.model';
 import { EndorsementService } from 'src/app/underwriting/services/endorsements.service';
+import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({
     selector: 'app-policy-revision-details',
@@ -42,12 +49,15 @@ export class PolicyRevisionDetailsComponent implements OnInit {
 
     //Editable fields
     isEditmode = false;
+    _risks: RiskModel[];
 
     constructor(
         private route: ActivatedRoute,
         private formBuilder: FormBuilder,
         private policiesService: PoliciesService,
         private cdr: ChangeDetectorRef,
+        private msg: NzMessageService,
+        private readonly router: Router,
         private endorsementService: EndorsementService
     ) {}
 
@@ -71,19 +81,20 @@ export class PolicyRevisionDetailsComponent implements OnInit {
 
         this.endorsementForm = this.formBuilder.group({
             effectDate: ['', Validators.required],
-            endorsementRemarks: ['', Validators.required]
+            remark: ['', Validators.required]
         });
 
         this.route.params.subscribe(id => {
             this.policiesService.getPolicyById(id['id']).subscribe(policy => {
                 this.policyData = policy;
                 this.risks = policy.risks;
+                // this._risks = this.risks;
                 this.displayRisks = this.risks;
 
                 //set values of  fields
-                this.policyRevisionDetailsForm
-                    .get('client')
-                    .setValue(this.policyData.client);
+                // this.policyRevisionDetailsForm
+                //     .get('client')
+                //     .setValue(this.policyData.client);
                 this.policyRevisionDetailsForm
                     .get('nameOfInsured')
                     .setValue(this.policyData.nameOfInsured);
@@ -95,10 +106,10 @@ export class PolicyRevisionDetailsComponent implements OnInit {
                     .setValue(this.policyData.endDate);
                 this.policyRevisionDetailsForm
                     .get('sumInsured')
-                    .setValue(this.policyData.sumInsured);
+                    .setValue(this.sumArray(this.risks, 'sumInsured'));
                 this.policyRevisionDetailsForm
                     .get('netPremium')
-                    .setValue(this.policyData.netPremium);
+                    .setValue(this.sumArray(this.risks, 'netPremium'));
                 this.policyRevisionDetailsForm
                     .get('currency')
                     .setValue(this.policyData.currency);
@@ -119,10 +130,10 @@ export class PolicyRevisionDetailsComponent implements OnInit {
     }
 
     recieveEditedRisk($event) {
+        console.log('EVENT', $event);
         const editedRisk: RiskModel = $event;
         this.updateRisk(editedRisk);
         this.cdr.detectChanges();
-        this.risks = this.risks;
     }
 
     recieveAddedrisk($event) {
@@ -130,14 +141,16 @@ export class PolicyRevisionDetailsComponent implements OnInit {
         this.addRisk(addedRisk);
     }
 
+    // remove risk from risks table
+    removeRisk(regNumber: string): void {
+        this.risks = this.risks.filter(risk => risk.regNumber !== regNumber);
+    }
+
     addRisk(risks: RiskModel[]) {
         this.risks = [...this.risks, ...risks];
-        console.log(this.risks);
     }
 
     updateRisk(risk: RiskModel) {
-        console.log('saveRisk Called!');
-        console.log(this.risks);
         var riskIndex = _.findIndex(this.risks, {
             riskId: risk.riskId
         });
@@ -160,21 +173,55 @@ export class PolicyRevisionDetailsComponent implements OnInit {
 
         const endorsement: Endorsement = {
             ...this.endorsementForm.value,
-            endorsementType: 'Revision of cover',
-            createdDate: new Date(),
-            status: 'Not Approved'
+            type: 'Revision Of Cover',
+            dateCreated: new Date(),
+            dateUpdated: new Date(),
+            status: 'Pending'
         };
 
         const policy: Policy = {
             ...this.policyRevisionDetailsForm.value,
+            policyNumber: this.policyData.policyNumber,
+            product: this.policyData.product,
+            client: this.policyData.client,
+            clientCode: this.policyData.clientCode,
+            branch: this.policyData.branch,
+            insuranceCompany: this.policyData.insuranceCompany,
+            preparedBy: this.policyData.preparedBy,
+            status: this.policyData.status,
+            user: this.policyData.user,
+            town: this.policyData.town,
+            productType: this.policyData.productType,
+            underwritingYear: this.policyData.underwritingYear,
+            receiptStatus: this.policyData.receiptStatus,
+            paymentPlan: this.policyData.paymentPlan,
+            id: this.policyData.id,
             risks: this.risks
         };
 
-        this.endorsementService.addEndorsement(endorsement);
-        this.policiesService
-            .updatePolicy(policy, this.policyData.id)
-            .subscribe(policy => {
+        console.log('policy details form values:');
+        console.log(this.policyRevisionDetailsForm.value);
+
+        console.log('risks:');
+        console.log(this.risks);
+
+        this.endorsementService
+            .createEndorsement(this.policyData.id, endorsement)
+            .subscribe(endorsement => {
                 res => console.log(res);
             });
+
+        this.policiesService.updatePolicy(policy);
+
+        this.msg.success('Endorsement Successful');
+        this.router.navigateByUrl(
+            '/flosure/underwriting/endorsements/view-endorsements'
+        );
+    }
+
+    sumArray(items, prop) {
+        return items.reduce(function(a, b) {
+            return a + b[prop];
+        }, 0);
     }
 }

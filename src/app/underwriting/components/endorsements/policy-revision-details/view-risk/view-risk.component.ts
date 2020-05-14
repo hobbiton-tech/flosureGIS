@@ -330,8 +330,7 @@ export class ViewRiskComponent implements OnInit {
             yearOfManufacture: ['', Validators.required],
             color: ['', [Validators.required]],
             // sumInsured: ['', Validators.required],
-            productType: ['', Validators.required],
-            insuranceType: ['Comprehensive']
+            productType: ['', Validators.required]
         });
 
         // vehicle make loading
@@ -635,7 +634,7 @@ export class ViewRiskComponent implements OnInit {
 
     // view details of the risk
     viewRiskDetails(risk: RiskModel) {
-        console.log('risk details: ');
+        console.log('risk details(view Risk): ');
         console.log(this.riskData);
         this.riskDetailsModalVisible = true;
 
@@ -646,7 +645,7 @@ export class ViewRiskComponent implements OnInit {
                 .setValue(risk.vehicleModel);
             this.riskDetailsForm
                 .get('yearOfManufacture')
-                .setValue(this.getYearOfManfTimeStamp(risk));
+                .setValue(risk.yearOfManufacture);
             this.riskDetailsForm.get('regNumber').setValue(risk.regNumber);
             this.riskDetailsForm
                 .get('engineNumber')
@@ -657,11 +656,9 @@ export class ViewRiskComponent implements OnInit {
             this.riskDetailsForm.get('productType').setValue(risk.productType);
             this.riskDetailsForm
                 .get('riskStartDate')
-                .setValue(this.getStartDateTimeStamp(risk));
+                .setValue(risk.riskStartDate);
             this.riskDetailsForm.get('riskQuarter').setValue(risk.riskQuarter);
-            this.riskDetailsForm
-                .get('riskEndDate')
-                .setValue(this.getEndDateTimeStamp(risk));
+            this.riskDetailsForm.get('riskEndDate').setValue(risk.riskEndDate);
             this.riskDetailsForm.get('color').setValue(risk.color);
         } else {
             this.riskDetailsForm.get('vehicleMake').setValue(risk.vehicleMake);
@@ -679,14 +676,17 @@ export class ViewRiskComponent implements OnInit {
                 .get('chassisNumber')
                 .setValue(risk.chassisNumber);
             this.riskDetailsForm.get('productType').setValue(risk.productType);
-            // this.riskDetailsForm
-            //     .get('riskStartDate')
-            //     .setValue(risk.riskStartDate);
+            this.riskDetailsForm
+                .get('riskStartDate')
+                .setValue(risk.riskStartDate);
             this.riskDetailsForm.get('riskQuarter').setValue(risk.riskQuarter);
-            // this.riskDetailsForm.get('riskEndDate').setValue(risk.riskEndDate);
+            this.riskDetailsForm.get('riskEndDate').setValue(risk.riskEndDate);
             this.riskDetailsForm.get('color').setValue(risk.color);
         }
 
+        console.log('=>' + this.selectedValue.value);
+        console.log('=>' + risk.insuranceType);
+        this.selectedValue.value = risk.insuranceType;
         this.selectedVehicleMake = risk.vehicleMake;
         this.selectedVehicleModel = risk.vehicleModel;
         this.sumInsured = risk.sumInsured;
@@ -712,13 +712,19 @@ export class ViewRiskComponent implements OnInit {
                 premiumRate: this.premiumRate,
                 basicPremium: this.basicPremium,
                 loads: this.loads,
+                discounts: this.discounts,
                 loadingTotal: this.premiumLoadingTotal,
+                discountTotal: this.premiumDiscount,
+                discountSubTotal: this.premiumDiscount,
                 discountRate: this.premiumDiscountRate,
                 premiumLevy: this.basicPremiumLevy,
                 netPremium: this.netPremium,
-                insuranceType: this.selectedValue.value
+                insuranceType: this.selectedValue.value,
+                estimatedValue: 0
             };
             this.currentRiskEdit = some;
+            console.log('current riskEdit form editRisk method:');
+            console.log(this.currentRiskEdit);
         } else {
             //third party risk
             const some: RiskModel = {
@@ -727,6 +733,7 @@ export class ViewRiskComponent implements OnInit {
                 premiumRate: 0,
                 basicPremium: this.basicPremium,
                 loads: this.loads,
+                discounts: this.discounts,
                 loadingTotal: this.premiumLoadingTotal,
                 discountRate: this.premiumDiscountRate,
                 premiumLevy: this.basicPremiumLevy,
@@ -734,6 +741,8 @@ export class ViewRiskComponent implements OnInit {
                 insuranceType: this.selectedValue.value
             };
             this.currentRiskEdit = some;
+            console.log('current riskEdit form editRisk method:');
+            console.log(this.currentRiskEdit);
         }
 
         this.sendEdittedRiskEmitter.emit(this.currentRiskEdit);
@@ -752,6 +761,7 @@ export class ViewRiskComponent implements OnInit {
                 premiumRate: this.premiumRate,
                 basicPremium: this.basicPremium,
                 loads: this.loads,
+                discounts: this.discounts,
                 loadingTotal: this.premiumLoadingTotal,
                 discountRate: this.premiumDiscountRate,
                 premiumLevy: this.basicPremiumLevy,
@@ -759,6 +769,8 @@ export class ViewRiskComponent implements OnInit {
                 insuranceType: this.selectedValue.value
             };
             this.currentRiskEdit = some;
+            console.log('some:');
+            console.log(some);
 
             var riskIndex = _.findIndex(this.risks, {
                 riskId: this.riskData.riskId
@@ -773,6 +785,7 @@ export class ViewRiskComponent implements OnInit {
                 premiumRate: 0,
                 basicPremium: this.basicPremium,
                 loads: this.loads,
+                discounts: this.discounts,
                 loadingTotal: this.premiumLoadingTotal,
                 discountRate: this.premiumDiscountRate,
                 premiumLevy: this.basicPremiumLevy,
@@ -780,6 +793,8 @@ export class ViewRiskComponent implements OnInit {
                 insuranceType: this.selectedValue.value
             };
             this.currentRiskEdit = some;
+            console.log('some:');
+            console.log(some);
 
             var riskIndex = _.findIndex(this.risks, {
                 riskId: this.riskData.riskId

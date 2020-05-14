@@ -1,8 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ProductSetupsServiceService } from '../../services/product-setups-service.service';
-import { IProduct } from '../../models/product-setups-models.model';
+import { IProduct, IClass } from '../../models/product-setups-models.model';
 import { ActivatedRoute } from '@angular/router';
+import { Class } from 'estree';
 
 @Component({
     selector: 'app-add-product',
@@ -25,6 +26,10 @@ export class AddProductComponent implements OnInit {
     //ProductId
     productId: string;
 
+    classesList: IClass[];
+
+    selectedClass: IClass;
+
     constructor(
         private formBuilder: FormBuilder,
         private productSetupsService: ProductSetupsServiceService,
@@ -43,6 +48,10 @@ export class AddProductComponent implements OnInit {
         this.route.params.subscribe(param => {
             this.classId = param.classId;
         });
+
+        this.productSetupsService.getClasses().subscribe(classes => {
+            this.classesList = classes;
+        });
     }
 
     closeAddProductFormDrawer(): void {
@@ -50,8 +59,10 @@ export class AddProductComponent implements OnInit {
     }
 
     async addProduct(productDto: IProduct) {
+        console.log('here');
+        console.log(this.selectedClass.id);
         await this.productSetupsService
-            .addProduct(productDto, this.classId)
+            .addProduct(productDto, this.selectedClass.id)
             .subscribe(res => {
                 console.log(res);
             });

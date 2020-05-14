@@ -2,19 +2,24 @@
     <div style="margin: 15px;">
         <nz-page-header nzBackIcon nzTitle="Policy Number: {{ policyData.policyNumber }}"
             [nzSubtitle]="policyData.client">
+            <!-- <nz-page-header-extra>
+                <button nz-button nzType="default" (click)="undoEndorsement()">
+                    Undo Endorsement
+                </button>
+            </nz-page-header-extra> -->
         </nz-page-header>
     </div>
 </div>
 <div style="margin: 15px;">
     <nz-card>
         <nz-divider nzText="Policy Details" nzOrientation="left"></nz-divider>
-        <form nz-form [formGroup]="policyRevisionDetailsForm">
+        <form nz-form [formGroup]="backupPolicyForm">
             <div nz-row nzGutter="0">
                 <div nz-col nzSpan="12">
                     <nz-form-item>
                         <nz-form-label nzSpan="7">Name of Insured</nz-form-label>
                         <nz-form-control nzSpan="17">
-                            <input nz-input formControlName="nameOfInsured" />
+                            <input nz-input formControlName="nameOfInsured" [disabled]="!isEditmode" />
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
@@ -91,11 +96,6 @@
                     <i nz-icon nzType="search"></i>
                 </ng-template>
             </div>
-            <div nz-col nzSpan="12">
-                <button nz-button nzType="primary" style="float: right;" (click)="openAddRiskFormModal()">
-                    Add Risk
-                </button>
-            </div>
         </div>
 
         <div style="margin-top: 20px;">
@@ -131,11 +131,6 @@
                             <button nz-button nzType="primary" nzSize="small" (click)="openViewRiskFormModal(risk)">
                                 View
                             </button>
-                            <nz-divider nzType="vertical"></nz-divider>
-                            <button nz-button nzType="danger" nzSize="small" nz-popconfirm nzTitle="Remove Risk?"
-                                (nzOnConfirm)="removeRisk(risk.regNumber)">
-                                Remove
-                            </button>
                         </td>
                     </tr>
                 </tbody>
@@ -143,47 +138,10 @@
         </div>
     </nz-card>
 
-    <nz-card>
-        <nz-divider nzText="Endorsement Remarks" nzOrientation="left"></nz-divider>
-        <form [formGroup]="endorsementForm">
-            <div nz-row>
-                <div nz-col nzSpan="12" style="margin-bottom: 10px; width: 50%;">
-                    <nz-form-item>
-                        <nz-form-label nzSpan="7">Effect Date</nz-form-label>
-                        <nz-form-control nzSpan="12">
-                            <nz-date-picker formControlName="effectDate"></nz-date-picker>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col nzSpan="12" style="margin-bottom: 10px; width: 50%;">
-                    <nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired>Endorsement Remarks</nz-form-label>
-                        <nz-form-control nzSpan="12">
-                            <textarea formControlName="remark" nz-input rows="2" placeholder="remarks"></textarea>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-            </div>
-            <div nz-row>
-                <div nz-col>
-                    <div style="text-align: center; margin-top: 10px; margin-bottom: 10px; ">
-                        <button nz-button nzType="primary" (click)="endorsePolicy()">
-                            Endorse Policy
-                        </button>
-                        <button nz-button nzType="default" style="margin-left: 15px;">
-                            Cancel Endorsement
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </nz-card>
+
 </div>
 
 <!-- Modals -->
-<app-add-risk [isAddRiskFormModalVisible]="addRiskFormModalVisible"
-    (closeAddRiskFormModalVisible)="addRiskFormModalVisible = false" (sendAddRiskEmitter)="recieveAddedrisk($event)">
-</app-add-risk>
-<app-view-risk [isViewRiskFormModalVisible]="viewRiskFormModalVisible" [riskData]="editedRisk"
-    (closeViewRiskFormVisible)="viewRiskFormModalVisible = false" (sendEdittedRiskEmitter)="recieveEditedRisk($event)">
-</app-view-risk>
+<app-view-backup-policy-risks [isViewRiskFormModalVisible]="viewRiskFormModalVisible" [riskData]="editedRisk"
+    (closeViewRiskFormVisible)="viewRiskFormModalVisible = false">
+</app-view-backup-policy-risks>
