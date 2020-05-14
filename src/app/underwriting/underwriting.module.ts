@@ -15,6 +15,8 @@ import { PolicyScheduleDocumentComponent } from './documents/policy-schedule-doc
 import { PolicyDebitNoteDocumentComponent } from './documents/policy-debit-note-document/policy-debit-note-document.component';
 import { PolicyDetailsResolver } from './resolvers/policy-details.resolver';
 import { PoliciesService } from './services/policies.service';
+import { PolicyRenewalsComponent } from './components/policy-renewals/policy-renewals.component';
+import { PolicyRenewalsDetailsComponent } from './components/policy-renewals-details/policy-renewals-details.component';
 import { RevisionCoverComponent } from './components/endorsements/components/revision-cover/revision-cover.component';
 import { ExtensionCoverComponent } from './components/endorsements/components/extension-cover/extension-cover.component';
 import { CancellationCoverComponent } from './components/endorsements/components/cancellation-cover/cancellation-cover.component';
@@ -31,6 +33,7 @@ import { ViewRiskComponent } from './components/endorsements/policy-revision-det
 import { AddRiskComponent } from './components/endorsements/policy-revision-details/add-risk/add-risk.component';
 import { ViewExtensionRiskComponent } from './components/endorsements/policy-extension-details/view-extension-risk/view-extension-risk.component';
 import { ViewCancellationRiskComponent } from './components/endorsements/policy-cancellation-details/view-cancellation-risk/view-cancellation-risk.component';
+
 
 const routes: Routes = [
     {
@@ -88,8 +91,16 @@ const routes: Routes = [
     {
         path: 'policy-details/:id',
         component: PolicyDetailsComponent,
-        resolve: PolicyDetailsResolver
-    }
+        resolve: PolicyDetailsResolver,
+    },
+    {
+        path: 'policy-renewal-list',
+        component: PolicyRenewalsComponent,
+    },
+    {
+        path: 'policy-renewal-details/:id',
+        component: PolicyRenewalsDetailsComponent,
+    },
 ];
 
 @NgModule({
@@ -101,6 +112,8 @@ const routes: Routes = [
         PolicyClausesDocumentComponent,
         PolicyScheduleDocumentComponent,
         PolicyDebitNoteDocumentComponent,
+        PolicyRenewalsComponent,
+        PolicyRenewalsDetailsComponent,
         RevisionCoverComponent,
         ExtensionCoverComponent,
         CancellationCoverComponent,

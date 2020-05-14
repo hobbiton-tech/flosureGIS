@@ -9,7 +9,8 @@ import 'firebase/firestore';
 import { filter, first } from 'rxjs/operators';
 import { v4 } from 'uuid';
 import { debounceTime, map, switchMap } from 'rxjs/operators';
-import { isTemplateRef } from 'ng-zorro-antd';
+import { isTemplateRef, NzMessageService } from 'ng-zorro-antd';
+
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -20,7 +21,12 @@ export class PoliciesService {
     policies: Observable<Policy[]>;
     policy: any;
 
-    constructor(private firebase: AngularFirestore, private http: HttpClient) {
+    constructor(
+        private firebase: AngularFirestore,
+        private msg: NzMessageService,
+        private http: HttpClient
+    ) {
+
         this.policiesCollection = firebase.collection<Policy>('policies');
         this.policies = this.policiesCollection.valueChanges();
     }
@@ -49,6 +55,7 @@ export class PoliciesService {
     async addPolicy(policy: Policy) {
         this.policies.pipe(first()).subscribe(async policies => {
             const today = new Date();
+            policy.term = 1;
             policy.nameOfInsured = policy.client;
             policy.dateOfIssue =
                 today.getDay() +
@@ -76,6 +83,52 @@ export class PoliciesService {
         });
     }
 
+    updatePolicy(policy: Policy) {
+        this.policies.pipe(first()).subscribe(async (policies) => {
+            const today = new Date();
+            policy.client = policy.nameOfInsured;
+            policy.dateOfIssue =
+                today.getDay() +
+                '-' +
+                today.getMonth() +
+                '-' +
+                today.getFullYear();
+            policy.timeOfIssue = today.getHours() + ':' + today.getMinutes();
+            policy.expiryDate = policy.endDate;
+            policy.status = 'Active';
+            localStorage.removeItem('policyNumber');
+            localStorage.setItem('policyNumber', policy.policyNumber);
+
+            localStorage.removeItem('clientId');
+            localStorage.setItem('clientId', policy.nameOfInsured); // TODO: Need to change to client code.
+            console.log('POLICY NUMBER>>>>', policy.id);
+
+            this.http
+                .put<Policy>(
+                    `http://localhost:3000/policy/${policy.id}`,
+                    policy
+                )
+                .subscribe(
+                    (data) => {
+                        this.msg.success('Policy Successfully Updated');
+                    },
+                    (error) => {
+                        this.msg.error('Failed');
+                    }
+                );
+
+            // this.policiesCollection
+            //     .doc(policy.id)
+            //     .update(policy)
+            //     .then((res) => {
+            //         this.msg.success('Policy Successfully Updated');
+            //     })
+            //     .catch(() => {
+            //         this.msg.error('Failed');
+            //     });
+        });
+    }
+
     // get single risk
     getPolicy(policyNumber: string): Promise<void> {
         this.firebase
@@ -99,17 +152,23 @@ export class PoliciesService {
         return this.policies;
     }
 
-    // getPolicyById(policyId: string): Observable<Policy> {
-    //     return this.policiesCollection.doc<Policy>(policyId).valueChanges();
-    // }
+    getPolicyById(policyId: string): Observable<Policy> {
+        return this.http.get<Policy>(
+            `http://localhost:3000/policy/${policyId}`
+        );
+
+        // this.policiesCollection.doc<Policy>(policyId).valueChanges();
+    }
 
     getClientsPolicies(clientId: string): Observable<Policy[]> {
         return this.policies.pipe(filter(policy => clientId === clientId));
     }
 
-    // getPolicies(): Observable<Policy[]> {
-    //     return this.policies;
-    // }
+    getPolicies(): Observable<Policy[]> {
+        return this.http.get<Policy[]>('http://localhost:3000/policy');
+        // this.policies;
+    }
+
 
     countGenerator(number) {
         if (number <= 9999) {

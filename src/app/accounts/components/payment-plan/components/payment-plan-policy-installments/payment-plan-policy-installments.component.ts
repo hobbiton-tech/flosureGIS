@@ -30,10 +30,12 @@ import * as _ from 'lodash';
 })
 export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
     receiptForm: FormGroup;
+    allocationForm: FormGroup;
     cancelForm: FormGroup;
     reinstateForm: FormGroup;
     submitted = false;
     today = new Date();
+    isPolicyVisible = false;
 
     //
     clientName = '';
@@ -76,6 +78,7 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
 
     // Recipting
     isVisible = false;
+    isAllocationVisible = false;
     isCancelVisible = false;
     isReinstateVisible = false;
     isOkLoading = false;
@@ -84,6 +87,7 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
     _id = '';
     loadingReceipt = false;
     client: IIndividualClient & ICorporateClient;
+    selectedPolicies = [];
 
     optionList = [
         { label: 'Premium Payment', value: 'Premium Payment' },
@@ -108,6 +112,11 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
     clientType: string;
     receiptNo: string;
     paymentPlanReceipts: PlanReceipt[];
+    rptNo: string;
+    rcpt: any;
+    listOfPolicies: any;
+    amount: any;
+    allocationReceipt: any;
 
     constructor(
         private route: ActivatedRoute,
@@ -125,10 +134,26 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
         this.reinstateForm = this.formBuilder.group({
             remarks: ['', Validators.required],
         });
+        this.allocationForm = this.formBuilder.group({
+            policies: ['', Validators.required],
+        });
+
+        this.receiptForm = this.formBuilder.group({
+            sumInDigits: ['', Validators.required],
+            paymentMethod: ['', Validators.required],
+            tpinNumber: ['4324324324324324'],
+            address: [''],
+            receiptType: ['', Validators.required],
+            narration: ['', Validators.required],
+            sumInWords: [''],
+            dateReceived: [''],
+            todayDate: [this.today],
+            remarks: [''],
+        });
     }
 
     ngOnInit(): void {
-        this.route.params.subscribe((param) => {
+        this.route.params.subscribe(async (param) => {
             this.paymentPlanId = param.id;
             this.policyNumber = param.policyNumber;
 
@@ -156,6 +181,10 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
                     this.paymentPlanPolicyInstallmentsCount = this.paymentPlanData.installments.length;
 
                     this.displayPoliciesList = this.paymentPlanData.policyPaymentPlan;
+
+                    this.listOfPolicies = this.displayPoliciesList.filter(
+                        (x) => x.allocationStatus !== 'Allocated'
+                    );
                     this.displayReceiptsList = this.paymentPlanData.planReceipt;
 
                     console.log(this.paymentPlanData.policyPaymentPlan);
@@ -204,32 +233,20 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
                 )[0];
             });
 
-            this.receiptForm = this.formBuilder.group({
-                receivedFrom: ['', Validators.required],
-                sumInDigits: ['', Validators.required],
-                paymentMethod: ['', Validators.required],
-                tpinNumber: ['4324324324324324'],
-                receiptNumber: [
-                    this.paymentPlanService.generateReceiptNumber(),
-                ],
-                address: [''],
-                receiptType: ['', Validators.required],
-                narration: ['', Validators.required],
-                sumInWords: [''],
-                dateReceived: [''],
-                todayDate: [this.today],
-                remarks: [''],
-            });
+            // this.paymentPlanService.generateReceiptNumber().subscribe((rct) => {
+            //     this.rptNo = rct.receiptNumber;
+            // });
+            this.rcpt = await this.paymentPlanService.generateReceiptNumber();
 
-            console.log(this.paymentPlanService.generateReceiptNumber());
+            console.log();
         });
     }
 
-    viewPolicyDetails(policy: Policy): void {
-        this.router.navigateByUrl(
-            '/flosure/underwriting/policy-details/' + policy.policyNumber
-        );
-    }
+    // viewPolicyDetails(policy): void {
+    //     // this.router.navigateByUrl(
+    //     //     '/flosure/underwriting/policy-details/' + policy.policyNumber
+    //     // );
+    // }
 
     showModal(paymentPlanPolicyInstallment: InstallmentsModel): void {
         this.isVisible = true;
@@ -256,6 +273,8 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
 
     async handleOk() {
         this.submitted = true;
+        console.log('.........RPT No...........');
+        console.log(this.rptNo);
 
         if (this.receiptForm.valid) {
             const amount = this.receiptForm.controls.sumInDigits.value;
@@ -272,8 +291,7 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
                 sumInDigits: amount,
                 todayDate: new Date(),
             };
-            let planReceipt: PlanReceipt[] = [];
-            planReceipt = this.displayReceiptsList;
+            const planReceipt: PlanReceipt[] = [];
             planReceipt.push({
                 ...this.receiptForm.value,
                 id: this._id,
@@ -282,8 +300,17 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
                 sumInDigits: amount,
                 policyNumber: '',
             });
+            if (this.displayReceiptsList === undefined) {
+                this.displayReceiptsList = [...planReceipt];
+            } else {
+                this.displayReceiptsList = [
+                    ...this.displayReceiptsList,
+                    ...planReceipt,
+                ];
+            }
+
             this.receiptNum = this._id;
-            this.paymentPlanData.planReceipt = planReceipt;
+            this.paymentPlanData.planReceipt = this.displayReceiptsList;
 
             const p = this.paymentPlanPolicyInstallments;
             let d = amount;
@@ -339,8 +366,7 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
                 this.isVisible = false;
                 this.isOkLoading = false;
             }, 30);
-            console.log('.........RPT No...........');
-            console.log(this.receiptNo);
+
             await this.paymentPlanService.addReceipt(
                 receipt,
                 this.paymentPlanData
@@ -376,5 +402,82 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
         return date.seconds * 1000;
     }
 
-    showAllocationModal() {}
+    showAllocationModal(receipt) {
+        this.isAllocationVisible = true;
+        this.amount = receipt.sumInDigits;
+
+        this.allocationReceipt = receipt;
+        // this.allocationForm.get('sumInDigits').setValue(receipt.sumInDigits);
+    }
+
+    handleAllocationCancel() {
+        this.isAllocationVisible = false;
+    }
+
+    handleAllocationOk() {
+        console.log(this.allocationForm.controls.policies.value);
+
+        let allocationDif = this.amount;
+
+        // let receipt: any;
+        let index = 0;
+        const policies = this.allocationForm.controls.policies.value;
+
+        for (const policy of policies) {
+            if (allocationDif > policy.netPremium) {
+                allocationDif = allocationDif - policy.netPremium;
+                this.allocationReceipt.sumInDigits = allocationDif;
+                index = this.displayReceiptsList.findIndex(
+                    (e) =>
+                        e.receiptNumber === this.allocationReceipt.receiptNumber
+                );
+                this.displayReceiptsList[index].sumInDigits = allocationDif;
+                this.displayReceiptsList[index].allocationStatus =
+                    'Partially Allocated';
+                policy.allocatedAmount = policy.netPremium;
+                policy.allocationStatus = 'Allocated';
+                continue;
+            }
+            if (allocationDif < policy.netPremium) {
+                allocationDif = policy.netPremium - allocationDif;
+                index = this.displayReceiptsList.findIndex(
+                    (e) =>
+                        e.receiptNumber === this.allocationReceipt.receiptNumber
+                );
+                this.displayReceiptsList[index].sumInDigits = 0;
+
+                this.displayReceiptsList[index].allocationStatus = 'Allocated';
+
+                policy.allocatedAmount = policy.allocatedAmount + this.amount;
+                policy.allocationStatus = 'Partially Allocated';
+                console.log(this.displayReceiptsList);
+                break;
+            }
+            if (allocationDif === policy.netPremium) {
+                allocationDif = policy.netPremium - allocationDif;
+                index = this.displayReceiptsList.findIndex(
+                    (e) =>
+                        e.receiptNumber === this.allocationReceipt.receiptNumber
+                );
+                this.displayReceiptsList[index].sumInDigits = 0;
+
+                this.displayReceiptsList[index].allocationStatus = 'Allocated';
+
+                policy.allocatedAmount = this.amount;
+                policy.allocationStatus = 'Allocated';
+                console.log(this.displayReceiptsList);
+                break;
+            }
+        }
+
+        this.listOfPolicies = policies;
+
+        this.paymentPlanData.policyPaymentPlan = this.listOfPolicies;
+        this.paymentPlanService.updatePaymentPlan(this.paymentPlanData);
+        this.isAllocationVisible = false;
+    }
+
+    showPolicyModal() {
+        this.isPolicyVisible = true;
+    }
 }

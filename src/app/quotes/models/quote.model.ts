@@ -16,11 +16,10 @@ export class MotorQuotationModel {
     status: QuoteStatus;
     basicPremiumSubTotal: number;
     receiptStatus: ReceiptStatus;
-    sourceOfBusiness: SourceOfBusinessType;
+    sourceOfBusiness: string;
     intermediaryName: string;
     quarter: string;
 }
-
 
 export class LoadModel {
     loadType: LoadType;
@@ -102,6 +101,10 @@ export type DiscountType =
     | 'Valued Client Discount'
     | 'Low Term Agreement Discount';
 
-export type SourceOfBusinessType = 'Direct' | 'Broker' | 'Agent' | 'Sales Representative'
+export type SourceOfBusinessType =
+    | 'Direct'
+    | 'Broker'
+    | 'Agent'
+    | 'Sales Representative';
 
 export type InsuranceType = 'ThirdParty' | 'Comprehensive';

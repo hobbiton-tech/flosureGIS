@@ -4,6 +4,7 @@ import {
     IPaymentModel,
     InstallmentsModel,
     PolicyPaymentPlan,
+    PlanReceipt,
 } from '../models/payment-plans.model';
 import { PaymentPlanService } from '../../services/payment-plan.service';
 
@@ -20,6 +21,7 @@ import {
     ICorporateClient,
 } from 'src/app/clients/models/clients.model';
 import { AccountService } from '../../services/account.service';
+import { IReceiptModel } from '../models/receipts.model';
 
 @Component({
     selector: 'app-payment-plan',
@@ -54,7 +56,9 @@ export class PaymentPlanComponent implements OnInit {
     formattedDate: any;
     clientName: any;
     netPremium = 0;
-    formattedeDate: string;
+    formattedeDate: any;
+    _id: string;
+    user: string;
     constructor(
         private router: Router,
         private paymentPlanService: PaymentPlanService,
@@ -187,6 +191,7 @@ export class PaymentPlanComponent implements OnInit {
                 client: policy.client,
                 clientCode: '',
                 netPremium: policy.netPremium,
+                allocatedAmount: 0,
                 allocationStatus: 'Unallocated',
             });
 
@@ -194,7 +199,7 @@ export class PaymentPlanComponent implements OnInit {
             this.netPremium = this.netPremium + policy.netPremium;
             // this.policyPlan = policyPlan;
             this.policyUpdate.paymentPlan = 'Created';
-            this.accountService.updatePolicy(this.policyUpdate);
+            // this.accountService.updatePolicy(this.policyUpdate);
         }
 
         const eDate = new Date(this.paymentPlanForm.controls.startDate.value);
@@ -202,7 +207,7 @@ export class PaymentPlanComponent implements OnInit {
             eDate.getMonth() +
                 this.paymentPlanForm.controls.numberOfInstallments.value
         );
-        this.formattedeDate = eDate.toISOString().slice(0, 10);
+        this.formattedeDate = eDate.toISOString();
 
         const dAmount =
             pAmount -
@@ -226,7 +231,7 @@ export class PaymentPlanComponent implements OnInit {
             i++
         ) {
             iDate.setMonth(iDate.getMonth() + 1);
-            this.formattedDate = iDate.toISOString().slice(0, 10);
+            this.formattedDate = iDate.toISOString();
 
             installment.push({
                 installmentAmount: iAmount,
@@ -248,20 +253,53 @@ export class PaymentPlanComponent implements OnInit {
             policyPaymentPlan: policyPlan,
             remainingInstallments: this.paymentPlanForm.controls
                 .numberOfInstallments.value,
-            amountPaid: 0,
+            amountPaid: this.paymentPlanForm.controls.initialInstallmentAmount
+                .value,
             numberOfPaidInstallments: 0,
             amountOutstanding: dAmount,
             installments: installment,
-            startDate: pDate,
+            startDate: pDate.toISOString(),
             endDate: this.formattedeDate,
         };
 
         console.log('..........Payment Plan..........');
         console.log(plan);
 
+        this._id = v4();
+        const receipt: IReceiptModel = {
+            id: this._id,
+            paymentMethod: '',
+            receivedFrom: this.paymentPlanForm.controls.clientName.value,
+            onBehalfOf: this.paymentPlanForm.controls.clientName.value,
+            capturedBy: 'charles malama',
+            policyNumber: '',
+            receiptStatus: 'Receipted',
+            narration: 'Payment Plan',
+            receiptType: 'Premium Payment',
+            sumInDigits: this.paymentPlanForm.controls.initialInstallmentAmount
+                .value,
+            todayDate: new Date(),
+        };
+
+        const planReceipt: PlanReceipt[] = [];
+        planReceipt.push({
+            id: this._id,
+            onBehalfOf: this.paymentPlanForm.controls.clientName.value,
+            allocationStatus: 'Unallocated',
+            sumInDigits: this.paymentPlanForm.controls.initialInstallmentAmount
+                .value,
+            policyNumber: '',
+        });
+
+        plan.planReceipt = planReceipt;
+        console.log('=====================');
+
+        console.log(receipt, plan);
+
         // add payment plan
-        this.paymentPlanService.addPaymentPlan(plan);
+        this.paymentPlanService.addPaymentPlanReceipt(receipt, plan);
         this.paymentPlanForm.reset();
         this.isVisible = false;
+        // this.generateID(this._id);
     }
 }

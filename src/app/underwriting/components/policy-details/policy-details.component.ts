@@ -6,11 +6,13 @@ import { PoliciesService } from '../../services/policies.service';
 import {
     IPaymentModel,
     InstallmentsModel,
+    PlanReceipt,
 } from 'src/app/accounts/components/models/payment-plans.model';
 import { v4 } from 'uuid';
 import { PaymentPlanService } from 'src/app/accounts/services/payment-plan.service';
 import { AccountService } from 'src/app/accounts/services/account.service';
 import { RiskModel } from 'src/app/quotes/models/quote.model';
+import { IReceiptModel } from 'src/app/accounts/components/models/receipts.model';
 
 @Component({
     selector: 'app-policy-details',
@@ -72,7 +74,8 @@ export class PolicyDetailsComponent implements OnInit {
     planId: string;
     // clientName: any;
     netPremium: any;
-    formattedeDate: string;
+    formattedeDate: Date;
+    _id: string;
 
     constructor(
         private readonly router: Router,
@@ -264,7 +267,7 @@ export class PolicyDetailsComponent implements OnInit {
                 eDate.getMonth() +
                     this.paymentPlanForm.controls.numberOfInstallments.value
             );
-            this.formattedeDate = eDate.toISOString().slice(0, 10);
+            this.formattedeDate = eDate;
 
             const dAmount =
                 pAmount -
@@ -281,7 +284,7 @@ export class PolicyDetailsComponent implements OnInit {
             );
             while (iDate <= eDate) {
                 iDate.setMonth(iDate.getMonth() + 1);
-                this.formattedDate = iDate.toISOString().slice(0, 10);
+                this.formattedDate = iDate;
 
                 installment.push({
                     installmentAmount: iAmount,
@@ -317,8 +320,45 @@ export class PolicyDetailsComponent implements OnInit {
                 endDate: this.formattedeDate,
             };
 
+            console.log('..........Payment Plan..........');
+            console.log(plan);
+
+            this._id = v4();
+            const receipt: IReceiptModel = {
+                id: this._id,
+                paymentMethod: '',
+                receivedFrom: this.paymentPlanForm.controls.clientName.value,
+                onBehalfOf: this.paymentPlanForm.controls.clientName.value,
+                capturedBy: 'charles malama',
+                policyNumber: '',
+                receiptStatus: 'Receipted',
+                narration: 'Payment Plan',
+                receiptType: 'Premium Payment',
+                sumInDigits: this.paymentPlanForm.controls
+                    .initialInstallmentAmount.value,
+                todayDate: new Date(),
+            };
+
+            const planReceipt: PlanReceipt[] = [];
+            planReceipt.push({
+                id: this._id,
+                onBehalfOf: this.paymentPlanForm.controls.clientName.value,
+                allocationStatus: 'Unallocated',
+                sumInDigits: this.paymentPlanForm.controls
+                    .initialInstallmentAmount.value,
+                policyNumber: '',
+            });
+
+            plan.planReceipt = planReceipt;
+            console.log('=====================');
+
+            console.log(receipt, plan);
+
             // add payment plan
-            this.paymentPlanService.addPaymentPlan(plan);
+            this.paymentPlanService.addPaymentPlanReceipt(receipt, plan);
+
+            // add payment plan
+            // this.paymentPlanService.addPaymentPlan(plan);
             this.paymentPlanForm.reset();
             this.isVisible = false;
             this.router.navigateByUrl('flosure/accounts/payment-plan');
