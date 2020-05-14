@@ -1,28 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Policy } from 'src/app/underwriting/models/policy.model';
+import { ISalesRepresentative } from 'src/app/settings/components/agents/models/agents.model';
 import { IReceiptModel } from '../../../models/receipts.model';
 import { AccountService } from 'src/app/accounts/services/account.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { Router } from '@angular/router';
+import { AgentsService } from 'src/app/settings/components/agents/services/agents.service';
 import _ from 'lodash';
 import { v4 } from 'uuid';
-import { AgentsService } from 'src/app/settings/components/agents/services/agents.service';
-import { IAgent } from 'src/app/settings/components/agents/models/agents.model';
 
 @Component({
-    selector: 'app-agent-client',
-    templateUrl: './agent-client.component.html',
-    styleUrls: ['./agent-client.component.scss'],
+    selector: 'app-sales-representative-client',
+    templateUrl: './sales-representative-client.component.html',
+    styleUrls: ['./sales-representative-client.component.scss'],
 })
-export class AgentClientComponent implements OnInit {
+export class SalesRepresentativeClientComponent implements OnInit {
     receiptForm: FormGroup;
     cancelForm: FormGroup;
     reinstateForm: FormGroup;
     submitted = false;
     receiptsCount = 0;
     unreceiptedList: Policy[];
-    agentList: IAgent[];
+    salesRepList: ISalesRepresentative[];
     receiptedList: IReceiptModel[];
     cancelledReceiptList: IReceiptModel[];
     receiptObj: IReceiptModel = new IReceiptModel();
@@ -84,7 +84,7 @@ export class AgentClientComponent implements OnInit {
     typeOfClient = ['Direct', 'Agent', 'Broker'];
 
     selectedType = 'Direct';
-    selectedAgent: any;
+    selectedSale: any;
     listofUnreceiptedReceipts: Policy[];
     displayedListOfUnreceiptedReceipts: Policy[];
     sourceOfBusiness: string;
@@ -120,18 +120,18 @@ export class AgentClientComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.agentService.getAgents().subscribe((agents) => {
-            this.agentList = agents;
+        this.agentService.getSalesRepresentatives().subscribe((salesRep) => {
+            this.salesRepList = salesRep;
 
             console.log('===================');
-            console.log(this.agentList);
+            console.log(this.salesRepList);
         });
         this.receiptService.getPolicies().subscribe((quotes) => {
             this.listofUnreceiptedReceipts = _.filter(
                 quotes,
                 (x) =>
                     x.receiptStatus === 'Unreceipted' &&
-                    x.sourceOfBusiness === 'agent'
+                    x.sourceOfBusiness === 'salesRepresentative'
             );
             this.displayedListOfUnreceiptedReceipts = this.listofUnreceiptedReceipts;
 
@@ -139,7 +139,7 @@ export class AgentClientComponent implements OnInit {
                 quotes,
                 (x) =>
                     x.receiptStatus === 'Unreceipted' &&
-                    x.sourceOfBusiness === 'agent'
+                    x.sourceOfBusiness === 'salesRepresentative'
             ).length;
             console.log('======= Unreceipt List =======');
             console.log(this.listofUnreceiptedReceipts);
@@ -150,7 +150,7 @@ export class AgentClientComponent implements OnInit {
                 receipts,
                 (x) =>
                     x.receiptStatus === 'Receipted' &&
-                    x.sourceOfBusiness === 'agent'
+                    x.sourceOfBusiness === 'salesRepresentative'
             );
 
             console.log('======= Receipt List =======');
@@ -160,7 +160,7 @@ export class AgentClientComponent implements OnInit {
                 receipts,
                 (x) =>
                     x.receiptStatus === 'Cancelled' &&
-                    x.sourceOfBusiness === 'agent'
+                    x.sourceOfBusiness === 'salesRepresentative'
             );
 
             console.log('======= Cancelled Receipt List =======');
@@ -178,7 +178,7 @@ export class AgentClientComponent implements OnInit {
             (x) => x.intermediaryName === value
         );
         console.log(this.listofUnreceiptedReceipts);
-        console.log('SELECRED', value);
+        console.log('SELECTED', value);
     }
 
     showModal(unreceipted: Policy): void {

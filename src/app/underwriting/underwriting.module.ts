@@ -15,6 +15,8 @@ import { PolicyScheduleDocumentComponent } from './documents/policy-schedule-doc
 import { PolicyDebitNoteDocumentComponent } from './documents/policy-debit-note-document/policy-debit-note-document.component';
 import { PolicyDetailsResolver } from './resolvers/policy-details.resolver';
 import { PoliciesService } from './services/policies.service';
+import { PolicyRenewalsComponent } from './components/policy-renewals/policy-renewals.component';
+import { PolicyRenewalsDetailsComponent } from './components/policy-renewals-details/policy-renewals-details.component';
 
 const routes: Routes = [
     {
@@ -34,6 +36,14 @@ const routes: Routes = [
         component: PolicyDetailsComponent,
         resolve: PolicyDetailsResolver,
     },
+    {
+        path: 'policy-renewal-list',
+        component: PolicyRenewalsComponent,
+    },
+    {
+        path: 'policy-renewal-details/:id',
+        component: PolicyRenewalsDetailsComponent,
+    },
 ];
 
 @NgModule({
@@ -45,6 +55,8 @@ const routes: Routes = [
         PolicyClausesDocumentComponent,
         PolicyScheduleDocumentComponent,
         PolicyDebitNoteDocumentComponent,
+        PolicyRenewalsComponent,
+        PolicyRenewalsDetailsComponent,
     ],
     imports: [
         CommonModule,

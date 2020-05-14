@@ -7,7 +7,7 @@ export class IReceiptModel {
     sumInWords?: string;
     dateRecieved?: Date;
     paymentMethod: string;
-    policyNumber: string;
+    policyNumber?: string;
     todayDate: Date;
     sumInDigits: number;
     capturedBy: string;
@@ -16,6 +16,13 @@ export class IReceiptModel {
     receiptType: string;
     receiptStatus: ReceiptStatus;
     remarks?: string;
+    sourceOfBusiness?: string;
+    intermediaryName?: string;
 }
 
+export type SourceOfBusinessType =
+    | 'Direct'
+    | 'Broker'
+    | 'Agent'
+    | 'Sales Representative';
 export type ReceiptStatus = 'Receipted' | 'Cancelled';

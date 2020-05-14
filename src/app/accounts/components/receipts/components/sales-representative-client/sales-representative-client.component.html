@@ -21,15 +21,15 @@
                         <div nz-col nzSpan="12">
                             <div>
                                 <nz-select
-                                    [(ngModel)]="selectedAgent"
-                                    nzPlaceHolder="Select Agent"
+                                    [(ngModel)]="selectedSale"
+                                    nzPlaceHolder="Select Sale"
                                     (ngModelChange)="log($event)"
                                     nzAllowClear
                                 >
                                     <nz-option
-                                        *ngFor="let agent of agentList"
-                                        [nzValue]="agent.companyName"
-                                        [nzLabel]="agent.companyName"
+                                        *ngFor="let salesRep of salesRepList"
+                                        [nzValue]="salesRep.companyName"
+                                        [nzLabel]="salesRep.companyName"
                                     ></nz-option>
                                 </nz-select>
                             </div>

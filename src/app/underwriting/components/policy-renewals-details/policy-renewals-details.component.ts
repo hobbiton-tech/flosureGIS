@@ -1,35 +1,35 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { QuotesService } from '../../services/quotes.service';
-import { ClientsService } from 'src/app/clients/services/clients.service';
-import {
-    ICorporateClient,
-    IIndividualClient,
-} from 'src/app/clients/models/clients.model';
+import { Policy } from '../../models/policy.model';
 import {
     RiskModel,
-    MotorQuotationModel,
-    Load,
+    DiscountType,
     LoadModel,
     DiscountModel,
-    DiscountType,
-} from '../../models/quote.model';
-import { map, debounceTime, switchMap } from 'rxjs/operators';
-import { NzMessageService, UploadChangeParam } from 'ng-zorro-antd';
-import * as XLSX from 'xlsx';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { IQuoteDTO } from '../../models/quote.dto';
-import { QuotesGraphqlService } from '../../services/quotes.graphql.service';
-import { v4 } from 'uuid';
-import _ from 'lodash';
+} from 'src/app/quotes/models/quote.model';
+import { Router, ActivatedRoute } from '@angular/router';
+import { PoliciesService } from '../../services/policies.service';
+import { PaymentPlanService } from 'src/app/accounts/services/payment-plan.service';
+import { AccountService } from 'src/app/accounts/services/account.service';
+import { ITimestamp } from 'src/app/settings/components/insurance-companies/models/insurance-company.model';
 import {
-    IBroker,
-    ISalesRepresentative,
-    IAgent,
-} from 'src/app/settings/components/agents/models/agents.model';
+    InstallmentsModel,
+    IPaymentModel,
+    PlanReceipt,
+} from 'src/app/accounts/components/models/payment-plans.model';
+import { v4 } from 'uuid';
+import { map, debounceTime, switchMap } from 'rxjs/operators';
+import { IReceiptModel } from 'src/app/accounts/components/models/receipts.model';
+import * as XLSX from 'xlsx';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { NzMessageService, UploadChangeParam } from 'ng-zorro-antd';
+import { HttpClient } from '@angular/common/http';
+import _ from 'lodash';
+import { QuotesService } from 'src/app/quotes/services/quotes.service';
+import { ClientsService } from 'src/app/clients/services/clients.service';
 import { AgentsService } from 'src/app/settings/components/agents/services/agents.service';
+import { IDebitNoteDTO } from 'src/app/quotes/models/debit-note.dto';
+import { ICertificateDTO } from 'src/app/quotes/models/certificate.dto';
 
 type AOA = any[][];
 
@@ -67,25 +67,104 @@ interface IRateRequest {
 }
 
 @Component({
-    selector: 'app-create-quote',
-    templateUrl: './create-quote.component.html',
-    styleUrls: ['./create-quote.component.scss'],
+    selector: 'app-policy-renewals-details',
+    templateUrl: './policy-renewals-details.component.html',
+    styleUrls: ['./policy-renewals-details.component.scss'],
 })
-export class CreateQuoteComponent implements OnInit {
-    constructor(
-        private formBuilder: FormBuilder,
-        private readonly router: Router,
-        private readonly quoteService: QuotesService,
-        private readonly gqlquoteService: QuotesGraphqlService,
-        private readonly clientsService: ClientsService,
-        private msg: NzMessageService,
-        private http: HttpClient,
-        private readonly agentsService: AgentsService
-    ) {}
+export class PolicyRenewalsDetailsComponent implements OnInit {
+    isVisible = false;
+    policyDetailsForm: FormGroup;
+    paymentPlanForm: FormGroup;
+    premiumComputationForm: FormGroup;
+    policydata: Policy[] = [];
 
-    // conditional render of agent field based on mode(agent or user)
-    agentMode = false;
-    switchLoading = false;
+    policiesList: Policy[];
+    policyNumber: string;
+    policyData: Policy = new Policy();
+    policy: Policy;
+    displayPolicy: Policy;
+    policyUpdate: Policy = new Policy();
+    isLoading = false;
+
+    paymentPlan = 'NotCreated';
+    // risk details modal
+    riskDetailsModalVisible = false;
+    isPlanVisible = false;
+
+    status = 'Unreceipted';
+
+    // risks
+    risks: RiskModel[] = [];
+    risksLoading = true;
+
+    searchString: string;
+
+    isEditmode = false;
+    territorialExtensionWeeks: number;
+
+    // set risk tamplate table not vivible
+    isTabletemplate = true;
+
+    // low term agreement discount amount
+    lowTermAgreementDiscountAmount: number;
+
+    // increase third party amount
+    increasedThirdPartyLimitAmount: number;
+
+    // valued client discount amount
+    valuedClientDiscountAmount: number;
+
+    // loss of use amount
+    territorialExtensionAmount: number;
+
+    // inexperienced driver amount
+    inexperiencedDriverAmount: number;
+
+    // under age driver amount
+    underAgeDriverAmount: number;
+
+    // selected basic premium input type option are rate and amount
+    selectedBasicPremiunTypeValue = 'rate';
+    // basic premium amount when user selects amount as basic premium input type
+    basicPremiumAmount: number;
+
+    // selected increase third party input type
+    selectedIncreaseThirdPartyLimitInputTypeValue = 'rate';
+    // selected riot and strike input type
+    selectedRiotAndStrikeInputTypeValue = 'rate';
+    // selected Car stereo input type
+    selectedCarStereoInputTypeValue = 'rate';
+    // car stereo amount
+    carStereoAmount: number;
+
+    // selected loss of use input type
+    selectedLossOfUseInputTypeValue = 'rate';
+    // selected territorial extension input type
+    selectedTerritorialExtensionInputTypeValue = 'rate';
+    // selected no claim discount input type
+    selectedNoClaimsDiscountInputTypeValue = 'rate';
+    // selected loyalty discount input type
+    selectedLoyaltyDiscountInputTypeValue = 'rate';
+
+    // selected valued client discount input type
+    selectedValuedClientDiscountInputTypeValue = 'rate';
+
+    // no claim discount amount
+    noClaimsDiscountAmount: number;
+
+    // selected low term agreement discount input type
+    selectedLowTermAgreementDiscountInputTypeValue = 'rate';
+
+    // loss of use amount
+    lossOfUseAmount: number;
+
+    // increase third party amount
+    riotAndStrikeAmount: number;
+
+    // Edit risk details
+    isRiskDetailsEditmode = false;
+
+    territorialExtensionCountries: number;
 
     // vehicle make drop down
     vehicleMakeUrl = 'https://api.randomuser.me/?results=5';
@@ -101,184 +180,7 @@ export class CreateQuoteComponent implements OnInit {
     selectedVehicleModel: string;
     isVehicleModelLoading = false;
 
-    // loading feedback
-    computeBasicPremiumIsLoading = false;
-    computeIncreasedThirdPartyLimitIsLoading = false;
-    computeRiotAndStrikeIsLoading = false;
-    computeCarStereoIsLoading = false;
-    computeTerritorialExtensionIsLoading = false;
-    computeLossOfUseIsLoading = false;
-    computeDiscountIsLoading = false;
-    computePremiumIsLoading = false;
-    handleDiscountIsLoading = false;
-
-    addLoadIsLoading = false;
-
-    //
-    data: AOA = [
-        [1, 2],
-        [3, 4],
-    ];
-    wopts: XLSX.WritingOptions = { bookType: 'xlsx', type: 'array' };
-
-    /*name of the risks template that will be downloaded. */
-    fileName = 'Risks_template.xlsx';
-    fileLocation: string;
-
-    motor: any;
-    quoteForm: FormGroup;
-    riskThirdPartyForm: FormGroup;
-    riskComprehensiveForm: FormGroup;
-    clients: Array<IIndividualClient & ICorporateClient>;
-    premiumLoadingForm: FormGroup;
-
-    //intermediaries
-    brokers: IBroker[];
-    agents: IAgent[];
-    salesRepresentatives: ISalesRepresentative[];
-
-    // selected risk in risk table
-    selectedRisk: RiskModel;
-
-    // risk being edited
-    currentRiskEdit: RiskModel;
-
-    premiumComputationForm: FormGroup;
-
-    quoteNumber = '';
-    risks: RiskModel[] = [];
-
-    ///// Premium Computation
-    // Basic Premium
-    basicPremium: number;
-    sumInsured: number;
-    premiumRate: number;
-    premiumRateType: string;
-
-    LevyRate: number = 3;
-    basicPremiumLevy: number;
-
-    // Loading
-    addingLoad: boolean;
-    premiumLoadingTotal: number;
-
-    increasedThirdPartyLimitsRate: number;
-    increasedThirdPartyLimitsAmount: number;
-    increasedThirdPartyLimitsRateType: string;
-    increasedThirdPartyLimitValue: number;
-
-    riotAndStrikeRate: number;
-    // riotAndStrikeAmount: number;
-    riotAndStrikeRateType: string;
-
-    carStereoValue: number;
-    carStereoRate: number;
-    carStereoRateType: string;
-    // carStereoAmount: number;
-
-    territorialExtensionRateType: string;
-    territorialExtensionWeeks: number;
-    territorialExtensionCountries: number;
-
-    lossOfUseDailyRate: number;
-    lossOfUseDailyRateType: string;
-    lossOfUseDays: number;
-    // lossOfUseAmount: number;
-
-    // Discount
-    premiumDiscountRate: number;
-    premiumDiscountRateType: string;
-    premiumDiscount: number;
-    premiumDiscountSubtotal: number;
-    // Net or total premium
-    totalPremium: number;
-    netPremium: number;
-
-    // loads added to loading
-    loads: LoadModel[] = [];
-
-    //dicounts added
-    discounts: DiscountModel[] = [];
-
-    // risk upload modal
-    isVisible = false;
-    isConfirmLoading = false;
-
-    // risk details modal
-    riskDetailsModalVisible = false;
-
-    // close add risk panel
-    isAddRiskPanelOpen: boolean;
-
-    // Edit risk details
-    isRiskDetailsEditmode = false;
-
-    //selected basic premium input type option are rate and amount
-    selectedBasicPremiunTypeValue = 'rate';
-    //basic premium amount when user selects amount as basic premium input type
-    basicPremiumAmount: number;
-
-    //selected increase third party input type
-    selectedIncreaseThirdPartyLimitInputTypeValue = 'rate';
-    //increase third party amount
-    increasedThirdPartyLimitAmount: number;
-
-    //selected riot and strike input type
-    selectedRiotAndStrikeInputTypeValue = 'rate';
-    //increase third party amount
-    riotAndStrikeAmount: number;
-
-    //selected Car stereo input type
-    selectedCarStereoInputTypeValue = 'rate';
-    //car stereo amount
-    carStereoAmount: number;
-
-    //selected loss of use input type
-    selectedLossOfUseInputTypeValue = 'rate';
-    //loss of use amount
-    lossOfUseAmount: number;
-
-    //selected territorial extension input type
-    selectedTerritorialExtensionInputTypeValue = 'rate';
-    //loss of use amount
-    territorialExtensionAmount: number;
-
-    //inexperienced driver amount
-    inexperiencedDriverAmount: number;
-
-    //under age driver amount
-    underAgeDriverAmount: number;
-
-    //selected no claim discount input type
-    selectedNoClaimsDiscountInputTypeValue = 'rate';
-    //no claim discount amount
-    noClaimsDiscountAmount: number;
-
-    //selected loyalty discount input type
-    selectedLoyaltyDiscountInputTypeValue = 'rate';
-    //loyalty discount amount
-    loyaltyDiscountAmount: number;
-
-    //selected valued client discount input type
-    selectedValuedClientDiscountInputTypeValue = 'rate';
-    //valued client discount amount
-    valuedClientDiscountAmount: number;
-
-    //selected low term agreement discount input type
-    selectedLowTermAgreementDiscountInputTypeValue = 'rate';
-    //low term agreement discount amount
-    lowTermAgreementDiscountAmount: number;
-
-    todayYear = null;
-
-    //set risk tamplate table not vivible
-    isTabletemplate = true;
-
-    optionList = [
-        { label: 'Motor Comprehensive', value: 'Comprehensive' },
-        { label: 'Motor Third Party', value: 'ThirdParty' },
-    ];
-    selectedValue = { label: 'Motor Comprehensive', value: 'Comprehensive' };
+    // selectedValue = { label: 'Motor Comprehensive', value: 'Comprehensive' };
 
     motorComprehensiveloadingOptions = [
         {
@@ -304,35 +206,150 @@ export class CreateQuoteComponent implements OnInit {
         value: '',
     };
 
-    //motor third party rates
-    motorThirdPartyRates = {
-        pirvate: { Q1: 165, Q2: 280, Q3: 370, Q4: 464 },
-        commercial: { Q1: 199, Q2: 340, Q3: 452, Q4: 566 },
-        'bus/taxi': { Q1: 270, Q2: 464, Q3: 618, Q4: 772 },
-    };
-
-    //discounts
+    // discounts
     discountOptions = [
         { label: 'No claims dicount', value: 'noClaimsDiscount' },
         { label: 'Loyalty Discount', value: 'loyaltyDiscount' },
         { label: 'Valued Client Discount', value: 'valuedClientDiscount' },
         { label: 'Low Term Agreement', value: 'lowTermAgreementDiscount' },
     ];
-
     selectedDiscountValue = { label: '', value: '' };
+    // loading feedback
+    computeBasicPremiumIsLoading = false;
+    computeIncreasedThirdPartyLimitIsLoading = false;
+    computeRiotAndStrikeIsLoading = false;
+    computeCarStereoIsLoading = false;
+    computeTerritorialExtensionIsLoading = false;
+    computeLossOfUseIsLoading = false;
+    computeDiscountIsLoading = false;
+    computePremiumIsLoading = false;
+    handleDiscountIsLoading = false;
+    // loyalty discount amount
+    loyaltyDiscountAmount: number;
 
-    selectedSourceOfBusiness: string;
+    addLoadIsLoading = false;
 
-    sourceOfBusinessOptions = [
-        { label: 'Direct', value: 'direct' },
-        { label: 'Broker', value: 'broker' },
-        { label: 'Agent', value: 'agent' },
-        { label: 'Sales Representative', value: 'salesRepresentative' },
+    //
+    data: AOA = [
+        [1, 2],
+        [3, 4],
     ];
+    wopts: XLSX.WritingOptions = { bookType: 'xlsx', type: 'array' };
+
+    /*name of the risks template that will be downloaded. */
+    fileName = 'Risks_template.xlsx';
+    fileLocation: string;
+
+    // selected risk in risk table
+    selectedRisk: RiskModel;
+
+    increasedThirdPartyLimitsRateType: string;
+
+    // risk being edited
+    currentRiskEdit: RiskModel;
+    premiumRateType: string;
+    riotAndStrikeRateType: string;
+    carStereoRateType: string;
+    territorialExtensionRateType: string;
+    lossOfUseDailyRateType: string;
+    premiumDiscountRateType: string;
+
+    // PDFS
+    isCertificatePDFVisible = false;
+    isDebitNotePDFVisible = false;
+    isSchedulePDFVisible = false;
+    isClausesPDFVisible = false;
+    // close add risk panel
+    isAddRiskPanelOpen: boolean;
 
     startValue: Date | null = null;
     endValue: Date | null = null;
     endOpen = false;
+
+    // For Modal
+    clientName: string;
+    clientNumber: string;
+    clientEmail: string;
+    policyRisk: RiskModel;
+    issueDate: string;
+    issueTime: string;
+    agency: string;
+    classOfBusiness: string;
+    coverForm: any;
+    coverTo: string;
+    basicPremium: any;
+    loadingAmount: string;
+    discountAmount: string;
+    totalAmount: string;
+
+    optionList = [
+        { label: 'Full Payment', value: 'fully' },
+        { label: 'Payment Plan', value: 'plan' },
+    ];
+
+    optionInsuranceTypeList = [
+        { label: 'Motor Comprehensive', value: 'Comprehensive' },
+        { label: 'Motor Third Party', value: 'ThirdParty' },
+    ];
+    selectedClassValue = {
+        label: 'Motor Comprehensive',
+        value: 'Comprehensive',
+    };
+    selectedPlanValue = 'fully';
+    formattedDate: any;
+    planId: string;
+    // clientName: any;
+    netPremium: number;
+    formattedeDate: Date;
+    _id: string;
+    riskComprehensiveForm: FormGroup;
+    riskThirdPartyForm: FormGroup;
+    sumInsured: number;
+    premiumRate: number;
+    loads: any[];
+    premiumLoadingTotal: number;
+    premiumDiscountRate: number;
+    basicPremiumLevy: any;
+    premiumDiscount: number;
+    // selectedLoadingValue: { label: string; value: string };
+    addingLoad: boolean;
+    riotAndStrikeRate: number;
+    increasedThirdPartyLimitsRate: number;
+    increasedThirdPartyLimitValue: number;
+    carStereoValue: number;
+    carStereoRate: number;
+    lossOfUseDailyRate: number;
+    lossOfUseDays: number;
+    //dicounts added
+    discounts: DiscountModel[] = [];
+    LevyRate = 3;
+    policyCertificateURl: string;
+    debitNoteURL: string;
+    policyID: string;
+
+    constructor(
+        private readonly router: Router,
+        private route: ActivatedRoute,
+        private formBuilder: FormBuilder,
+        private policiesService: PoliciesService,
+        private paymentPlanService: PaymentPlanService,
+        private receiptService: AccountService,
+        private msg: NzMessageService,
+        private http: HttpClient,
+        private quotesService: QuotesService,
+        private readonly clientsService: ClientsService,
+        private readonly agentsService: AgentsService
+    ) {
+        this.paymentPlanForm = this.formBuilder.group({
+            numberOfInstallments: ['', Validators.required],
+            startDate: ['', Validators.required],
+            initialInstallmentAmount: ['', Validators.required],
+        });
+    }
+
+    // conditional render of agent field based on mode(agent or user)
+    agentMode = false;
+    switchLoading = false;
 
     compareFn = (o1: any, o2: any) =>
         o1 && o2 ? o1.value === o2.value : o1 === o2;
@@ -358,74 +375,103 @@ export class CreateQuoteComponent implements OnInit {
         }
         return endValue.getTime() <= this.startValue.getTime();
     };
-
     ngOnInit(): void {
-        let user = localStorage.getItem('user');
-        this.quoteForm = this.formBuilder.group({
-            quoteNumber: [this.quoteService.generateQuoteNumber()],
-            client: ['', Validators.required],
-            messageCode: ['ewrewre', Validators.required],
-            underwritingYear: [''],
-            currency: ['', Validators.required],
-            startDate: ['', Validators.required],
-            endDate: [''],
-            quarter: ['', Validators.required],
-            user: [user, Validators.required],
-            status: ['Draft'],
-            receiptStatus: ['Unreceipted'],
-            sourceOfBusiness: ['', Validators.required],
-            intermediaryName: [''],
-        });
+        this.route.params.subscribe((id) => {
+            this.policiesService.getPolicyById(id.id).subscribe((policy) => {
+                console.log('CHECKING ID GET', policy);
+                this.policyData = policy;
+                console.log('CHECKING ID Policy>>>>', this.policyData);
 
-        this.clientsService.getAllClients().subscribe((clients) => {
-            this.clients = [...clients[0], ...clients[1]] as Array<
-                IIndividualClient & ICorporateClient
-            >;
-        });
+                this.policyID = this.policyData.id;
+                this.policyNumber = this.policyData.policyNumber;
 
-        this.agentsService.getAgents().subscribe((agents) => {
-            this.agents = agents;
-        });
+                this.risks = policy.risks;
 
-        this.agentsService.getBrokers().subscribe((brokers) => {
-            this.brokers = brokers;
-        });
+                this.policyRisk = policy.risks[0];
+                this.clientName = policy.client;
+                this.clientNumber = '+260976748392';
+                this.clientEmail = policy.client + '@gmail.com'; // TODO: Track client data
+                this.agency = 'Direct'; // TODO: Track this guy too
+                this.coverForm = policy.startDate.toString();
+                this.coverTo = policy.endDate.toString();
+                // this.basicPremium = this.policy
+                this.loadingAmount = '-';
+                this.discountAmount = '-';
+                this.totalAmount = policy.netPremium.toString();
+                this.issueDate = policy.dateOfIssue.toString();
+                this.issueTime = policy.dateOfIssue.toString();
 
-        this.agentsService
-            .getSalesRepresentatives()
-            .subscribe((salesRepresentatives) => {
-                this.salesRepresentatives = salesRepresentatives;
+                // set values of fields
+                // this.policyDetailsForm
+                //     .get('client')
+                //     .setValue(this.policyData.client);
+                this.policyDetailsForm
+                    .get('nameOfInsured')
+                    .setValue(this.policyData.nameOfInsured);
+                this.policyDetailsForm
+                    .get('startDate')
+                    .setValue(this.policyData.startDate);
+                this.policyDetailsForm
+                    .get('endDate')
+                    .setValue(this.policyData.endDate);
+                this.policyDetailsForm
+                    .get('sumInsured')
+                    .setValue(this.policyData.sumInsured);
+                this.policyDetailsForm
+                    .get('netPremium')
+                    .setValue(this.policyData.netPremium);
+                this.policyDetailsForm
+                    .get('currency')
+                    .setValue(this.policyData.currency);
+                this.policyDetailsForm
+                    .get('timeOfIssue')
+                    .setValue(this.policyData.timeOfIssue);
+                this.policyDetailsForm
+                    .get('dateOfIssue')
+                    .setValue(this.policyData.dateOfIssue);
+                this.policyDetailsForm
+                    .get('expiryDate')
+                    .setValue(this.policyData.endDate);
+                this.policyDetailsForm
+                    .get('quarter')
+                    .setValue(this.policyData.quarter);
+                this.policyDetailsForm
+                    .get('remarks')
+                    .setValue(this.policyData.remarks);
+
+                this.risksLoading = false;
             });
 
-        this.riskComprehensiveForm = this.formBuilder.group({
-            riskStartDate: ['', Validators.required],
-            riskQuarter: ['', Validators.required],
-            riskEndDate: ['', Validators.required],
-            regNumber: ['', Validators.required],
-            vehicleMake: ['', Validators.required],
-            vehicleModel: ['', Validators.required],
-            engineNumber: [''],
-            chassisNumber: ['', Validators.required],
-            yearOfManufacture: ['', Validators.required],
-            color: ['', [Validators.required]],
-            // sumInsured: ['', Validators.required],
-            productType: ['', Validators.required],
-            insuranceType: ['Comprehensive'],
-        });
+            this.riskComprehensiveForm = this.formBuilder.group({
+                riskStartDate: ['', Validators.required],
+                riskQuarter: ['', Validators.required],
+                riskEndDate: ['', Validators.required],
+                regNumber: ['', Validators.required],
+                vehicleMake: ['', Validators.required],
+                vehicleModel: ['', Validators.required],
+                engineNumber: [''],
+                chassisNumber: ['', Validators.required],
+                yearOfManufacture: ['', Validators.required],
+                color: ['', [Validators.required]],
+                // sumInsured: ['', Validators.required],
+                productType: ['', Validators.required],
+                insuranceType: ['Comprehensive'],
+            });
 
-        this.riskThirdPartyForm = this.formBuilder.group({
-            riskStartDate: ['', Validators.required],
-            riskQuarter: ['', Validators.required],
-            riskEndDate: ['', Validators.required],
-            regNumber: ['', [Validators.required]],
-            vehicleMake: ['', [Validators.required]],
-            vehicleModel: ['', [Validators.required]],
-            engineNumber: [''],
-            chassisNumber: ['', [Validators.required]],
-            yearOfManufacture: ['', Validators.required],
-            color: ['', [Validators.required]],
-            productType: ['', [Validators.required]],
-            insuranceType: ['ThirdParty'],
+            this.riskThirdPartyForm = this.formBuilder.group({
+                riskStartDate: ['', Validators.required],
+                riskQuarter: ['', Validators.required],
+                riskEndDate: ['', Validators.required],
+                regNumber: ['', [Validators.required]],
+                vehicleMake: ['', [Validators.required]],
+                vehicleModel: ['', [Validators.required]],
+                engineNumber: [''],
+                chassisNumber: ['', [Validators.required]],
+                yearOfManufacture: ['', Validators.required],
+                color: ['', [Validators.required]],
+                productType: ['', [Validators.required]],
+                insuranceType: ['ThirdParty'],
+            });
         });
 
         // vehicle make loading
@@ -471,7 +517,74 @@ export class CreateQuoteComponent implements OnInit {
             this.vehicleModelOptionList = data;
             this.isVehicleModelLoading = false;
         });
+        // this.route.data.subscribe((data: Policy) => {
+        //     console.log('RESOLVED', data);
+        //     this.route.params.subscribe((param) => {
+        //         this.policyNumber = param.policyNumber;
+        //         this.policiesService.getPolicies().subscribe((policies) => {
 
+        //         });
+        //     });
+        // });
+        // policy details form
+        this.policyDetailsForm = this.formBuilder.group({
+            // client: ['', Validators.required],
+            nameOfInsured: ['', Validators.required],
+            startDate: ['', Validators.required],
+            endDate: [''],
+            product: [''],
+            sumInsured: ['', Validators.required],
+            netPremium: [''],
+            currency: ['', Validators.required],
+            branch: [''],
+            timeOfIssue: ['', Validators.required],
+            dateOfIssue: ['', Validators.required],
+            expiryDate: ['', Validators.required],
+            quarter: ['', Validators.required],
+            town: [''],
+            remarks: ['', Validators.required],
+        });
+
+        // set values of fields
+        // this.policiesService.getPolicies().subscribe((policies) => {
+        //     this.policyData = policies.filter(
+        //         (x) => x.policyNumber === this.policyNumber
+        //     )[0];
+        //     this.policyDetailsForm
+        //         .get('client')
+        //         .setValue(this.policyData.client);
+        //     this.policyDetailsForm
+        //         .get('nameOfInsured')
+        //         .setValue(this.policyData.nameOfInsured);
+        //     this.policyDetailsForm
+        //         .get('startDate')
+        //         .setValue(this.policyData.startDate);
+        //     this.policyDetailsForm
+        //         .get('endDate')
+        //         .setValue(this.policyData.endDate);
+        //     this.policyDetailsForm
+        //         .get('sumInsured')
+        //         .setValue(this.policyData.sumInsured);
+        //     this.policyDetailsForm
+        //         .get('netPremium')
+        //         .setValue(this.policyData.netPremium);
+        //     this.policyDetailsForm
+        //         .get('currency')
+        //         .setValue(this.policyData.currency);
+        //     this.policyDetailsForm
+        //         .get('timeOfIssue')
+        //         .setValue(this.policyData.timeOfIssue);
+        //     this.policyDetailsForm
+        //         .get('dateOfIssue')
+        //         .setValue(this.policyData.dateOfIssue);
+        //     this.policyDetailsForm
+        //         .get('expiryDate')
+        //         .setValue(this.policyData.endDate);
+        //     this.policyDetailsForm
+        //         .get('quarter')
+        //         .setValue(this.policyData.quarter);
+        // });
+        this.increasedThirdPartyLimitsRateType = 'percentage';
         this.premiumComputationForm = this.formBuilder.group({
             sumInsured: ['', Validators.required],
             premiumRate: ['', Validators.required],
@@ -512,6 +625,163 @@ export class CreateQuoteComponent implements OnInit {
         this.territorialExtensionRateType = 'percentage';
         this.lossOfUseDailyRateType = 'percentage';
         this.premiumDiscountRateType = 'percentage';
+    }
+
+    getTimeStamp(policy: Policy): number {
+        return (policy.startDate as ITimestamp).seconds;
+    }
+
+    getEndDateTimeStamp(policy: Policy): number {
+        return (policy.endDate as ITimestamp).seconds;
+    }
+
+    goToRenewPoliciesList(): void {
+        this.router.navigateByUrl('/flosure/underwriting/policy-renewal-list');
+    }
+
+    goToClientsList(): void {
+        this.router.navigateByUrl('/flosure/clients/clients-list');
+    }
+
+    showPolicyModal(policy: Policy): void {
+        this.isPlanVisible = true;
+    }
+
+    showVModal(): void {
+        this.isVisible = true;
+    }
+
+    handleOk(policyData): void {
+        if (this.selectedPlanValue === 'plan') {
+            let pAmount = 0;
+            let policyCount = 0;
+            const policyPlan: Policy[] = [];
+            policyPlan.push({
+                ...policyData,
+            });
+
+            this.policyUpdate = policyData;
+
+            pAmount = pAmount + policyData.netPremium;
+            policyCount++;
+
+            this.clientName = policyData.client;
+            this.netPremium = this.netPremium + policyData.netPremium;
+            // this.policyPlan = policyPlan;
+            this.policyUpdate.paymentPlan = 'Created';
+            this.receiptService.updatePolicy(this.policyUpdate);
+
+            const eDate = new Date(
+                this.paymentPlanForm.controls.startDate.value
+            );
+            eDate.setMonth(
+                eDate.getMonth() +
+                    this.paymentPlanForm.controls.numberOfInstallments.value
+            );
+            this.formattedeDate = eDate;
+
+            const dAmount =
+                pAmount -
+                this.paymentPlanForm.controls.initialInstallmentAmount.value;
+
+            // Create installments
+            const iAmount =
+                dAmount /
+                this.paymentPlanForm.controls.numberOfInstallments.value;
+            const installment: InstallmentsModel[] = [];
+
+            const iDate = new Date(
+                this.paymentPlanForm.controls.startDate.value
+            );
+            while (iDate <= eDate) {
+                iDate.setMonth(iDate.getMonth() + 1);
+                this.formattedDate = iDate;
+
+                installment.push({
+                    installmentAmount: iAmount,
+                    installmentDate: this.formattedDate,
+                    balance: iAmount,
+                    installmentStatus: 'UnPaid',
+                });
+            }
+
+            // Payment Plan
+            const pDate = new Date(
+                this.paymentPlanForm.controls.startDate.value
+            );
+            console.log('THis', this.policyData);
+
+            this.planId = v4();
+            const plan: IPaymentModel = {
+                ...this.paymentPlanForm.value,
+                id: this.planId,
+                clientId: '',
+                clientName: policyData.client,
+                numberOfPolicies: policyCount,
+                totalPremium: pAmount,
+                status: 'UnPaid',
+                policyPaymentPlan: policyPlan,
+                remainingInstallments: this.paymentPlanForm.controls
+                    .numberOfInstallments.value,
+                amountPaid: 0,
+                numberOfPaidInstallments: 0,
+                amountOutstanding: dAmount,
+                installments: installment,
+                startDate: pDate,
+                endDate: this.formattedeDate,
+            };
+
+            console.log('..........Payment Plan..........');
+            console.log(plan);
+
+            this._id = v4();
+            const receipt: IReceiptModel = {
+                id: this._id,
+                paymentMethod: '',
+                receivedFrom: this.paymentPlanForm.controls.clientName.value,
+                onBehalfOf: this.paymentPlanForm.controls.clientName.value,
+                capturedBy: 'charles malama',
+                policyNumber: '',
+                receiptStatus: 'Receipted',
+                narration: 'Payment Plan',
+                receiptType: 'Premium Payment',
+                sumInDigits: this.paymentPlanForm.controls
+                    .initialInstallmentAmount.value,
+                todayDate: new Date(),
+            };
+
+            const planReceipt: PlanReceipt[] = [];
+            planReceipt.push({
+                id: this._id,
+                onBehalfOf: this.paymentPlanForm.controls.clientName.value,
+                allocationStatus: 'Unallocated',
+                sumInDigits: this.paymentPlanForm.controls
+                    .initialInstallmentAmount.value,
+                policyNumber: '',
+            });
+
+            plan.planReceipt = planReceipt;
+            console.log('=====================');
+
+            console.log(receipt, plan);
+
+            // add payment plan
+            this.paymentPlanService.addPaymentPlanReceipt(receipt, plan);
+
+            // add payment plan
+            // this.paymentPlanService.addPaymentPlan(plan);
+            this.paymentPlanForm.reset();
+            this.isVisible = false;
+            this.router.navigateByUrl('flosure/accounts/payment-plan');
+        } else if (this.selectedPlanValue === 'fully') {
+            this.router.navigateByUrl('/flosure/accounts/receipts');
+        }
+
+        this.isVisible = false;
+    }
+
+    handleCancel(): void {
+        this.isVisible = false;
     }
 
     handleComprehensiveRiskEndDateCalculation(): void {
@@ -594,14 +864,14 @@ export class CreateQuoteComponent implements OnInit {
 
     handlePolicyEndDateCalculation(): void {
         if (
-            this.quoteForm.get('startDate').value != '' &&
-            this.quoteForm.get('quarter').value != ''
+            this.policyDetailsForm.get('startDate').value != '' &&
+            this.policyDetailsForm.get('quarter').value != ''
         ) {
             const request: IRateRequest = {
                 sumInsured: 0,
                 premiumRate: 0,
-                startDate: this.quoteForm.get('startDate').value,
-                quarter: Number(this.quoteForm.get('quarter').value),
+                startDate: this.policyDetailsForm.get('startDate').value,
+                quarter: Number(this.policyDetailsForm.get('quarter').value),
                 discount: 0,
                 appliedDiscount: 0,
                 carStereo: 0,
@@ -621,7 +891,9 @@ export class CreateQuoteComponent implements OnInit {
                     request
                 )
                 .subscribe((data) => {
-                    this.quoteForm.get('endDate').setValue(data.endDate);
+                    this.policyDetailsForm
+                        .get('endDate')
+                        .setValue(data.endDate);
                 });
         }
     }
@@ -717,13 +989,13 @@ export class CreateQuoteComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    onSubmit() {
-        const some = this.quoteForm.value;
-        this.quoteService.addMotorQuotation(some);
+    // onSubmit() {
+    //     const some = this.quoteForm.value;
+    //     this.quoteService.addMotorQuotation(some);
 
-        localStorage.setItem('motor', JSON.stringify(some));
-        this.quoteService.getRisk('an');
-    }
+    //     localStorage.setItem('motor', JSON.stringify(some));
+    //     this.quoteService.getRisk('an');
+    // }
 
     // add third party risk
     addThirdPartyRisk(): void {
@@ -741,7 +1013,7 @@ export class CreateQuoteComponent implements OnInit {
             discountRate: this.premiumDiscountRate,
             premiumLevy: this.basicPremiumLevy,
             netPremium: this.netPremium,
-            insuranceType: this.selectedValue.value,
+            insuranceType: this.selectedClassValue.value,
         });
         this.risks = [...this.risks, ...some];
 
@@ -792,7 +1064,7 @@ export class CreateQuoteComponent implements OnInit {
             discountRate: this.premiumDiscountRate,
             premiumLevy: this.basicPremiumLevy,
             netPremium: this.netPremium,
-            insuranceType: this.selectedValue.value,
+            insuranceType: this.selectedClassValue.value,
         });
         this.risks = [...this.risks, ...some];
 
@@ -843,10 +1115,11 @@ export class CreateQuoteComponent implements OnInit {
 
     // view details of the risk
     viewRiskDetails(risk: RiskModel) {
+        console.log('RiSK CHECK>>>>', risk);
         this.selectedRisk = risk;
         this.riskDetailsModalVisible = true;
 
-        if (this.selectedValue.value === 'Comprehensive') {
+        if (this.selectedClassValue.value === 'Comprehensive') {
             this.riskComprehensiveForm
                 .get('vehicleMake')
                 .setValue(risk.vehicleMake);
@@ -928,12 +1201,12 @@ export class CreateQuoteComponent implements OnInit {
         this.risks = this.risks.filter((risk) => risk.riskId !== riskId);
     }
 
-    //save risks changes after editing
+    // save risks changes after editing
     saveRisk(): void {
         this.currentRiskEdit = this.selectedRisk;
 
-        if (this.selectedValue.value === 'Comprehensive') {
-            //comprehensive risk
+        if (this.selectedClassValue.value === 'Comprehensive') {
+            // comprehensive risk
             const some: RiskModel = {
                 ...this.riskComprehensiveForm.value,
                 sumInsured: Number(this.sumInsured),
@@ -944,17 +1217,17 @@ export class CreateQuoteComponent implements OnInit {
                 discountRate: this.premiumDiscountRate,
                 premiumLevy: this.basicPremiumLevy,
                 netPremium: this.netPremium,
-                insuranceType: this.selectedValue.value,
+                insuranceType: this.selectedClassValue.value,
             };
             this.currentRiskEdit = some;
 
-            var riskIndex = _.findIndex(this.risks, {
+            let riskIndex = _.findIndex(this.risks, {
                 riskId: this.selectedRisk.riskId,
             });
             this.risks.splice(riskIndex, 1, this.currentRiskEdit);
             this.risks = this.risks;
         } else {
-            //third party risk
+            // third party risk
             const some: RiskModel = {
                 ...this.riskThirdPartyForm.value,
                 sumInsured: 0,
@@ -965,11 +1238,11 @@ export class CreateQuoteComponent implements OnInit {
                 discountRate: this.premiumDiscountRate,
                 premiumLevy: this.basicPremiumLevy,
                 netPremium: this.netPremium,
-                insuranceType: this.selectedValue.value,
+                insuranceType: this.selectedClassValue.value,
             };
             this.selectedRisk = some;
 
-            var riskIndex = _.findIndex(this.risks, {
+            let riskIndex = _.findIndex(this.risks, {
                 riskId: this.selectedRisk.riskId,
             });
             this.risks.splice(riskIndex, 1, this.currentRiskEdit);
@@ -984,74 +1257,193 @@ export class CreateQuoteComponent implements OnInit {
         this.riskDetailsModalVisible = false;
     }
 
-    async addQuote(): Promise<void> {
-        const quote: MotorQuotationModel = {
-            ...this.quoteForm.value,
-            // clientCode
-            user: this.agentMode
-                ? this.quoteForm.get('user').value
-                : localStorage.getItem('user'),
-            risks: this.risks,
+    async renewPolicy(): Promise<void> {
+        const debitNote: IDebitNoteDTO = {
+            companyTelephone: 'Joshua Silwembe',
+            companyEmail: 'joshua.silwembe@hobbiton.co.zm',
+            vat: '5%',
+            pin: '4849304930',
+            todayDate: new Date(),
+            agency: 'string',
+            nameOfInsured: 'Joshua Silwembe',
+            addressOfInsured: 'string',
+            ref: 'string',
+            policyNumber: 'string',
+            endorsementNumber: 'string',
+            regarding: 'string',
+            classOfBusiness: 'string',
+            brokerRef: 'string',
+            fromDate: new Date(),
+            toDate: new Date(),
+            currency: 'string',
+            basicPremium: 0,
+            insuredPremiumLevy: 0,
+            netPremium: 0,
+            processedBy: 'string',
         };
 
-        const quoteDto: IQuoteDTO = {
-            quoteNumber: quote.quoteNumber,
-            revisionNumber: '00001',
-            startDate: quote.startDate as Date,
-            endDate: quote.endDate as Date,
-            client: quote.client,
-            status: 'Draft',
-            preparedBy: 'Charles Malama',
-            motorQuotationModelId: quote.id,
-            dateCreated: new Date(),
-            clientCode: quote.clientCode,
-            messageCode: '123001',
-            coverCode: quote.coverCode,
-            currency: quote.currency,
-            riskModelId: '023001',
-            regNumber: quote.risks[0].regNumber,
-            vehicleMake: quote.risks[0].vehicleMake,
-            vehicleModel: quote.risks[0].vehicleModel,
-            engineNumber: quote.risks[0].engineNumber,
-            chassisNumber: quote.risks[0].chassisNumber,
-            color: quote.risks[0].color,
-            estimatedValue: quote.risks[0].estimatedValue,
-            productType: quote.risks[0].productType,
-            messageModelId: '02501',
-            description: '',
-            coverModelId: '0948398',
+        const certificate: ICertificateDTO = {
+            certificateNumber: 'string',
+            policyNumber: 'string',
+            clientName: 'string',
+            nameOfInsured: 'string',
+            address: 'string',
+            phone: 'string',
+            email: 'james@gmail.com',
+            coverType: 'string',
+            startDate: new Date(),
+            expiryDate: new Date(),
+            sumInsured: 0,
+            regMark: 'string',
+            makeAndType: 'string',
+            engine: 'string',
+            chassisNumber: 'string',
+            yearOfManufacture: 'string',
+            color: 'string',
+            branch: 'string',
+            timeOfIssue: new Date(),
+            dateOfIssue: new Date(),
+            thirdPartyPropertyDamage: 0,
+            thirdPartyInuryAndDeath: 0,
+            thirdPartyBoodilyInjury_DeathPerEvent: 0,
+            town: 'string',
         };
 
-        this.quoteService.generateQuote(quoteDto).subscribe((res) => {
-            this.gqlquoteService
-                .addQuote({
-                    clientId: 'some', // System can't keep track of this guy
-                    quoteNumber: quote.quoteNumber,
-                    quoteUrl: res.Location,
-                })
-                .then((res) => {
-                    res.subscribe((x) => {
-                        console.log(x);
-                    });
-                });
+        const debit$ = this.quotesService.generateDebitNote(debitNote);
+        const cert$ = this.quotesService.generateCertificate(certificate);
+
+        combineLatest([debit$, cert$]).subscribe(async ([debit, cert]) => {
+            this.debitNoteURL = debit.Location;
+            this.policyCertificateURl = cert.Location;
+
+            console.log('DEBIT', debit.Location);
+            console.log('CERT', cert.Location);
+
+            // await this.quotesService.addQuoteDocuments()
+
+            // convert to policy
+            const policy: Policy = {
+                ...this.policyDetailsForm.value,
+                receiptStatus: this.status,
+                risks: this.risks,
+                term: this.policyData.term + 1,
+                sumInsured: this.sumArray(this.risks, 'sumInsured'),
+                netPremium: this.sumArray(this.risks, 'netPremium'),
+                paymentPlan: this.paymentPlan,
+                underwritingYear: new Date().getFullYear(),
+                user: localStorage.getItem('user'),
+            };
+
+            this.policyData = policy;
+
+            this.policyData.id = this.policyID;
+            this.policyData.policyNumber = this.policyNumber;
+            console.log('POLICY>>>>', this.policyData);
+            await this.policiesService.updatePolicy(this.policyData);
         });
-
-        await this.quoteService
-            .addMotorQuotation(quote)
-            .then(() => {
-                this.msg.success('Quotation Successfully created');
-                this.router.navigateByUrl('/flosure/quotes/quotes-list');
-            })
-            .catch(() => {
-                this.msg.error('Quotation Creation Failed');
-            });
     }
+
+    // sumArray(items, prop) {
+    //     return items.reduce(function (a, b) {
+    //         return a + b[prop];
+    //     }, 0);
+    // }
+
+    // filter by search
+    // search(value: string): void {
+    //     if (value === '' || !value) {
+    //         this.displayQuote = this.quote;
+    //     }
+
+    //     this.displayQuote.risks = this.quote.risks.filter((quote) => {
+    //         return (
+    //             quote.insuranceType
+    //                 .toLowerCase()
+    //                 .includes(value.toLowerCase()) ||
+    //             quote.regNumber.toLowerCase().includes(value.toLowerCase()) ||
+    //             quote.chassisNumber
+    //                 .toLowerCase()
+    //                 .includes(value.toLowerCase()) ||
+    //             quote.vehicleMake.toLowerCase().includes(value.toLowerCase()) ||
+    //             quote.vehicleModel
+    //                 .toLowerCase()
+    //                 .includes(value.toLowerCase()) ||
+    //             quote.engineNumber
+    //                 .toLowerCase()
+    //                 .includes(value.toLowerCase()) ||
+    //             quote.productType.toLowerCase().includes(value.toLowerCase()) ||
+    //             quote.color.toLowerCase().includes(value.toLowerCase())
+    //         );
+    //     });
+    // }
+    // async addPolicy(): Promise<void> {
+    //     const policy: Policy = {
+    //         ...this.quoteForm.value,
+    //         // clientCode
+    //         user: this.agentMode
+    //             ? this.quoteForm.get('user').value
+    //             : localStorage.getItem('user'),
+    //         risks: this.risks,
+    //     };
+
+    //     const quoteDto: IQuoteDTO = {
+    //         quoteNumber: quote.quoteNumber,
+    //         revisionNumber: '00001',
+    //         startDate: quote.startDate as Date,
+    //         endDate: quote.endDate as Date,
+    //         client: quote.client,
+    //         status: 'Draft',
+    //         preparedBy: 'Charles Malama',
+    //         motorQuotationModelId: quote.id,
+    //         dateCreated: new Date(),
+    //         clientCode: quote.clientCode,
+    //         messageCode: '123001',
+    //         coverCode: quote.coverCode,
+    //         currency: quote.currency,
+    //         riskModelId: '023001',
+    //         regNumber: quote.risks[0].regNumber,
+    //         vehicleMake: quote.risks[0].vehicleMake,
+    //         vehicleModel: quote.risks[0].vehicleModel,
+    //         engineNumber: quote.risks[0].engineNumber,
+    //         chassisNumber: quote.risks[0].chassisNumber,
+    //         color: quote.risks[0].color,
+    //         estimatedValue: quote.risks[0].estimatedValue,
+    //         productType: quote.risks[0].productType,
+    //         messageModelId: '02501',
+    //         description: '',
+    //         coverModelId: '0948398',
+    //     };
+
+    //     this.quoteService.generateQuote(quoteDto).subscribe((res) => {
+    //         this.gqlquoteService
+    //             .addQuote({
+    //                 clientId: 'some', // System can't keep track of this guy
+    //                 quoteNumber: quote.quoteNumber,
+    //                 quoteUrl: res.Location,
+    //             })
+    //             .then((res) => {
+    //                 res.subscribe((x) => {
+    //                     console.log(x);
+    //                 });
+    //             });
+    //     });
+
+    //     await this.quoteService
+    //         .addMotorQuotation(quote)
+    //         .then(() => {
+    //             this.msg.success('Quotation Successfully created');
+    //             this.router.navigateByUrl('/flosure/quotes/quotes-list');
+    //         })
+    //         .catch(() => {
+    //             this.msg.error('Quotation Creation Failed');
+    //         });
+    // }
 
     showModal(): void {
         this.isVisible = true;
     }
 
-    handleCancel(): void {
+    handleRiskCancel(): void {
         this.isVisible = false;
     }
 
@@ -1169,7 +1561,7 @@ export class CreateQuoteComponent implements OnInit {
 
     handleDiscount(discountType: DiscountType) {
         this.handleDiscountIsLoading = true;
-        //following methods check if the repective loads are in the loads array
+        // following methods check if the repective loads are in the loads array
         const riotAndStrikeInLoads = this.loads.some(
             (item) => item.loadType === 'Riot And Strike'
         );
@@ -1183,7 +1575,7 @@ export class CreateQuoteComponent implements OnInit {
             (item) => item.loadType === 'Loss Of Use'
         );
 
-        //if the checked loading are not in loads array set there values to Zero!
+        // if the checked loading are not in loads array set there values to Zero!
         if (!riotAndStrikeInLoads) {
             this.riotAndStrikeRate = 0;
         }
@@ -1230,7 +1622,7 @@ export class CreateQuoteComponent implements OnInit {
             )
             .subscribe((data) => {
                 this.discounts.push({
-                    discountType: discountType,
+                    discountType,
                     amount: Number(data.discount),
                 });
                 this.premiumDiscount = this.sumArray(this.discounts, 'amount');
@@ -1241,7 +1633,7 @@ export class CreateQuoteComponent implements OnInit {
 
     handleDiscountThirdParty() {
         this.handleDiscountIsLoading = true;
-        //following methods check if the repective loads are in the loads array
+        // following methods check if the repective loads are in the loads array
         const riotAndStrikeInLoads = this.loads.some(
             (item) => item.loadType === 'Riot And Strike'
         );
@@ -1255,7 +1647,7 @@ export class CreateQuoteComponent implements OnInit {
             (item) => item.loadType === 'Loss Of Use'
         );
 
-        //if the checked loading are not in loads array set there values to Zero!
+        // if the checked loading are not in loads array set there values to Zero!
         if (!riotAndStrikeInLoads) {
             this.riotAndStrikeRate = 0;
         }
@@ -1643,14 +2035,14 @@ export class CreateQuoteComponent implements OnInit {
         }
     }
 
-    //sum up specific values in array
+    // sum up specific values in array
     sumArray(items, prop) {
         return items.reduce(function (a, b) {
             return a + b[prop];
         }, 0);
     }
 
-    //following method adds basic premium + loading - discount then applies levy then finds net premium
+    // following method adds basic premium + loading - discount then applies levy then finds net premium
     handleNetPremium() {
         this.basicPremiumLevy =
             (this.LevyRate / 100) *
@@ -1662,15 +2054,27 @@ export class CreateQuoteComponent implements OnInit {
             this.premiumLoadingTotal -
             this.premiumDiscount +
             this.basicPremiumLevy;
+
+        console.log(
+            'ERROR TRACKING',
+            (this.LevyRate / 100) *
+                (this.basicPremium +
+                    this.premiumLoadingTotal -
+                    this.premiumDiscount),
+            this.LevyRate,
+            this.basicPremium,
+            this.premiumLoadingTotal,
+            this.premiumDiscount
+        );
     }
 
-    //changes the quote basic premium to the inputed amount
+    // changes the quote basic premium to the inputed amount
     handleBasicPremiumAmount() {
         this.basicPremium = Number(this.basicPremiumAmount);
         this.handleNetPremium();
     }
 
-    //changes the quote increase third party limit to inputed amount
+    // changes the quote increase third party limit to inputed amount
     handleIncreasedThirdPartyLimitAmount() {
         this.loads.push({
             loadType: 'Increased Third Party Limit',
@@ -1680,7 +2084,7 @@ export class CreateQuoteComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //changes the quote riot and strike to inputed amount
+    // changes the quote riot and strike to inputed amount
     handleRiotAndStrikeAmount() {
         this.loads.push({
             loadType: 'Riot And Strike',
@@ -1690,7 +2094,7 @@ export class CreateQuoteComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //changes the quote car stereo to inputed amount
+    // changes the quote car stereo to inputed amount
     handleCarStereoAmount() {
         this.loads.push({
             loadType: 'Car Stereo',
@@ -1700,7 +2104,7 @@ export class CreateQuoteComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //changes the quote loss of use loading to inputed amount
+    // changes the quote loss of use loading to inputed amount
     handleLossOfUseAmount() {
         this.loads.push({
             loadType: 'Loss Of Use',
@@ -1710,7 +2114,7 @@ export class CreateQuoteComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //changes the quote loss of use loading to inputed amount
+    // changes the quote loss of use loading to inputed amount
     handleTerritorialExtensionAmount() {
         this.loads.push({
             loadType: 'Territorial Extension',
@@ -1720,7 +2124,7 @@ export class CreateQuoteComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //changes the quote loss of use loading to inputed amount
+    // changes the quote loss of use loading to inputed amount
     handleInexperiencedDriverAmount() {
         this.loads.push({
             loadType: 'Inexperienced Driver',
@@ -1730,7 +2134,7 @@ export class CreateQuoteComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //changes the quote loss of use loading to inputed amount
+    // changes the quote loss of use loading to inputed amount
     handleUnderAgeDriverAmount() {
         this.loads.push({
             loadType: 'Under Age Driver',
@@ -1740,7 +2144,7 @@ export class CreateQuoteComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //adds inputted discount to total discount amount
+    // adds inputted discount to total discount amount
     handleNoClaimsDiscountAmount() {
         this.discounts.push({
             discountType: 'No Claims Discount',
@@ -1750,7 +2154,7 @@ export class CreateQuoteComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //adds inputted discount to total discount amount
+    // adds inputted discount to total discount amount
     handleLoyaltyDiscountAmount() {
         this.discounts.push({
             discountType: 'Loyalty Discount',
@@ -1760,7 +2164,7 @@ export class CreateQuoteComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //adds inputted discount to total discount amount
+    // adds inputted discount to total discount amount
     handleValuedClientDiscountAmount() {
         this.discounts.push({
             discountType: 'Valued Client Discount',
@@ -1770,7 +2174,7 @@ export class CreateQuoteComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //adds inputted discount to total discount amount
+    // adds inputted discount to total discount amount
     handleLowTermAgreementDiscountAmount() {
         this.discounts.push({
             discountType: 'Low Term Agreement Discount',

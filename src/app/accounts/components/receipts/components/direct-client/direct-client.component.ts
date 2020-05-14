@@ -72,6 +72,8 @@ export class DirectClientComponent implements OnInit {
         { label: 'EFT', value: 'eft' },
         { label: 'Bank Transfer', value: 'bank transfer' },
     ];
+    sourceOfBusiness: string;
+    intermediaryName: string;
     constructor(
         private receiptService: AccountService,
         private formBuilder: FormBuilder,
@@ -104,11 +106,15 @@ export class DirectClientComponent implements OnInit {
         this.receiptService.getPolicies().subscribe((quotes) => {
             this.unreceiptedList = _.filter(
                 quotes,
-                (x) => x.receiptStatus === 'Unreceipted'
+                (x) =>
+                    x.receiptStatus === 'Unreceipted' &&
+                    x.sourceOfBusiness === 'direct'
             );
             this.receiptsCount = _.filter(
                 quotes,
-                (x) => x.receiptStatus === 'Unreceipted'
+                (x) =>
+                    x.receiptStatus === 'Unreceipted' &&
+                    x.sourceOfBusiness === 'direct'
             ).length;
             console.log('======= Unreceipt List =======');
             console.log(this.unreceiptedList);
@@ -117,7 +123,9 @@ export class DirectClientComponent implements OnInit {
         this.receiptService.getReciepts().subscribe((receipts) => {
             this.receiptedList = _.filter(
                 receipts,
-                (x) => x.receiptStatus === 'Receipted'
+                (x) =>
+                    x.receiptStatus === 'Receipted' &&
+                    x.sourceOfBusiness === 'direct'
             );
 
             console.log('======= Receipt List =======');
@@ -125,7 +133,9 @@ export class DirectClientComponent implements OnInit {
 
             this.cancelReceiptList = _.filter(
                 receipts,
-                (x) => x.receiptStatus === 'Cancelled'
+                (x) =>
+                    x.receiptStatus === 'Cancelled' &&
+                    x.sourceOfBusiness === 'direct'
             );
 
             console.log('======= Cancelled Receipt List =======');
@@ -140,6 +150,8 @@ export class DirectClientComponent implements OnInit {
         this.user = unreceipted.user;
         this.policy = unreceipted;
         this.policyAmount = unreceipted.netPremium;
+        this.sourceOfBusiness = unreceipted.sourceOfBusiness;
+        this.intermediaryName = unreceipted.intermediaryName;
         console.log(this.policyAmount);
     }
 
@@ -161,6 +173,8 @@ export class DirectClientComponent implements OnInit {
                 receiptStatus: this.recStatus,
                 sumInDigits: this.policyAmount,
                 todayDate: new Date(),
+                sourceOfBusiness: this.sourceOfBusiness,
+                intermediaryName: 'direct',
             };
 
             this.receiptNum = this._id;
