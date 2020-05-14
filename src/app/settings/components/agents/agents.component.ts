@@ -2,6 +2,13 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { IAgent, IBroker, ISalesRepresentative } from './models/agents.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AgentsService } from './services/agents.service';
+import {
+    IClass,
+    IProduct
+} from '../product-setups/models/product-setups-models.model';
+import { ProductSetupsServiceService } from '../product-setups/services/product-setups-service.service';
+import { CommisionSetupsService } from './services/commision-setups.service';
+import { ICommissionSetup } from './models/commission-setup.model';
 
 @Component({
     selector: 'app-agents',
@@ -13,6 +20,16 @@ export class AgentsComponent implements OnInit {
     intermediariesList: Array<IAgent & IBroker & ISalesRepresentative>;
     displayIntermediariesList: Array<IAgent & IBroker & ISalesRepresentative>;
 
+    selectedIntermediary: IAgent & IBroker & ISalesRepresentative;
+
+    addProductCommissionFormDrawerVisible = false;
+
+    //edit table commission setup form
+    isEditmode = false;
+
+    //commission setupsform
+    commissionSetupForm: FormGroup;
+
     totalIntermediaries = 0;
     agents: IAgent[];
     totalAgents = 0;
@@ -21,11 +38,48 @@ export class AgentsComponent implements OnInit {
     salesRepesentertives: ISalesRepresentative[];
     totalSalesRepresentatives = 0;
 
+    commissionsList: ICommissionSetup[] = [];
+    displayCommissionList: ICommissionSetup[] = [];
+
+    //filtered commission list based on intermediary name
+    intermediaryNameCommissionList: ICommissionSetup[] = [];
+
+    classesList: IClass[] = [];
+    productsList: IProduct[] = [];
+
+    //selected class
+    selectedClass: IClass;
+
+    //single class
+    singleClass: IClass;
+
+    //selected commission setup
+    selectedCommissionSetup: ICommissionSetup;
+
+    selectedProduct: IProduct;
+
+    sourceOfBusinessOptions = [
+        { label: 'Direct', value: 'Direct' },
+        { label: 'Broker', value: 'Broker' },
+        { label: 'Agent', value: 'Agent' },
+        { label: 'Sales Representative', value: 'Sales Representative' }
+    ];
+
     constructor(
         private formBuilder: FormBuilder,
         private cdr: ChangeDetectorRef,
+        private productSetupsService: ProductSetupsServiceService,
+        private commissionSetupsService: CommisionSetupsService,
         private agentService: AgentsService
-    ) {}
+    ) {
+        this.commissionSetupForm = this.formBuilder.group({
+            intermediaryName: ['', Validators.required],
+            intermediaryType: ['', Validators.required],
+            productClass: ['', Validators.required],
+            productName: ['', Validators.required],
+            commission: ['', Validators.required]
+        });
+    }
 
     ngOnInit(): void {
         this.agentService.getAllIntermediaries().subscribe(intermediaries => {
@@ -42,9 +96,134 @@ export class AgentsComponent implements OnInit {
 
             this.totalIntermediaries = this.intermediariesList.length;
         });
+
+        this.productSetupsService.getClasses().subscribe(classes => {
+            this.classesList = classes;
+        });
+
+        this.commissionSetupsService
+            .getCommissionSetups()
+            .subscribe(commissions => {
+                this.commissionsList = commissions;
+            });
+    }
+
+    changeSelectedIntermediary(
+        intermediary: IAgent & IBroker & ISalesRepresentative
+    ) {
+        this.selectedIntermediary = intermediary;
+        this.filterCommissionList();
+        this.loadProducts();
+
+        this.commissionSetupForm
+            .get('intermediaryName')
+            .setValue(
+                this.selectedIntermediary.companyName
+                    ? this.selectedIntermediary.companyName
+                    : this.selectedIntermediary.contactFirstName
+            );
+        this.commissionSetupForm
+            .get('intermediaryType')
+            .setValue(this.selectedIntermediary.intermediaryType);
+        this.commissionSetupForm.get('productClass').setValue(null);
+        this.commissionSetupForm.get('productName').setValue(null);
+        this.commissionSetupForm.get('commission').setValue('');
+    }
+
+    changeSelectedCommission(commissionSetup: ICommissionSetup) {
+        this.selectedCommissionSetup = commissionSetup;
+
+        //fill commission form
+        // this.commissionSetupForm
+        //     .get('intermediaryName')
+        //     .setValue(this.selectedCommissionSetup.intermediaryName);
+        // this.commissionSetupForm
+        //     .get('intermediaryType')
+        //     .setValue(this.selectedCommissionSetup.intermediaryType);
+        this.commissionSetupForm
+            .get('productClass')
+            .setValue(this.selectedCommissionSetup.productClass);
+        this.commissionSetupForm
+            .get('productName')
+            .setValue(this.selectedCommissionSetup.productName);
+        this.commissionSetupForm
+            .get('commission')
+            .setValue(this.selectedCommissionSetup.commission);
     }
 
     openAddAgentsFormDrawer() {
         this.addAgentsFormDrawerVisible = true;
+    }
+
+    openAddProductCommissionFormDrawer() {
+        this.addProductCommissionFormDrawerVisible = true;
+    }
+
+    //filters commissions list based on selected intermediary and selected class
+    filterCommissionList() {
+        console.log('filter commission lost called here..');
+        this.loadProducts();
+        this.commissionSetupsService
+            .getCommissionSetups()
+            .subscribe(commissions => {
+                this.displayCommissionList = commissions.filter(
+                    x =>
+                        x.intermediaryName ==
+                            this.selectedIntermediary.companyName ||
+                        x.intermediaryName ==
+                            this.selectedIntermediary.contactFirstName +
+                                ' ' +
+                                this.selectedIntermediary.contactLastName
+                );
+
+                console.log(this.displayCommissionList);
+            });
+    }
+
+    //loads products based on selected class
+    loadProducts() {
+        this.productSetupsService.getClasses().subscribe(classes => {
+            this.selectedClass = classes.filter(
+                x =>
+                    x.className ===
+                    this.commissionSetupForm.get('productClass').value
+            )[0];
+            this.productsList = this.selectedClass.products;
+        });
+    }
+
+    async addCommissionSetup(commission: ICommissionSetup) {
+        await this.commissionSetupsService
+            .addCommissionSetup(commission)
+            .subscribe(res => {
+                console.log(res);
+            });
+    }
+
+    submitCommissionSetup() {
+        // for (let i in this.commissionSetupForm.controls) {
+        //     this.commissionSetupForm[i].markAsDirty();
+        //     this.commissionSetupForm[i].updateValueAndValidity();
+        // }
+
+        if (this.commissionSetupForm.valid || !this.commissionSetupForm.valid) {
+            console.log(this.commissionSetupForm.value);
+            this.addCommissionSetup(this.commissionSetupForm.value).then(
+                res => {
+                    //put some feedback here
+                    this.isEditmode = false;
+                    console.log(res);
+                }
+            );
+        }
+    }
+
+    //make commission setup form visible
+    editCommissionSetupsForm() {
+        this.isEditmode = true;
+    }
+
+    cancelEditCommissionForm() {
+        this.isEditmode = false;
     }
 }

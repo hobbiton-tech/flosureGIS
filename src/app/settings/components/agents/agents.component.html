@@ -8,27 +8,27 @@
         </nz-breadcrumb-item>
     </nz-breadcrumb>
 
-    <nz-card [nzBordered]="false" style="margin-top: 20px;">
-        <nz-tabset>
-            <nz-tab nzTitle="Intermediaries">
-                <nz-card [nzBordered]="false">
+    <div style="margin: 20px;">
+        <nz-row nzGutter="24">
+            <!-- Intermediary card starts here -->
+            <nz-col nzSpan="8">
+                <nz-card [nzBordered]="false" nzTitle="Intermediaries" [nzExtra]="addIntermediaryButton">
+                    <ng-template #addIntermediaryButton>
+                        <button nz-button nzType="primary" style="float: right;" (click)="openAddAgentsFormDrawer()">
+                            Add Intermediary
+                        </button>
+                    </ng-template>
                     <div style="margin-bottom: 10px;">
-                        <div nz-row [nzGutter]="24">
-                            <div nz-col nzSpan="12">
-                                <div style="width: 75%;">
+                        <div nz-row>
+                            <div nz-col>
+                                <div style="width: 100%;">
                                     <nz-input-group [nzSuffix]="suffixIconSearch">
-                                        <input type="text" nz-input placeholder="Search by ID, name, date, branch" />
+                                        <input type="text" nz-input placeholder="Search by name, type" />
                                     </nz-input-group>
                                     <ng-template #suffixIconSearch>
                                         <i nz-icon nzType="search"></i>
                                     </ng-template>
                                 </div>
-                            </div>
-                            <div nz-col nzSpan="12">
-                                <button nz-button nzType="primary" style="float: right;"
-                                    (click)="openAddAgentsFormDrawer()">
-                                    Add Intermediary
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -37,55 +37,218 @@
                         [nzBordered]="true" style="background-color: white;">
                         <thead>
                             <tr>
-                                <th>Intermediary ID</th>
                                 <th>Intermediary Name</th>
                                 <th>Intermediary Type</th>
-                                <th>Intermediary Email</th>
-                                <th>Intermediary Phone Number</th>
-                                <th>Date Created</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let intermediary of intermediaryTable.data">
-                                <td>{{ intermediary.intermediaryId }}</td>
+                            <tr *ngFor="let intermediary of intermediaryTable.data" style="cursor: pointer;"
+                                (click)="changeSelectedIntermediary(intermediary)">
                                 <td>
                                     {{ intermediary.companyName ? intermediary.companyName : (intermediary.contactFirstName + ' ' + intermediary.contactLastName)}}
                                 </td>
                                 <td>{{ intermediary.intermediaryType }}</td>
-                                <td>{{ intermediary.email ? intermediary.email : intermediary.contactEmail }}</td>
-                                <td>{{ intermediary.phone ? intermediary.phone : intermediary.contactPhone }}</td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-card>
+            </nz-col>
+            <!-- Intermediary card ends here -->
+
+            <!-- Products card starts here -->
+            <nz-col nzSpan="8">
+                <nz-card [nzBordered]="false" nzTitle="Commission Structure" [nzExtra]="Intermediary">
+                    <ng-template #Intermediary>
+                        <!-- <p *ngIf="selectedIntermediary ? selectedIntermediary.companyName : ''">
+                            {{selectedIntermediary.companyName}} ({{selectedIntermediary.intermediaryType}}) </p> -->
+                        <div *ngIf="selectedIntermediary">
+                            <div *ngIf="selectedIntermediary.intermediaryType == 'Agent' || 'Broker'">
+                                {{selectedIntermediary.companyName }}
+                            </div>
+                            <div *ngIf="selectedIntermediary.intermediaryType == 'Sales Representative'">
+                                {{selectedIntermediary.contactFirstName}} {{ selectedIntermediary.contactLastName}}
+                            </div>
+                        </div>
+                        <div *ngIf="!selectedIntermediary">
+                            <p></p>
+                        </div>
+                    </ng-template>
+
+                    <div style="margin-bottom: 10px;">
+                        <div nz-row>
+                            <div nz-col>
+                                <div style="width: 100%;">
+                                    <nz-input-group [nzSuffix]="suffixIconSearch">
+                                        <input type="text" nz-input placeholder="Search by product" />
+                                    </nz-input-group>
+                                    <ng-template #suffixIconSearch>
+                                        <i nz-icon nzType="search"></i>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <nz-table #commissionTable [nzData]="displayCommissionList" [nzSize]="'small'" [nzBordered]="true"
+                        style="background-color: white;">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Commission</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let commission of commissionTable.data" style="cursor: pointer;"
+                                (click)="changeSelectedCommission(commission)">
                                 <td>
-                                    {{
-                                        intermediary.dateCreated.seconds * 1000 | date
-                                    }}
+                                    {{ commission.productName }}
+                                </td>
+                                <td>
+                                    {{ commission.commission / 100 | percent}}
                                 </td>
                             </tr>
                         </tbody>
                     </nz-table>
                 </nz-card>
-            </nz-tab>
-        </nz-tabset>
-    </nz-card>
+            </nz-col>
+            <!-- Products card ends here -->
 
-    <nz-card nzTitle="Commission Setups" style="margin-top: 10px;">
-        <div style="padding:30px;">
-            <div nz-row [nzGutter]="12">
-                <div nz-col [nzSpan]="12">
-                    <nz-card nzTitle="Products">
-                        <p>Card content</p>
-                    </nz-card>
-                </div>
-                <div nz-col [nzSpan]="12">
-                    <nz-card nzTitle="Commission">
-                        <p>Card content</p>
-                    </nz-card>
-                </div>
-            </div>
-        </div>
-    </nz-card>
+            <!-- Commissions card starts here -->
+            <nz-col nzSpan="8">
+                <nz-card [nzBordered]="false" nzTitle="Commission Setup" [nzExtra]="editButton">
+                    <ng-template #editButton>
+                        <div *ngIf="!isEditmode">
+                            <button nz-button nzType="primary" style="float: right;"
+                                (click)="editCommissionSetupsForm()">
+                                Edit
+                            </button>
+                        </div>
+                        <div *ngIf="isEditmode">
+                            <button nz-button nzType="primary" style="float: right;"
+                                (click)="cancelEditCommissionForm()">
+                                Cancel
+                            </button>
+                        </div>
+                    </ng-template>
+
+                    <form [formGroup]="commissionSetupForm">
+
+                        <div>
+                            <nz-form-item>
+                                <nz-form-label [nzSpan]="7" nzFor="intermediaryName">Intermediary Name
+                                </nz-form-label>
+                                <nz-form-control nzSpan="10">
+
+                                    <nz-select nzPlaceHolder="Select intermediary name" style="width: 100%;"
+                                        formControlName="intermediaryName" [nzDisabled]="!isEditmode">
+                                        <div *ngFor="let intermediary of intermediariesList">
+                                            <nz-option
+                                                [nzValue]="selectedIntermediary.companyName ? selectedIntermediary.companyName : selectedIntermediary.contactFirstName + ' ' + selectedIntermediary.contactLastName"
+                                                [nzLabel]="selectedIntermediary.companyName ? selectedIntermediary.companyName : selectedIntermediary.contactFirstName + ' ' + selectedIntermediary.contactLastName">
+                                            </nz-option>
+                                        </div>
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+
+                        <div>
+                            <nz-form-item>
+                                <nz-form-label [nzSpan]="7" nzFor="intermediaryType">Intermediary Type
+                                </nz-form-label>
+                                <nz-form-control nzSpan="10">
+
+                                    <nz-select nzPlaceHolder="Select intermediary type" style="width: 100%;"
+                                        formControlName="intermediaryType" [nzDisabled]="!isEditmode">
+                                        <div *ngFor="let option of sourceOfBusinessOptions">
+                                            <nz-option [nzValue]="option.value" [nzLabel]="option.label">
+                                            </nz-option>
+                                        </div>
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+
+                        <div>
+                            <nz-form-item>
+                                <nz-form-label [nzSpan]="7" nzFor="productClass">Class
+                                </nz-form-label>
+                                <nz-form-control nzSpan="10">
+
+                                    <nz-select nzPlaceHolder="Select class" style="width: 100%;"
+                                        (ngModelChange)="loadProducts()" formControlName="productClass"
+                                        [nzDisabled]="!isEditmode">
+                                        <div *ngFor="let class of classesList">
+                                            <nz-option [nzValue]="class.className" [nzLabel]="class.className">
+                                            </nz-option>
+                                        </div>
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+
+                        <div>
+                            <nz-form-item>
+                                <nz-form-label [nzSpan]="7" nzFor="productName">Product
+                                </nz-form-label>
+                                <nz-form-control nzSpan="10">
+
+                                    <nz-select nzPlaceHolder="Select product" style="width: 100%;"
+                                        formControlName="productName" [nzDisabled]="!isEditmode">
+                                        <div *ngFor="let product of productsList">
+                                            <nz-option [nzValue]="product.productName" [nzLabel]="product.productName">
+                                            </nz-option>
+                                        </div>
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+
+                        <div>
+                            <nz-form-item>
+                                <nz-form-label [nzSpan]="7" nzFor="commission">Commission
+                                </nz-form-label>
+                                <nz-form-control nzSpan="10">
+                                    <nz-input-group nzCompact>
+                                        <input nz-input disabled="true" value="%" style="width: 30%;" />
+                                        <input nz-input nzPlaceHolder="" formControlName="commission"
+                                            [disabled]="!isEditmode" style="width: 70%;" type="number" />
+                                    </nz-input-group>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+
+                        <div *ngIf="isEditmode">
+                            <nz-form-item>
+                                <nz-form-control>
+                                    <div style="text-align: center; margin-top: 10px;">
+                                        <button nz-button nzType="primary" style="margin-right: 8px;"
+                                            (click)="submitCommissionSetup()">
+                                            Save
+                                        </button>
+                                        <button nz-button nzType="default" (click)="commissionSetupForm.reset()">Reset
+                                            Form</button>
+                                    </div>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+
+                    </form>
+
+
+                </nz-card>
+            </nz-col>
+            <!-- Commissions card ends here -->
+        </nz-row>
+    </div>
 </div>
 
 
-
+<!-- Drawers -->
 <app-add-agent [isAddAgentsFormDrawerVisible]="addAgentsFormDrawerVisible"
     (closeAddAgentsFormDrawerVisible)="addAgentsFormDrawerVisible = false"></app-add-agent>
+
+<app-add-product-commission [isAddProductCommissionFormDrawerVisible]="addProductCommissionFormDrawerVisible"
+    [selectedIntermediary]="selectedIntermediary"
+    (closeAddProductCommissionDrawerVisible)="addProductCommissionFormDrawerVisible = false">
+</app-add-product-commission>

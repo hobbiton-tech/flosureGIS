@@ -38,6 +38,8 @@ export class PoliciesComponent implements OnInit {
         );
     }
 
+
+  
     search(value: string): void {
         if (value === '' || !value) {
             // this.displayPoliciesList = this.policiesList

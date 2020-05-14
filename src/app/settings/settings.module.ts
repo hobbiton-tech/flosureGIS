@@ -22,6 +22,11 @@ import { AgentsService } from './components/agents/services/agents.service';
 import { AddAgentComponent } from './components/agents/add-agent/add-agent.component';
 import { AddTaxComponent } from './components/rates/components/add-tax/add-tax.component';
 import { ProductSetupsComponent } from './components/product-setups/product-setups.component';
+import { AddClassComponent } from './components/product-setups/components/add-class/add-class.component';
+import { AddProductComponent } from './components/product-setups/components/add-product/add-product.component';
+import { AddCoverTypeComponent } from './components/product-setups/components/add-cover-type/add-cover-type.component';
+import { AddPerilComponent } from './components/product-setups/components/add-peril/add-peril.component';
+import { AddProductCommissionComponent } from './components/agents/add-product-commission/add-product-commission.component';
 
 const routes: Routes = [
     {
@@ -82,7 +87,12 @@ const routes: Routes = [
         AgentsComponent,
         AddAgentComponent,
         AddTaxComponent,
-        ProductSetupsComponent
+        ProductSetupsComponent,
+        AddClassComponent,
+        AddProductComponent,
+        AddCoverTypeComponent,
+        AddPerilComponent,
+        AddProductCommissionComponent
     ],
     imports: [
         CommonModule,

@@ -1,19 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { generateUsers } from './data/users.data';
 import {
     FormGroup,
     FormBuilder,
     Validators,
-    FormControl,
+    FormControl
 } from '@angular/forms';
+import { UsersService } from './services/users.service';
+import { User } from './models/users.model';
 
 @Component({
     selector: 'app-users',
     templateUrl: './users.component.html',
-    styleUrls: ['./users.component.scss'],
+    styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
-    usersList = [];
+    usersList: User[] = [];
 
     isVisible = false;
     // Declarations
@@ -26,18 +27,28 @@ export class UsersComponent implements OnInit {
         return this.listOfSelectedValue.indexOf(value) === -1;
     }
 
-    constructor(private formBuilder: FormBuilder) {
+    constructor(
+        private formBuilder: FormBuilder,
+        private readonly usersService: UsersService
+    ) {
         this.userDetailsForm = this.formBuilder.group({
-            first_name: ['', Validators.required],
-            last_name: ['', Validators.required],
+            firstName: ['', Validators.required],
+            surname: ['', Validators.required],
             email: ['', Validators.required],
             password: ['', Validators.required],
-            phone_number: ['', Validators.required],
-            roleID: ['', Validators.required],
+            phoneNumber: ['', Validators.required],
+            role: ['', Validators.required],
+            branch: ['', Validators.required],
+            department: ['', Validators.required],
+            jobTitle: ['', Validators.required]
         });
     }
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.usersService.getUsers().subscribe(users => {
+            this.usersList = users;
+        });
+    }
 
     showModal(): void {
         this.isVisible = true;
@@ -53,11 +64,22 @@ export class UsersComponent implements OnInit {
         this.isVisible = false;
     }
 
-    onSubmitForm(): void {
-        // tslint:disable-next-line: forin
+    async addUser(userDto: User) {
+        await this.usersService.addUser(userDto).subscribe(res => {
+            console.log(res);
+        });
+    }
+
+    submitUser(): void {
         for (const i in this.userDetailsForm.controls) {
             this.userDetailsForm.controls[i].markAsDirty();
             this.userDetailsForm.controls[i].updateValueAndValidity();
+        }
+
+        if (this.userDetailsForm.valid || !this.userDetailsForm.valid) {
+            this.addUser(this.userDetailsForm.value).then(res => {
+                this.userDetailsForm.reset();
+            });
         }
     }
 

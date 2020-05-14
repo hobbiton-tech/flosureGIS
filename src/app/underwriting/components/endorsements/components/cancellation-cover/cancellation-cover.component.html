@@ -1,0 +1,50 @@
+<div style="margin: 10px;">
+    <div style="margin-bottom: 20px; background: #fff;">
+        <nz-page-header>
+            <nz-page-header-title>Cancellation Of Cover</nz-page-header-title>
+            <!-- <nz-page-header-subtitle></nz-page-header-subtitle> -->
+        </nz-page-header>
+    </div>
+    <nz-card>
+        <div style="margin-bottom: 10px; width: 50%;">
+            <nz-input-group [nzSuffix]="suffixIconSearch">
+                <input type="text" nz-input placeholder="Search by policy number" [(ngModel)]="searchString"
+                    (ngModelChange)="search($event)" />
+            </nz-input-group>
+            <ng-template #suffixIconSearch>
+                <i nz-icon nzType="search"></i>
+            </ng-template>
+        </div>
+
+        <nz-table #policiesTable [nzData]="displayPoliciesList" [nzSize]="'small'" [nzBordered]="true">
+            <thead>
+                <tr>
+                    <th>Policy Number</th>
+                    <th>Cover From</th>
+                    <th>Cover To</th>
+                    <th>Client Name</th>
+                    <th>Approved By</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let policy of policiesTable.data" style="cursor: pointer;">
+                    <td>{{ policy.policyNumber }}</td>
+                    <td>{{ policy.startDate | date }}</td>
+                    <td>{{ policy.endDate | date }}</td>
+                    <td>{{ policy.client }}</td>
+                    <td>{{ policy.user }}</td>
+                    <td>{{ policy.status }}</td>
+                    <td>
+                        <div *ngIf="policy.status != 'Cancelled'">
+                            <button nz-button nzType="danger" nzSize="small" (click)="viewPolicyDetails(policy)">
+                                Cancel Policy
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </nz-card>
+</div>

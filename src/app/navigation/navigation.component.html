@@ -73,13 +73,54 @@
                                 Policy Listing
                             </a>
                         </li>
-                        <li nz-menu-item nzMatchRouter>
-                            <a
-                                routerLink="/flosure/underwriting/accident-policies"
-                            >
-                                Endorsements
-                            </a>
+
+                        <li nz-submenu nzMatchRouter nzTitle="Endorsements">
+                            <ul>
+                                <li nz-menu-item nzMatchRouter>
+                                    <a routerLink="/flosure/underwriting/endorsements/view-endorsements">
+                                        View Endorsements</a>
+                                </li>
+                                <li nz-menu-item nzMatchRouter>
+                                    <a routerLink="/flosure/underwriting/endorsements/revision-cover">
+                                        Revision of Cover</a>
+                                </li>
+                                <li nz-menu-item nzMatchRouter>
+                                    <a routerLink="/flosure/underwriting/endorsements/extension-cover">
+                                        Extension of Cover</a>
+                                </li>
+                                <li nz-menu-item nzMatchRouter>
+                                    <a routerLink="/flosure/underwriting/endorsements/cancellation-cover">
+                                        Cancellation of Cover</a>
+                                </li>
+                                <!-- <li nz-menu-item nzMatchRouter>
+                                    <a
+                                        routerLink="/flosure/underwriting/endorsements/edit-policy"
+                                    >
+                                     Edit Revision</a
+                                    >
+                                </li> -->
+                                <!-- <li nz-menu-item nzMatchRouter>
+                                    <a
+                                        routerLink="/flosure/underwriting/endorsements/edit-extension"
+                                    >
+                                     Edit Extension</a
+                                    >
+                                </li> -->
+                                <!-- <li nz-menu-item nzMatchRouter>
+                                    <a
+                                        routerLink="/flosure/underwriting/endorsements/edit-cancellation"
+                                    >
+                                     Edit Cancellation</a
+                                    >
+                                </li> -->
+                            </ul>
+
                         </li>
+                        <!-- <li nz-menu-item nzMatchRouter>
+                            <a routerLink="">
+                                Cancellations
+                            </a>
+                        </li> -->
                         <li nz-menu-item nzMatchRouter>
                             <a
                                 routerLink="/flosure/underwriting/policy-renewal-list"
