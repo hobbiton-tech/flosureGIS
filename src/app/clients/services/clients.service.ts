@@ -9,76 +9,51 @@ import { first } from 'rxjs/operators';
 import { v4 } from 'uuid';
 
 import 'firebase/firestore';
+import { IIndividualClientDto, ICorporateClientDto } from '../models/client.dto';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+const httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+};
 
 @Injectable({
     providedIn: 'root',
 })
 export class ClientsService {
-    private individualClientsCollection: AngularFirestoreCollection<
-        IIndividualClient
-    >;
-    private corporateClientsCollection: AngularFirestoreCollection<
-        ICorporateClient
-    >;
+    constructor(
+        private readonly http: HttpClient,
+    ) {}
 
-    individualClients: Observable<IIndividualClient[]>;
-    corporateClients: Observable<ICorporateClient[]>;
-
-    constructor(private firebase: AngularFirestore) {
-        this.individualClientsCollection = this.firebase.collection<
-            IIndividualClient
-        >('individaul_clients');
-        this.corporateClientsCollection = this.firebase.collection<
-            ICorporateClient
-        >('corporate_clients');
-
-        this.individualClients = this.individualClientsCollection.valueChanges();
-        this.corporateClients = this.corporateClientsCollection.valueChanges();
+    getAllClients(): Observable<[IIndividualClientDto[], ICorporateClientDto[]]> {
+        return combineLatest(
+            this.getIndividualClient(),
+            this.getCorporateClient()
+        );
     }
 
-    async addIndividualClient(client: IIndividualClient): Promise<void> {
-        this.individualClients.pipe(first()).subscribe(async (clients) => {
-            client.id = v4(); // Generates UUID of version 4.
-            client.clientType = 'Individual';
-            client.dateCreated = new Date();
-            client.dateUpdated = new Date();
-            client.status = 'Inactive';
-            client.clientID = this.generateClientID(
-                'Individual',
-                'BR202000030',
-                clients.length
-            );
-
-            await this.individualClientsCollection.add(client);
-        });
+    addIndividualClient(dto: IIndividualClientDto): Observable<IIndividualClientDto> {
+        return this.http.post<IIndividualClient>(
+            'https://flosure-postgres-api.herokuapp.com/',
+            dto, httpOptions
+        );
     }
 
-    async addCorporateClient(client: ICorporateClient): Promise<void> {
-        this.corporateClients.pipe(first()).subscribe(async (clients) => {
-            client.id = v4();
-            client.dateCreated = new Date();
-            client.dateUpdated = new Date();
-            client.status = 'Inactive';
-            client.clientID = this.generateClientID(
-                'Corporate',
-                'BR20200020',
-                clients.length
-            );
-            client.clientType = 'Corporate';
-            await this.corporateClientsCollection.add(client);
-        });
+    addCorporateClient(dto: ICorporateClientDto): Observable<ICorporateClientDto> {
+        return this.http.post<ICorporateClientDto>(
+            'https://flosure-postgres-api.herokuapp.com/',
+            dto, httpOptions
+        );
     }
 
-    getIndividualClients(): Observable<IIndividualClient[]> {
-        return this.individualClients;
+    getIndividualClient(): Observable<IIndividualClientDto[]> {
+        return this.http.get<IIndividualClientDto[]>('');
     }
 
-    getCorporateClients(): Observable<ICorporateClient[]> {
-        return this.corporateClients;
+    getCorporateClient(): Observable<ICorporateClientDto[]> {
+        return this.http.get<ICorporateClientDto[]>('');
     }
-
-    getAllClients(): Observable<[IIndividualClient[], ICorporateClient[]]> {
-        return combineLatest(this.individualClients, this.corporateClients);
+    updateIndividualClient(dto: IIndividualClientDto): Observable<any> {
+        return this.http.put('', dto, httpOptions);
     }
 
     countGenerator(numb: string | number) {
