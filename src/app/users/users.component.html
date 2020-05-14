@@ -1,8 +1,8 @@
 <div style="margin: 10px;">
     <div style="margin-bottom: 10px; background: #fff;">
         <nz-page-header>
-            <nz-page-header-title>User</nz-page-header-title>
-            <nz-page-header-subtitle>List of all users</nz-page-header-subtitle>
+            <nz-page-header-title>Users</nz-page-header-title>
+            <!-- <nz-page-header-subtitle>List of all users</nz-page-header-subtitle> -->
             <nz-page-header-extra>
                 <!-- <button nz-button>View Summary</button> -->
                 <button nz-button nzType="primary" (click)="showModal()">
@@ -153,7 +153,7 @@
                                             <input
                                                 nz-input
                                                 type="password"
-                                                formControlName="checkPassword"
+                                                
                                                 id="checkPassword"
                                             />
                                             <ng-template #errorTpl let-control>
@@ -297,7 +297,7 @@
         </div>
         <nz-table
             #usersTable
-            [nzData]="usersList"
+            [nzData]="displayUsersList"
             [nzSize]="'small'"
             [nzBordered]="true"
         >
@@ -322,14 +322,14 @@
 
                     <!-- <td>
           <nz-badge [nzStatus]="user.status === 'Draft' ? 'warning' : 'success'" [nzText]="user.status"></nz-badge>-->
-                    <td>
+                    <!-- <td>
                         <button nz-button nzType="default">
                             <i nz-icon nzType="edit"></i>
                         </button>
                         <button nz-button nzType="default">
                             <i nz-icon nzType="delete"></i>
                         </button>
-                    </td>
+                    </td> -->
                 </tr>
             </tbody>
         </nz-table>

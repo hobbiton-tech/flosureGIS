@@ -7,7 +7,7 @@
             </nz-page-header-extra>
             <nz-page-header-content>
                 <nz-descriptions [nzColumn]="3">
-                    <nz-descriptions-item nzTitle="Total Endorsements" [nzSpan]="1">{{ endorsementsCount}}
+                    <nz-descriptions-item nzTitle="Total Endorsements" [nzSpan]="1">{{ endorsementsCount }}
                     </nz-descriptions-item>
                 </nz-descriptions>
             </nz-page-header-content>
@@ -28,21 +28,25 @@
             <thead>
                 <tr>
                     <th>Type</th>
+                    <th>Policy Number</th>
                     <th>Remarks</th>
                     <th>Date Created</th>
                     <th>Effective Date</th>
-                    <th>Status</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let endorsement of endorsementsTable.data">
-                    <td>{{ endorsement.endorsementType }}</td>
-                    <td>{{ endorsement.endorsementRemarks}}</td>
-                    <td>{{ endorsement.createdDate.seconds * 1000 | date }}</td>
-                    <td>{{ endorsement.effectDate.seconds * 1000 | date }}</td>
-                    <td>{{ endorsement.status }}</td>
-                    <td></td>
+                    <td>{{ endorsement.type }}</td>
+                    <td>{{ endorsement.policy.policyNumber ? endorsement.policy.policyNumber : '-'  }}</td>
+                    <td>{{ endorsement.remark}}</td>
+                    <td>{{ endorsement.dateCreated | date }}</td>
+                    <td>{{ endorsement.effectDate | date }}</td>
+                    <td>
+                        <button nz-button nzType="primary" nzSize="small" (click)="viewPolicyBackup(endorsement.id)">
+                            View Policy
+                        </button>
+                    </td>
                 </tr>
             </tbody>
         </nz-table>

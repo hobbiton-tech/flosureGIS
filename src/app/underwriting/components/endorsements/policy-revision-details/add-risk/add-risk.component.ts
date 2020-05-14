@@ -217,7 +217,7 @@ export class AddRiskComponent implements OnInit {
         { label: 'Motor Comprehensive', value: 'Comprehensive' },
         { label: 'Motor Third Party', value: 'ThirdParty' }
     ];
-    selectedValue = { label: 'Motor Comprehensive', value: 'Comprehensive' };
+    selectedValue = { label: 'Motor Third Party', value: 'ThirdParty' };
 
     motorComprehensiveloadingOptions = [
         {
@@ -324,8 +324,7 @@ export class AddRiskComponent implements OnInit {
             yearOfManufacture: ['', Validators.required],
             color: ['', [Validators.required]],
             // sumInsured: ['', Validators.required],
-            productType: ['', Validators.required],
-            insuranceType: ['Comprehensive']
+            productType: ['', Validators.required]
         });
 
         // vehicle make loading
@@ -393,6 +392,7 @@ export class AddRiskComponent implements OnInit {
 
     ////////////////////////////
     handleRiskEndDateCalculation(): void {
+        console.log('handle risk end date calculation third party');
         if (this.selectedValue.value == 'ThirdParty') {
             this.handleBasicPremiumCalculationThirdParty();
         }
@@ -465,6 +465,7 @@ export class AddRiskComponent implements OnInit {
     }
 
     handleBasicPremiumCalculationThirdParty(): void {
+        console.log('handle basic premium calculation third party');
         if (
             this.riskDetailsForm.get('productType').value != '' &&
             this.riskDetailsForm.get('riskQuarter').value != ''
@@ -1246,4 +1247,7 @@ export class AddRiskComponent implements OnInit {
     handleCancel(): void {
         this.closeAddRiskFormModalVisible.emit();
     }
+
+    //do not delete!!
+    doNothing(): void {}
 }

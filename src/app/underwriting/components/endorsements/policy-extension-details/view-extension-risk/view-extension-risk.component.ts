@@ -17,6 +17,9 @@ export class ViewExtensionRiskComponent implements OnInit {
     @Input()
     riskData: RiskModel;
 
+    @Output()
+    sendEdittedRiskExtensionEmitter: EventEmitter<any> = new EventEmitter();
+
     // vehicle make drop down
     vehicleMakeUrl = 'https://api.randomuser.me/?results=5';
     searchChange$ = new BehaviorSubject('');
@@ -304,7 +307,7 @@ export class ViewExtensionRiskComponent implements OnInit {
                 .setValue(risk.vehicleModel);
             this.riskDetailsForm
                 .get('yearOfManufacture')
-                .setValue(this.getYearOfManfTimeStamp(risk));
+                .setValue(risk.yearOfManufacture);
             this.riskDetailsForm.get('regNumber').setValue(risk.regNumber);
             this.riskDetailsForm
                 .get('engineNumber')
@@ -315,11 +318,9 @@ export class ViewExtensionRiskComponent implements OnInit {
             this.riskDetailsForm.get('productType').setValue(risk.productType);
             this.riskDetailsForm
                 .get('riskStartDate')
-                .setValue(this.getStartDateTimeStamp(risk));
+                .setValue(risk.riskStartDate);
             this.riskDetailsForm.get('riskQuarter').setValue(risk.riskQuarter);
-            this.riskDetailsForm
-                .get('riskEndDate')
-                .setValue(this.getEndDateTimeStamp(risk));
+            this.riskDetailsForm.get('riskEndDate').setValue(risk.riskEndDate);
             this.riskDetailsForm.get('color').setValue(risk.color);
         } else {
             this.riskDetailsForm.get('vehicleMake').setValue(risk.vehicleMake);
@@ -358,6 +359,71 @@ export class ViewExtensionRiskComponent implements OnInit {
         this.premiumDiscount = risk.discountTotal;
         this.basicPremiumLevy = risk.premiumLevy;
         this.netPremium = risk.netPremium;
+    }
+
+    //send editted risk
+    editRisk(): void {
+        this.currentRiskEdit = this.riskData;
+
+        if (this.selectedValue.value === 'Comprehensive') {
+            //comprehensive risk
+            const some: RiskModel = {
+                ...this.riskDetailsForm.value,
+                sumInsured: Number(this.sumInsured),
+                premiumRate: this.premiumRate,
+                basicPremium: this.basicPremium,
+                loads: this.loads,
+                discounts: this.discounts,
+                loadingTotal: this.premiumLoadingTotal,
+                discountTotal: this.premiumDiscount,
+                discountSubTotal: this.premiumDiscount,
+                discountRate: this.premiumDiscountRate,
+                premiumLevy: this.basicPremiumLevy,
+                netPremium: this.netPremium,
+                insuranceType: this.selectedValue.value,
+                estimatedValue: 0
+            };
+            this.currentRiskEdit = some;
+            console.log('current riskEdit form editRisk method:');
+            console.log(this.currentRiskEdit);
+        } else {
+            //third party risk
+            const some: RiskModel = {
+                ...this.riskDetailsForm.value,
+                sumInsured: 0,
+                premiumRate: 0,
+                basicPremium: this.basicPremium,
+                loads: this.loads,
+                discounts: this.discounts,
+                loadingTotal: this.premiumLoadingTotal,
+                discountRate: this.premiumDiscountRate,
+                premiumLevy: this.basicPremiumLevy,
+                netPremium: this.netPremium,
+                insuranceType: this.selectedValue.value
+            };
+            this.currentRiskEdit = some;
+            console.log('current riskEdit form editRisk method:');
+            console.log(this.currentRiskEdit);
+        }
+
+        this.sendEdittedRiskExtensionEmitter.emit(this.currentRiskEdit);
+        this.closeViewRiskFormVisible.emit();
+    }
+
+    //resets form
+    resetComprehensiveRiskForm(e: MouseEvent) {
+        console.log(this.riskData);
+        e.preventDefault();
+        this.riskDetailsForm.reset();
+        (this.sumInsured = 0),
+            (this.premiumRate = 0),
+            (this.basicPremium = 0),
+            (this.loads = []),
+            (this.premiumLoadingTotal = 0),
+            (this.premiumDiscountRate = 0),
+            (this.netPremium = 0);
+        this.basicPremiumLevy = 0;
+        this.premiumDiscount = 0;
     }
 
     getYearOfManfTimeStamp(risk: RiskModel): number {

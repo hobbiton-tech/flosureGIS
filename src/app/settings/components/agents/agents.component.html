@@ -59,18 +59,12 @@
             <nz-col nzSpan="8">
                 <nz-card [nzBordered]="false" nzTitle="Commission Structure" [nzExtra]="Intermediary">
                     <ng-template #Intermediary>
-                        <!-- <p *ngIf="selectedIntermediary ? selectedIntermediary.companyName : ''">
-                            {{selectedIntermediary.companyName}} ({{selectedIntermediary.intermediaryType}}) </p> -->
                         <div *ngIf="selectedIntermediary">
-                            <div *ngIf="selectedIntermediary.intermediaryType == 'Agent' || 'Broker'">
-                                {{selectedIntermediary.companyName }}
-                            </div>
-                            <div *ngIf="selectedIntermediary.intermediaryType == 'Sales Representative'">
+                            <div *ngIf="selectedIntermediary.companyName">{{selectedIntermediary.companyName }}</div>
+
+                            <div *ngIf="!selectedIntermediary.companyName">
                                 {{selectedIntermediary.contactFirstName}} {{ selectedIntermediary.contactLastName}}
                             </div>
-                        </div>
-                        <div *ngIf="!selectedIntermediary">
-                            <p></p>
                         </div>
                     </ng-template>
 
@@ -142,10 +136,12 @@
                                     <nz-select nzPlaceHolder="Select intermediary name" style="width: 100%;"
                                         formControlName="intermediaryName" [nzDisabled]="!isEditmode">
                                         <div *ngFor="let intermediary of intermediariesList">
-                                            <nz-option
-                                                [nzValue]="selectedIntermediary.companyName ? selectedIntermediary.companyName : selectedIntermediary.contactFirstName + ' ' + selectedIntermediary.contactLastName"
-                                                [nzLabel]="selectedIntermediary.companyName ? selectedIntermediary.companyName : selectedIntermediary.contactFirstName + ' ' + selectedIntermediary.contactLastName">
-                                            </nz-option>
+                                            <div *ngIf="selectedIntermediary">
+                                                <nz-option
+                                                    [nzValue]="selectedIntermediary.companyName ? selectedIntermediary.companyName : (selectedIntermediary.contactFirstName + ' ' + selectedIntermediary.contactLastName)"
+                                                    [nzLabel]="selectedIntermediary.companyName ? selectedIntermediary.companyName : (selectedIntermediary.contactFirstName + ' ' + selectedIntermediary.contactLastName)">
+                                                </nz-option>
+                                            </div>
                                         </div>
                                     </nz-select>
                                 </nz-form-control>

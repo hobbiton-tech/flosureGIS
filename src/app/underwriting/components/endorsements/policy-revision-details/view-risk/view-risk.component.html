@@ -4,6 +4,49 @@
      <!-- Risk Details start here -->
      <!-- <div *ngIf="selectedValue?.value === 'Comprehensive'"> -->
         <form [formGroup]="riskDetailsForm">
+            <div nz-row nzGutter="0" style="margin-bottom: 30px;">
+                <div nz-col nzSpan="8">
+                    <nz-form-item>
+                        <nz-form-label
+                            [nzSpan]="10"
+                            nzFor="insuranceType"
+                            nzRequired
+                            >Insurance Type
+                        </nz-form-label>
+                        <nz-form-control nzSpan="10">
+                            <nz-select
+                                name="insuranceType"
+                                [(ngModel)]="selectedValue"
+                                [compareWith]="compareFn"
+                                (ngModelChange)="log($event)"
+                                nzAllowClear
+                                [ngModelOptions]="{standalone: true}"
+                                nzDisabled="true"
+                            >
+                                <nz-option
+                                    *ngFor="
+                                        let option of optionList
+                                    "
+                                    [nzValue]="option"
+                                    [nzLabel]="option.label"
+                                ></nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <!-- <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <button
+                            nz-button
+                            nzType="primary"
+                            (click)="showModal()"
+                            style="float: right;"
+                        >
+                            Import Fleet
+                        </button>
+                    </nz-form-item>
+                </div> -->
+            </div>
             <div nz-row nzGutter="0">
                 <div nz-col nzSpan="8">
                     <nz-form-item>
@@ -1510,6 +1553,7 @@
                     Save
                 </button>
                 <button
+                style="margin-left: 15px;"
                     nz-button
                     nzType="default"
                     (click)="

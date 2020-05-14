@@ -31,6 +31,9 @@ import { ViewRiskComponent } from './components/endorsements/policy-revision-det
 import { AddRiskComponent } from './components/endorsements/policy-revision-details/add-risk/add-risk.component';
 import { ViewExtensionRiskComponent } from './components/endorsements/policy-extension-details/view-extension-risk/view-extension-risk.component';
 import { ViewCancellationRiskComponent } from './components/endorsements/policy-cancellation-details/view-cancellation-risk/view-cancellation-risk.component';
+import { BackupPolicyDetailsComponent } from './components/endorsements/backup-policy-details/backup-policy-details.component';
+import { ViewBackupPolicyRisksComponent } from './components/endorsements/backup-policy-details/view-backup-policy-risks/view-backup-policy-risks.component';
+import { PolicyCreditNoteDocumentComponent } from './documents/policy-credit-note-document/policy-credit-note-document.component';
 
 const routes: Routes = [
     {
@@ -86,6 +89,10 @@ const routes: Routes = [
         component: PolicyCancellationDetailsComponent
     },
     {
+        path: 'backup-policy-details/:id',
+        component: BackupPolicyDetailsComponent
+    },
+    {
         path: 'policy-details/:id',
         component: PolicyDetailsComponent,
         resolve: PolicyDetailsResolver
@@ -114,7 +121,10 @@ const routes: Routes = [
         ViewRiskComponent,
         AddRiskComponent,
         ViewExtensionRiskComponent,
-        ViewCancellationRiskComponent
+        ViewCancellationRiskComponent,
+        BackupPolicyDetailsComponent,
+        ViewBackupPolicyRisksComponent,
+        PolicyCreditNoteDocumentComponent
     ],
     imports: [
         CommonModule,

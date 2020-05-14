@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { UsersService } from './services/users.service';
 import { User } from './models/users.model';
+import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({
     selector: 'app-users',
@@ -15,6 +16,7 @@ import { User } from './models/users.model';
 })
 export class UsersComponent implements OnInit {
     usersList: User[] = [];
+    displayUsersList: User[] = [];
 
     isVisible = false;
     // Declarations
@@ -29,7 +31,8 @@ export class UsersComponent implements OnInit {
 
     constructor(
         private formBuilder: FormBuilder,
-        private readonly usersService: UsersService
+        private readonly usersService: UsersService,
+        private msg: NzMessageService
     ) {
         this.userDetailsForm = this.formBuilder.group({
             firstName: ['', Validators.required],
@@ -47,6 +50,7 @@ export class UsersComponent implements OnInit {
     ngOnInit(): void {
         this.usersService.getUsers().subscribe(users => {
             this.usersList = users;
+            this.displayUsersList = this.usersList;
         });
     }
 
@@ -67,6 +71,10 @@ export class UsersComponent implements OnInit {
     async addUser(userDto: User) {
         await this.usersService.addUser(userDto).subscribe(res => {
             console.log(res);
+            this.isVisible = false;
+            this.msg.success('User successfully Added');
+            this.usersList = this.displayUsersList;
+            this.displayUsersList = this.usersList;
         });
     }
 

@@ -8,6 +8,7 @@ import { Observable, combineLatest } from 'rxjs';
 import { IAgent, IBroker, ISalesRepresentative } from '../models/agents.model';
 import { v4 } from 'uuid';
 import { first, combineAll } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
     providedIn: 'root'
@@ -23,7 +24,7 @@ export class AgentsService {
     brokers: Observable<IBroker[]>;
     salesRepresentatives: Observable<ISalesRepresentative[]>;
 
-    constructor(private firebase: AngularFirestore) {
+    constructor(private firebase: AngularFirestore, private http: HttpClient) {
         this.agentsCollection = this.firebase.collection<IAgent>('agents');
         this.agents = this.agentsCollection.valueChanges();
 
@@ -50,9 +51,9 @@ export class AgentsService {
         });
     }
 
-    getAgents(): Observable<IAgent[]> {
-        return this.agents;
-    }
+    // getAgents(): Observable<IAgent[]> {
+    //     return this.agents;
+    // }
 
     async addBroker(broker: IBroker): Promise<void> {
         this.brokers.pipe(first()).subscribe(async brokers => {
@@ -68,9 +69,9 @@ export class AgentsService {
         });
     }
 
-    getBrokers(): Observable<IBroker[]> {
-        return this.brokers;
-    }
+    // getBrokers(): Observable<IBroker[]> {
+    //     return this.brokers;
+    // }
 
     async addSalesRepresentative(
         salesRepresentative: ISalesRepresentative
@@ -92,20 +93,20 @@ export class AgentsService {
             });
     }
 
-    getSalesRepresentatives(): Observable<ISalesRepresentative[]> {
-        return this.salesRepresentatives;
-    }
+    // getSalesRepresentatives(): Observable<ISalesRepresentative[]> {
+    //     return this.salesRepresentatives;
+    // }
 
-    getAllIntermediaries(): Observable<
-        [IAgent[], IBroker[], ISalesRepresentative[]]
-    > {
-        // return combineLatest(this.agents, this.brokers, this.salesRepresentatives);
-        return combineLatest(
-            this.agents,
-            this.brokers,
-            this.salesRepresentatives
-        );
-    }
+    // getAllIntermediaries(): Observable<
+    //     [IAgent[], IBroker[], ISalesRepresentative[]]
+    // > {
+    //     // return combineLatest(this.agents, this.brokers, this.salesRepresentatives);
+    //     return combineLatest(
+    //         this.agents,
+    //         this.brokers,
+    //         this.salesRepresentatives
+    //     );
+    // }
 
     countGenerator(numb: string | number) {
         if (numb <= 99999) {
@@ -128,5 +129,34 @@ export class AgentsService {
         const count = this.countGenerator(totalAgents);
 
         return intermediaryTyp + insuranceCompanyNam + count;
+    }
+
+    //postgres
+    getAgents(): Observable<IAgent[]> {
+        return this.http.get<IAgent[]>(
+            'https://flosure-postgres-api.herokuapp.com/intermediary/agent'
+        );
+    }
+
+    getBrokers(): Observable<IBroker[]> {
+        return this.http.get<IBroker[]>(
+            'https://flosure-postgres-api.herokuapp.com/intermediary/broker'
+        );
+    }
+
+    getSalesRepresentatives(): Observable<ISalesRepresentative[]> {
+        return this.http.get<ISalesRepresentative[]>(
+            'https://flosure-postgres-api.herokuapp.com/intermediary/sales-representative'
+        );
+    }
+
+    getAllIntermediaries(): Observable<
+        [IAgent[], IBroker[], ISalesRepresentative[]]
+    > {
+        return combineLatest(
+            this.getAgents(),
+            this.getBrokers(),
+            this.getSalesRepresentatives()
+        );
     }
 }

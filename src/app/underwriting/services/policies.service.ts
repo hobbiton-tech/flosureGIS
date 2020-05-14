@@ -26,25 +26,55 @@ export class PoliciesService {
     }
 
     //postgres db
+    ///////////////////////
+    createPolicy(policy: Policy): Observable<Policy> {
+        return this.http.post<Policy>('http://localhost:3000/policy', policy);
+    }
+
     getPolicies(): Observable<Policy[]> {
-        return this.http.get<Policy[]>(
-            'https://flosure-postgres-api.herokuapp.com/policy'
-        );
+        return this.http.get<Policy[]>('http://localhost:3000/policy');
     }
 
     getPolicyById(policyId: string): Observable<Policy> {
         return this.http.get<Policy>(
-            `https://flosure-postgres-api.herokuapp.com/policy/${policyId}`
+            `http://localhost:3000/policy/${policyId}`
         );
         // return this.policiesCollection.doc<Policy>(policyId).valueChanges();
     }
 
     updatePolicy(policy: Policy, policyId: string): Observable<Policy> {
         return this.http.put<Policy>(
-            `https://flosure-postgres-api.herokuapp.com/policy/${policyId}`,
+            `http://localhost:3000/policy/${policyId}`,
             policy
         );
     }
+
+    //backup policies
+    createBackupPolicy(policy: Policy): Observable<Policy> {
+        return this.http.post<Policy>('http://localhost:3000/policy', policy);
+    }
+
+    getBackupPolicies(): Observable<Policy[]> {
+        return this.http.get<Policy[]>('http://localhost:3000/policy');
+    }
+
+    getBackupPolicyById(policyId: string): Observable<Policy> {
+        return this.http.get<Policy>(
+            `http://localhost:3000/policy/${policyId}`
+        );
+        // return this.policiesCollection.doc<Policy>(policyId).valueChanges();
+    }
+
+    updateBackupPolicy(policy: Policy, policyId: string): Observable<Policy> {
+        console.log('policy details:');
+        console.log(policy);
+        return this.http.put<Policy>(
+            `http://localhost:3000/policy/${policyId}`,
+            policy
+        );
+    }
+
+    ////////////////////////////////////////////
 
     async addPolicy(policy: Policy) {
         this.policies.pipe(first()).subscribe(async policies => {

@@ -17,4 +17,8 @@ export class UsersService {
     getUsers(): Observable<User[]> {
         return this.http.get<User[]>('http://localhost:3000/users');
     }
+
+    getSingleUser(userId: string): Observable<User> {
+        return this.http.get<User>(`http://localhost:3000/${userId}`);
+    }
 }

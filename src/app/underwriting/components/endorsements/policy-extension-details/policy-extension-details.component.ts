@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Policy } from 'src/app/underwriting/models/policy.model';
 import { RiskModel } from 'src/app/quotes/models/quote.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PoliciesService } from 'src/app/underwriting/services/policies.service';
 import { Endorsement } from 'src/app/underwriting/models/endorsement.model';
 import { EndorsementService } from 'src/app/underwriting/services/endorsements.service';
+import { NzMessageService } from 'ng-zorro-antd';
+import _ from 'lodash';
 
 @Component({
     selector: 'app-policy-extension-details',
@@ -33,7 +35,10 @@ export class PolicyExtensionDetailsComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private formBuilder: FormBuilder,
+        private msg: NzMessageService,
+        private readonly router: Router,
         private policiesService: PoliciesService,
+        private cdr: ChangeDetectorRef,
         private endorsementService: EndorsementService
     ) {}
 
@@ -57,7 +62,7 @@ export class PolicyExtensionDetailsComponent implements OnInit {
 
         this.endorsementForm = this.formBuilder.group({
             effectDate: ['', Validators.required],
-            endorsementRemarks: ['', Validators.required]
+            remark: ['', Validators.required]
         });
 
         this.route.params.subscribe(id => {
@@ -103,6 +108,21 @@ export class PolicyExtensionDetailsComponent implements OnInit {
         });
     }
 
+    recieveEditedRisk($event) {
+        console.log('EVENT', $event);
+        const editedRisk: RiskModel = $event;
+        this.updateRisk(editedRisk);
+        this.cdr.detectChanges();
+    }
+
+    updateRisk(risk: RiskModel) {
+        var riskIndex = _.findIndex(this.risks, {
+            riskId: risk.riskId
+        });
+
+        this.risks.splice(riskIndex, 1, risk);
+    }
+
     openViewRiskFormModal(risk: RiskModel) {
         this.editedRisk = risk;
         this.viewRiskFormModalVisible = true;
@@ -114,9 +134,10 @@ export class PolicyExtensionDetailsComponent implements OnInit {
 
         const endorsement: Endorsement = {
             ...this.endorsementForm.value,
-            endorsementType: 'Extension of cover',
-            createdDate: new Date(),
-            status: 'Not Approved'
+            type: 'Extension Of Cover',
+            dateCreated: new Date(),
+            dateUpdated: new Date(),
+            status: 'Pending'
         };
 
         const policy: Policy = {
@@ -124,12 +145,20 @@ export class PolicyExtensionDetailsComponent implements OnInit {
             risks: this.risks
         };
 
-        this.endorsementService.addEndorsement(endorsement);
+        this.endorsementService.createEndorsement(
+            this.policyData.id,
+            endorsement
+        );
 
         this.policiesService
             .updatePolicy(policy, this.policyData.id)
             .subscribe(policy => {
                 res => console.log(res);
             });
+
+        this.msg.success('Endorsement Successful');
+        this.router.navigateByUrl(
+            '/flosure/underwriting/endorsements/view-endorsements'
+        );
     }
 }

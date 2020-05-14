@@ -9,6 +9,7 @@ import { debounceTime, map, switchMap } from 'rxjs/operators';
 import { first, filter } from 'rxjs/operators';
 import { v4 } from 'uuid';
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
     providedIn: 'root'
@@ -18,7 +19,7 @@ export class EndorsementService {
     endorsements: Observable<Endorsement[]>;
     endorsement: any;
 
-    constructor(private firebase: AngularFirestore) {
+    constructor(private firebase: AngularFirestore, private http: HttpClient) {
         this.endorsementsCollection = firebase.collection<Endorsement>(
             'endorsements'
         );
@@ -27,10 +28,8 @@ export class EndorsementService {
 
     async addEndorsement(endorsement: Endorsement) {
         this.endorsements.pipe(first()).subscribe(async endorsements => {
-            endorsement.endorsementId = v4();
-            this.endorsementsCollection
-                .doc(endorsement.endorsementId)
-                .set(endorsement);
+            endorsement.id = v4();
+            this.endorsementsCollection.doc(endorsement.id).set(endorsement);
         });
     }
 
@@ -55,7 +54,40 @@ export class EndorsementService {
     //     return this.endorsementsCollection.doc<Endorsement>(endorsemenId).valueChanges();
     // }
 
+    // getEndorsements(): Observable<Endorsement[]> {
+    //     return this.endorsements;
+    // }
+
+    //postgress db
+    createEndorsement(
+        policyId: string,
+        endorsement: Endorsement
+    ): Observable<Endorsement> {
+        console.log(endorsement);
+        return this.http.post<Endorsement>(
+            `http://localhost:3000/endorsement/${policyId}`,
+            endorsement
+        );
+    }
     getEndorsements(): Observable<Endorsement[]> {
-        return this.endorsements;
+        return this.http.get<Endorsement[]>(
+            'http://localhost:3000/endorsement'
+        );
+    }
+
+    getEndorsementById(endorsementId: string): Observable<Endorsement> {
+        return this.http.get<Endorsement>(
+            `http://localhost:3000/endorsement/${endorsementId}`
+        );
+    }
+
+    updateEndorsement(
+        endorsement: Endorsement,
+        endorsementId: string
+    ): Observable<Endorsement> {
+        return this.http.put<Endorsement>(
+            `http://localhost:3000/endorsement/${endorsementId}`,
+            endorsement
+        );
     }
 }

@@ -42,6 +42,11 @@
                                 Cancel Policy
                             </button>
                         </div>
+                        <div *ngIf="policy.status == 'Cancelled'">
+                            <button nz-button nzType="primary" nzSize="small" (click)="viewPolicyDetails(policy)">
+                                View Policy
+                            </button>
+                        </div>
                     </td>
                 </tr>
             </tbody>

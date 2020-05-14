@@ -113,7 +113,7 @@ export class AgentsComponent implements OnInit {
     ) {
         this.selectedIntermediary = intermediary;
         this.filterCommissionList();
-        this.loadProducts();
+        // this.loadProducts();
 
         this.commissionSetupForm
             .get('intermediaryName')
@@ -125,8 +125,8 @@ export class AgentsComponent implements OnInit {
         this.commissionSetupForm
             .get('intermediaryType')
             .setValue(this.selectedIntermediary.intermediaryType);
-        this.commissionSetupForm.get('productClass').setValue(null);
-        this.commissionSetupForm.get('productName').setValue(null);
+        // this.commissionSetupForm.get('productClass').setValue(null);
+        // this.commissionSetupForm.get('productName').setValue(null);
         this.commissionSetupForm.get('commission').setValue('');
     }
 
@@ -162,7 +162,7 @@ export class AgentsComponent implements OnInit {
     //filters commissions list based on selected intermediary and selected class
     filterCommissionList() {
         console.log('filter commission lost called here..');
-        this.loadProducts();
+        // this.loadProducts();
         this.commissionSetupsService
             .getCommissionSetups()
             .subscribe(commissions => {

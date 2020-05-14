@@ -4,6 +4,19 @@
     <form nz-form [formGroup]="productForm">
         <div nz-row>
             <nz-form-item>
+                <nz-form-label [nzSpan]="8" nzFor="productlass" nzRequired>Class</nz-form-label>
+                <nz-form-control [nzSpan]="14">
+                    <nz-select nzShowSearch nzAllowClear [nzPlaceHolder]="'Select a class'" [(ngModel)]="selectedClass"
+                        [ngModelOptions]="{standalone: true}" name=" select">
+                        <nz-option *ngFor="let class of classesList" [nzValue]="class" [nzLabel]="class.className">
+                        </nz-option>
+                    </nz-select>
+
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-row>
+            <nz-form-item>
                 <nz-form-label [nzSpan]="8" nzFor="productCode" nzRequired>Product Name</nz-form-label>
                 <nz-form-control [nzSpan]="14">
                     <input nz-input formControlName="productName" name="productName" id="productName"
