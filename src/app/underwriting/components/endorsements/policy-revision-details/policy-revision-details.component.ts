@@ -195,6 +195,7 @@ export class PolicyRevisionDetailsComponent implements OnInit {
             underwritingYear: this.policyData.underwritingYear,
             receiptStatus: this.policyData.receiptStatus,
             paymentPlan: this.policyData.paymentPlan,
+            id: this.policyData.id,
             risks: this.risks
         };
 
@@ -210,11 +211,7 @@ export class PolicyRevisionDetailsComponent implements OnInit {
                 res => console.log(res);
             });
 
-        this.policiesService
-            .updatePolicy(policy, this.policyData.id)
-            .subscribe(policy => {
-                res => console.log(res);
-            });
+        this.policiesService.updatePolicy(policy);
 
         this.msg.success('Endorsement Successful');
         this.router.navigateByUrl(

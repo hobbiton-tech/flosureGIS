@@ -27,6 +27,10 @@ export class Policy {
     underwritingYear: Date | ITimestamp;
     receiptStatus: ReceiptStatus;
     paymentPlan: PaymentPlan;
+    sourceOfBusiness: string;
+    intermediaryName: string;
+    remarks?: string;
+    term: number;
 }
 
 export interface ITimestamp {
@@ -40,3 +44,8 @@ export type PolicyStatus = 'Lapsed' | 'Active' | 'Cancelled' | 'Expired';
 export type InsuranceType = 'ThirdParty' | 'Comprehensive';
 export type ReceiptStatus = 'Unreceipted' | 'Receipted';
 export type PaymentPlan = 'Created' | 'NotCreated';
+export type SourceOfBusinessType =
+    | 'Direct'
+    | 'Broker'
+    | 'Agent'
+    | 'Sales Representative';

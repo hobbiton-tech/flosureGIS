@@ -175,6 +175,7 @@ export class PolicyCancellationDetailsComponent implements OnInit {
             type: 'Cancellation Of Cover',
             dateCreated: new Date(),
             dateUpdated: new Date(),
+            id: this.policyData.id,
             status: 'Pending'
         };
 
@@ -189,11 +190,7 @@ export class PolicyCancellationDetailsComponent implements OnInit {
             endorsement
         );
 
-        this.policiesService
-            .updatePolicy(policy, this.policyData.id)
-            .subscribe(policy => {
-                res => console.log(res);
-            });
+        this.policiesService.updatePolicy(policy);
 
         this.creditNoteAmount = this.policyCancellationBalance();
 

@@ -1,37 +1,29 @@
 import { Component, OnInit } from '@angular/core';
-import { MotorQuotationModel } from 'src/app/quotes/models/quote.model';
-import { AccountService } from '../../services/account.service';
-import * as _ from 'lodash';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { IReceiptModel } from '../models/receipts.model';
-import { NzMessageService } from 'ng-zorro-antd';
-import { v4 } from 'uuid';
-import { IReceiptDTO } from 'src/app/quotes/models/receipt.dto';
-import { getTranslationDeclStmts } from '@angular/compiler/src/render3/view/template';
-import { combineLatest } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
 import { Policy } from 'src/app/underwriting/models/policy.model';
-import {
-    IAgent,
-    IBroker,
-} from 'src/app/settings/components/agents/models/agents.model';
+import { IAgent } from 'src/app/settings/components/agents/models/agents.model';
+import { IReceiptModel } from '../../../models/receipts.model';
+import { AccountService } from 'src/app/accounts/services/account.service';
+import { NzMessageService } from 'ng-zorro-antd';
+import { Router } from '@angular/router';
 import { AgentsService } from 'src/app/settings/components/agents/services/agents.service';
+import _ from 'lodash';
+import { v4 } from 'uuid';
 
 @Component({
-    selector: 'app-receipts',
-    templateUrl: './receipts.component.html',
-    styleUrls: ['./receipts.component.scss'],
+    selector: 'app-broker-client',
+    templateUrl: './broker-client.component.html',
+    styleUrls: ['./broker-client.component.scss'],
 })
-export class ReceiptsComponent implements OnInit {
+export class BrokerClientComponent implements OnInit {
     receiptForm: FormGroup;
     cancelForm: FormGroup;
     reinstateForm: FormGroup;
     submitted = false;
     receiptsCount = 0;
     unreceiptedList: Policy[];
+    brokerList: IAgent[];
     receiptedList: IReceiptModel[];
-    brokerList: IBroker[];
     cancelledReceiptList: IReceiptModel[];
     receiptObj: IReceiptModel = new IReceiptModel();
     receipt: IReceiptModel;
@@ -51,15 +43,16 @@ export class ReceiptsComponent implements OnInit {
     receiptList = [];
     cancelReceiptList = [];
 
-    isVisibleBrokerReceipting = false;
+    isVisible = false;
     isCancelVisible = false;
     isReinstateVisible = false;
-    isOkBrokerReceiptingLoading = false;
+    isOkLoading = false;
     policyNumber = '';
     user = '';
     _id = '';
     isVisibleClientType = false;
     isOkClientTypeLoading = false;
+    agent: any;
 
     // modal
     isReceiptVisible = false;
@@ -88,10 +81,14 @@ export class ReceiptsComponent implements OnInit {
         { label: 'Bank Transfer', value: 'bank transfer' },
     ];
 
-    typeOfClient = ['Direct', 'Agent', 'Broker', 'Sales Representatives'];
+    typeOfClient = ['Direct', 'Agent', 'Broker'];
 
     selectedType = 'Direct';
-    selectedAgent = '';
+    selectedBroker = '';
+    listofUnreceiptedReceipts: Policy[];
+    displayedListOfUnreceiptedReceipts: Policy[];
+    sourceOfBusiness: string;
+    intermediaryName: string;
 
     constructor(
         private receiptService: AccountService,
@@ -102,9 +99,8 @@ export class ReceiptsComponent implements OnInit {
     ) {
         this.receiptForm = this.formBuilder.group({
             receivedFrom: ['', Validators.required],
-            sumInDigits: ['', Validators.required],
+            // sumInDigits: [this.policyAmount],
             paymentMethod: ['', Validators.required],
-            onBehalfOf: ['', Validators.required],
             tpinNumber: ['4324324324324324'],
             address: [''],
             receiptType: ['', Validators.required],
@@ -130,60 +126,89 @@ export class ReceiptsComponent implements OnInit {
             console.log('===================');
             console.log(this.brokerList);
         });
-        // this.receiptService.getPolicies().subscribe((quotes) => {
-        //       this.unreceiptedList = _.filter(
-        //           quotes,
-        //           (x) => x.receiptStatus === 'Unreceipted'
-        //       );
-        //       this.receiptsCount = _.filter(
-        //           quotes,
-        //           (x) => x.receiptStatus === 'Unreceipted'
-        //       ).length;
-        //       console.log('======= Unreceipt List =======');
-        //       console.log(this.unreceiptedList);
-        //   });
+        this.receiptService.getPolicies().subscribe((quotes) => {
+            this.listofUnreceiptedReceipts = _.filter(
+                quotes,
+                (x) =>
+                    x.receiptStatus === 'Unreceipted' &&
+                    x.sourceOfBusiness === 'broker'
+            );
 
-        // this.receiptService.getReciepts().subscribe((receipts) => {
-        //       this.receiptedList = _.filter(
-        //           receipts,
-        //           (x) => x.receiptStatus === 'Receipted'
-        //       );
+            this.displayedListOfUnreceiptedReceipts = this.listofUnreceiptedReceipts;
 
-        //       console.log('======= Receipt List =======');
-        //       console.log(this.receiptedList);
+            this.receiptsCount = _.filter(
+                quotes,
+                (x) =>
+                    x.receiptStatus === 'Unreceipted' &&
+                    x.sourceOfBusiness === 'broker'
+            ).length;
+            console.log('======= Unreceipt List =======');
+            console.log(this.listofUnreceiptedReceipts);
+        });
 
-        //       this.cancelReceiptList = _.filter(
-        //           receipts,
-        //           (x) => x.receiptStatus === 'Cancelled'
-        //       );
+        this.receiptService.getReciepts().subscribe((receipts) => {
+            this.receiptedList = _.filter(
+                receipts,
+                (x) =>
+                    x.receiptStatus === 'Receipted' &&
+                    x.sourceOfBusiness === 'broker'
+            );
 
-        //       console.log('======= Cancelled Receipt List =======');
-        //       console.log(this.cancelReceiptList);
-        //   });
+            console.log('======= Receipt List =======');
+            console.log(this.receiptedList);
+
+            this.cancelReceiptList = _.filter(
+                receipts,
+                (x) =>
+                    x.receiptStatus === 'Cancelled' &&
+                    x.sourceOfBusiness === 'broker'
+            );
+
+            console.log('======= Cancelled Receipt List =======');
+            console.log(this.cancelReceiptList);
+        });
     }
 
-    showBrokerReceiptModal(): void {
-        this.isVisibleBrokerReceipting = true;
+    log(value): void {
+        // this.listOfPolicies = this.policies.filter((x) => x.client === value);
+        this.displayedListOfUnreceiptedReceipts = this.listofUnreceiptedReceipts.filter(
+            (x) => x.intermediaryName === value
+        );
+        console.log(value);
+    }
+
+    showModal(unreceipted: Policy): void {
+        this.isVisible = true;
+        this.clientName = unreceipted.client;
+        this.policyNumber = unreceipted.policyNumber;
+        this.user = unreceipted.user;
+        this.policy = unreceipted;
+        this.policyAmount = unreceipted.netPremium;
+        this.sourceOfBusiness = unreceipted.sourceOfBusiness;
+        this.intermediaryName = unreceipted.intermediaryName;
+        console.log(this.policyAmount);
     }
 
     get receiptFormControl() {
         return this.receiptForm.controls;
     }
 
-    async handleOkBrokerReceipting() {
+    async handleOk() {
         this.submitted = true;
         if (this.receiptForm.valid) {
-            this.isOkBrokerReceiptingLoading = true;
+            this.isOkLoading = true;
             this._id = v4();
             const receipt: IReceiptModel = {
                 id: this._id,
                 ...this.receiptForm.value,
                 onBehalfOf: this.clientName,
-                capturedBy: 'this.user',
+                capturedBy: this.user,
+                policyNumber: this.policyNumber,
                 receiptStatus: this.recStatus,
+                sumInDigits: this.policyAmount,
                 todayDate: new Date(),
-                sourceOfBusiness: 'broker',
-                intermediaryName: this.receiptForm.controls.onBehalfOf.value,
+                sourceOfBusiness: this.sourceOfBusiness,
+                intermediaryName: this.intermediaryName,
             };
 
             this.receiptNum = this._id;
@@ -198,58 +223,60 @@ export class ReceiptsComponent implements OnInit {
                     console.log(err);
                 });
             this.receiptForm.reset();
+            setTimeout(() => {
+                this.isVisible = false;
+                this.isOkLoading = false;
+            }, 30);
+
             this.policy.receiptStatus = 'Receipted';
             this.policy.paymentPlan = 'Created';
             console.log('<++++++++++++++++++CLAIN+++++++++>');
             console.log(this.policy);
 
             await this.receiptService.updatePolicy(this.policy);
-            setTimeout(() => {
-                this.isVisibleBrokerReceipting = false;
-                this.isOkBrokerReceiptingLoading = false;
-            }, 3000);
+
             this.generateID(this._id);
         }
     }
 
-    handleCancelBrokerReceipting(): void {
-        this.isVisibleBrokerReceipting = false;
+    handleCancel(): void {
+        this.isVisible = false;
     }
-    // showCancelModal(receipt: IReceiptModel) {
-    //     this.isCancelVisible = true;
-    //     this.cancelReceipt = receipt;
-    // }
+    showCancelModal(receipt: IReceiptModel) {
+        this.isCancelVisible = true;
+        this.cancelReceipt = receipt;
+    }
 
-    // cancelCancellation() {
-    //     this.isCancelVisible = false;
-    // }
+    cancelCancellation() {
+        this.isCancelVisible = false;
+    }
 
-    // async onCancel() {
-    //     this.cancelReceipt.receiptStatus = 'Cancelled';
-    //     this.cancelReceipt.remarks = this.cancelForm.controls.remarks.value;
-    //     console.log('<++++++++++++++++++CLAIN+++++++++>');
-    //     console.log(this.cancelReceipt);
-    //     await this.receiptService.updateReceipt(this.cancelReceipt);
-    //     this.isCancelVisible = false;
-    // }
+    async onCancel() {
+        this.cancelReceipt.receiptStatus = 'Cancelled';
+        this.cancelReceipt.remarks = this.cancelForm.controls.remarks.value;
+        console.log('<++++++++++++++++++CLAIN+++++++++>');
+        console.log(this.cancelReceipt);
+        await this.receiptService.updateReceipt(this.cancelReceipt);
+        this.isCancelVisible = false;
+    }
 
-    // showReinstateModal(receipt: IReceiptModel) {
-    //     this.isReinstateVisible = true;
-    //     this.reinstateReceipt = receipt;
-    // }
+    showReinstateModal(receipt: IReceiptModel) {
+        this.isReinstateVisible = true;
+        this.reinstateReceipt = receipt;
+    }
 
-    // cancelReinstate() {
-    //     this.isReinstateVisible = false;
-    // }
+    cancelReinstate() {
+        this.isReinstateVisible = false;
+    }
 
-    // async onReinstate() {
-    //     this.reinstateReceipt.receiptStatus = 'Receipted';
-    //     this.reinstateReceipt.remarks = this.cancelForm.controls.remarks.value;
-    //     console.log('<++++++++++++++++++CLAIN+++++++++>');
-    //     console.log(this.reinstateReceipt);
-    //     await this.receiptService.updateReceipt(this.reinstateReceipt);
-    //     this.isReinstateVisible = false;
-    // }
+    async onReinstate() {
+        this.reinstateReceipt.receiptStatus = 'Receipted';
+        this.reinstateReceipt.remarks = this.cancelForm.controls.remarks.value;
+        console.log('<++++++++++++++++++CLAIN+++++++++>');
+        console.log(this.reinstateReceipt);
+        await this.receiptService.updateReceipt(this.reinstateReceipt);
+        this.isReinstateVisible = false;
+    }
 
     // pop Confirm
     cancel() {}
@@ -268,7 +295,11 @@ export class ReceiptsComponent implements OnInit {
     }
 
     handleOkClientType(): void {
-        this.isVisibleClientType = false;
+        this.isOkClientTypeLoading = true;
+        setTimeout(() => {
+            this.isVisible = false;
+            this.isOkClientTypeLoading = false;
+        }, 3000);
     }
 
     handleCancelClientType(): void {

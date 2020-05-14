@@ -142,6 +142,7 @@ export class PolicyExtensionDetailsComponent implements OnInit {
 
         const policy: Policy = {
             ...this.policyExtensionDetailsForm.value,
+            id: this.policyData.id,
             risks: this.risks
         };
 
@@ -150,11 +151,7 @@ export class PolicyExtensionDetailsComponent implements OnInit {
             endorsement
         );
 
-        this.policiesService
-            .updatePolicy(policy, this.policyData.id)
-            .subscribe(policy => {
-                res => console.log(res);
-            });
+        this.policiesService.updatePolicy(policy);
 
         this.msg.success('Endorsement Successful');
         this.router.navigateByUrl(

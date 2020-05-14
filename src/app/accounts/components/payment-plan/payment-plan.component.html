@@ -264,9 +264,9 @@
                         </td>
                         <td>{{ paymentPlan.amountPaid | number: '1.2-2' }}</td>
                         <td>
-                            {{ paymentPlan.startDate * 1000 | date }}
+                            {{ paymentPlan.startDate | date }}
                         </td>
-                        <td>{{ paymentPlan.endDate * 1000 | date }}</td>
+                        <td>{{ paymentPlan.endDate | date }}</td>
                         <td>{{ paymentPlan.numberOfPaidInstallments }}</td>
                         <td>{{ paymentPlan.remainingInstallments }}</td>
                         <td>{{ paymentPlan.status }}</td>
