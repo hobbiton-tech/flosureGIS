@@ -24,15 +24,15 @@ import { SlackService } from './slack.service';
 registerLocaleData(en);
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCex2KRIQS6ZFM7BnIIfHzM1Zn31hd5rl4",
-    authDomain: "flosure-golden-lotus.firebaseapp.com",
-    databaseURL: "https://flosure-golden-lotus.firebaseio.com",
-    projectId: "flosure-golden-lotus",
-    storageBucket: "flosure-golden-lotus.appspot.com",
-    messagingSenderId: "586554297839",
-    appId: "1:586554297839:web:32083a80f3f6e0511a7a1a",
-    measurementId: "G-ZQGFJ0M16G"
-  };
+    apiKey: 'AIzaSyA4otys77Tb4bX7uXJONdquRlj0HCzzn1M',
+    authDomain: 'aplus-insurance.firebaseapp.com',
+    databaseURL: 'https://aplus-insurance.firebaseio.com',
+    projectId: 'aplus-insurance',
+    storageBucket: 'aplus-insurance.appspot.com',
+    messagingSenderId: '526693014551',
+    appId: '1:526693014551:web:8978a27a6419f6b52dd052',
+    measurementId: 'G-WJ7T20L388',
+};
 
 @NgModule({
     declarations: [
