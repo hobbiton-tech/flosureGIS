@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import {
     AngularFirestore,
     AngularFirestoreCollection,
-    DocumentReference,
+    DocumentReference
 } from '@angular/fire/firestore';
 import { first } from 'rxjs/operators';
 import { v4 } from 'uuid';
@@ -13,6 +13,8 @@ import { IDebitNoteDTO } from '../models/debit-note.dto';
 import { ICertificateDTO } from '../models/certificate.dto';
 import { IReceiptDTO } from '../models/receipt.dto';
 import { HttpClient } from '@angular/common/http';
+import { NzMessageService } from 'ng-zorro-antd';
+import { Router } from '@angular/router';
 
 export interface IQuoteDocument {
     id: string;
@@ -41,7 +43,7 @@ interface IQuoteNumberResult {
 }
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
 export class QuotesService {
     private motorQuoteCollection: AngularFirestoreCollection<
@@ -58,7 +60,12 @@ export class QuotesService {
     private riskCollection: AngularFirestoreCollection<RiskModel>;
     risks: Observable<RiskModel[]>;
     risk: Observable<RiskModel>;
-    constructor(private firebase: AngularFirestore, private http: HttpClient) {
+    constructor(
+        private firebase: AngularFirestore,
+        private http: HttpClient,
+        private msg: NzMessageService,
+        private readonly router: Router
+    ) {
         this.motorQuoteCollection = firebase.collection<MotorQuotationModel>(
             'mortor_quotations'
         );
@@ -82,13 +89,13 @@ export class QuotesService {
                 .get<IQuoteNumberResult>(
                     'https://flosure-premium-rates.herokuapp.com/quotes'
                 )
-                .subscribe(async (res) => {
+                .subscribe(async res => {
                     quotation.quoteNumber = res.resultQuoteNumber;
                     await this.motorQuoteCollection
                         .doc(quotation.id)
                         .set(quotation)
                         .then(() => {})
-                        .catch((err) => {
+                        .catch(err => {
                             console.log(err);
                         });
                 });
@@ -106,7 +113,7 @@ export class QuotesService {
                 .then(() => {
                     console.log(risk);
                 })
-                .catch((err) => {
+                .catch(err => {
                     console.log(err);
                 });
         });
@@ -118,12 +125,12 @@ export class QuotesService {
             .collection('risks')
             .ref.where('quoteNumber', '==', quoteNumber)
             .get()
-            .then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
+            .then(querySnapshot => {
+                querySnapshot.forEach(doc => {
                     console.log(doc.data());
                 });
             })
-            .catch((error) => {
+            .catch(error => {
                 console.log('Error getting documents: ', error);
             });
     }
@@ -143,7 +150,7 @@ export class QuotesService {
             .get<IQuoteNumberResult>(
                 `https://flosure-premium-rates.herokuapp.com/quotes`
             )
-            .subscribe((data) => {
+            .subscribe(data => {
                 quotationNumber = data.resultQuoteNumber;
             });
         return quotationNumber;
@@ -169,10 +176,10 @@ export class QuotesService {
         return this.motorQuoteCollection
             .doc(`${quote.id}`)
             .update(quote)
-            .then((res) => {
+            .then(res => {
                 console.log(res);
             })
-            .catch((err) => {
+            .catch(err => {
                 console.log(err);
             });
     }
@@ -202,6 +209,53 @@ export class QuotesService {
         return this.http.post<IAmazonS3Result>(
             'https://flosure-pdf-service.herokuapp.com/reciept',
             dto
+        );
+    }
+
+    //postgres db
+
+    createMotorQuotation(motorQuotation: MotorQuotationModel) {
+        this.http
+            .get<IQuoteNumberResult>(
+                'https://flosure-premium-rates.herokuapp.com/quotes'
+            )
+            .subscribe(async res => {
+                motorQuotation.quoteNumber = res.resultQuoteNumber;
+                this.http
+                    .post<MotorQuotationModel>(
+                        'http://localhost:3000/quotation',
+                        motorQuotation
+                    )
+                    .subscribe(async res => {
+                        this.msg.success('Quotation Successfully Created');
+                        this.router.navigateByUrl(
+                            '/flosure/quotes/quotes-list'
+                        );
+                    });
+            });
+    }
+
+    getMotorQuotations(): Observable<MotorQuotationModel[]> {
+        return this.http.get<MotorQuotationModel[]>(
+            'http://localhost:3000/quotation'
+        );
+    }
+
+    getMotorQuotationById(
+        quotationId: string
+    ): Observable<MotorQuotationModel> {
+        return this.http.get<MotorQuotationModel>(
+            `http://localhost:3000/quotation/${quotationId}`
+        );
+    }
+
+    updateMotorQuotation(
+        motorQuotation: MotorQuotationModel,
+        quotationId: string
+    ): Observable<MotorQuotationModel> {
+        return this.http.put<MotorQuotationModel>(
+            `http://localhost:3000/quotation/${quotationId}`,
+            motorQuotation
         );
     }
 }

@@ -1,0 +1,147 @@
+<div class="policy-details">
+    <div style="margin: 15px;">
+        <nz-page-header nzBackIcon nzTitle="Policy Number: {{ policyData.policyNumber }}"
+            [nzSubtitle]="policyData.client">
+            <!-- <nz-page-header-extra>
+                <button nz-button nzType="default" (click)="undoEndorsement()">
+                    Undo Endorsement
+                </button>
+            </nz-page-header-extra> -->
+        </nz-page-header>
+    </div>
+</div>
+<div style="margin: 15px;">
+    <nz-card>
+        <nz-divider nzText="Policy Details" nzOrientation="left"></nz-divider>
+        <form nz-form [formGroup]="backupPolicyForm">
+            <div nz-row nzGutter="0">
+                <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="7">Name of Insured</nz-form-label>
+                        <nz-form-control nzSpan="17">
+                            <input nz-input formControlName="nameOfInsured" [disabled]="!isEditmode" />
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label nzSpan="7">Currency</nz-form-label>
+                        <nz-form-control nzSpan="17">
+                            <input nz-input [disabled]="!isEditmode" formControlName="currency" />
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label nzSpan="7">Sum Insured</nz-form-label>
+                        <nz-form-control nzSpan="17">
+                            <input nz-input [disabled]="!isEditmode" formControlName="sumInsured" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label nzSpan="7">Premium</nz-form-label>
+                        <nz-form-control nzSpan="17">
+                            <input nz-input [disabled]="!isEditmode" formControlName="netPremium" />
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label nzSpan="7">Quarter</nz-form-label>
+                        <nz-form-control nzSpan="17">
+                            <input nz-input [disabled]="!isEditmode" formControlName="quarter" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="7">Start Date</nz-form-label>
+                        <nz-form-control nzSpan="17">
+                            <nz-date-picker formControlName="startDate" [nzDisabled]="!isEditmode"></nz-date-picker>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label nzSpan="7">End Date</nz-form-label>
+                        <nz-form-control nzSpan="17">
+                            <nz-date-picker formControlName="endDate" [nzDisabled]="!isEditmode"></nz-date-picker>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label nzSpan="7">Date Of Issue</nz-form-label>
+                        <nz-form-control nzSpan="17">
+                            <nz-date-picker formControlName="dateOfIssue" [nzDisabled]="!isEditmode"></nz-date-picker>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label nzSpan="7">Time Of Issue</nz-form-label>
+                        <nz-form-control nzSpan="17">
+                            <nz-time-picker formControlName="timeOfIssue" [nzDisabled]="!isEditmode"></nz-time-picker>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label nzSpan="7">Expiry Date</nz-form-label>
+                        <nz-form-control nzSpan="17">
+                            <nz-date-picker formControlName="expiryDate" [nzDisabled]="!isEditmode">
+                            </nz-date-picker>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+        </form>
+    </nz-card>
+    <nz-card>
+        <nz-divider nzText="Risk Details" nzOrientation="left"></nz-divider>
+        <div nz-row>
+            <div nz-col nzSpan="12" style="margin-bottom: 10px; width: 50%;">
+                <nz-input-group [nzSuffix]="suffixIconSearch">
+                    <input type="text" nz-input placeholder="Search by insurance type, vehicle make, vehcle model.." />
+                </nz-input-group>
+                <ng-template #suffixIconSearch>
+                    <i nz-icon nzType="search"></i>
+                </ng-template>
+            </div>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <nz-table #risksTable [nzData]="displayRisks" nzSize="small">
+                <thead>
+                    <tr>
+                        <th>Insurance Type</th>
+                        <th>Registration Number</th>
+                        <th>Vehicle Make</th>
+                        <th>Vehicle Model</th>
+                        <th>Engine Number</th>
+                        <th>Chassis Number</th>
+                        <th>Color</th>
+                        <th>Product Type</th>
+                        <th>Sum Insured</th>
+                        <th>Premium</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let risk of risksTable.data">
+                        <td>{{ risk.insuranceType }}</td>
+                        <td>{{ risk.regNumber }}</td>
+                        <td>{{ risk.vehicleMake }}</td>
+                        <td>{{ risk.vehicleModel }}</td>
+                        <td>{{ risk.engineNumber }}</td>
+                        <td>{{ risk.chassisNumber }}</td>
+                        <td>{{ risk.color }}</td>
+                        <td>{{ risk.productType }}</td>
+                        <td>{{ risk.sumInsured | number: '1.2-2' }}</td>
+                        <td>{{ risk.netPremium | number: '1.2-2' }}</td>
+                        <td>
+                            <button nz-button nzType="primary" nzSize="small" (click)="openViewRiskFormModal(risk)">
+                                View
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </nz-card>
+
+
+</div>
+
+<!-- Modals -->
+<app-view-backup-policy-risks [isViewRiskFormModalVisible]="viewRiskFormModalVisible" [riskData]="editedRisk"
+    (closeViewRiskFormVisible)="viewRiskFormModalVisible = false">
+</app-view-backup-policy-risks>

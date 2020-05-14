@@ -4,8 +4,8 @@ export class Policy {
     id: string;
     policyNumber: string;
     product: string;
-    startDate: Date | ITimestamp;
-    endDate: Date | ITimestamp;
+    startDate: Date;
+    endDate: Date;
     client: string;
     clientCode: string;
     nameOfInsured: string;

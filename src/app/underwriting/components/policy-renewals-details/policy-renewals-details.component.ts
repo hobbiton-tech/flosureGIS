@@ -30,6 +30,8 @@ import { ClientsService } from 'src/app/clients/services/clients.service';
 import { AgentsService } from 'src/app/settings/components/agents/services/agents.service';
 import { IDebitNoteDTO } from 'src/app/quotes/models/debit-note.dto';
 import { ICertificateDTO } from 'src/app/quotes/models/certificate.dto';
+import { Endorsement } from '../../models/endorsement.model';
+import { EndorsementService } from '../../services/endorsements.service';
 
 type AOA = any[][];
 
@@ -87,6 +89,9 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
     displayPolicy: Policy;
     policyUpdate: Policy = new Policy();
     isLoading = false;
+
+    //endorsement form
+    endorsementForm: FormGroup;
 
     paymentPlan = 'NotCreated';
     // risk details modal
@@ -340,7 +345,8 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
         private http: HttpClient,
         private quotesService: QuotesService,
         private readonly clientsService: ClientsService,
-        private readonly agentsService: AgentsService
+        private readonly agentsService: AgentsService,
+        private endorsementService: EndorsementService
     ) {
         this.paymentPlanForm = this.formBuilder.group({
             numberOfInstallments: ['', Validators.required],
@@ -473,6 +479,11 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
                 color: ['', [Validators.required]],
                 productType: ['', [Validators.required]],
                 insuranceType: ['ThirdParty'],
+            });
+
+            this.endorsementForm = this.formBuilder.group({
+                effectDate: ['', Validators.required],
+                remark: ['', Validators.required],
             });
         });
 
@@ -629,13 +640,13 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
         this.premiumDiscountRateType = 'percentage';
     }
 
-    getTimeStamp(policy: Policy): number {
-        return (policy.startDate as ITimestamp).seconds;
-    }
+    // getTimeStamp(policy: Policy): number {
+    //     return (policy.startDate as ITimestamp).seconds;
+    // }
 
-    getEndDateTimeStamp(policy: Policy): number {
-        return (policy.endDate as ITimestamp).seconds;
-    }
+    // getEndDateTimeStamp(policy: Policy): number {
+    //     return (policy.endDate as ITimestamp).seconds;
+    // }
 
     goToRenewPoliciesList(): void {
         this.router.navigateByUrl('/flosure/underwriting/policy-renewal-list');
@@ -1223,7 +1234,7 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
             };
             this.currentRiskEdit = some;
 
-            const riskIndex = _.findIndex(this.risks, {
+            let riskIndex = _.findIndex(this.risks, {
                 riskId: this.selectedRisk.riskId,
             });
             this.risks.splice(riskIndex, 1, this.currentRiskEdit);
@@ -1244,7 +1255,7 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
             };
             this.selectedRisk = some;
 
-            const riskIndex = _.findIndex(this.risks, {
+            let riskIndex = _.findIndex(this.risks, {
                 riskId: this.selectedRisk.riskId,
             });
             this.risks.splice(riskIndex, 1, this.currentRiskEdit);
@@ -1324,6 +1335,15 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
 
             // await this.quotesService.addQuoteDocuments()
 
+            const endorsement: Endorsement = {
+                ...this.endorsementForm.value,
+                type: 'Cancellation Of Cover',
+                dateCreated: new Date(),
+                dateUpdated: new Date(),
+                id: this.policyData.id,
+                status: 'Pending',
+            };
+
             // convert to policy
             const policy: Policy = {
                 ...this.policyDetailsForm.value,
@@ -1341,9 +1361,14 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
 
             this.policyData.id = this.policyID;
             this.policyData.policyNumber = this.policyNumber;
+
             console.log('POLICY>>>>', this.policyData);
             await this.policiesService.updatePolicy(this.policyData);
 
+            this.endorsementService.createEndorsement(
+                this.policyData.id,
+                endorsement
+            );
             setTimeout(() => {
                 this.loadingPolicy = false;
             }, 3000);

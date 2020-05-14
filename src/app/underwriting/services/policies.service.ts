@@ -10,6 +10,7 @@ import { filter, first } from 'rxjs/operators';
 import { v4 } from 'uuid';
 import { debounceTime, map, switchMap } from 'rxjs/operators';
 import { isTemplateRef, NzMessageService } from 'ng-zorro-antd';
+
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -28,6 +29,57 @@ export class PoliciesService {
         this.policiesCollection = firebase.collection<Policy>('policies');
         this.policies = this.policiesCollection.valueChanges();
     }
+
+    //postgres db
+    ///////////////////////
+    createPolicy(policy: Policy): Observable<Policy> {
+        return this.http.post<Policy>('http://localhost:3000/policy', policy);
+    }
+
+    // getPolicies(): Observable<Policy[]> {
+    //     return this.http.get<Policy[]>('http://localhost:3000/policy');
+    // }
+
+    // getPolicyById(policyId: string): Observable<Policy> {
+    //     return this.http.get<Policy>(
+    //         `http://localhost:3000/policy/${policyId}`
+    //     );
+    //     return this.policiesCollection.doc<Policy>(policyId).valueChanges();
+    // }
+
+    // updatePolicy(policy: Policy, policyId: string): Observable<Policy> {
+    //     return this.http.put<Policy>(
+    //         `http://localhost:3000/policy/${policyId}`,
+    //         policy
+    //     );
+    // }
+
+    //backup policies
+    createBackupPolicy(policy: Policy): Observable<Policy> {
+        return this.http.post<Policy>('http://localhost:3000/policy', policy);
+    }
+
+    getBackupPolicies(): Observable<Policy[]> {
+        return this.http.get<Policy[]>('http://localhost:3000/policy');
+    }
+
+    getBackupPolicyById(policyId: string): Observable<Policy> {
+        return this.http.get<Policy>(
+            `http://localhost:3000/policy/${policyId}`
+        );
+        // return this.policiesCollection.doc<Policy>(policyId).valueChanges();
+    }
+
+    updateBackupPolicy(policy: Policy, policyId: string): Observable<Policy> {
+        console.log('policy details:');
+        console.log(policy);
+        return this.http.put<Policy>(
+            `http://localhost:3000/policy/${policyId}`,
+            policy
+        );
+    }
+
+    ////////////////////////////////////////////
 
     async addPolicy(policy: Policy) {
         this.policies.pipe(first()).subscribe(async (policies) => {
@@ -79,7 +131,6 @@ export class PoliciesService {
             localStorage.removeItem('clientId');
             localStorage.setItem('clientId', policy.nameOfInsured); // TODO: Need to change to client code.
             console.log('POLICY NUMBER>>>>', policy.id);
-
             // this.http
             //     .put<Policy>(
             //         `http://localhost:3000/policy/${policy.id}`,
