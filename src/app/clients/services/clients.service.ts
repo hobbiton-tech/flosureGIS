@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { IIndividualClient, ICorporateClient } from '../models/clients.model';
 import {
@@ -9,51 +9,149 @@ import { first } from 'rxjs/operators';
 import { v4 } from 'uuid';
 
 import 'firebase/firestore';
-import { IIndividualClientDto, ICorporateClientDto } from '../models/client.dto';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-
-const httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-};
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ClientsService {
-    constructor(
-        private readonly http: HttpClient,
-    ) {}
+    private individualClientsCollection: AngularFirestoreCollection<
+        IIndividualClient
+    >;
+    private corporateClientsCollection: AngularFirestoreCollection<
+        ICorporateClient
+    >;
 
-    getAllClients(): Observable<[IIndividualClientDto[], ICorporateClientDto[]]> {
-        return combineLatest(
-            this.getIndividualClient(),
-            this.getCorporateClient()
+    // individualClients: Observable<IIndividualClient[]>;
+    // corporateClients: Observable<ICorporateClient[]>;
+
+    constructor(private http: HttpClient, private firebase: AngularFirestore) {
+        // this.individualClientsCollection = this.firebase.collection<
+        //     IIndividualClient
+        // >('individaul_clients');
+        // this.corporateClientsCollection = this.firebase.collection<
+        //     ICorporateClient
+        // >('corporate_clients');
+        // this.individualClients = this.individualClientsCollection.valueChanges();
+        // this.corporateClients = this.corporateClientsCollection.valueChanges();
+    }
+
+    // async addIndividualClient(client: IIndividualClient): Promise<void> {
+    //     this.individualClients.pipe(first()).subscribe(async (clients) => {
+    //         client.id = v4(); // Generates UUID of version 4.
+    //         client.clientType = 'Individual';
+    //         client.dateCreated = new Date();
+    //         client.dateUpdated = new Date();
+    //         client.status = 'Inactive';
+    // client.clientID = this.generateClientID(
+    //     'Individual',
+    //     'BR202000030',
+    //     clients.length
+    // );
+
+    //         await this.individualClientsCollection.add(client);
+    //     });
+    // }
+
+    // async addCorporateClient(client: ICorporateClient): Promise<void> {
+    //     this.corporateClients.pipe(first()).subscribe(async (clients) => {
+    //         client.id = v4();
+    //         client.dateCreated = new Date();
+    //         client.dateUpdated = new Date();
+    //         client.status = 'Inactive';
+    //         client.clientID = this.generateClientID(
+    //             'Corporate',
+    //             'BR20200020',
+    //             clients.length
+    //         );
+    //         client.clientType = 'Corporate';
+    //         await this.corporateClientsCollection.add(client);
+    //     });
+    // }
+
+    addCorporateClient(client: ICorporateClient): Observable<ICorporateClient> {
+        client.clientType = 'Corporate';
+        client.dateCreated = new Date();
+        client.dateUpdated = new Date();
+        client.status = 'Inactive';
+        client.clientID = this.generateClientID(
+            'Corporate',
+            'BR202000030',
+            22
+        );
+        return this.http.post<ICorporateClient>(
+            'http://localhost:3000/clients/scorporate',
+            client
         );
     }
 
-    addIndividualClient(dto: IIndividualClientDto): Observable<IIndividualClientDto> {
+    getCorporateClients(): Observable<ICorporateClient[]> {
+        return this.http.get<ICorporateClient[]>(
+            'http://localhost:3000/clients/corporate'
+        );
+    }
+
+    getCorporateClient(id: string): Observable<ICorporateClient> {
+        return this.http.get<ICorporateClient>(
+            `https://flosure-postgres-api.herokuapp.com/clients/corporate/${id}`
+        );
+    }
+
+    updateCorporateClient(
+        client: IIndividualClient,
+        id: string
+    ): Observable<IIndividualClient> {
+        return this.http.put<IIndividualClient>(
+            `https://flosure-postgres-api.herokuapp.com/clients/corporate/${id}`,
+            client
+        );
+    }
+
+    addIndividualClient(
+        client: IIndividualClient
+    ): Observable<IIndividualClient> {
+        client.clientType = 'Individual';
+        client.dateCreated = new Date();
+        client.dateUpdated = new Date();
+        client.status = 'Inactive';
+        client.clientID = this.generateClientID(
+            'Individual',
+            'BR202000030',
+            22
+        );
         return this.http.post<IIndividualClient>(
-            'https://flosure-postgres-api.herokuapp.com/',
-            dto, httpOptions
+            'http://localhost:3000/clients/individual',
+            client
         );
     }
 
-    addCorporateClient(dto: ICorporateClientDto): Observable<ICorporateClientDto> {
-        return this.http.post<ICorporateClientDto>(
-            'https://flosure-postgres-api.herokuapp.com/',
-            dto, httpOptions
+    getIndividualClients(): Observable<IIndividualClient[]> {
+        return this.http.get<IIndividualClient[]>(
+            'https://flosure-postgres-api.herokuapp.com/clients/individual'
         );
     }
 
-    getIndividualClient(): Observable<IIndividualClientDto[]> {
-        return this.http.get<IIndividualClientDto[]>('');
+    getIndividualClient(id: string): Observable<IIndividualClient> {
+        return this.http.get<IIndividualClient>(
+            `https://flosure-postgres-api.herokuapp.com/clients/individual/${id}`
+        );
     }
 
-    getCorporateClient(): Observable<ICorporateClientDto[]> {
-        return this.http.get<ICorporateClientDto[]>('');
+    updateIndividualClient(
+        client: IIndividualClient,
+        id: string
+    ): Observable<IIndividualClient> {
+        return this.http.put<IIndividualClient>(
+            `https://flosure-postgres-api.herokuapp.com/clients/individual/${id}`,
+            client
+        );
     }
-    updateIndividualClient(dto: IIndividualClientDto): Observable<any> {
-        return this.http.put('', dto, httpOptions);
+
+    getAllClients(): Observable<[IIndividualClient[], ICorporateClient[]]> {
+        return combineLatest(
+            this.getIndividualClients(),
+            this.getCorporateClients()
+        );
     }
 
     countGenerator(numb: string | number) {
