@@ -1,8 +1,8 @@
 <div style="margin: 15px;">
     <nz-breadcrumb>
-        <nz-page-header nzBackIcon  
-        nzTitle="Intermediary Type: {{ client.intermediaryType }}"
-
+        <nz-page-header
+            nzBackIcon
+            nzTitle="Intermediary Type: {{ client.intermediaryType }}"
         >
             <nz-page-header-extra>
                 <button
@@ -11,7 +11,7 @@
                     nzType="primary"
                     (click)="isEditmode = false"
                 >
-                    Save Changes
+                    Cancel Edit
                 </button>
                 <button
                     *ngIf="!isEditmode"
@@ -31,7 +31,7 @@
                     nzText="Company Details"
                     nzOrientation="left"
                 ></nz-divider>
-                <form nz-form>
+                <form nz-form [formGroup]="agentForm">
                     <!-- <nz-divider
                     nzText="Company Details"
                     nzOrientation="left"
@@ -48,8 +48,8 @@
                                 <nz-form-control [nzSpan]="14">
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.companyName"
                                         [disabled]="!isEditmode"
+                                        formControlName="companyName"
                                     />
                                 </nz-form-control>
                             </nz-form-item>
@@ -65,8 +65,8 @@
                                 <nz-form-control [nzSpan]="14">
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.tPinNumber"
                                         [disabled]="!isEditmode"
+                                        formControlName="tPinNumber"
                                     />
                                 </nz-form-control>
                             </nz-form-item>
@@ -84,8 +84,8 @@
                                 <nz-form-control [nzSpan]="14">
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.email"
                                         [disabled]="!isEditmode"
+                                        formControlName="email"
                                     />
                                 </nz-form-control>
                             </nz-form-item>
@@ -102,8 +102,8 @@
                                 <nz-form-control [nzSpan]="14">
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.phone"
                                         [disabled]="!isEditmode"
+                                        formControlName="phone"
                                     />
                                 </nz-form-control>
                             </nz-form-item>
@@ -122,8 +122,8 @@
                                 <nz-form-control [nzSpan]="14">
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.address"
                                         [disabled]="!isEditmode"
+                                        formControlName="address"
                                     />
                                 </nz-form-control>
                             </nz-form-item>
@@ -146,10 +146,8 @@
                                 <nz-form-control [nzSpan]="14">
                                     <input
                                         nz-input
-                                        [(placeholder)]="
-                                            client.contactFirstName
-                                        "
                                         [disabled]="!isEditmode"
+                                        formControlName="contactFirstName"
                                     />
                                 </nz-form-control>
                             </nz-form-item>
@@ -165,8 +163,8 @@
                                 <nz-form-control [nzSpan]="14">
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.contactLastName"
                                         [disabled]="!isEditmode"
+                                        formControlName="contactLastName"
                                     />
                                 </nz-form-control>
                             </nz-form-item>
@@ -184,8 +182,8 @@
                                 <nz-form-control [nzSpan]="14">
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.contactEmail"
                                         [disabled]="!isEditmode"
+                                        formControlName="contactEmail"
                                     />
                                 </nz-form-control>
                             </nz-form-item>
@@ -202,8 +200,8 @@
                                 <nz-form-control [nzSpan]="14">
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.contactPhone"
                                         [disabled]="!isEditmode"
+                                        formControlName="contactPhone"
                                     />
                                 </nz-form-control>
                             </nz-form-item>
@@ -222,8 +220,8 @@
                                 <nz-form-control [nzSpan]="14">
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.contactAddress"
                                         [disabled]="!isEditmode"
+                                        formControlName="contactAddress"
                                     />
                                 </nz-form-control>
                             </nz-form-item>
@@ -247,8 +245,8 @@
                                     <nz-form-control [nzSpan]="18">
                                         <input
                                             nz-input
-                                            [(placeholder)]="client.accountName"
                                             [disabled]="!isEditmode"
+                                            formControlName="accountName"
                                         />
                                     </nz-form-control>
                                 </nz-form-item>
@@ -264,10 +262,8 @@
                                     <nz-form-control [nzSpan]="18">
                                         <input
                                             nz-input
-                                            [(placeholder)]="
-                                                client.accountNumber
-                                            "
                                             [disabled]="!isEditmode"
+                                            formControlName="accountNumber"
                                         />
                                     </nz-form-control>
                                 </nz-form-item>
@@ -310,8 +306,8 @@
                                     <nz-form-control [nzSpan]="18">
                                         <input
                                             nz-input
-                                            [(placeholder)]="client.bank"
                                             [disabled]="!isEditmode"
+                                            formControlName="bank"
                                         />
                                     </nz-form-control>
                                 </nz-form-item>
@@ -327,8 +323,8 @@
                                     <nz-form-control [nzSpan]="18">
                                         <input
                                             nz-input
-                                            [(placeholder)]="client.branch"
                                             [disabled]="!isEditmode"
+                                            formControlName="branch"
                                         />
                                     </nz-form-control>
                                 </nz-form-item>
@@ -344,8 +340,9 @@
                                     nzType="primary"
                                     style="margin-right: 8px;"
                                     [disabled]="!isEditmode"
+                                    (click)="updateAgent()"
                                 >
-                                    Edit Agent
+                                    Update Agent
                                 </button>
                                 <button
                                     nz-button
@@ -360,13 +357,13 @@
                 </form>
             </nz-card>
         </div>
-        <div *ngIf="client.intermediaryType === 'Broker'">
+        <div *ngIf="client.intermediaryType == 'Broker'">
             <nz-card>
                 <nz-divider
                     nzText="Company Details"
                     nzOrientation="left"
                 ></nz-divider>
-                <form nz-form>
+                <form nz-form [formGroup]="brokerForm">
                     <div nz-row>
                         <div nz-col [nzSpan]="12">
                             <nz-form-item>
@@ -379,7 +376,7 @@
                                 <nz-form-control [nzSpan]="14">
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.companyName"
+                                        formControlName="companyName"
                                         [disabled]="!isEditmode"
                                     />
                                 </nz-form-control>
@@ -396,7 +393,7 @@
                                 <nz-form-control [nzSpan]="14">
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.tPinNumber"
+                                        formControlName="tPinNumber"
                                         [disabled]="!isEditmode"
                                     />
                                 </nz-form-control>
@@ -415,7 +412,7 @@
                                 <nz-form-control [nzSpan]="14">
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.email"
+                                        formControlName="email"
                                         [disabled]="!isEditmode"
                                     />
                                 </nz-form-control>
@@ -433,7 +430,7 @@
                                 <nz-form-control [nzSpan]="14">
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.phone"
+                                        formControlName="phone"
                                         [disabled]="!isEditmode"
                                     />
                                 </nz-form-control>
@@ -453,7 +450,7 @@
                                 <nz-form-control [nzSpan]="14">
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.address"
+                                        formControlName="address"
                                         [disabled]="!isEditmode"
                                     />
                                 </nz-form-control>
@@ -477,9 +474,7 @@
                                 <nz-form-control [nzSpan]="14">
                                     <input
                                         nz-input
-                                        [(placeholder)]="
-                                            client.contactFirstName
-                                        "
+                                        formControlName="contactFirstName"
                                         [disabled]="!isEditmode"
                                     />
                                 </nz-form-control>
@@ -496,7 +491,7 @@
                                 <nz-form-control [nzSpan]="14">
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.contactLastName"
+                                        formControlName="contactLastName"
                                         [disabled]="!isEditmode"
                                     />
                                 </nz-form-control>
@@ -515,7 +510,7 @@
                                 <nz-form-control [nzSpan]="14">
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.contactEmail"
+                                        formControlName="contactEmail"
                                         [disabled]="!isEditmode"
                                     />
                                 </nz-form-control>
@@ -533,7 +528,7 @@
                                 <nz-form-control [nzSpan]="14">
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.contactPhone"
+                                        formControlName="contactPhone"
                                         [disabled]="!isEditmode"
                                     />
                                 </nz-form-control>
@@ -553,7 +548,7 @@
                                 <nz-form-control [nzSpan]="14">
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.contactAddress"
+                                        formControlName="contactAddress"
                                         [disabled]="!isEditmode"
                                     />
                                 </nz-form-control>
@@ -578,7 +573,7 @@
                                     <nz-form-control [nzSpan]="18">
                                         <input
                                             nz-input
-                                            [(placeholder)]="client.accountName"
+                                            formControlName="accountName"
                                             [disabled]="!isEditmode"
                                         />
                                     </nz-form-control>
@@ -595,9 +590,7 @@
                                     <nz-form-control [nzSpan]="18">
                                         <input
                                             nz-input
-                                            [(placeholder)]="
-                                                client.accountNumber
-                                            "
+                                            formControlName="accountNumber"
                                             [disabled]="!isEditmode"
                                         />
                                     </nz-form-control>
@@ -641,7 +634,7 @@
                                     <nz-form-control [nzSpan]="18">
                                         <input
                                             nz-input
-                                            [(placeholder)]="client.bank"
+                                            formControlName="bank"
                                             [disabled]="!isEditmode"
                                         />
                                     </nz-form-control>
@@ -658,7 +651,7 @@
                                     <nz-form-control [nzSpan]="18">
                                         <input
                                             nz-input
-                                            [(placeholder)]="client.branch"
+                                            formControlName="branch"
                                             [disabled]="!isEditmode"
                                         />
                                     </nz-form-control>
@@ -675,13 +668,15 @@
                                     nzType="primary"
                                     style="margin-right: 8px;"
                                     [disabled]="!isEditmode"
+                                    (click)="updateBroker()"
                                 >
-                                    Edit Agent
+                                    Edit Broker
                                 </button>
                                 <button
                                     nz-button
                                     [disabled]="!isEditmode"
                                     nzType="default"
+                                    
                                 >
                                     Reset Form
                                 </button>
@@ -698,7 +693,7 @@
                     nzText="Corporate Contact Details"
                     nzOrientation="left"
                 ></nz-divider>
-                <form>
+                <form [formGroup]="salesRepresentativeForm">
                     <div nz-row>
                         <div nz-col [nzSpan]="12">
                             <nz-form-item>
@@ -710,9 +705,9 @@
                                 >
                                 <nz-form-control [nzSpan]="14">
                                     <input
-                                    nz-input
-                                    [(placeholder)]="client.contactFirstName"
-                                    [disabled]="!isEditmode"
+                                        nz-input
+                                        [disabled]="!isEditmode"
+                                        formControlName="contactFirstName"
                                     />
                                 </nz-form-control>
                             </nz-form-item>
@@ -727,9 +722,9 @@
                                 >
                                 <nz-form-control [nzSpan]="14">
                                     <input
-                                    nz-input
-                                    [(placeholder)]="client.contactLastName"
-                                    [disabled]="!isEditmode"
+                                        nz-input
+                                        [disabled]="!isEditmode"
+                                        formControlName="contactLastName"
                                     />
                                 </nz-form-control>
                             </nz-form-item>
@@ -746,9 +741,9 @@
                                 >
                                 <nz-form-control [nzSpan]="14">
                                     <input
-                                    nz-input
-                                    [(placeholder)]="client.contactEmail"
-                                    [disabled]="!isEditmode"
+                                        nz-input
+                                        [disabled]="!isEditmode"
+                                        formControlName="contactEmail"
                                     />
                                 </nz-form-control>
                             </nz-form-item>
@@ -764,9 +759,9 @@
                                 >
                                 <nz-form-control [nzSpan]="14">
                                     <input
-                                    nz-input
-                                    [(placeholder)]="client.contactPhone"
-                                    [disabled]="!isEditmode"
+                                        nz-input
+                                        [disabled]="!isEditmode"
+                                        formControlName="contactPhone"
                                     />
                                 </nz-form-control>
                             </nz-form-item>
@@ -784,9 +779,9 @@
                                 >
                                 <nz-form-control [nzSpan]="14">
                                     <input
-                                    nz-input
-                                    [(placeholder)]="client.contactAddress"
-                                    [disabled]="!isEditmode"
+                                        nz-input
+                                        [disabled]="!isEditmode"
+                                        formControlName="contactAddress"
                                     />
                                 </nz-form-control>
                             </nz-form-item>
@@ -809,9 +804,9 @@
                                     >
                                     <nz-form-control [nzSpan]="18">
                                         <input
-                                        nz-input
-                                        [(placeholder)]="client.accountName"
-                                        [disabled]="!isEditmode"
+                                            nz-input
+                                            [disabled]="!isEditmode"
+                                            formControlName="accountName"
                                         />
                                     </nz-form-control>
                                 </nz-form-item>
@@ -826,9 +821,8 @@
                                     >
                                     <nz-form-control [nzSpan]="18">
                                         <input
-                                        nz-input
-                                        [(placeholder)]="client.accountNumber"
-                                        [disabled]="!isEditmode"
+                                            [disabled]="!isEditmode"
+                                            formControlName="accountNumber"
                                         />
                                     </nz-form-control>
                                 </nz-form-item>
@@ -870,9 +864,9 @@
                                     >
                                     <nz-form-control [nzSpan]="18">
                                         <input
-                                        nz-input
-                                        [(placeholder)]="client.bank"
-                                        [disabled]="!isEditmode"
+                                            nz-input
+                                            [disabled]="!isEditmode"
+                                            formControlName="bank"
                                         />
                                     </nz-form-control>
                                 </nz-form-item>
@@ -887,9 +881,9 @@
                                     >
                                     <nz-form-control [nzSpan]="18">
                                         <input
-                                        nz-input
-                                        [(placeholder)]="client.branch"
-                                        [disabled]="!isEditmode"
+                                            nz-input
+                                            [disabled]="!isEditmode"
+                                            formControlName="branch"
                                         />
                                     </nz-form-control>
                                 </nz-form-item>
@@ -904,6 +898,7 @@
                                     nz-button
                                     nzType="primary"
                                     style="margin-right: 8px;"
+                                    (click)="updateSalesRespresentative()"
                                 >
                                     Add Sales Representative
                                 </button>
