@@ -47,12 +47,15 @@ export class PoliciesService {
     //     return this.policiesCollection.doc<Policy>(policyId).valueChanges();
     // }
 
-    // updatePolicy(policy: Policy, policyId: string): Observable<Policy> {
-    //     return this.http.put<Policy>(
-    //         `http://localhost:3000/policy/${policyId}`,
-    //         policy
-    //     );
-    // }
+    updatePolicy(policy: Policy): Observable<Policy> {
+        console.log('recieved policy:');
+        console.log(policy);
+        console.log('policy status: ' + policy.status);
+        return this.http.put<Policy>(
+            `http://localhost:3000/policy/${policy.id}`,
+            policy
+        );
+    }
 
     //backup policies
     createBackupPolicy(policy: Policy): Observable<Policy> {
@@ -112,7 +115,7 @@ export class PoliciesService {
         });
     }
 
-    updatePolicy(policy: Policy) {
+    renewPolicy(policy: Policy) {
         this.policies.pipe(first()).subscribe(async policies => {
             const today = new Date();
             policy.client = policy.nameOfInsured;
@@ -131,7 +134,7 @@ export class PoliciesService {
             localStorage.removeItem('clientId');
             localStorage.setItem('clientId', policy.nameOfInsured); // TODO: Need to change to client code.
             console.log('POLICY NUMBER>>>>', policy.id);
-
+            console.log(policy);
             this.http
                 .put<Policy>(
                     `http://localhost:3000/policy/${policy.id}`,

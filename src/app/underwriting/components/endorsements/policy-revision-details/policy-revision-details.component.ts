@@ -211,12 +211,15 @@ export class PolicyRevisionDetailsComponent implements OnInit {
                 res => console.log(res);
             });
 
-        this.policiesService.updatePolicy(policy);
+        // this.policiesService.createBackupPolicy(policy);
+        this.policiesService.updatePolicy(policy).subscribe(policy => {
+            res => console.log(res);
+        });
 
         this.msg.success('Endorsement Successful');
-        this.router.navigateByUrl(
-            '/flosure/underwriting/endorsements/view-endorsements'
-        );
+        // this.router.navigateByUrl(
+        //     '/flosure/underwriting/endorsements/view-endorsements'
+        // );
     }
 
     sumArray(items, prop) {

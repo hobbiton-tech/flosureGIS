@@ -1356,7 +1356,7 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
             this.policyData.policyNumber = this.policyNumber;
 
             console.log('POLICY>>>>', this.policyData);
-            await this.policiesService.updatePolicy(this.policyData);
+            await this.policiesService.renewPolicy(this.policyData);
 
             this.endorsementService.createEndorsement(
                 this.policyData.id,

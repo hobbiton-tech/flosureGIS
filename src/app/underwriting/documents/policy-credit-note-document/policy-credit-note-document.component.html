@@ -13,7 +13,7 @@
 </div>
 <div id="creditPrintSection">
 
-    <div class="invoice-box">
+    <!-- <div class="invoice-box">
         <table cellpadding="0" cellspacing="0">
             <tr class="top">
                 <td colspan="4">
@@ -26,12 +26,7 @@
                                             " />
                             </td>
                             <td>
-                                <!-- <span style="font-weight: bold;">Credit Note#:</span>
-                                <span style="
-                                                font-weight: bold;
-                                                color: red;
-                                            ">0000000123</span><br />
-                                Date Created: <br /> -->
+                                
                             </td>
                             <td>
                                 Policy Number: {{ policy.policyNumber }}<br />
@@ -69,12 +64,6 @@
                 <td>
                     Description
                 </td>
-                <!-- <td class="td2">
-                    Quantity
-                </td> -->
-                <!-- <td>
-                    Price
-                </td> -->
                 <td id="td1">
                     Amount
                 </td>
@@ -83,12 +72,6 @@
                 <td>
                     Cancellation of Policy
                 </td>
-                <!-- <td class="td2">
-                    1
-                </td> -->
-                <!-- <td>
-                    K30000
-                </td> -->
                 <td id="td1">
                     {{creditNoteAmount | number: '1.2-2'}}
                 </td>
@@ -97,10 +80,111 @@
         <p style="text-align: right; font-weight: bold;">
             Total:<span style="text-decoration: underline;">{{creditNoteAmount | number: '1.2-2'}}</span>
         </p>
-        <!-- <p style="font-weight: bold;">Cover:</p> -->
         <p style="font-weight: bold;">
             Currency: {{policy.currency}}
         </p>
         <br />
+    </div> -->
+
+    <!-- Savenda -->
+    <div class="invoice-box">
+        <table cellpadding="0" cellspacing="0">
+            <tr class="top">
+                <td colspan="6">
+                    <table>
+                        <tr>
+                            <td class="title">
+                                <img src="assets/images/Savenda-Logo-Final.png" style="
+                                        width: 100%;
+                                        max-width: 240px;
+                                    " />
+                            </td>
+                            <td>
+                                <span style="font-weight: bold;">Credit Note#:</span>
+                                <span style="
+                                        font-weight: bold;
+                                        color: red;
+                                    ">0000000123</span>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr class="information">
+                <td colspan="6">
+                    <table>
+                        <tr>
+                            <td>
+                                Savenda General Insurance Limited<br />
+                                Plot 20849 PSC Corporate Park, Alick
+                                Nkhatha Road<br />
+                                Mass Media P.O. Box 30363, Lusaka
+                                Zambia<br />
+                                <span style="font-weight: bold;">TPIN:</span>
+                                <span style="
+                                        font-weight: bold;
+                                        color: red;
+                                    ">82358383734</span>
+                            </td>
+                            <td>
+                                {{policy.client}}<br />
+                                {{ clientNumber }}<br />
+                                {{ clientEmail }}
+                            </td>
+                        </tr>
+                    </table>
+                    <p id="title">CREDIT NOTE</p>
+                </td>
+            </tr>
+            <tr class="heading">
+                <td>
+                    Binder No
+                </td>
+                <td class="td2">
+                    Details
+                </td>
+                <td>
+                    Start Date
+                </td>
+                <td>
+                    End Date
+                </td>
+                <td id="td3">
+                    Amount
+                </td>
+            </tr>
+            <tr class="details">
+                <td>
+
+                </td>
+                <td class="td2">
+
+                </td>
+                <td>
+                    {{policy.startDate | date}}
+                </td>
+                <td>
+                    {{policy.endDate | date}}
+                </td>
+                <td id="td3">
+                    {{creditNoteAmount | number: '1.2-2'}}
+                </td>
+            </tr>
+        </table>
+        <p style="text-align: right; font-weight: bold;">
+            TOTAL:
+            <span>{{creditNoteAmount | number: '1.2-2'}}</span>
+        </p>
+        <br />
+        <br />
+        <br />
+        <p style="font-weight: bold; text-align: left;">
+            Policy Cert No: {{policy.policyNumber}} <span style="float: right;">Insured: {{policy.nameOfInsured}}</span>
+        </p>
+        <p style="font-weight: bold;">
+            Endorsement No:
+            <span style="float: right;">Tax Invoice No:</span>
+        </p>
+        <p style="font-weight: bold;">Reasons Of Credit Note: </p>
     </div>
 </div>

@@ -181,22 +181,26 @@ export class PolicyCancellationDetailsComponent implements OnInit {
 
         const policy: Policy = {
             ...this.policyCancellationDetailsForm.value,
+            id: this.policyData.id,
             risks: this.risks,
             status: 'Cancelled'
         };
 
-        this.endorsementService.createEndorsement(
-            this.policyData.id,
-            endorsement
-        );
+        this.endorsementService
+            .createEndorsement(this.policyData.id, endorsement)
+            .subscribe(endorsement => {
+                res => console.log(res);
+            });
 
-        this.policiesService.updatePolicy(policy);
+        this.policiesService.updatePolicy(policy).subscribe(policy => {
+            res => console.log(res);
+        });
 
         this.creditNoteAmount = this.policyCancellationBalance();
 
         this.msg.success('Cancellation Successful');
-        this.router.navigateByUrl(
-            '/flosure/underwriting/endorsements/view-endorsements'
-        );
+        // this.router.navigateByUrl(
+        //     '/flosure/underwriting/endorsements/view-endorsements'
+        // );
     }
 }

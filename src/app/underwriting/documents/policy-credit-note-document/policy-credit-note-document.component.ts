@@ -55,6 +55,8 @@ export class PolicyCreditNoteDocumentComponent implements OnInit {
     @Input()
     policy: Policy;
 
+    today: Date = new Date();
+
     constructor() {}
 
     generatingPDF = false;

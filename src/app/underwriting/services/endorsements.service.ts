@@ -63,7 +63,8 @@ export class EndorsementService {
         policyId: string,
         endorsement: Endorsement
     ): Observable<Endorsement> {
-        console.log(endorsement);
+        console.log('endorsement: ');
+        console.log(endorsement)
         return this.http.post<Endorsement>(
             `http://localhost:3000/endorsement/${policyId}`,
             endorsement

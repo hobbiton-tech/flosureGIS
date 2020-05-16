@@ -56,6 +56,9 @@ export class ViewRiskComponent implements OnInit {
     @Input()
     riskData: RiskModel;
 
+    @Input()
+    policyEndDate: Date;
+
     @Output()
     sendEdittedRiskEmitter: EventEmitter<any> = new EventEmitter();
 
