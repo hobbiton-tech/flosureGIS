@@ -821,6 +821,7 @@
                                     >
                                     <nz-form-control [nzSpan]="18">
                                         <input
+                                            nz-input
                                             [disabled]="!isEditmode"
                                             formControlName="accountNumber"
                                         />
@@ -898,6 +899,7 @@
                                     nz-button
                                     nzType="primary"
                                     style="margin-right: 8px;"
+                                    [disabled]="!isEditmode"
                                     (click)="updateSalesRespresentative()"
                                 >
                                     Add Sales Representative

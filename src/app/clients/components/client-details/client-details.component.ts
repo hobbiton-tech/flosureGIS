@@ -233,6 +233,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
 
         const agent: IIndividualClient = {
             dateCreated: this.client.dateCreated,
+            dateUpdated:  new Date(),
             ...this.individualClientForm.value,
         };
 
@@ -248,6 +249,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
 
         const agent: ICorporateClient = {
             dateCreated: this.client.dateCreated,
+            dateUpdated:  new Date(),
             ...this.corporateClientForm.value,
         };
 
