@@ -53,6 +53,7 @@ export class PolicyCancellationDetailsComponent implements OnInit {
 
     //Credit Note PDF
     isCreditNotePDFVisible = false;
+    isCancelledPolicy = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -104,6 +105,8 @@ export class PolicyCancellationDetailsComponent implements OnInit {
                 this.totalAmount = policy.netPremium.toString();
                 this.issueDate = policy.dateOfIssue.toString();
                 this.issueTime = policy.dateOfIssue.toString();
+
+                this.isCancelledPolicy = this.policyData.status === 'Cancelled';
 
                 //set values of  fields
                 this.policyCancellationDetailsForm

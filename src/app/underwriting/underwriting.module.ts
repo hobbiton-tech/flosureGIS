@@ -37,6 +37,7 @@ import { BackupPolicyDetailsComponent } from './components/endorsements/backup-p
 import { ViewBackupPolicyRisksComponent } from './components/endorsements/backup-policy-details/view-backup-policy-risks/view-backup-policy-risks.component';
 import { PolicyCreditNoteDocumentComponent } from './documents/policy-credit-note-document/policy-credit-note-document.component';
 
+import { IntermediaryDetailsComponent } from './components/endorsements/intermediary-details/intermediary-details.component';
 
 const routes: Routes = [
     {
@@ -98,16 +99,23 @@ const routes: Routes = [
     {
         path: 'policy-details/:id',
         component: PolicyDetailsComponent,
-        resolve: PolicyDetailsResolver,
+        resolve: PolicyDetailsResolver
     },
     {
         path: 'policy-renewal-list',
-        component: PolicyRenewalsComponent,
+        component: PolicyRenewalsComponent
     },
     {
         path: 'policy-renewal-details/:id',
-        component: PolicyRenewalsDetailsComponent,
+        component: PolicyRenewalsDetailsComponent
     },
+    {
+        resolve: PolicyDetailsResolver
+    },
+    {
+        path: 'intermediary-view/:id',
+        component: IntermediaryDetailsComponent
+    }
 ];
 
 @NgModule({
@@ -137,7 +145,8 @@ const routes: Routes = [
         ViewCancellationRiskComponent,
         BackupPolicyDetailsComponent,
         ViewBackupPolicyRisksComponent,
-        PolicyCreditNoteDocumentComponent
+        PolicyCreditNoteDocumentComponent,
+        IntermediaryDetailsComponent
     ],
     imports: [
         CommonModule,

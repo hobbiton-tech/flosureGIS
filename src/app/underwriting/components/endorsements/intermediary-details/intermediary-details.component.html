@@ -1,0 +1,915 @@
+<div style="margin: 15px;">
+    <nz-breadcrumb>
+        <nz-page-header
+            nzBackIcon
+            nzTitle="Intermediary Type: {{ client.intermediaryType }}"
+        >
+            <nz-page-header-extra>
+                <button
+                    *ngIf="isEditmode"
+                    nz-button
+                    nzType="primary"
+                    (click)="isEditmode = false"
+                >
+                    Cancel Edit
+                </button>
+                <button
+                    *ngIf="!isEditmode"
+                    nz-button
+                    nzType="primary"
+                    (click)="isEditmode = true"
+                >
+                    Edit Client
+                </button>
+            </nz-page-header-extra>
+        </nz-page-header>
+    </nz-breadcrumb>
+    <div class="client-personal-details" style="margin-top: 20px;">
+        <div *ngIf="client.intermediaryType == 'Agent'">
+            <nz-card>
+                <nz-divider
+                    nzText="Company Details"
+                    nzOrientation="left"
+                ></nz-divider>
+                <form nz-form [formGroup]="agentForm">
+                    <!-- <nz-divider
+                    nzText="Company Details"
+                    nzOrientation="left"
+                ></nz-divider> -->
+                    <div nz-row>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label
+                                    [nzSpan]="8"
+                                    nzFor="companyName"
+                                    nzRequired
+                                    >Company Name</nz-form-label
+                                >
+                                <nz-form-control [nzSpan]="14">
+                                    <input
+                                        nz-input
+                                        [disabled]="!isEditmode"
+                                        formControlName="companyName"
+                                    />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label
+                                    [nzSpan]="8"
+                                    nzFor="tPinNumber"
+                                    nzRequired
+                                    >TPIN Number</nz-form-label
+                                >
+                                <nz-form-control [nzSpan]="14">
+                                    <input
+                                        nz-input
+                                        [disabled]="!isEditmode"
+                                        formControlName="tPinNumber"
+                                    />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                    <div nz-row>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label
+                                    [nzSpan]="8"
+                                    nzFor="email"
+                                    nzRequired
+                                    >Email</nz-form-label
+                                >
+                                <nz-form-control [nzSpan]="14">
+                                    <input
+                                        nz-input
+                                        [disabled]="!isEditmode"
+                                        formControlName="email"
+                                    />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label
+                                    [nzSpan]="8"
+                                    nzFor="phone"
+                                    nzRequired
+                                    >Phone</nz-form-label
+                                >
+                                <nz-form-control [nzSpan]="14">
+                                    <input
+                                        nz-input
+                                        [disabled]="!isEditmode"
+                                        formControlName="phone"
+                                    />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+
+                    <div nz-row>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label
+                                    [nzSpan]="8"
+                                    nzFor="address"
+                                    nzRequired
+                                    >Address</nz-form-label
+                                >
+                                <nz-form-control [nzSpan]="14">
+                                    <input
+                                        nz-input
+                                        [disabled]="!isEditmode"
+                                        formControlName="address"
+                                    />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+
+                    <nz-divider
+                        nzText="Corporate Contact Details"
+                        nzOrientation="left"
+                    ></nz-divider>
+                    <div nz-row>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label
+                                    [nzSpan]="8"
+                                    nzFor="contactFirstName"
+                                    nzRequired
+                                    >Contact First Name</nz-form-label
+                                >
+                                <nz-form-control [nzSpan]="14">
+                                    <input
+                                        nz-input
+                                        [disabled]="!isEditmode"
+                                        formControlName="contactFirstName"
+                                    />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label
+                                    [nzSpan]="8"
+                                    nzFor="contactLastName"
+                                    nzRequired
+                                    >Contact Last Name</nz-form-label
+                                >
+                                <nz-form-control [nzSpan]="14">
+                                    <input
+                                        nz-input
+                                        [disabled]="!isEditmode"
+                                        formControlName="contactLastName"
+                                    />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                    <div nz-row>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label
+                                    [nzSpan]="8"
+                                    nzFor="contactEmail"
+                                    nzRequired
+                                    >Contact Email</nz-form-label
+                                >
+                                <nz-form-control [nzSpan]="14">
+                                    <input
+                                        nz-input
+                                        [disabled]="!isEditmode"
+                                        formControlName="contactEmail"
+                                    />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label
+                                    [nzSpan]="8"
+                                    nzFor="contactPhone"
+                                    nzRequired
+                                    >Contact phone</nz-form-label
+                                >
+                                <nz-form-control [nzSpan]="14">
+                                    <input
+                                        nz-input
+                                        [disabled]="!isEditmode"
+                                        formControlName="contactPhone"
+                                    />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+
+                    <div nz-row>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label
+                                    [nzSpan]="8"
+                                    nzFor="contactAddress"
+                                    nzRequired
+                                    >Contact Address</nz-form-label
+                                >
+                                <nz-form-control [nzSpan]="14">
+                                    <input
+                                        nz-input
+                                        [disabled]="!isEditmode"
+                                        formControlName="contactAddress"
+                                    />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+
+                    <div>
+                        <nz-divider
+                            nzText="Bank Details"
+                            nzOrientation="left"
+                        ></nz-divider>
+
+                        <div nz-row>
+                            <div nz-col [nzSpan]="12">
+                                <nz-form-item>
+                                    <nz-form-label
+                                        [nzSpan]="6"
+                                        nzFor="accountName"
+                                        >Account Name</nz-form-label
+                                    >
+                                    <nz-form-control [nzSpan]="18">
+                                        <input
+                                            nz-input
+                                            [disabled]="!isEditmode"
+                                            formControlName="accountName"
+                                        />
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+
+                            <div nz-col [nzSpan]="12">
+                                <nz-form-item>
+                                    <nz-form-label
+                                        [nzSpan]="6"
+                                        nzFor="accountNumber"
+                                        >Account No.</nz-form-label
+                                    >
+                                    <nz-form-control [nzSpan]="18">
+                                        <input
+                                            nz-input
+                                            [disabled]="!isEditmode"
+                                            formControlName="accountNumber"
+                                        />
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                        </div>
+
+                        <div nz-row>
+                            <div nz-col [nzSpan]="12">
+                                <nz-form-item>
+                                    <nz-form-label
+                                        [nzSpan]="6"
+                                        nzFor="accountType"
+                                        >Account Type</nz-form-label
+                                    >
+                                    <nz-form-control [nzSpan]="18">
+                                        <nz-select
+                                            formControlName="accountType"
+                                            nzShowSearch
+                                            nzAllowClear
+                                            placeholder="Account Type"
+                                        >
+                                            <nz-option
+                                                nzLabel="ZMW"
+                                                nzValue="zmw"
+                                            ></nz-option>
+                                            <nz-option
+                                                nzLabel="Dollar"
+                                                nzValue="dollar"
+                                            ></nz-option>
+                                        </nz-select>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+
+                            <div nz-col [nzSpan]="12">
+                                <nz-form-item>
+                                    <nz-form-label [nzSpan]="6" nzFor="bank"
+                                        >Bank</nz-form-label
+                                    >
+                                    <nz-form-control [nzSpan]="18">
+                                        <input
+                                            nz-input
+                                            [disabled]="!isEditmode"
+                                            formControlName="bank"
+                                        />
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                        </div>
+
+                        <div nz-row>
+                            <div nz-col [nzSpan]="12">
+                                <nz-form-item>
+                                    <nz-form-label [nzSpan]="6" nzFor="branch"
+                                        >Branch</nz-form-label
+                                    >
+                                    <nz-form-control [nzSpan]="18">
+                                        <input
+                                            nz-input
+                                            [disabled]="!isEditmode"
+                                            formControlName="branch"
+                                        />
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                        </div>
+                    </div>
+
+                    <nz-form-item>
+                        <nz-form-control>
+                            <div style="text-align: center; margin-top: 10px;">
+                                <button
+                                    nz-button
+                                    nzType="primary"
+                                    style="margin-right: 8px;"
+                                    [disabled]="!isEditmode"
+                                    (click)="updateAgent()"
+                                >
+                                    Update Agent
+                                </button>
+                                <button
+                                    nz-button
+                                    [disabled]="!isEditmode"
+                                    nzType="default"
+                                >
+                                    Reset Form
+                                </button>
+                            </div>
+                        </nz-form-control>
+                    </nz-form-item>
+                </form>
+            </nz-card>
+        </div>
+        <div *ngIf="client.intermediaryType == 'Broker'">
+            <nz-card>
+                <nz-divider
+                    nzText="Company Details"
+                    nzOrientation="left"
+                ></nz-divider>
+                <form nz-form [formGroup]="brokerForm">
+                    <div nz-row>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label
+                                    [nzSpan]="8"
+                                    nzFor="companyName"
+                                    nzRequired
+                                    >Company Name</nz-form-label
+                                >
+                                <nz-form-control [nzSpan]="14">
+                                    <input
+                                        nz-input
+                                        formControlName="companyName"
+                                        [disabled]="!isEditmode"
+                                    />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label
+                                    [nzSpan]="8"
+                                    nzFor="tPinNumber"
+                                    nzRequired
+                                    >TPIN Number</nz-form-label
+                                >
+                                <nz-form-control [nzSpan]="14">
+                                    <input
+                                        nz-input
+                                        formControlName="tPinNumber"
+                                        [disabled]="!isEditmode"
+                                    />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                    <div nz-row>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label
+                                    [nzSpan]="8"
+                                    nzFor="email"
+                                    nzRequired
+                                    >Email</nz-form-label
+                                >
+                                <nz-form-control [nzSpan]="14">
+                                    <input
+                                        nz-input
+                                        formControlName="email"
+                                        [disabled]="!isEditmode"
+                                    />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label
+                                    [nzSpan]="8"
+                                    nzFor="phone"
+                                    nzRequired
+                                    >Phone</nz-form-label
+                                >
+                                <nz-form-control [nzSpan]="14">
+                                    <input
+                                        nz-input
+                                        formControlName="phone"
+                                        [disabled]="!isEditmode"
+                                    />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+
+                    <div nz-row>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label
+                                    [nzSpan]="8"
+                                    nzFor="address"
+                                    nzRequired
+                                    >Address</nz-form-label
+                                >
+                                <nz-form-control [nzSpan]="14">
+                                    <input
+                                        nz-input
+                                        formControlName="address"
+                                        [disabled]="!isEditmode"
+                                    />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+
+                    <nz-divider
+                        nzText="Corporate Contact Details"
+                        nzOrientation="left"
+                    ></nz-divider>
+                    <div nz-row>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label
+                                    [nzSpan]="8"
+                                    nzFor="contactFirstName"
+                                    nzRequired
+                                    >Contact First Name</nz-form-label
+                                >
+                                <nz-form-control [nzSpan]="14">
+                                    <input
+                                        nz-input
+                                        formControlName="contactFirstName"
+                                        [disabled]="!isEditmode"
+                                    />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label
+                                    [nzSpan]="8"
+                                    nzFor="contactLastName"
+                                    nzRequired
+                                    >Contact Last Name</nz-form-label
+                                >
+                                <nz-form-control [nzSpan]="14">
+                                    <input
+                                        nz-input
+                                        formControlName="contactLastName"
+                                        [disabled]="!isEditmode"
+                                    />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                    <div nz-row>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label
+                                    [nzSpan]="8"
+                                    nzFor="contactEmail"
+                                    nzRequired
+                                    >Contact Email</nz-form-label
+                                >
+                                <nz-form-control [nzSpan]="14">
+                                    <input
+                                        nz-input
+                                        formControlName="contactEmail"
+                                        [disabled]="!isEditmode"
+                                    />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label
+                                    [nzSpan]="8"
+                                    nzFor="contactPhone"
+                                    nzRequired
+                                    >Contact phone</nz-form-label
+                                >
+                                <nz-form-control [nzSpan]="14">
+                                    <input
+                                        nz-input
+                                        formControlName="contactPhone"
+                                        [disabled]="!isEditmode"
+                                    />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+
+                    <div nz-row>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label
+                                    [nzSpan]="8"
+                                    nzFor="contactAddress"
+                                    nzRequired
+                                    >Contact Address</nz-form-label
+                                >
+                                <nz-form-control [nzSpan]="14">
+                                    <input
+                                        nz-input
+                                        formControlName="contactAddress"
+                                        [disabled]="!isEditmode"
+                                    />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+
+                    <div>
+                        <nz-divider
+                            nzText="Bank Details"
+                            nzOrientation="left"
+                        ></nz-divider>
+
+                        <div nz-row>
+                            <div nz-col [nzSpan]="12">
+                                <nz-form-item>
+                                    <nz-form-label
+                                        [nzSpan]="6"
+                                        nzFor="accountName"
+                                        >Account Name</nz-form-label
+                                    >
+                                    <nz-form-control [nzSpan]="18">
+                                        <input
+                                            nz-input
+                                            formControlName="accountName"
+                                            [disabled]="!isEditmode"
+                                        />
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+
+                            <div nz-col [nzSpan]="12">
+                                <nz-form-item>
+                                    <nz-form-label
+                                        [nzSpan]="6"
+                                        nzFor="accountNumber"
+                                        >Account No.</nz-form-label
+                                    >
+                                    <nz-form-control [nzSpan]="18">
+                                        <input
+                                            nz-input
+                                            formControlName="accountNumber"
+                                            [disabled]="!isEditmode"
+                                        />
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                        </div>
+
+                        <div nz-row>
+                            <div nz-col [nzSpan]="12">
+                                <nz-form-item>
+                                    <nz-form-label
+                                        [nzSpan]="6"
+                                        nzFor="accountType"
+                                        >Account Type</nz-form-label
+                                    >
+                                    <nz-form-control [nzSpan]="18">
+                                        <nz-select
+                                            formControlName="accountType"
+                                            nzShowSearch
+                                            nzAllowClear
+                                            placeholder="Account Type"
+                                        >
+                                            <nz-option
+                                                nzLabel="ZMW"
+                                                nzValue="zmw"
+                                            ></nz-option>
+                                            <nz-option
+                                                nzLabel="Dollar"
+                                                nzValue="dollar"
+                                            ></nz-option>
+                                        </nz-select>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+
+                            <div nz-col [nzSpan]="12">
+                                <nz-form-item>
+                                    <nz-form-label [nzSpan]="6" nzFor="bank"
+                                        >Bank</nz-form-label
+                                    >
+                                    <nz-form-control [nzSpan]="18">
+                                        <input
+                                            nz-input
+                                            formControlName="bank"
+                                            [disabled]="!isEditmode"
+                                        />
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                        </div>
+
+                        <div nz-row>
+                            <div nz-col [nzSpan]="12">
+                                <nz-form-item>
+                                    <nz-form-label [nzSpan]="6" nzFor="branch"
+                                        >Branch</nz-form-label
+                                    >
+                                    <nz-form-control [nzSpan]="18">
+                                        <input
+                                            nz-input
+                                            formControlName="branch"
+                                            [disabled]="!isEditmode"
+                                        />
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                        </div>
+                    </div>
+
+                    <nz-form-item>
+                        <nz-form-control>
+                            <div style="text-align: center; margin-top: 10px;">
+                                <button
+                                    nz-button
+                                    nzType="primary"
+                                    style="margin-right: 8px;"
+                                    [disabled]="!isEditmode"
+                                    (click)="updateBroker()"
+                                >
+                                    Edit Broker
+                                </button>
+                                <button
+                                    nz-button
+                                    [disabled]="!isEditmode"
+                                    nzType="default"
+                                    
+                                >
+                                    Reset Form
+                                </button>
+                            </div>
+                        </nz-form-control>
+                    </nz-form-item>
+                </form>
+            </nz-card>
+        </div>
+
+        <div *ngIf="client.intermediaryType === 'Sales Representative'">
+            <nz-card>
+                <nz-divider
+                    nzText="Corporate Contact Details"
+                    nzOrientation="left"
+                ></nz-divider>
+                <form [formGroup]="salesRepresentativeForm">
+                    <div nz-row>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label
+                                    [nzSpan]="8"
+                                    nzFor="contactFirstName"
+                                    nzRequired
+                                    >Contact First Name</nz-form-label
+                                >
+                                <nz-form-control [nzSpan]="14">
+                                    <input
+                                        nz-input
+                                        [disabled]="!isEditmode"
+                                        formControlName="contactFirstName"
+                                    />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label
+                                    [nzSpan]="8"
+                                    nzFor="contactLastName"
+                                    nzRequired
+                                    >Contact Last Name</nz-form-label
+                                >
+                                <nz-form-control [nzSpan]="14">
+                                    <input
+                                        nz-input
+                                        [disabled]="!isEditmode"
+                                        formControlName="contactLastName"
+                                    />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                    <div nz-row>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label
+                                    [nzSpan]="8"
+                                    nzFor="contactEmail"
+                                    nzRequired
+                                    >Contact Email</nz-form-label
+                                >
+                                <nz-form-control [nzSpan]="14">
+                                    <input
+                                        nz-input
+                                        [disabled]="!isEditmode"
+                                        formControlName="contactEmail"
+                                    />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label
+                                    [nzSpan]="8"
+                                    nzFor="contactPhone"
+                                    nzRequired
+                                    >Contact phone</nz-form-label
+                                >
+                                <nz-form-control [nzSpan]="14">
+                                    <input
+                                        nz-input
+                                        [disabled]="!isEditmode"
+                                        formControlName="contactPhone"
+                                    />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+
+                    <div nz-row>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label
+                                    [nzSpan]="8"
+                                    nzFor="contactAddress"
+                                    nzRequired
+                                    >Contact Address</nz-form-label
+                                >
+                                <nz-form-control [nzSpan]="14">
+                                    <input
+                                        nz-input
+                                        [disabled]="!isEditmode"
+                                        formControlName="contactAddress"
+                                    />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+
+                    <div>
+                        <nz-divider
+                            nzText="Bank Details"
+                            nzOrientation="left"
+                        ></nz-divider>
+
+                        <div nz-row>
+                            <div nz-col [nzSpan]="12">
+                                <nz-form-item>
+                                    <nz-form-label
+                                        [nzSpan]="6"
+                                        nzFor="accountName"
+                                        >Account Name</nz-form-label
+                                    >
+                                    <nz-form-control [nzSpan]="18">
+                                        <input
+                                            nz-input
+                                            [disabled]="!isEditmode"
+                                            formControlName="accountName"
+                                        />
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+
+                            <div nz-col [nzSpan]="12">
+                                <nz-form-item>
+                                    <nz-form-label
+                                        [nzSpan]="6"
+                                        nzFor="accountNumber"
+                                        >Account No.</nz-form-label
+                                    >
+                                    <nz-form-control [nzSpan]="18">
+                                        <input
+                                            [disabled]="!isEditmode"
+                                            formControlName="accountNumber"
+                                        />
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                        </div>
+
+                        <div nz-row>
+                            <div nz-col [nzSpan]="12">
+                                <nz-form-item>
+                                    <nz-form-label
+                                        [nzSpan]="6"
+                                        nzFor="accountType"
+                                        >Account Type</nz-form-label
+                                    >
+                                    <nz-form-control [nzSpan]="18">
+                                        <nz-select
+                                            formControlName="accountType"
+                                            nzShowSearch
+                                            nzAllowClear
+                                            placeholder="Account Type"
+                                        >
+                                            <nz-option
+                                                nzLabel="ZMW"
+                                                nzValue="zmw"
+                                            ></nz-option>
+                                            <nz-option
+                                                nzLabel="Dollar"
+                                                nzValue="dollar"
+                                            ></nz-option>
+                                        </nz-select>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+
+                            <div nz-col [nzSpan]="12">
+                                <nz-form-item>
+                                    <nz-form-label [nzSpan]="6" nzFor="bank"
+                                        >Bank</nz-form-label
+                                    >
+                                    <nz-form-control [nzSpan]="18">
+                                        <input
+                                            nz-input
+                                            [disabled]="!isEditmode"
+                                            formControlName="bank"
+                                        />
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                        </div>
+
+                        <div nz-row>
+                            <div nz-col [nzSpan]="12">
+                                <nz-form-item>
+                                    <nz-form-label [nzSpan]="6" nzFor="branch"
+                                        >Branch</nz-form-label
+                                    >
+                                    <nz-form-control [nzSpan]="18">
+                                        <input
+                                            nz-input
+                                            [disabled]="!isEditmode"
+                                            formControlName="branch"
+                                        />
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                        </div>
+                    </div>
+
+                    <nz-form-item>
+                        <nz-form-control>
+                            <div style="text-align: center; margin-top: 10px;">
+                                <button
+                                    nz-button
+                                    nzType="primary"
+                                    style="margin-right: 8px;"
+                                    (click)="updateSalesRespresentative()"
+                                >
+                                    Add Sales Representative
+                                </button>
+                                <button nz-button nzType="default">
+                                    Reset Form
+                                </button>
+                            </div>
+                        </nz-form-control>
+                    </nz-form-item>
+                </form>
+            </nz-card>
+        </div>
+    </div>
+</div>

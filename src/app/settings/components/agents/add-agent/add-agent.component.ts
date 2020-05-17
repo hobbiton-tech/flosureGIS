@@ -110,17 +110,17 @@ export class AddAgentComponent implements OnInit {
     }
 
     async addAgentIntermediary(agent: IAgent) {
-        await this.agentService.addAgent(agent);
+        await this.agentService.addAgent(agent).subscribe();
     }
 
     async addBrokerIntermediary(broker: IBroker) {
-        await this.agentService.addBroker(broker);
+        await this.agentService.addBroker(broker).subscribe();
     }
 
     async addSalesRepresentativeIntermediary(
         salesRepresentative: ISalesRepresentative
     ) {
-        await this.agentService.addSalesRepresentative(salesRepresentative);
+        await this.agentService.addSalesRepresentative(salesRepresentative).subscribe();
     }
 
     submitAgentIntermediary() {

@@ -15,6 +15,7 @@ export interface IAgent {
     accountName: string;
     accountNumber: number;
     accountType: string;
+    bank: string;
     branch: string;
     dateCreated: Date;
     intermediaryType: IntermediaryType;

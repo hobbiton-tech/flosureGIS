@@ -8,7 +8,11 @@ import { Observable, combineLatest } from 'rxjs';
 import { IAgent, IBroker, ISalesRepresentative } from '../models/agents.model';
 import { v4 } from 'uuid';
 import { first, combineAll } from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+const httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
 
 @Injectable({
     providedIn: 'root'
@@ -37,61 +41,61 @@ export class AgentsService {
         this.salesRepresentatives = this.salesRepresentativesCollection.valueChanges();
     }
 
-    async addAgent(agent: IAgent): Promise<void> {
-        this.agents.pipe(first()).subscribe(async agents => {
-            agent.id = v4();
-            agent.dateCreated = new Date();
-            agent.intermediaryId = this.generateIntermediaryID(
-                'Agent',
-                'GL',
-                agents.length
-            );
+    // async addAgent(agent: IAgent): Promise<void> {
+    //     this.agents.pipe(first()).subscribe(async agents => {
+    //         agent.id = v4();
+    //         agent.dateCreated = new Date();
+    //         agent.intermediaryId = this.generateIntermediaryID(
+    //             'Agent',
+    //             'GL',
+    //             agents.length
+    //         );
 
-            await this.agentsCollection.doc(agent.id).set(agent);
-        });
-    }
+    //         await this.agentsCollection.doc(agent.id).set(agent);
+    //     });
+    // }
 
     // getAgents(): Observable<IAgent[]> {
     //     return this.agents;
     // }
 
-    async addBroker(broker: IBroker): Promise<void> {
-        this.brokers.pipe(first()).subscribe(async brokers => {
-            broker.id = v4();
-            broker.dateCreated = new Date();
-            broker.intermediaryId = this.generateIntermediaryID(
-                'Broker',
-                'GL',
-                brokers.length
-            );
+    // async addBroker(broker: IBroker): Promise<void> {
+    //     this.brokers.pipe(first()).subscribe(async brokers => {
+    //         broker.id = v4();
+    //         broker.dateCreated = new Date();
+    //         broker.intermediaryId = this.generateIntermediaryID(
+    //             'Broker',
+    //             'GL',
+    //             brokers.length
+    //         );
 
-            await this.brokersCollection.doc(broker.id).set(broker);
-        });
-    }
+    //         await this.brokersCollection.doc(broker.id).set(broker);
+    //     });
+    // }
 
     // getBrokers(): Observable<IBroker[]> {
     //     return this.brokers;
     // }
 
-    async addSalesRepresentative(
-        salesRepresentative: ISalesRepresentative
-    ): Promise<void> {
-        this.salesRepresentatives
-            .pipe(first())
-            .subscribe(async salesRepresentatives => {
-                salesRepresentative.id = v4();
-                salesRepresentative.dateCreated = new Date();
-                salesRepresentative.intermediaryId = this.generateIntermediaryID(
-                    'Sales Representative',
-                    'GL',
-                    salesRepresentatives.length
-                );
+    // async addSalesRepresentative(
+    //     salesRepresentative: ISalesRepresentative
+    // ): Promise<void> {
+    //     this.salesRepresentatives
+    //         .pipe(first())
+    //         .subscribe(async salesRepresentatives => {
+    //             salesRepresentative.id = v4();
+    //             salesRepresentative.dateCreated = new Date();
+    //             salesRepresentative.intermediaryId = this.generateIntermediaryID(
+    //                 'Sales Representative',
+    //                 'GL',
+    //                 salesRepresentatives.length
+    //             );
 
-                await this.salesRepresentativesCollection
-                    .doc(salesRepresentative.id)
-                    .set(salesRepresentative);
-            });
-    }
+    //             await this.salesRepresentativesCollection
+    //                 .doc(salesRepresentative.id)
+    //                 .set(salesRepresentative);
+    //         });
+    // }
 
     // getSalesRepresentatives(): Observable<ISalesRepresentative[]> {
     //     return this.salesRepresentatives;
@@ -130,6 +134,108 @@ export class AgentsService {
 
         return intermediaryTyp + insuranceCompanyNam + count;
     }
+
+    //postgres
+    addSalesRepresentative(
+        salesRepresentatives: ISalesRepresentative
+    ): Observable<ISalesRepresentative> {
+        salesRepresentatives.dateCreated = new Date();
+        salesRepresentatives.intermediaryType = 'Sales Representative';
+        console.log(salesRepresentatives);
+        return this.http.post<ISalesRepresentative>(
+            'http://localhost:3000/intermediary/sales-representative',
+            salesRepresentatives
+        );
+    }
+    // getSalesRepresentatives(): Observable<ISalesRepresentative[]> {
+    //     return this.http.get<ISalesRepresentative[]>(
+    //         'http://localhost:3000/intermediary/sales-representative'
+    //     );
+    // }
+
+    getSalesRepresentative(id: string): Observable<ISalesRepresentative> {
+        return this.http.get<ISalesRepresentative>(
+            `http://localhost:3000/intermediary/sales-representative/${id}`
+        );
+    }
+
+    updateSalesRepresentatives(
+        agent: ISalesRepresentative,
+        id: string
+    ): Observable<ISalesRepresentative> {
+        return this.http.put<ISalesRepresentative>(
+            `http://localhost:3000/intermediary/sales-representative/${id}`,
+            agent
+        );
+    }
+
+    updateBroker(agent: IBroker, id: string): Observable<IBroker> {
+        return this.http.put<IBroker>(
+            `http://localhost:3000/intermediary/broker/${id}`,
+            agent
+        );
+    }
+
+    addBroker(broker: IBroker): Observable<IBroker> {
+        broker.dateCreated = new Date();
+        broker.intermediaryType = 'Broker';
+        console.log(broker);
+        return this.http.post<IBroker>(
+            'http://localhost:3000/intermediary/broker',
+            broker
+        );
+    }
+
+    getBroker(id: string): Observable<IBroker> {
+        return this.http.get<IBroker>(
+            `http://localhost:3000//intermediary/broker/${id}`
+        );
+    }
+
+    // getBrokers(): Observable<IBroker[]> {
+    //     return this.http.get<IBroker[]>(
+    //         'http://localhost:3000/intermediary/broker'
+    //     );
+    // }
+
+    addAgent(agent: IAgent): Observable<IAgent> {
+        agent.dateCreated = new Date();
+        agent.intermediaryType = 'Agent';
+        console.log(agent);
+        return this.http.post<IAgent>(
+            'http://localhost:3000/intermediary/agent',
+            agent
+        );
+    }
+
+    // getAgent(id: string): Observable<IAgent> {
+    //     return this.http.get<IAgent>(
+    //         `http://localhost:3000/intermediary/agent/${id}`
+    //     );
+    // }
+
+    // getAgents(): Observable<IAgent[]> {
+    //     return this.http.get<IAgent[]>(
+    //         'http://localhost:3000/intermediary/agent'
+    //     );
+    // }
+
+    updateAgent(agent: IAgent, id: string): Observable<IAgent> {
+        return this.http.put<IAgent>(
+            `http://localhost:3000/intermediary/agent/${id}`,
+            agent
+        );
+    }
+
+    // getAllIntermediaries(): Observable<
+    //     [IAgent[], IBroker[], ISalesRepresentative[]]
+    // > {
+    //     return combineLatest(
+    //         this.getAgents(),
+    //         this.getBrokers(),
+    //         this.getSalesRepresentatives()
+    //     );
+    // }
 
     //postgres
     getAgents(): Observable<IAgent[]> {

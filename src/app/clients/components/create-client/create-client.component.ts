@@ -89,11 +89,11 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
     }
 
     async addIndividualClient(client: IIndividualClient): Promise<void> {
-        await this.clientsService.addIndividualClient(client);
+        await this.clientsService.addIndividualClient(client).subscribe();
     }
 
     async addCorporateClient(client: ICorporateClient): Promise<void> {
-        await this.clientsService.addCorporateClient(client);
+        await this.clientsService.addCorporateClient(client).subscribe();
     }
 
     submitIndividualClient(): void {

@@ -2,9 +2,9 @@
     <div style="margin: 15px;">
         <nz-page-header nzBackIcon nzTitle="Policy Number: {{ policyData.policyNumber }}"
             [nzSubtitle]="policyData.client">
-            <!-- <div *ngIf="policyData.status == 'Cancelled'">
+            <div *ngIf="policyData.status == 'Cancelled'">
                 <nz-tag nzColor="red">Cancelled</nz-tag>
-            </div> -->
+            </div>
             <nz-page-header-extra>
                 <button nz-button nzType="default" (click)="isCreditNotePDFVisible = true"
                     *ngIf="policyData.status == 'Cancelled'">
