@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { IClass } from '../../models/product-setups-models.model';
 import { ProductSetupsServiceService } from '../../services/product-setups-service.service';
+import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({
     selector: 'app-add-class',
@@ -15,12 +16,15 @@ export class AddClassComponent implements OnInit {
     @Output()
     closeAddClassFormDrawerVisible: EventEmitter<any> = new EventEmitter();
 
+    update: boolean = true;
+
     //class details form
     classForm: FormGroup;
 
     constructor(
         private formBuilder: FormBuilder,
-        private productSetupsService: ProductSetupsServiceService
+        private productSetupsService: ProductSetupsServiceService,
+        private msg: NzMessageService
     ) {
         this.classForm = this.formBuilder.group({
             className: ['', Validators.required],
@@ -34,13 +38,19 @@ export class AddClassComponent implements OnInit {
     ngOnInit(): void {}
 
     closeAddClassFormDrawer(): void {
-        this.closeAddClassFormDrawerVisible.emit();
+        this.closeAddClassFormDrawerVisible.emit(true);
     }
 
     async addClass(classDto: IClass) {
-        await this.productSetupsService.addClass(classDto).subscribe(res => {
-            console.log(res);
-        });
+        await this.productSetupsService.addClass(classDto).subscribe(
+            res => {
+                this.msg.success('Class Added successfully');
+                this.closeAddClassFormDrawer();
+            },
+            err => {
+                this.msg.error('Failed to add class');
+            }
+        );
     }
 
     submitClass() {

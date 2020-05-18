@@ -24,21 +24,33 @@ export class AgentsService {
         ISalesRepresentative
     >;
 
-    agents: Observable<IAgent[]>;
-    brokers: Observable<IBroker[]>;
-    salesRepresentatives: Observable<ISalesRepresentative[]>;
+    agents: IAgent[];
+    brokers: IBroker[];
+    salesRepresentatives: ISalesRepresentative[];
 
     constructor(private firebase: AngularFirestore, private http: HttpClient) {
-        this.agentsCollection = this.firebase.collection<IAgent>('agents');
-        this.agents = this.agentsCollection.valueChanges();
+        // this.agentsCollection = this.firebase.collection<IAgent>('agents');
+        // this.agents = this.agentsCollection.valueChanges();
 
-        this.brokersCollection = this.firebase.collection<IBroker>('brokers');
-        this.brokers = this.brokersCollection.valueChanges();
+        // this.brokersCollection = this.firebase.collection<IBroker>('brokers');
+        // this.brokers = this.brokersCollection.valueChanges();
 
-        this.salesRepresentativesCollection = this.firebase.collection<
-            ISalesRepresentative
-        >('sales_representatives');
-        this.salesRepresentatives = this.salesRepresentativesCollection.valueChanges();
+        // this.salesRepresentativesCollection = this.firebase.collection<
+        //     ISalesRepresentative
+        // >('sales_representatives');
+        // this.salesRepresentatives = this.salesRepresentativesCollection.valueChanges();
+
+        this.getAgents().subscribe(totalAgents => {
+            this.agents = totalAgents;
+        });
+
+        this.getBrokers().subscribe(totalBrokers => {
+            this.brokers = totalBrokers;
+        });
+
+        this.getSalesRepresentatives().subscribe(totalSalesRepresentatives => {
+            this.salesRepresentatives = totalSalesRepresentatives;
+        });
     }
 
     // async addAgent(agent: IAgent): Promise<void> {
@@ -128,7 +140,7 @@ export class AgentsService {
             .substring(0, 3)
             .toLocaleUpperCase();
         const insuranceCompanyNam = insuranceCompanyName
-            .substring(0, 2)
+            .substring(0, 3)
             .toLocaleUpperCase();
         const count = this.countGenerator(totalAgents);
 
@@ -141,7 +153,11 @@ export class AgentsService {
     ): Observable<ISalesRepresentative> {
         salesRepresentatives.dateCreated = new Date();
         salesRepresentatives.intermediaryType = 'Sales Representative';
-        console.log(salesRepresentatives);
+        salesRepresentatives.intermediaryId = this.generateIntermediaryID(
+            'Sales Representative',
+            'SGI',
+            this.salesRepresentatives.length
+        );
         return this.http.post<ISalesRepresentative>(
             'http://localhost:3000/intermediary/sales-representative',
             salesRepresentatives
@@ -179,7 +195,11 @@ export class AgentsService {
     addBroker(broker: IBroker): Observable<IBroker> {
         broker.dateCreated = new Date();
         broker.intermediaryType = 'Broker';
-        console.log(broker);
+        broker.intermediaryId = this.generateIntermediaryID(
+            'Broker',
+            'SGI',
+            this.brokers.length
+        );
         return this.http.post<IBroker>(
             'http://localhost:3000/intermediary/broker',
             broker
@@ -201,7 +221,11 @@ export class AgentsService {
     addAgent(agent: IAgent): Observable<IAgent> {
         agent.dateCreated = new Date();
         agent.intermediaryType = 'Agent';
-        console.log(agent);
+        agent.intermediaryId = this.generateIntermediaryID(
+            'Agent',
+            'SGI',
+            this.agents.length
+        );
         return this.http.post<IAgent>(
             'http://localhost:3000/intermediary/agent',
             agent
@@ -240,19 +264,19 @@ export class AgentsService {
     //postgres
     getAgents(): Observable<IAgent[]> {
         return this.http.get<IAgent[]>(
-            'https://flosure-postgres-api.herokuapp.com/intermediary/agent'
+            'http://localhost:3000/intermediary/agent'
         );
     }
 
     getBrokers(): Observable<IBroker[]> {
         return this.http.get<IBroker[]>(
-            'https://flosure-postgres-api.herokuapp.com/intermediary/broker'
+            'http://localhost:3000/intermediary/broker'
         );
     }
 
     getSalesRepresentatives(): Observable<ISalesRepresentative[]> {
         return this.http.get<ISalesRepresentative[]>(
-            'https://flosure-postgres-api.herokuapp.com/intermediary/sales-representative'
+            'http://localhost:3000/intermediary/sales-representative'
         );
     }
 

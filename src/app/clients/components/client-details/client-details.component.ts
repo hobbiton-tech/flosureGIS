@@ -2,11 +2,11 @@ import {
     Component,
     OnInit,
     ChangeDetectorRef,
-    AfterViewInit,
+    AfterViewInit
 } from '@angular/core';
 import {
     ICorporateClient,
-    IIndividualClient,
+    IIndividualClient
 } from '../../models/clients.model';
 import { Router, ActivatedRoute } from '@angular/router';
 // import { AccountDetails } from '../../models/account-details.model';
@@ -23,7 +23,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 @Component({
     selector: 'app-client-details',
     templateUrl: './client-details.component.html',
-    styleUrls: ['./client-details.component.scss'],
+    styleUrls: ['./client-details.component.scss']
 })
 export class ClientDetailsComponent implements OnInit, AfterViewInit {
     isEditmode = false;
@@ -68,7 +68,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
             accountNumber: ['', Validators.required],
             accountType: ['', Validators.required],
             bank: ['', Validators.required],
-            branch: ['', Validators.required],
+            branch: ['', Validators.required]
         });
 
         this.corporateClientForm = this.formBuilder.group({
@@ -88,19 +88,19 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
             accountNumber: ['', Validators.required],
             accountType: ['', Validators.required],
             bank: ['', Validators.required],
-            branch: ['', Validators.required],
+            branch: ['', Validators.required]
         });
     }
 
     ngOnInit(): void {
-        this.router.params.subscribe((param) => {
+        this.router.params.subscribe(param => {
             this.id = param.id;
         });
 
-        this.clientsService.getAllClients().subscribe((clients) => {
+        this.clientsService.getAllClients().subscribe(clients => {
             console.log(clients);
             this.client = [...clients[1], ...clients[0]].filter(
-                (x) => x.id === this.id
+                x => x.id === this.id
             )[0] as IIndividualClient & ICorporateClient;
 
             console.log('CLIENTS', this.client);
@@ -233,13 +233,14 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
 
         const agent: IIndividualClient = {
             dateCreated: this.client.dateCreated,
-            ...this.individualClientForm.value,
+            dateUpdated: new Date(),
+            ...this.individualClientForm.value
         };
 
         this.clientsService
             .updateIndividualClient(agent, this.client.id)
-            .subscribe((agent) => {
-                (res) => console.log(res);
+            .subscribe(agent => {
+                res => console.log(res);
             });
     }
 
@@ -248,13 +249,14 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
 
         const agent: ICorporateClient = {
             dateCreated: this.client.dateCreated,
-            ...this.corporateClientForm.value,
+            dateUpdated: new Date(),
+            ...this.corporateClientForm.value
         };
 
         this.clientsService
             .updateCorporateClient(agent, this.client.id)
-            .subscribe((agent) => {
-                (res) => console.log(res);
+            .subscribe(agent => {
+                res => console.log(res);
             });
     }
 
@@ -277,5 +279,10 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
     getTimeStamp(client: ICorporateClient & IIndividualClient): number {
         const date = client.dateCreated as ITimestamp;
         return date.seconds;
+    }
+
+    getDateOfBirthTimeStamp(client: IIndividualClient): number {
+        const date = client.dateOfBirth as ITimestamp;
+        return date.seconds * 1000;
     }
 }

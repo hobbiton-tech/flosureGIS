@@ -239,12 +239,17 @@ export class QuotesService {
                         'http://localhost:3000/quotation',
                         motorQuotation
                     )
-                    .subscribe(async res => {
-                        this.msg.success('Quotation Successfully Created');
-                        this.router.navigateByUrl(
-                            '/flosure/quotes/quotes-list'
-                        );
-                    });
+                    .subscribe(
+                        async res => {
+                            this.msg.success('Quotation Successfully Created');
+                            this.router.navigateByUrl(
+                                '/flosure/quotes/quotes-list'
+                            );
+                        },
+                        async err => {
+                            this.msg.error('Quotation Creation failed');
+                        }
+                    );
             });
     }
 

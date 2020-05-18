@@ -26,6 +26,13 @@ export class ClientsService {
     corporateClients: ICorporateClient[];
 
     constructor(private http: HttpClient, private firebase: AngularFirestore) {
+        this.getIndividualClients().subscribe(totalIndividaulClients => {
+            this.individualClients = totalIndividaulClients;
+        });
+
+        this.getCorporateClients().subscribe(totalCorporateClients => {
+            this.corporateClients = totalCorporateClients;
+        });
         // this.individualClientsCollection = this.firebase.collection<
         //     IIndividualClient
         // >('individaul_clients');
@@ -70,10 +77,6 @@ export class ClientsService {
     // }
 
     addCorporateClient(client: ICorporateClient): Observable<ICorporateClient> {
-        this.getCorporateClients().subscribe(totalCorporateClients => {
-            this.corporateClients = totalCorporateClients;
-        });
-
         client.clientType = 'Corporate';
         client.dateCreated = new Date();
         client.dateUpdated = new Date();
@@ -115,10 +118,6 @@ export class ClientsService {
     addIndividualClient(
         client: IIndividualClient
     ): Observable<IIndividualClient> {
-        this.getIndividualClients().subscribe(totalIndividaulClients => {
-            this.individualClients = totalIndividaulClients;
-        });
-
         client.clientType = 'Individual';
         client.dateCreated = new Date();
         client.dateUpdated = new Date();
@@ -128,7 +127,6 @@ export class ClientsService {
             'SGI',
             this.individualClients.length
         );
-        console.log(client);
         return this.http.post<IIndividualClient>(
             'http://localhost:3000/clients/individual',
             client

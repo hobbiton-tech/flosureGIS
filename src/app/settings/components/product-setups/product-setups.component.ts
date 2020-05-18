@@ -3,6 +3,7 @@ import { IClass, IProduct } from './models/product-setups-models.model';
 import { ProductSetupsServiceService } from './services/product-setups-service.service';
 import { ActivatedRoute } from '@angular/router';
 import { ProductTrackerService } from './services/producti-tracker.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
     selector: 'app-product-setups',
@@ -12,6 +13,8 @@ import { ProductTrackerService } from './services/producti-tracker.service';
 export class ProductSetupsComponent implements OnInit {
     classesList: IClass[] = [];
     productsList: IProduct[] = [];
+
+    classUpdate = new BehaviorSubject<boolean>(false);
 
     //classId
     classId: string;
@@ -47,6 +50,16 @@ export class ProductSetupsComponent implements OnInit {
 
             this.productsList = this.classesList[0].products;
         });
+
+        this.classUpdate.subscribe(update =>
+            update === true
+                ? this.productSetupsService.getClasses().subscribe(classes => {
+                      this.classesList = classes;
+
+                      this.productsList = this.classesList[0].products;
+                  })
+                : ''
+        );
     }
 
     openAddClassFormDrawer() {
@@ -66,12 +79,6 @@ export class ProductSetupsComponent implements OnInit {
     }
 
     changeSelectedClass(selectedClass: IClass) {
-        // this.productSetupsService
-        //     .getProducts(selectedClass.id)
-        //     .subscribe(products => {
-        //         this.productsList = products;
-        //         this.productTrackerService.changeClass(selectedClass)
-        //     });
         this.productSetupsService.getClasses().subscribe(classes => {
             this.singleClass = classes.filter(
                 x => x.id === selectedClass.id
@@ -79,5 +86,9 @@ export class ProductSetupsComponent implements OnInit {
 
             this.productsList = this.singleClass.products;
         });
+    }
+
+    recieveUpdate($event) {
+        this.classUpdate.next($event);
     }
 }

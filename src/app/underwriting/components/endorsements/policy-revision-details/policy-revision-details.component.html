@@ -194,5 +194,5 @@
 </app-add-risk>
 <app-view-risk [isViewRiskFormModalVisible]="viewRiskFormModalVisible" [riskData]="editedRisk"
     [policyEndDate]="policyData.endDate" (closeViewRiskFormVisible)="viewRiskFormModalVisible = false"
-    (sendEdittedRiskEmitter)="recieveEditedRisk($event)">
+    (sendEdittedRiskEmitter)="recieveEditedRisk($event)" (closeViewRiskFormVisible)="recieveUpdate($event)">
 </app-view-risk>

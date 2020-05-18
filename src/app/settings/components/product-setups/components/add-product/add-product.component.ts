@@ -4,6 +4,7 @@ import { ProductSetupsServiceService } from '../../services/product-setups-servi
 import { IProduct, IClass } from '../../models/product-setups-models.model';
 import { ActivatedRoute } from '@angular/router';
 import { Class } from 'estree';
+import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({
     selector: 'app-add-product',
@@ -16,6 +17,8 @@ export class AddProductComponent implements OnInit {
 
     @Output()
     closeAddProductFormDrawerVisible: EventEmitter<any> = new EventEmitter();
+
+    update: boolean = true;
 
     //product details form
     productForm: FormGroup;
@@ -33,7 +36,8 @@ export class AddProductComponent implements OnInit {
     constructor(
         private formBuilder: FormBuilder,
         private productSetupsService: ProductSetupsServiceService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private msg: NzMessageService
     ) {
         this.productForm = this.formBuilder.group({
             productName: ['', Validators.required],
@@ -55,17 +59,21 @@ export class AddProductComponent implements OnInit {
     }
 
     closeAddProductFormDrawer(): void {
-        this.closeAddProductFormDrawerVisible.emit();
+        this.closeAddProductFormDrawerVisible.emit(true);
     }
 
     async addProduct(productDto: IProduct) {
-        console.log('here');
-        console.log(this.selectedClass.id);
         await this.productSetupsService
             .addProduct(productDto, this.selectedClass.id)
-            .subscribe(res => {
-                console.log(res);
-            });
+            .subscribe(
+                res => {
+                    this.msg.success('Product Added successfully');
+                    this.closeAddProductFormDrawer();
+                },
+                err => {
+                    this.msg.error('Failed to add product');
+                }
+            );
     }
 
     submitProduct() {

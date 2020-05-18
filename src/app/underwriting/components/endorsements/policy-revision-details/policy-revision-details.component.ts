@@ -19,6 +19,7 @@ import _ from 'lodash';
 import { Endorsement } from 'src/app/underwriting/models/endorsement.model';
 import { EndorsementService } from 'src/app/underwriting/services/endorsements.service';
 import { NzMessageService } from 'ng-zorro-antd';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
     selector: 'app-policy-revision-details',
@@ -33,6 +34,8 @@ export class PolicyRevisionDetailsComponent implements OnInit {
     //modals
     addRiskFormModalVisible = false;
     viewRiskFormModalVisible = false;
+
+    policyRiskRevisionUpdate = new BehaviorSubject<boolean>(false);
 
     //policy details form
     policyRevisionDetailsForm: FormGroup;
@@ -127,11 +130,25 @@ export class PolicyRevisionDetailsComponent implements OnInit {
                     .setValue(this.policyData.quarter);
             });
         });
+
+        this.policyRiskRevisionUpdate.subscribe(update => {
+            update === true
+                ? this.route.params.subscribe(id => {
+                      this.policiesService
+                          .getBackupPolicyById(id['id'])
+                          .subscribe(policy => {
+                              console.log(this.risks);
+                          });
+                  })
+                : '';
+        });
     }
 
     recieveEditedRisk($event) {
         console.log('EVENT', $event);
+        console.log(this.risks);
         const editedRisk: RiskModel = $event;
+        this.policyRiskRevisionUpdate.next(true);
         this.updateRisk(editedRisk);
         this.cdr.detectChanges();
     }
@@ -156,6 +173,7 @@ export class PolicyRevisionDetailsComponent implements OnInit {
         });
 
         this.risks.splice(riskIndex, 1, risk);
+        this.policyRiskRevisionUpdate.next(true);
     }
 
     openAddRiskFormModal() {
@@ -226,5 +244,9 @@ export class PolicyRevisionDetailsComponent implements OnInit {
         return items.reduce(function(a, b) {
             return a + b[prop];
         }, 0);
+    }
+
+    recieveUpdate($event) {
+        this.policyRiskRevisionUpdate.next($event);
     }
 }

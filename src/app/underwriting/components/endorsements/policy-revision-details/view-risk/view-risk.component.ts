@@ -12,6 +12,7 @@ import { HttpClient } from '@angular/common/http';
 import { v4 } from 'uuid';
 import _ from 'lodash';
 import { ITimestamp } from 'src/app/underwriting/models/policy.model';
+import { NzMessageService } from 'ng-zorro-antd';
 
 interface IRateResult {
     sumInsured: string;
@@ -61,6 +62,8 @@ export class ViewRiskComponent implements OnInit {
 
     @Output()
     sendEdittedRiskEmitter: EventEmitter<any> = new EventEmitter();
+
+    update: boolean = true;
 
     // vehicle make drop down
     vehicleMakeUrl = 'https://api.randomuser.me/?results=5';
@@ -316,7 +319,11 @@ export class ViewRiskComponent implements OnInit {
 
     riskDetailsForm: FormGroup;
 
-    constructor(private formBuilder: FormBuilder, private http: HttpClient) {}
+    constructor(
+        private formBuilder: FormBuilder,
+        private http: HttpClient,
+        private msg: NzMessageService
+    ) {}
 
     ngOnInit(): void {
         /////////////Risk Details Starts here//////////////////
@@ -749,7 +756,7 @@ export class ViewRiskComponent implements OnInit {
         }
 
         this.sendEdittedRiskEmitter.emit(this.currentRiskEdit);
-        this.closeViewRiskFormVisible.emit();
+        this.closeViewRiskFormVisible.emit(true);
     }
 
     //save risks changes after editing

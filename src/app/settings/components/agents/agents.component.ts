@@ -4,17 +4,19 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AgentsService } from './services/agents.service';
 import {
     IClass,
-    IProduct,
+    IProduct
 } from '../product-setups/models/product-setups-models.model';
 import { ProductSetupsServiceService } from '../product-setups/services/product-setups-service.service';
 import { CommisionSetupsService } from './services/commision-setups.service';
 import { ICommissionSetup } from './models/commission-setup.model';
 import { Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
+import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({
     selector: 'app-agents',
     templateUrl: './agents.component.html',
-    styleUrls: ['./agents.component.scss'],
+    styleUrls: ['./agents.component.scss']
 })
 export class AgentsComponent implements OnInit {
     addAgentsFormDrawerVisible = false;
@@ -24,6 +26,9 @@ export class AgentsComponent implements OnInit {
     selectedIntermediary: IAgent & IBroker & ISalesRepresentative;
 
     addProductCommissionFormDrawerVisible = false;
+
+    intermediaryUpdate = new BehaviorSubject<boolean>(false);
+    commissionUpdate = new BehaviorSubject<boolean>(false);
 
     //edit table commission setup form
     isEditmode = false;
@@ -63,7 +68,7 @@ export class AgentsComponent implements OnInit {
         { label: 'Direct', value: 'Direct' },
         { label: 'Broker', value: 'Broker' },
         { label: 'Agent', value: 'Agent' },
-        { label: 'Sales Representative', value: 'Sales Representative' },
+        { label: 'Sales Representative', value: 'Sales Representative' }
     ];
 
     constructor(
@@ -72,19 +77,20 @@ export class AgentsComponent implements OnInit {
         private cdr: ChangeDetectorRef,
         private productSetupsService: ProductSetupsServiceService,
         private commissionSetupsService: CommisionSetupsService,
-        private agentService: AgentsService
+        private agentService: AgentsService,
+        private msg: NzMessageService
     ) {
         this.commissionSetupForm = this.formBuilder.group({
             intermediaryName: ['', Validators.required],
             intermediaryType: ['', Validators.required],
             productClass: ['', Validators.required],
             productName: ['', Validators.required],
-            commission: ['', Validators.required],
+            commission: ['', Validators.required]
         });
     }
 
     ngOnInit(): void {
-        this.agentService.getAllIntermediaries().subscribe((intermediaries) => {
+        this.agentService.getAllIntermediaries().subscribe(intermediaries => {
             this.totalAgents = intermediaries[0].length;
             this.totalBrokers = intermediaries[1].length;
             this.totalSalesRepresentatives = intermediaries[2].length;
@@ -92,22 +98,65 @@ export class AgentsComponent implements OnInit {
             this.intermediariesList = [
                 ...intermediaries[0],
                 ...intermediaries[1],
-                ...intermediaries[2],
+                ...intermediaries[2]
             ] as Array<IAgent & IBroker & ISalesRepresentative>;
             this.displayIntermediariesList = this.intermediariesList;
 
             this.totalIntermediaries = this.intermediariesList.length;
         });
 
-        this.productSetupsService.getClasses().subscribe((classes) => {
+        this.intermediaryUpdate.subscribe(update =>
+            update === true
+                ? this.agentService
+                      .getAllIntermediaries()
+                      .subscribe(intermediaries => {
+                          this.totalAgents = intermediaries[0].length;
+                          this.totalBrokers = intermediaries[1].length;
+                          this.totalSalesRepresentatives =
+                              intermediaries[2].length;
+
+                          this.intermediariesList = [
+                              ...intermediaries[0],
+                              ...intermediaries[1],
+                              ...intermediaries[2]
+                          ] as Array<IAgent & IBroker & ISalesRepresentative>;
+                          this.displayIntermediariesList = this.intermediariesList;
+
+                          this.totalIntermediaries = this.intermediariesList.length;
+                      })
+                : ''
+        );
+
+        this.productSetupsService.getClasses().subscribe(classes => {
             this.classesList = classes;
         });
 
         this.commissionSetupsService
             .getCommissionSetups()
-            .subscribe((commissions) => {
+            .subscribe(commissions => {
                 this.commissionsList = commissions;
             });
+
+        this.commissionUpdate.subscribe(update =>
+            update === true
+                ? this.commissionSetupsService
+                      .getCommissionSetups()
+                      .subscribe(commissions => {
+                          this.commissionsList = commissions;
+                          this.displayCommissionList = this.commissionsList.filter(
+                              x =>
+                                  x.intermediaryName ==
+                                      this.selectedIntermediary.companyName ||
+                                  x.intermediaryName ==
+                                      this.selectedIntermediary
+                                          .contactFirstName +
+                                          ' ' +
+                                          this.selectedIntermediary
+                                              .contactLastName
+                          );
+                      })
+                : ''
+        );
     }
 
     changeSelectedIntermediary(
@@ -122,7 +171,9 @@ export class AgentsComponent implements OnInit {
             .setValue(
                 this.selectedIntermediary.companyName
                     ? this.selectedIntermediary.companyName
-                    : this.selectedIntermediary.contactFirstName
+                    : this.selectedIntermediary.contactFirstName +
+                          ' ' +
+                          this.selectedIntermediary.contactLastName
             );
         this.commissionSetupForm
             .get('intermediaryType')
@@ -167,9 +218,9 @@ export class AgentsComponent implements OnInit {
         // this.loadProducts();
         this.commissionSetupsService
             .getCommissionSetups()
-            .subscribe((commissions) => {
+            .subscribe(commissions => {
                 this.displayCommissionList = commissions.filter(
-                    (x) =>
+                    x =>
                         x.intermediaryName ==
                             this.selectedIntermediary.companyName ||
                         x.intermediaryName ==
@@ -184,9 +235,9 @@ export class AgentsComponent implements OnInit {
 
     //loads products based on selected class
     loadProducts() {
-        this.productSetupsService.getClasses().subscribe((classes) => {
+        this.productSetupsService.getClasses().subscribe(classes => {
             this.selectedClass = classes.filter(
-                (x) =>
+                x =>
                     x.className ===
                     this.commissionSetupForm.get('productClass').value
             )[0];
@@ -197,9 +248,17 @@ export class AgentsComponent implements OnInit {
     async addCommissionSetup(commission: ICommissionSetup) {
         await this.commissionSetupsService
             .addCommissionSetup(commission)
-            .subscribe((res) => {
-                console.log(res);
-            });
+            .subscribe(
+                res => {
+                    this.msg.success('Commission successfully setup');
+                },
+                err => {
+                    this.msg.error('Failed to add commission');
+                },
+                () => {
+                    this.commissionUpdate.next(true);
+                }
+            );
     }
 
     submitCommissionSetup() {
@@ -211,10 +270,9 @@ export class AgentsComponent implements OnInit {
         if (this.commissionSetupForm.valid || !this.commissionSetupForm.valid) {
             console.log(this.commissionSetupForm.value);
             this.addCommissionSetup(this.commissionSetupForm.value).then(
-                (res) => {
+                res => {
                     //put some feedback here
                     this.isEditmode = false;
-                    console.log(res);
                 }
             );
         }
@@ -230,8 +288,16 @@ export class AgentsComponent implements OnInit {
     }
 
     editViewIntermediary(agent: IAgent | IBroker | ISalesRepresentative): void {
+        // this.router.navigateByUrl(
+        //     '/flosure/underwriting/intermediary-view/' + agent.id
+        // );
+        console.log(agent);
         this.router.navigateByUrl(
-            '/flosure/underwriting/intermediary-view/' + agent.id
+            `/flosure/underwriting/intermediary-view/${agent.id}`
         );
+    }
+
+    recieveUpdate($event) {
+        this.intermediaryUpdate.next($event);
     }
 }

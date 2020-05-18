@@ -1150,7 +1150,7 @@
                                         <!-- Discount Ends here -->
 
                                         <div nz-col nzSpan="8">
-                                            <div nz-col nzSpan="20" style="float: right;">
+                                            <div nz-col nzSpan="24">
                                                 <nz-card>
                                                     <nz-divider nzText="Loading" nzOrientation="left"></nz-divider>
                                                     <div *ngIf="
@@ -1200,33 +1200,38 @@
                                                     </div>
                                                 </nz-card>
 
-                                                <div style="margin-top: 5px">
-                                                    <nz-card>
-                                                        <nz-divider nzText="Discount" nzOrientation="left"></nz-divider>
-                                                        <div *ngIf="(discounts === undefined || discounts.length == 0)">
-                                                            <p>No Discount added</p>
-                                                        </div>
-                                                        <div *ngFor="let discount of discounts; let i = index;">
-                                                            <div>
-                                                                <div nz-row>
-                                                                    <div nz-col nzSpan="10">
-                                                                        <p>{{discount.discountType}}:</p>
-                                                                    </div>
-                                                                    <div nz-col nzSpan="6">
-                                                                        <p style="margin-left: 4px;">
-                                                                            {{discount.amount | number:'1.2-2'}}</p>
-                                                                    </div>
-                                                                    <div nz-col nzSpan="8">
-                                                                        <a style="float: right;"
-                                                                            (click)="removeDiscount(discount, $event)">Remove
-                                                                            Discount</a>
+                                                <div nz-col nzSpan="24">
+                                                    <div style="margin-top: 5px">
+                                                        <nz-card>
+                                                            <nz-divider nzText="Discount" nzOrientation="left">
+                                                            </nz-divider>
+                                                            <div
+                                                                *ngIf="(discounts === undefined || discounts.length == 0)">
+                                                                <p>No Discount added</p>
+                                                            </div>
+                                                            <div *ngFor="let discount of discounts; let i = index;">
+                                                                <div>
+                                                                    <div nz-row>
+                                                                        <div nz-col nzSpan="10">
+                                                                            <p>{{discount.discountType}}:</p>
+                                                                        </div>
+                                                                        <div nz-col nzSpan="6">
+                                                                            <p style="margin-left: 4px;">
+                                                                                {{discount.amount | number:'1.2-2'}}</p>
+                                                                        </div>
+                                                                        <div nz-col nzSpan="8">
+                                                                            <a style="float: right;"
+                                                                                (click)="removeDiscount(discount, $event)">Remove
+                                                                                Discount</a>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    </nz-card>
+                                                        </nz-card>
+                                                    </div>
                                                 </div>
                                             </div>
+
                                         </div>
 
                                         <div nz-col nzSpan="8">
@@ -1852,7 +1857,7 @@
                                         <!-- Discount Ends here -->
 
                                         <div nz-col nzSpan="8">
-                                            <div nz-col nzSpan="20" style="float: right;">
+                                            <div nz-col nzSpan="24">
                                                 <nz-card>
                                                     <nz-divider nzText="Loading" nzOrientation="left"></nz-divider>
                                                     <div *ngIf="
@@ -1903,31 +1908,33 @@
                                                 </nz-card>
                                             </div>
 
-                                            <div style="margin-top: 5px">
-                                                <nz-card>
-                                                    <nz-divider nzText="Discount" nzOrientation="left"></nz-divider>
-                                                    <div *ngIf="(discounts === undefined || discounts.length == 0)">
-                                                        <p>No Discount added</p>
-                                                    </div>
-                                                    <div *ngFor="let discount of discounts; let i = index;">
-                                                        <div>
-                                                            <div nz-row>
-                                                                <div nz-col nzSpan="10">
-                                                                    <p>{{discount.discountType}}:</p>
-                                                                </div>
-                                                                <div nz-col nzSpan="6">
-                                                                    <p style="margin-left: 4px;">
-                                                                        {{discount.amount | number:'1.2-2'}}</p>
-                                                                </div>
-                                                                <div nz-col nzSpan="8">
-                                                                    <a style="float: right;"
-                                                                        (click)="removeDiscount(discount, $event)">Remove
-                                                                        Discount</a>
+                                            <div nz-col nzSpan="24">
+                                                <div style="margin-top: 5px">
+                                                    <nz-card>
+                                                        <nz-divider nzText="Discount" nzOrientation="left"></nz-divider>
+                                                        <div *ngIf="(discounts === undefined || discounts.length == 0)">
+                                                            <p>No Discount added</p>
+                                                        </div>
+                                                        <div *ngFor="let discount of discounts; let i = index;">
+                                                            <div>
+                                                                <div nz-row>
+                                                                    <div nz-col nzSpan="10">
+                                                                        <p>{{discount.discountType}}:</p>
+                                                                    </div>
+                                                                    <div nz-col nzSpan="6">
+                                                                        <p style="margin-left: 4px;">
+                                                                            {{discount.amount | number:'1.2-2'}}</p>
+                                                                    </div>
+                                                                    <div nz-col nzSpan="8">
+                                                                        <a style="float: right;"
+                                                                            (click)="removeDiscount(discount, $event)">Remove
+                                                                            Discount</a>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </nz-card>
+                                                    </nz-card>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -2964,7 +2971,7 @@
 
 
                             <div nz-col nzSpan="8">
-                                <div nz-col nzSpan="20" style="float: right;">
+                                <div nz-col nzSpan="24">
                                     <nz-card>
                                         <nz-divider nzText="Loading" nzOrientation="left"></nz-divider>
                                         <div *ngIf="
@@ -3012,32 +3019,33 @@
                                         </div>
                                     </nz-card>
 
-
-                                    <div style="margin-top: 5px">
-                                        <nz-card>
-                                            <nz-divider nzText="Discount" nzOrientation="left"></nz-divider>
-                                            <div *ngIf="(discounts === undefined || discounts.length == 0)">
-                                                <p>No Discount added</p>
-                                            </div>
-                                            <div *ngFor="let discount of discounts; let i = index;">
-                                                <div>
-                                                    <div nz-row>
-                                                        <div nz-col nzSpan="10">
-                                                            <p>{{discount.discountType}}:</p>
-                                                        </div>
-                                                        <div nz-col nzSpan="6">
-                                                            <p style="margin-left: 4px;">
-                                                                {{discount.amount | number:'1.2-2'}}</p>
-                                                        </div>
-                                                        <div nz-col nzSpan="8" *ngIf="isRiskDetailsEditmode">
-                                                            <a style="float: right;"
-                                                                (click)="removeDiscount(discount, $event)">Remove
-                                                                Discount</a>
+                                    <div nz-col nzSpan="24">
+                                        <div style="margin-top: 5px">
+                                            <nz-card>
+                                                <nz-divider nzText="Discount" nzOrientation="left"></nz-divider>
+                                                <div *ngIf="(discounts === undefined || discounts.length == 0)">
+                                                    <p>No Discount added</p>
+                                                </div>
+                                                <div *ngFor="let discount of discounts; let i = index;">
+                                                    <div>
+                                                        <div nz-row>
+                                                            <div nz-col nzSpan="10">
+                                                                <p>{{discount.discountType}}:</p>
+                                                            </div>
+                                                            <div nz-col nzSpan="6">
+                                                                <p style="margin-left: 4px;">
+                                                                    {{discount.amount | number:'1.2-2'}}</p>
+                                                            </div>
+                                                            <div nz-col nzSpan="8" *ngIf="isRiskDetailsEditmode">
+                                                                <a style="float: right;"
+                                                                    (click)="removeDiscount(discount, $event)">Remove
+                                                                    Discount</a>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </nz-card>
+                                            </nz-card>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -3575,7 +3583,7 @@
 
 
                             <div nz-col nzSpan="8">
-                                <div nz-col nzSpan="20" style="float: right;">
+                                <div nz-col nzSpan="24">
                                     <nz-card>
                                         <nz-divider nzText="Loading" nzOrientation="left"></nz-divider>
                                         <div *ngIf="
@@ -3624,31 +3632,33 @@
                                     </nz-card>
 
 
-                                    <div style="margin-top: 5px">
-                                        <nz-card>
-                                            <nz-divider nzText="Discount" nzOrientation="left"></nz-divider>
-                                            <div *ngIf="(discounts === undefined || discounts.length == 0)">
-                                                <p>No Discount added</p>
-                                            </div>
-                                            <div *ngFor="let discount of discounts; let i = index;">
-                                                <div>
-                                                    <div nz-row>
-                                                        <div nz-col nzSpan="10">
-                                                            <p>{{discount.discountType}}:</p>
-                                                        </div>
-                                                        <div nz-col nzSpan="6">
-                                                            <p style="margin-left: 4px;">
-                                                                {{discount.amount | number:'1.2-2'}}</p>
-                                                        </div>
-                                                        <div nz-col nzSpan="8" *ngIf="isRiskDetailsEditmode">
-                                                            <a style="float: right;"
-                                                                (click)="removeDiscount(discount, $event)">Remove
-                                                                Discount</a>
+                                    <div nz-col nzSpan="24">
+                                        <div style="margin-top: 5px">
+                                            <nz-card>
+                                                <nz-divider nzText="Discount" nzOrientation="left"></nz-divider>
+                                                <div *ngIf="(discounts === undefined || discounts.length == 0)">
+                                                    <p>No Discount added</p>
+                                                </div>
+                                                <div *ngFor="let discount of discounts; let i = index;">
+                                                    <div>
+                                                        <div nz-row>
+                                                            <div nz-col nzSpan="10">
+                                                                <p>{{discount.discountType}}:</p>
+                                                            </div>
+                                                            <div nz-col nzSpan="6">
+                                                                <p style="margin-left: 4px;">
+                                                                    {{discount.amount | number:'1.2-2'}}</p>
+                                                            </div>
+                                                            <div nz-col nzSpan="8" *ngIf="isRiskDetailsEditmode">
+                                                                <a style="float: right;"
+                                                                    (click)="removeDiscount(discount, $event)">Remove
+                                                                    Discount</a>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </nz-card>
+                                            </nz-card>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -23,6 +23,8 @@ export class AddAgentComponent implements OnInit {
     @Output()
     closeAddAgentsFormDrawerVisible: EventEmitter<any> = new EventEmitter();
 
+    update: boolean = true;
+
     agentForm: FormGroup;
     brokerForm: FormGroup;
     salesRepresentativeForm: FormGroup;
@@ -33,7 +35,7 @@ export class AddAgentComponent implements OnInit {
         private formBuilder: FormBuilder,
         private cdr: ChangeDetectorRef,
         private agentService: AgentsService,
-        private message: NzMessageService
+        private msg: NzMessageService
     ) {
         //agent form
         this.agentForm = this.formBuilder.group({
@@ -102,7 +104,7 @@ export class AddAgentComponent implements OnInit {
     }
 
     closeDrawer(): void {
-        this.closeAddAgentsFormDrawerVisible.emit();
+        this.closeAddAgentsFormDrawerVisible.emit(true);
     }
 
     changeIntermediaryType(event): void {
@@ -110,17 +112,35 @@ export class AddAgentComponent implements OnInit {
     }
 
     async addAgentIntermediary(agent: IAgent) {
-        await this.agentService.addAgent(agent).subscribe();
+        await this.agentService.addAgent(agent).subscribe(
+            res => {
+                this.msg.success('Agent added successfully')
+                this.closeDrawer();
+            },
+            err => { this.msg.error('Failed to add Agent') }
+        );
     }
 
     async addBrokerIntermediary(broker: IBroker) {
-        await this.agentService.addBroker(broker).subscribe();
+        await this.agentService.addBroker(broker).subscribe(
+            res => {
+                this.msg.success('Broker added successfully')
+                this.closeDrawer();
+            },
+            err => { this.msg.error('Failed to add Broker') }
+        );
     }
 
     async addSalesRepresentativeIntermediary(
         salesRepresentative: ISalesRepresentative
     ) {
-        await this.agentService.addSalesRepresentative(salesRepresentative).subscribe();
+        await this.agentService.addSalesRepresentative(salesRepresentative).subscribe(
+            res => {
+                this.msg.success('Sales representative added successfully')
+                this.closeDrawer();
+            },
+            err => { this.msg.error('Failed to add Sales representative') }
+        );
     }
 
     submitAgentIntermediary() {

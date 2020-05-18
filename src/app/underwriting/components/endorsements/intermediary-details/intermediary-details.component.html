@@ -2,7 +2,7 @@
     <nz-breadcrumb>
         <nz-page-header
             nzBackIcon
-            nzTitle="Intermediary Type: {{ client.intermediaryType }}"
+            nzTitle="Intermediary Type: {{ client ? (client.intermediaryType ? client.intermediaryType : ' ') : '' }}"
         >
             <nz-page-header-extra>
                 <button
@@ -19,12 +19,13 @@
                     nzType="primary"
                     (click)="isEditmode = true"
                 >
-                    Edit Client
+                    Edit Intermediary
                 </button>
             </nz-page-header-extra>
         </nz-page-header>
     </nz-breadcrumb>
     <div class="client-personal-details" style="margin-top: 20px;">
+        <div *ngIf="client">
         <div *ngIf="client.intermediaryType == 'Agent'">
             <nz-card>
                 <nz-divider
@@ -284,6 +285,7 @@
                                             nzShowSearch
                                             nzAllowClear
                                             placeholder="Account Type"
+                                            [nzDisabled]="!isEditmode"
                                         >
                                             <nz-option
                                                 nzLabel="ZMW"
@@ -357,6 +359,7 @@
                 </form>
             </nz-card>
         </div>
+    
         <div *ngIf="client.intermediaryType == 'Broker'">
             <nz-card>
                 <nz-divider
@@ -612,6 +615,7 @@
                                             nzShowSearch
                                             nzAllowClear
                                             placeholder="Account Type"
+                                            [nzDisabled]="!isEditmode"
                                         >
                                             <nz-option
                                                 nzLabel="ZMW"
@@ -821,6 +825,7 @@
                                     >
                                     <nz-form-control [nzSpan]="18">
                                         <input
+                                            nz-input
                                             [disabled]="!isEditmode"
                                             formControlName="accountNumber"
                                         />
@@ -843,6 +848,7 @@
                                             nzShowSearch
                                             nzAllowClear
                                             placeholder="Account Type"
+                                            [nzDisabled]="!isEditmode"
                                         >
                                             <nz-option
                                                 nzLabel="ZMW"
@@ -898,6 +904,7 @@
                                     nz-button
                                     nzType="primary"
                                     style="margin-right: 8px;"
+                                    [disabled]="!isEditmode"
                                     (click)="updateSalesRespresentative()"
                                 >
                                     Add Sales Representative
@@ -911,5 +918,6 @@
                 </form>
             </nz-card>
         </div>
+    </div>
     </div>
 </div>

@@ -110,9 +110,6 @@ const routes: Routes = [
         component: PolicyRenewalsDetailsComponent
     },
     {
-        resolve: PolicyDetailsResolver
-    },
-    {
         path: 'intermediary-view/:id',
         component: IntermediaryDetailsComponent
     }
