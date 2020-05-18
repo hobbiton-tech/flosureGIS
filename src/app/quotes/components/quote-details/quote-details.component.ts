@@ -123,6 +123,7 @@ export class QuoteDetailsComponent implements OnInit {
     quotesList: MotorQuotationModel[] = [];
     quotesLoading = true;
     risks: RiskModel[] = [];
+    numberOfRisks: number;
 
     // selected risk in risk table
     selectedRisk: RiskModel;
@@ -442,6 +443,7 @@ export class QuoteDetailsComponent implements OnInit {
                     .setValue(this.quoteData.endDate);
 
                 this.risks = this.quoteData.risks;
+                this.numberOfRisks = this.risks.length;
                 this.premiumLoadingTotal = 0;
             });
         });

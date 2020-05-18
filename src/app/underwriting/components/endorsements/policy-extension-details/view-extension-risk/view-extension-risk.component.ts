@@ -7,6 +7,8 @@ import {
 } from 'src/app/quotes/models/quote.model';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
+import { Policy } from 'src/app/underwriting/models/policy.model';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-view-extension-risk',
@@ -14,8 +16,17 @@ import { BehaviorSubject } from 'rxjs';
     styleUrls: ['./view-extension-risk.component.scss']
 })
 export class ViewExtensionRiskComponent implements OnInit {
+    //check risk popover
+    riskPopoverVisible: boolean = false;
+
     @Input()
     riskData: RiskModel;
+
+    @Input()
+    policyData: Policy;
+
+    @Input()
+    policyEndDate: Date;
 
     @Output()
     sendEdittedRiskExtensionEmitter: EventEmitter<any> = new EventEmitter();
@@ -67,6 +78,9 @@ export class ViewExtensionRiskComponent implements OnInit {
 
     LevyRate: number = 3;
     basicPremiumLevy: number;
+
+    //basic premium after extension
+    extendedbasicPremium: number;
 
     // Loading
     addingLoad: boolean;
@@ -444,5 +458,59 @@ export class ViewExtensionRiskComponent implements OnInit {
 
     handleCancel(): void {
         this.closeViewRiskFormVisible.emit();
+    }
+
+    //recomputes premium after extension of end date
+    computeExtensionPremium() {
+        this.basicPremium = this.riskData.basicPremium;
+        const currentRiskEndDate = this.riskData.riskEndDate;
+        const extendedRiskEndDate = this.riskDetailsForm.get('riskEndDate')
+            .value;
+
+        const start = moment(currentRiskEndDate);
+        const end = moment(extendedRiskEndDate);
+
+        const differenceInDays = end.diff(start, 'days');
+
+        const newBasicPremium =
+            (differenceInDays / 365) * Number(this.riskData.basicPremium);
+
+        this.extendedbasicPremium = newBasicPremium;
+
+        if (this.checkRiskEndDate()) {
+            console.log('basicPremium: ' + this.basicPremium);
+            console.log('extendedBasicPremium: ' + this.extendedbasicPremium);
+            this.basicPremium = this.basicPremium + this.extendedbasicPremium;
+            console.log('basic premium after extnsion ' + this.basicPremium);
+            this.handleNetPremium();
+        } else {
+            console.log('risk end date is beyond policy cover!');
+        }
+    }
+
+    //check if risk end date is greater than policy end date
+    checkRiskEndDate(): boolean {
+        const riskEnd: Date = this.riskDetailsForm.get('riskEndDate').value;
+
+        if (moment(riskEnd).isSameOrAfter(this.policyEndDate)) {
+            return false;
+        } else {
+            this.riskDetailsForm.get('riskEndDate').markAsDirty;
+            return true;
+        }
+    }
+
+    //following method adds basic premium + loading - discount then applies levy then finds net premium
+    handleNetPremium() {
+        this.basicPremiumLevy =
+            (this.LevyRate / 100) *
+            (this.basicPremium +
+                this.premiumLoadingTotal -
+                this.premiumDiscount);
+        this.netPremium =
+            this.basicPremium +
+            this.premiumLoadingTotal -
+            this.premiumDiscount +
+            this.basicPremiumLevy;
     }
 }

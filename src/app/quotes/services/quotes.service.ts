@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { MotorQuotationModel, RiskModel } from '../models/quote.model';
+import {
+    MotorQuotationModel,
+    RiskModel,
+    InsuranceType
+} from '../models/quote.model';
 import { Observable } from 'rxjs';
 import {
     AngularFirestore,
@@ -38,8 +42,13 @@ export interface IReceiptDocument {
     receiptUrl: string;
 }
 
+interface IQuoteNumberRequest {
+    // insuranceType: InsuranceType;
+    branch: string;
+}
+
 interface IQuoteNumberResult {
-    resultQuoteNumber: string;
+    quotationNumber: string;
 }
 
 @Injectable({
@@ -87,10 +96,10 @@ export class QuotesService {
             quotation.id = v4();
             this.http
                 .get<IQuoteNumberResult>(
-                    'https://flosure-premium-rates.herokuapp.com/quotes'
+                    'https://flosure-premium-rates.herokuapp.com/savenda-quotations/01'
                 )
                 .subscribe(async res => {
-                    quotation.quoteNumber = res.resultQuoteNumber;
+                    quotation.quoteNumber = res.quotationNumber;
                     await this.motorQuoteCollection
                         .doc(quotation.id)
                         .set(quotation)
@@ -148,10 +157,10 @@ export class QuotesService {
         var quotationNumber: string = '';
         this.http
             .get<IQuoteNumberResult>(
-                `https://flosure-premium-rates.herokuapp.com/quotes`
+                `https://flosure-premium-rates.herokuapp.com/savenda-quotations/01`
             )
             .subscribe(data => {
-                quotationNumber = data.resultQuoteNumber;
+                quotationNumber = data.quotationNumber;
             });
         return quotationNumber;
     }
@@ -215,23 +224,32 @@ export class QuotesService {
     //postgres db
 
     createMotorQuotation(motorQuotation: MotorQuotationModel) {
+        const quotationNumberRequest: IQuoteNumberRequest = {
+            branch: motorQuotation.branch //get from db
+        };
+
         this.http
             .get<IQuoteNumberResult>(
-                'https://flosure-premium-rates.herokuapp.com/quotes'
+                'https://flosure-premium-rates.herokuapp.com/savenda-quotations/01'
             )
             .subscribe(async res => {
-                motorQuotation.quoteNumber = res.resultQuoteNumber;
+                motorQuotation.quoteNumber = res.quotationNumber;
                 this.http
                     .post<MotorQuotationModel>(
                         'http://localhost:3000/quotation',
                         motorQuotation
                     )
-                    .subscribe(async res => {
-                        this.msg.success('Quotation Successfully Created');
-                        this.router.navigateByUrl(
-                            '/flosure/quotes/quotes-list'
-                        );
-                    });
+                    .subscribe(
+                        async res => {
+                            this.msg.success('Quotation Successfully Created');
+                            this.router.navigateByUrl(
+                                '/flosure/quotes/quotes-list'
+                            );
+                        },
+                        async err => {
+                            this.msg.error('Quotation Creation failed');
+                        }
+                    );
             });
     }
 

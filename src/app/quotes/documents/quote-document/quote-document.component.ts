@@ -37,6 +37,9 @@ export class QuoteDocumentComponent implements OnInit {
     discountAmount: string;
 
     @Input()
+    premiumLevy: string;
+
+    @Input()
     totalAmount: string;
 
     constructor() {}

@@ -8,6 +8,7 @@ import {
 import { UsersService } from './services/users.service';
 import { User } from './models/users.model';
 import { NzMessageService } from 'ng-zorro-antd';
+import { Subject, BehaviorSubject } from 'rxjs';
 
 @Component({
     selector: 'app-users',
@@ -17,6 +18,8 @@ import { NzMessageService } from 'ng-zorro-antd';
 export class UsersComponent implements OnInit {
     usersList: User[] = [];
     displayUsersList: User[] = [];
+
+    userUpdate = new BehaviorSubject<boolean>(false);
 
     isVisible = false;
     // Declarations
@@ -52,6 +55,15 @@ export class UsersComponent implements OnInit {
             this.usersList = users;
             this.displayUsersList = this.usersList;
         });
+
+        this.userUpdate.subscribe(update =>
+            update === true
+                ? this.usersService.getUsers().subscribe(users => {
+                      this.usersList = users;
+                      this.displayUsersList = this.usersList;
+                  })
+                : ''
+        );
     }
 
     showModal(): void {
@@ -69,13 +81,19 @@ export class UsersComponent implements OnInit {
     }
 
     async addUser(userDto: User) {
-        await this.usersService.addUser(userDto).subscribe(res => {
-            console.log(res);
-            this.isVisible = false;
-            this.msg.success('User successfully Added');
-            this.usersList = this.displayUsersList;
-            this.displayUsersList = this.usersList;
-        });
+        await this.usersService.addUser(userDto).subscribe(
+            res => {
+                this.isVisible = false;
+                this.msg.success('User successfully Added');
+            },
+
+            err => {
+                this.msg.success('Failed to add User');
+            },
+            () => {
+                this.userUpdate.next(true);
+            }
+        );
     }
 
     submitUser(): void {

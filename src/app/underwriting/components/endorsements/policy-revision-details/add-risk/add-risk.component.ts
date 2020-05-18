@@ -54,6 +54,9 @@ export class AddRiskComponent implements OnInit {
     @Output()
     sendAddRiskEmitter: EventEmitter<any> = new EventEmitter();
 
+    @Input()
+    policyEndDate: Date;
+
     // vehicle make drop down
     vehicleMakeUrl = 'https://api.randomuser.me/?results=5';
     searchChange$ = new BehaviorSubject('');

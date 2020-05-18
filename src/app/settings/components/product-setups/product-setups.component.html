@@ -157,11 +157,13 @@
 
 <!-- Drawers -->
 <app-add-class [isAddClassFormDrawerVisible]="addClassFormDrawerVisible"
-    (closeAddClassFormDrawerVisible)="addClassFormDrawerVisible = false">
+    (closeAddClassFormDrawerVisible)="addClassFormDrawerVisible = false"
+    (closeAddClassFormDrawerVisible)="recieveUpdate($event)">
 </app-add-class>
 
 <app-add-product [isAddProductFormDrawerVisible]="addProductFormDrawerVisible"
-    (closeAddProductFormDrawerVisible)="addProductFormDrawerVisible = false">
+    (closeAddProductFormDrawerVisible)="addProductFormDrawerVisible = false"
+    (closeAddProductFormDrawerVisible)="recieveUpdate($event)">
 </app-add-product>
 
 <app-add-cover-type [isAddCoverTypeFormDrawerVisible]="addCoverTypeFormDrawerVisible"

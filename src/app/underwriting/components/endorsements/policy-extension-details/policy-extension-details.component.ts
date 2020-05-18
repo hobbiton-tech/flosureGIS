@@ -17,6 +17,8 @@ import _ from 'lodash';
 export class PolicyExtensionDetailsComponent implements OnInit {
     editedRisk: RiskModel;
 
+    policyEndDate: Date;
+
     //policy details form
     policyExtensionDetailsForm: FormGroup;
 
@@ -125,6 +127,9 @@ export class PolicyExtensionDetailsComponent implements OnInit {
 
     openViewRiskFormModal(risk: RiskModel) {
         this.editedRisk = risk;
+        this.policyEndDate = this.policyExtensionDetailsForm.get(
+            'endDate'
+        ).value;
         this.viewRiskFormModalVisible = true;
     }
 
@@ -146,16 +151,19 @@ export class PolicyExtensionDetailsComponent implements OnInit {
             risks: this.risks
         };
 
-        this.endorsementService.createEndorsement(
-            this.policyData.id,
-            endorsement
-        );
+        this.endorsementService
+            .createEndorsement(this.policyData.id, endorsement)
+            .subscribe(endorsement => {
+                res => console.log(res);
+            });
 
-        this.policiesService.updatePolicy(policy);
+        this.policiesService.updatePolicy(policy).subscribe(policy => {
+            res => console.log(res);
+        });
 
         this.msg.success('Endorsement Successful');
-        this.router.navigateByUrl(
-            '/flosure/underwriting/endorsements/view-endorsements'
-        );
+        // this.router.navigateByUrl(
+        //     '/flosure/underwriting/endorsements/view-endorsements'
+        // );
     }
 }

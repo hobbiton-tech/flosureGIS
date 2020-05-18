@@ -1,0 +1,433 @@
+
+{
+  "header": {
+    "reportVersion": 2,
+    "event": "Allocation failed - JavaScript heap out of memory",
+    "trigger": "FatalError",
+    "filename": "report.20200517.220849.2552.0.001.json",
+    "dumpEventTime": "2020-05-17T22:08:50Z",
+    "dumpEventTimeStamp": "1589746130010",
+    "processId": 2552,
+    "threadId": null,
+    "cwd": "C:\\Users\\Joshua silwembe\\flosure-broker-ui\\flosure-broker-ui",
+    "commandLine": [
+      "node",
+      "C:\\Users\\Joshua silwembe\\AppData\\Roaming\\npm\\\\node_modules\\@angular\\cli\\bin\\ng",
+      "serve"
+    ],
+    "nodejsVersion": "v12.16.2",
+    "wordSize": 64,
+    "arch": "x64",
+    "platform": "win32",
+    "componentVersions": {
+      "node": "12.16.2",
+      "v8": "7.8.279.23-node.34",
+      "uv": "1.34.2",
+      "zlib": "1.2.11",
+      "brotli": "1.0.7",
+      "ares": "1.15.0",
+      "modules": "72",
+      "nghttp2": "1.40.0",
+      "napi": "5",
+      "llhttp": "2.0.4",
+      "http_parser": "2.9.3",
+      "openssl": "1.1.1e",
+      "cldr": "36.0",
+      "icu": "65.1",
+      "tz": "2019c",
+      "unicode": "12.1"
+    },
+    "release": {
+      "name": "node",
+      "lts": "Erbium",
+      "headersUrl": "https://nodejs.org/download/release/v12.16.2/node-v12.16.2-headers.tar.gz",
+      "sourceUrl": "https://nodejs.org/download/release/v12.16.2/node-v12.16.2.tar.gz",
+      "libUrl": "https://nodejs.org/download/release/v12.16.2/win-x64/node.lib"
+    },
+    "osName": "Windows_NT",
+    "osRelease": "10.0.18362",
+    "osVersion": "Windows 10 Home",
+    "osMachine": "x86_64",
+    "cpus": [
+      {
+        "model": "Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz",
+        "speed": 2592,
+        "user": 6179500,
+        "nice": 0,
+        "sys": 4874281,
+        "idle": 128303062,
+        "irq": 874515
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz",
+        "speed": 2592,
+        "user": 4120484,
+        "nice": 0,
+        "sys": 2412546,
+        "idle": 132823578,
+        "irq": 27171
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz",
+        "speed": 2592,
+        "user": 11647937,
+        "nice": 0,
+        "sys": 4131812,
+        "idle": 123576843,
+        "irq": 50546
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz",
+        "speed": 2592,
+        "user": 4656250,
+        "nice": 0,
+        "sys": 2525703,
+        "idle": 132174640,
+        "irq": 28859
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz",
+        "speed": 2592,
+        "user": 7592109,
+        "nice": 0,
+        "sys": 3306312,
+        "idle": 128458171,
+        "irq": 36187
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz",
+        "speed": 2592,
+        "user": 4351546,
+        "nice": 0,
+        "sys": 2945765,
+        "idle": 132059281,
+        "irq": 17984
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz",
+        "speed": 2592,
+        "user": 7318968,
+        "nice": 0,
+        "sys": 4086078,
+        "idle": 127951546,
+        "irq": 32781
+      },
+      {
+        "model": "Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz",
+        "speed": 2592,
+        "user": 5171453,
+        "nice": 0,
+        "sys": 3430484,
+        "idle": 130754656,
+        "irq": 17515
+      }
+    ],
+    "networkInterfaces": [
+      {
+        "name": "Ethernet 2",
+        "internal": false,
+        "mac": "0a:00:27:00:00:0c",
+        "address": "fe80::a556:c640:1308:af21",
+        "netmask": "ffff:ffff:ffff:ffff::",
+        "family": "IPv6",
+        "scopeid": 12
+      },
+      {
+        "name": "Ethernet 2",
+        "internal": false,
+        "mac": "0a:00:27:00:00:0c",
+        "address": "192.168.56.1",
+        "netmask": "255.255.255.0",
+        "family": "IPv4"
+      },
+      {
+        "name": "Wi-Fi",
+        "internal": false,
+        "mac": "84:ef:18:f2:ba:61",
+        "address": "fe80::1154:623a:6a73:c444",
+        "netmask": "ffff:ffff:ffff:ffff::",
+        "family": "IPv6",
+        "scopeid": 29
+      },
+      {
+        "name": "Wi-Fi",
+        "internal": false,
+        "mac": "84:ef:18:f2:ba:61",
+        "address": "192.168.8.104",
+        "netmask": "255.255.255.0",
+        "family": "IPv4"
+      },
+      {
+        "name": "Loopback Pseudo-Interface 1",
+        "internal": true,
+        "mac": "00:00:00:00:00:00",
+        "address": "::1",
+        "netmask": "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
+        "family": "IPv6",
+        "scopeid": 0
+      },
+      {
+        "name": "Loopback Pseudo-Interface 1",
+        "internal": true,
+        "mac": "00:00:00:00:00:00",
+        "address": "127.0.0.1",
+        "netmask": "255.0.0.0",
+        "family": "IPv4"
+      }
+    ],
+    "host": "SIL"
+  },
+  "javascriptStack": {
+    "message": "No stack.",
+    "stack": [
+      "Unavailable."
+    ]
+  },
+  "nativeStack": [
+    {
+      "pc": "0x00007ff6c7092309",
+      "symbol": "std::basic_ostream<char,std::char_traits<char> >::operator<<+11577"
+    },
+    {
+      "pc": "0x00007ff6c7096869",
+      "symbol": "std::basic_ostream<char,std::char_traits<char> >::operator<<+29337"
+    },
+    {
+      "pc": "0x00007ff6c70956e8",
+      "symbol": "std::basic_ostream<char,std::char_traits<char> >::operator<<+24856"
+    },
+    {
+      "pc": "0x00007ff6c71bdd82",
+      "symbol": "v8::base::CPU::has_sse+59378"
+    },
+    {
+      "pc": "0x00007ff6c79da27e",
+      "symbol": "v8::Isolate::ReportExternalAllocationLimitReached+94"
+    },
+    {
+      "pc": "0x00007ff6c79c2351",
+      "symbol": "v8::SharedArrayBuffer::Externalize+833"
+    },
+    {
+      "pc": "0x00007ff6c788e8ac",
+      "symbol": "v8::internal::Heap::EphemeronKeyWriteBarrierFromCode+1436"
+    },
+    {
+      "pc": "0x00007ff6c7899ae0",
+      "symbol": "v8::internal::Heap::ProtectUnprotectedMemoryChunks+1312"
+    },
+    {
+      "pc": "0x00007ff6c7896604",
+      "symbol": "v8::internal::Heap::PageFlagsAreConsistent+3204"
+    },
+    {
+      "pc": "0x00007ff6c788be03",
+      "symbol": "v8::internal::Heap::CollectGarbage+1283"
+    },
+    {
+      "pc": "0x00007ff6c788a474",
+      "symbol": "v8::internal::Heap::AddRetainedMap+2452"
+    },
+    {
+      "pc": "0x00007ff6c78ab67d",
+      "symbol": "v8::internal::Factory::NewFillerObject+61"
+    },
+    {
+      "pc": "0x00007ff6c76113d1",
+      "symbol": "v8::internal::interpreter::JumpTableTargetOffsets::iterator::operator=+1665"
+    },
+    {
+      "pc": "0x00007ff6c7e2730d",
+      "symbol": "v8::internal::SetupIsolateDelegate::SetupHeap+546637"
+    },
+    {
+      "pc": "0x000003b77d3de9f6",
+      "symbol": ""
+    }
+  ],
+  "javascriptHeap": {
+    "totalMemory": 2155261952,
+    "totalCommittedMemory": 2155261952,
+    "usedMemory": 2115612160,
+    "availableMemory": 46794024,
+    "memoryLimit": 2197815296,
+    "heapSpaces": {
+      "read_only_space": {
+        "memorySize": 262144,
+        "committedMemory": 262144,
+        "capacity": 32808,
+        "used": 32808,
+        "available": 0
+      },
+      "new_space": {
+        "memorySize": 4194304,
+        "committedMemory": 4194304,
+        "capacity": 2094912,
+        "used": 402224,
+        "available": 1692688
+      },
+      "old_space": {
+        "memorySize": 1878138880,
+        "committedMemory": 1878138880,
+        "capacity": 1861002888,
+        "used": 1860549808,
+        "available": 453080
+      },
+      "code_space": {
+        "memorySize": 5935104,
+        "committedMemory": 5935104,
+        "capacity": 5240032,
+        "used": 5240032,
+        "available": 0
+      },
+      "map_space": {
+        "memorySize": 33034240,
+        "committedMemory": 33034240,
+        "capacity": 16398320,
+        "used": 16398320,
+        "available": 0
+      },
+      "large_object_space": {
+        "memorySize": 233074688,
+        "committedMemory": 233074688,
+        "capacity": 232444680,
+        "used": 232444680,
+        "available": 0
+      },
+      "code_large_object_space": {
+        "memorySize": 622592,
+        "committedMemory": 622592,
+        "capacity": 544288,
+        "used": 544288,
+        "available": 0
+      },
+      "new_large_object_space": {
+        "memorySize": 0,
+        "committedMemory": 0,
+        "capacity": 2094912,
+        "used": 0,
+        "available": 2094912
+      }
+    }
+  },
+  "resourceUsage": {
+    "userCpuSeconds": 384.328,
+    "kernelCpuSeconds": 22.25,
+    "cpuConsumptionPercent": 30.8481,
+    "maxRss": 2264801280,
+    "pageFaults": {
+      "IORequired": 2292398,
+      "IONotRequired": 0
+    },
+    "fsActivity": {
+      "reads": 12915,
+      "writes": 9
+    }
+  },
+  "libuv": [
+  ],
+  "workers": [
+  ],
+  "environmentVariables": {
+    "=C:": "C:\\Users\\Joshua silwembe\\flosure-broker-ui\\flosure-broker-ui",
+    "ALLUSERSPROFILE": "C:\\ProgramData",
+    "API_KEY": "db1cea388df078337b77d7e54c2fc6f5",
+    "APPDATA": "C:\\Users\\Joshua silwembe\\AppData\\Roaming",
+    "BROWSERSLIST_IGNORE_OLD_DATA": "1",
+    "CommonProgramFiles": "C:\\Program Files\\Common Files",
+    "CommonProgramFiles(x86)": "C:\\Program Files (x86)\\Common Files",
+    "CommonProgramW6432": "C:\\Program Files\\Common Files",
+    "COMPUTERNAME": "SIL",
+    "ComSpec": "C:\\WINDOWS\\system32\\cmd.exe",
+    "DriverData": "C:\\Windows\\System32\\Drivers\\DriverData",
+    "FPS_BROWSER_APP_PROFILE_STRING": "Internet Explorer",
+    "FPS_BROWSER_USER_PROFILE_STRING": "Default",
+    "HOMEDRIVE": "C:",
+    "HOMEPATH": "\\Users\\Joshua silwembe",
+    "LOCALAPPDATA": "C:\\Users\\Joshua silwembe\\AppData\\Local",
+    "LOGONSERVER": "\\\\SIL",
+    "NUMBER_OF_PROCESSORS": "8",
+    "OneDrive": "C:\\Users\\Joshua silwembe\\OneDrive",
+    "OneDriveConsumer": "C:\\Users\\Joshua silwembe\\OneDrive",
+    "OS": "Windows_NT",
+    "Path": "C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath;C:\\ProgramData\\Oracle\\Java\\javapath;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\Program Files (x86)\\MySQL\\MySQL Server 6.0\\bin;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Microsoft VS Code\\bin;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files\\dotnet\\;C:\\Program Files\\Git\\cmd;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Microsoft SQL Server\\130\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Yarn\\bin\\;C:\\Program Files\\nodejs\\;C:\\Users\\Joshua silwembe\\AppData\\Local\\Programs\\Python\\Python37-32\\Scripts\\;C:\\Users\\Joshua silwembe\\AppData\\Local\\Programs\\Python\\Python37-32\\;C:\\Ruby21-x64\\bin;C:\\Users\\Joshua silwembe\\AppData\\Local\\Programs\\Python\\Python36\\Scripts\\;C:\\Users\\Joshua silwembe\\AppData\\Local\\Programs\\Python\\Python36\\;C:\\Users\\Joshua silwembe\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\Joshua silwembe\\NetBeansProjects\\Java_chat_bot\\src\\java_chat_bot\\Inno Setup 5;C:\\Program Files\\Microsoft VS Code\\bin;C:\\Program Files\\heroku\\bin;C:\\Users\\Joshua silwembe\\Downloads\\Compressed\\curl-7.59.0\\src;C:\\Users\\Joshua silwembe\\.dotnet\\tools;C:\\Users\\Joshua silwembe\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\Joshua silwembe\\AppData\\Local\\Yarn\\bin;C:\\Users\\Joshua silwembe\\AppData\\Roaming\\npm",
+    "PATHEXT": ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JSE;.WSF;.WSH;.MSC;.RB;.RBW;.CPL",
+    "PROCESSOR_ARCHITECTURE": "AMD64",
+    "PROCESSOR_IDENTIFIER": "Intel64 Family 6 Model 94 Stepping 3, GenuineIntel",
+    "PROCESSOR_LEVEL": "6",
+    "PROCESSOR_REVISION": "5e03",
+    "ProgramData": "C:\\ProgramData",
+    "ProgramFiles": "C:\\Program Files",
+    "ProgramFiles(x86)": "C:\\Program Files (x86)",
+    "ProgramW6432": "C:\\Program Files",
+    "PROMPT": "$P$G",
+    "PSModulePath": "C:\\Users\\Joshua silwembe\\Documents\\WindowsPowerShell\\Modules;C:\\Program Files\\WindowsPowerShell\\Modules;C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\Modules",
+    "PT7HOME": "C:\\Program Files\\Cisco Packet Tracer 7.2.1",
+    "PUBLIC": "C:\\Users\\Public",
+    "QT_DEVICE_PIXEL_RATIO": "auto",
+    "SESSIONNAME": "Console",
+    "SystemDrive": "C:",
+    "SystemRoot": "C:\\WINDOWS",
+    "TEMP": "C:\\Users\\JOSHUA~1\\AppData\\Local\\Temp",
+    "TMP": "C:\\Users\\JOSHUA~1\\AppData\\Local\\Temp",
+    "USERDOMAIN": "SIL",
+    "USERDOMAIN_ROAMINGPROFILE": "SIL",
+    "USERNAME": "Joshua silwembe",
+    "USERPROFILE": "C:\\Users\\Joshua silwembe",
+    "VBOX_MSI_INSTALL_PATH": "C:\\Program Files\\Oracle\\VirtualBox\\",
+    "WEBPACK_DEV_SERVER": "true",
+    "windir": "C:\\WINDOWS",
+    "TERM_PROGRAM": "vscode",
+    "TERM_PROGRAM_VERSION": "1.39.2",
+    "LANG": "en_US.UTF-8",
+    "COLORTERM": "truecolor"
+  },
+  "sharedObjects": [
+    "C:\\Program Files\\nodejs\\node.exe",
+    "C:\\WINDOWS\\SYSTEM32\\ntdll.dll",
+    "C:\\WINDOWS\\System32\\KERNEL32.DLL",
+    "C:\\WINDOWS\\System32\\KERNELBASE.dll",
+    "C:\\WINDOWS\\System32\\WS2_32.dll",
+    "C:\\WINDOWS\\System32\\RPCRT4.dll",
+    "C:\\WINDOWS\\SYSTEM32\\dbghelp.dll",
+    "C:\\WINDOWS\\System32\\ucrtbase.dll",
+    "C:\\WINDOWS\\System32\\PSAPI.DLL",
+    "C:\\WINDOWS\\System32\\ADVAPI32.dll",
+    "C:\\WINDOWS\\System32\\msvcrt.dll",
+    "C:\\WINDOWS\\SYSTEM32\\IPHLPAPI.DLL",
+    "C:\\WINDOWS\\System32\\sechost.dll",
+    "C:\\WINDOWS\\SYSTEM32\\USERENV.dll",
+    "C:\\WINDOWS\\System32\\USER32.dll",
+    "C:\\WINDOWS\\System32\\profapi.dll",
+    "C:\\WINDOWS\\System32\\win32u.dll",
+    "C:\\WINDOWS\\System32\\GDI32.dll",
+    "C:\\WINDOWS\\System32\\gdi32full.dll",
+    "C:\\WINDOWS\\System32\\msvcp_win.dll",
+    "C:\\WINDOWS\\System32\\CRYPT32.dll",
+    "C:\\WINDOWS\\System32\\MSASN1.dll",
+    "C:\\WINDOWS\\System32\\bcrypt.dll",
+    "C:\\WINDOWS\\SYSTEM32\\WINMM.dll",
+    "C:\\WINDOWS\\SYSTEM32\\winmmbase.dll",
+    "C:\\WINDOWS\\System32\\cfgmgr32.dll",
+    "C:\\WINDOWS\\System32\\bcryptPrimitives.dll",
+    "C:\\WINDOWS\\System32\\IMM32.DLL",
+    "C:\\WINDOWS\\System32\\powrprof.dll",
+    "C:\\WINDOWS\\System32\\UMPDC.dll",
+    "C:\\WINDOWS\\SYSTEM32\\CRYPTBASE.DLL",
+    "C:\\WINDOWS\\system32\\uxtheme.dll",
+    "C:\\WINDOWS\\System32\\combase.dll",
+    "C:\\WINDOWS\\system32\\mswsock.dll",
+    "C:\\WINDOWS\\System32\\kernel.appcore.dll",
+    "C:\\WINDOWS\\System32\\NSI.dll",
+    "C:\\WINDOWS\\SYSTEM32\\dhcpcsvc6.DLL",
+    "C:\\WINDOWS\\SYSTEM32\\dhcpcsvc.DLL",
+    "C:\\WINDOWS\\SYSTEM32\\DNSAPI.dll",
+    "C:\\WINDOWS\\system32\\napinsp.dll",
+    "C:\\WINDOWS\\system32\\pnrpnsp.dll",
+    "C:\\WINDOWS\\System32\\winrnr.dll",
+    "C:\\WINDOWS\\system32\\NLAapi.dll",
+    "C:\\WINDOWS\\system32\\wshbth.dll",
+    "C:\\Windows\\System32\\rasadhlp.dll",
+    "C:\\WINDOWS\\System32\\fwpuclnt.dll"
+  ]
+}

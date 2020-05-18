@@ -2,9 +2,9 @@
     <div style="margin: 15px;">
         <nz-page-header nzBackIcon nzTitle="Policy Number: {{ policyData.policyNumber }}"
             [nzSubtitle]="policyData.client">
-            <!-- <div *ngIf="policyData.status == 'Cancelled'">
+            <div *ngIf="policyData.status == 'Cancelled'">
                 <nz-tag nzColor="red">Cancelled</nz-tag>
-            </div> -->
+            </div>
             <nz-page-header-extra>
                 <button nz-button nzType="default" (click)="isCreditNotePDFVisible = true"
                     *ngIf="policyData.status == 'Cancelled'">
@@ -56,20 +56,23 @@
                     <nz-form-item>
                         <nz-form-label nzSpan="7">Start Date</nz-form-label>
                         <nz-form-control nzSpan="17">
-                            <nz-date-picker formControlName="startDate" [nzDisabled]="!isEditmode"></nz-date-picker>
+                            <nz-date-picker nzFormat="dd-MM-yyyy" formControlName="startDate"
+                                [nzDisabled]="!isEditmode"></nz-date-picker>
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
                         <nz-form-label nzSpan="7">End Date</nz-form-label>
                         <nz-form-control nzSpan="17">
-                            <nz-date-picker formControlName="endDate" [nzDisabled]="!isEditmode"></nz-date-picker>
+                            <nz-date-picker nzFormat="dd-MM-yyyy" formControlName="endDate" [nzDisabled]="!isEditmode">
+                            </nz-date-picker>
                         </nz-form-control>
                     </nz-form-item>
 
                     <nz-form-item>
                         <nz-form-label nzSpan="7">Date Of Issue</nz-form-label>
                         <nz-form-control nzSpan="17">
-                            <nz-date-picker formControlName="dateOfIssue" [nzDisabled]="!isEditmode"></nz-date-picker>
+                            <nz-date-picker nzFormat="dd-MM-yyyy" formControlName="dateOfIssue"
+                                [nzDisabled]="!isEditmode"></nz-date-picker>
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
@@ -81,7 +84,8 @@
                     <nz-form-item>
                         <nz-form-label nzSpan="7">Expiry Date</nz-form-label>
                         <nz-form-control nzSpan="17">
-                            <nz-date-picker formControlName="expiryDate" [nzDisabled]="!isEditmode">
+                            <nz-date-picker nzFormat="dd-MM-yyyy" formControlName="expiryDate"
+                                [nzDisabled]="!isEditmode">
                             </nz-date-picker>
                         </nz-form-control>
                     </nz-form-item>

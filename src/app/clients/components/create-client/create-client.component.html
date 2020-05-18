@@ -329,7 +329,7 @@
                                 >Sector</nz-form-label
                             >
                             <nz-form-control [nzSpan]="18">
-                                <nz-select
+                                <!-- <nz-select
                                     formControlName="sector"
                                     nzShowSearch
                                     nzAllowClear
@@ -343,7 +343,15 @@
                                         nzLabel="Manufacturing"
                                         nzValue="manufacturing"
                                     ></nz-option>
-                                </nz-select>
+                                </nz-select> -->
+                                <input
+                                nz-input
+                                formControlName="sector"
+                                name="sector"
+                                type="text"
+                                id="sector"
+                                placeholder="sector"
+                            />
                             </nz-form-control>
                         </nz-form-item>
                     </div>
@@ -666,7 +674,7 @@
                                 >Sector</nz-form-label
                             >
                             <nz-form-control [nzSpan]="15">
-                                <nz-select
+                                <!-- <nz-select
                                     formControlName="sector"
                                     nzShowSearch
                                     nzAllowClear
@@ -680,7 +688,15 @@
                                         nzLabel="Manufacturing"
                                         nzValue="manufacturing"
                                     ></nz-option>
-                                </nz-select>
+                                </nz-select> -->
+                                <input
+                                nz-input
+                                formControlName="sector"
+                                name="sector"
+                                type="text"
+                                id="sector"
+                                placeholder="sector"
+                            />
                             </nz-form-control>
                         </nz-form-item>
                     </div>
@@ -928,7 +944,7 @@
                                 nzType="primary"
                                 style="margin-right: 8px;"
                             >
-                                Add CLient
+                                Add Client
                             </button>
                             <button nz-button nzType="default">
                                 Reset Form
