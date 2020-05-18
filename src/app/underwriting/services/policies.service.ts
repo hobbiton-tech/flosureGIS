@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Policy } from '../models/policy.model';
 import {
     AngularFirestore,
-    AngularFirestoreCollection
+    AngularFirestoreCollection,
 } from '@angular/fire/firestore';
 import 'firebase/firestore';
 import { filter, first } from 'rxjs/operators';
@@ -14,7 +14,7 @@ import { isTemplateRef, NzMessageService } from 'ng-zorro-antd';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class PoliciesService {
     private policiesCollection: AngularFirestoreCollection<Policy>;
@@ -85,7 +85,7 @@ export class PoliciesService {
     ////////////////////////////////////////////
 
     async addPolicy(policy: Policy) {
-        this.policies.pipe(first()).subscribe(async policies => {
+        this.policies.pipe(first()).subscribe(async (policies) => {
             const today = new Date();
             policy.term = 1;
             policy.nameOfInsured = policy.client;
@@ -115,8 +115,9 @@ export class PoliciesService {
         });
     }
 
-    renewPolicy(policy: Policy) {
-        this.policies.pipe(first()).subscribe(async policies => {
+
+    updatePolicy(policy: Policy) {
+        this.policies.pipe(first()).subscribe(async (policies) => {
             const today = new Date();
             policy.client = policy.nameOfInsured;
             policy.dateOfIssue =
@@ -134,30 +135,30 @@ export class PoliciesService {
             localStorage.removeItem('clientId');
             localStorage.setItem('clientId', policy.nameOfInsured); // TODO: Need to change to client code.
             console.log('POLICY NUMBER>>>>', policy.id);
-            console.log(policy);
-            this.http
-                .put<Policy>(
-                    `http://localhost:3000/policy/${policy.id}`,
-                    policy
-                )
-                .subscribe(
-                    data => {
-                        this.msg.success('Policy Successfully Updated');
-                    },
-                    error => {
-                        this.msg.error('Failed');
-                    }
-                );
 
-            // this.policiesCollection
-            //     .doc(policy.id)
-            //     .update(policy)
-            //     .then((res) => {
-            //         this.msg.success('Policy Successfully Updated');
-            //     })
-            //     .catch(() => {
-            //         this.msg.error('Failed');
-            //     });
+            // this.http
+            //     .put<Policy>(
+            //         `http://localhost:3000/policy/${policy.id}`,
+            //         policy
+            //     )
+            //     .subscribe(
+            //         (data) => {
+            //             this.msg.success('Policy Successfully Updated');
+            //         },
+            //         (error) => {
+            //             this.msg.error('Failed');
+            //         }
+            //     );
+
+            this.policiesCollection
+                .doc(policy.id)
+                .update(policy)
+                .then((res) => {
+                    this.msg.success('Policy Successfully Updated');
+                })
+                .catch(() => {
+                    this.msg.error('Failed');
+                });
         });
     }
 
@@ -167,13 +168,13 @@ export class PoliciesService {
             .collection('policies')
             .ref.where('policyNumber', '==', policyNumber)
             .get()
-            .then(querySnapshot => {
-                querySnapshot.forEach(doc => {
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
                     console.log(doc.data());
                     this.policy = doc.data();
                 });
             })
-            .catch(error => {
+            .catch((error) => {
                 console.log('Error getting documents: ', error);
             });
 
@@ -185,20 +186,20 @@ export class PoliciesService {
     }
 
     getPolicyById(policyId: string): Observable<Policy> {
-        return this.http.get<Policy>(
-            `http://localhost:3000/policy/${policyId}`
-        );
+        // return this.http.get<Policy>(
+        //     `http://localhost:3000/policy/${policyId}`
+        // );
 
-        // this.policiesCollection.doc<Policy>(policyId).valueChanges();
+        return this.policiesCollection.doc<Policy>(policyId).valueChanges();
     }
 
     getClientsPolicies(clientId: string): Observable<Policy[]> {
-        return this.policies.pipe(filter(policy => clientId === clientId));
+        return this.policies.pipe(filter((policy) => clientId === clientId));
     }
 
     getPolicies(): Observable<Policy[]> {
-        return this.http.get<Policy[]>('http://localhost:3000/policy');
-        // this.policies;
+        // return this.http.get<Policy[]>('http://localhost:3000/policy');
+        return this.policies;
     }
 
     countGenerator(number) {
@@ -214,10 +215,7 @@ export class PoliciesService {
         const count = this.countGenerator(totalPolicies);
         const today = new Date();
         const dateString: string =
-            today
-                .getFullYear()
-                .toString()
-                .substr(-2) +
+            today.getFullYear().toString().substr(-2) +
             ('0' + (today.getMonth() + 1)).slice(-2) +
             +('0' + today.getDate()).slice(-2);
 
