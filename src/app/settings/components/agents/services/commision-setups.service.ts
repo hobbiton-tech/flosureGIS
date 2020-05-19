@@ -5,21 +5,21 @@ import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class CommisionSetupsService {
     constructor(private http: HttpClient) {}
 
     addCommissionSetup(dto: ICommissionSetup): Observable<ICommissionSetup> {
         return this.http.post<ICommissionSetup>(
-            'http://localhost:3000/commission-setups',
+            'https://flosure-postgres-api.herokuapp.com/commission-setups',
             dto
         );
     }
 
     getCommissionSetups(): Observable<ICommissionSetup[]> {
         return this.http.get<ICommissionSetup[]>(
-            'http://localhost:3000/commission-setups'
+            'https://flosure-postgres-api.herokuapp.com/commission-setups'
         );
     }
 }
