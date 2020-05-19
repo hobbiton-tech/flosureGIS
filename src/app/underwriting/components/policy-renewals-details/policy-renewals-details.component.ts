@@ -247,6 +247,8 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
 
     // selected risk in risk table
     selectedRisk: RiskModel;
+    selectedRisks: RiskModel = new RiskModel();
+
 
     increasedThirdPartyLimitsRateType: string;
 
@@ -2204,5 +2206,9 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
         });
         this.premiumDiscount = this.sumArray(this.discounts, 'amount');
         this.handleNetPremium();
+    }
+    isCertificateVisible(risk: RiskModel) {
+        this.selectedRisks = risk;
+        this.isCertificatePDFVisible = true;
     }
 }
