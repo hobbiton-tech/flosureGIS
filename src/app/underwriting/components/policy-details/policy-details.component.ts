@@ -43,6 +43,8 @@ export class PolicyDetailsComponent implements OnInit {
 
     isEditmode = false;
 
+    selectedRisk: RiskModel = new RiskModel();
+
     // PDFS
     isCertificatePDFVisible = false;
     isDebitNotePDFVisible = false;
@@ -371,5 +373,10 @@ export class PolicyDetailsComponent implements OnInit {
 
     handleCancel(): void {
         this.isVisible = false;
+    }
+
+    isCertificateVisible(risk: RiskModel) {
+        this.selectedRisk = risk;
+        this.isCertificatePDFVisible = true;
     }
 }

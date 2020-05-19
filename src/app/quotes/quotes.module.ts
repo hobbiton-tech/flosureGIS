@@ -15,6 +15,7 @@ import { RiskDetailsComponent } from './components/risk-details/risk-details.com
 import { QuotesGraphqlService } from './services/quotes.graphql.service';
 import { QuoteComponent } from './documents/quote/quote.component';
 import { QuoteDocumentComponent } from './documents/quote-document/quote-document.component';
+import { DraftQuoteDocumentComponent } from './documents/draft-quote-document/draft-quote-document.component';
 
 const routes: Routes = [
     {
@@ -39,6 +40,7 @@ const routes: Routes = [
         RiskDetailsComponent,
         QuoteComponent,
         QuoteDocumentComponent,
+        DraftQuoteDocumentComponent,
     ],
     imports: [
         CommonModule,

@@ -407,7 +407,7 @@
                             <input nz-input nzPlaceHolder="" name="sumInsured" type="number"
                                 [(ngModel)]="sumInsured"
                                 [ngModelOptions]="{standalone: true}"
-                                (ngModelChange)="handleBasicPremiumAmount()" />
+                                 />
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -1566,9 +1566,7 @@
                 <button
                     nz-button
                     nzType="primary"
-                    [disabled]="
-                        !validateriskComprehensiveFormDetails()
-                    "
+                    
                     (click)="selectedValue.value == 'Comprehensive' ? addComprehensiveRisk() : addThirdPartyRisk()"
                 >
                     Add Risk
@@ -1586,6 +1584,5 @@
             </div>
         </form>
     <!-- risk details end here -->
-
 
 </nz-modal>

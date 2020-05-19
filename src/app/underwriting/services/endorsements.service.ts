@@ -64,21 +64,21 @@ export class EndorsementService {
         endorsement: Endorsement
     ): Observable<Endorsement> {
         console.log('endorsement: ');
-        console.log(endorsement)
+        console.log(endorsement);
         return this.http.post<Endorsement>(
-            `http://localhost:3000/endorsement/${policyId}`,
+            `https://flosure-postgres-api.herokuapp.com/class/endorsement/${policyId}`,
             endorsement
         );
     }
     getEndorsements(): Observable<Endorsement[]> {
         return this.http.get<Endorsement[]>(
-            'http://localhost:3000/endorsement'
+            'https://flosure-postgres-api.herokuapp.com/class/endorsement'
         );
     }
 
     getEndorsementById(endorsementId: string): Observable<Endorsement> {
         return this.http.get<Endorsement>(
-            `http://localhost:3000/endorsement/${endorsementId}`
+            `https://flosure-postgres-api.herokuapp.com/class/endorsement/${endorsementId}`
         );
     }
 
@@ -87,7 +87,7 @@ export class EndorsementService {
         endorsementId: string
     ): Observable<Endorsement> {
         return this.http.put<Endorsement>(
-            `http://localhost:3000/endorsement/${endorsementId}`,
+            `https://flosure-postgres-api.herokuapp.com/class/endorsement/${endorsementId}`,
             endorsement
         );
     }

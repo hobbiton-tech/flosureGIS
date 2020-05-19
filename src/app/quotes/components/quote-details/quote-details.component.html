@@ -24,6 +24,9 @@
                 <button *ngIf="isQuoteApproved" nz-button nzType="primary" (click)="isViewQuotePDFVisible = true">
                     View Quote PDF
                 </button>
+                <button *ngIf="!isQuoteApproved" nz-button nzType="primary" (click)="handleDraftQuotation()">
+                    View Draft PDF
+                </button>
                 <button *ngIf="!isQuoteApproved" nz-button nzType="primary" (click)="generateDocuments()">
                     Covert to Policy
                 </button>
@@ -3940,16 +3943,36 @@
 
 
         <!-- Quote PDFs Modal-->
-        <nz-modal [(nzVisible)]="isViewQuotePDFVisible" nzTitle="Goldern Lotus Insurance"
+        <nz-modal [(nzVisible)]="isViewQuotePDFVisible" nzTitle="Savenda Insurance"
             (nzOnCancel)="isViewQuotePDFVisible = false" (nzOnOk)="isViewQuotePDFVisible = false" nzWidth="800">
             <nz-card style="width: 100%" [nzBordered]="true" nzTitle="Quote Document" [nzExtra]="pdfQuoteActions">
-                <!-- <pdf-viewer [src]="'/assets/docs/quote.pdf'" [original-size]="true">
-                </pdf-viewer> -->
                 <app-quote-document [quoteNumber]="quoteNumber" [clientName]="quoteData.client"
                     [dateCreated]="quoteData.dateCreated" [basicPremium]="basicPremium"
                     [loadingAmount]="premiumLoadingTotal" [discountAmount]="premiumDiscount" [totalAmount]="netPremium"
                     [premiumLevy]="basicPremiumLevy" [numberOfRisks]="numberOfRisks">
                 </app-quote-document>
+            </nz-card>
+            <ng-template #pdfQuoteActions>
+                <div style="display: flex;">
+                    <div style="margin-right: 8px;">
+                        <button nz-button nzSize="medium" nzType="primary">Print</button>
+                    </div>
+                    <div>
+                        <button nz-button nzSize="medium" nzType="primary">Email</button>
+                    </div>
+                </div>
+            </ng-template>
+        </nz-modal>
+
+        <nz-modal [(nzVisible)]="isViewDraftQuotePDFVisible" nzTitle="Savenda General Insurance"
+            (nzOnCancel)="isViewDraftQuotePDFVisible = false" (nzOnOk)="isViewDraftQuotePDFVisible = false"
+            nzWidth="800">
+            <nz-card style="width: 100%" [nzBordered]="true" nzTitle="Quote Document" [nzExtra]="pdfQuoteActions">
+                <app-draft-quote-document [quoteNumber]="quoteNumber" [clientName]="quoteData.client"
+                    [dateCreated]="quoteData.dateCreated" [basicPremium]="quoteBasicPremium"
+                    [loadingAmount]="premiumLoadingTotal" [discountAmount]="quoteDiscountTotal"
+                    [totalAmount]="quoteNetPremium" [premiumLevy]="quoteLevy" [numberOfRisks]="numberOfRisks">
+                </app-draft-quote-document>
             </nz-card>
             <ng-template #pdfQuoteActions>
                 <div style="display: flex;">

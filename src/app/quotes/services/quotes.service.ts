@@ -228,15 +228,22 @@ export class QuotesService {
             branch: motorQuotation.branch //get from db
         };
 
+        let insuranceType = '';
+        const productType = motorQuotation.risks[0].insuranceType;
+        if (productType == 'Comprehensive') {
+            insuranceType = 'MCP';
+        } else {
+            insuranceType = 'THP';
+        }
         this.http
             .get<IQuoteNumberResult>(
-                'https://flosure-premium-rates.herokuapp.com/savenda-quotations/01'
+                `https://flosure-premium-rates.herokuapp.com/aplus-quote/1/0/${insuranceType}`
             )
             .subscribe(async res => {
                 motorQuotation.quoteNumber = res.quotationNumber;
                 this.http
                     .post<MotorQuotationModel>(
-                        'http://localhost:3000/quotation',
+                        'https://flosure-postgres-api.herokuapp.com/class/quotation',
                         motorQuotation
                     )
                     .subscribe(
@@ -255,7 +262,7 @@ export class QuotesService {
 
     getMotorQuotations(): Observable<MotorQuotationModel[]> {
         return this.http.get<MotorQuotationModel[]>(
-            'http://localhost:3000/quotation'
+            'https://flosure-postgres-api.herokuapp.com/class/quotation'
         );
     }
 
@@ -263,7 +270,7 @@ export class QuotesService {
         quotationId: string
     ): Observable<MotorQuotationModel> {
         return this.http.get<MotorQuotationModel>(
-            `http://localhost:3000/quotation/${quotationId}`
+            `https://flosure-postgres-api.herokuapp.com/class/quotation/${quotationId}`
         );
     }
 
@@ -272,7 +279,7 @@ export class QuotesService {
         quotationId: string
     ): Observable<MotorQuotationModel> {
         return this.http.put<MotorQuotationModel>(
-            `http://localhost:3000/quotation/${quotationId}`,
+            `https://flosure-postgres-api.herokuapp.com/class/quotation/${quotationId}`,
             motorQuotation
         );
     }
