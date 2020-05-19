@@ -56,7 +56,7 @@ export class AccountService {
 
             this.http
                 .get<IReceiptNumberResult>(
-                    'https://flosure-premium-rates.herokuapp.com/receipts'
+                    'https://flosure-premium-rates.herokuapp.com/savenda-receipts/1'
                 )
                 .subscribe(async (res) => {
                     receipt.receiptNumber = res.receiptNumber;

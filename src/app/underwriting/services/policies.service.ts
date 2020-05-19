@@ -30,7 +30,7 @@ export class PoliciesService {
         this.policies = this.policiesCollection.valueChanges();
     }
 
-    //postgres db
+    // postgres db
     ///////////////////////
     createPolicy(policy: Policy): Observable<Policy> {
         return this.http.post<Policy>('http://localhost:3000/policy', policy);
@@ -47,17 +47,18 @@ export class PoliciesService {
     //     return this.policiesCollection.doc<Policy>(policyId).valueChanges();
     // }
 
-    updatePolicy(policy: Policy): Observable<Policy> {
-        console.log('recieved policy:');
-        console.log(policy);
-        console.log('policy status: ' + policy.status);
-        return this.http.put<Policy>(
-            `http://localhost:3000/policy/${policy.id}`,
-            policy
-        );
-    }
+    // updatePolicy(policy: Policy): Observable<Policy> {
+    //     console.log('recieved policy:');
+    //     console.log(policy);
+    //     console.log('policy status: ' + policy.status);
+    //     return this.http.put<Policy>(
+    //         `http://localhost:3000/policy/${policy.id}`,
+    //         policy
+    //   );
 
-    //backup policies
+    // }
+
+    // backup policies
     createBackupPolicy(policy: Policy): Observable<Policy> {
         return this.http.post<Policy>('http://localhost:3000/policy', policy);
     }
@@ -115,8 +116,19 @@ export class PoliciesService {
         });
     }
 
-
     updatePolicy(policy: Policy) {
+        console.log('recieved policy:');
+        console.log(policy);
+        console.log('policy status: ' + policy.status);
+        return this.policiesCollection.doc(policy.id).update(policy);
+
+        // this.http.put<Policy>(
+        //       `http://localhost:3000/policy/${policy.id}`,
+        //       policy
+        //   );
+    }
+
+    renewPolicy(policy: Policy) {
         this.policies.pipe(first()).subscribe(async (policies) => {
             const today = new Date();
             policy.client = policy.nameOfInsured;
@@ -131,11 +143,10 @@ export class PoliciesService {
             policy.status = 'Active';
             localStorage.removeItem('policyNumber');
             localStorage.setItem('policyNumber', policy.policyNumber);
-
             localStorage.removeItem('clientId');
             localStorage.setItem('clientId', policy.nameOfInsured); // TODO: Need to change to client code.
             console.log('POLICY NUMBER>>>>', policy.id);
-
+            console.log(policy);
             // this.http
             //     .put<Policy>(
             //         `http://localhost:3000/policy/${policy.id}`,
@@ -149,7 +160,6 @@ export class PoliciesService {
             //             this.msg.error('Failed');
             //         }
             //     );
-
             this.policiesCollection
                 .doc(policy.id)
                 .update(policy)

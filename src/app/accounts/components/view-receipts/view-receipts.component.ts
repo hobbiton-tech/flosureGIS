@@ -6,6 +6,8 @@ import { IReceiptDTO } from 'src/app/quotes/models/receipt.dto';
 import { ActivatedRoute } from '@angular/router';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
+import * as jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 // import { NgxPrinterService } from 'ngx-printer/public_api';
 
 @Component({
@@ -15,6 +17,7 @@ import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
 })
 export class ViewReceiptsComponent implements OnInit {
     receiptsList: Policy[];
+    generatingPDF = false;
     receiptsCount = 0;
     showReceiptModal = false;
     receiptedList: IReceiptModel[];
@@ -52,6 +55,46 @@ export class ViewReceiptsComponent implements OnInit {
         });
     }
 
+    htmlToPdf() {
+        this.generatingPDF = true;
+        const div = document.getElementById('printSection');
+        const options = {
+            allowTaint: true,
+            onclone: (doc) => {
+                doc.querySelector('div').style.transform = 'none';
+            },
+            background: 'white',
+            height: div.clientHeight,
+            width: div.clientWidth,
+        };
+
+        html2canvas(div, options).then((canvas) => {
+            //Initialize JSPDF
+            let doc = new jsPDF({
+                unit: 'px',
+                format: 'a4',
+            });
+            //Converting canvas to Image
+            let imgData = canvas.toDataURL('image/PNG');
+            //Add image Canvas to PDF
+            doc.addImage(imgData, 'PNG', 0, 0);
+
+            let pdfOutput = doc.output();
+            // using ArrayBuffer will allow you to put image inside PDF
+            let buffer = new ArrayBuffer(pdfOutput.length);
+            let array = new Uint8Array(buffer);
+            for (let i = 0; i < pdfOutput.length; i++) {
+                array[i] = pdfOutput.charCodeAt(i);
+            }
+
+            //Name of pdf
+            const fileName = 'receipt.pdf';
+
+            // Make file
+            doc.save(fileName);
+            this.generatingPDF = false;
+        });
+    }
     // generateDocuments(): void {
     //     this.receiptService.getReciepts().subscribe((receipts) => {
     //         this.receiptObj = receipts.filter((x) => x.id === this._id)[0];

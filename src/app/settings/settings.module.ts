@@ -27,44 +27,45 @@ import { AddProductComponent } from './components/product-setups/components/add-
 import { AddCoverTypeComponent } from './components/product-setups/components/add-cover-type/add-cover-type.component';
 import { AddPerilComponent } from './components/product-setups/components/add-peril/add-peril.component';
 import { AddProductCommissionComponent } from './components/agents/add-product-commission/add-product-commission.component';
+import { ClausesService } from './components/underwriting-setups/services/clauses.service';
 
 const routes: Routes = [
     {
         path: 'insurance-companies',
-        component: InsuranceCompaniesComponent
+        component: InsuranceCompaniesComponent,
     },
     {
         path: 'rates',
-        component: RatesComponent
+        component: RatesComponent,
     },
     {
         path: 'add-insurance-company',
-        component: AddInsuranceCompanyComponent
+        component: AddInsuranceCompanyComponent,
     },
     {
-        path: 'underwriting',
-        component: UnderwritingSetupsComponent
+        path: 'clauses',
+        component: UnderwritingSetupsComponent,
     },
     {
         path: 'accounts',
-        component: AccountsComponent
+        component: AccountsComponent,
     },
     {
         path: 'organization-setups',
-        component: OrganizationalSetupsComponent
+        component: OrganizationalSetupsComponent,
     },
     {
         path: 'agents-setups',
-        component: AgentsComponent
+        component: AgentsComponent,
     },
     {
         path: 'add-agents',
-        component: AddAgentComponent
+        component: AddAgentComponent,
     },
     {
         path: 'product-setups',
-        component: ProductSetupsComponent
-    }
+        component: ProductSetupsComponent,
+    },
 ];
 
 @NgModule({
@@ -92,15 +93,15 @@ const routes: Routes = [
         AddProductComponent,
         AddCoverTypeComponent,
         AddPerilComponent,
-        AddProductCommissionComponent
+        AddProductCommissionComponent,
     ],
     imports: [
         CommonModule,
         NgZorroAntdModule,
         FormsModule,
         ReactiveFormsModule,
-        RouterModule.forChild(routes)
+        RouterModule.forChild(routes),
     ],
-    providers: [AgentsService]
+    providers: [AgentsService, ClausesService],
 })
 export class SettingsModule {}
