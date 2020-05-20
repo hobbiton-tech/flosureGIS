@@ -24,23 +24,23 @@ import { SlackService } from './slack.service';
 registerLocaleData(en);
 
 const firebaseConfig = {
-    apiKey: 'AIzaSyDzwhgLq4-nMHpJ1xldhHwPwpjOHc4sZV0',
-    authDomain: 'flosure-backend.firebaseapp.com',
-    databaseURL: 'https://flosure-backend.firebaseio.com',
-    projectId: 'flosure-backend',
-    storageBucket: 'flosure-backend.appspot.com',
-    messagingSenderId: '167483416678',
-    appId: '1:167483416678:web:dcd089c936275ee33f4da7',
-    measurementId: 'G-4565Y5EHD4',
+    // apiKey: 'AIzaSyDzwhgLq4-nMHpJ1xldhHwPwpjOHc4sZV0',
+    // authDomain: 'flosure-backend.firebaseapp.com',
+    // databaseURL: 'https://flosure-backend.firebaseio.com',
+    // projectId: 'flosure-backend',
+    // storageBucket: 'flosure-backend.appspot.com',
+    // messagingSenderId: '167483416678',
+    // appId: '1:167483416678:web:dcd089c936275ee33f4da7',
+    // measurementId: 'G-4565Y5EHD4',
 
-    // apiKey: 'AIzaSyA4otys77Tb4bX7uXJONdquRlj0HCzzn1M',
-    // authDomain: 'aplus-insurance.firebaseapp.com',
-    // databaseURL: 'https://aplus-insurance.firebaseio.com',
-    // projectId: 'aplus-insurance',
-    // storageBucket: 'aplus-insurance.appspot.com',
-    // messagingSenderId: '526693014551',
-    // appId: '1:526693014551:web:edce6fd10c1c52742dd052',
-    // measurementId: 'G-GNB5VZE6XQ'
+    apiKey: 'AIzaSyA4otys77Tb4bX7uXJONdquRlj0HCzzn1M',
+    authDomain: 'aplus-insurance.firebaseapp.com',
+    databaseURL: 'https://aplus-insurance.firebaseio.com',
+    projectId: 'aplus-insurance',
+    storageBucket: 'aplus-insurance.appspot.com',
+    messagingSenderId: '526693014551',
+    appId: '1:526693014551:web:edce6fd10c1c52742dd052',
+    measurementId: 'G-GNB5VZE6XQ'
 };
 
 @NgModule({
