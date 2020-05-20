@@ -12,7 +12,6 @@ import 'firebase/firestore';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { HttpClientModule } from '@angular/common/http';
 import { RiskDetailsComponent } from './components/risk-details/risk-details.component';
-import { QuotesGraphqlService } from './services/quotes.graphql.service';
 import { QuoteComponent } from './documents/quote/quote.component';
 import { QuoteDocumentComponent } from './documents/quote-document/quote-document.component';
 import { DraftQuoteDocumentComponent } from './documents/draft-quote-document/draft-quote-document.component';
@@ -20,16 +19,16 @@ import { DraftQuoteDocumentComponent } from './documents/draft-quote-document/dr
 const routes: Routes = [
     {
         path: 'create-quote',
-        component: CreateQuoteComponent,
+        component: CreateQuoteComponent
     },
     {
         path: 'quotes-list',
-        component: QuotesComponent,
+        component: QuotesComponent
     },
     {
         path: 'quote-details/:quoteNumber',
-        component: QuoteDetailsComponent,
-    },
+        component: QuoteDetailsComponent
+    }
 ];
 
 @NgModule({
@@ -40,7 +39,7 @@ const routes: Routes = [
         RiskDetailsComponent,
         QuoteComponent,
         QuoteDocumentComponent,
-        DraftQuoteDocumentComponent,
+        DraftQuoteDocumentComponent
     ],
     imports: [
         CommonModule,
@@ -49,9 +48,9 @@ const routes: Routes = [
         ReactiveFormsModule,
         PdfViewerModule,
         HttpClientModule,
-        RouterModule.forChild(routes),
+        RouterModule.forChild(routes)
     ],
     exports: [QuotesComponent, CreateQuoteComponent],
-    providers: [QuotesService, QuotesGraphqlService],
+    providers: [QuotesService]
 })
 export class QuotesModule {}

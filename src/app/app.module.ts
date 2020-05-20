@@ -17,7 +17,7 @@ import { LoginComponent } from './login/login.component';
 import { AngularFireStorageModule, BUCKET } from '@angular/fire/storage';
 import { environment } from '../environments/environment';
 import 'firebase/storage';
-import { GraphQLModule } from './graphql.module';
+
 import { SlackService } from './slack.service';
 
 registerLocaleData(en);
@@ -56,8 +56,8 @@ const firebaseConfig = {
         ReactiveFormsModule,
         AngularFireModule.initializeApp(firebaseConfig),
         AngularFireDatabaseModule,
-        AngularFireStorageModule,
-        GraphQLModule,
+        AngularFireStorageModule
+
     ],
     providers: [{ provide: NZ_I18N, useValue: en_US }, SlackService],
     bootstrap: [AppComponent],
