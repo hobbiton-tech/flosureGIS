@@ -57,7 +57,8 @@ export class PoliciesService {
         );
     }
 
-    //backup policies
+
+    // backup policies
     createBackupPolicy(policy: Policy): Observable<Policy> {
         return this.http.post<Policy>(
             'https://flosure-postgres-api.herokuapp.com/policy',
@@ -120,6 +121,7 @@ export class PoliciesService {
         });
     }
 
+
     renewPolicy(policy: Policy) {
         this.policies.pipe(first()).subscribe(async policies => {
             const today = new Date();
@@ -135,7 +137,6 @@ export class PoliciesService {
             policy.status = 'Active';
             localStorage.removeItem('policyNumber');
             localStorage.setItem('policyNumber', policy.policyNumber);
-
             localStorage.removeItem('clientId');
             localStorage.setItem('clientId', policy.nameOfInsured); // TODO: Need to change to client code.
             console.log('POLICY NUMBER>>>>', policy.id);
@@ -146,10 +147,10 @@ export class PoliciesService {
                     policy
                 )
                 .subscribe(
-                    data => {
+                    (data) => {
                         this.msg.success('Policy Successfully Updated');
                     },
-                    error => {
+                    (error) => {
                         this.msg.error('Failed');
                     }
                 );
@@ -194,7 +195,7 @@ export class PoliciesService {
             `https://flosure-postgres-api.herokuapp.com/policy/${policyId}`
         );
 
-        return this.policiesCollection.doc<Policy>(policyId).valueChanges();
+        // return this.policiesCollection.doc<Policy>(policyId).valueChanges();
     }
 
     getClientsPolicies(clientId: string): Observable<Policy[]> {
@@ -205,6 +206,8 @@ export class PoliciesService {
         return this.http.get<Policy[]>(
             'https://flosure-postgres-api.herokuapp.com/policy'
         );
+        // return this.policies;
+
     }
 
     countGenerator(number) {

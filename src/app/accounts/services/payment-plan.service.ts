@@ -95,7 +95,7 @@ export class PaymentPlanService implements Resolve<any> {
         this.receipts.pipe(first()).subscribe(async (receipts) => {
             this.http
                 .get<IReceiptNumberResult>(
-                    'https://flosure-premium-rates.herokuapp.com/receipts'
+                    'https://flosure-premium-rates.herokuapp.com/savenda-receipts/1'
                 )
                 .subscribe(async (res) => {
                     receipt.receiptNumber = res.receiptNumber;
@@ -159,7 +159,7 @@ export class PaymentPlanService implements Resolve<any> {
         this.receipts.pipe(first()).subscribe(async (receipts) => {
             this.http
                 .get<IReceiptNumberResult>(
-                    'https://flosure-premium-rates.herokuapp.com/receipts'
+                    'https://flosure-premium-rates.herokuapp.com/savenda-receipts/1'
                 )
                 .subscribe(async (res) => {
                     receipt.receiptNumber = res.receiptNumber;
@@ -205,7 +205,9 @@ export class PaymentPlanService implements Resolve<any> {
 
     generateReceiptNumber(): Promise<any> {
         return this.http
-            .get<any>('https://flosure-premium-rates.herokuapp.com/receipts')
+            .get<any>(
+                'https://flosure-premium-rates.herokuapp.com/savenda-receipts/1'
+            )
             .toPromise();
     }
 }
