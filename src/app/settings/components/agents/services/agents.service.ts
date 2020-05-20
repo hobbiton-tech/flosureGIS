@@ -211,6 +211,7 @@ export class AgentsService {
     getBroker(id: string): Observable<IBroker> {
         return this.http.get<IBroker>(
             `https://flosure-postgres-api.herokuapp.com/intermediary/broker/${id}`
+
         );
     }
 
@@ -225,7 +226,7 @@ export class AgentsService {
         agent.intermediaryType = 'Agent';
         agent.intermediaryId = this.generateIntermediaryID(
             'Agent',
-            'SGI',
+            'AP',
             this.agents.length
         );
         return this.http.post<IAgent>(

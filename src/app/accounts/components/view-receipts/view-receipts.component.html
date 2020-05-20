@@ -1,8 +1,4 @@
-<nz-spin
-    [nzSize]="'large'"
-    [nzSpinning]="loadingReceipt"
-    [nzTip]="'Loading PDF'"
->
+<nz-spin [nzSize]="'large'" [nzSpinning]="loadingReceipt" [nzTip]="'Loading PDF'">
     <div style="margin: 15px;">
         <nz-breadcrumb>
             <nz-breadcrumb-item>
@@ -34,6 +30,7 @@
             </nz-page-header-extra>
         </nz-page-header>
         <nz-card>
+
             <nz-divider
                 nzText="Receipt Details"
                 nzOrientation="left"
@@ -107,6 +104,7 @@
                                             On Behalf Of: {{ receipt.onBehalfOf
                                             }}<br />
                                             <!-- John Doe<br />
+
                                         john@example.com -->
                                         </td>
                                     </tr>

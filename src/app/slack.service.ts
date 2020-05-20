@@ -31,7 +31,7 @@ export class SlackService {
     sendToSlack(msg: ISlackMessage): Promise<string> {
         return this.http
             .post(
-                'https://hooks.slack.com/services/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',
+                'https://hooks.slack.com/services/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',
                 {
                     text: event,
                     attachments: [

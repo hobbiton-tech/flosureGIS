@@ -158,12 +158,16 @@ export class PolicyExtensionDetailsComponent implements OnInit {
             });
 
         this.policiesService.updatePolicy(policy).subscribe(policy => {
-            res => console.log(res);
-        });
-
-        this.msg.success('Endorsement Successful');
+            res => {
+                console.log(res)
         // this.router.navigateByUrl(
         //     '/flosure/underwriting/endorsements/view-endorsements'
         // );
+            }
+            this.msg.success('Endorsement Successful');
+
+        });
+
+        
     }
 }

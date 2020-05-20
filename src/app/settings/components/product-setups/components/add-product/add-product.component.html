@@ -7,7 +7,7 @@
                 <nz-form-label [nzSpan]="8" nzFor="productlass" nzRequired>Class</nz-form-label>
                 <nz-form-control [nzSpan]="14">
                     <nz-select nzShowSearch nzAllowClear [nzPlaceHolder]="'Select a class'" [(ngModel)]="selectedClass"
-                        [ngModelOptions]="{standalone: true}" name=" select">
+                        [ngModelOptions]="{standalone: true}" name=" select" (nzOpenChange)="reloadClasses()">
                         <nz-option *ngFor="let class of classesList" [nzValue]="class" [nzLabel]="class.className">
                         </nz-option>
                     </nz-select>
@@ -29,7 +29,7 @@
             <nz-form-item>
                 <nz-form-label [nzSpan]="8" nzFor="productCode" nzRequired>Product Code</nz-form-label>
                 <nz-form-control [nzSpan]="14">
-                    <input nz-input formControlName="productCode" name="productCode" id="productCode"
+                    <input nz-input formControlName="productCode" name="productCode" id="productCode" type="number"
                         placeholder="Product code" />
                 </nz-form-control>
             </nz-form-item>

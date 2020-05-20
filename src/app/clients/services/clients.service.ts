@@ -83,7 +83,7 @@ export class ClientsService {
         client.status = 'Inactive';
         client.clientID = this.generateClientID(
             'Corporate',
-            'SGI',
+            'AP',
             this.corporateClients.length
         );
         console.log(client);
@@ -124,7 +124,7 @@ export class ClientsService {
         client.status = 'Inactive';
         client.clientID = this.generateClientID(
             'Individual',
-            'SGI',
+            'AP',
             this.individualClients.length
         );
         return this.http.post<IIndividualClient>(

@@ -733,8 +733,6 @@ export class ViewRiskComponent implements OnInit {
                 estimatedValue: 0
             };
             this.currentRiskEdit = some;
-            console.log('current riskEdit form editRisk method:');
-            console.log(this.currentRiskEdit);
         } else {
             //third party risk
             const some: RiskModel = {
@@ -751,8 +749,6 @@ export class ViewRiskComponent implements OnInit {
                 insuranceType: this.selectedValue.value
             };
             this.currentRiskEdit = some;
-            console.log('current riskEdit form editRisk method:');
-            console.log(this.currentRiskEdit);
         }
 
         this.sendEdittedRiskEmitter.emit(this.currentRiskEdit);
@@ -779,8 +775,6 @@ export class ViewRiskComponent implements OnInit {
                 insuranceType: this.selectedValue.value
             };
             this.currentRiskEdit = some;
-            console.log('some:');
-            console.log(some);
 
             var riskIndex = _.findIndex(this.risks, {
                 riskId: this.riskData.riskId

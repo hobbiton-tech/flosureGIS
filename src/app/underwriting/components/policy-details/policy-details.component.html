@@ -15,14 +15,17 @@
             <nz-page-header (nzBack)="goToClientsList()" nzBackIcon
                 nzTitle="Policy Number: {{ policyData.policyNumber }}" [nzSubtitle]="policyData.client">
                 <nz-page-header-extra>
-                    <button nz-button nzType="default" (click)="isCertificatePDFVisible = true">
+                    <!-- <button nz-button nzType="default" (click)="isCertificatePDFVisible = true">
                         Certificate
-                    </button>
+                    </button> -->
                     <button nz-button nzType="default" (click)="isDebitNotePDFVisible = true">
                         Debit Note
                     </button>
-                    <button nz-button nzType="default" (click)="isClausesPDFVisible = true">
+                    <!-- <button nz-button nzType="default" (click)="isClausesPDFVisible = true">
                         Clauses
+                    </button> -->
+                    <button nz-button nzType="default" (click)="isSchedulePDFVisible = true">
+                        Policy Schedule
                     </button>
 
                     <button *ngIf="policyData.paymentPlan === 'NotCreated'" nz-button nzType="primary"
@@ -126,20 +129,26 @@
                             <th>Product Type</th>
                             <th>Sum Insured</th>
                             <th>Premium</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let policy of risksTable.data">
-                            <td>{{ policy.insuranceType }}</td>
-                            <td>{{ policy.regNumber }}</td>
-                            <td>{{ policy.vehicleMake }}</td>
-                            <td>{{ policy.vehicleModel }}</td>
-                            <td>{{ policy.engineNumber }}</td>
-                            <td>{{ policy.chassisNumber }}</td>
-                            <td>{{ policy.color }}</td>
-                            <td>{{ policy.productType }}</td>
-                            <td>{{ policy.sumInsured | number: '1.2-2' }}</td>
-                            <td>{{ policy.netPremium | number: '1.2-2' }}</td>
+                        <tr *ngFor="let risk of risksTable.data">
+                            <td>{{ risk.insuranceType }}</td>
+                            <td>{{ risk.regNumber }}</td>
+                            <td>{{ risk.vehicleMake }}</td>
+                            <td>{{ risk.vehicleModel }}</td>
+                            <td>{{ risk.engineNumber }}</td>
+                            <td>{{ risk.chassisNumber }}</td>
+                            <td>{{ risk.color }}</td>
+                            <td>{{ risk.productType }}</td>
+                            <td>{{ risk.sumInsured | number: '1.2-2' }}</td>
+                            <td>{{ risk.netPremium | number: '1.2-2' }}</td>
+                            <td>
+                                <button nz-button nzType="default" (click)="isCertificateVisible(risk)">
+                                    Certificate
+                                </button>
+                            </td>
                         </tr>
                     </tbody>
                 </nz-table>
@@ -294,17 +303,17 @@
     </div>
 </nz-modal>
 
-<nz-modal nzWidth="700" nzTitle="Golden Lotus" [(nzVisible)]="isCertificatePDFVisible"
+<nz-modal nzWidth="700" nzTitle="" [(nzVisible)]="isCertificatePDFVisible"
     (nzOnCancel)="isCertificatePDFVisible = false" (nzOnOk)="isCertificatePDFVisible = false">
     <nz-card [nzBordered]="true" nzTitle="Policy Certificate Document">
         <app-policy-certificate-document *ngIf="!risksLoading" [clientName]="clientName" [clientNumber]="clientNumber"
-            [clientEmail]="''" [insuredName]="clientName" [policyRisk]="policyRisk" [policyNumber]="policyNumber"
-            [issueDate]="issueDate" [issueTime]="issueTime" [policy]="policyData">
+            [clientEmail]="clientEmail" [insuredName]="clientName" [policyNumber]="policyNumber" [issueDate]="issueDate"
+            [issueTime]="issueTime" [policy]="policyData" [policyRisk]="selectedRisk">
         </app-policy-certificate-document>
     </nz-card>
 </nz-modal>
 
-<nz-modal style="width: 100%;" nzWidth="800" nzTitle="Golden Lotus" [(nzVisible)]="isDebitNotePDFVisible"
+<nz-modal style="width: 100%;" nzWidth="800" nzTitle="" [(nzVisible)]="isDebitNotePDFVisible"
     (nzOnCancel)="isDebitNotePDFVisible = false" (nzOnOk)="isDebitNotePDFVisible = false">
     <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Debit Document">
         <app-policy-debit-note-document *ngIf="!risksLoading" [clientName]="clientName" [clientNumber]="clientNumber"
@@ -316,14 +325,19 @@
     </nz-card>
 </nz-modal>
 
-<nz-modal style="width: 100%;" nzTitle="Golden Lotus" [(nzVisible)]="isSchedulePDFVisible"
+<nz-modal style="width: 150%;" nzTitle="" nzWidth="800" [(nzVisible)]="isSchedulePDFVisible"
     (nzOnCancel)="isSchedulePDFVisible = false" (nzOnOk)="isSchedulePDFVisible = false">
     <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Schedule Document">
-        <!-- <app-policy-certificate-document></app-policy-certificate-document> -->
+        <app-policy-schedule-document *ngIf="!risksLoading" [clientName]="clientName" [clientNumber]="clientNumber"
+            [coverFrom]="coverForm" [coverTo]="coverTo" [clientEmail]="clientEmail" [policyNumber]="policyNumber"
+            [clientEmail]="''" [insuredName]="clientName" [policyRisk]="policyRisk" [policyNumber]="policyNumber"
+            [issueDate]="issueDate" [issueTime]="issueTime" [policy]="policyData" [basicPremium]="basicPremium"
+            [loadingAmount]="loadingAmount" [discountAmount]="discountAmount" [totalAmount]="totalAmount">
+        </app-policy-schedule-document>
     </nz-card>
 </nz-modal>
 
-<nz-modal style="width: 100%;" nzWidth="800" nzTitle="Golden Lotus" [(nzVisible)]="isClausesPDFVisible"
+<nz-modal style="width: 100%;" nzWidth="800" nzTitle="" [(nzVisible)]="isClausesPDFVisible"
     (nzOnCancel)="isClausesPDFVisible = false" (nzOnOk)="isClausesPDFVisible = false">
     <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Policy Clauses Document">
         <app-policy-clauses-document></app-policy-clauses-document>

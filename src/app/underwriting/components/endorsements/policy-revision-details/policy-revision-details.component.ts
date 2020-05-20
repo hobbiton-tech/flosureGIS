@@ -50,6 +50,9 @@ export class PolicyRevisionDetailsComponent implements OnInit {
     //selectedRisk
     selectedRisk: RiskModel;
 
+    //assigned risks to update table
+    assignedRisks: RiskModel[];
+
     //Editable fields
     isEditmode = false;
     _risks: RiskModel[];
@@ -131,26 +134,22 @@ export class PolicyRevisionDetailsComponent implements OnInit {
             });
         });
 
-        this.policyRiskRevisionUpdate.subscribe((update) => {
-            update === true
-                ? this.route.params.subscribe((id) => {
-                      this.policiesService
-                          .getBackupPolicyById(id['id'])
-                          .subscribe((policy) => {
-                              console.log(this.risks);
-                          });
-                  })
-                : '';
+
+        this.policyRiskRevisionUpdate.subscribe(update => {
+            update === true ? this.updateRisksTable() : '';
+
         });
     }
 
     recieveEditedRisk($event) {
-        console.log('EVENT', $event);
-        console.log(this.risks);
-        const editedRisk: RiskModel = $event;
+        // this.updateRisk($event);
+        var riskIndex = _.findIndex(this.risks, {
+            riskId: $event.riskId
+        });
+
+        this.risks = this.risks.splice(riskIndex, 1, $event);
+        this.displayRisks = this.risks;
         this.policyRiskRevisionUpdate.next(true);
-        this.updateRisk(editedRisk);
-        this.cdr.detectChanges();
     }
 
     recieveAddedrisk($event) {
@@ -165,16 +164,18 @@ export class PolicyRevisionDetailsComponent implements OnInit {
 
     addRisk(risks: RiskModel[]) {
         this.risks = [...this.risks, ...risks];
+        this.risks = this.risks;
+        this.displayRisks = this.risks;
     }
 
-    updateRisk(risk: RiskModel) {
-        var riskIndex = _.findIndex(this.risks, {
-            riskId: risk.riskId,
-        });
-
-        this.risks.splice(riskIndex, 1, risk);
-        this.policyRiskRevisionUpdate.next(true);
-    }
+    // updateRisk(risk: RiskModel) {
+    //     var riskIndex = _.findIndex(this.risks, {
+    //         riskId: risk.riskId
+    //     });
+    //     this.risks = this.risks.splice(riskIndex, 1, risk);
+    //     this.displayRisks = this.risks;
+    //     this.policyRiskRevisionUpdate.next(true);
+    // }
 
     openAddRiskFormModal() {
         this.addRiskFormModalVisible = true;
@@ -187,8 +188,6 @@ export class PolicyRevisionDetailsComponent implements OnInit {
 
     //endorse policy
     endorsePolicy() {
-        console.log('endorse policy clicked!!');
-
         const endorsement: Endorsement = {
             ...this.endorsementForm.value,
             type: 'Revision Of Cover',
@@ -217,12 +216,6 @@ export class PolicyRevisionDetailsComponent implements OnInit {
             risks: this.risks,
         };
 
-        console.log('policy details form values:');
-        console.log(this.policyRevisionDetailsForm.value);
-
-        console.log('risks:');
-        console.log(this.risks);
-
         this.endorsementService
             .createEndorsement(this.policyData.id, endorsement)
             .subscribe((endorsement) => {
@@ -230,14 +223,19 @@ export class PolicyRevisionDetailsComponent implements OnInit {
             });
 
         // this.policiesService.createBackupPolicy(policy);
-        this.policiesService.updatePolicy(policy).subscribe((policy) => {
-            (res) => console.log(res);
-        });
 
-        this.msg.success('Endorsement Successful');
+        this.policiesService.updatePolicy(policy).subscribe(policy => {
+            res => {
+ 
         // this.router.navigateByUrl(
         //     '/flosure/underwriting/endorsements/view-endorsements'
         // );
+            }
+
+            this.msg.success('Endorsement Successful');
+        });
+
+        
     }
 
     sumArray(items, prop) {
@@ -247,6 +245,11 @@ export class PolicyRevisionDetailsComponent implements OnInit {
     }
 
     recieveUpdate($event) {
-        this.policyRiskRevisionUpdate.next($event);
+        // this.policyRiskRevisionUpdate.next($event);
+    }
+
+    updateRisksTable() {
+        this.risks = this.risks;
+        this.displayRisks = this.risks;
     }
 }

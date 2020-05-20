@@ -1,0 +1,211 @@
+<div class="invoice-box">
+    <tr style="text-align: center;"><strong style="color:red; font-size: 20px;">Draft Quotation</strong></tr>
+    <table cellpadding="0" cellspacing="0">
+        <tr class="top">
+            <td colspan="2">
+                <table>
+                    <tr>
+                        <td class="title">
+                            <img src="assets/images/apluslogo.png" style="width: 100%; max-width: 300px;" />
+                        </td>
+
+                        <td>
+                            Quote No: {{quoteNumber}}<br />
+                            Created: {{dateCreated | date}}<br />
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr class="information">
+            <td colspan="2">
+                <table>
+                    <tr>
+                        <td>
+                            A+ General Insurance<br />
+                            Plot No. 402, Roma Park, Zambezi Road<br />
+                            P.O. Box 31700, Lusaka Zambia<br />
+                        </td>
+
+                        <td>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr class="information">
+            <td colspan="2">
+                <strong>RE: Motor Insurance Quotation</strong>
+                <br />
+            </td>
+        </tr>
+
+        <tr class="heading">
+            <!-- <td>
+                Type of Insurance
+            </td> -->
+            <td>
+                Number of Vehicles
+            </td>
+        </tr>
+
+        <tr class="details">
+            <!-- <td>
+                {{insuranceType}}
+            </td> -->
+
+            <td>
+                {{numberOfRisks}}
+            </td>
+        </tr>
+
+        <tr class="heading">
+            <td>
+                Item
+            </td>
+
+            <td>
+                Amount
+            </td>
+        </tr>
+
+        <tr class="item">
+            <td>
+                Basic Premium
+            </td>
+
+            <td> {{ basicPremium | number: '1.2-2' }}</td>
+        </tr>
+
+        <tr class="item">
+            <td>
+                Loading
+            </td>
+
+            <td> {{ loadingAmount | number: '1.2-2' }}</td>
+        </tr>
+
+        <tr class="item last">
+            <td>
+                Discount
+            </td>
+
+            <td> {{ discountAmount | number: '1.2-2' }}</td>
+        </tr>
+
+        <tr class="item last">
+            <td>
+                Levy
+            </td>
+
+            <td> {{ premiumLevy | number: '1.2-2' }}</td>
+        </tr>
+
+        <tr class="total">
+            <td></td>
+
+            <td>Total: {{ totalAmount | number: '1.2-2' }}</td>
+        </tr>
+    </table>
+</div>
+
+<!-- <div class="invoice-box">
+    <table cellpadding="0" cellspacing="0">
+        <tr class="top">
+            <td colspan="6">
+                <table>
+                    <tr>
+                        <td class="title">
+                            <img src="assets/images/Savenda-Logo-Final.png" style="
+                                        width: 100%;
+                                        max-width: 240px;
+                                    " />
+                        </td>
+                        <td>
+                            Quote Number: {{quoteNumber}}<br />
+                        Created: {{dateCreated}}<br />
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr class="information">
+            <td colspan="6">
+                <table>
+                    <tr>
+                        <td>
+                            Savenda General Insurance Limited<br />
+                            Plot 20849 PSC Corporate Park, Alick
+                            Nkhatha Road<br />
+                            Mass Media P.O. Box 30363, Lusaka
+                            Zambia<br />
+                            <span style="font-weight: bold;">TPIN:</span>
+                            <span style="
+                                        font-weight: bold;
+                                        color: red;
+                                    ">82358383734</span>
+                        </td>
+                        <td>
+                            {{clientName}}<br />
+                            {{clientNumber}}<br />
+                            {{clientEmail}}
+                        </td>
+                    </tr>
+                </table>
+                <p id="title">MOTOR INSURANCE QUOTATION</p>
+            </td>
+        </tr>
+        <tr class="heading">
+            <td>
+                SUM INSURED
+            </td>
+            <td class="td2">
+                DISCOUNT
+            </td>
+            <td>
+                START DATE
+            </td>
+            <td>
+                END DATE
+            </td>
+            <td>
+                TOTAL
+            </td>
+        </tr>
+        <tr class="details">
+            <td>
+
+            </td>
+            <td class="td2">
+                {{discountAmount}}
+            </td>
+            <td>
+
+            </td>
+            <td>
+
+            </td>
+            <td>
+                {{basicPremium}}
+            </td>
+        </tr>
+    </table>
+    <p style="font-weight: bold; text-align: left;">
+        Combined Third Party Liability Limits: ZMW 500,000.00
+    </p>
+    <br />
+    <p style="font-weight: bold;">Cover:</p>
+    <p style="font-weight: bold;">Total number of vehicles: {{numberOfRisks}}</p>
+    <p style="font-weight: bold;">
+        Currency:
+    </p>
+    <p style="font-weight: bold;">Product Type:</p>
+    <br />
+    <p style="font-weight: bold;">
+        NOTE: THIS INSURANCE CEASES ON THE SALE OR CHANGE OF
+        OWNERSHIP OF THE STATED VEHICLE. COVER RESTRICTED WITHIN
+        ZAMBIA ONLY.
+    </p>
+</div> -->

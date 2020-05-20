@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Policy } from '../models/policy.model';
 import {
     AngularFirestore,
-    AngularFirestoreCollection,
+    AngularFirestoreCollection
 } from '@angular/fire/firestore';
 import 'firebase/firestore';
 import { filter, first } from 'rxjs/operators';
@@ -14,7 +14,7 @@ import { isTemplateRef, NzMessageService } from 'ng-zorro-antd';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
 export class PoliciesService {
     private policiesCollection: AngularFirestoreCollection<Policy>;
@@ -50,16 +50,13 @@ export class PoliciesService {
     //     return this.policiesCollection.doc<Policy>(policyId).valueChanges();
     // }
 
-    // updatePolicy(policy: Policy): Observable<Policy> {
-    //     console.log('recieved policy:');
-    //     console.log(policy);
-    //     console.log('policy status: ' + policy.status);
-    //     return this.http.put<Policy>(
-    //         `https://flosure-postgres-api.herokuapp.com/policy/${policy.id}`,
-    //         policy
-    //   );
+    updatePolicy(policy: Policy): Observable<Policy> {
+        return this.http.put<Policy>(
+            `https://flosure-postgres-api.herokuapp.com/policy/${policy.id}`,
+            policy
+        );
+    }
 
-    // }
 
     // backup policies
     createBackupPolicy(policy: Policy): Observable<Policy> {
@@ -94,7 +91,7 @@ export class PoliciesService {
     ////////////////////////////////////////////
 
     async addPolicy(policy: Policy) {
-        this.policies.pipe(first()).subscribe(async (policies) => {
+        this.policies.pipe(first()).subscribe(async policies => {
             const today = new Date();
             policy.term = 1;
             policy.nameOfInsured = policy.client;
@@ -124,18 +121,9 @@ export class PoliciesService {
         });
     }
 
-    updatePolicy(policy: Policy): Observable<Policy> {
-        console.log('recieved policy:');
-        console.log(policy);
-        console.log('policy status: ' + policy.status);
-        return this.http.put<Policy>(
-            `https://flosure-postgres-api.herokuapp.com/policy/${policy.id}`,
-            policy
-        );
-    }
 
     renewPolicy(policy: Policy) {
-        this.policies.pipe(first()).subscribe(async (policies) => {
+        this.policies.pipe(first()).subscribe(async policies => {
             const today = new Date();
             policy.client = policy.nameOfInsured;
             policy.dateOfIssue =
@@ -166,6 +154,7 @@ export class PoliciesService {
                         this.msg.error('Failed');
                     }
                 );
+
             // this.policiesCollection
             //     .doc(policy.id)
             //     .update(policy)
@@ -184,13 +173,13 @@ export class PoliciesService {
             .collection('policies')
             .ref.where('policyNumber', '==', policyNumber)
             .get()
-            .then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
+            .then(querySnapshot => {
+                querySnapshot.forEach(doc => {
                     console.log(doc.data());
                     this.policy = doc.data();
                 });
             })
-            .catch((error) => {
+            .catch(error => {
                 console.log('Error getting documents: ', error);
             });
 
@@ -210,7 +199,7 @@ export class PoliciesService {
     }
 
     getClientsPolicies(clientId: string): Observable<Policy[]> {
-        return this.policies.pipe(filter((policy) => clientId === clientId));
+        return this.policies.pipe(filter(policy => clientId === clientId));
     }
 
     getPolicies(): Observable<Policy[]> {
@@ -218,6 +207,7 @@ export class PoliciesService {
             'https://flosure-postgres-api.herokuapp.com/policy'
         );
         // return this.policies;
+
     }
 
     countGenerator(number) {
@@ -233,7 +223,10 @@ export class PoliciesService {
         const count = this.countGenerator(totalPolicies);
         const today = new Date();
         const dateString: string =
-            today.getFullYear().toString().substr(-2) +
+            today
+                .getFullYear()
+                .toString()
+                .substr(-2) +
             ('0' + (today.getMonth() + 1)).slice(-2) +
             +('0' + today.getDate()).slice(-2);
 

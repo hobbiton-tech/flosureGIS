@@ -196,14 +196,18 @@ export class PolicyCancellationDetailsComponent implements OnInit {
             });
 
         this.policiesService.updatePolicy(policy).subscribe(policy => {
-            res => console.log(res);
+            res => {
+                console.log(res);
+            // this.router.navigateByUrl(
+            // '/flosure/underwriting/endorsements/view-endorsements'
+            }
+
+            this.msg.success('Cancellation Successful');
+
         });
 
         this.creditNoteAmount = this.policyCancellationBalance();
 
-        this.msg.success('Cancellation Successful');
-        // this.router.navigateByUrl(
-        //     '/flosure/underwriting/endorsements/view-endorsements'
-        // );
+        
     }
 }

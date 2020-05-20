@@ -35,6 +35,7 @@ registerLocaleData(en);
 // };
 
 const firebaseConfig = {
+
     apiKey: 'AIzaSyCIwedzdF9Og67CsT8oChO8UkMBk1OVQPE',
     authDomain: 'savenda-insurance.firebaseapp.com',
     databaseURL: 'https://savenda-insurance.firebaseio.com',
@@ -43,6 +44,7 @@ const firebaseConfig = {
     messagingSenderId: '795733102142',
     appId: '1:795733102142:web:62eaa45624e4473e35cb6f',
     measurementId: 'G-SCN3RMBTB7',
+
 };
 
 @NgModule({
@@ -50,7 +52,7 @@ const firebaseConfig = {
         AppComponent,
         NavigationComponent,
         LoginComponent,
-        RatesComponent,
+        RatesComponent
     ],
     imports: [
         BrowserModule,
@@ -63,9 +65,9 @@ const firebaseConfig = {
         AngularFireModule.initializeApp(firebaseConfig),
         AngularFireDatabaseModule,
         AngularFireStorageModule,
-        GraphQLModule,
+        GraphQLModule
     ],
     providers: [{ provide: NZ_I18N, useValue: en_US }, SlackService],
-    bootstrap: [AppComponent],
+    bootstrap: [AppComponent]
 })
 export class AppModule {}

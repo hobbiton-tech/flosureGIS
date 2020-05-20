@@ -61,7 +61,7 @@ export class PolicyCertificateDocumentComponent implements OnInit {
             },
             background: 'white',
             height: div.clientHeight,
-            width: div.clientWidth,
+            width: div.clientWidth
         };
 
         html2canvas(div, options).then(canvas => {

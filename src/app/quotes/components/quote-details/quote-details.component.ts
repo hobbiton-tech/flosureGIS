@@ -4,7 +4,7 @@ import {
     RiskModel,
     LoadModel,
     DiscountType,
-    DiscountModel,
+    DiscountModel
 } from '../../models/quote.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Policy } from 'src/app/underwriting/models/policy.model';
@@ -30,7 +30,7 @@ import { AgentsService } from 'src/app/settings/components/agents/services/agent
 import {
     IBroker,
     IAgent,
-    ISalesRepresentative,
+    ISalesRepresentative
 } from 'src/app/settings/components/agents/models/agents.model';
 import { ImageElement } from 'canvg';
 
@@ -195,6 +195,13 @@ export class QuoteDetailsComponent implements OnInit {
     //dicounts added
     discounts: DiscountModel[] = [];
 
+    //for quote document
+    quoteBasicPremium: number;
+    quoteLoadingTotal: number;
+    quoteDiscountTotal: number;
+    quoteLevy: number;
+    quoteNetPremium: number;
+
     // loading feedback
     computeBasicPremiumIsLoading = false;
     computeIncreasedThirdPartyLimitIsLoading = false;
@@ -281,7 +288,7 @@ export class QuoteDetailsComponent implements OnInit {
         { label: 'Territorial Extension', value: 'territorailExtension' },
         { label: 'Loss Of Use', value: 'lossOfUse' },
         { label: 'Inexperienced Driver', value: 'inexperiencedDriver' },
-        { label: 'Under Age Driver', value: 'underAgeDriver' },
+        { label: 'Under Age Driver', value: 'underAgeDriver' }
     ];
 
     motorThirdPartyloadingOptions = [
@@ -301,7 +308,7 @@ export class QuoteDetailsComponent implements OnInit {
         { label: 'No claims dicount', value: 'noClaimsDiscount' },
         { label: 'Loyalty Discount', value: 'loyaltyDiscount' },
         { label: 'Valued Client Discount', value: 'valuedClientDiscount' },
-        { label: 'Low Term Agreement', value: 'lowTermAgreementDiscount' },
+        { label: 'Low Term Agreement', value: 'lowTermAgreementDiscount' }
     ];
 
     selectedDiscountValue = { label: '', value: '' };
@@ -312,7 +319,7 @@ export class QuoteDetailsComponent implements OnInit {
         { label: 'Direct', value: 'direct' },
         { label: 'Broker', value: 'broker' },
         { label: 'Agent', value: 'agent' },
-        { label: 'Sales Representative', value: 'salesRepresentative' },
+        { label: 'Sales Representative', value: 'salesRepresentative' }
     ];
 
     quoteData: MotorQuotationModel = new MotorQuotationModel();
@@ -338,6 +345,7 @@ export class QuoteDetailsComponent implements OnInit {
 
     // Quote PDFs modal
     isViewQuotePDFVisible = false;
+    isViewDraftQuotePDFVisible = false;
 
     searchString: string;
 
@@ -413,7 +421,7 @@ export class QuoteDetailsComponent implements OnInit {
                 this.quoteDetailsForm
                     .get('sourceOfBusiness')
                     .setValue(this.quoteData.sourceOfBusiness, {
-                        onlySelf: true,
+                        onlySelf: true
                     });
                 this.quoteDetailsForm
                     .get('intermediaryName')
@@ -450,35 +458,33 @@ export class QuoteDetailsComponent implements OnInit {
             });
         });
 
-        this.clientsService.getAllClients().subscribe((clients) => {
+        this.clientsService.getAllClients().subscribe(clients => {
             this.clients = [...clients[0], ...clients[1]] as Array<
                 IIndividualClient & ICorporateClient
             >;
         });
 
-        this.agentsService.getAgents().subscribe((agents) => {
+        this.agentsService.getAgents().subscribe(agents => {
             this.agents = agents;
         });
 
-        this.agentsService.getBrokers().subscribe((brokers) => {
+        this.agentsService.getBrokers().subscribe(brokers => {
             this.brokers = brokers;
         });
 
         this.agentsService
             .getSalesRepresentatives()
-            .subscribe((salesRepresentatives) => {
+            .subscribe(salesRepresentatives => {
                 this.salesRepresentatives = salesRepresentatives;
             });
 
-        this.agentsService
-            .getAllIntermediaries()
-            .subscribe((intermediaries) => {
-                this.intermediaries = [
-                    ...intermediaries[0],
-                    ...intermediaries[1],
-                    ...intermediaries[2],
-                ] as Array<IAgent & IBroker & ISalesRepresentative>;
-            });
+        this.agentsService.getAllIntermediaries().subscribe(intermediaries => {
+            this.intermediaries = [
+                ...intermediaries[0],
+                ...intermediaries[1],
+                ...intermediaries[2]
+            ] as Array<IAgent & IBroker & ISalesRepresentative>;
+        });
 
         // start of initialize computations
         this.sumInsured = 0;
@@ -518,7 +524,7 @@ export class QuoteDetailsComponent implements OnInit {
             quarter: ['', Validators.required],
             underwritingYear: ['', Validators.required],
             sourceOfBusiness: ['', Validators.required],
-            intermediaryName: ['', Validators.required],
+            intermediaryName: ['', Validators.required]
         });
 
         this.riskComprehensiveForm = this.formBuilder.group({
@@ -1119,6 +1125,9 @@ export class QuoteDetailsComponent implements OnInit {
                 paymentPlan: this.paymentPlan,
                 underwritingYear: new Date(),
                 user: localStorage.getItem('user'),
+                sourceOfBusiness: this.quoteData.sourceOfBusiness,
+                intermediaryName: this.quoteData.intermediaryName
+
             };
 
             // const policy = this.quoteDetailsForm.value as Policy;
@@ -1564,7 +1573,7 @@ export class QuoteDetailsComponent implements OnInit {
             .subscribe((data) => {
                 this.loads.push({
                     loadType: 'Territorial Extension',
-                    amount: Number(data.territorialExtensionPremium),
+                    amount: Number(data.territorialExtensionPremium)
                 });
                 this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
                 this.handleNetPremium();
@@ -1920,7 +1929,7 @@ export class QuoteDetailsComponent implements OnInit {
     handleTerritorialExtensionAmount() {
         this.loads.push({
             loadType: 'Territorial Extension',
-            amount: Number(this.territorialExtensionAmount),
+            amount: Number(this.territorialExtensionAmount)
         });
         this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
         this.handleNetPremium();
@@ -1930,7 +1939,7 @@ export class QuoteDetailsComponent implements OnInit {
     handleInexperiencedDriverAmount() {
         this.loads.push({
             loadType: 'Inexperienced Driver',
-            amount: Number(this.inexperiencedDriverAmount),
+            amount: Number(this.inexperiencedDriverAmount)
         });
         this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
         this.handleNetPremium();
@@ -1940,7 +1949,7 @@ export class QuoteDetailsComponent implements OnInit {
     handleUnderAgeDriverAmount() {
         this.loads.push({
             loadType: 'Under Age Driver',
-            amount: Number(this.underAgeDriverAmount),
+            amount: Number(this.underAgeDriverAmount)
         });
         this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
         this.handleNetPremium();
@@ -1950,7 +1959,7 @@ export class QuoteDetailsComponent implements OnInit {
     handleNoClaimsDiscountAmount() {
         this.discounts.push({
             discountType: 'No Claims Discount',
-            amount: Number(this.noClaimsDiscountAmount),
+            amount: Number(this.noClaimsDiscountAmount)
         });
         this.premiumDiscount = this.sumArray(this.discounts, 'amount');
         this.handleNetPremium();
@@ -1960,7 +1969,7 @@ export class QuoteDetailsComponent implements OnInit {
     handleLoyaltyDiscountAmount() {
         this.discounts.push({
             discountType: 'Loyalty Discount',
-            amount: Number(this.loyaltyDiscountAmount),
+            amount: Number(this.loyaltyDiscountAmount)
         });
         this.premiumDiscount = this.sumArray(this.discounts, 'amount');
         this.handleNetPremium();
@@ -1970,7 +1979,7 @@ export class QuoteDetailsComponent implements OnInit {
     handleValuedClientDiscountAmount() {
         this.discounts.push({
             discountType: 'Valued Client Discount',
-            amount: Number(this.valuedClientDiscountAmount),
+            amount: Number(this.valuedClientDiscountAmount)
         });
         this.premiumDiscount = this.sumArray(this.discounts, 'amount');
         this.handleNetPremium();
@@ -1980,9 +1989,29 @@ export class QuoteDetailsComponent implements OnInit {
     handleLowTermAgreementDiscountAmount() {
         this.discounts.push({
             discountType: 'Low Term Agreement Discount',
-            amount: Number(this.lowTermAgreementDiscountAmount),
+            amount: Number(this.lowTermAgreementDiscountAmount)
         });
         this.premiumDiscount = this.sumArray(this.discounts, 'amount');
         this.handleNetPremium();
+    }
+
+    ///Draft quotation calculations
+    handleDraftQuotation() {
+        this.quoteLoadingTotal = 0;
+        this.quoteDiscountTotal = 0;
+
+        this.quoteBasicPremium = this.sumArray(this.risks, 'basicPremium');
+        this.quoteLevy = this.sumArray(this.risks, 'premiumLevy');
+        this.quoteNetPremium = this.sumArray(this.risks, 'netPremium');
+
+        for (let risk of this.risks) {
+            this.quoteLoadingTotal += this.sumArray(risk.loads, 'amount');
+        }
+
+        for (let risk of this.risks) {
+            this.quoteDiscountTotal += this.sumArray(risk.discounts, 'amount');
+        }
+
+        this.isViewDraftQuotePDFVisible = true;
     }
 }

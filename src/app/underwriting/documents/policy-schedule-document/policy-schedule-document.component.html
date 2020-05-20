@@ -1,1 +1,126 @@
-<p>policy-schedule-document works!</p>
+<div style="
+        display: flex;
+        margin-bottom: 15px;
+        align-items: flex-end;
+        width: 100%;
+    ">
+    <button nz-button nzType="primary" style="margin-right: 8px;" (click)="htmlToPdf()">
+        Download
+    </button>
+    <button nz-button nzType="primary" [useExistingCss]="true" [printSectionId]="'debitPrintSection'" ngxPrint>
+        Print
+    </button>
+</div>
+
+<div id="debitPrintSection">
+    <div>
+        <h2 class="heading">MOTOR INDIVIDUAL SCHEDULE</h2>
+        <div style="
+                font-weight: bold;
+                border: 3px;
+                border-style: solid;
+                border-color: #FF0000;
+                padding: 1em;
+            ">
+            <p>Agency: <span style="float: right;">Policy No: {{policy.policyNumber}}</span></p>
+            <p>Insurer: A+ General insurance<span style="float: right;">Currency: {{policy.currency}}</span></p>
+            <p>Insured: {{policy.nameOfInsured}}<span style="float: right;">Email: {{clientEmail}}</span></p>
+            <p>State:<span style="float: right;">Date: {{issueDate | date}}</span></p>
+            <p>Telephone:<span style="float: right;">TPIN: 1002167568</span></p>
+            <p>
+                Business or Profession:<span style="float: right;"></span>
+            </p>
+            <p>
+                Period: {{coverFrom | date}} : {{coverTo | date}}<span style="float: right;">Total Premium:
+                    {{totalAmount | number: '1.2-2'}}</span>
+            </p>
+        </div>
+        <br />
+        <nz-table style="width: 100%;" #risksTable [nzData]="policy.risks" nzFrontPagination="false"
+            nzShowPagination="false">
+            <tr>
+                <th>Reg No.</th>
+                <th>Make/Model</th>
+                <th>Color</th>
+                <th>Engine No.</th>
+                <th>Chasis No.</th>
+                <th>Year of Manf.</th>
+                <!-- <th>S.I</th> -->
+                <th>Cover Type</th>
+            </tr>
+            <tr *ngFor="let risk of risksTable.data">
+                <td>{{risk.regNumber}}</td>
+                <td>{{risk.vehicleMake}}/{{risk.vehicleModel}}</td>
+                <td>{{risk.color}}</td>
+                <td>{{risk.engineNumber}}</td>
+                <td>{{risk.chassisNumber}}</td>
+                <td>{{risk.yearOfManufacture | date}}</td>
+                <!-- <td>{{risk.regNumber}}</td> -->
+                <td>{{risk.insuranceType}}</td>
+            </tr>
+        </nz-table>
+        <br />
+        <p style="font-weight: bold;">Limits of Liability:</p>
+        <p>
+            . Third Party Property Damage<span style="float: right;">30,000</span>
+        </p>
+        <p>
+            . Third Party Injury and Death<span style="float: right;">50,000</span>
+        </p>
+        <p>
+            . Third Party Bodily Injury/ Death per Event<span style="float: right;">100,000</span>
+        </p>
+        <p>
+            . Combined Liability Limit<span style="float: right;">60,000</span>
+        </p>
+        <br />
+        <p style="font-weight: bold;">
+            Authorised Driver:<span style="float: right;"></span>
+        </p>
+        <br />
+        <p style="font-weight: bold;">
+            NOTE: This policy is issued subject to the clauses attached.
+        </p>
+        <br />
+        <p>
+            Signed on behalf of the Company on the date stated in the
+            Schedule
+        </p>
+        <p>Examined:<span id="text">Signed:</span></p>
+        <br />
+        <p style="font-weight: bold;">
+            I certify that I have received a copy of this policy
+            together with the following additional documents (If any):
+        </p>
+        <p>1.</p>
+        <p>2.</p>
+        <p>3.</p>
+        <p>Insured Signature:</p>
+        <p>Date:</p>
+        <p>Printed Name:</p>
+        <p style="font-weight: bold; text-decoration: underline;">
+            POLICY REMARKS
+        </p>
+        <br />
+        <p style="
+                font-weight: bold;
+                text-decoration: underline;
+                text-align: center;
+            ">
+            COMPLIMENTS AND COMPLAINTS HANDLING PROCEDURE
+        </p>
+        <p>
+            If you have a complaint, kindly speak to our Branch Manager
+            at any of our branches. If you feel your complain has not
+            been handled in a fair manner, kindly call us on +260955770707 or +260977978538 and speak to our Customer
+            Service Team or
+            email us
+            on info@aplusgeneral.co.zm .
+        </p>
+        <p>
+            Prepared By: <span id="text">Signed</span>
+            <span style="float: right;">On:{{issueDate | date}}</span>
+        </p>
+        <p>Authorized By:</p>
+    </div>
+</div>

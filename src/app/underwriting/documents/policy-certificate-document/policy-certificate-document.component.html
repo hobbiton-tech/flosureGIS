@@ -167,7 +167,7 @@
                     <image
                         width="710"
                         height="329"
-                        xlink:href="assets/images/Savenda-Logo-Final.png"
+                        xlink:href="assets/images/apluslogo.png"
                     />
                 </pattern>
                 <pattern
@@ -273,8 +273,6 @@
                     class="cls-9"
                     transform="translate(402 507)"
                 >
-                    <tspan x="0" y="0">Disc No:</tspan>
-                    <tspan class="cls-10" y="0">47389</tspan>
                 </text>
                 <text
                     id="Vehicle_Reg_No:_BAP_3102_ZM"
@@ -451,16 +449,6 @@
                     <tspan x="0" y="0">Third Party Limits of Liability</tspan>
                 </text>
                 <text
-                    id="Certificate_No:_50392"
-                    data-name="Certificate No:  50392"
-                    class="cls-15"
-                    transform="translate(24 137)"
-                >
-                    <tspan x="0" y="0" xml:space="preserve">
-                        Certificate No: 50392
-                    </tspan>
-                </text>
-                <text
                     id="Client_Name:_Isaac_Musonda"
                     data-name="Client Name:  Isaac Musonda"
                     class="cls-15"
@@ -486,7 +474,7 @@
                     class="cls-15"
                     transform="translate(302 157)"
                 >
-                    <tspan x="0" y="0">Insured Name: {{ insuredName }}</tspan>
+                    <tspan x="0" y="0">Insured Name: {{ policy.nameOfInsured }}</tspan>
                 </text>
                 <text
                     id="Cover_Type:_Comprehensive_Insurance"
@@ -516,7 +504,7 @@
                 >
                     <tspan x="0" y="0">
                         From:
-                        {{ convertRiskDate(policyRisk) * 1000 | date }}
+                        {{ policyRisk.riskStartDate | date }}
                     </tspan>
                 </text>
                 <text
@@ -782,7 +770,7 @@
                     transform="translate(395 319)"
                 >
                     <!-- TODO: CHECK!! -->
-                    <tspan x="0" y="0">{{ '2003' }}</tspan>
+                    <tspan x="0" y="0"> </tspan>
                 </text>
                 <text id="Gold" class="cls-18" transform="translate(508 319)">
                     <tspan x="0" y="0">{{ policyRisk.color }}</tspan>

@@ -12,7 +12,7 @@ import { PoliciesService } from 'src/app/underwriting/services/policies.service'
 @Component({
     selector: 'app-direct-client',
     templateUrl: './direct-client.component.html',
-    styleUrls: ['./direct-client.component.scss'],
+    styleUrls: ['./direct-client.component.scss']
 })
 export class DirectClientComponent implements OnInit {
     receiptForm: FormGroup;
@@ -62,16 +62,16 @@ export class DirectClientComponent implements OnInit {
         { label: 'Third Party Recovery', value: 'Third Party Recovery' },
         {
             label: 'Imprest Retirement Receipt',
-            value: 'Imprest Retirement Receipt',
+            value: 'Imprest Retirement Receipt'
         },
         { label: 'Third Party Recovery', value: 'Third Party Recovery' },
-        { label: 'General Receipt', value: 'General Receipt' },
+        { label: 'General Receipt', value: 'General Receipt' }
     ];
 
     paymentMethodList = [
         { label: 'Cash', value: 'cash' },
         { label: 'EFT', value: 'eft' },
-        { label: 'Bank Transfer', value: 'bank transfer' },
+        { label: 'Bank Transfer', value: 'bank transfer' }
     ];
     sourceOfBusiness: string;
     intermediaryName: string;
@@ -93,28 +93,30 @@ export class DirectClientComponent implements OnInit {
             sumInWords: [''],
             dateReceived: [''],
             todayDate: [this.today],
-            remarks: [''],
+            remarks: ['']
         });
 
         this.cancelForm = this.formBuilder.group({
-            remarks: ['', Validators.required],
+            remarks: ['', Validators.required]
         });
         this.reinstateForm = this.formBuilder.group({
-            remarks: ['', Validators.required],
+            remarks: ['', Validators.required]
         });
     }
 
     ngOnInit(): void {
+
         this.policeServices.getPolicies().subscribe((quotes) => {
+
             this.unreceiptedList = _.filter(
                 quotes,
-                (x) =>
+                x =>
                     x.receiptStatus === 'Unreceipted' &&
                     x.sourceOfBusiness === 'direct'
             );
             this.receiptsCount = _.filter(
                 quotes,
-                (x) =>
+                x =>
                     x.receiptStatus === 'Unreceipted' &&
                     x.sourceOfBusiness === 'direct'
             ).length;
@@ -122,10 +124,10 @@ export class DirectClientComponent implements OnInit {
             console.log(this.unreceiptedList);
         });
 
-        this.receiptService.getReciepts().subscribe((receipts) => {
+        this.receiptService.getReciepts().subscribe(receipts => {
             this.receiptedList = _.filter(
                 receipts,
-                (x) =>
+                x =>
                     x.receiptStatus === 'Receipted' &&
                     x.sourceOfBusiness === 'direct'
             );
@@ -135,7 +137,7 @@ export class DirectClientComponent implements OnInit {
 
             this.cancelReceiptList = _.filter(
                 receipts,
-                (x) =>
+                x =>
                     x.receiptStatus === 'Cancelled' &&
                     x.sourceOfBusiness === 'direct'
             );
@@ -176,17 +178,17 @@ export class DirectClientComponent implements OnInit {
                 sumInDigits: this.policyAmount,
                 todayDate: new Date(),
                 sourceOfBusiness: this.sourceOfBusiness,
-                intermediaryName: 'direct',
+                intermediaryName: 'direct'
             };
 
             this.receiptNum = this._id;
             await this.receiptService
-                .addReceipt(receipt)
-                .then((mess) => {
+                .addReceipt(receipt, this.policy.risks[0].insuranceType)
+                .then(mess => {
                     this.message.success('Receipt Successfully created');
                     console.log(mess);
                 })
-                .catch((err) => {
+                .catch(err => {
                     this.message.warning('Receipt Failed');
                     console.log(err);
                 });

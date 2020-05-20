@@ -59,7 +59,7 @@ export class AddProductComponent implements OnInit {
     }
 
     closeAddProductFormDrawer(): void {
-        this.closeAddProductFormDrawerVisible.emit(true);
+        this.closeAddProductFormDrawerVisible.emit();
     }
 
     async addProduct(productDto: IProduct) {
@@ -87,5 +87,11 @@ export class AddProductComponent implements OnInit {
                 this.productForm.reset();
             });
         }
+    }
+
+    reloadClasses() {
+        this.productSetupsService.getClasses().subscribe(classes => {
+            this.classesList = classes;
+        });
     }
 }
