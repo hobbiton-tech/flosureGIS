@@ -17,7 +17,6 @@ import { LoginComponent } from './login/login.component';
 import { AngularFireStorageModule, BUCKET } from '@angular/fire/storage';
 import { environment } from '../environments/environment';
 import 'firebase/storage';
-import { RatesComponent } from './app/settings/components/rates/rates.component';
 import { GraphQLModule } from './graphql.module';
 import { SlackService } from './slack.service';
 
@@ -44,12 +43,7 @@ const firebaseConfig = {
 };
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        NavigationComponent,
-        LoginComponent,
-        RatesComponent
-    ],
+    declarations: [AppComponent, NavigationComponent, LoginComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,
