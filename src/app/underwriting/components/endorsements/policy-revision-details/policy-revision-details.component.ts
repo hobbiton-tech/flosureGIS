@@ -3,13 +3,13 @@ import {
     OnInit,
     Input,
     ChangeDetectorRef,
-    ComponentFactoryResolver
+    ComponentFactoryResolver,
 } from '@angular/core';
 import {
     FormGroup,
     FormBuilder,
     Validators,
-    FormGroupName
+    FormGroupName,
 } from '@angular/forms';
 import { Policy } from 'src/app/underwriting/models/policy.model';
 import { RiskModel } from 'src/app/quotes/models/quote.model';
@@ -24,7 +24,7 @@ import { BehaviorSubject } from 'rxjs';
 @Component({
     selector: 'app-policy-revision-details',
     templateUrl: './policy-revision-details.component.html',
-    styleUrls: ['./policy-revision-details.component.scss']
+    styleUrls: ['./policy-revision-details.component.scss'],
 })
 export class PolicyRevisionDetailsComponent implements OnInit {
     editedRisk: RiskModel;
@@ -79,16 +79,16 @@ export class PolicyRevisionDetailsComponent implements OnInit {
             dateOfIssue: ['', Validators.required],
             expiryDate: ['', Validators.required],
             quarter: ['', Validators.required],
-            town: ['', Validators.required]
+            town: ['', Validators.required],
         });
 
         this.endorsementForm = this.formBuilder.group({
             effectDate: ['', Validators.required],
-            remark: ['', Validators.required]
+            remark: ['', Validators.required],
         });
 
-        this.route.params.subscribe(id => {
-            this.policiesService.getPolicyById(id['id']).subscribe(policy => {
+        this.route.params.subscribe((id) => {
+            this.policiesService.getPolicyById(id['id']).subscribe((policy) => {
                 this.policyData = policy;
                 this.risks = policy.risks;
                 // this._risks = this.risks;
@@ -131,12 +131,12 @@ export class PolicyRevisionDetailsComponent implements OnInit {
             });
         });
 
-        this.policyRiskRevisionUpdate.subscribe(update => {
+        this.policyRiskRevisionUpdate.subscribe((update) => {
             update === true
-                ? this.route.params.subscribe(id => {
+                ? this.route.params.subscribe((id) => {
                       this.policiesService
                           .getBackupPolicyById(id['id'])
-                          .subscribe(policy => {
+                          .subscribe((policy) => {
                               console.log(this.risks);
                           });
                   })
@@ -160,7 +160,7 @@ export class PolicyRevisionDetailsComponent implements OnInit {
 
     // remove risk from risks table
     removeRisk(regNumber: string): void {
-        this.risks = this.risks.filter(risk => risk.regNumber !== regNumber);
+        this.risks = this.risks.filter((risk) => risk.regNumber !== regNumber);
     }
 
     addRisk(risks: RiskModel[]) {
@@ -169,7 +169,7 @@ export class PolicyRevisionDetailsComponent implements OnInit {
 
     updateRisk(risk: RiskModel) {
         var riskIndex = _.findIndex(this.risks, {
-            riskId: risk.riskId
+            riskId: risk.riskId,
         });
 
         this.risks.splice(riskIndex, 1, risk);
@@ -194,7 +194,7 @@ export class PolicyRevisionDetailsComponent implements OnInit {
             type: 'Revision Of Cover',
             dateCreated: new Date(),
             dateUpdated: new Date(),
-            status: 'Pending'
+            status: 'Pending',
         };
 
         const policy: Policy = {
@@ -214,7 +214,7 @@ export class PolicyRevisionDetailsComponent implements OnInit {
             receiptStatus: this.policyData.receiptStatus,
             paymentPlan: this.policyData.paymentPlan,
             id: this.policyData.id,
-            risks: this.risks
+            risks: this.risks,
         };
 
         console.log('policy details form values:');
@@ -225,13 +225,13 @@ export class PolicyRevisionDetailsComponent implements OnInit {
 
         this.endorsementService
             .createEndorsement(this.policyData.id, endorsement)
-            .subscribe(endorsement => {
-                res => console.log(res);
+            .subscribe((endorsement) => {
+                (res) => console.log(res);
             });
 
         // this.policiesService.createBackupPolicy(policy);
-        this.policiesService.updatePolicy(policy).subscribe(policy => {
-            res => console.log(res);
+        this.policiesService.updatePolicy(policy).subscribe((policy) => {
+            (res) => console.log(res);
         });
 
         this.msg.success('Endorsement Successful');
@@ -241,7 +241,7 @@ export class PolicyRevisionDetailsComponent implements OnInit {
     }
 
     sumArray(items, prop) {
-        return items.reduce(function(a, b) {
+        return items.reduce(function (a, b) {
             return a + b[prop];
         }, 0);
     }

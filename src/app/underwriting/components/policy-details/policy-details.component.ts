@@ -6,7 +6,7 @@ import { PoliciesService } from '../../services/policies.service';
 import {
     IPaymentModel,
     InstallmentsModel,
-    PlanReceipt
+    PlanReceipt,
 } from 'src/app/accounts/components/models/payment-plans.model';
 import { v4 } from 'uuid';
 import { PaymentPlanService } from 'src/app/accounts/services/payment-plan.service';
@@ -17,7 +17,7 @@ import { IReceiptModel } from 'src/app/accounts/components/models/receipts.model
 @Component({
     selector: 'app-policy-details',
     templateUrl: './policy-details.component.html',
-    styleUrls: ['./policy-details.component.scss']
+    styleUrls: ['./policy-details.component.scss'],
 })
 export class PolicyDetailsComponent implements OnInit {
     isVisible = false;
@@ -67,7 +67,7 @@ export class PolicyDetailsComponent implements OnInit {
 
     optionList = [
         { label: 'Full Payment', value: 'fully' },
-        { label: 'Payment Plan', value: 'plan' }
+        { label: 'Payment Plan', value: 'plan' },
     ];
     selectedValue = 'fully';
     formattedDate: any;
@@ -88,13 +88,13 @@ export class PolicyDetailsComponent implements OnInit {
         this.paymentPlanForm = this.formBuilder.group({
             numberOfInstallments: ['', Validators.required],
             startDate: ['', Validators.required],
-            initialInstallmentAmount: ['', Validators.required]
+            initialInstallmentAmount: ['', Validators.required],
         });
     }
 
     ngOnInit(): void {
-        this.route.params.subscribe(id => {
-            this.policiesService.getPolicyById(id['id']).subscribe(policy => {
+        this.route.params.subscribe((id) => {
+            this.policiesService.getPolicyById(id.id).subscribe((policy) => {
                 console.log('CHECKING ID GET', policy);
                 this.policyData = policy;
 
@@ -176,7 +176,7 @@ export class PolicyDetailsComponent implements OnInit {
             dateOfIssue: ['', Validators.required],
             expiryDate: ['', Validators.required],
             quarter: ['', Validators.required],
-            town: ['', Validators.required]
+            town: ['', Validators.required],
         });
 
         // set values of fields
@@ -241,15 +241,14 @@ export class PolicyDetailsComponent implements OnInit {
     }
 
     handleOk(policyData): void {
+        this.policyUpdate = policyData;
         if (this.selectedValue === 'plan') {
             let pAmount = 0;
             let policyCount = 0;
             const policyPlan: Policy[] = [];
             policyPlan.push({
-                ...policyData
+                ...policyData,
             });
-
-            this.policyUpdate = policyData;
 
             pAmount = pAmount + policyData.netPremium;
             policyCount++;
@@ -258,7 +257,12 @@ export class PolicyDetailsComponent implements OnInit {
             this.netPremium = this.netPremium + policyData.netPremium;
             // this.policyPlan = policyPlan;
             this.policyUpdate.paymentPlan = 'Created';
-            this.receiptService.updatePolicy(this.policyUpdate);
+            console.log(this.policyUpdate);
+            this.policiesService
+                .updatePolicy(this.policyUpdate)
+                .subscribe((res) => {
+                    console.log('policy update>>>>', this.policyUpdate);
+                });
 
             const eDate = new Date(
                 this.paymentPlanForm.controls.startDate.value
@@ -290,7 +294,7 @@ export class PolicyDetailsComponent implements OnInit {
                     installmentAmount: iAmount,
                     installmentDate: this.formattedDate,
                     balance: iAmount,
-                    installmentStatus: 'UnPaid'
+                    installmentStatus: 'UnPaid',
                 });
             }
 
@@ -317,7 +321,7 @@ export class PolicyDetailsComponent implements OnInit {
                 amountOutstanding: dAmount,
                 installments: installment,
                 startDate: pDate,
-                endDate: this.formattedeDate
+                endDate: this.formattedeDate,
             };
 
             console.log('..........Payment Plan..........');
@@ -327,8 +331,10 @@ export class PolicyDetailsComponent implements OnInit {
             const receipt: IReceiptModel = {
                 id: this._id,
                 paymentMethod: '',
-                receivedFrom: this.paymentPlanForm.controls.clientName.value,
-                onBehalfOf: this.paymentPlanForm.controls.clientName.value,
+                receivedFrom: policyData.client,
+                onBehalfOf: policyData.client,
+                // receivedFrom: this.paymentPlanForm.controls.clientName.value,
+                // onBehalfOf: this.paymentPlanForm.controls.clientName.value,
                 capturedBy: 'charles malama',
                 policyNumber: '',
                 receiptStatus: 'Receipted',
@@ -336,17 +342,17 @@ export class PolicyDetailsComponent implements OnInit {
                 receiptType: 'Premium Payment',
                 sumInDigits: this.paymentPlanForm.controls
                     .initialInstallmentAmount.value,
-                todayDate: new Date()
+                todayDate: new Date(),
             };
 
             const planReceipt: PlanReceipt[] = [];
             planReceipt.push({
                 id: this._id,
-                onBehalfOf: this.paymentPlanForm.controls.clientName.value,
+                onBehalfOf: policyData.client,
                 allocationStatus: 'Unallocated',
                 sumInDigits: this.paymentPlanForm.controls
                     .initialInstallmentAmount.value,
-                policyNumber: ''
+                policyNumber: '',
             });
 
             plan.planReceipt = planReceipt;
@@ -363,6 +369,13 @@ export class PolicyDetailsComponent implements OnInit {
             this.isVisible = false;
             this.router.navigateByUrl('flosure/accounts/payment-plan');
         } else if (this.selectedValue === 'fully') {
+            this.policyUpdate.paymentPlan = 'Created';
+            console.log(this.policyUpdate);
+            this.policiesService
+                .updatePolicy(this.policyUpdate)
+                .subscribe((res) => {
+                    console.log('policy update>>>>', this.policyUpdate);
+                });
             this.router.navigateByUrl('/flosure/accounts/receipts');
         }
 
