@@ -1,13 +1,26 @@
-<div style="
+<div
+    style="
         display: flex;
         margin-bottom: 15px;
         align-items: flex-end;
         width: 100%;
-    ">
-    <button nz-button nzType="primary" style="margin-right: 8px;" (click)="htmlToPdf()">
+    "
+>
+    <button
+        nz-button
+        nzType="primary"
+        style="margin-right: 8px;"
+        (click)="htmlToPdf()"
+    >
         Download
     </button>
-    <button nz-button nzType="primary" [useExistingCss]="true" [printSectionId]="'debitPrintSection'" ngxPrint>
+    <button
+        nz-button
+        nzType="primary"
+        [useExistingCss]="true"
+        [printSectionId]="'debitPrintSection'"
+        ngxPrint
+    >
         Print
     </button>
 </div>
@@ -154,7 +167,6 @@
         </table>
     </div> -->
 
-
     <div class="invoice-box">
         <table cellpadding="0" cellspacing="0">
             <tr class="top">
@@ -162,10 +174,10 @@
                     <table>
                         <tr>
                             <td class="title">
-                                <img src="assets/images/apluslogo.png" style="
-                                        width: 100%;
-                                        max-width: 240px;
-                                    " />
+                                <img
+                                    src="assets/images/Savenda-Logo-Final.png"
+                                    style="width: 100%; max-width: 240px;"
+                                />
                             </td>
                             <td>
                                 <!-- <span style="font-weight: bold;">DebitNote#:</span>
@@ -188,10 +200,9 @@
                                 Plot No. 402, Roma Park, Zambezi Road<br />
                                 P.O. Box 31700, Lusaka Zambia<br />
                                 <span style="font-weight: bold;">TPIN:</span>
-                                <span style="
-                                        font-weight: bold;
-                                        color: red;
-                                    ">1002167568</span>
+                                <span style="font-weight: bold; color: red;"
+                                    >1002167568</span
+                                >
                             </td>
                             <td>
                                 {{ policy.client }}<br />
@@ -218,29 +229,29 @@
                 </td>
             </tr>
             <tr class="details">
-                <td>
-                </td>
+                <td></td>
 
-                <td class="td2">
-
-                </td>
+                <td class="td2"></td>
                 <td>
                     {{ policy.nameOfInsured }}
                 </td>
                 <td id="td3">
-                    {{policy.netPremium}}
+                    {{ policy.netPremium }}
                 </td>
             </tr>
         </table>
         <p style="text-align: right; font-weight: bold;">
             TOTAL:
-            <span>{{policy.netPremium}}</span>
+            <span>{{ policy.netPremium }}</span>
         </p>
         <br />
         <br />
         <br />
         <p style="font-weight: bold; text-align: left;">
-            Insured: {{policy.nameOfInsured}}<span style="float: right;"> Policy Cert No: {{policy.policyNumber}}</span>
+            Insured: {{ policy.nameOfInsured
+            }}<span style="float: right;">
+                Policy Cert No: {{ policy.policyNumber }}</span
+            >
         </p>
         <!-- <p style="font-weight: bold;">
             Agent: {{policy.intermediaryName}}

@@ -48,7 +48,7 @@ interface IQuoteNumberRequest {
 }
 
 interface IQuoteNumberResult {
-    quoteNumber: string;
+    quotationNumber: string;
 }
 
 @Injectable({
@@ -91,6 +91,7 @@ export class QuotesService {
     }
 
     // add quotation
+
     // async addMotorQuotation(quotation: MotorQuotationModel): Promise<void> {
     //     this.quotations.pipe(first()).subscribe(async () => {
     //         quotation.id = v4();
@@ -110,6 +111,7 @@ export class QuotesService {
     //             });
     //     });
     // }
+
 
     async addQuoteDocuments(document: IQuoteDocument): Promise<void> {
         await this.quoteDocumentsCollection.doc(`${document.id}`).set(document);
@@ -153,6 +155,7 @@ export class QuotesService {
     }
 
     // Genereating quote number
+
     // generateQuoteNumber(): string {
     //     var quotationNumber: string = '';
     //     this.http
@@ -164,6 +167,7 @@ export class QuotesService {
     //         });
     //     return quotationNumber;
     // }
+
 
     // Genereating quote number
     // generateQuoteNumber(brokerCode: string, totalQuotes: number) {
@@ -224,13 +228,15 @@ export class QuotesService {
     //postgres db
 
     createMotorQuotation(motorQuotation: MotorQuotationModel) {
-        let insuranceType = '';
-        const productType = motorQuotation.risks[0].insuranceType;
-        if (productType == 'Comprehensive') {
-            insuranceType = 'MCP';
-        } else {
-            insuranceType = 'THP';
-        }
+
+        //         let insuranceType = '';
+        //         const productType = motorQuotation.risks[0].insuranceType;
+        //         if (productType == 'Comprehensive') {
+        //             insuranceType = 'MCP';
+        //         } else {
+        //             insuranceType = 'THP';
+        //         }
+
 
         //         this.http
         //             .get<IQuoteNumberResult>(
