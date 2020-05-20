@@ -7,6 +7,7 @@ import { NzMessageService } from 'ng-zorro-antd';
 import { Router } from '@angular/router';
 import _ from 'lodash';
 import { v4 } from 'uuid';
+import { PoliciesService } from 'src/app/underwriting/services/policies.service';
 
 @Component({
     selector: 'app-direct-client',
@@ -76,6 +77,7 @@ export class DirectClientComponent implements OnInit {
     intermediaryName: string;
     constructor(
         private receiptService: AccountService,
+        private policeServices: PoliciesService,
         private formBuilder: FormBuilder,
         private message: NzMessageService,
         private router: Router
@@ -103,7 +105,9 @@ export class DirectClientComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.receiptService.getPolicies().subscribe(quotes => {
+
+        this.policeServices.getPolicies().subscribe((quotes) => {
+
             this.unreceiptedList = _.filter(
                 quotes,
                 x =>

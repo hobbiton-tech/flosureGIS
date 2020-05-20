@@ -3,7 +3,7 @@ import { Observable, combineLatest } from 'rxjs';
 import { IIndividualClient, ICorporateClient } from '../models/clients.model';
 import {
     AngularFirestore,
-    AngularFirestoreCollection
+    AngularFirestoreCollection,
 } from '@angular/fire/firestore';
 import { first } from 'rxjs/operators';
 import { v4 } from 'uuid';
@@ -12,7 +12,7 @@ import 'firebase/firestore';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class ClientsService {
     private individualClientsCollection: AngularFirestoreCollection<
@@ -26,11 +26,11 @@ export class ClientsService {
     corporateClients: ICorporateClient[];
 
     constructor(private http: HttpClient, private firebase: AngularFirestore) {
-        this.getIndividualClients().subscribe(totalIndividaulClients => {
+        this.getIndividualClients().subscribe((totalIndividaulClients) => {
             this.individualClients = totalIndividaulClients;
         });
 
-        this.getCorporateClients().subscribe(totalCorporateClients => {
+        this.getCorporateClients().subscribe((totalCorporateClients) => {
             this.corporateClients = totalCorporateClients;
         });
         // this.individualClientsCollection = this.firebase.collection<

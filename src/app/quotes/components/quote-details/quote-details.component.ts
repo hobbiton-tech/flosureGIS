@@ -383,6 +383,9 @@ export class QuoteDetailsComponent implements OnInit {
                 this.quote = this.quotesList.filter(
                     x => x.quoteNumber === this.quoteNumber
                 )[0];
+                console.log('this.quote>>>>>', this.quoteData);
+
+                this.risks = this.quoteData.risks;
 
                 // if (this.quoteData.sourceOfBusiness == 'Agent') {
                 //     this.agent = this.intermediaries.filter(
@@ -448,7 +451,6 @@ export class QuoteDetailsComponent implements OnInit {
                     .get('endDate')
                     .setValue(this.quoteData.endDate);
 
-                this.risks = this.quoteData.risks;
                 this.numberOfRisks = this.risks.length;
                 this.premiumLoadingTotal = 0;
             });

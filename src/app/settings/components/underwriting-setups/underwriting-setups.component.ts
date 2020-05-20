@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { generateClauses } from '../../models/underwriting/clause.model';
 import { generateClauseSubclassData } from '../../models/underwriting/clause-subclass.model';
 import { generateCoverTypePremiums } from '../../models/underwriting/cover-type-premium.model';
 import { generateCoverTypes } from '../../models/underwriting/cover-type.model';
