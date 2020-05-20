@@ -2,7 +2,9 @@ import {
     Component,
     OnInit,
     AfterViewInit,
-    ChangeDetectorRef
+    ChangeDetectorRef,
+    Output,
+    EventEmitter
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -12,6 +14,7 @@ import {
 } from '../../models/clients.model';
 import { ClientsService } from '../../services/clients.service';
 import { NzMessageService } from 'ng-zorro-antd';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
     selector: 'app-create-client',
@@ -19,8 +22,13 @@ import { NzMessageService } from 'ng-zorro-antd';
     styleUrls: ['./create-client.component.scss']
 })
 export class CreateClientComponent implements OnInit, AfterViewInit {
+    @Output()
+    closeAddAgentsFormDrawerVisible: EventEmitter<any> = new EventEmitter();
+
     individualClientForm: FormGroup;
     corporateClientForm: FormGroup;
+
+    userUpdate = new BehaviorSubject<boolean>(false);
 
     selectedClientType: string;
 
@@ -98,6 +106,9 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
             },
             async err => {
                 this.msg.error('Client Creation failed');
+            },
+            async () => {
+                this.closeDrawer();
             }
         );
     }
@@ -110,6 +121,10 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
             },
             async err => {
                 this.msg.error('Client Creation failed');
+            },
+
+            async () => {
+                this.closeDrawer();
             }
         );
     }
@@ -155,5 +170,9 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
         //         }
         //     );
         // }
+    }
+
+    closeDrawer(): void {
+        this.closeAddAgentsFormDrawerVisible.emit(true);
     }
 }

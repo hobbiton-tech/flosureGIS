@@ -225,7 +225,7 @@
 
                 </td>
                 <td>
-                    {{ policy.client }}
+                    {{ policy.nameOfInsured }}
                 </td>
                 <td id="td3">
                     {{policy.netPremium}}
@@ -242,8 +242,8 @@
         <p style="font-weight: bold; text-align: left;">
             Insured: {{policy.nameOfInsured}}<span style="float: right;"> Policy Cert No: {{policy.policyNumber}}</span>
         </p>
-        <p style="font-weight: bold;">
-            Agent:
-        </p>
+        <!-- <p style="font-weight: bold;">
+            Agent: {{policy.intermediaryName}}
+        </p> -->
     </div>
 </div>

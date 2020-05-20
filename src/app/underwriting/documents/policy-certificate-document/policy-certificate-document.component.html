@@ -449,16 +449,6 @@
                     <tspan x="0" y="0">Third Party Limits of Liability</tspan>
                 </text>
                 <text
-                    id="Certificate_No:_50392"
-                    data-name="Certificate No:  50392"
-                    class="cls-15"
-                    transform="translate(24 137)"
-                >
-                    <tspan x="0" y="0" xml:space="preserve">
-                        Certificate No: 50392
-                    </tspan>
-                </text>
-                <text
                     id="Client_Name:_Isaac_Musonda"
                     data-name="Client Name:  Isaac Musonda"
                     class="cls-15"
@@ -484,7 +474,7 @@
                     class="cls-15"
                     transform="translate(302 157)"
                 >
-                    <tspan x="0" y="0">Insured Name: {{ insuredName }}</tspan>
+                    <tspan x="0" y="0">Insured Name: {{ policy.nameOfInsured }}</tspan>
                 </text>
                 <text
                     id="Cover_Type:_Comprehensive_Insurance"
@@ -514,7 +504,7 @@
                 >
                     <tspan x="0" y="0">
                         From:
-                        {{ convertRiskDate(policyRisk) * 1000 | date }}
+                        {{ policyRisk.riskStartDate | date }}
                     </tspan>
                 </text>
                 <text

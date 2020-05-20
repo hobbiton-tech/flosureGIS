@@ -12,20 +12,20 @@ export class UsersService {
 
     addUser(dto: User): Observable<User> {
         return this.http.post<User>(
-            'https://flosure-postgres-api.herokuapp.com/class/users',
+            'https://flosure-postgres-api.herokuapp.com/users',
             dto
         );
     }
 
     getUsers(): Observable<User[]> {
         return this.http.get<User[]>(
-            'https://flosure-postgres-api.herokuapp.com/class/users'
+            'https://flosure-postgres-api.herokuapp.com/users'
         );
     }
 
     getSingleUser(userId: string): Observable<User> {
         return this.http.get<User>(
-            `https://flosure-postgres-api.herokuapp.com/class/${userId}`
+            `https://flosure-postgres-api.herokuapp.com/${userId}`
         );
     }
 }

@@ -48,7 +48,7 @@ interface IQuoteNumberRequest {
 }
 
 interface IQuoteNumberResult {
-    quotationNumber: string;
+    quoteNumber: string;
 }
 
 @Injectable({
@@ -99,7 +99,7 @@ export class QuotesService {
                     'https://flosure-premium-rates.herokuapp.com/savenda-quotations/01'
                 )
                 .subscribe(async res => {
-                    quotation.quoteNumber = res.quotationNumber;
+                    quotation.quoteNumber = res.quoteNumber;
                     await this.motorQuoteCollection
                         .doc(quotation.id)
                         .set(quotation)
@@ -160,7 +160,7 @@ export class QuotesService {
                 `https://flosure-premium-rates.herokuapp.com/savenda-quotations/01`
             )
             .subscribe(data => {
-                quotationNumber = data.quotationNumber;
+                quotationNumber = data.quoteNumber;
             });
         return quotationNumber;
     }
@@ -224,10 +224,6 @@ export class QuotesService {
     //postgres db
 
     createMotorQuotation(motorQuotation: MotorQuotationModel) {
-        const quotationNumberRequest: IQuoteNumberRequest = {
-            branch: motorQuotation.branch //get from db
-        };
-
         let insuranceType = '';
         const productType = motorQuotation.risks[0].insuranceType;
         if (productType == 'Comprehensive') {
@@ -235,15 +231,17 @@ export class QuotesService {
         } else {
             insuranceType = 'THP';
         }
+
         this.http
             .get<IQuoteNumberResult>(
                 `https://flosure-premium-rates.herokuapp.com/aplus-quote/1/0/${insuranceType}`
             )
-            .subscribe(async res => {
-                motorQuotation.quoteNumber = res.quotationNumber;
+            .subscribe(res => {
+                motorQuotation.quoteNumber = res.quoteNumber;
+
                 this.http
                     .post<MotorQuotationModel>(
-                        'https://flosure-postgres-api.herokuapp.com/class/quotation',
+                        'https://flosure-postgres-api.herokuapp.com/quotation',
                         motorQuotation
                     )
                     .subscribe(
@@ -262,7 +260,7 @@ export class QuotesService {
 
     getMotorQuotations(): Observable<MotorQuotationModel[]> {
         return this.http.get<MotorQuotationModel[]>(
-            'https://flosure-postgres-api.herokuapp.com/class/quotation'
+            'https://flosure-postgres-api.herokuapp.com/quotation'
         );
     }
 
@@ -270,7 +268,7 @@ export class QuotesService {
         quotationId: string
     ): Observable<MotorQuotationModel> {
         return this.http.get<MotorQuotationModel>(
-            `https://flosure-postgres-api.herokuapp.com/class/quotation/${quotationId}`
+            `https://flosure-postgres-api.herokuapp.com/quotation/${quotationId}`
         );
     }
 
@@ -279,7 +277,7 @@ export class QuotesService {
         quotationId: string
     ): Observable<MotorQuotationModel> {
         return this.http.put<MotorQuotationModel>(
-            `https://flosure-postgres-api.herokuapp.com/class/quotation/${quotationId}`,
+            `https://flosure-postgres-api.herokuapp.com/quotation/${quotationId}`,
             motorQuotation
         );
     }

@@ -23,8 +23,8 @@
                 padding: 1em;
             ">
             <p>Agency: <span style="float: right;">Policy No: {{policy.policyNumber}}</span></p>
-            <p>Insurer:<span style="float: right;">Currency: {{policy.currency}}</span></p>
-            <p>Insured: {{clientName}}<span style="float: right;">Email: {{clientEmail}}</span></p>
+            <p>Insurer: A+ General insurance<span style="float: right;">Currency: {{policy.currency}}</span></p>
+            <p>Insured: {{policy.nameOfInsured}}<span style="float: right;">Email: {{clientEmail}}</span></p>
             <p>State:<span style="float: right;">Date: {{issueDate | date}}</span></p>
             <p>Telephone:<span style="float: right;">TPIN: 1002167568</span></p>
             <p>
@@ -75,7 +75,7 @@
         </p>
         <br />
         <p style="font-weight: bold;">
-            Authorised Driver:<span style="float: right;">[content here]</span>
+            Authorised Driver:<span style="float: right;"></span>
         </p>
         <br />
         <p style="font-weight: bold;">

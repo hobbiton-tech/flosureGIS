@@ -307,7 +307,7 @@
     (nzOnCancel)="isCertificatePDFVisible = false" (nzOnOk)="isCertificatePDFVisible = false">
     <nz-card [nzBordered]="true" nzTitle="Policy Certificate Document">
         <app-policy-certificate-document *ngIf="!risksLoading" [clientName]="clientName" [clientNumber]="clientNumber"
-            [clientEmail]="''" [insuredName]="clientName" [policyNumber]="policyNumber" [issueDate]="issueDate"
+            [clientEmail]="clientEmail" [insuredName]="clientName" [policyNumber]="policyNumber" [issueDate]="issueDate"
             [issueTime]="issueTime" [policy]="policyData" [policyRisk]="selectedRisk">
         </app-policy-certificate-document>
     </nz-card>

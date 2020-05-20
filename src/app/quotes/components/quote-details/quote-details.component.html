@@ -21,11 +21,11 @@
                 </div>
             </ng-template>
             <nz-page-header-extra>
-                <button *ngIf="isQuoteApproved" nz-button nzType="primary" (click)="isViewQuotePDFVisible = true">
+                <!-- <button *ngIf="isQuoteApproved" nz-button nzType="primary" (click)="isViewQuotePDFVisible = true">
                     View Quote PDF
-                </button>
+                </button> -->
                 <button *ngIf="!isQuoteApproved" nz-button nzType="primary" (click)="handleDraftQuotation()">
-                    View Draft PDF
+                    View Draft Quote
                 </button>
                 <button *ngIf="!isQuoteApproved" nz-button nzType="primary" (click)="generateDocuments()">
                     Covert to Policy

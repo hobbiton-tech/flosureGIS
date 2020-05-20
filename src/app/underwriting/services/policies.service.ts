@@ -34,28 +34,25 @@ export class PoliciesService {
     ///////////////////////
     createPolicy(policy: Policy): Observable<Policy> {
         return this.http.post<Policy>(
-            'https://flosure-postgres-api.herokuapp.com/class/policy',
+            'https://flosure-postgres-api.herokuapp.com/policy',
             policy
         );
     }
 
     // getPolicies(): Observable<Policy[]> {
-    //     return this.http.get<Policy[]>('https://flosure-postgres-api.herokuapp.com/class/policy');
+    //     return this.http.get<Policy[]>('https://flosure-postgres-api.herokuapp.com/policy');
     // }
 
     // getPolicyById(policyId: string): Observable<Policy> {
     //     return this.http.get<Policy>(
-    //         `https://flosure-postgres-api.herokuapp.com/class/policy/${policyId}`
+    //         `https://flosure-postgres-api.herokuapp.com/policy/${policyId}`
     //     );
     //     return this.policiesCollection.doc<Policy>(policyId).valueChanges();
     // }
 
     updatePolicy(policy: Policy): Observable<Policy> {
-        console.log('recieved policy:');
-        console.log(policy);
-        console.log('policy status: ' + policy.status);
         return this.http.put<Policy>(
-            `https://flosure-postgres-api.herokuapp.com/class/policy/${policy.id}`,
+            `https://flosure-postgres-api.herokuapp.com/policy/${policy.id}`,
             policy
         );
     }
@@ -63,20 +60,20 @@ export class PoliciesService {
     //backup policies
     createBackupPolicy(policy: Policy): Observable<Policy> {
         return this.http.post<Policy>(
-            'https://flosure-postgres-api.herokuapp.com/class/policy',
+            'https://flosure-postgres-api.herokuapp.com/policy',
             policy
         );
     }
 
     getBackupPolicies(): Observable<Policy[]> {
         return this.http.get<Policy[]>(
-            'https://flosure-postgres-api.herokuapp.com/class/policy'
+            'https://flosure-postgres-api.herokuapp.com/policy'
         );
     }
 
     getBackupPolicyById(policyId: string): Observable<Policy> {
         return this.http.get<Policy>(
-            `https://flosure-postgres-api.herokuapp.com/class/policy/${policyId}`
+            `https://flosure-postgres-api.herokuapp.com/policy/${policyId}`
         );
         // return this.policiesCollection.doc<Policy>(policyId).valueChanges();
     }
@@ -85,7 +82,7 @@ export class PoliciesService {
         console.log('policy details:');
         console.log(policy);
         return this.http.put<Policy>(
-            `https://flosure-postgres-api.herokuapp.com/class/policy/${policyId}`,
+            `https://flosure-postgres-api.herokuapp.com/policy/${policyId}`,
             policy
         );
     }
@@ -145,7 +142,7 @@ export class PoliciesService {
             console.log(policy);
             this.http
                 .put<Policy>(
-                    `https://flosure-postgres-api.herokuapp.com/class/policy/${policy.id}`,
+                    `https://flosure-postgres-api.herokuapp.com/policy/${policy.id}`,
                     policy
                 )
                 .subscribe(
@@ -194,10 +191,10 @@ export class PoliciesService {
 
     getPolicyById(policyId: string): Observable<Policy> {
         return this.http.get<Policy>(
-            `https://flosure-postgres-api.herokuapp.com/class/policy/${policyId}`
+            `https://flosure-postgres-api.herokuapp.com/policy/${policyId}`
         );
 
-        // this.policiesCollection.doc<Policy>(policyId).valueChanges();
+        return this.policiesCollection.doc<Policy>(policyId).valueChanges();
     }
 
     getClientsPolicies(clientId: string): Observable<Policy[]> {
@@ -206,9 +203,8 @@ export class PoliciesService {
 
     getPolicies(): Observable<Policy[]> {
         return this.http.get<Policy[]>(
-            'https://flosure-postgres-api.herokuapp.com/class/policy'
+            'https://flosure-postgres-api.herokuapp.com/policy'
         );
-        // this.policies;
     }
 
     countGenerator(number) {

@@ -1118,7 +1118,9 @@ export class QuoteDetailsComponent implements OnInit {
                 netPremium: this.sumArray(this.quoteData.risks, 'netPremium'),
                 paymentPlan: this.paymentPlan,
                 underwritingYear: new Date(),
-                user: localStorage.getItem('user')
+                user: localStorage.getItem('user'),
+                sourceOfBusiness: this.quoteData.sourceOfBusiness,
+                intermediaryName: this.quoteData.intermediaryName
             };
 
             // const policy = this.quoteDetailsForm.value as Policy;
