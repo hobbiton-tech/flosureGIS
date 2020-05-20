@@ -1,17 +1,22 @@
 <div class="invoice-box">
-    <tr style="text-align: center;"><strong style="color:red; font-size: 20px;">Draft Quotation</strong></tr>
+    <tr style="text-align: center;">
+        <strong style="color: red; font-size: 20px;">Draft Quotation</strong>
+    </tr>
     <table cellpadding="0" cellspacing="0">
         <tr class="top">
             <td colspan="2">
                 <table>
                     <tr>
                         <td class="title">
-                            <img src="assets/images/apluslogo.png" style="width: 100%; max-width: 300px;" />
+                            <img
+                                src="assets/images/Savenda-Logo-Final.png"
+                                style="width: 100%; max-width: 300px;"
+                            />
                         </td>
 
                         <td>
-                            Quote No: {{quoteNumber}}<br />
-                            Created: {{dateCreated | date}}<br />
+                            Quote No: {{ quoteNumber }}<br />
+                            Created: {{ dateCreated | date }}<br />
                         </td>
                     </tr>
                 </table>
@@ -28,8 +33,7 @@
                             P.O. Box 31700, Lusaka Zambia<br />
                         </td>
 
-                        <td>
-                        </td>
+                        <td></td>
                     </tr>
                 </table>
             </td>
@@ -57,7 +61,7 @@
             </td> -->
 
             <td>
-                {{numberOfRisks}}
+                {{ numberOfRisks }}
             </td>
         </tr>
 
@@ -76,7 +80,7 @@
                 Basic Premium
             </td>
 
-            <td> {{ basicPremium | number: '1.2-2' }}</td>
+            <td>{{ basicPremium | number: '1.2-2' }}</td>
         </tr>
 
         <tr class="item">
@@ -84,7 +88,7 @@
                 Loading
             </td>
 
-            <td> {{ loadingAmount | number: '1.2-2' }}</td>
+            <td>{{ loadingAmount | number: '1.2-2' }}</td>
         </tr>
 
         <tr class="item last">
@@ -92,7 +96,7 @@
                 Discount
             </td>
 
-            <td> {{ discountAmount | number: '1.2-2' }}</td>
+            <td>{{ discountAmount | number: '1.2-2' }}</td>
         </tr>
 
         <tr class="item last">
@@ -100,7 +104,7 @@
                 Levy
             </td>
 
-            <td> {{ premiumLevy | number: '1.2-2' }}</td>
+            <td>{{ premiumLevy | number: '1.2-2' }}</td>
         </tr>
 
         <tr class="total">

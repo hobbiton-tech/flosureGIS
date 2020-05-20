@@ -48,7 +48,7 @@ interface IQuoteNumberRequest {
 }
 
 interface IQuoteNumberResult {
-    quoteNumber: string;
+    quotationNumber: string;
 }
 
 @Injectable({
@@ -97,7 +97,8 @@ export class QuotesService {
             this.http
                 .get<IQuoteNumberResult>(
                     'https://flosure-premium-rates.herokuapp.com/savenda-quotations/1'
-                ).subscribe(async (res) => {
+                )
+                .subscribe(async (res) => {
                     quotation.quoteNumber = res.quotationNumber;
 
                     await this.motorQuoteCollection
@@ -158,9 +159,9 @@ export class QuotesService {
         this.http
             .get<IQuoteNumberResult>(
                 `https://flosure-premium-rates.herokuapp.com/savenda-quotations/1`
-            ).subscribe((data) => {
+            )
+            .subscribe((data) => {
                 quotationNumber = data.quotationNumber;
-
             });
         return quotationNumber;
     }
@@ -224,22 +225,20 @@ export class QuotesService {
     //postgres db
 
     createMotorQuotation(motorQuotation: MotorQuotationModel) {
+        //         let insuranceType = '';
+        //         const productType = motorQuotation.risks[0].insuranceType;
+        //         if (productType == 'Comprehensive') {
+        //             insuranceType = 'MCP';
+        //         } else {
+        //             insuranceType = 'THP';
+        //         }
 
-//         let insuranceType = '';
-//         const productType = motorQuotation.risks[0].insuranceType;
-//         if (productType == 'Comprehensive') {
-//             insuranceType = 'MCP';
-//         } else {
-//             insuranceType = 'THP';
-//         }
-
-//         this.http
-//             .get<IQuoteNumberResult>(
-//                 `https://flosure-premium-rates.herokuapp.com/aplus-quote/1/0/${insuranceType}`
-//             )
-//             .subscribe(res => {
-//                 motorQuotation.quoteNumber = res.quoteNumber;
-
+        //         this.http
+        //             .get<IQuoteNumberResult>(
+        //                 `https://flosure-premium-rates.herokuapp.com/aplus-quote/1/0/${insuranceType}`
+        //             )
+        //             .subscribe(res => {
+        //                 motorQuotation.quoteNumber = res.quoteNumber;
 
         const quotationNumberRequest: IQuoteNumberRequest = {
             branch: motorQuotation.branch, //get from db
