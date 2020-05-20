@@ -13,7 +13,7 @@ import {
     Load,
     LoadModel,
     DiscountModel,
-    DiscountType,
+    DiscountType
 } from '../../models/quote.model';
 import { map, debounceTime, switchMap } from 'rxjs/operators';
 import { NzMessageService, UploadChangeParam } from 'ng-zorro-antd';
@@ -21,13 +21,12 @@ import * as XLSX from 'xlsx';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { IQuoteDTO } from '../../models/quote.dto';
-import { QuotesGraphqlService } from '../../services/quotes.graphql.service';
 import { v4 } from 'uuid';
 import _ from 'lodash';
 import {
     IBroker,
     ISalesRepresentative,
-    IAgent,
+    IAgent
 } from 'src/app/settings/components/agents/models/agents.model';
 import { AgentsService } from 'src/app/settings/components/agents/services/agents.service';
 
@@ -80,7 +79,6 @@ export class CreateQuoteComponent implements OnInit {
         private formBuilder: FormBuilder,
         private readonly router: Router,
         private readonly quoteService: QuotesService,
-        private readonly gqlquoteService: QuotesGraphqlService,
         private readonly clientsService: ClientsService,
         private msg: NzMessageService,
         private http: HttpClient,
@@ -296,7 +294,7 @@ export class CreateQuoteComponent implements OnInit {
         { label: 'Territorial Extension', value: 'territorailExtension' },
         { label: 'Loss Of Use', value: 'lossOfUse' },
         { label: 'Inexperienced Driver', value: 'inexperiencedDriver' },
-        { label: 'Under Age Driver', value: 'underAgeDriver' },
+        { label: 'Under Age Driver', value: 'underAgeDriver' }
     ];
 
     motorThirdPartyloadingOptions = [
@@ -322,7 +320,7 @@ export class CreateQuoteComponent implements OnInit {
         { label: 'No claims dicount', value: 'noClaimsDiscount' },
         { label: 'Loyalty Discount', value: 'loyaltyDiscount' },
         { label: 'Valued Client Discount', value: 'valuedClientDiscount' },
-        { label: 'Low Term Agreement', value: 'lowTermAgreementDiscount' },
+        { label: 'Low Term Agreement', value: 'lowTermAgreementDiscount' }
     ];
 
     selectedDiscountValue = { label: '', value: '' };
@@ -333,7 +331,7 @@ export class CreateQuoteComponent implements OnInit {
         { label: 'Direct', value: 'direct' },
         { label: 'Broker', value: 'broker' },
         { label: 'Agent', value: 'agent' },
-        { label: 'Sales Representative', value: 'salesRepresentative' },
+        { label: 'Sales Representative', value: 'salesRepresentative' }
     ];
 
     startValue: Date | null = null;
@@ -378,7 +376,7 @@ export class CreateQuoteComponent implements OnInit {
             status: ['Draft'],
             receiptStatus: ['Unreceipted'],
             sourceOfBusiness: ['', Validators.required],
-            intermediaryName: [''],
+            intermediaryName: ['']
         });
 
         this.clientsService.getAllClients().subscribe(clients => {
@@ -387,17 +385,17 @@ export class CreateQuoteComponent implements OnInit {
             >;
         });
 
-        this.agentsService.getAgents().subscribe((agents) => {
+        this.agentsService.getAgents().subscribe(agents => {
             this.agents = agents;
         });
 
-        this.agentsService.getBrokers().subscribe((brokers) => {
+        this.agentsService.getBrokers().subscribe(brokers => {
             this.brokers = brokers;
         });
 
         this.agentsService
             .getSalesRepresentatives()
-            .subscribe((salesRepresentatives) => {
+            .subscribe(salesRepresentatives => {
                 this.salesRepresentatives = salesRepresentatives;
             });
 
@@ -1028,17 +1026,17 @@ export class CreateQuoteComponent implements OnInit {
         };
 
         this.quoteService.generateQuote(quoteDto).subscribe(res => {
-            this.gqlquoteService
-                .addQuote({
-                    clientId: 'some', // System can't keep track of this guy
-                    quoteNumber: quote.quoteNumber,
-                    quoteUrl: res.Location
-                })
-                .then(res => {
-                    res.subscribe(x => {
-                        console.log(x);
-                    });
-                });
+            // this.gqlquoteService
+            //     .addQuote({
+            //         clientId: 'some', // System can't keep track of this guy
+            //         quoteNumber: quote.quoteNumber,
+            //         quoteUrl: res.Location
+            //     })
+            //     .then(res => {
+            //         res.subscribe(x => {
+            //             console.log(x);
+            //         });
+            //     });
         });
 
         //firebase
@@ -1053,7 +1051,7 @@ export class CreateQuoteComponent implements OnInit {
         //     });
 
         //postgres
-        await this.quoteService.createMotorQuotation(quote)
+        await this.quoteService.createMotorQuotation(quote);
     }
 
     showModal(): void {
@@ -1230,17 +1228,17 @@ export class CreateQuoteComponent implements OnInit {
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
             riotAndStrike: Number(this.riotAndStrikeRate) / 100,
-            levy: 0.03,
+            levy: 0.03
         };
         this.http
             .post<IRateResult>(
                 `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
                 request
             )
-            .subscribe((data) => {
+            .subscribe(data => {
                 this.discounts.push({
                     discountType: discountType,
-                    amount: Number(data.discount),
+                    amount: Number(data.discount)
                 });
                 this.premiumDiscount = this.sumArray(this.discounts, 'amount');
                 this.handleNetPremium();
@@ -1558,7 +1556,7 @@ export class CreateQuoteComponent implements OnInit {
             .subscribe(data => {
                 this.loads.push({
                     loadType: 'Territorial Extension',
-                    amount: Number(data.territorialExtensionPremium),
+                    amount: Number(data.territorialExtensionPremium)
                 });
                 this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
                 this.handleNetPremium();
@@ -1723,7 +1721,7 @@ export class CreateQuoteComponent implements OnInit {
     handleTerritorialExtensionAmount() {
         this.loads.push({
             loadType: 'Territorial Extension',
-            amount: Number(this.territorialExtensionAmount),
+            amount: Number(this.territorialExtensionAmount)
         });
         this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
         this.handleNetPremium();
@@ -1733,7 +1731,7 @@ export class CreateQuoteComponent implements OnInit {
     handleInexperiencedDriverAmount() {
         this.loads.push({
             loadType: 'Inexperienced Driver',
-            amount: Number(this.inexperiencedDriverAmount),
+            amount: Number(this.inexperiencedDriverAmount)
         });
         this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
         this.handleNetPremium();
@@ -1743,7 +1741,7 @@ export class CreateQuoteComponent implements OnInit {
     handleUnderAgeDriverAmount() {
         this.loads.push({
             loadType: 'Under Age Driver',
-            amount: Number(this.underAgeDriverAmount),
+            amount: Number(this.underAgeDriverAmount)
         });
         this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
         this.handleNetPremium();
@@ -1753,7 +1751,7 @@ export class CreateQuoteComponent implements OnInit {
     handleNoClaimsDiscountAmount() {
         this.discounts.push({
             discountType: 'No Claims Discount',
-            amount: Number(this.noClaimsDiscountAmount),
+            amount: Number(this.noClaimsDiscountAmount)
         });
         this.premiumDiscount = this.sumArray(this.discounts, 'amount');
         this.handleNetPremium();
@@ -1763,7 +1761,7 @@ export class CreateQuoteComponent implements OnInit {
     handleLoyaltyDiscountAmount() {
         this.discounts.push({
             discountType: 'Loyalty Discount',
-            amount: Number(this.loyaltyDiscountAmount),
+            amount: Number(this.loyaltyDiscountAmount)
         });
         this.premiumDiscount = this.sumArray(this.discounts, 'amount');
         this.handleNetPremium();
@@ -1773,7 +1771,7 @@ export class CreateQuoteComponent implements OnInit {
     handleValuedClientDiscountAmount() {
         this.discounts.push({
             discountType: 'Valued Client Discount',
-            amount: Number(this.valuedClientDiscountAmount),
+            amount: Number(this.valuedClientDiscountAmount)
         });
         this.premiumDiscount = this.sumArray(this.discounts, 'amount');
         this.handleNetPremium();
@@ -1783,7 +1781,7 @@ export class CreateQuoteComponent implements OnInit {
     handleLowTermAgreementDiscountAmount() {
         this.discounts.push({
             discountType: 'Low Term Agreement Discount',
-            amount: Number(this.lowTermAgreementDiscountAmount),
+            amount: Number(this.lowTermAgreementDiscountAmount)
         });
         this.premiumDiscount = this.sumArray(this.discounts, 'amount');
         this.handleNetPremium();

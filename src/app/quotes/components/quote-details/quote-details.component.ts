@@ -24,7 +24,6 @@ import {
 import { UploadChangeParam, NzMessageService } from 'ng-zorro-antd';
 import { debounceTime, switchMap, map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { QuotesGraphqlService } from '../../services/quotes.graphql.service';
 import _ from 'lodash';
 import { AgentsService } from 'src/app/settings/components/agents/services/agents.service';
 import {
@@ -366,7 +365,6 @@ export class QuoteDetailsComponent implements OnInit {
         private policiesService: PoliciesService,
         private router: Router,
         private quotesService: QuotesService,
-        private gqlQuotesService: QuotesGraphqlService,
         private readonly clientsService: ClientsService,
         private route: ActivatedRoute,
         private msg: NzMessageService,
@@ -1129,31 +1127,31 @@ export class QuoteDetailsComponent implements OnInit {
                 console.log(res);
             });
 
-            await this.gqlQuotesService
-                .addCertificate({
-                    clientId: localStorage.getItem('clientId'), // Added from the policy service
-                    policyNumber: localStorage.getItem('policyNumber'), // Added in the policy service.
-                    certificateUrl: cert.Location
-                })
-                .then(res => {
-                    // console.log('GQL', res);
-                    res.subscribe(x => {
-                        console.log('GLQ', x);
-                    });
-                });
+            // await this.gqlQuotesService
+            //     .addCertificate({
+            //         clientId: localStorage.getItem('clientId'), // Added from the policy service
+            //         policyNumber: localStorage.getItem('policyNumber'), // Added in the policy service.
+            //         certificateUrl: cert.Location
+            //     })
+            //     .then(res => {
+            //         // console.log('GQL', res);
+            //         res.subscribe(x => {
+            //             console.log('GLQ', x);
+            //         });
+            //     });
 
-            await this.gqlQuotesService
-                .addDebitNote({
-                    clientId: localStorage.getItem('clientId'), // Added from the policy service,
-                    policyNumber: localStorage.getItem('policyNumber'), // Added in the policy service.
-                    debitNoteUrl: debit.Location
-                })
-                .then(res => {
-                    res.subscribe(x => {
-                        console.log('GLQ', x);
-                    });
-                    // console.log('GQL', res);
-                });
+            // await this.gqlQuotesService
+            //     .addDebitNote({
+            //         clientId: localStorage.getItem('clientId'), // Added from the policy service,
+            //         policyNumber: localStorage.getItem('policyNumber'), // Added in the policy service.
+            //         debitNoteUrl: debit.Location
+            //     })
+            //     .then(res => {
+            //         res.subscribe(x => {
+            //             console.log('GLQ', x);
+            //         });
+            //         // console.log('GQL', res);
+            //     });
 
             this.isQuoteApproved = true;
             this.approvingQuote = false;
