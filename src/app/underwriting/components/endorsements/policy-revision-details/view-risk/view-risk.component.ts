@@ -536,7 +536,7 @@ export class ViewRiskComponent implements OnInit {
         const some: RiskModel[] = [];
         some.push({
             ...this.riskDetailsForm.value,
-            riskId: v4(),
+            id: v4(),
             sumInsured: 0,
             premiumRate: 0,
             basicPremium: this.basicPremium,
@@ -584,7 +584,7 @@ export class ViewRiskComponent implements OnInit {
         const some: RiskModel[] = [];
         some.push({
             ...this.riskDetailsForm.value,
-            riskId: v4(),
+            id: v4(),
             sumInsured: Number(this.sumInsured),
             premiumRate: this.premiumRate,
             basicPremium: this.basicPremium,
@@ -644,6 +644,7 @@ export class ViewRiskComponent implements OnInit {
 
     // view details of the risk
     viewRiskDetails(risk: RiskModel) {
+        this.currentRiskEdit = risk;
         console.log('risk details(view Risk): ');
         console.log(this.riskData);
         this.riskDetailsModalVisible = true;
@@ -712,7 +713,7 @@ export class ViewRiskComponent implements OnInit {
 
     //send editted risk
     editRisk(): void {
-        this.currentRiskEdit = this.riskData;
+        // this.currentRiskEdit = this.riskData;
 
         if (this.selectedValue.value === 'Comprehensive') {
             //comprehensive risk
@@ -730,7 +731,8 @@ export class ViewRiskComponent implements OnInit {
                 premiumLevy: this.basicPremiumLevy,
                 netPremium: this.netPremium,
                 insuranceType: this.selectedValue.value,
-                estimatedValue: 0
+                estimatedValue: 0,
+                id: this.currentRiskEdit.id
             };
             this.currentRiskEdit = some;
         } else {
@@ -746,7 +748,8 @@ export class ViewRiskComponent implements OnInit {
                 discountRate: this.premiumDiscountRate,
                 premiumLevy: this.basicPremiumLevy,
                 netPremium: this.netPremium,
-                insuranceType: this.selectedValue.value
+                insuranceType: this.selectedValue.value,
+                id: this.currentRiskEdit.id
             };
             this.currentRiskEdit = some;
         }
@@ -777,7 +780,7 @@ export class ViewRiskComponent implements OnInit {
             this.currentRiskEdit = some;
 
             var riskIndex = _.findIndex(this.risks, {
-                riskId: this.riskData.riskId
+                id: this.riskData.id
             });
             this.risks.splice(riskIndex, 1, this.currentRiskEdit);
             this.risks = this.risks;
@@ -801,7 +804,7 @@ export class ViewRiskComponent implements OnInit {
             console.log(some);
 
             var riskIndex = _.findIndex(this.risks, {
-                riskId: this.riskData.riskId
+                id: this.riskData.id
             });
             this.risks.splice(riskIndex, 1, this.currentRiskEdit);
         }

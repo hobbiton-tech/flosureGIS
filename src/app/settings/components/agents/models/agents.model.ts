@@ -13,7 +13,7 @@ export interface IAgent {
     contactPhone: string;
     contactAddress: string;
     accountName: string;
-    accountNumber: number;
+    accountNumber: string;
     accountType: string;
     bank: string;
     branch: string;
@@ -36,7 +36,7 @@ export interface IBroker {
     contactPhone: string;
     contactAddress: string;
     accountName: string;
-    accountNumber: number;
+    accountNumber: string;
     accountType: string;
     bank: string;
     branch: string;
@@ -53,7 +53,7 @@ export interface ISalesRepresentative {
     contactPhone: string;
     contactAddess: string;
     accountName: string;
-    accountNumber: number;
+    accountNumber: string;
     accountType: string;
     bank: string;
     branch: string;

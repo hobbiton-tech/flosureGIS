@@ -97,7 +97,7 @@
         </div>
 
         <div style="margin-top: 20px;">
-            <nz-table #risksTable [nzData]="risks" nzSize="small">
+            <nz-table #risksTable [nzData]="displayRisks" nzSize="small">
                 <thead>
                     <tr>
                         <th>Insurance Type</th>
@@ -114,7 +114,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let risk of risksTable.data">
+                    <tr *ngFor="let risk of displayRisks ; trackBy:trackByRiskId">
                         <td>{{ risk.insuranceType }}</td>
                         <td>{{ risk.regNumber }}</td>
                         <td>{{ risk.vehicleMake }}</td>

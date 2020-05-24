@@ -14,113 +14,141 @@
 
 <div id="debitPrintSection">
     <div>
-        <h2 class="heading">MOTOR INDIVIDUAL SCHEDULE</h2>
-        <div style="
-                font-weight: bold;
-                border: 3px;
-                border-style: solid;
-                border-color: #FF0000;
-                padding: 1em;
-            ">
-            <p>Agency: <span style="float: right;">Policy No: {{policy.policyNumber}}</span></p>
-            <p>Insurer: A+ General insurance<span style="float: right;">Currency: {{policy.currency}}</span></p>
-            <p>Insured: {{policy.nameOfInsured}}<span style="float: right;">Email: {{clientEmail}}</span></p>
-            <p>State:<span style="float: right;">Date: {{issueDate | date}}</span></p>
-            <p>Telephone:<span style="float: right;">TPIN: 1002167568</span></p>
-            <p>
-                Business or Profession:<span style="float: right;"></span>
-            </p>
-            <p>
-                Period: {{coverFrom | date}} : {{coverTo | date}}<span style="float: right;">Total Premium:
-                    {{totalAmount | number: '1.2-2'}}</span>
+        <h2 class="heading">A PLUS GENERAL INSURANCE LIMITED</h2>
+        <P class="centerheading">Schedule attaching to and forming part of <strong>Private Motor</strong> Car Policy No.
+            {{policy.policyNumber}}</P>
+
+        <p>To form part of a valid insurance contract this Schedule must bear the Company’s computer policy number, be
+            signed by the Company’s authorized representative
+            and be attached to the relative policy document.</p>
+
+        <div>
+            <p>Name Of Insured: <span style="font-weight: bold;">{{policy.nameOfInsured}}</span><span
+                    style="float: right;">Agency: <span
+                        style="font-weight: bold;">{{policy.intermediaryName}}</span></span></p>
+            <p>Address: <span style="float: right;">Email: <span
+                        style="font-weight: bold;">{{clientEmail}}</span></span></p>
+            <p>Business or Profession: <span style="font-weight: bold;">TBA</span><span style="float: right;">Currency:
+                    <span style="font-weight: bold;">{{policy.currency}}</span></span></p>
+            Period Of Insurance:
+            <ol type="A">
+                <li>From <span style="font-weight: bold;">{{coverFrom | date}}</span> to
+                    <span style="font-weight: bold;">{{coverTo | date}}</span> both dates inclusive and no other for the
+                    purpose
+                    of this insurance</li>
+                <li>Any subsequent period for which the Insured shall pay and the company shall agree to accept a
+                    Renewal premium</li>
+            </ol>
+
+
+            <p>Motor Vehicle: Any of the following
+                <span style="float: right;">
+                    Premium: {{policy.currency == 'ZMW' ? 'K' : '$'}}{{basicPremium | number: '1.2-2'}}<br />
+                    3% Levy: {{policy.currency == 'ZMW' ? 'K' : '$'}}{{10 | number: '1.2-2'}}<br />
+                    Total Premium: {{policy.currency == 'ZMW' ? 'K' : '$'}}{{totalAmount | number: '1.2-2'}}<br />
+                </span>
             </p>
         </div>
         <br />
+
         <nz-table style="width: 100%;" #risksTable [nzData]="policy.risks" nzFrontPagination="false"
             nzShowPagination="false">
             <tr>
                 <th>Reg No.</th>
                 <th>Make/Model</th>
-                <th>Color</th>
                 <th>Engine No.</th>
                 <th>Chasis No.</th>
+                <th>Cubic Capacity</th>
                 <th>Year of Manf.</th>
-                <!-- <th>S.I</th> -->
-                <th>Cover Type</th>
+                <th>Seating Capacity including Driver</th>
+                <th>Insured's estimated value including Accessories and Spares</th>
+                <th>Insurance Provided</th>
             </tr>
             <tr *ngFor="let risk of risksTable.data">
                 <td>{{risk.regNumber}}</td>
                 <td>{{risk.vehicleMake}}/{{risk.vehicleModel}}</td>
-                <td>{{risk.color}}</td>
                 <td>{{risk.engineNumber}}</td>
                 <td>{{risk.chassisNumber}}</td>
+                <td>TBA</td>
                 <td>{{risk.yearOfManufacture | date}}</td>
-                <!-- <td>{{risk.regNumber}}</td> -->
+                <td>TBA</td>
+                <td>{{risk.estimatedValue ? risk.estimatedValue : 'N/A'}}</td>
                 <td>{{risk.insuranceType}}</td>
             </tr>
         </nz-table>
         <br />
-        <p style="font-weight: bold;">Limits of Liability:</p>
-        <p>
-            . Third Party Property Damage<span style="float: right;">30,000</span>
+
+
+        <p style="font-weight: bold;">Insurance Provided.</p>
+        <ol type="1">
+            <li>Where the Insurance Provided is “Comprehensive” all Sections of this policy are operative</li>
+            <li>Where the Insurance provided is “Third Party Fire and Theft” Section I - 10 of this Policy is cancelled
+                and Section I operates only in respect of loss or damage
+                caused directly by the fire self-ignition lightning explosion theft or attempted theft.</li>
+            <li>Where the insurance Provided is “Third Party” Sections I of this Policy is cancelled</li>
+            <li>
+                <p style="font-weight: bold;">Limits of Liability</p>
+                <p>Limit of the amount of the Company’s liability under</p>
+                <p><span style="font-weight: bold;">Section I</span> - 3 (Protection and Removal) – <span
+                        style="font-weight: bold;">K500</span></p>
+                <p><span style="font-weight: bold;">Section II</span> -1 (a) and 2 (a) (Liability to Third Parties –
+                    death bodily injury) in respect of any one
+                    claim or series
+                    Of claims arising out of one event: <span style="font-weight: bold;">K60,100 per event / K30,100 per
+                        person</span></p>
+                <p><span style="font-weight: bold;">Section II</span> - 1 (b) and 2 (b) (Liability to third Parties –
+                    Property Damage) in respect of any claim
+                    or series
+                    Of claims arising out of one event: <span style="font-weight: bold;">K30,000</span>
+                    <span>- arising from loss of use of a motor vehicle which is limited to in respect of any one claim
+                        or series of claims arising out of one
+                        Event – <span style="font-weight: bold;">NIL</span> per event</span></p>
+                <p>Section I-10 (Medical Expenses) in respect of any one accident/any one person <span
+                        style="font-weight: bold;">K100 / K50</span></p>
+            </li>
+        </ol>
+
+        <p><span style="font-weight: bold;">Unauthorized Repair Limit (Section 1 – 4 (a)): K500</span> any one event</p>
+        <p><span style="font-weight: bold;">Geographical Area</span>: Zambia and Congo DR Pedicle only</p>
+        <p><span style="font-weight: bold;">Legislation</span>: Road Traffic Act of 1997 Cap 464 of Zambia</p>
+        <p><span style="font-weight: bold;">Authorized Driver</span>: Any of the following:</p>
+
+        <ol type="a">
+            <li>The Insured</li>
+            <li>Any person driving on the Insured’s order or with his permission
+                Provided that the person driving is permitted in accordance with the licensing or other laws or
+                regulations to drive the Motor
+                Vehicle or has been so permitted and is not disqualified by order of a Court of Law or by reason of any
+                enactment or regulation in
+                That behalf from driving the Motor Vehicle or if a learner is driving in compliance with the Road
+                Traffic Act of Zambia</li>
+        </ol>
+        <p><span style="font-weight: bold;">COMPULSORY Excesses to apply on each and every claim as follows:</span></p>
+        <ol type="a">
+            <li>Collision &amp; Fire: 10% minimum: <span style="font-weight: bold;">K500</span></li>
+            <li>Theft of vehicle with anti theft device: 10% minimum: <span style="font-weight: bold;">K500</span></li>
+            <li>Theft of vehicle without anti theft device: 15% minimum: <span style="font-weight: bold;">K500</span>
+            </li>
+            <li>Third Party Property damage: 10% minimum: <span style="font-weight: bold;">K500</span></li>
+        </ol>
+        <p><span style="font-weight: bold;">Limitations as to Use</span>:</p>
+        <p>Use only for social domestic and pleasure purposes and for the Insured’s business. The Policy does not cover
+            use for hire or reward or for racing pace making
+            reliability trial speed, Testing or use for any purpose in connection with the Motor Trade.</p>
+        <p><span style="font-weight: bold;">Signing endorsements</span>:</p>
+        <ul>
+            <li><span style="font-weight: bold;">MEMO 1.RIOT AND STRIKE</span></li>
+            <li><span style="font-weight: bold;">MEMO 2. THIS COVER IS SUBJECT TO PAYMENT OF FULL ANNUAL PREMIUM IN THE
+                    EVENT OF A CLAIM IN ANYONE PERIOD
+                    OF INSURANCE</span></li>
+        </ul>
+        <p><span style="font-weight: bold;">Date of Signature of Proposal and Declaration</span>: AS PER COVERNOTE <span
+                style="font-weight: bold;">[Cover note number]</span> DATED
+            {{policy.dateOfIssue | date}}</p>
+        <p>SIGNED AT:<span style="text-align: center;">DATE [today Date]</span><span
+                style="float: right;">....................................................</span></p>
+        <p><span style="float: center;"></span><span style="float: right;"><span style="font-weight: bold;">For Chief
+                    Executive Officer</span></span>
         </p>
-        <p>
-            . Third Party Injury and Death<span style="float: right;">50,000</span>
-        </p>
-        <p>
-            . Third Party Bodily Injury/ Death per Event<span style="float: right;">100,000</span>
-        </p>
-        <p>
-            . Combined Liability Limit<span style="float: right;">60,000</span>
-        </p>
-        <br />
-        <p style="font-weight: bold;">
-            Authorised Driver:<span style="float: right;"></span>
-        </p>
-        <br />
-        <p style="font-weight: bold;">
-            NOTE: This policy is issued subject to the clauses attached.
-        </p>
-        <br />
-        <p>
-            Signed on behalf of the Company on the date stated in the
-            Schedule
-        </p>
-        <p>Examined:<span id="text">Signed:</span></p>
-        <br />
-        <p style="font-weight: bold;">
-            I certify that I have received a copy of this policy
-            together with the following additional documents (If any):
-        </p>
-        <p>1.</p>
-        <p>2.</p>
-        <p>3.</p>
-        <p>Insured Signature:</p>
-        <p>Date:</p>
-        <p>Printed Name:</p>
-        <p style="font-weight: bold; text-decoration: underline;">
-            POLICY REMARKS
-        </p>
-        <br />
-        <p style="
-                font-weight: bold;
-                text-decoration: underline;
-                text-align: center;
-            ">
-            COMPLIMENTS AND COMPLAINTS HANDLING PROCEDURE
-        </p>
-        <p>
-            If you have a complaint, kindly speak to our Branch Manager
-            at any of our branches. If you feel your complain has not
-            been handled in a fair manner, kindly call us on +260955770707 or +260977978538 and speak to our Customer
-            Service Team or
-            email us
-            on info@aplusgeneral.co.zm .
-        </p>
-        <p>
-            Prepared By: <span id="text">Signed</span>
-            <span style="float: right;">On:{{issueDate | date}}</span>
-        </p>
-        <p>Authorized By:</p>
     </div>
 </div>

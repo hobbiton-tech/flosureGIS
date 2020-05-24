@@ -5,11 +5,15 @@ import {
     AngularFirestore,
     AngularFirestoreCollection
 } from '@angular/fire/firestore';
-import { first } from 'rxjs/operators';
+import { first, switchMap } from 'rxjs/operators';
 import { v4 } from 'uuid';
 
 import 'firebase/firestore';
 import { HttpClient } from '@angular/common/http';
+import { IClient, IAccountDetails, IClientDTO } from '../models/client.model';
+import { IAccount } from 'src/app/settings/models/organizational/account.model';
+
+const BASE_URL = 'http://localhost:3000';
 
 @Injectable({
     providedIn: 'root'
@@ -75,6 +79,43 @@ export class ClientsService {
     //         await this.corporateClientsCollection.add(client);
     //     });
     // }
+
+    //New flosure api
+    createIndividualClient(client: IClientDTO) {
+        const clnt: IClient = {
+            clientType: 'Individual',
+            firstName: client.firstName,
+            lastName: client.lastName,
+            phoneNumber: client.phoneNumber,
+            email: client.email,
+            address: client.address,
+            idType: client.idType,
+            idNumber: client.idNumber,
+            title: client.title,
+            maritalStatus: client.maritalStatus,
+            gender: client.gender,
+            sector: client.sector,
+            occupation: client.occupation,
+            dateOfBirth: client.dateOfBirth
+        };
+
+        const account: IAccountDetails = {
+            bank: client.bank,
+            branch: client.branch,
+            tpinNumber: client.tpinNumber
+        };
+
+        const addAccountDetails$ = id =>
+            this.http.post<IAccountDetails>(
+                `${BASE_URL}/clients/account-details`,
+                { clientId: id, ...account }
+            );
+
+        return this.http
+            .post<IClient>(`${BASE_URL}/clients`, clnt)
+            .pipe(switchMap(x => addAccountDetails$(x.id)));
+    }
+    /////////////
 
     addCorporateClient(client: ICorporateClient): Observable<ICorporateClient> {
         client.clientType = 'Corporate';

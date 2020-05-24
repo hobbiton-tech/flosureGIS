@@ -33,6 +33,7 @@ export class PoliciesService {
     //postgres db
     ///////////////////////
     createPolicy(policy: Policy): Observable<Policy> {
+        console.log(policy);
         return this.http.post<Policy>(
             'https://flosure-postgres-api.herokuapp.com/policy',
             policy
@@ -56,7 +57,6 @@ export class PoliciesService {
             policy
         );
     }
-
 
     // backup policies
     createBackupPolicy(policy: Policy): Observable<Policy> {
@@ -121,7 +121,6 @@ export class PoliciesService {
         });
     }
 
-
     renewPolicy(policy: Policy) {
         this.policies.pipe(first()).subscribe(async policies => {
             const today = new Date();
@@ -147,10 +146,10 @@ export class PoliciesService {
                     policy
                 )
                 .subscribe(
-                    (data) => {
+                    data => {
                         this.msg.success('Policy Successfully Updated');
                     },
-                    (error) => {
+                    error => {
                         this.msg.error('Failed');
                     }
                 );
@@ -207,7 +206,6 @@ export class PoliciesService {
             'https://flosure-postgres-api.herokuapp.com/policy'
         );
         // return this.policies;
-
     }
 
     countGenerator(number) {

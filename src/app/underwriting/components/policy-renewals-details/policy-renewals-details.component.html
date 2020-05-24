@@ -1,8 +1,4 @@
-<nz-spin
-    [nzSize]="'large'"
-    [nzSpinning]="loadingPolicy"
-    [nzTip]="'Renewing Policy'"
->
+<nz-spin [nzSize]="'large'" [nzSpinning]="loadingPolicy" [nzTip]="'Renewing Policy'">
     <div class="policy-detail">
         <div style="margin: 15px;">
             <nz-breadcrumb>
@@ -2550,7 +2546,7 @@
                             </button>
                             <nz-divider nzType="vertical"></nz-divider>
                             <button nz-button nzType="danger" nz-popconfirm nzTitle="Delete Risk?"
-                                (nzOnConfirm)="removeRisk(risk.riskId)">
+                                (nzOnConfirm)="removeRisk(risk.id)">
                                 Delete
                             </button>
                         </td>
@@ -5019,7 +5015,7 @@
     </div>
 </nz-modal>
 
-<nz-modal nzWidth="700" nzTitle="Golden Lotus" [(nzVisible)]="isCertificatePDFVisible"
+<nz-modal nzWidth="700" nzTitle="A Plus General Insurance" [(nzVisible)]="isCertificatePDFVisible"
     (nzOnCancel)="isCertificatePDFVisible = false" (nzOnOk)="isCertificatePDFVisible = false">
     <nz-card [nzBordered]="true" nzTitle="Policy Certificate Document">
         <app-policy-certificate-document *ngIf="!risksLoading" [clientName]="clientName" [clientNumber]="clientNumber"
@@ -5029,7 +5025,7 @@
     </nz-card>
 </nz-modal>
 
-<nz-modal style="width: 100%;" nzWidth="800" nzTitle="Golden Lotus" [(nzVisible)]="isDebitNotePDFVisible"
+<nz-modal style="width: 100%;" nzWidth="800" nzTitle="A Plus General Insurance" [(nzVisible)]="isDebitNotePDFVisible"
     (nzOnCancel)="isDebitNotePDFVisible = false" (nzOnOk)="isDebitNotePDFVisible = false">
     <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Debit Document">
         <app-policy-debit-note-document *ngIf="!risksLoading" [clientName]="clientName" [clientNumber]="clientNumber"
@@ -5041,14 +5037,14 @@
     </nz-card>
 </nz-modal>
 
-<nz-modal style="width: 100%;" nzTitle="Golden Lotus" [(nzVisible)]="isSchedulePDFVisible"
+<nz-modal style="width: 100%;" nzTitle="A Plus General Insurance" [(nzVisible)]="isSchedulePDFVisible"
     (nzOnCancel)="isSchedulePDFVisible = false" (nzOnOk)="isSchedulePDFVisible = false">
     <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Schedule Document">
         <!-- <app-policy-certificate-document></app-policy-certificate-document> -->
     </nz-card>
 </nz-modal>
 
-<nz-modal style="width: 100%;" nzWidth="800" nzTitle="Golden Lotus" [(nzVisible)]="isClausesPDFVisible"
+<nz-modal style="width: 100%;" nzWidth="800" nzTitle="A Plus General Insurance" [(nzVisible)]="isClausesPDFVisible"
     (nzOnCancel)="isClausesPDFVisible = false" (nzOnOk)="isClausesPDFVisible = false">
     <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Policy Clauses Document">
         <app-policy-clauses-document></app-policy-clauses-document>

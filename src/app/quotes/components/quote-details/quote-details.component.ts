@@ -957,7 +957,7 @@ export class QuoteDetailsComponent implements OnInit {
             this.currentRiskEdit = some;
 
             var riskIndex = _.findIndex(this.risks, {
-                riskId: this.selectedRisk.riskId
+                id: this.selectedRisk.id
             });
             this.risks.splice(riskIndex, 1, this.currentRiskEdit);
             this.risks = this.risks;
@@ -978,7 +978,7 @@ export class QuoteDetailsComponent implements OnInit {
             this.selectedRisk = some;
 
             var riskIndex = _.findIndex(this.risks, {
-                riskId: this.selectedRisk.riskId
+                id: this.selectedRisk.id
             });
             this.risks.splice(riskIndex, 1, this.currentRiskEdit);
         }

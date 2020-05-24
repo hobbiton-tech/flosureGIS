@@ -18,6 +18,7 @@ import { PoliciesService } from 'src/app/underwriting/services/policies.service'
 import _ from 'lodash';
 import { Endorsement } from 'src/app/underwriting/models/endorsement.model';
 import { EndorsementService } from 'src/app/underwriting/services/endorsements.service';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-backup-policy-details',
@@ -40,6 +41,7 @@ export class BackupPolicyDetailsComponent implements OnInit {
     endorsementForm: FormGroup;
 
     policyData: Policy = new Policy();
+    policyNumber: string;
     risks: RiskModel[] = [];
     displayRisks: RiskModel[];
 
@@ -48,6 +50,27 @@ export class BackupPolicyDetailsComponent implements OnInit {
 
     //Editable fields
     isEditmode = false;
+
+    // For Modal
+    clientName: string;
+    clientNumber: string;
+    clientEmail: string;
+    policyRisk: RiskModel;
+    issueDate: string;
+    issueTime: string;
+    agency: string;
+    classOfBusiness: string;
+    coverForm: string;
+    coverTo: string;
+    basicPremium: string;
+    loadingAmount: string;
+    discountAmount: string;
+    totalAmount: string;
+    creditNoteAmount: number;
+
+    //Credit Note PDF
+    isCreditNotePDFVisible = false;
+    isCancelledPolicy = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -131,5 +154,23 @@ export class BackupPolicyDetailsComponent implements OnInit {
         return items.reduce(function(a, b) {
             return a + b[prop];
         }, 0);
+    }
+
+    //calculate number of days between two dates and returns requisition amount
+    policyCancellationBalance(): number {
+        const todayDate = new Date();
+        const policyEndDate = this.policyData.endDate;
+
+        const start = moment(todayDate);
+        const end = moment(policyEndDate);
+
+        const differenceInDays = end.diff(start, 'days');
+        const requisitionAmount =
+            Number(this.policyData.netPremium) -
+            (differenceInDays / 365) * Number(this.policyData.netPremium);
+
+        this.creditNoteAmount = requisitionAmount;
+
+        return requisitionAmount;
     }
 }

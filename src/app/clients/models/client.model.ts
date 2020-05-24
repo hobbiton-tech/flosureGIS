@@ -13,7 +13,7 @@ export interface IIndividualClient {
     clientID: string;
     gender: GenderType;
     address: string;
-    idType: IDType;
+    idType: IdType;
     idNumber: string;
     dateOfBirth: Date | ITimestamp;
     dateCreated: Date | ITimestamp;
@@ -23,7 +23,7 @@ export interface IIndividualClient {
     status: ClientStatus;
     sector: string;
     accountName: string;
-    accountNumber: number;
+    accountNumber: string;
     bank: string;
     branch: string;
     accountType: string;
@@ -39,20 +39,68 @@ export interface ICorporateClient {
     contactLastName: string;
     contactEmail: string;
     companyName: string;
-    taxPin: number;
+    taxPin: string;
     dateCreated: Date | ITimestamp;
     dateUpdated: Date | ITimestamp;
     clientType: ClientType;
     status: ClientStatus;
     accountName: string;
-    accountNumber: number;
+    accountNumber: string;
     bank: string;
     branch: string;
     accountType: string;
 }
 
+export interface IClient {
+    id?: string;
+    title: string;
+    maritalStatus: MaritalStatus;
+    gender: GenderType;
+    sector: string;
+    dateOfBirth: Date;
+    occupation: OccupationType;
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    email: string;
+    address: string;
+    clientType: ClientType;
+    idType: IdType;
+    idNumber: string;
+}
+
+export interface IAccountDetails {
+    bank: string;
+    branch: string;
+    tpinNumber: string;
+}
+
+export interface IClientDTO {
+    title: string;
+    maritalStatus: MaritalStatus;
+    gender: GenderType;
+    sector: string;
+    dateOfBirth: Date;
+    occupation: OccupationType;
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    email: string;
+    address: string;
+    clientType: ClientType;
+    idType: IdType;
+    idNumber: string;
+    bank: string;
+    branch: string;
+    tpinNumber: string;
+    dateCreated: Date;
+    dateUpdated: Date;
+    clientId: string;
+}
+
+export type MaritalStatus = 'Single' | 'Married';
 export type ClientType = 'Individual' | 'Corporate';
 export type OccupationType = 'Employed' | 'Unemployed' | 'Student';
 export type GenderType = 'Male' | 'Female';
-export type IDType = 'NRC' | 'Passport' | 'License';
+export type IdType = 'NRC' | 'Passport' | 'License';
 export type ClientStatus = 'Active' | 'Inactive';

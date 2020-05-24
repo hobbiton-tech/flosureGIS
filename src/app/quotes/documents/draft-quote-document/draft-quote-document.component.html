@@ -1,212 +1,266 @@
 <div class="invoice-box">
-    <tr style="text-align: center;">
+    <tr>
         <strong style="color: red; font-size: 20px;">Draft Quotation</strong>
+        <p style="text-align: right;"><strong>Quote
+                No: </strong>{{quoteNumber}}</p>
     </tr>
-    <table cellpadding="0" cellspacing="0">
-        <tr class="top">
-            <td colspan="2">
-                <table>
-                    <tr>
-                        <td class="title">
-                            <img src="assets/images/apluslogo.png" style="width: 100%; max-width: 300px;" />
-                        </td>
-
-                        <td>
-                            Quote No: {{ quoteNumber }}<br />
-                            Created: {{ dateCreated | date }}<br />
-                        </td>
-                    </tr>
-                </table>
+    <table>
+        <tr>
+            <td>
+                <img src="assets/images/apluslogo.png" />
+                <span style="float: right;">
+                    <p style="font-size: 12px;">
+                        A Plus General Insurance<br />
+                        Plot No. 402, Roma Park, Zambezi Road<br />
+                        P.O. Box 31700, Lusaka Zambia<br />
+                        Tel: +260 211 239865/6 - Tele/Fax:+260 211 239867<br />
+                        E-mail: info@aplusgeneral.com<br />
+                    </p>
+                </span>
             </td>
         </tr>
 
+        <hr style="width:100%; height:2px; background-color: red;">
+
         <tr class="information">
             <td colspan="2">
-                <table>
-                    <tr>
-                        <td>
-                            A+ General Insurance<br />
-                            Plot No. 402, Roma Park, Zambezi Road<br />
-                            P.O. Box 31700, Lusaka Zambia<br />
-                        </td>
-
-                        <td></td>
-                    </tr>
-                </table>
+                <p style="text-align: center;"><strong>INSURANCE QUOTATION SLIP</strong></p>
             </td>
         </tr>
 
+        <hr style="width:100%; height:2px; background-color: black;">
+
+        <table>
+            <tr>
+                <td><strong>Date</strong></td>
+                <td><strong>:</strong></td>
+                <td><span>{{dateCreated | date}}</span></td>
+            </tr>
+            <tr>
+                <td><strong>Name Of insured</strong></td>
+                <td><strong>:</strong></td>
+                <td><span>Name of insured</span></td>
+            </tr>
+            <tr>
+                <td><strong>Postal Address</strong></td>
+                <td><strong>:</strong></td>
+                <td><span>NIL</span></td>
+            </tr>
+            <tr>
+                <td><strong>Period Of Insurance</strong></td>
+                <td><strong>:</strong></td>
+                <td><span>One year from date to be advised</span></td>
+            </tr>
+            <tr>
+                <td><strong>Validity Period</strong></td>
+                <td><strong>:</strong></td>
+                <td><span>Thirty (30) days</span></td>
+            </tr>
+            <tr>
+                <td><strong>Agency/Contact Person</strong></td>
+                <td><strong>:</strong></td>
+                <td><span>Direct</span></td>
+            </tr>
+            <tr>
+                <td><strong>Prepared By</strong></td>
+                <td><strong>:</strong></td>
+                <td><span>Deryck Musyani</span></td>
+            </tr>
+        </table>
+
+        <hr style="width:100%; height:2px; background-color: black;">
+
         <tr class="information">
             <td colspan="2">
-                <strong>RE: Motor Insurance Quotation</strong>
+                We refer to the above subject and your quotation request dated <strong>{{dateCreated | date}}</strong>
+                and
+                we are pleased to submit our
+                indicative insurance terms of cover valid for 30 days as follows:
                 <br />
             </td>
         </tr>
 
-        <tr class="heading">
-            <!-- <td>
-                Type of Insurance
-            </td> -->
-            <td>
-                Number of Vehicles
+        <tr class="information">
+            <td colspan="2">
+                <p style="text-align: center; background-color: skyblue; color: aliceblue;">COMPREHENSIVE</p>
+                <br />
             </td>
         </tr>
 
-        <tr class="details">
-            <!-- <td>
-                {{insuranceType}}
-            </td> -->
+        <table>
+            <tr class="information">
+                <td colspan="2"><strong>Description of cover</strong></td>
+                <td><strong>:</strong></td>
+                <td><span>Loss or damage to the insured vehicle
+                        (Political Riot
+                        and Strike excluded) and indemnity against all
+                        sums legally liable to pay to other parties for
+                        bodily injury, property damage arising from use of the Insured vehicle.</span></td>
+            </tr>
 
-            <td>
-                {{ numberOfRisks }}
+            <tr class="information">
+                <td colspan="2"><strong>Basis of coverage</strong></td>
+                <td><strong>:</strong></td>
+                <td><span>Loss Occurring Basis</span></td>
+            </tr>
+
+            <tr class="information">
+                <td colspan="2"><strong>Interest</strong></td>
+                <td><strong>:</strong></td>
+                <td><span>Motor Vehicles</span></td>
+            </tr>
+        </table>
+
+        <tr class="information">
+            <td colspan="2">
+                <nz-table style="width: 100%;" nzSize="small" #risksTable [nzData]="" nzFrontPagination="false"
+                    nzShowPagination="false">
+        <tr style="font-size: 15;">
+            <th>MAKE</th>
+            <th>MODEL</th>
+            <th>REG NO.</th>
+            <th>SUM INSURED</th>
+            <th>RATE(%)</th>
+            <th>PREMIUM</th>
+            <th>LEVY @ 3%</th>
+            <th>TOTAL</th>
+        </tr>
+        <tr *ngFor="let risk of risksTable.data">
+            <td>{{risk.vehicleMake}}</td>
+            <td>{{risk.vehicleModel}}</td>
+            <td>{{risk.regNumber}}</td>
+            <td>{{risk.sumInsured | number: '1.2-2'}}</td>
+            <td>{{risk.pemiumRate}}</td>
+            <td>{{risk.basicPremium | number: '1.2-2'}}</td>
+            <td>{{risk.premiumLevy | number: '1.2-2'}}</td>
+            <td>{{risk.netPremium | number: '1.2-2'}}</td>
+        </tr>
+        </nz-table>
+        <br />
+        </td>
+        </tr>
+
+        <table>
+            <tr>
+                <td><strong>Total Sum Insured</strong></td>
+                <td><strong>:</strong></td>
+                <td><span>K10</span></td>
+            </tr>
+
+            <tr>
+                <td><strong>Rate</strong></td>
+                <td><strong>:</strong></td>
+                <td><span>5% on Total Sum Insured</span></td>
+            </tr>
+
+            <tr>
+                <td><strong>Basic Premium</strong></td>
+                <td><strong>:</strong></td>
+                <td><span>K10</span></td>
+            </tr>
+
+            <tr>
+                <td><strong>Levy @ 3%</strong></td>
+                <td><strong>:</strong></td>
+                <td><span>K10</span></td>
+            </tr>
+
+            <tr>
+                <td><strong>Total Premium</strong></td>
+                <td><strong>:</strong></td>
+                <td><span>K10</span></td>
+            </tr>
+
+            <tr>
+                <td><strong>Basic Excess</strong></td>
+                <td><strong>:</strong></td>
+                <td><span>10% minimum K1,000.00 each claim – all other losses (Own damage and TPPD)</span></td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td><strong>:</strong></td>
+                <td><span>15% minimum K1,000.00 each claim – theft of vehicle without anti-theft device Fitted.</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td><strong>Conditions/Warranties</strong></td>
+                <td><strong>:</strong></td>
+                <td><span>As per standard policy</span></td>
+            </tr>
+
+            <tr>
+                <td><strong>Third Party Limits of Liability</strong></td>
+                <td><strong>:</strong></td>
+                <td><span>
+                        Death/Bodily Injury per person K30,100.00<br />
+                        Death/Bodily Injury per event K60,100.00<br />
+                        Property Damage any one event K30,000.00
+                    </span></td>
+            </tr>
+
+            <tr>
+                <td><strong>Territorial Clause</strong></td>
+                <td><strong>:</strong></td>
+                <td><span>Zambia</span></td>
+            </tr>
+
+            <tr>
+                <td><strong>Jurisdiction Clause</strong></td>
+                <td><strong>:</strong></td>
+                <td><span>Zambia</span></td>
+            </tr>
+
+            <tr>
+                <td><strong>Conditions</strong></td>
+                <td><strong>:</strong></td>
+                <td><span>As per standard policy</span></td>
+            </tr>
+
+            <tr>
+                <td><strong>Warranties</strong></td>
+                <td><strong>:</strong></td>
+                <td><span>As per standard policy</span></td>
+            </tr>
+
+            <tr>
+                <td><strong>Exclusions (Among Others)</strong></td>
+                <td><strong>:</strong></td>
+                <td><span>As follows</span></td>
+            </tr>
+
+            <tr>
+                <td>
+                    <span>
+                        <ul>
+                            <li>Consequential Loss of any kind</li>
+                            <li>Unlicensed Drivers</li>
+                            <li>Driving under the influence of Alcohol/Drugs</li>
+                            <li>Damage to tires due to application of brakes</li>
+                            <li>Depreciation, Mechanical or electrical failures or breakages</li>
+                            <li>Political Risks</li>
+                            <li>Terrorism &amp; War Risks</li>
+                        </ul>
+                    </span>
+                </td>
+            </tr>
+        </table>
+
+        <tr class="information">
+            <td colspan="2">
+                <strong>We trust you will find our terms competitive and now await your placing slip. Should you have
+                    any query please feel free to
+                    contact us.</strong>
+                <br />
             </td>
         </tr>
 
-        <tr class="heading">
-            <td>
-                Item
+        <tr class="information">
+            <td colspan="2">
+                <strong>Regards</strong>
+                <br />
             </td>
-
-            <td>
-                Amount
-            </td>
-        </tr>
-
-        <tr class="item">
-            <td>
-                Basic Premium
-            </td>
-
-            <td>{{ basicPremium | number: '1.2-2' }}</td>
-        </tr>
-
-        <tr class="item">
-            <td>
-                Loading
-            </td>
-
-            <td>{{ loadingAmount | number: '1.2-2' }}</td>
-        </tr>
-
-        <tr class="item last">
-            <td>
-                Discount
-            </td>
-
-            <td>{{ discountAmount | number: '1.2-2' }}</td>
-        </tr>
-
-        <tr class="item last">
-            <td>
-                Levy
-            </td>
-
-            <td>{{ premiumLevy | number: '1.2-2' }}</td>
-        </tr>
-
-        <tr class="total">
-            <td></td>
-
-            <td>Total: {{ totalAmount | number: '1.2-2' }}</td>
         </tr>
     </table>
 </div>
-
-<!-- <div class="invoice-box">
-    <table cellpadding="0" cellspacing="0">
-        <tr class="top">
-            <td colspan="6">
-                <table>
-                    <tr>
-                        <td class="title">
-                            <img src="assets/images/apluslogo.png" style="
-                                        width: 100%;
-                                        max-width: 240px;
-                                    " />
-                        </td>
-                        <td>
-                            Quote Number: {{quoteNumber}}<br />
-                        Created: {{dateCreated}}<br />
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-        <tr class="information">
-            <td colspan="6">
-                <table>
-                    <tr>
-                        <td>
-                            Savenda General Insurance Limited<br />
-                            Plot 20849 PSC Corporate Park, Alick
-                            Nkhatha Road<br />
-                            Mass Media P.O. Box 30363, Lusaka
-                            Zambia<br />
-                            <span style="font-weight: bold;">TPIN:</span>
-                            <span style="
-                                        font-weight: bold;
-                                        color: red;
-                                    ">82358383734</span>
-                        </td>
-                        <td>
-                            {{clientName}}<br />
-                            {{clientNumber}}<br />
-                            {{clientEmail}}
-                        </td>
-                    </tr>
-                </table>
-                <p id="title">MOTOR INSURANCE QUOTATION</p>
-            </td>
-        </tr>
-        <tr class="heading">
-            <td>
-                SUM INSURED
-            </td>
-            <td class="td2">
-                DISCOUNT
-            </td>
-            <td>
-                START DATE
-            </td>
-            <td>
-                END DATE
-            </td>
-            <td>
-                TOTAL
-            </td>
-        </tr>
-        <tr class="details">
-            <td>
-
-            </td>
-            <td class="td2">
-                {{discountAmount}}
-            </td>
-            <td>
-
-            </td>
-            <td>
-
-            </td>
-            <td>
-                {{basicPremium}}
-            </td>
-        </tr>
-    </table>
-    <p style="font-weight: bold; text-align: left;">
-        Combined Third Party Liability Limits: ZMW 500,000.00
-    </p>
-    <br />
-    <p style="font-weight: bold;">Cover:</p>
-    <p style="font-weight: bold;">Total number of vehicles: {{numberOfRisks}}</p>
-    <p style="font-weight: bold;">
-        Currency:
-    </p>
-    <p style="font-weight: bold;">Product Type:</p>
-    <br />
-    <p style="font-weight: bold;">
-        NOTE: THIS INSURANCE CEASES ON THE SALE OR CHANGE OF
-        OWNERSHIP OF THE STATED VEHICLE. COVER RESTRICTED WITHIN
-        ZAMBIA ONLY.
-    </p>
-</div> -->

@@ -1015,7 +1015,7 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
         const some: RiskModel[] = [];
         some.push({
             ...this.riskThirdPartyForm.value,
-            riskId: v4(),
+            id: v4(),
             sumInsured: 0,
             premiumRate: 0,
             basicPremium: this.basicPremium,
@@ -1066,7 +1066,7 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
         const some: RiskModel[] = [];
         some.push({
             ...this.riskComprehensiveForm.value,
-            riskId: v4(),
+            id: v4(),
             sumInsured: Number(this.sumInsured),
             premiumRate: this.premiumRate,
             basicPremium: this.basicPremium,
@@ -1210,8 +1210,8 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
     }
 
     // remove risk from risks table
-    removeRisk(riskId: string): void {
-        this.risks = this.risks.filter((risk) => risk.riskId !== riskId);
+    removeRisk(id: string): void {
+        this.risks = this.risks.filter((risk) => risk.id !== id);
     }
 
     // save risks changes after editing
@@ -1235,7 +1235,7 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
             this.currentRiskEdit = some;
 
             let riskIndex = _.findIndex(this.risks, {
-                riskId: this.selectedRisk.riskId,
+                id: this.selectedRisk.id,
             });
             this.risks.splice(riskIndex, 1, this.currentRiskEdit);
             this.risks = this.risks;
@@ -1256,7 +1256,7 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
             this.selectedRisk = some;
 
             let riskIndex = _.findIndex(this.risks, {
-                riskId: this.selectedRisk.riskId,
+                id: this.selectedRisk.id,
             });
             this.risks.splice(riskIndex, 1, this.currentRiskEdit);
         }

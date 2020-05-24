@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { QuotesService } from '../../services/quotes.service';
+import {
+    QuotesService,
+    AddPolicyDTO,
+    AddRiskDTO
+} from '../../services/quotes.service';
 import { ClientsService } from 'src/app/clients/services/clients.service';
 import {
     ICorporateClient,
@@ -430,46 +434,6 @@ export class CreateQuoteComponent implements OnInit {
             insuranceType: ['ThirdParty']
         });
 
-        // vehicle make loading
-        const getVehicleMakeList = (name: string) =>
-            this.http
-                .get(`${this.vehicleMakeUrl}`)
-                .pipe(map((res: any) => res.results))
-                .pipe(
-                    map((list: any) => {
-                        return list.map(() => `${name}`);
-                    })
-                );
-
-        const vehicleMakeOptionList$: Observable<string[]> = this.searchChange$
-            .asObservable()
-            .pipe(debounceTime(500))
-            .pipe(switchMap(getVehicleMakeList));
-        vehicleMakeOptionList$.subscribe(data => {
-            this.vehicleMakeOptionList = data;
-            this.isVehicleMakeLoading = false;
-        });
-
-        // vehicle model loading
-        const getVehicleModelList = (name: string) =>
-            this.http
-                .get(`${this.vehicleModelUrl}`)
-                .pipe(map((res: any) => res.results))
-                .pipe(
-                    map((list: any) => {
-                        return list.map(() => `${name}`);
-                    })
-                );
-
-        const vehicleModelOptionList$: Observable<string[]> = this.searchChange$
-            .asObservable()
-            .pipe(debounceTime(500))
-            .pipe(switchMap(getVehicleModelList));
-        vehicleModelOptionList$.subscribe(data => {
-            this.vehicleModelOptionList = data;
-            this.isVehicleModelLoading = false;
-        });
-
         this.premiumComputationForm = this.formBuilder.group({
             sumInsured: ['', Validators.required],
             premiumRate: ['', Validators.required],
@@ -715,20 +679,12 @@ export class CreateQuoteComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    // onSubmit() {
-    //     const some = this.quoteForm.value;
-    //     this.quoteService.addMotorQuotation(some);
-
-    //     localStorage.setItem('motor', JSON.stringify(some));
-    //     this.quoteService.getRisk('an');
-    // }
-
     // add third party risk
     addThirdPartyRisk(): void {
         const some: RiskModel[] = [];
         some.push({
             ...this.riskThirdPartyForm.value,
-            riskId: v4(),
+            id: v4(),
             sumInsured: 0,
             premiumRate: 0,
             basicPremium: this.basicPremium,
@@ -779,7 +735,7 @@ export class CreateQuoteComponent implements OnInit {
         const some: RiskModel[] = [];
         some.push({
             ...this.riskComprehensiveForm.value,
-            riskId: v4(),
+            id: v4(),
             sumInsured: Number(this.sumInsured),
             premiumRate: this.premiumRate,
             basicPremium: this.basicPremium,
@@ -922,8 +878,8 @@ export class CreateQuoteComponent implements OnInit {
     }
 
     // remove risk from risks table
-    removeRisk(riskId: string): void {
-        this.risks = this.risks.filter(risk => risk.riskId !== riskId);
+    removeRisk(id: string): void {
+        this.risks = this.risks.filter(risk => risk.id !== id);
     }
 
     //save risks changes after editing
@@ -947,7 +903,7 @@ export class CreateQuoteComponent implements OnInit {
             this.currentRiskEdit = some;
 
             var riskIndex = _.findIndex(this.risks, {
-                riskId: this.selectedRisk.riskId
+                id: this.selectedRisk.id
             });
             this.risks.splice(riskIndex, 1, this.currentRiskEdit);
             this.risks = this.risks;
@@ -968,7 +924,7 @@ export class CreateQuoteComponent implements OnInit {
             this.selectedRisk = some;
 
             var riskIndex = _.findIndex(this.risks, {
-                riskId: this.selectedRisk.riskId
+                id: this.selectedRisk.id
             });
             this.risks.splice(riskIndex, 1, this.currentRiskEdit);
         }
@@ -996,59 +952,6 @@ export class CreateQuoteComponent implements OnInit {
                 : localStorage.getItem('user'),
             risks: this.risks
         };
-
-        const quoteDto: IQuoteDTO = {
-            quoteNumber: quote.quoteNumber,
-            revisionNumber: '00001',
-            startDate: quote.startDate as Date,
-            endDate: quote.endDate as Date,
-            client: quote.client,
-            status: 'Draft',
-            preparedBy: 'Charles Malama',
-            motorQuotationModelId: quote.id,
-            dateCreated: new Date(),
-            clientCode: quote.clientCode,
-            messageCode: '123001',
-            coverCode: quote.coverCode,
-            currency: quote.currency,
-            riskModelId: '023001',
-            regNumber: quote.risks[0].regNumber,
-            vehicleMake: quote.risks[0].vehicleMake,
-            vehicleModel: quote.risks[0].vehicleModel,
-            engineNumber: quote.risks[0].engineNumber,
-            chassisNumber: quote.risks[0].chassisNumber,
-            color: quote.risks[0].color,
-            estimatedValue: quote.risks[0].estimatedValue,
-            productType: quote.risks[0].productType,
-            messageModelId: '02501',
-            description: '',
-            coverModelId: '0948398'
-        };
-
-        this.quoteService.generateQuote(quoteDto).subscribe(res => {
-            // this.gqlquoteService
-            //     .addQuote({
-            //         clientId: 'some', // System can't keep track of this guy
-            //         quoteNumber: quote.quoteNumber,
-            //         quoteUrl: res.Location
-            //     })
-            //     .then(res => {
-            //         res.subscribe(x => {
-            //             console.log(x);
-            //         });
-            //     });
-        });
-
-        //firebase
-        // await this.quoteService
-        //     .addMotorQuotation(quote)
-        //     .then(() => {
-        //         this.msg.success('Quotation Successfully created');
-        //         this.router.navigateByUrl('/flosure/quotes/quotes-list');
-        //     })
-        //     .catch(() => {
-        //         this.msg.error('Quotation Creation Failed');
-        //     });
 
         //postgres
         await this.quoteService.createMotorQuotation(quote);
@@ -1785,5 +1688,11 @@ export class CreateQuoteComponent implements OnInit {
         });
         this.premiumDiscount = this.sumArray(this.discounts, 'amount');
         this.handleNetPremium();
+    }
+
+    public async addQuotePG() {
+        const quote: AddPolicyDTO = {};
+
+        const risks: AddRiskDTO[] = [...this.risks];
     }
 }
