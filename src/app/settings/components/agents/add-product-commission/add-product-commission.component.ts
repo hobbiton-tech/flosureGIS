@@ -66,7 +66,7 @@ export class AddProductCommissionComponent implements OnInit {
                 x => x.id === selectedClass.id
             )[0];
 
-            this.productsList = this.singleClass.products;
+            this.productsList = this.singleClass.Product;
         });
     }
 

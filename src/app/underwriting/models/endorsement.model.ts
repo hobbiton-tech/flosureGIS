@@ -19,6 +19,6 @@ export interface ITimestamp {
 
 export type EndorsementStatus = 'Approved' | 'Pending';
 export type EndorsementType =
-    | 'Revision Of Cover'
-    | 'Extension Of Cover'
-    | 'Cancellation Of Cover';
+    | 'Revision_Of_Cover'
+    | 'Extension_Of_Cover'
+    | 'Cancellation_Of_Cover';

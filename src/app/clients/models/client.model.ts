@@ -51,6 +51,18 @@ export interface ICorporateClient {
     accountType: string;
 }
 
+export interface IClientCorporate {
+    id?: string;
+    phoneNumber: string;
+    address: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    sector: string;
+    clientType: ClientType;
+    status: ClientStatus;
+}
+
 export interface IClient {
     id?: string;
     title: string;
@@ -73,9 +85,21 @@ export interface IAccountDetails {
     bank: string;
     branch: string;
     tpinNumber: string;
+    accountName: string;
+    accountNumber: string;
+    accountType: string;
+}
+
+export interface ICompanyDetails {
+    registrationNumber: string;
+    companyName: string;
+    companyAddress: string;
+    companyEmail: string;
+    tpinNumber: string;
 }
 
 export interface IClientDTO {
+    id?: string;
     title: string;
     maritalStatus: MaritalStatus;
     gender: GenderType;
@@ -83,19 +107,31 @@ export interface IClientDTO {
     dateOfBirth: Date;
     occupation: OccupationType;
     firstName: string;
+    middleName: string;
     lastName: string;
     phoneNumber: string;
     email: string;
-    address: string;
+    status: ClientStatus;
     clientType: ClientType;
     idType: IdType;
     idNumber: string;
     bank: string;
     branch: string;
-    tpinNumber: string;
     dateCreated: Date;
     dateUpdated: Date;
     clientId: string;
+    accountName: string;
+    accountNumber: string;
+    accountType: string;
+    contactEmail: string;
+    companyName: string;
+    companyAddress: string;
+    companyEmail: string;
+    tpinNumber: string;
+    registrationNumber: string;
+    address: string;
+    AccountDetails: IAccountDetails;
+    CompanyDetail: ICompanyDetails[];
 }
 
 export type MaritalStatus = 'Single' | 'Married';

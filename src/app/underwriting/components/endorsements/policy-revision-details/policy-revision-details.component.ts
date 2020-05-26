@@ -180,7 +180,7 @@ export class PolicyRevisionDetailsComponent implements OnInit {
     endorsePolicy() {
         const endorsement: Endorsement = {
             ...this.endorsementForm.value,
-            type: 'Revision Of Cover',
+            type: 'Revision_Of_Cover',
             dateCreated: new Date(),
             dateUpdated: new Date(),
             status: 'Pending'

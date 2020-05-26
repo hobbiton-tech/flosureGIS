@@ -1323,15 +1323,15 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
             town: 'string',
         };
 
-        const debit$ = this.quotesService.generateDebitNote(debitNote);
-        const cert$ = this.quotesService.generateCertificate(certificate);
+        const debit$ = ''
+        const cert$ = ''
 
         combineLatest([debit$, cert$]).subscribe(async ([debit, cert]) => {
-            this.debitNoteURL = debit.Location;
-            this.policyCertificateURl = cert.Location;
+            // this.debitNoteURL = debit.Location;
+            // this.policyCertificateURl = cert.Location;
 
-            console.log('DEBIT', debit.Location);
-            console.log('CERT', cert.Location);
+            // console.log('DEBIT', debit.Location);
+            // console.log('CERT', cert.Location);
 
             // await this.quotesService.addQuoteDocuments()
 

@@ -24,7 +24,8 @@
 
         <div>
             <p>Name Of Insured: <span style="font-weight: bold;">{{policy.nameOfInsured}}</span><span
-                    style="float: right;">Agency: <span
+                    style="float: right;">Agency:
+                    {{policy.sourceOfBusiness ? (policy.sourceOfBusiness == 'direct' ? 'Direct' : policy.intermediaryName): '-'}}<span
                         style="font-weight: bold;">{{policy.intermediaryName}}</span></span></p>
             <p>Address: <span style="float: right;">Email: <span
                         style="font-weight: bold;">{{clientEmail}}</span></span></p>
@@ -44,7 +45,7 @@
             <p>Motor Vehicle: Any of the following
                 <span style="float: right;">
                     Premium: {{policy.currency == 'ZMW' ? 'K' : '$'}}{{basicPremium | number: '1.2-2'}}<br />
-                    3% Levy: {{policy.currency == 'ZMW' ? 'K' : '$'}}{{10 | number: '1.2-2'}}<br />
+                    3% Levy: {{policy.currency == 'ZMW' ? 'K' : '$'}}{{premiumLevy | number: '1.2-2'}}<br />
                     Total Premium: {{policy.currency == 'ZMW' ? 'K' : '$'}}{{totalAmount | number: '1.2-2'}}<br />
                 </span>
             </p>
@@ -145,7 +146,8 @@
         <p><span style="font-weight: bold;">Date of Signature of Proposal and Declaration</span>: AS PER COVERNOTE <span
                 style="font-weight: bold;">[Cover note number]</span> DATED
             {{policy.dateOfIssue | date}}</p>
-        <p>SIGNED AT:<span style="text-align: center;">DATE [today Date]</span><span
+        <p>SIGNED AT:.............................................<span style="text-align: center;">DATE:
+                {{todayDate | date}}</span><span
                 style="float: right;">....................................................</span></p>
         <p><span style="float: center;"></span><span style="float: right;"><span style="font-weight: bold;">For Chief
                     Executive Officer</span></span>

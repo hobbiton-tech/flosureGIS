@@ -101,11 +101,11 @@
 
         <p style="text-align: right; font-weight: bold;">
             Sub Total:
-            <span>{{ policy.netPremium | number: '1.2-2' }}</span>
+            <span>{{ subTotal | number: '1.2-2' }}</span>
         </p>
         <p style="text-align: right; font-weight: bold;">
-            Insurance Levy 3%
-            <span>{{ policy.netPremium | number: '1.2-2' }}</span>
+            Insurance Levy 3%:
+            <span>{{ premiumLevy | number: '1.2-2' }}</span>
         </p>
         <p style="text-align: right; font-weight: bold;">
             Total:
@@ -113,15 +113,14 @@
         </p>
         <br />
         <p style="font-weight: bold; text-align: left;">
-            Prepared By: {{ policy.nameOfInsured
-            }}<span style="float: right;">
+            Prepared By: ................................................<span style="float: right;">
                 Sign:...............................................</span>
         </p>
 
         <br />
 
         <p style="font-weight: bold; text-align: left;">
-            Approved By: {{ policy.nameOfInsured}}<span style="float: right;">
+            Approved By: ................................................<span style="float: right;">
                 Sign:...............................................</span>
         </p>
     </div>

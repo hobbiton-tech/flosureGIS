@@ -10,7 +10,13 @@ import { v4 } from 'uuid';
 
 import 'firebase/firestore';
 import { HttpClient } from '@angular/common/http';
-import { IClient, IAccountDetails, IClientDTO } from '../models/client.model';
+import {
+    IClient,
+    IAccountDetails,
+    IClientDTO,
+    IClientCorporate,
+    ICompanyDetails
+} from '../models/client.model';
 import { IAccount } from 'src/app/settings/models/organizational/account.model';
 
 const BASE_URL = 'http://localhost:3000';
@@ -102,7 +108,10 @@ export class ClientsService {
         const account: IAccountDetails = {
             bank: client.bank,
             branch: client.branch,
-            tpinNumber: client.tpinNumber
+            tpinNumber: client.tpinNumber,
+            accountName: client.accountName,
+            accountNumber: client.accountNumber,
+            accountType: client.accountType
         };
 
         const addAccountDetails$ = id =>
@@ -114,6 +123,56 @@ export class ClientsService {
         return this.http
             .post<IClient>(`${BASE_URL}/clients`, clnt)
             .pipe(switchMap(x => addAccountDetails$(x.id)));
+    }
+
+    createCorporateClient(client: IClientDTO) {
+        const clnt: IClientCorporate = {
+            clientType: 'Corporate',
+            firstName: client.firstName,
+            lastName: client.lastName,
+            phoneNumber: client.phoneNumber,
+            email: client.email,
+            address: client.address,
+            sector: client.sector,
+            status: client.status
+        };
+
+        const companyDetails: ICompanyDetails = {
+            registrationNumber: client.registrationNumber,
+            companyName: client.companyName,
+            companyAddress: client.companyAddress,
+            companyEmail: client.companyEmail,
+            tpinNumber: client.tpinNumber
+        };
+
+        const account: IAccountDetails = {
+            bank: client.bank,
+            branch: client.branch,
+            tpinNumber: client.tpinNumber,
+            accountName: client.accountName,
+            accountNumber: client.accountNumber,
+            accountType: client.accountType
+        };
+
+        const addAccountDetails$ = id =>
+            this.http.post<IAccountDetails>(
+                `${BASE_URL}/clients/account-details`,
+                { clientId: id, ...account }
+            );
+
+        const addCompanyDetails$ = id =>
+            this.http.post<ICompanyDetails>(
+                `${BASE_URL}/clients/company-details`,
+                { clientId: id, ...companyDetails }
+            );
+
+        return this.http
+            .post<IClient>(`${BASE_URL}/clients`, clnt)
+            .pipe(switchMap(x => addCompanyDetails$(x.id)));
+    }
+
+    getClients(): Observable<IClientDTO[]> {
+        return this.http.get<IClientDTO[]>(`${BASE_URL}/clients`);
     }
     /////////////
 

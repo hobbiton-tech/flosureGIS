@@ -147,7 +147,7 @@ export class PolicyExtensionDetailsComponent implements OnInit {
 
         const endorsement: Endorsement = {
             ...this.endorsementForm.value,
-            type: 'Extension Of Cover',
+            type: 'Extension_Of_Cover',
             dateCreated: new Date(),
             dateUpdated: new Date(),
             status: 'Pending'

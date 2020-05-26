@@ -15,7 +15,7 @@ import {
 import { ClientsService } from '../../services/clients.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { BehaviorSubject } from 'rxjs';
-import { IClient } from '../../models/client.model';
+import { IClient, IClientDTO } from '../../models/client.model';
 
 @Component({
     selector: 'app-create-client',
@@ -66,14 +66,14 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
 
         this.corporateClientForm = this.formBuilder.group({
             companyName: ['', Validators.required],
-            taxPin: ['', Validators.required],
+            tpinNumber: ['', Validators.required],
             registrationNumber: ['', Validators.required],
-            email: ['', Validators.required],
+            companyEmail: ['', Validators.required],
             phoneNumber: ['', Validators.required],
-            address: ['', Validators.required],
+            companyAddress: ['', Validators.required],
             sector: ['', Validators.required],
-            contactFirstName: ['', Validators.required],
-            contactLastName: ['', Validators.required],
+            firstName: ['', Validators.required],
+            lastName: ['', Validators.required],
             contactEmail: ['', Validators.required],
             contactPhone: ['', Validators.required],
             contactAddress: ['', Validators.required],
@@ -99,7 +99,7 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
         console.log(event);
     }
 
-    async addIndividualClient(client: IClient): Promise<void> {
+    async addIndividualClient(client: IClientDTO): Promise<void> {
         await this.clientsService.createIndividualClient(client).subscribe(
             async res => {
                 this.msg.success('Client Created successfully');
@@ -114,8 +114,8 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
         );
     }
 
-    async addCorporateClient(client: ICorporateClient): Promise<void> {
-        await this.clientsService.addCorporateClient(client).subscribe(
+    async addCorporateClient(client: IClientDTO): Promise<void> {
+        await this.clientsService.createCorporateClient(client).subscribe(
             async res => {
                 this.msg.success('Client Created successfully');
                 this.router.navigateByUrl('/flosure/clients/clients-list');

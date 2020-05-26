@@ -27,11 +27,11 @@ export class AddClassComponent implements OnInit {
         private msg: NzMessageService
     ) {
         this.classForm = this.formBuilder.group({
-            className: ['', Validators.required],
-            classCode: ['', Validators.required],
-            classDescription: ['', Validators.required],
-            classPolicyNumberPrefix: ['', Validators.required],
-            classClaimNumberPrefix: ['', Validators.required]
+            name: ['', Validators.required],
+            code: ['', Validators.required],
+            description: ['', Validators.required],
+            policyNumberPrefix: ['', Validators.required],
+            claimNumberPrefix: ['', Validators.required]
         });
     }
 

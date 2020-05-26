@@ -1691,8 +1691,7 @@ export class CreateQuoteComponent implements OnInit {
     }
 
     public async addQuotePG() {
-        const quote: AddPolicyDTO = {};
-
-        const risks: AddRiskDTO[] = [...this.risks];
+        // const quote: AddPolicyDTO = {};
+        // const risks: AddRiskDTO[] = [...this.risks];
     }
 }
