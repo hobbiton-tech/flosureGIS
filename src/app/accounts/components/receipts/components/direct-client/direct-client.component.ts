@@ -105,8 +105,8 @@ export class DirectClientComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.policeServices.getPolicies().subscribe((quotes) => {
-            console.log('Policies in Receipts>>>>', quotes);
+        this.policeServices.getPolicies().subscribe(quotes => {
+
             this.unreceiptedList = _.filter(
                 quotes,
                 (x) =>

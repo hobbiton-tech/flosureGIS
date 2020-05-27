@@ -1,171 +1,17 @@
-<div
-    style="
+<div style="
         display: flex;
         margin-bottom: 15px;
         align-items: flex-end;
         width: 100%;
-    "
->
-    <button
-        nz-button
-        nzType="primary"
-        style="margin-right: 8px;"
-        (click)="htmlToPdf()"
-    >
+    ">
+    <button nz-button nzType="primary" style="margin-right: 8px;" (click)="htmlToPdf()">
         Download
     </button>
-    <button
-        nz-button
-        nzType="primary"
-        [useExistingCss]="true"
-        [printSectionId]="'debitPrintSection'"
-        ngxPrint
-    >
+    <button nz-button nzType="primary" [useExistingCss]="true" [printSectionId]="'debitPrintSection'" ngxPrint>
         Print
     </button>
 </div>
 <div id="debitPrintSection">
-    <!-- <div class="invoice-box">
-        <table cellpadding="0" cellspacing="0">
-            <tr class="top">
-                <td colspan="3">
-                    <table>
-                        <tr>
-                            <td class="title">
-                                <img src="assets/images/golden-lotus-transparent.png"
-                                    style="width: 100%; max-width: 300px;" />
-                            </td>
-                            <td></td>
-                            <td>
-                                Policy Number: {{ policy.policyNumber }}<br />
-                                Date: {{ policy.dateOfIssue | date }}<br />
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-
-            <tr class="information">
-                <td colspan="3">
-                    <table>
-                        <tr>
-                            <td>
-                                Golden Lotus Insurance Co. Ltd<br />
-                                Plot 9711, Chudleigh,<br />
-                                Lusaka, Zambia.
-                            </td>
-                            <td>
-                                {{ policy.client }}<br />
-                                {{ clientNumber }}<br />
-                                {{ clientEmail }}
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-
-            <tr class="information">
-                <td colspan="3">
-                    <strong>PREMIUM TAX INVOICE</strong>
-                    <br />
-                </td>
-            </tr>
-
-            <tr class="heading">
-                <td>
-                    Agency
-                </td>
-                <td>
-                    Agency Ref
-                </td>
-                <td>
-                    Reference
-                </td>
-            </tr>
-
-            <tr class="details">
-                <td>
-                    Direct
-                </td>
-                <td>
-                    -
-                </td>
-                <td>Policy Number: {{ policy.policyNumber }}</td>
-            </tr>
-
-            <tr class="heading">
-                <td>Class of Business</td>
-                <td>
-                    Cover From
-                </td>
-                <td>
-                    Cover To
-                </td>
-            </tr>
-
-            <tr class="details">
-                <td>
-                    Motor Individual
-                </td>
-                <td>
-                    {{ policy.startDate | date }}
-                </td>
-                <td>
-                    {{ policy.endDate | date }}
-                </td>
-            </tr>
-
-            <tr class="heading">
-                <td>
-                    Item
-                </td>
-                <td></td>
-                <td>
-                    Amount
-                </td>
-            </tr>
-
-            <tr class="item">
-                <td>
-                    Loading
-                </td>
-                <td></td>
-                <td>ZMW {{ risk.loadingTotal | number }}</td>
-            </tr>
-
-            <tr class="item">
-                <td>
-                    Discount
-                </td>
-                <td></td>
-                <td>ZMW {{ risk.discountSubTotal | number }}</td>
-            </tr>
-
-            <tr class="item">
-                <td>
-                    Basic Premium
-                </td>
-                <td></td>
-                <td>ZMW {{ risk.basicPremium | number }}</td>
-            </tr>
-
-            <tr class="item">
-                <td>
-                    Levy
-                </td>
-                <td></td>
-                <td>ZMW {{ risk.premiumLevy | number }}</td>
-            </tr>
-
-            <tr class="total">
-                <td></td>
-                <td></td>
-                <td>
-                    <strong>Total: {{ policy.netPremium | number }}</strong>
-                </td>
-            </tr>
-        </table>
-    </div> -->
 
     <div class="invoice-box">
         <table cellpadding="0" cellspacing="0">
@@ -174,88 +20,110 @@
                     <table>
                         <tr>
                             <td class="title">
-                                <img
-                                    src="assets/images/Savenda-Logo-Final.png"
-                                    style="width: 100%; max-width: 240px;"
-                                />
+                                <img src="assets/images/apluslogo.png" style="width: 100%; max-width: 240px;" />
                             </td>
                             <td>
-                                <!-- <span style="font-weight: bold;">DebitNote#:</span>
-                                <span style="
-                                        font-weight: bold;
-                                        color: red;
-                                    ">0000000123</span><br />
-                                Date Created: <br /> -->
+                                A Plus General Insurance<br />
+                                Plot No. 402, Roma Park, Zambezi Road<br />
+                                P.O. Box 31700, Lusaka Zambia<br />
+                                Tel: +260 211 239865/6 - Tele/Fax:+260 211 239867<br />
+                                E-mail: info@aplusgeneral.com<br />
                             </td>
                         </tr>
                     </table>
-                </td>
-            </tr>
-            <tr class="information">
-                <td colspan="6">
-                    <table>
-                        <tr>
-                            <td>
-                                Savenda General Insurance Limited<br />
-                                Plot 20849 PSC Corporate Park, Alick Nkhatha
-                                Road<br />
-                                Mass Media P.O. Box 30363, Lusaka Zambia<br />
-                                <span style="font-weight: bold;">TPIN:</span>
-                                <span style="font-weight: bold; color: red;"
-                                    >1002167568</span
-                                >
-                            </td>
-                            <td>
-                                {{ policy.client }}<br />
-                                {{ clientNumber }}<br />
-                                {{ clientEmail }}
-                            </td>
-                        </tr>
-                    </table>
-                    <p id="title">DEBIT NOTE</p>
-                </td>
-            </tr>
-            <tr class="heading">
-                <td>
-                    Binder No
-                </td>
-                <td class="td2">
-                    Cover No.
-                </td>
-                <td>
-                    Insured's Name & Asset
-                </td>
-                <td id="td3">
-                    Premium
-                </td>
-            </tr>
-            <tr class="details">
-                <td></td>
-
-                <td class="td2"></td>
-                <td>
-                    {{ policy.nameOfInsured }}
-                </td>
-                <td id="td3">
-                    {{ policy.netPremium }}
                 </td>
             </tr>
         </table>
+
+        <hr style="width:100%; height:2px; background-color: black;">
+
+        <table>
+            <tr class="information">
+                <td colspan="6">
+                    <p id="title">DEBIT NOTE</p>
+                </td>
+            </tr>
+            <tr class="subTitle">
+                <td>
+                    <p style="float: right !important;">No. [debit note no.]</p>
+                    <span style="font-weight: bold;">TPIN:</span><span
+                        style="font-weight: bold; color: red;">1002167568</span>
+                </td>
+            </tr>
+        </table>
+
+        <br />
+        <table>
+            <tr>
+                <td><span style="font-weight: bold;">Insured: {{ policy.nameOfInsured }}</span></td>
+                <td><span style="font-weight: bold;">Agent: [Agent name]</span></td>
+            </tr>
+            <tr>
+                <td><span style="font-weight: bold;">Address:</span></td>
+                <td><span style="font-weight: bold;">Terms:</span></td>
+            </tr>
+            <tr>
+                <td><span style="font-weight: bold;">Telephone:</span></td>
+                <td><span style="font-weight: bold;"></span></td>
+            </tr>
+        </table>
+        <br />
+
+
+        <nz-table style="width: 100%;" style="border: 1px solid black; border-collapse: collapse;" #risksTable
+            [nzData]="policy.risks" nzFrontPagination="false" nzShowPagination="false">
+
+            <tr class="heading">
+                <th style="border: 1px solid black;">
+                    Binder No.
+                </th>
+                <th class="td2" style="border: 1px solid black;">
+                    Cover No.
+                </th>
+                <th style="border: 1px solid black;">
+                    Insured's Name & Asset
+                </th>
+                <th id="td3" style="border: 1px solid black;">
+                    Premium
+                </th>
+            </tr>
+
+            <tr *ngFor="let risk of risksTable.data" class="details">
+                <td style="border: 1px solid black;"></td>
+
+                <td class="td2" style="border: 1px solid black;"></td>
+                <td style="border: 1px solid black;">
+                    {{risk.regNumber}}, {{risk.vehicleMake}} {{risk.vehicleModel}} - {{ risk.insuranceType }}
+                </td>
+                <td id="td3" style="border: 1px solid black;">
+                    {{ risk.netPremium | number: '1.2-2' }}
+                </td>
+            </tr>
+        </nz-table>
+
         <p style="text-align: right; font-weight: bold;">
-            TOTAL:
-            <span>{{ policy.netPremium }}</span>
+            Sub Total:
+            <span>{{ subTotal | number: '1.2-2' }}</span>
         </p>
-        <br />
-        <br />
+        <p style="text-align: right; font-weight: bold;">
+            Insurance Levy 3%:
+            <span>{{ premiumLevy | number: '1.2-2' }}</span>
+        </p>
+        <p style="text-align: right; font-weight: bold;">
+            Total:
+            <span>{{ policy.netPremium | number: '1.2-2' }}</span>
+        </p>
         <br />
         <p style="font-weight: bold; text-align: left;">
-            Insured: {{ policy.nameOfInsured
-            }}<span style="float: right;">
-                Policy Cert No: {{ policy.policyNumber }}</span
-            >
+            Prepared By: ................................................<span style="float: right;">
+                Sign:...............................................</span>
         </p>
-        <!-- <p style="font-weight: bold;">
-            Agent: {{policy.intermediaryName}}
-        </p> -->
+
+        <br />
+
+        <p style="font-weight: bold; text-align: left;">
+            Approved By: ................................................<span style="float: right;">
+                Sign:...............................................</span>
+        </p>
     </div>
 </div>

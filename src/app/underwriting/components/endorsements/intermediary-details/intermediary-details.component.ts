@@ -231,7 +231,7 @@ export class IntermediaryDetailsComponent implements OnInit {
         //     (x) => x.id === this.id
         //   )[0] as IAgent & IBroker & ISalesRepresentative;
         //   console.log('AGENTS', this.client)
-        // });
+        /// });
     }
 
     updateAgent() {

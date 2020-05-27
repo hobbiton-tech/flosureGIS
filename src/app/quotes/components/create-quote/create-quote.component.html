@@ -2051,7 +2051,7 @@
                         </button>
                         <nz-divider nzType="vertical"></nz-divider>
                         <button nz-button nzType="danger" nz-popconfirm nzTitle="Delete Risk?"
-                            (nzOnConfirm)="removeRisk(risk.riskId)">
+                            (nzOnConfirm)="removeRisk(risk.id)">
                             Delete
                         </button>
                     </td>
@@ -2119,7 +2119,7 @@
 
     <!-- Risk Deatils Modal starts here-->
     <nz-modal [(nzVisible)]="riskDetailsModalVisible" [nzTitle]="riskTitle" [nzContent]="riskContent"
-        (nzOnCancel)="closeRiskDetails()" (nzOnOk)="closeRiskDetails()" nzWidth="100%">
+        (nzOnCancel)="closeRiskDetails()" (nzOnOk)="closeRiskDetails()" nzWidth="90%">
         <ng-template #riskTitle>
             Risk Details
         </ng-template>

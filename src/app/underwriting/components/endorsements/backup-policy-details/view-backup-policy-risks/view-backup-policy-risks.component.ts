@@ -273,7 +273,7 @@ export class ViewBackupPolicyRisksComponent implements OnInit {
                 .setValue(risk.vehicleModel);
             this.riskDetailsForm
                 .get('yearOfManufacture')
-                .setValue(this.getYearOfManfTimeStamp(risk));
+                .setValue(risk.yearOfManufacture);
             this.riskDetailsForm.get('regNumber').setValue(risk.regNumber);
             this.riskDetailsForm
                 .get('engineNumber')
@@ -284,11 +284,9 @@ export class ViewBackupPolicyRisksComponent implements OnInit {
             this.riskDetailsForm.get('productType').setValue(risk.productType);
             this.riskDetailsForm
                 .get('riskStartDate')
-                .setValue(this.getStartDateTimeStamp(risk));
+                .setValue(risk.riskStartDate);
             this.riskDetailsForm.get('riskQuarter').setValue(risk.riskQuarter);
-            this.riskDetailsForm
-                .get('riskEndDate')
-                .setValue(this.getEndDateTimeStamp(risk));
+            this.riskDetailsForm.get('riskEndDate').setValue(risk.riskEndDate);
             this.riskDetailsForm.get('color').setValue(risk.color);
         } else {
             this.riskDetailsForm.get('vehicleMake').setValue(risk.vehicleMake);
@@ -297,7 +295,7 @@ export class ViewBackupPolicyRisksComponent implements OnInit {
                 .setValue(risk.vehicleModel);
             this.riskDetailsForm
                 .get('yearOfManufacture')
-                .setValue(this.getYearOfManfTimeStamp(risk));
+                .setValue(risk.yearOfManufacture);
             this.riskDetailsForm.get('regNumber').setValue(risk.regNumber);
             this.riskDetailsForm
                 .get('engineNumber')
@@ -308,11 +306,9 @@ export class ViewBackupPolicyRisksComponent implements OnInit {
             this.riskDetailsForm.get('productType').setValue(risk.productType);
             this.riskDetailsForm
                 .get('riskStartDate')
-                .setValue(this.getStartDateTimeStamp(risk));
+                .setValue(risk.riskStartDate);
             this.riskDetailsForm.get('riskQuarter').setValue(risk.riskQuarter);
-            this.riskDetailsForm
-                .get('riskEndDate')
-                .setValue(this.getEndDateTimeStamp(risk));
+            this.riskDetailsForm.get('riskEndDate').setValue(risk.riskEndDate);
             this.riskDetailsForm.get('color').setValue(risk.color);
         }
 

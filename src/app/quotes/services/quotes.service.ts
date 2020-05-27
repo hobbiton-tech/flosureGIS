@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
+
 import {
     MotorQuotationModel,
     RiskModel,
     InsuranceType,
 } from '../models/quote.model';
+
 import { Observable } from 'rxjs';
 import {
     AngularFirestore,
@@ -11,14 +13,11 @@ import {
     DocumentReference,
 } from '@angular/fire/firestore';
 import { first } from 'rxjs/operators';
-import { v4 } from 'uuid';
-import { IQuoteDTO } from '../models/quote.dto';
-import { IDebitNoteDTO } from '../models/debit-note.dto';
-import { ICertificateDTO } from '../models/certificate.dto';
-import { IReceiptDTO } from '../models/receipt.dto';
 import { HttpClient } from '@angular/common/http';
 import { NzMessageService } from 'ng-zorro-antd';
 import { Router } from '@angular/router';
+
+const BASE_URL = 'https://flosure-api.azurewebsites.net';
 
 export interface IQuoteDocument {
     id: string;
@@ -48,7 +47,7 @@ interface IQuoteNumberRequest {
 }
 
 interface IQuoteNumberResult {
-    quotationNumber: string;
+    quoteNumber: string;
 }
 
 @Injectable({
@@ -112,6 +111,7 @@ export class QuotesService {
     //     });
     // }
 
+
     async addQuoteDocuments(document: IQuoteDocument): Promise<void> {
         await this.quoteDocumentsCollection.doc(`${document.id}`).set(document);
     }
@@ -152,6 +152,7 @@ export class QuotesService {
     getQuotes(): Observable<MotorQuotationModel[]> {
         return this.quotations;
     }
+
 
     // Genereating quote number
 
@@ -195,51 +196,18 @@ export class QuotesService {
             });
     }
 
-    generateQuote(dto: IQuoteDTO): Observable<IAmazonS3Result> {
-        return this.http.post<IAmazonS3Result>(
-            'https://flosure-pdf-service.herokuapp.com/quotation',
-            dto
-        );
-    }
-
-    generateDebitNote(dto: IDebitNoteDTO): Observable<IAmazonS3Result> {
-        return this.http.post<IAmazonS3Result>(
-            'https://flosure-pdf-service.herokuapp.com/debit-note',
-            dto
-        );
-    }
-
-    generateCertificate(dto: ICertificateDTO): Observable<IAmazonS3Result> {
-        return this.http.post<IAmazonS3Result>(
-            'https://flosure-pdf-service.herokuapp.com/certificate',
-            dto
-        );
-    }
-
-    generateReceipt(dto: IReceiptDTO): Observable<IAmazonS3Result> {
-        return this.http.post<IAmazonS3Result>(
-            'https://flosure-pdf-service.herokuapp.com/reciept',
-            dto
-        );
-    }
-
     //postgres db
 
     createMotorQuotation(motorQuotation: MotorQuotationModel) {
-        //         let insuranceType = '';
-        //         const productType = motorQuotation.risks[0].insuranceType;
-        //         if (productType == 'Comprehensive') {
-        //             insuranceType = 'MCP';
-        //         } else {
-        //             insuranceType = 'THP';
-        //         }
 
-        //         this.http
-        //             .get<IQuoteNumberResult>(
-        //                 `https://flosure-premium-rates.herokuapp.com/aplus-quote/1/0/${insuranceType}`
-        //             )
-        //             .subscribe(res => {
-        //                 motorQuotation.quoteNumber = res.quoteNumber;
+        let insuranceType = '';
+        const productType = motorQuotation.risks[0].insuranceType;
+        if (productType == 'Comprehensive') {
+            insuranceType = 'MCP';
+        } else {
+            insuranceType = 'THP';
+        }
+
 
         const quotationNumberRequest: IQuoteNumberRequest = {
             branch: motorQuotation.branch, //get from db
@@ -294,4 +262,140 @@ export class QuotesService {
             motorQuotation
         );
     }
+
+    /// POSTGES DB METHODS
+    public addPolicyPG(dto: AddPolicyDTO): Observable<PolicyModelPG> {
+        return this.http.post<PolicyModelPG>(`${BASE_URL}/policies/add`, dto);
+    }
+
+    public addRiskPG(dto: AddRiskDTO): Observable<RiskModelPG> {
+        return this.http.post<RiskModelPG>(
+            `${BASE_URL}/policies/risks/add`,
+            dto
+        );
+    }
+
+    public addLoadingPG(dto: LoadingDTO): Observable<RiskModelPG> {
+        return this.http.post<RiskModelPG>(
+            `${BASE_URL}/policies/loading/add`,
+            dto
+        );
+    }
+
+    public addDiscountPG(dto: DiscountDTO): Observable<RiskModelPG> {
+        return this.http.post<RiskModelPG>(
+            `${BASE_URL}/policies/discount/add`,
+            dto
+        );
+    }
+}
+
+export class PolicyModelPG {
+    clientId: string;
+    dateCreated: Date;
+    dateOfIssue: Date;
+    dateUpdated: Date;
+    endDate: Date;
+    id: string;
+    intermediaryId: string;
+    policyNumber: string;
+    startDate: Date;
+    timeOfIssue: Date;
+}
+
+export class RiskModelPG {
+    endDate: Date;
+    id: string;
+    insuranceType: InsuranceType;
+    policyid: string;
+    productType: ProductType;
+    startDate: Date;
+    sumInsured: number;
+}
+
+export class LoadingModelPG {
+    id: number;
+    riskId: string;
+    amount: number;
+    loadingType:
+        | 'Car_Stereo'
+        | 'Increased_Third_Party_Limit'
+        | 'Inexperienced_Driver'
+        | 'Loss_Of_Use'
+        | 'Riot_And_Strike'
+        | 'Territorial_Extension'
+        | 'Under_Age_Driver';
+}
+
+export class DiscountModelPG {
+    id: string;
+    riskid: string;
+    amount: number;
+    discountType: 'LowTermAgreement' | 'Loyalty' | 'NoClaims' | 'ValuedClient';
+}
+
+export type ProductType = 'Private' | 'Commercial' | 'BusTaxi';
+export type InsuranceType = 'ThirdParty' | 'Comprehensive';
+export type LoadType =
+    | 'Increased Third Party Limit'
+    | 'Riot And Strike'
+    | 'Car Stereo'
+    | 'Territorial Extension'
+    | 'Loss Of Use'
+    | 'Inexperienced Driver'
+    | 'Under Age Driver';
+export type DiscountType =
+    | 'No Claims Discount'
+    | 'Loyalty Discount'
+    | 'Valued Client Discount'
+    | 'Low Term Agreement Discount';
+
+export interface AddPolicyDTO {
+    clientId: string;
+    intermediaryId: string;
+    startDate: Date;
+    endDate: Date;
+}
+
+export interface AddRiskDTO {
+    policyId: string;
+    sumInsured: number;
+    startDate: Date;
+    endDate: Date;
+    basicPremium: number;
+    premiumLevy: number;
+    productType: ProductType;
+    insuranceType: InsuranceType;
+    vehicle: VehicleDTO;
+    premium: PremiumDTO;
+    loading?: LoadingDTO;
+    discount?: DiscountDTO;
+}
+
+export interface VehicleDTO {
+    regNumber: string;
+    vehicleMake: string;
+    vehicleModel: string;
+    yearOfManufacture: string;
+    engineNumber?: string;
+    chassisNumber?: string;
+    estimatedValue?: number;
+    color: string;
+}
+
+export interface PremiumDTO {
+    basicPremium: number;
+    premiumLevy: number;
+    netPremium: number;
+    premiumRate: number;
+}
+
+export interface LoadingDTO {
+    loadingType: LoadType;
+    amount: number;
+}
+
+export interface DiscountDTO {
+    discountType: DiscountType;
+    amount: number;
 }

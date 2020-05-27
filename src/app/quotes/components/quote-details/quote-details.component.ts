@@ -962,8 +962,9 @@ export class QuoteDetailsComponent implements OnInit {
             };
             this.currentRiskEdit = some;
 
-            let riskIndex = _.findIndex(this.risks, {
-                riskId: this.selectedRisk.riskId,
+            var riskIndex = _.findIndex(this.risks, {
+                id: this.selectedRisk.id
+
             });
             this.risks.splice(riskIndex, 1, this.currentRiskEdit);
             this.risks = this.risks;
@@ -983,8 +984,9 @@ export class QuoteDetailsComponent implements OnInit {
             };
             this.selectedRisk = some;
 
-            let riskIndex = _.findIndex(this.risks, {
-                riskId: this.selectedRisk.riskId,
+            var riskIndex = _.findIndex(this.risks, {
+                id: this.selectedRisk.id
+
             });
             this.risks.splice(riskIndex, 1, this.currentRiskEdit);
         }
@@ -1091,17 +1093,10 @@ export class QuoteDetailsComponent implements OnInit {
             town: 'string',
         };
 
-        const debit$ = this.quotesService.generateDebitNote(debitNote);
-        const cert$ = this.quotesService.generateCertificate(certificate);
+        const debit$ = ''
+        const cert$ = ''
 
         combineLatest([debit$, cert$]).subscribe(async ([debit, cert]) => {
-            this.debitNoteURL = debit.Location;
-            this.policyCertificateURl = cert.Location;
-
-            console.log('DEBIT', debit.Location);
-            console.log('CERT', cert.Location);
-
-            // await this.quotesService.addQuoteDocuments()
 
             this.quote.status = 'Approved';
             await this.quotesService

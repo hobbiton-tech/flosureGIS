@@ -55,11 +55,18 @@ export class PolicyScheduleDocumentComponent implements OnInit {
     @Input()
     coverTo: string;
 
+    @Input()
+    premiumLevy: string;
+
+    todayDate: Date;
+
     constructor() {}
 
     generatingPDF = false;
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.todayDate = new Date();
+    }
 
     htmlToPdf() {
         this.generatingPDF = true;

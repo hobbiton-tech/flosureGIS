@@ -3,25 +3,24 @@ import {
     OnInit,
     AfterViewInit,
     ChangeDetectorRef,
-
     Output,
     EventEmitter
-
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {
     IIndividualClient,
-    ICorporateClient,
+    ICorporateClient
 } from '../../models/clients.model';
 import { ClientsService } from '../../services/clients.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { BehaviorSubject } from 'rxjs';
+import { IClient, IClientDTO } from '../../models/client.model';
 
 @Component({
     selector: 'app-create-client',
     templateUrl: './create-client.component.html',
-    styleUrls: ['./create-client.component.scss'],
+    styleUrls: ['./create-client.component.scss']
 })
 export class CreateClientComponent implements OnInit, AfterViewInit {
     @Output()
@@ -52,7 +51,7 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
             middleName: ['', Validators.required],
             email: ['', Validators.required],
             dateOfBirth: ['', Validators.required],
-            phone: ['', Validators.required],
+            phoneNumber: ['', Validators.required],
             address: ['', Validators.required],
             gender: ['', Validators.required],
             sector: ['', Validators.required],
@@ -62,19 +61,19 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
             accountNumber: ['', Validators.required],
             accountType: ['', Validators.required],
             bank: ['', Validators.required],
-            branch: ['', Validators.required],
+            branch: ['', Validators.required]
         });
 
         this.corporateClientForm = this.formBuilder.group({
             companyName: ['', Validators.required],
-            taxPin: ['', Validators.required],
+            tpinNumber: ['', Validators.required],
             registrationNumber: ['', Validators.required],
-            email: ['', Validators.required],
-            phone: ['', Validators.required],
-            address: ['', Validators.required],
+            companyEmail: ['', Validators.required],
+            phoneNumber: ['', Validators.required],
+            companyAddress: ['', Validators.required],
             sector: ['', Validators.required],
-            contactFirstName: ['', Validators.required],
-            contactLastName: ['', Validators.required],
+            firstName: ['', Validators.required],
+            lastName: ['', Validators.required],
             contactEmail: ['', Validators.required],
             contactPhone: ['', Validators.required],
             contactAddress: ['', Validators.required],
@@ -83,7 +82,7 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
             accountNumber: ['', Validators.required],
             accountType: ['', Validators.required],
             bank: ['', Validators.required],
-            branch: ['', Validators.required],
+            branch: ['', Validators.required]
         });
     }
 
@@ -100,13 +99,13 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
         console.log(event);
     }
 
-    async addIndividualClient(client: IIndividualClient): Promise<void> {
-        await this.clientsService.addIndividualClient(client).subscribe(
-            async (res) => {
+    async addIndividualClient(client: IClientDTO): Promise<void> {
+        await this.clientsService.createIndividualClient(client).subscribe(
+            async res => {
                 this.msg.success('Client Created successfully');
                 this.router.navigateByUrl('/flosure/clients/clients-list');
             },
-            async (err) => {
+            async err => {
                 this.msg.error('Client Creation failed');
             },
             async () => {
@@ -115,13 +114,13 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
         );
     }
 
-    async addCorporateClient(client: ICorporateClient): Promise<void> {
-        await this.clientsService.addCorporateClient(client).subscribe(
-            async (res) => {
+    async addCorporateClient(client: IClientDTO): Promise<void> {
+        await this.clientsService.createCorporateClient(client).subscribe(
+            async res => {
                 this.msg.success('Client Created successfully');
                 this.router.navigateByUrl('/flosure/clients/clients-list');
             },
-            async (err) => {
+            async err => {
                 this.msg.error('Client Creation failed');
             },
 
@@ -144,7 +143,7 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
             !this.individualClientForm.valid
         ) {
             this.addIndividualClient(this.individualClientForm.value).then(
-                (res) => {
+                res => {
                     console.log('Added Individaul');
                     this.individualClientForm.reset();
                 }
@@ -153,7 +152,7 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
     }
 
     submitCorporateClient(): void {
-        this.addCorporateClient(this.corporateClientForm.value).then((res) => {
+        this.addCorporateClient(this.corporateClientForm.value).then(res => {
             console.log('Added Corporate.');
             this.corporateClientForm.reset();
         });

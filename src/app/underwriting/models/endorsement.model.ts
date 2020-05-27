@@ -3,6 +3,7 @@ import { Policy } from './policy.model';
 export class Endorsement {
     id: string;
     type: EndorsementType;
+    endorsementNumber: string;
     remark: string;
     dateCreated: Date | ITimestamp;
     dateUpdated: Date | ITimestamp;
@@ -18,6 +19,6 @@ export interface ITimestamp {
 
 export type EndorsementStatus = 'Approved' | 'Pending';
 export type EndorsementType =
-    | 'Revision Of Cover'
-    | 'Extension Of Cover'
-    | 'cancellation Of Cover';
+    | 'Revision_Of_Cover'
+    | 'Extension_Of_Cover'
+    | 'Cancellation_Of_Cover';

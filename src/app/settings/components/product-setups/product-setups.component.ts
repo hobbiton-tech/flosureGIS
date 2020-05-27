@@ -48,7 +48,7 @@ export class ProductSetupsComponent implements OnInit {
         this.productSetupsService.getClasses().subscribe(classes => {
             this.classesList = classes;
 
-            this.productsList = this.classesList[0].products;
+            this.productsList = this.classesList[0].Product;
         });
 
         this.classUpdate.subscribe(update =>
@@ -56,7 +56,7 @@ export class ProductSetupsComponent implements OnInit {
                 ? this.productSetupsService.getClasses().subscribe(classes => {
                       this.classesList = classes;
 
-                      this.productsList = this.classesList[0].products;
+                      this.productsList = this.classesList[0].Product;
                   })
                 : ''
         );
@@ -84,7 +84,7 @@ export class ProductSetupsComponent implements OnInit {
                 x => x.id === selectedClass.id
             )[0];
 
-            this.productsList = this.singleClass.products;
+            this.productsList = this.singleClass.Product;
         });
     }
 

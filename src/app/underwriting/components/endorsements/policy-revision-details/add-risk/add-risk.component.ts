@@ -525,8 +525,8 @@ export class AddRiskComponent implements OnInit {
         const some: RiskModel[] = [];
         some.push({
             ...this.riskDetailsForm.value,
-            riskId: v4(),
-            sumInsured: 0,
+            id: v4(),
+            sumInsured: Number(this.sumInsured),
             premiumRate: 0,
             basicPremium: this.basicPremium,
             loads: this.loads,
@@ -538,7 +538,8 @@ export class AddRiskComponent implements OnInit {
             netPremium: this.netPremium,
             insuranceType: this.selectedValue.value
         });
-        this.risks = [...this.risks, ...some];
+        this.sendAddRiskEmitter.emit(some);
+        // this.risks = [...this.risks, ...some];
 
         // reset form after submitting
         this.riskDetailsForm.reset();
@@ -552,8 +553,7 @@ export class AddRiskComponent implements OnInit {
         this.basicPremiumLevy = 0;
         this.premiumDiscount = 0;
 
-        this.isAddRiskPanelOpen = false;
-        console.log(this.risks);
+        this.closeAddRiskFormModalVisible.emit();
     }
 
     resetThirdPartyRiskForm(e: MouseEvent) {
@@ -574,7 +574,7 @@ export class AddRiskComponent implements OnInit {
         const some: RiskModel[] = [];
         some.push({
             ...this.riskDetailsForm.value,
-            riskId: v4(),
+            id: v4(),
             sumInsured: Number(this.sumInsured),
             premiumRate: this.premiumRate,
             basicPremium: this.basicPremium,
@@ -601,6 +601,8 @@ export class AddRiskComponent implements OnInit {
             (this.netPremium = 0);
         this.basicPremiumLevy = 0;
         this.premiumDiscount = 0;
+
+        this.closeAddRiskFormModalVisible.emit();
     }
 
     resetComprehensiveRiskForm(e: MouseEvent) {

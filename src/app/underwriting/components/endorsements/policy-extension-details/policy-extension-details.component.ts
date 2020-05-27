@@ -8,6 +8,7 @@ import { Endorsement } from 'src/app/underwriting/models/endorsement.model';
 import { EndorsementService } from 'src/app/underwriting/services/endorsements.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import _ from 'lodash';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
     selector: 'app-policy-extension-details',
@@ -30,9 +31,12 @@ export class PolicyExtensionDetailsComponent implements OnInit {
 
     policyData: Policy = new Policy();
     risks: RiskModel[] = [];
+    displayRisks: RiskModel[];
 
     //Editable fields
     isEditmode = false;
+
+    policyRiskExtensionUpdate = new BehaviorSubject<boolean>(false);
 
     constructor(
         private route: ActivatedRoute,
@@ -71,6 +75,7 @@ export class PolicyExtensionDetailsComponent implements OnInit {
             this.policiesService.getPolicyById(id['id']).subscribe(policy => {
                 this.policyData = policy;
                 this.risks = policy.risks;
+                this.displayRisks = this.risks;
 
                 //set values of  fields
                 this.policyExtensionDetailsForm
@@ -108,18 +113,21 @@ export class PolicyExtensionDetailsComponent implements OnInit {
                     .setValue(this.policyData.quarter);
             });
         });
+
+        this.policyRiskExtensionUpdate.subscribe(update => {
+            update === true ? this.updateRisksTable() : '';
+        });
     }
 
-    recieveEditedRisk($event) {
-        console.log('EVENT', $event);
-        const editedRisk: RiskModel = $event;
-        this.updateRisk(editedRisk);
-        this.cdr.detectChanges();
+    recieveEditedRisk(risk: RiskModel) {
+        // console.log('EVENT', $event);
+        // const editedRisk: RiskModel = $event;
+        this.updateRisk(risk);
     }
 
     updateRisk(risk: RiskModel) {
         var riskIndex = _.findIndex(this.risks, {
-            riskId: risk.riskId
+            id: risk.id
         });
 
         this.risks.splice(riskIndex, 1, risk);
@@ -139,7 +147,7 @@ export class PolicyExtensionDetailsComponent implements OnInit {
 
         const endorsement: Endorsement = {
             ...this.endorsementForm.value,
-            type: 'Extension Of Cover',
+            type: 'Extension_Of_Cover',
             dateCreated: new Date(),
             dateUpdated: new Date(),
             status: 'Pending'
@@ -159,15 +167,25 @@ export class PolicyExtensionDetailsComponent implements OnInit {
 
         this.policiesService.updatePolicy(policy).subscribe(policy => {
             res => {
-                console.log(res)
-        // this.router.navigateByUrl(
-        //     '/flosure/underwriting/endorsements/view-endorsements'
-        // );
-            }
+                console.log(res);
+                // this.router.navigateByUrl(
+                //     '/flosure/underwriting/endorsements/view-endorsements'
+                // );
+            };
             this.msg.success('Endorsement Successful');
-
         });
+    }
 
-        
+    recieveUpdate($event) {
+        this.policyRiskExtensionUpdate.next($event);
+    }
+
+    updateRisksTable() {
+        this.risks = this.risks;
+        this.displayRisks = this.risks;
+    }
+
+    trackByRiskId(index: number, risk: RiskModel): string {
+        return risk.id;
     }
 }

@@ -2,11 +2,16 @@
     <div style="margin: 15px;">
         <nz-page-header nzBackIcon nzTitle="Policy Number: {{ policyData.policyNumber }}"
             [nzSubtitle]="policyData.client">
-            <!-- <nz-page-header-extra>
-                <button nz-button nzType="default" (click)="undoEndorsement()">
-                    Undo Endorsement
+            [nzSubtitle]="policyData.client">
+            <div *ngIf="policyData.status == 'Cancelled'">
+                <nz-tag nzColor="red">Cancelled</nz-tag>
+            </div>
+            <nz-page-header-extra>
+                <button nz-button nzType="default" (click)="isCreditNotePDFVisible = true"
+                    *ngIf="policyData.status == 'Cancelled'">
+                    Credit Note
                 </button>
-            </nz-page-header-extra> -->
+            </nz-page-header-extra>
         </nz-page-header>
     </div>
 </div>
@@ -145,3 +150,16 @@
 <app-view-backup-policy-risks [isViewRiskFormModalVisible]="viewRiskFormModalVisible" [riskData]="editedRisk"
     (closeViewRiskFormVisible)="viewRiskFormModalVisible = false">
 </app-view-backup-policy-risks>
+
+<nz-modal style="width: 100%;" nzWidth="800" nzTitle="A Plus General Insurance" [(nzVisible)]="isCreditNotePDFVisible"
+    (nzOnCancel)="isCreditNotePDFVisible = false" (nzOnOk)="isCreditNotePDFVisible = false"
+    (nzAfterOpen)="policyCancellationBalance()">
+    <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Credit Document">
+        <app-policy-credit-note-document [clientName]="clientName" [clientNumber]="clientNumber"
+            [creditNoteAmount]="creditNoteAmount" [clientEmail]="clientEmail" [agency]="agency"
+            [policyNumber]="policyNumber" [classOfBusiness]="classOfBusiness" [coverFrom]="coverForm"
+            [coverTo]="coverTo" [basicPremium]="basicPremium" [loadingAmount]="loadingAmount"
+            [discountAmount]="discountAmount" [totalAmount]="totalAmount" [risk]="policyRisk" [policy]="policyData">
+        </app-policy-credit-note-document>
+    </nz-card>
+</nz-modal>

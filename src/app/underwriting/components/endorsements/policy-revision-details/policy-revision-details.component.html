@@ -103,7 +103,7 @@
         </div>
 
         <div style="margin-top: 20px;">
-            <nz-table #risksTable [nzData]="displayRisks" nzSize="small">
+            <nz-table nzSize="small" [nzData]="displayRisks">
                 <thead>
                     <tr>
                         <th>Insurance Type</th>
@@ -120,7 +120,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let risk of risksTable.data">
+                    <tr *ngFor="let risk of displayRisks ; trackBy:trackByRiskId">
                         <td>{{ risk.insuranceType }}</td>
                         <td>{{ risk.regNumber }}</td>
                         <td>{{ risk.vehicleMake }}</td>
@@ -137,7 +137,7 @@
                             </button>
                             <nz-divider nzType="vertical"></nz-divider>
                             <button nz-button nzType="danger" nzSize="small" nz-popconfirm nzTitle="Remove Risk?"
-                                (nzOnConfirm)="removeRisk(risk.regNumber)">
+                                (nzOnConfirm)="removeRisk(risk.id)">
                                 Remove
                             </button>
                         </td>

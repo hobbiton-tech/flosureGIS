@@ -27,7 +27,7 @@ export class LoadModel {
 }
 
 export class RiskModel {
-    riskId: string;
+    id: string;
     riskStartDate: Date | ITimestamp;
     riskEndDate: Date | ITimestamp;
     riskQuarter: number;

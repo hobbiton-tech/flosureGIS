@@ -7,7 +7,7 @@ import { Policy } from '../../models/policy.model';
 @Component({
     selector: 'app-policy-debit-note-document',
     templateUrl: './policy-debit-note-document.component.html',
-    styleUrls: ['./policy-debit-note-document.component.scss'],
+    styleUrls: ['./policy-debit-note-document.component.scss']
 })
 export class PolicyDebitNoteDocumentComponent implements OnInit {
     @Input()
@@ -47,16 +47,23 @@ export class PolicyDebitNoteDocumentComponent implements OnInit {
     totalAmount: string;
 
     @Input()
+    premiumLevy: string;
+
+    @Input()
     risk: RiskModel;
 
     @Input()
     policy: Policy;
 
+    subTotal: number;
+
     constructor() {}
 
     generatingPDF = false;
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.subTotal = this.sumArray(this.policy.risks, 'basicPremium');
+    }
 
     htmlToPdf() {
         this.generatingPDF = true;
@@ -64,13 +71,13 @@ export class PolicyDebitNoteDocumentComponent implements OnInit {
         const options = {
             background: 'white',
             height: div.clientHeight,
-            width: div.clientWidth,
+            width: div.clientWidth
         };
 
-        html2canvas(div, options).then((canvas) => {
+        html2canvas(div, options).then(canvas => {
             let doc = new jsPDF({
                 unit: 'px',
-                format: 'a4',
+                format: 'a4'
             });
             let imgData = canvas.toDataURL('image/PNG');
             doc.addImage(imgData, 'PNG', 0, 0);
@@ -85,5 +92,11 @@ export class PolicyDebitNoteDocumentComponent implements OnInit {
             doc.save(fileName);
             this.generatingPDF = false;
         });
+    }
+
+    sumArray(items, prop) {
+        return items.reduce(function(a, b) {
+            return a + b[prop];
+        }, 0);
     }
 }

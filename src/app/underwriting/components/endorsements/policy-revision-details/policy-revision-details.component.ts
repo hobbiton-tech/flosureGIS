@@ -3,13 +3,13 @@ import {
     OnInit,
     Input,
     ChangeDetectorRef,
-    ComponentFactoryResolver,
+    ComponentFactoryResolver
 } from '@angular/core';
 import {
     FormGroup,
     FormBuilder,
     Validators,
-    FormGroupName,
+    FormGroupName
 } from '@angular/forms';
 import { Policy } from 'src/app/underwriting/models/policy.model';
 import { RiskModel } from 'src/app/quotes/models/quote.model';
@@ -24,7 +24,7 @@ import { BehaviorSubject } from 'rxjs';
 @Component({
     selector: 'app-policy-revision-details',
     templateUrl: './policy-revision-details.component.html',
-    styleUrls: ['./policy-revision-details.component.scss'],
+    styleUrls: ['./policy-revision-details.component.scss']
 })
 export class PolicyRevisionDetailsComponent implements OnInit {
     editedRisk: RiskModel;
@@ -82,19 +82,18 @@ export class PolicyRevisionDetailsComponent implements OnInit {
             dateOfIssue: ['', Validators.required],
             expiryDate: ['', Validators.required],
             quarter: ['', Validators.required],
-            town: ['', Validators.required],
+            town: ['', Validators.required]
         });
 
         this.endorsementForm = this.formBuilder.group({
             effectDate: ['', Validators.required],
-            remark: ['', Validators.required],
+            remark: ['', Validators.required]
         });
 
-        this.route.params.subscribe((id) => {
-            this.policiesService.getPolicyById(id['id']).subscribe((policy) => {
+        this.route.params.subscribe(id => {
+            this.policiesService.getPolicyById(id['id']).subscribe(policy => {
                 this.policyData = policy;
                 this.risks = policy.risks;
-                // this._risks = this.risks;
                 this.displayRisks = this.risks;
 
                 //set values of  fields
@@ -134,32 +133,24 @@ export class PolicyRevisionDetailsComponent implements OnInit {
             });
         });
 
-
         this.policyRiskRevisionUpdate.subscribe(update => {
             update === true ? this.updateRisksTable() : '';
-
         });
     }
 
-    recieveEditedRisk($event) {
-        // this.updateRisk($event);
-        var riskIndex = _.findIndex(this.risks, {
-            riskId: $event.riskId
-        });
-
-        this.risks = this.risks.splice(riskIndex, 1, $event);
-        this.displayRisks = this.risks;
-        this.policyRiskRevisionUpdate.next(true);
+    recieveEditedRisk(risk: RiskModel) {
+        this.updateRisk(risk);
     }
 
-    recieveAddedrisk($event) {
-        const addedRisk: RiskModel[] = $event;
+    recieveAddedrisk(risk) {
+        const addedRisk: RiskModel[] = risk;
         this.addRisk(addedRisk);
     }
 
     // remove risk from risks table
-    removeRisk(regNumber: string): void {
-        this.risks = this.risks.filter((risk) => risk.regNumber !== regNumber);
+    removeRisk(id: string): void {
+        this.risks = this.risks.filter(risk => risk.id !== id);
+        this.displayRisks = this.risks;
     }
 
     addRisk(risks: RiskModel[]) {
@@ -168,14 +159,13 @@ export class PolicyRevisionDetailsComponent implements OnInit {
         this.displayRisks = this.risks;
     }
 
-    // updateRisk(risk: RiskModel) {
-    //     var riskIndex = _.findIndex(this.risks, {
-    //         riskId: risk.riskId
-    //     });
-    //     this.risks = this.risks.splice(riskIndex, 1, risk);
-    //     this.displayRisks = this.risks;
-    //     this.policyRiskRevisionUpdate.next(true);
-    // }
+    updateRisk(risk: RiskModel) {
+        var riskIndex = _.findIndex(this.risks, {
+            id: risk.id
+        });
+
+        this.risks.splice(riskIndex, 1, risk);
+    }
 
     openAddRiskFormModal() {
         this.addRiskFormModalVisible = true;
@@ -190,10 +180,10 @@ export class PolicyRevisionDetailsComponent implements OnInit {
     endorsePolicy() {
         const endorsement: Endorsement = {
             ...this.endorsementForm.value,
-            type: 'Revision Of Cover',
+            type: 'Revision_Of_Cover',
             dateCreated: new Date(),
             dateUpdated: new Date(),
-            status: 'Pending',
+            status: 'Pending'
         };
 
         const policy: Policy = {
@@ -213,43 +203,44 @@ export class PolicyRevisionDetailsComponent implements OnInit {
             receiptStatus: this.policyData.receiptStatus,
             paymentPlan: this.policyData.paymentPlan,
             id: this.policyData.id,
-            risks: this.risks,
+            risks: this.risks
         };
 
         this.endorsementService
             .createEndorsement(this.policyData.id, endorsement)
-            .subscribe((endorsement) => {
-                (res) => console.log(res);
+            .subscribe(endorsement => {
+                res => console.log(res);
             });
 
         // this.policiesService.createBackupPolicy(policy);
 
         this.policiesService.updatePolicy(policy).subscribe(policy => {
             res => {
- 
-        // this.router.navigateByUrl(
-        //     '/flosure/underwriting/endorsements/view-endorsements'
-        // );
-            }
+                // this.router.navigateByUrl(
+                //     '/flosure/underwriting/endorsements/view-endorsements'
+                // );
+            };
 
             this.msg.success('Endorsement Successful');
         });
-
-        
     }
 
     sumArray(items, prop) {
-        return items.reduce(function (a, b) {
+        return items.reduce(function(a, b) {
             return a + b[prop];
         }, 0);
     }
 
     recieveUpdate($event) {
-        // this.policyRiskRevisionUpdate.next($event);
+        this.policyRiskRevisionUpdate.next($event);
     }
 
     updateRisksTable() {
         this.risks = this.risks;
         this.displayRisks = this.risks;
+    }
+
+    trackByRiskId(index: number, risk: RiskModel): string {
+        return risk.id;
     }
 }
