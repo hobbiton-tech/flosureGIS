@@ -1,6 +1,6 @@
 import {
     AngularFirestore,
-    AngularFirestoreCollection,
+    AngularFirestoreCollection
 } from '@angular/fire/firestore';
 import 'firebase/firestore';
 import { Endorsement } from '../models/endorsement.model';
@@ -11,8 +11,10 @@ import { v4 } from 'uuid';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
+const BASE_URL = 'http://localhost:3000';
+
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
 export class EndorsementService {
     private endorsementsCollection: AngularFirestoreCollection<Endorsement>;
@@ -27,7 +29,7 @@ export class EndorsementService {
     }
 
     async addEndorsement(endorsement: Endorsement) {
-        this.endorsements.pipe(first()).subscribe(async (endorsements) => {
+        this.endorsements.pipe(first()).subscribe(async endorsements => {
             endorsement.id = v4();
             this.endorsementsCollection.doc(endorsement.id).set(endorsement);
         });
@@ -38,13 +40,13 @@ export class EndorsementService {
             .collection('endorsements')
             .ref.where('endoresementId', '==', endorsemenId)
             .get()
-            .then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
+            .then(querySnapshot => {
+                querySnapshot.forEach(doc => {
                     console.log(doc.data());
                     this.endorsement = doc.data();
                 });
             })
-            .catch((error) => {
+            .catch(error => {
                 console.log('Error getting documents:', error);
             });
         return this.endorsement;
@@ -65,22 +67,33 @@ export class EndorsementService {
     ): Observable<Endorsement> {
         console.log('endorsement: ');
         console.log(endorsement);
-        return this.http.post<Endorsement>( `https://flosure-postgres-api.herokuapp.com/endorsement/${policyId}`, endorsement );
+        return this.http.post<Endorsement>(
+            `${BASE_URL}/policies/endorsements`,
+            {
+                policyId: policyId,
+                ...endorsement
+            }
+        );
     }
     getEndorsements(): Observable<Endorsement[]> {
         return this.http.get<Endorsement[]>(
-            'https://flosure-postgres-api.herokuapp.com/endorsement'
+            `${BASE_URL}/policies/endorsements`
         );
     }
 
     getEndorsementById(endorsementId: string): Observable<Endorsement> {
-        return this.http.get<Endorsement>( `https://flosure-postgres-api.herokuapp.com/endorsement/${endorsementId}`);
+        return this.http.get<Endorsement>(
+            `https://flosure-postgres-api.herokuapp.com/endorsement/${endorsementId}`
+        );
     }
 
     updateEndorsement(
         endorsement: Endorsement,
         endorsementId: string
     ): Observable<Endorsement> {
-        return this.http.put<Endorsement>( `https://flosure-postgres-api.herokuapp.com/endorsement/${endorsementId}`,endorsement);
+        return this.http.put<Endorsement>(
+            `https://flosure-postgres-api.herokuapp.com/endorsement/${endorsementId}`,
+            endorsement
+        );
     }
 }

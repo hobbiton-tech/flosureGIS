@@ -40,11 +40,11 @@ export class AddProductComponent implements OnInit {
         private msg: NzMessageService
     ) {
         this.productForm = this.formBuilder.group({
-            productName: ['', Validators.required],
-            productCode: ['', Validators.required],
-            productDescription: ['', Validators.required],
-            productPolicyNumberPrefix: ['', Validators.required],
-            productClaimNumberPrefix: ['', Validators.required]
+            name: ['', Validators.required],
+            code: ['', Validators.required],
+            description: ['', Validators.required],
+            policyNumberPrefix: ['', Validators.required],
+            claimNumberPrefix: ['', Validators.required]
         });
     }
 

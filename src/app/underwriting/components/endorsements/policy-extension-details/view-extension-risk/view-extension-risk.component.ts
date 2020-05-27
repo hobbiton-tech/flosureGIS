@@ -494,6 +494,7 @@ export class ViewExtensionRiskComponent implements OnInit {
 
         if (moment(riskEnd).isSameOrAfter(this.policyEndDate)) {
             return false;
+            
         } else {
             this.riskDetailsForm.get('riskEndDate').markAsDirty;
             return true;

@@ -10,6 +10,7 @@ import * as XLSX from 'xlsx';
 
 import * as _ from 'lodash';
 import { BehaviorSubject } from 'rxjs';
+import { IClientDTO } from '../../models/client.model';
 
 @Component({
     selector: 'app-clients-list',
@@ -17,9 +18,13 @@ import { BehaviorSubject } from 'rxjs';
     styleUrls: ['./clients-list.component.scss']
 })
 export class ClientsListComponent implements OnInit {
-    clientList: Array<IIndividualClient & ICorporateClient>;
-    displayClientList: Array<IIndividualClient & ICorporateClient>;
-    searchedClientList: Array<IIndividualClient & ICorporateClient>;
+    // clientList: Array<IIndividualClient & ICorporateClient>;
+    // displayClientList: Array<IIndividualClient & ICorporateClient>;
+    // searchedClientList: Array<IIndividualClient & ICorporateClient>;
+
+    clientList: IClientDTO[];
+    displayClientList: IClientDTO[];
+    searchedClientList: IClientDTO[];
 
     clientUpdate = new BehaviorSubject<boolean>(false);
 
@@ -46,17 +51,28 @@ export class ClientsListComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.clientsService.getAllClients().subscribe(clients => {
-            this.individualClients = clients[0];
-            this.corporateClients = clients[1];
+        this.clientsService.getClients().subscribe(clients => {
+            // this.individualClients = clients[0];
+            // this.corporateClients = clients[1];
 
-            this.totalIndividualClients = clients[0].length;
-            this.totalCorporateClients = clients[1].length;
+            // this.totalIndividualClients = clients[0].length;
+            // this.totalCorporateClients = clients[1].length;
 
-            this.clientList = [...clients[0], ...clients[1]] as Array<
-                ICorporateClient & IIndividualClient
-            >;
+            // this.clientList = [...clients[0], ...clients[1]] as Array<
+            //     ICorporateClient & IIndividualClient
+            // >;
+            console.log(clients);
+
+            this.clientList = clients;
+
             this.displayClientList = this.clientList;
+
+            this.totalIndividualClients = this.clientList.filter(
+                x => x.clientType === 'Individual'
+            ).length;
+            this.totalCorporateClients = this.clientList.filter(
+                x => x.clientType === 'Corporate'
+            ).length;
 
             this.totalClients = this.clientList.length;
 
@@ -65,16 +81,22 @@ export class ClientsListComponent implements OnInit {
 
         this.clientUpdate.subscribe(update =>
             update === true
-                ? this.clientsService.getAllClients().subscribe(clients => {
-                      this.individualClients = clients[0];
-                      this.corporateClients = clients[1];
+                ? this.clientsService.getClients().subscribe(clients => {
+                      //   this.individualClients = clients[0];
+                      //   this.corporateClients = clients[1];
 
-                      this.totalIndividualClients = clients[0].length;
-                      this.totalCorporateClients = clients[1].length;
+                      //   this.totalIndividualClients = clients[0].length;
+                      //   this.totalCorporateClients = clients[1].length;
 
-                      this.clientList = [...clients[0], ...clients[1]] as Array<
-                          ICorporateClient & IIndividualClient
-                      >;
+                      //   this.clientList = [...clients[0], ...clients[1]] as Array<
+                      //       ICorporateClient & IIndividualClient
+                      //   >;
+                      //   this.displayClientList = this.clientList;
+
+                      //   this.totalClients = this.clientList.length;
+
+                      this.clientList = clients;
+
                       this.displayClientList = this.clientList;
 
                       this.totalClients = this.clientList.length;
@@ -99,20 +121,20 @@ export class ClientsListComponent implements OnInit {
         this.clientsService.addCorporateClient(client);
     }
 
-    filterClients(filter: 'All' | 'Individaul' | 'Corporate'): void {
-        switch (filter) {
-            case 'All':
-                this.displayClientList = this.clientList;
-            case 'Individaul':
-                this.displayClientList = this.individualClients as Array<
-                    IIndividualClient & ICorporateClient
-                >;
-            case 'Corporate':
-                this.displayClientList = this.corporateClients as Array<
-                    IIndividualClient & ICorporateClient
-                >;
-        }
-    }
+    // filterClients(filter: 'All' | 'Individaul' | 'Corporate'): void {
+    //     switch (filter) {
+    //         case 'All':
+    //             this.displayClientList = this.clientList;
+    //         case 'Individaul':
+    //             this.displayClientList = this.individualClients as Array<
+    //                 IIndividualClient & ICorporateClient
+    //             >;
+    //         case 'Corporate':
+    //             this.displayClientList = this.corporateClients as Array<
+    //                 IIndividualClient & ICorporateClient
+    //             >;
+    //     }
+    // }
 
     search(value: string): void {
         if (value === '' || !value) {
@@ -122,9 +144,6 @@ export class ClientsListComponent implements OnInit {
         this.displayClientList = this.clientList.filter(client => {
             if (client.clientType === 'Individual') {
                 return (
-                    client.clientID
-                        .toLowerCase()
-                        .includes(value.toLowerCase()) ||
                     client.clientType
                         .toLocaleLowerCase()
                         .includes(value.toLowerCase()) ||
@@ -138,9 +157,6 @@ export class ClientsListComponent implements OnInit {
                 );
             } else {
                 return (
-                    client.clientID
-                        .toLowerCase()
-                        .includes(value.toLowerCase()) ||
                     client.clientType
                         .toLocaleLowerCase()
                         .includes(value.toLowerCase()) ||

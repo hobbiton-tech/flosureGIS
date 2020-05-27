@@ -33,6 +33,7 @@ export class PoliciesService {
     // postgres db
     ///////////////////////
     createPolicy(policy: Policy): Observable<Policy> {
+        console.log(policy);
         return this.http.post<Policy>(
             'https://flosure-postgres-api.herokuapp.com/policy',
             policy
@@ -145,10 +146,10 @@ export class PoliciesService {
                     policy
                 )
                 .subscribe(
-                    (data) => {
+                    data => {
                         this.msg.success('Policy Successfully Updated');
                     },
-                    (error) => {
+                    error => {
                         this.msg.error('Failed');
                     }
                 );

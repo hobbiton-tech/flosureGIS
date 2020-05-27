@@ -56,23 +56,23 @@
                             >
                                 <nz-option
                                     nzLabel="Mr"
-                                    nzValue="mr"
+                                    nzValue="Mr"
                                 ></nz-option>
                                 <nz-option
                                     nzLabel="Mrs"
-                                    nzValue="mrs"
+                                    nzValue="Mrs"
                                 ></nz-option>
                                 <nz-option
                                     nzLabel="Miss"
-                                    nzValue="miss"
+                                    nzValue="Miss"
                                 ></nz-option>
                                 <nz-option
                                     nzLabel="Dr"
-                                    nzValue="dr"
+                                    nzValue="Dr"
                                 ></nz-option>
                                 <nz-option
                                     nzLabel="Prof"
-                                    nzValue="prof"
+                                    nzValue="Prof"
                                 ></nz-option>
                             </nz-select>
                         </nz-form-control>
@@ -148,11 +148,15 @@
                             >
                                 <nz-option
                                     nzLabel="NRC"
-                                    nzValue="nrc"
+                                    nzValue="NRC"
                                 ></nz-option>
                                 <nz-option
                                     nzLabel="Passport"
-                                    nzValue="passport"
+                                    nzValue="Passport"
+                                ></nz-option>
+                                <nz-option
+                                    nzLabel="Drivers License"
+                                    nzValue="License"
                                 ></nz-option>
                             </nz-select>
                         </nz-form-control>
@@ -219,15 +223,15 @@
             <div nz-row>
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                        <nz-form-label [nzSpan]="8" nzFor="phone" nzRequired
+                        <nz-form-label [nzSpan]="8" nzFor="phoneNumber" nzRequired
                             >Phone</nz-form-label
                         >
                         <nz-form-control [nzSpan]="14">
                             <input
                                 nz-input
-                                formControlName="phone"
-                                name="phone"
-                                id="phone"
+                                formControlName="phoneNumber"
+                                name="phoneNumber"
+                                id="phoneNumber"
                                 placeholder="Phone Number"
                             />
                         </nz-form-control>
@@ -267,11 +271,11 @@
                             >
                                 <nz-option
                                     nzLabel="Male"
-                                    nzValue="male"
+                                    nzValue="Male"
                                 ></nz-option>
                                 <nz-option
                                     nzLabel="Female"
-                                    nzValue="female"
+                                    nzValue="Female"
                                 ></nz-option>
                             </nz-select>
                         </nz-form-control>
@@ -294,11 +298,11 @@
                             >
                                 <nz-option
                                     nzLabel="Single"
-                                    nzValue="single"
+                                    nzValue="Single"
                                 ></nz-option>
                                 <nz-option
                                     nzLabel="Married"
-                                    nzValue="married"
+                                    nzValue="Married"
                                 ></nz-option>
                             </nz-select>
                         </nz-form-control>
@@ -370,15 +374,15 @@
                                 >
                                     <nz-option
                                         nzLabel="Student"
-                                        nzValue="student"
+                                        nzValue="Student"
                                     ></nz-option>
                                     <nz-option
                                         nzLabel="Employed"
-                                        nzValue="employed"
+                                        nzValue="Employed"
                                     ></nz-option>
                                     <nz-option
                                         nzLabel="Unemployed"
-                                        nzValue="unemployed"
+                                        nzValue="Unemployed"
                                     ></nz-option>
                                 </nz-select>
                             </nz-form-control>
@@ -566,18 +570,18 @@
                         <nz-form-item>
                             <nz-form-label
                                 [nzSpan]="8"
-                                nzFor="taxPin"
+                                nzFor="tpinNumber"
                                 nzRequired
                                 >Tpin Number</nz-form-label
                             >
                             <nz-form-control [nzSpan]="15">
                                 <input
                                     nz-input
-                                    formControlName="taxPin"
-                                    name="taxPin"
+                                    formControlName="tpinNumber"
+                                    name="tpinNumber"
                                     type="text"
-                                    id="taxPin"
-                                    placeholder="taxPin"
+                                    id="tpinNumber"
+                                    placeholder="tpinNumber"
                                 />
                             </nz-form-control>
                         </nz-form-item>
@@ -608,16 +612,16 @@
 
                     <div nz-col [nzSpan]="12">
                         <nz-form-item>
-                            <nz-form-label [nzSpan]="8" nzFor="email" nzRequired
+                            <nz-form-label [nzSpan]="8" nzFor="companyEmail" nzRequired
                                 >Email</nz-form-label
                             >
                             <nz-form-control [nzSpan]="15">
                                 <input
                                     nz-input
-                                    formControlName="email"
-                                    name="email"
-                                    type="email"
-                                    id="email"
+                                    formControlName="companyEmail"
+                                    name="companyEmail"
+                                    type="companyEmail"
+                                    id="companyEmail"
                                     placeholder="Email Address"
                                 />
                             </nz-form-control>
@@ -628,15 +632,15 @@
                 <div nz-row>
                     <div nz-col [nzSpan]="12">
                         <nz-form-item>
-                            <nz-form-label [nzSpan]="8" nzFor="phone" nzRequired
+                            <nz-form-label [nzSpan]="8" nzFor="phoneNumber" nzRequired
                                 >Phone</nz-form-label
                             >
                             <nz-form-control [nzSpan]="15">
                                 <input
                                     nz-input
-                                    formControlName="phone"
-                                    name="phone"
-                                    id="phone"
+                                    formControlName="phoneNumber"
+                                    name="phoneNumber"
+                                    id="phoneNumber"
                                     placeholder="Phone Number"
                                 />
                             </nz-form-control>
@@ -647,16 +651,16 @@
                         <nz-form-item>
                             <nz-form-label
                                 [nzSpan]="8"
-                                nzFor="address"
+                                nzFor="companyAddress"
                                 nzRequired
                                 >Address</nz-form-label
                             >
                             <nz-form-control [nzSpan]="15">
                                 <input
                                     nz-input
-                                    formControlName="address"
-                                    name="address"
-                                    id="address"
+                                    formControlName="companyAddress"
+                                    name="companyAddress"
+                                    id="companyAddress"
                                     placeholder="Address"
                                 />
                             </nz-form-control>
@@ -720,16 +724,16 @@
                             <nz-form-item>
                                 <nz-form-label
                                     [nzSpan]="8"
-                                    nzFor="contactFirstName"
+                                    nzFor="firstName"
                                     >Contact First Name</nz-form-label
                                 >
                                 <nz-form-control [nzSpan]="16">
                                     <input
                                         nz-input
-                                        formControlName="contactFirstName"
-                                        name="contactFirstName"
+                                        formControlName="firstName"
+                                        name="firstName"
                                         type="text"
-                                        id="contactFirstName"
+                                        id="firstName"
                                         placeholder="Contact First Name"
                                     />
                                 </nz-form-control>
@@ -740,15 +744,15 @@
                             <nz-form-item>
                                 <nz-form-label
                                     [nzSpan]="8"
-                                    nzFor="contactLastName"
+                                    nzFor="lastName"
                                     >Contact Last Name</nz-form-label
                                 >
                                 <nz-form-control [nzSpan]="16">
                                     <input
                                         nz-input
-                                        formControlName="contactLastName"
-                                        name="contactLastName"
-                                        id="contactLastName"
+                                        formControlName="lastName"
+                                        name="lastName"
+                                        id="lastName"
                                         placeholder="Contact Last Name"
                                     />
                                 </nz-form-control>

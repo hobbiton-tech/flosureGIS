@@ -64,17 +64,16 @@
                 [nzBordered]="true" style="background-color: white;">
                 <thead>
                     <tr>
-                        <th>Client ID</th>
                         <th>Client Name</th>
+                        <th>Client ID</th>
                         <th>Email</th>
                         <th>Phone</th>
                         <th>Client Type</th>
-                        <th>Client Status</th>
+                        <!-- <th>Client Status</th> -->
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let client of clientsTable.data" (click)="viewDetails(client)" style="cursor: pointer;">
-                        <td>{{ client.clientID }}</td>
                         <td>
                             {{
                                 client.clientType === 'Individual'
@@ -82,17 +81,29 @@
                                     : client.companyName
                             }}
                         </td>
-                        <td>{{ client.email }}</td>
-                        <td>{{ client.phone }}</td>
-                        <td>{{ client.clientType }}</td>
                         <td>
+                            {{
+                                client.clientType === 'Individual'
+                                    ? client.idNumber
+                                    : client.CompanyDetail.registrationNumber
+                            }}
+                        </td>
+                        <td>{{ 
+                        client.clientType === 'Individual'
+                                    ? client.email
+                                    : client.CompanyDetail.companyEmail
+                        
+                         }}</td>
+                        <td>{{ client.phoneNumber }}</td>
+                        <td>{{ client.clientType }}</td>
+                        <!-- <td>
                             <nz-badge [nzStatus]="
                                     client.status === 'Inactive'
                                         ? 'error'
                                         : 'success'
                                 " [nzText]="client.status">
                             </nz-badge>
-                        </td>
+                        </td> -->
                     </tr>
                 </tbody>
             </nz-table>

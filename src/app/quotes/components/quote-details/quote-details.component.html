@@ -110,9 +110,8 @@
                                 <nz-form-control nzSpan="17">
                                     <nz-select name="intermediaryName" formControlName="intermediaryName" nzAllowClear
                                         nzPlaceHolder="Select agent" [nzDisabled]="!isEditmode">
-                                        <nz-option *ngFor="let option of agents"
-                                            [nzValue]="option.contactFirstName + ' ' + option.contactLastName"
-                                            [nzLabel]="option.contactFirstName + ' ' + option.contactLastName">
+                                        <nz-option *ngFor="let option of agents" [nzValue]="option.companyName"
+                                            [nzLabel]="option.companyName">
                                         </nz-option>
                                     </nz-select>
                                 </nz-form-control>
@@ -2238,7 +2237,7 @@
         <!-- Risk Details ends here -->
 
         <nz-modal [(nzVisible)]="quoteRiskDetailsModalVisible" [nzTitle]="riskTitle" [nzContent]="riskContent"
-            (nzOnCancel)="closeRiskDetails()" (nzOnOk)="closeRiskDetails()" nzWidth="100%">
+            (nzOnCancel)="closeRiskDetails()" (nzOnOk)="closeRiskDetails()" nzWidth="90%">
             <ng-template #riskTitle>
                 Risk Details
             </ng-template>
@@ -3964,7 +3963,7 @@
             </ng-template>
         </nz-modal>
 
-        <nz-modal [(nzVisible)]="isViewDraftQuotePDFVisible" nzTitle="Savenda General Insurance"
+        <nz-modal [(nzVisible)]="isViewDraftQuotePDFVisible" nzTitle="A Plus General Insurance"
             (nzOnCancel)="isViewDraftQuotePDFVisible = false" (nzOnOk)="isViewDraftQuotePDFVisible = false"
             nzWidth="800">
             <nz-card style="width: 100%" [nzBordered]="true" nzTitle="Quote Document" [nzExtra]="pdfQuoteActions">

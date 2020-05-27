@@ -19,6 +19,30 @@ export interface IExtension {
     description: string;
 }
 
+export interface IRiskClauses {
+    id: string;
+    productName: string;
+    clauseId: string;
+    heading: string;
+    clauseDetails;
+}
+
+export interface IRiskWording {
+    id: string;
+    productName: string;
+    wordingId: string;
+    heading: string;
+    description: string;
+}
+
+export interface IRiskExtension {
+    id: string;
+    productName: string;
+    extensionId: string;
+    heading: string;
+    description: string;
+}
+
 // const createClause = () => {
 //     const clause: IClause = {
 //         clauseId: faker.random.number(12),

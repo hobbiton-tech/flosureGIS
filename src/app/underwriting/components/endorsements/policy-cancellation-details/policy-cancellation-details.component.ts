@@ -175,7 +175,7 @@ export class PolicyCancellationDetailsComponent implements OnInit {
 
         const endorsement: Endorsement = {
             ...this.endorsementForm.value,
-            type: 'Cancellation Of Cover',
+            type: 'Cancellation_Of_Cover',
             dateCreated: new Date(),
             dateUpdated: new Date(),
             id: this.policyData.id,
@@ -198,16 +198,13 @@ export class PolicyCancellationDetailsComponent implements OnInit {
         this.policiesService.updatePolicy(policy).subscribe(policy => {
             res => {
                 console.log(res);
-            // this.router.navigateByUrl(
-            // '/flosure/underwriting/endorsements/view-endorsements'
-            }
+                // this.router.navigateByUrl(
+                // '/flosure/underwriting/endorsements/view-endorsements'
+            };
 
             this.msg.success('Cancellation Successful');
-
         });
 
         this.creditNoteAmount = this.policyCancellationBalance();
-
-        
     }
 }

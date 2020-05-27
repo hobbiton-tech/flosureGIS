@@ -1575,9 +1575,7 @@
                 style="margin-left: 15px;"
                     nz-button
                     nzType="default"
-                    (click)="
-                        resetComprehensiveRiskForm($event)
-                    "
+                     (click)="selectedValue.value == 'Comprehensive' ? resetComprehensiveRiskForm($event) : resetThirdPartyRiskForm($event)"
                 >
                     Reset Form
                 </button>
