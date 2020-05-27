@@ -1,10 +1,22 @@
-import * as faker from 'faker';
-
 export interface IClause {
     id: string;
-    clauseHeading: string;
+    heading: string;
     productId: string;
     clauseDetails: string;
+}
+
+export interface IWording {
+    id: string;
+    heading: string;
+    productId: string;
+    description: string;
+}
+
+export interface IExtension {
+    id: string;
+    heading: string;
+    productId: string;
+    description: string;
 }
 
 // const createClause = () => {

@@ -6,7 +6,7 @@ import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class ProductSetupsServiceService {
     constructor(private http: HttpClient) {}
@@ -34,6 +34,12 @@ export class ProductSetupsServiceService {
     getProducts(id: string): Observable<IProduct[]> {
         return this.http.get<IProduct[]>(
             `https://flosure-postgres-api.herokuapp.com/product/class-products/${id}`
+        );
+    }
+
+    getProductsNo(): Observable<IProduct[]> {
+        return this.http.get<IProduct[]>(
+            `https://flosure-postgres-api.herokuapp.com/product/class-products`
         );
     }
 }

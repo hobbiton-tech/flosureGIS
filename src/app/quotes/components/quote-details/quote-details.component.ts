@@ -1137,32 +1137,38 @@ export class QuoteDetailsComponent implements OnInit {
                     console.log('Risks>>>>', risk);
                     if (risk.insuranceType === 'ThirdParty') {
                         console.log('Risk Type>>>>', risk.insuranceType);
-                        // this.http.post(
-                        //     'https://zampointzidb.eservices.gov.zm/ZIDB/ReceiveInsurancePolicies',
-                        //     {
-                        //         insuranceType: 1,
-                        //         status: 1,
-                        //         registrationMark: risk.regNumber.replace(/\s/g, ''),
-                        //         dateFrom: risk.riskStartDate,
-                        //         dateTo: risk.riskEndDate,
-                        //         insurancePolicyNo: policy.policyNumber,
-                        //         chassisNumber: risk.chassisNumber,
-                        //     }
-                        // );
+                        this.http.post(
+                            'https://zampointzidb.eservices.gov.zm/ZIDB/ReceiveInsurancePolicies',
+                            {
+                                insuranceType: 1,
+                                status: 1,
+                                registrationMark: risk.regNumber.replace(
+                                    /\s/g,
+                                    ''
+                                ),
+                                dateFrom: risk.riskStartDate,
+                                dateTo: risk.riskEndDate,
+                                insurancePolicyNo: policy.policyNumber,
+                                chassisNumber: risk.chassisNumber,
+                            }
+                        );
                     } else if (risk.insuranceType === 'Comprehensive') {
                         console.log('Risk Type>>>>', risk.insuranceType);
-                        // this.http.post(
-                        //     'https://zampointzidb.eservices.gov.zm/ZIDB/ReceiveInsurancePolicies',
-                        //     {
-                        //         insuranceType: 2,
-                        //         status: 1,
-                        //         registrationMark: risk.regNumber.replace(/\s/g, ''),
-                        //         dateFrom: risk.riskStartDate,
-                        //         dateTo: risk.riskEndDate,
-                        //         insurancePolicyNo: policy.policyNumber,
-                        //         chassisNumber: risk.chassisNumber,
-                        //     }
-                        // );
+                        this.http.post(
+                            'https://zampointzidb.eservices.gov.zm/ZIDB/ReceiveInsurancePolicies',
+                            {
+                                insuranceType: 2,
+                                status: 1,
+                                registrationMark: risk.regNumber.replace(
+                                    /\s/g,
+                                    ''
+                                ),
+                                dateFrom: risk.riskStartDate,
+                                dateTo: risk.riskEndDate,
+                                insurancePolicyNo: policy.policyNumber,
+                                chassisNumber: risk.chassisNumber,
+                            }
+                        );
                     }
                 }
             });
