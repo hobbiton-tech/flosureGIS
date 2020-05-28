@@ -32,6 +32,12 @@ import {
     ISalesRepresentative,
 } from 'src/app/settings/components/agents/models/agents.model';
 import { ImageElement } from 'canvg';
+import { ClausesService } from 'src/app/settings/components/underwriting-setups/services/clauses.service';
+import {
+    IPolicyClauses,
+    IPolicyWording,
+    IPolicyExtension,
+} from 'src/app/settings/models/underwriting/clause.model';
 
 type AOA = any[][];
 
@@ -74,6 +80,9 @@ interface IRateRequest {
     styleUrls: ['./quote-details.component.scss'],
 })
 export class QuoteDetailsComponent implements OnInit {
+    clauses: IPolicyClauses[];
+    wordings: IPolicyWording[];
+    extensions: IPolicyExtension[];
     // form
     quoteDetailsForm: FormGroup;
     riskThirdPartyForm: FormGroup;
@@ -369,7 +378,8 @@ export class QuoteDetailsComponent implements OnInit {
         private route: ActivatedRoute,
         private msg: NzMessageService,
         private http: HttpClient,
-        private readonly agentsService: AgentsService
+        private readonly agentsService: AgentsService,
+        private productClauseService: ClausesService
     ) {}
 
     ngOnInit(): void {
@@ -386,6 +396,32 @@ export class QuoteDetailsComponent implements OnInit {
                 console.log('this.quote>>>>>', this.quoteData);
 
                 this.risks = this.quoteData.risks;
+                this.productClauseService
+                    .getPolicyClauses()
+                    .subscribe((res) => {
+                        this.clauses = res.filter(
+                            (x) => x.policyId === this.risks[0].id
+                        );
+                        console.log('CLAUSES>>>>>', this.clauses);
+                    });
+
+                this.productClauseService
+                    .getPolicyExtensions()
+                    .subscribe((res) => {
+                        this.extensions = res.filter(
+                            (x) => x.policyId === this.risks[0].id
+                        );
+                        console.log('EXTENSIONS>>>>>', this.extensions);
+                    });
+
+                this.productClauseService
+                    .getPolicyWordings()
+                    .subscribe((res) => {
+                        this.wordings = res.filter(
+                            (x) => x.policyId === this.risks[0].id
+                        );
+                        console.log('WORDINGS>>>>>', this.wordings);
+                    });
 
                 // if (this.quoteData.sourceOfBusiness == 'Agent') {
                 //     this.agent = this.intermediaries.filter(
@@ -962,9 +998,8 @@ export class QuoteDetailsComponent implements OnInit {
             };
             this.currentRiskEdit = some;
 
-            var riskIndex = _.findIndex(this.risks, {
-                id: this.selectedRisk.id
-
+            const riskIndex = _.findIndex(this.risks, {
+                id: this.selectedRisk.id,
             });
             this.risks.splice(riskIndex, 1, this.currentRiskEdit);
             this.risks = this.risks;
@@ -984,9 +1019,8 @@ export class QuoteDetailsComponent implements OnInit {
             };
             this.selectedRisk = some;
 
-            var riskIndex = _.findIndex(this.risks, {
-                id: this.selectedRisk.id
-
+            const riskIndex = _.findIndex(this.risks, {
+                id: this.selectedRisk.id,
             });
             this.risks.splice(riskIndex, 1, this.currentRiskEdit);
         }
@@ -1009,6 +1043,28 @@ export class QuoteDetailsComponent implements OnInit {
         console.log(this.quoteDetailsForm.value);
         // push to convert quote to policy and policies collection
         const policy = this.quoteDetailsForm.value as Policy;
+
+        for (const clause of this.clauses) {
+            clause.policyId = policy.id;
+            this.productClauseService.updatePolicyClause(clause);
+        }
+
+        for (const extenstion of this.extensions) {
+            extenstion.policyId = policy.id;
+            this.productClauseService.updatePolicyExtension(extenstion);
+        }
+
+        for (const wording of this.wordings) {
+            wording.policyId = policy.id;
+            this.productClauseService.updatePolicyWording(wording);
+        }
+
+        console.log(
+            'CLAUSE>>>>>>',
+            this.clauses,
+            this.extensions,
+            this.wordings
+        );
 
         this.policiesService.addPolicy(policy);
     }
@@ -1093,11 +1149,10 @@ export class QuoteDetailsComponent implements OnInit {
             town: 'string',
         };
 
-        const debit$ = ''
-        const cert$ = ''
+        const debit$ = '';
+        const cert$ = '';
 
         combineLatest([debit$, cert$]).subscribe(async ([debit, cert]) => {
-
             this.quote.status = 'Approved';
             await this.quotesService
                 .updateMotorQuotation(this.quote, this.quote.id)

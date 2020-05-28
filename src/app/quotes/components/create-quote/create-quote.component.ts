@@ -33,6 +33,9 @@ import {
     IClause,
     IWording,
     IExtension,
+    IPolicyClauses,
+    IPolicyWording,
+    IPolicyExtension,
 } from 'src/app/settings/models/underwriting/clause.model';
 import { ClausesService } from 'src/app/settings/components/underwriting-setups/services/clauses.service';
 
@@ -87,6 +90,23 @@ export class CreateQuoteComponent implements OnInit {
     PolicyClause: any[];
     PolicyWording: any[];
     PolicyExtension: any[];
+    selectedClauseValue: any[];
+    isClauseEditVisible = false;
+    selectedExtensionValue: any[];
+    isExtensionEditVisible = false;
+    selectedWordingValue: any[];
+    isWordingEditVisible = false;
+    editClause: any;
+    editExtension: any;
+    editWording: any;
+
+    newClauseWording: IPolicyClauses;
+    newWordingWording: IPolicyWording;
+    newExtensionWording: IPolicyExtension;
+
+    clauseForm: FormGroup;
+    extensionForm: FormGroup;
+    wordingForm: FormGroup;
     constructor(
         private formBuilder: FormBuilder,
         private readonly router: Router,
@@ -96,7 +116,20 @@ export class CreateQuoteComponent implements OnInit {
         private http: HttpClient,
         private readonly agentsService: AgentsService,
         private productClauseService: ClausesService
-    ) {}
+    ) {
+        this.clauseForm = formBuilder.group({
+            heading: ['', Validators.required],
+            clauseDetails: ['', Validators.required],
+        });
+        this.extensionForm = formBuilder.group({
+            heading: ['', Validators.required],
+            description: ['', Validators.required],
+        });
+        this.wordingForm = formBuilder.group({
+            heading: ['', Validators.required],
+            description: ['', Validators.required],
+        });
+    }
 
     // conditional render of agent field based on mode(agent or user)
     agentMode = false;
@@ -147,7 +180,7 @@ export class CreateQuoteComponent implements OnInit {
     clients: Array<IIndividualClient & ICorporateClient>;
     premiumLoadingForm: FormGroup;
 
-    //intermediaries
+    // intermediaries
     brokers: IBroker[];
     agents: IAgent[];
     salesRepresentatives: ISalesRepresentative[];
@@ -169,7 +202,7 @@ export class CreateQuoteComponent implements OnInit {
     premiumRate: number;
     premiumRateType: string;
 
-    LevyRate: number = 3;
+    LevyRate = 3;
     basicPremiumLevy: number;
 
     // Loading
@@ -211,7 +244,7 @@ export class CreateQuoteComponent implements OnInit {
     // loads added to loading
     loads: LoadModel[] = [];
 
-    //dicounts added
+    // dicounts added
     discounts: DiscountModel[] = [];
 
     // risk upload modal
@@ -227,68 +260,68 @@ export class CreateQuoteComponent implements OnInit {
     // Edit risk details
     isRiskDetailsEditmode = false;
 
-    //selected basic premium input type option are rate and amount
+    // selected basic premium input type option are rate and amount
     selectedBasicPremiunTypeValue = 'rate';
-    //basic premium amount when user selects amount as basic premium input type
+    // basic premium amount when user selects amount as basic premium input type
     basicPremiumAmount: number;
 
-    //selected increase third party input type
+    // selected increase third party input type
     selectedIncreaseThirdPartyLimitInputTypeValue = 'rate';
-    //increase third party amount
+    // increase third party amount
     increasedThirdPartyLimitAmount: number;
 
-    //selected riot and strike input type
+    // selected riot and strike input type
     selectedRiotAndStrikeInputTypeValue = 'rate';
-    //increase third party amount
+    // increase third party amount
     riotAndStrikeAmount: number;
 
-    //selected Car stereo input type
+    // selected Car stereo input type
     selectedCarStereoInputTypeValue = 'rate';
-    //car stereo amount
+    // car stereo amount
     carStereoAmount: number;
 
-    //selected loss of use input type
+    // selected loss of use input type
     selectedLossOfUseInputTypeValue = 'rate';
-    //loss of use amount
+    // loss of use amount
     lossOfUseAmount: number;
 
-    //selected territorial extension input type
+    // selected territorial extension input type
     selectedTerritorialExtensionInputTypeValue = 'rate';
-    //loss of use amount
+    // loss of use amount
     territorialExtensionAmount: number;
 
-    //inexperienced driver amount
+    // inexperienced driver amount
     inexperiencedDriverAmount: number;
 
-    //under age driver amount
+    // under age driver amount
     underAgeDriverAmount: number;
 
-    //selected no claim discount input type
+    // selected no claim discount input type
     selectedNoClaimsDiscountInputTypeValue = 'rate';
-    //no claim discount amount
+    // no claim discount amount
     noClaimsDiscountAmount: number;
 
-    //selected loyalty discount input type
+    // selected loyalty discount input type
     selectedLoyaltyDiscountInputTypeValue = 'rate';
-    //loyalty discount amount
+    // loyalty discount amount
     loyaltyDiscountAmount: number;
 
-    //selected valued client discount input type
+    // selected valued client discount input type
     selectedValuedClientDiscountInputTypeValue = 'rate';
-    //valued client discount amount
+    // valued client discount amount
     valuedClientDiscountAmount: number;
 
-    //selected low term agreement discount input type
+    // selected low term agreement discount input type
     selectedLowTermAgreementDiscountInputTypeValue = 'rate';
-    //low term agreement discount amount
+    // low term agreement discount amount
     lowTermAgreementDiscountAmount: number;
 
     todayYear = null;
 
-    //set risk tamplate table not vivible
+    // set risk tamplate table not vivible
     isTabletemplate = true;
 
-    //quoteNumber
+    // quoteNumber
     quoteNumber: string;
 
     optionList = [
@@ -321,14 +354,14 @@ export class CreateQuoteComponent implements OnInit {
         value: '',
     };
 
-    //motor third party rates
+    // motor third party rates
     motorThirdPartyRates = {
         pirvate: { Q1: 165, Q2: 280, Q3: 370, Q4: 464 },
         commercial: { Q1: 199, Q2: 340, Q3: 452, Q4: 566 },
         'bus/taxi': { Q1: 270, Q2: 464, Q3: 618, Q4: 772 },
     };
 
-    //discounts
+    // discounts
     discountOptions = [
         { label: 'No claims dicount', value: 'noClaimsDiscount' },
         { label: 'Loyalty Discount', value: 'loyaltyDiscount' },
@@ -377,7 +410,7 @@ export class CreateQuoteComponent implements OnInit {
     };
 
     ngOnInit(): void {
-        let user = localStorage.getItem('user');
+        const user = localStorage.getItem('user');
         this.quoteForm = this.formBuilder.group({
             client: ['', Validators.required],
             messageCode: ['ewrewre', Validators.required],
@@ -755,7 +788,7 @@ export class CreateQuoteComponent implements OnInit {
         const some: RiskModel[] = [];
         some.push({
             ...this.riskThirdPartyForm.value,
-            riskId: v4(),
+            id: v4(),
             sumInsured: 0,
             premiumRate: 0,
             basicPremium: this.basicPremium,
@@ -806,7 +839,7 @@ export class CreateQuoteComponent implements OnInit {
         const some: RiskModel[] = [];
         some.push({
             ...this.riskComprehensiveForm.value,
-            riskId: v4(),
+            id: v4(),
             sumInsured: Number(this.sumInsured),
             premiumRate: this.premiumRate,
             basicPremium: this.basicPremium,
@@ -950,15 +983,15 @@ export class CreateQuoteComponent implements OnInit {
 
     // remove risk from risks table
     removeRisk(riskId: string): void {
-        this.risks = this.risks.filter((risk) => risk.riskId !== riskId);
+        this.risks = this.risks.filter((risk) => risk.id !== riskId);
     }
 
-    //save risks changes after editing
+    // save risks changes after editing
     saveRisk(): void {
         this.currentRiskEdit = this.selectedRisk;
 
         if (this.selectedValue.value === 'Comprehensive') {
-            //comprehensive risk
+            // comprehensive risk
             const some: RiskModel = {
                 ...this.riskComprehensiveForm.value,
                 sumInsured: Number(this.sumInsured),
@@ -973,13 +1006,13 @@ export class CreateQuoteComponent implements OnInit {
             };
             this.currentRiskEdit = some;
 
-            var riskIndex = _.findIndex(this.risks, {
-                riskId: this.selectedRisk.riskId,
+            const riskIndex = _.findIndex(this.risks, {
+                id: this.selectedRisk.id,
             });
             this.risks.splice(riskIndex, 1, this.currentRiskEdit);
             this.risks = this.risks;
         } else {
-            //third party risk
+            // third party risk
             const some: RiskModel = {
                 ...this.riskThirdPartyForm.value,
                 sumInsured: 0,
@@ -994,8 +1027,8 @@ export class CreateQuoteComponent implements OnInit {
             };
             this.selectedRisk = some;
 
-            var riskIndex = _.findIndex(this.risks, {
-                riskId: this.selectedRisk.riskId,
+            const riskIndex = _.findIndex(this.risks, {
+                id: this.selectedRisk.id,
             });
             this.risks.splice(riskIndex, 1, this.currentRiskEdit);
         }
@@ -1052,21 +1085,21 @@ export class CreateQuoteComponent implements OnInit {
             coverModelId: '0948398',
         };
 
-        this.quoteService.generateQuote(quoteDto).subscribe((res) => {
-            // this.gqlquoteService
-            //     .addQuote({
-            //         clientId: 'some', // System can't keep track of this guy
-            //         quoteNumber: quote.quoteNumber,
-            //         quoteUrl: res.Location
-            //     })
-            //     .then(res => {
-            //         res.subscribe(x => {
-            //             console.log(x);
-            //         });
-            //     });
-        });
+        // this.quoteService.generateQuote(quoteDto).subscribe((res) => {
+        // this.gqlquoteService
+        //     .addQuote({
+        //         clientId: 'some', // System can't keep track of this guy
+        //         quoteNumber: quote.quoteNumber,
+        //         quoteUrl: res.Location
+        //     })
+        //     .then(res => {
+        //         res.subscribe(x => {
+        //             console.log(x);
+        //         });
+        //     });
+        // });
 
-        //firebase
+        // firebase
         // await this.quoteService
         //     .addMotorQuotation(quote)
         //     .then(() => {
@@ -1077,7 +1110,36 @@ export class CreateQuoteComponent implements OnInit {
         //         this.msg.error('Quotation Creation Failed');
         //     });
 
-        //postgres
+        // postgres
+        for (const clause of this.selectedClauseValue) {
+            this.newClauseWording = {
+                ...clause,
+                id: v4(),
+                policyId: this.risks[0].id,
+            };
+            this.productClauseService.addPolicyClause(this.newClauseWording);
+        }
+
+        for (const extension of this.selectedExtensionValue) {
+            this.newExtensionWording = {
+                ...extension,
+                id: v4(),
+                policyId: this.risks[0].id,
+            };
+            this.productClauseService.addPolicyExtension(
+                this.newExtensionWording
+            );
+        }
+
+        for (const wording of this.selectedWordingValue) {
+            this.newWordingWording = {
+                ...wording,
+                id: v4(),
+                policyId: this.risks[0].id,
+            };
+            this.productClauseService.addPolicyWording(this.newWordingWording);
+        }
+
         await this.quoteService.createMotorQuotation(quote);
     }
 
@@ -1203,7 +1265,7 @@ export class CreateQuoteComponent implements OnInit {
 
     handleDiscount(discountType: DiscountType) {
         this.handleDiscountIsLoading = true;
-        //following methods check if the repective loads are in the loads array
+        // following methods check if the repective loads are in the loads array
         const riotAndStrikeInLoads = this.loads.some(
             (item) => item.loadType === 'Riot And Strike'
         );
@@ -1217,7 +1279,7 @@ export class CreateQuoteComponent implements OnInit {
             (item) => item.loadType === 'Loss Of Use'
         );
 
-        //if the checked loading are not in loads array set there values to Zero!
+        // if the checked loading are not in loads array set there values to Zero!
         if (!riotAndStrikeInLoads) {
             this.riotAndStrikeRate = 0;
         }
@@ -1264,7 +1326,7 @@ export class CreateQuoteComponent implements OnInit {
             )
             .subscribe((data) => {
                 this.discounts.push({
-                    discountType: discountType,
+                    discountType,
                     amount: Number(data.discount),
                 });
                 this.premiumDiscount = this.sumArray(this.discounts, 'amount');
@@ -1275,7 +1337,7 @@ export class CreateQuoteComponent implements OnInit {
 
     handleDiscountThirdParty() {
         this.handleDiscountIsLoading = true;
-        //following methods check if the repective loads are in the loads array
+        // following methods check if the repective loads are in the loads array
         const riotAndStrikeInLoads = this.loads.some(
             (item) => item.loadType === 'Riot And Strike'
         );
@@ -1289,7 +1351,7 @@ export class CreateQuoteComponent implements OnInit {
             (item) => item.loadType === 'Loss Of Use'
         );
 
-        //if the checked loading are not in loads array set there values to Zero!
+        // if the checked loading are not in loads array set there values to Zero!
         if (!riotAndStrikeInLoads) {
             this.riotAndStrikeRate = 0;
         }
@@ -1677,14 +1739,14 @@ export class CreateQuoteComponent implements OnInit {
         }
     }
 
-    //sum up specific values in array
+    // sum up specific values in array
     sumArray(items, prop) {
         return items.reduce(function (a, b) {
             return a + b[prop];
         }, 0);
     }
 
-    //following method adds basic premium + loading - discount then applies levy then finds net premium
+    // following method adds basic premium + loading - discount then applies levy then finds net premium
     handleNetPremium() {
         this.basicPremiumLevy =
             (this.LevyRate / 100) *
@@ -1698,13 +1760,13 @@ export class CreateQuoteComponent implements OnInit {
             this.basicPremiumLevy;
     }
 
-    //changes the quote basic premium to the inputed amount
+    // changes the quote basic premium to the inputed amount
     handleBasicPremiumAmount() {
         this.basicPremium = Number(this.basicPremiumAmount);
         this.handleNetPremium();
     }
 
-    //changes the quote increase third party limit to inputed amount
+    // changes the quote increase third party limit to inputed amount
     handleIncreasedThirdPartyLimitAmount() {
         this.loads.push({
             loadType: 'Increased Third Party Limit',
@@ -1714,7 +1776,7 @@ export class CreateQuoteComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //changes the quote riot and strike to inputed amount
+    // changes the quote riot and strike to inputed amount
     handleRiotAndStrikeAmount() {
         this.loads.push({
             loadType: 'Riot And Strike',
@@ -1724,7 +1786,7 @@ export class CreateQuoteComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //changes the quote car stereo to inputed amount
+    // changes the quote car stereo to inputed amount
     handleCarStereoAmount() {
         this.loads.push({
             loadType: 'Car Stereo',
@@ -1734,7 +1796,7 @@ export class CreateQuoteComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //changes the quote loss of use loading to inputed amount
+    // changes the quote loss of use loading to inputed amount
     handleLossOfUseAmount() {
         this.loads.push({
             loadType: 'Loss Of Use',
@@ -1744,7 +1806,7 @@ export class CreateQuoteComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //changes the quote loss of use loading to inputed amount
+    // changes the quote loss of use loading to inputed amount
     handleTerritorialExtensionAmount() {
         this.loads.push({
             loadType: 'Territorial Extension',
@@ -1754,7 +1816,7 @@ export class CreateQuoteComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //changes the quote loss of use loading to inputed amount
+    // changes the quote loss of use loading to inputed amount
     handleInexperiencedDriverAmount() {
         this.loads.push({
             loadType: 'Inexperienced Driver',
@@ -1764,7 +1826,7 @@ export class CreateQuoteComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //changes the quote loss of use loading to inputed amount
+    // changes the quote loss of use loading to inputed amount
     handleUnderAgeDriverAmount() {
         this.loads.push({
             loadType: 'Under Age Driver',
@@ -1774,7 +1836,7 @@ export class CreateQuoteComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //adds inputted discount to total discount amount
+    // adds inputted discount to total discount amount
     handleNoClaimsDiscountAmount() {
         this.discounts.push({
             discountType: 'No Claims Discount',
@@ -1784,7 +1846,7 @@ export class CreateQuoteComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //adds inputted discount to total discount amount
+    // adds inputted discount to total discount amount
     handleLoyaltyDiscountAmount() {
         this.discounts.push({
             discountType: 'Loyalty Discount',
@@ -1794,7 +1856,7 @@ export class CreateQuoteComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //adds inputted discount to total discount amount
+    // adds inputted discount to total discount amount
     handleValuedClientDiscountAmount() {
         this.discounts.push({
             discountType: 'Valued Client Discount',
@@ -1804,7 +1866,7 @@ export class CreateQuoteComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //adds inputted discount to total discount amount
+    // adds inputted discount to total discount amount
     handleLowTermAgreementDiscountAmount() {
         this.discounts.push({
             discountType: 'Low Term Agreement Discount',
@@ -1814,25 +1876,96 @@ export class CreateQuoteComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    onSelectWording(value) {
-        this.PolicyWording.push([...value]);
-        console.log('Check>>>>>>>>>>>', value);
-    }
-    onSelectExtension(value) {
-        this.PolicyExtension.push([...value]);
-        console.log('Checka>>>>>>>>>>>', value);
-    }
-    onSelectClause(value) {
-        console.log('Checkb>>>>>>>>>>>', value);
-        this.PolicyClause.push([...value]);
-    }
+    // onSelectWording(value) {
+    //     this.PolicyWording.push([...value]);
+    //     console.log('Check>>>>>>>>>>>', value);
+    // }
+    // onSelectExtension(value) {
+    //     this.PolicyExtension.push([...value]);
+    //     console.log('Checka>>>>>>>>>>>', value);
+    // }
+    // onSelectClause(value) {
+    //     console.log('Checkb>>>>>>>>>>>', value);
+    //     this.PolicyClause.push([...value]);
+    // }
     onEditWording(value) {
-        console.log('Checkc>>>>>>>>>>>', value);
+        console.log('Checke>>>>>>>>>>>', value);
+        this.editWording = value;
+
+        this.wordingForm.get('heading').setValue(this.editWording.heading);
+        this.wordingForm
+            .get('description')
+            .setValue(this.editWording.description);
+        this.isWordingEditVisible = true;
     }
     onEditExtension(value) {
-        console.log('Checkd>>>>>>>>>>>', value);
+        console.log('Checke>>>>>>>>>>>', value);
+        this.editExtension = value;
+
+        this.extensionForm.get('heading').setValue(this.editExtension.heading);
+        this.extensionForm
+            .get('description')
+            .setValue(this.editExtension.description);
+        this.isExtensionEditVisible = true;
     }
     onEditClauses(value) {
         console.log('Checke>>>>>>>>>>>', value);
+        this.editClause = value;
+
+        this.clauseForm.get('heading').setValue(this.editClause.heading);
+        this.clauseForm
+            .get('clauseDetails')
+            .setValue(this.editClause.clauseDetails);
+        this.isClauseEditVisible = true;
+    }
+
+    handleEditClauseOk() {
+        this.editClause.heading = this.clauseForm.controls.heading.value;
+        this.editClause.clauseDetails = this.clauseForm.controls.clauseDetails.value;
+
+        const index = this.selectedClauseValue.indexOf(this.editClause);
+        this.selectedClauseValue[index] = this.editClause;
+
+        console.log('Clause>>>>>>', this.editClause, this.selectedClauseValue);
+        this.isClauseEditVisible = false;
+    }
+    handleEditClauseCancel() {
+        this.isClauseEditVisible = false;
+    }
+
+    handleEditExtensionOk() {
+        this.editExtension.heading = this.extensionForm.controls.heading.value;
+        this.editExtension.description = this.extensionForm.controls.description.value;
+
+        const index = this.selectedExtensionValue.indexOf(this.editExtension);
+        this.selectedExtensionValue[index] = this.editExtension;
+
+        console.log(
+            'Clause>>>>>>',
+            this.editExtension,
+            this.selectedExtensionValue
+        );
+        this.isExtensionEditVisible = false;
+    }
+    handleEditExtensionCancel() {
+        this.isExtensionEditVisible = false;
+    }
+
+    handleEditWordingOk() {
+        this.editWording.heading = this.wordingForm.controls.heading.value;
+        this.editWording.description = this.wordingForm.controls.description.value;
+
+        const index = this.selectedWordingValue.indexOf(this.editWording);
+        this.selectedWordingValue[index] = this.editWording;
+
+        console.log(
+            'Clause>>>>>>',
+            this.editWording,
+            this.selectedWordingValue
+        );
+        this.isWordingEditVisible = false;
+    }
+    handleEditWordingCancel() {
+        this.isWordingEditVisible = false;
     }
 }

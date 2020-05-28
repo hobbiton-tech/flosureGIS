@@ -19,25 +19,25 @@ export interface IExtension {
     description: string;
 }
 
-export interface IRiskClauses {
+export interface IPolicyClauses {
     id: string;
-    productName: string;
-    clauseId: string;
+    policyId: string;
     heading: string;
-    clauseDetails;
+    productId: string;
+    clauseDetails: string;
 }
 
-export interface IRiskWording {
+export interface IPolicyWording {
     id: string;
-    productName: string;
+    policyId: string;
     wordingId: string;
     heading: string;
     description: string;
 }
 
-export interface IRiskExtension {
+export interface IPolicyExtension {
     id: string;
-    productName: string;
+    policyId: string;
     extensionId: string;
     heading: string;
     description: string;

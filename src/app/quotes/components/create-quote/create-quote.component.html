@@ -4356,21 +4356,34 @@
                                                         </ng-template>
                                                     </div>
                                                 </div>
-                                                <!-- <div nz-col nzSpan="12">
-                                            <button
-                                                nz-button
-                                                nzType="primary"
-                                                style="float: right;"
-                                                (click)="openWording()"
-                                            >
-                                                Add New Wording
-                                            </button>
-                                        </div> -->
+
+                                                <diV nz-col nzSpan="12">
+                                                    <nz-select
+                                                        style="width: 200px;"
+                                                        nzShowSearch
+                                                        nzAllowClear
+                                                        nzPlaceHolder="Select a Wording"
+                                                        nzMode="multiple"
+                                                        [(ngModel)]="
+                                                            selectedWordingValue
+                                                        "
+                                                    >
+                                                        <nz-option
+                                                            *ngFor="
+                                                                let o of wordingList
+                                                            "
+                                                            [nzLabel]="
+                                                                o.heading
+                                                            "
+                                                            [nzValue]="o"
+                                                        ></nz-option>
+                                                    </nz-select>
+                                                </diV>
                                             </div>
                                         </div>
                                         <nz-table
                                             #wordingTable
-                                            [nzData]="wordingList"
+                                            [nzData]="selectedWordingValue"
                                         >
                                             <thead>
                                                 <tr>
@@ -4394,7 +4407,7 @@
                                                         }}
                                                     </td>
                                                     <td>
-                                                        <button
+                                                        <!-- <button
                                                             nz-button
                                                             nzType="primary"
                                                             (click)="
@@ -4404,7 +4417,7 @@
                                                             "
                                                         >
                                                             Select
-                                                        </button>
+                                                        </button> -->
                                                         <button
                                                             nz-button
                                                             nzType="default"
@@ -4449,11 +4462,33 @@
                                                         </ng-template>
                                                     </div>
                                                 </div>
+                                                <diV nz-col nzSpan="12">
+                                                    <nz-select
+                                                        style="width: 200px;"
+                                                        nzShowSearch
+                                                        nzAllowClear
+                                                        nzPlaceHolder="Select a Clause"
+                                                        nzMode="multiple"
+                                                        [(ngModel)]="
+                                                            selectedExtensionValue
+                                                        "
+                                                    >
+                                                        <nz-option
+                                                            *ngFor="
+                                                                let o of extensionList
+                                                            "
+                                                            [nzLabel]="
+                                                                o.heading
+                                                            "
+                                                            [nzValue]="o"
+                                                        ></nz-option>
+                                                    </nz-select>
+                                                </diV>
                                             </div>
                                         </div>
                                         <nz-table
                                             #extensionTable
-                                            [nzData]="extensionList"
+                                            [nzData]="selectedExtensionValue"
                                         >
                                             <thead>
                                                 <tr>
@@ -4475,7 +4510,7 @@
                                                         {{ extension.wording }}
                                                     </td>
                                                     <td>
-                                                        <button
+                                                        <!-- <button
                                                             nz-button
                                                             nzType="primary"
                                                             (click)="
@@ -4485,7 +4520,7 @@
                                                             "
                                                         >
                                                             Select
-                                                        </button>
+                                                        </button> -->
                                                         <button
                                                             nz-button
                                                             nzType="default"
@@ -4527,9 +4562,25 @@
                                     </ng-template>
                                 </div>
                             </div>
+                            <diV nz-col nzSpan="12">
+                                <nz-select
+                                    style="width: 200px;"
+                                    nzShowSearch
+                                    nzAllowClear
+                                    nzPlaceHolder="Select a Clause"
+                                    nzMode="multiple"
+                                    [(ngModel)]="selectedClauseValue"
+                                >
+                                    <nz-option
+                                        *ngFor="let o of clauseList"
+                                        [nzLabel]="o.heading"
+                                        [nzValue]="o"
+                                    ></nz-option>
+                                </nz-select>
+                            </diV>
                         </div>
                     </div>
-                    <nz-table #clausesTable [nzData]="clauseList">
+                    <nz-table #clausesTable [nzData]="selectedClauseValue">
                         <thead>
                             <tr>
                                 <th>Clause Heading</th>
@@ -4542,13 +4593,13 @@
                                 <td>{{ clause.heading }}</td>
                                 <td>{{ clause.clauseDetails }}</td>
                                 <td>
-                                    <button
+                                    <!-- <button
                                         nz-button
                                         nzType="primary"
                                         (click)="onSelectClause(clause)"
                                     >
                                         Select
-                                    </button>
+                                    </button> -->
                                     <button
                                         nz-button
                                         nzType="default"
@@ -8379,3 +8430,192 @@
     </nz-modal>
     <!-- Risk Deatils Modal ends here-->
 </div>
+
+<nz-modal
+    [(nzVisible)]="isClauseEditVisible"
+    nzTitle="Edit Clause"
+    (nzOnCancel)="handleEditClauseCancel()"
+    (nzOnOk)="handleEditClauseOk()"
+>
+    <form nz-form [formGroup]="clauseForm">
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Heading</nz-form-label>
+            <nz-form-control
+                [nzSpan]="12"
+                nzHasFeedback
+                nzValidatingTip="Validating..."
+                [nzErrorTip]="clauseErrorTpl"
+            >
+                <input nz-input formControlName="heading" />
+                <ng-template #clauseErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please input your clause heading!
+                    </ng-container>
+                    <ng-container *ngIf="control.hasError('duplicated')">
+                        The heading is redundant!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
+            <nz-form-control
+                [nzSpan]="12"
+                nzHasFeedback
+                nzValidatingTip="Validating..."
+                [nzErrorTip]="clauseDeailsErrorTpl"
+            >
+                <input nz-input formControlName="clauseDetails" />
+                <ng-template #clauseDeailsErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please input your clause details!
+                    </ng-container>
+                    <ng-container *ngIf="control.hasError('duplicated')">
+                        The details are redundant!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+
+        <!-- <nz-form-item>
+            <nz-form-control [nzOffset]="7" [nzSpan]="12">
+                <button
+                    nz-button
+                    nzType="primary"
+                    [disabled]="!clauseForm.valid"
+                >
+                    Submit
+                </button>
+                <button nz-button (click)="resetClauseForm($event)">
+                    Reset
+                </button>
+            </nz-form-control>
+        </nz-form-item> -->
+    </form>
+</nz-modal>
+
+<nz-modal
+    [(nzVisible)]="isExtensionEditVisible"
+    nzTitle="Edit Extension"
+    (nzOnCancel)="handleEditExtensionCancel()"
+    (nzOnOk)="handleEditExtensionOk()"
+>
+    <form nz-form [formGroup]="extensionForm">
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Heading</nz-form-label>
+            <nz-form-control
+                [nzSpan]="12"
+                nzHasFeedback
+                nzValidatingTip="Validating..."
+                [nzErrorTip]="extensionErrorTpl"
+            >
+                <input nz-input formControlName="heading" />
+                <ng-template #extensionErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please input your clause heading!
+                    </ng-container>
+                    <ng-container *ngIf="control.hasError('duplicated')">
+                        The heading is redundant!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
+            <nz-form-control
+                [nzSpan]="12"
+                nzHasFeedback
+                nzValidatingTip="Validating..."
+                [nzErrorTip]="extensionDescriptionErrorTpl"
+            >
+                <input nz-input formControlName="description" />
+                <ng-template #extensionDescriptionErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please input your description!
+                    </ng-container>
+                    <ng-container *ngIf="control.hasError('duplicated')">
+                        The details are redundant!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+
+        <!-- <nz-form-item>
+            <nz-form-control [nzOffset]="7" [nzSpan]="12">
+                <button
+                    nz-button
+                    nzType="primary"
+                    [disabled]="!clauseForm.valid"
+                >
+                    Submit
+                </button>
+                <button nz-button (click)="resetClauseForm($event)">
+                    Reset
+                </button>
+            </nz-form-control>
+        </nz-form-item> -->
+    </form>
+</nz-modal>
+
+<nz-modal
+    [(nzVisible)]="isWordingEditVisible"
+    nzTitle="Edit Wording"
+    (nzOnCancel)="handleEditWordingCancel()"
+    (nzOnOk)="handleEditWordingOk()"
+>
+    <form nz-form [formGroup]="wordingForm">
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Heading</nz-form-label>
+            <nz-form-control
+                [nzSpan]="12"
+                nzHasFeedback
+                nzValidatingTip="Validating..."
+                [nzErrorTip]="wordingErrorTpl"
+            >
+                <input nz-input formControlName="heading" />
+                <ng-template #wordingErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please input your wording heading!
+                    </ng-container>
+                    <ng-container *ngIf="control.hasError('duplicated')">
+                        The heading is redundant!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
+            <nz-form-control
+                [nzSpan]="12"
+                nzHasFeedback
+                nzValidatingTip="Validating..."
+                [nzErrorTip]="extensionDescriptionErrorTpl"
+            >
+                <input nz-input formControlName="description" />
+                <ng-template #extensionDescriptionErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please input your description!
+                    </ng-container>
+                    <ng-container *ngIf="control.hasError('duplicated')">
+                        The description is redundant!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+
+        <!-- <nz-form-item>
+            <nz-form-control [nzOffset]="7" [nzSpan]="12">
+                <button
+                    nz-button
+                    nzType="primary"
+                    [disabled]="!clauseForm.valid"
+                >
+                    Submit
+                </button>
+                <button nz-button (click)="resetClauseForm($event)">
+                    Reset
+                </button>
+            </nz-form-control>
+        </nz-form-item> -->
+    </form>
+</nz-modal>

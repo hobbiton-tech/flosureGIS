@@ -6,6 +6,9 @@ import {
     IClause,
     IExtension,
     IWording,
+    IPolicyClauses,
+    IPolicyExtension,
+    IPolicyWording,
 } from 'src/app/settings/models/underwriting/clause.model';
 import {
     AngularFirestore,
@@ -29,6 +32,17 @@ export class ClausesService {
     private wordingCollection: AngularFirestoreCollection<IWording>;
     wordings: Observable<IWording[]>;
 
+    private clausePolicyCollection: AngularFirestoreCollection<IPolicyClauses>;
+    clausesPolicy: Observable<IPolicyClauses[]>;
+
+    private extensionPolicyCollection: AngularFirestoreCollection<
+        IPolicyExtension
+    >;
+    extensionsPolicy: Observable<IPolicyExtension[]>;
+
+    private wordingPolicyCollection: AngularFirestoreCollection<IPolicyWording>;
+    wordingsPolicy: Observable<IPolicyWording[]>;
+
     constructor(
         private http: HttpClient,
         private firebase: AngularFirestore,
@@ -47,6 +61,25 @@ export class ClausesService {
         this.wordingCollection = firebase.collection<IWording>('wordings');
 
         this.wordings = this.wordingCollection.valueChanges();
+
+        // policy product
+        this.clausePolicyCollection = firebase.collection<IPolicyClauses>(
+            'policy_clauses'
+        );
+
+        this.clausesPolicy = this.clausePolicyCollection.valueChanges();
+
+        this.extensionPolicyCollection = firebase.collection<IPolicyExtension>(
+            'policy_extensions'
+        );
+
+        this.extensionsPolicy = this.extensionPolicyCollection.valueChanges();
+
+        this.wordingPolicyCollection = firebase.collection<IPolicyWording>(
+            'policy_wordings'
+        );
+
+        this.wordingsPolicy = this.wordingPolicyCollection.valueChanges();
     }
 
     getProducts(): Observable<IProduct[]> {
@@ -141,5 +174,98 @@ export class ClausesService {
 
     getWordings(): Observable<IWording[]> {
         return this.wordings;
+    }
+
+    // Policy Clauses Methods
+    async addPolicyClause(clause: IPolicyClauses): Promise<void> {
+        await this.clausePolicyCollection
+            .doc(clause.id)
+            .set(clause)
+            .then((mess) => {
+                // this.message.success('Clause Successfully created');
+                console.log(mess);
+            })
+            .catch((err) => {
+                // this.message.warning('Clause Failed');
+                console.log(err);
+            });
+    }
+
+    async updatePolicyClause(clause: IPolicyClauses): Promise<void> {
+        return this.clausePolicyCollection
+            .doc(`${clause.id}`)
+            .update(clause)
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    getPolicyClauses(): Observable<IPolicyClauses[]> {
+        return this.clausesPolicy;
+    }
+
+    // Extesions Policy Methods
+    async addPolicyExtension(extension: IPolicyExtension): Promise<void> {
+        await this.extensionPolicyCollection
+            .doc(extension.id)
+            .set(extension)
+            .then((mess) => {
+                // this.message.success('Extension Successfully created');
+                console.log(mess);
+            })
+            .catch((err) => {
+                // this.message.warning('Extension Failed');
+                console.log(err);
+            });
+    }
+
+    async updatePolicyExtension(extension: IPolicyExtension): Promise<void> {
+        return this.extensionPolicyCollection
+            .doc(`${extension.id}`)
+            .update(extension)
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    getPolicyExtensions(): Observable<IPolicyExtension[]> {
+        return this.extensionsPolicy;
+    }
+
+    // Wording Methods
+    async addPolicyWording(wording: IPolicyWording): Promise<void> {
+        await this.wordingPolicyCollection
+            .doc(wording.id)
+            .set(wording)
+            .then((mess) => {
+                // this.message.success('Wording Successfully created');
+                console.log(mess);
+            })
+            .catch((err) => {
+                // this.message.warning('Extension Failed');
+                console.log(err);
+            });
+    }
+
+    async updatePolicyWording(wording: IPolicyWording): Promise<void> {
+        return this.wordingPolicyCollection
+            .doc(`${wording.id}`)
+            .update(wording)
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    getPolicyWordings(): Observable<IPolicyWording[]> {
+        return this.wordingsPolicy;
     }
 }

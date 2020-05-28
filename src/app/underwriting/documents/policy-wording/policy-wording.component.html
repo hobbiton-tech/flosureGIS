@@ -26,11 +26,13 @@
     <br />
     <br />
     <br />
-    <h2 id="title">PRIVATE CAR POLICY</h2>
-    <br />
-    <p>
-        paragraph 1
-    </p>
+    <div *ngFor="let wording of policyWording">
+        <h2 id="title">{{ wording.heading }}</h2>
+        <br />
+        <p>
+            {{ wording.description }}
+        </p>
+    </div>
     <div class="bottom">
         <p>
             .......................................................
@@ -44,9 +46,18 @@
     <br />
     <br />
     <br />
-    <h3 id="title">SECTION I - INSURANCE ON THE MOTOR CAR</h3>
-    <h4 class="bottom" style="font-weight: bold;">
+    <div *ngFor="let clause of policyClauses">
+        <h3 id="title">{{ clause.heading }}</h3>
+        <!-- <h4 class="bottom" style="font-weight: bold;">
         (Loss or Damage to the Motor Car)
-    </h4>
-    <p>Paragrah 2</p>
+    </h4> -->
+        <p>{{ clause.clauseDetails }}</p>
+    </div>
+    <div *ngFor="let extension of policyExtension">
+        <h3 id="title">{{ extension.heading }}</h3>
+        <!-- <h4 class="bottom" style="font-weight: bold;">
+        (Loss or Damage to the Motor Car)
+    </h4> -->
+        <p>{{ extension.description }}</p>
+    </div>
 </div>
