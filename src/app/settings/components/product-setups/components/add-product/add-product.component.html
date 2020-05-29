@@ -8,7 +8,7 @@
                 <nz-form-control [nzSpan]="14">
                     <nz-select nzShowSearch nzAllowClear [nzPlaceHolder]="'Select a class'" [(ngModel)]="selectedClass"
                         [ngModelOptions]="{standalone: true}" name=" select" (nzOpenChange)="reloadClasses()">
-                        <nz-option *ngFor="let class of classesList" [nzValue]="class" [nzLabel]="class.name">
+                        <nz-option *ngFor="let class of classesList" [nzValue]="class" [nzLabel]="class.className">
                         </nz-option>
                     </nz-select>
 
@@ -19,7 +19,7 @@
             <nz-form-item>
                 <nz-form-label [nzSpan]="8" nzFor="name" nzRequired>Product Name</nz-form-label>
                 <nz-form-control [nzSpan]="14">
-                    <input nz-input formControlName="name" name="name" id="name" placeholder="Product name" />
+                    <input nz-input formControlName="productName" name="name" id="name" placeholder="Product name" />
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -28,7 +28,7 @@
             <nz-form-item>
                 <nz-form-label [nzSpan]="8" nzFor="code" nzRequired>Product Code</nz-form-label>
                 <nz-form-control [nzSpan]="14">
-                    <input nz-input formControlName="code" name="code" id="code" placeholder="Product code" />
+                    <input nz-input formControlName="productCode" name="code" id="code" placeholder="Product code" />
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -37,7 +37,7 @@
             <nz-form-item>
                 <nz-form-label [nzSpan]="8" nzFor="description" nzRequired>Product Description</nz-form-label>
                 <nz-form-control [nzSpan]="14">
-                    <input nz-input formControlName="description" name="description" id="description"
+                    <input nz-input formControlName="productDescription" name="description" id="description"
                         placeholder="Product description" />
                 </nz-form-control>
             </nz-form-item>
