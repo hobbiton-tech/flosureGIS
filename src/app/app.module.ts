@@ -67,9 +67,9 @@ const firebaseConfig = {
         ReactiveFormsModule,
         AngularFireModule.initializeApp(firebaseConfig),
         AngularFireDatabaseModule,
-        AngularFireStorageModule
+        AngularFireStorageModule,
     ],
     providers: [{ provide: NZ_I18N, useValue: en_US }, SlackService],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
 })
 export class AppModule {}

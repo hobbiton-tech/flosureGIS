@@ -33,6 +33,12 @@ import {
 } from 'src/app/settings/components/agents/models/agents.model';
 import { ImageElement } from 'canvg';
 import { DebitNote } from 'src/app/underwriting/documents/models/documents.model';
+import { ClausesService } from 'src/app/settings/components/underwriting-setups/services/clauses.service';
+import {
+    IPolicyClauses,
+    IPolicyWording,
+    IPolicyExtension
+} from 'src/app/settings/models/underwriting/clause.model';
 
 type AOA = any[][];
 
@@ -75,13 +81,16 @@ interface IRateRequest {
     styleUrls: ['./quote-details.component.scss']
 })
 export class QuoteDetailsComponent implements OnInit {
+    clauses: IPolicyClauses[];
+    wordings: IPolicyWording[];
+    extensions: IPolicyExtension[];
     // form
     quoteDetailsForm: FormGroup;
     riskThirdPartyForm: FormGroup;
     riskComprehensiveForm: FormGroup;
     clients: Array<IIndividualClient & ICorporateClient>;
 
-    //intermediaries
+    // intermediaries
     brokers: IBroker[];
     agents: IAgent[];
     salesRepresentatives: ISalesRepresentative[];
@@ -105,7 +114,7 @@ export class QuoteDetailsComponent implements OnInit {
     selectedVehicleModel: string;
     isVehicleModelLoading = false;
 
-    //set risk tamplate table not vivible
+    // set risk tamplate table not vivible
     isTabletemplate = true;
 
     // excel template data
@@ -197,10 +206,10 @@ export class QuoteDetailsComponent implements OnInit {
     // loads added to loading
     loads: LoadModel[] = [];
 
-    //dicounts added
+    // dicounts added
     discounts: DiscountModel[] = [];
 
-    //for quote document
+    // for quote document
     quoteBasicPremium: number;
     quoteLoadingTotal: number;
     quoteDiscountTotal: number;
@@ -222,60 +231,60 @@ export class QuoteDetailsComponent implements OnInit {
 
     status = 'Unreceipted';
 
-    //selected basic premium input type option are rate and amount
+    // selected basic premium input type option are rate and amount
     selectedBasicPremiunTypeValue = 'rate';
-    //basic premium amount when user selects amount as basic premium input type
+    // basic premium amount when user selects amount as basic premium input type
     basicPremiumAmount: number;
 
-    //selected increase third party input type
+    // selected increase third party input type
     selectedIncreaseThirdPartyLimitInputTypeValue = 'rate';
-    //increase third party amount
+    // increase third party amount
     increasedThirdPartyLimitAmount: number;
 
-    //selected riot and strike input type
+    // selected riot and strike input type
     selectedRiotAndStrikeInputTypeValue = 'rate';
-    //increase third party amount
+    // increase third party amount
     riotAndStrikeAmount: number;
 
-    //selected Car stereo input type
+    // selected Car stereo input type
     selectedCarStereoInputTypeValue = 'rate';
-    //car stereo amount
+    // car stereo amount
     carStereoAmount: number;
 
-    //selected loss of use input type
+    // selected loss of use input type
     selectedLossOfUseInputTypeValue = 'rate';
-    //car stereo amount
+    // car stereo amount
     lossOfUseAmount: number;
 
-    //selected territorial extension input type
+    // selected territorial extension input type
     selectedTerritorialExtensionInputTypeValue = 'rate';
-    //loss of use amount
+    // loss of use amount
     territorialExtensionAmount: number;
 
-    //inexperienced driver amount
+    // inexperienced driver amount
     inexperiencedDriverAmount: number;
 
-    //under age driver amount
+    // under age driver amount
     underAgeDriverAmount: number;
 
-    //selected no claim discount input type
+    // selected no claim discount input type
     selectedNoClaimsDiscountInputTypeValue = 'rate';
-    //no claim discount amount
+    // no claim discount amount
     noClaimsDiscountAmount: number;
 
-    //selected loyalty discount input type
+    // selected loyalty discount input type
     selectedLoyaltyDiscountInputTypeValue = 'rate';
-    //loyalty discount amount
+    // loyalty discount amount
     loyaltyDiscountAmount: number;
 
-    //selected valued client discount input type
+    // selected valued client discount input type
     selectedValuedClientDiscountInputTypeValue = 'rate';
-    //valued client discount amount
+    // valued client discount amount
     valuedClientDiscountAmount: number;
 
-    //selected low term agreement discount input type
+    // selected low term agreement discount input type
     selectedLowTermAgreementDiscountInputTypeValue = 'rate';
-    //low term agreement discount amount
+    // low term agreement discount amount
     lowTermAgreementDiscountAmount: number;
 
     optionList = [
@@ -309,7 +318,7 @@ export class QuoteDetailsComponent implements OnInit {
         value: ''
     };
 
-    //discounts
+    // discounts
     discountOptions = [
         { label: 'No claims dicount', value: 'noClaimsDiscount' },
         { label: 'Loyalty Discount', value: 'loyaltyDiscount' },
@@ -338,7 +347,7 @@ export class QuoteDetailsComponent implements OnInit {
     quote: MotorQuotationModel = new MotorQuotationModel();
     displayQuote: MotorQuotationModel;
 
-    //source of business details
+    // source of business details
     sourceOfBusiness: string;
 
     selectedQuote: MotorQuotationModel;
@@ -376,7 +385,8 @@ export class QuoteDetailsComponent implements OnInit {
         private route: ActivatedRoute,
         private msg: NzMessageService,
         private http: HttpClient,
-        private readonly agentsService: AgentsService
+        private readonly agentsService: AgentsService,
+        private productClauseService: ClausesService
     ) {}
 
     ngOnInit(): void {
@@ -393,6 +403,28 @@ export class QuoteDetailsComponent implements OnInit {
                 console.log('this.quote>>>>>', this.quoteData);
 
                 this.risks = this.quoteData.risks;
+                this.productClauseService.getPolicyClauses().subscribe(res => {
+                    this.clauses = res.filter(
+                        x => x.policyId === this.risks[0].id
+                    );
+                    console.log('CLAUSES>>>>>', this.clauses);
+                });
+
+                this.productClauseService
+                    .getPolicyExtensions()
+                    .subscribe(res => {
+                        this.extensions = res.filter(
+                            x => x.policyId === this.risks[0].id
+                        );
+                        console.log('EXTENSIONS>>>>>', this.extensions);
+                    });
+
+                this.productClauseService.getPolicyWordings().subscribe(res => {
+                    this.wordings = res.filter(
+                        x => x.policyId === this.risks[0].id
+                    );
+                    console.log('WORDINGS>>>>>', this.wordings);
+                });
 
                 // if (this.quoteData.sourceOfBusiness == 'Agent') {
                 //     this.agent = this.intermediaries.filter(
@@ -942,13 +974,13 @@ export class QuoteDetailsComponent implements OnInit {
         this.risks = this.risks.filter(risk => risk.regNumber !== regNumber);
     }
 
-    //save risks changes after editing
+    // save risks changes after editing
     saveRisk(): void {
         this.currentRiskEdit = this.selectedRisk;
         console.log(this.currentRiskEdit);
 
         if (this.selectedValue.value === 'Comprehensive') {
-            //comprehensive risk
+            // comprehensive risk
             const some: RiskModel = {
                 ...this.riskComprehensiveForm.value,
                 sumInsured: Number(this.sumInsured),
@@ -963,13 +995,13 @@ export class QuoteDetailsComponent implements OnInit {
             };
             this.currentRiskEdit = some;
 
-            var riskIndex = _.findIndex(this.risks, {
+            const riskIndex = _.findIndex(this.risks, {
                 id: this.selectedRisk.id
             });
             this.risks.splice(riskIndex, 1, this.currentRiskEdit);
             this.risks = this.risks;
         } else {
-            //third party risk
+            // third party risk
             const some: RiskModel = {
                 ...this.riskThirdPartyForm.value,
                 sumInsured: 0,
@@ -984,7 +1016,7 @@ export class QuoteDetailsComponent implements OnInit {
             };
             this.selectedRisk = some;
 
-            var riskIndex = _.findIndex(this.risks, {
+            const riskIndex = _.findIndex(this.risks, {
                 id: this.selectedRisk.id
             });
             this.risks.splice(riskIndex, 1, this.currentRiskEdit);
@@ -998,18 +1030,43 @@ export class QuoteDetailsComponent implements OnInit {
     }
 
     handleOk(): void {
-        this.isConfirmLoading = true;
-        setTimeout(() => {
-            this.isVisible = false;
-            this.isConfirmLoading = false;
-            this.router.navigateByUrl('/flosure/underwriting/policies');
-        }, 3000);
+        // this.isConfirmLoading = true;
+        // setTimeout(() => {
+        //     this.isVisible = false;
+        //     this.isConfirmLoading = false;
+        //     this.router.navigateByUrl('/flosure/underwriting/policies');
+        // }, 3000);
 
         console.log(this.quoteDetailsForm.value);
         // push to convert quote to policy and policies collection
         const policy = this.quoteDetailsForm.value as Policy;
 
+        for (const clause of this.clauses) {
+            clause.policyId = policy.id;
+            this.productClauseService.updatePolicyClause(clause);
+        }
+
+        for (const extenstion of this.extensions) {
+            extenstion.policyId = policy.id;
+            this.productClauseService.updatePolicyExtension(extenstion);
+        }
+
+        for (const wording of this.wordings) {
+            wording.policyId = policy.id;
+            this.productClauseService.updatePolicyWording(wording);
+        }
+
+        console.log(
+            'CLAUSE>>>>>>',
+            this.clauses,
+            this.extensions,
+            this.wordings
+        );
+
         this.policiesService.addPolicy(policy);
+        this.isVisible = false;
+        this.router.navigateByUrl('/flosure/underwriting/policies');
+        this.isConfirmLoading = false;
     }
 
     getTimeStamp(quote: MotorQuotationModel): number {
@@ -1037,133 +1094,195 @@ export class QuoteDetailsComponent implements OnInit {
     handleCancel(): void {
         this.isVisible = false;
     }
-
     generateDocuments(): void {
+        console.log('here');
         this.approvingQuote = true;
 
-        const debitNote: IDebitNoteDTO = {
-            companyTelephone: 'Joshua Silwembe',
-            companyEmail: 'joshua.silwembe@hobbiton.co.zm',
-            vat: '5%',
-            pin: '4849304930',
-            todayDate: new Date(),
-            agency: 'string',
-            nameOfInsured: 'Joshua Silwembe',
-            addressOfInsured: 'string',
-            ref: 'string',
-            policyNumber: 'string',
-            endorsementNumber: 'string',
-            regarding: 'string',
-            classOfBusiness: 'string',
-            brokerRef: 'string',
-            fromDate: new Date(),
-            toDate: new Date(),
-            currency: 'string',
-            basicPremium: 0,
-            insuredPremiumLevy: 0,
-            netPremium: 0,
-            processedBy: 'string'
-        };
+        // const debitNote: IDebitNoteDTO = {
+        //     companyTelephone: 'Joshua Silwembe',
+        //     companyEmail: 'joshua.silwembe@hobbiton.co.zm',
+        //     vat: '5%',
+        //     pin: '4849304930',
+        //     todayDate: new Date(),
+        //     agency: 'string',
+        //     nameOfInsured: 'Joshua Silwembe',
+        //     addressOfInsured: 'string',
+        //     ref: 'string',
+        //     policyNumber: 'string',
+        //     endorsementNumber: 'string',
+        //     regarding: 'string',
+        //     classOfBusiness: 'string',
+        //     brokerRef: 'string',
+        //     fromDate: new Date(),
+        //     toDate: new Date(),
+        //     currency: 'string',
+        //     basicPremium: 0,
+        //     insuredPremiumLevy: 0,
+        //     netPremium: 0,
+        //     processedBy: 'string'
+        // };
 
-        const certificate: ICertificateDTO = {
-            certificateNumber: 'string',
-            policyNumber: 'string',
-            clientName: 'string',
-            nameOfInsured: 'string',
-            address: 'string',
-            phone: 'string',
-            email: 'james@gmail.com',
-            coverType: 'string',
-            startDate: new Date(),
-            expiryDate: new Date(),
-            sumInsured: 0,
-            regMark: 'string',
-            makeAndType: 'string',
-            engine: 'string',
-            chassisNumber: 'string',
-            yearOfManufacture: 'string',
-            color: 'string',
-            branch: 'string',
-            timeOfIssue: new Date(),
+        // const certificate: ICertificateDTO = {
+        //     certificateNumber: 'string',
+        //     policyNumber: 'string',
+        //     clientName: 'string',
+        //     nameOfInsured: 'string',
+        //     address: 'string',
+        //     phone: 'string',
+        //     email: 'james@gmail.com',
+        //     coverType: 'string',
+        //     startDate: new Date(),
+        //     expiryDate: new Date(),
+        //     sumInsured: 0,
+        //     regMark: 'string',
+        //     makeAndType: 'string',
+        //     engine: 'string',
+        //     chassisNumber: 'string',
+        //     yearOfManufacture: 'string',
+        //     color: 'string',
+        //     branch: 'string',
+        //     timeOfIssue: new Date(),
+        //     dateOfIssue: new Date(),
+        //     thirdPartyPropertyDamage: 0,
+        //     thirdPartyInuryAndDeath: 0,
+        //     thirdPartyBoodilyInjury_DeathPerEvent: 0,
+        //     town: 'string'
+        // };
+
+        // const debit$ = '';
+        // const cert$ = '';
+
+        // combineLatest().subscribe(async ([debit, cert]) => {
+        this.quote.status = 'Approved';
+        this.quotesService
+            .updateMotorQuotation(this.quote, this.quote.id)
+            .subscribe(quotation => res => console.log(res));
+
+        // convert to policy
+        const policy: Policy = {
+            ...this.quoteDetailsForm.value,
+            nameOfInsured: this.quoteData.client,
+            policyNumber: this.quoteNumber.replace('Q', 'P'),
             dateOfIssue: new Date(),
-            thirdPartyPropertyDamage: 0,
-            thirdPartyInuryAndDeath: 0,
-            thirdPartyBoodilyInjury_DeathPerEvent: 0,
-            town: 'string'
+            expiryDate: this.quoteData.endDate,
+            timeOfIssue: new Date(),
+            // new Date().getHours() + ':' + new Date().getMinutes(),
+            status: 'Active',
+            receiptStatus: this.status,
+            risks: this.quoteData.risks,
+            sumInsured: this.sumArray(this.quoteData.risks, 'sumInsured'),
+            netPremium: this.sumArray(this.quoteData.risks, 'netPremium'),
+            paymentPlan: this.paymentPlan,
+            underwritingYear: new Date(),
+            user: localStorage.getItem('user'),
+            sourceOfBusiness: this.quoteData.sourceOfBusiness,
+            intermediaryName: this.quoteData.intermediaryName
         };
 
-        const debit$ = '';
-        const cert$ = '';
+        const debitNote: DebitNote = {
+            remarks: '-',
+            dateCreated: new Date(),
+            dateUpdated: new Date()
+        };
 
-        combineLatest([debit$, cert$]).subscribe(async ([debit, cert]) => {
-            this.quote.status = 'Approved';
-            await this.quotesService
-                .updateMotorQuotation(this.quote, this.quote.id)
-                .subscribe(quotation => res => console.log(res));
+        // const policy = this.quoteDetailsForm.value as Policy;
+        console.log(policy);
 
-            // convert to policy
-            const policy: Policy = {
-                ...this.quoteDetailsForm.value,
-                nameOfInsured: this.quoteData.client,
-                policyNumber: this.quoteNumber.replace('Q', 'P'),
-                dateOfIssue: new Date(),
-                expiryDate: this.quoteData.endDate,
-                timeOfIssue: new Date(),
-                // new Date().getHours() + ':' + new Date().getMinutes(),
-                status: 'Active',
-                receiptStatus: this.status,
-                risks: this.quoteData.risks,
-                sumInsured: this.sumArray(this.quoteData.risks, 'sumInsured'),
-                netPremium: this.sumArray(this.quoteData.risks, 'netPremium'),
-                paymentPlan: this.paymentPlan,
-                underwritingYear: new Date(),
-                user: localStorage.getItem('user'),
-                sourceOfBusiness: this.quoteData.sourceOfBusiness,
-                intermediaryName: this.quoteData.intermediaryName
-            };
+        this.policiesService.createPolicy(policy).subscribe(res => {
+            console.log('response:');
+            console.log(res);
+            this.policiesService.createDebitNote(res.id, debitNote, res);
+            for (const clause of this.clauses) {
+                clause.policyId = res.id;
+                this.productClauseService.updatePolicyClause(clause);
+            }
 
-            const debitNote: DebitNote = {
-                remarks: '-',
-                dateCreated: new Date(),
-                dateUpdated: new Date()
-            };
+            for (const extenstion of this.extensions) {
+                extenstion.policyId = res.id;
+                this.productClauseService.updatePolicyExtension(extenstion);
+            }
 
-            // const policy = this.quoteDetailsForm.value as Policy;
-            console.log(policy);
-            await this.policiesService.createPolicy(policy).subscribe(res => {
-                console.log(res);
-                this.policiesService.createDebitNote(res.id, debitNote, res);
-            });
+            for (const wording of this.wordings) {
+                wording.policyId = res.id;
+                this.productClauseService.updatePolicyWording(wording);
+            }
 
-            // await this.gqlQuotesService
-            //     .addCertificate({
-            //         clientId: localStorage.getItem('clientId'), // Added from the policy service
-            //         policyNumber: localStorage.getItem('policyNumber'), // Added in the policy service.
-            //         certificateUrl: cert.Location
-            //     })
-            //     .then(res => {
-            //         // console.log('GQL', res);
-            //         res.subscribe(x => {
-            //             console.log('GLQ', x);
-            //         });
-            //     });
+            console.log(
+                'CLAUSE>>>>>>',
+                this.clauses,
+                this.extensions,
+                this.wordings
+            );
 
-            // await this.gqlQuotesService
-            //     .addDebitNote({
-            //         clientId: localStorage.getItem('clientId'), // Added from the policy service,
-            //         policyNumber: localStorage.getItem('policyNumber'), // Added in the policy service.
-            //         debitNoteUrl: debit.Location
-            //     })
-            //     .then(res => {
-            //         res.subscribe(x => {
-            //             console.log('GLQ', x);
-            //         });
-            //         // console.log('GQL', res);
-            //     });
-
-            this.isQuoteApproved = true;
-            this.approvingQuote = false;
+            // for (const risk of policy.risks) {
+            //     console.log('Risks>>>>', risk);
+            //     if (risk.insuranceType === 'ThirdParty') {
+            //         console.log('Risk Type>>>>', risk.insuranceType);
+            //         this.http.post(
+            //             'https://zampointzidb.eservices.gov.zm/ZIDB/ReceiveInsurancePolicies',
+            //             {
+            //                 insuranceType: 1,
+            //                 status: 1,
+            //                 registrationMark: risk.regNumber.replace(
+            //                     /\s/g,
+            //                     ''
+            //                 ),
+            //                 dateFrom: risk.riskStartDate,
+            //                 dateTo: risk.riskEndDate,
+            //                 insurancePolicyNo: policy.policyNumber,
+            //                 chassisNumber: risk.chassisNumber,
+            //             }
+            //         );
+            //     } else if (risk.insuranceType === 'Comprehensive') {
+            //         console.log('Risk Type>>>>', risk.insuranceType);
+            //         this.http.post(
+            //             'https://zampointzidb.eservices.gov.zm/ZIDB/ReceiveInsurancePolicies',
+            //             {
+            //                 insuranceType: 2,
+            //                 status: 1,
+            //                 registrationMark: risk.regNumber.replace(
+            //                     /\s/g,
+            //                     ''
+            //                 ),
+            //                 dateFrom: risk.riskStartDate,
+            //                 dateTo: risk.riskEndDate,
+            //                 insurancePolicyNo: policy.policyNumber,
+            //                 chassisNumber: risk.chassisNumber,
+            //             }
+            //         );
+            //     }
+            // }
         });
+
+        // await this.gqlQuotesService
+        //     .addCertificate({
+        //         clientId: localStorage.getItem('clientId'), // Added from the policy service
+        //         policyNumber: localStorage.getItem('policyNumber'), // Added in the policy service.
+        //         certificateUrl: cert.Location
+        //     })
+        //     .then(res => {
+        //         // console.log('GQL', res);
+        //         res.subscribe(x => {
+        //             console.log('GLQ', x);
+        //         });
+        //     });
+
+        // await this.gqlQuotesService
+        //     .addDebitNote({
+        //         clientId: localStorage.getItem('clientId'), // Added from the policy service,
+        //         policyNumber: localStorage.getItem('policyNumber'), // Added in the policy service.
+        //         debitNoteUrl: debit.Location
+        //     })
+        //     .then(res => {
+        //         res.subscribe(x => {
+        //             console.log('GLQ', x);
+        //         });
+        //         // console.log('GQL', res);
+        //     });
+
+        this.isQuoteApproved = true;
+        this.approvingQuote = false;
+        // });
     }
 
     sumArray(items, prop) {
@@ -1662,7 +1781,7 @@ export class QuoteDetailsComponent implements OnInit {
     }
 
     handleDiscount(discountType: DiscountType) {
-        //following methods check if the repective loads are in the loads array
+        // following methods check if the repective loads are in the loads array
         const riotAndStrikeInLoads = this.loads.some(
             item => item.loadType === 'Riot And Strike'
         );
@@ -1679,7 +1798,7 @@ export class QuoteDetailsComponent implements OnInit {
             item => item.loadType === 'Loss Of Use'
         );
 
-        //if the checked loading are not in loads array set there values to Zero!
+        // if the checked loading are not in loads array set there values to Zero!
         if (!riotAndStrikeInLoads) {
             this.riotAndStrikeRate = 0;
         }
@@ -1736,7 +1855,7 @@ export class QuoteDetailsComponent implements OnInit {
     }
 
     handleDiscountThirdParty() {
-        //following methods check if the repective loads are in the loads array
+        // following methods check if the repective loads are in the loads array
         const riotAndStrikeInLoads = this.loads.some(
             item => item.loadType === 'Riot And Strike'
         );
@@ -1753,7 +1872,7 @@ export class QuoteDetailsComponent implements OnInit {
             item => item.loadType === 'Loss Of Use'
         );
 
-        //if the checked loading are not in loads array set there values to Zero!
+        // if the checked loading are not in loads array set there values to Zero!
         if (!riotAndStrikeInLoads) {
             this.riotAndStrikeRate = 0;
         }
@@ -1864,7 +1983,7 @@ export class QuoteDetailsComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //following method adds basic premium + loading - discount then applies levy then finds net premium
+    // following method adds basic premium + loading - discount then applies levy then finds net premium
     handleNetPremium() {
         this.basicPremiumLevy =
             (this.LevyRate / 100) *
@@ -1878,13 +1997,13 @@ export class QuoteDetailsComponent implements OnInit {
             this.basicPremiumLevy;
     }
 
-    //changes the quote basic premium to the inputed amount
+    // changes the quote basic premium to the inputed amount
     handleBasicPremiumAmount() {
         this.basicPremium = Number(this.basicPremiumAmount);
         this.handleNetPremium();
     }
 
-    //changes the quote increase third party limit to inputed amount
+    // changes the quote increase third party limit to inputed amount
     handleIncreasedThirdPartyLimitAmount() {
         this.loads.push({
             loadType: 'Increased Third Party Limit',
@@ -1894,7 +2013,7 @@ export class QuoteDetailsComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //changes the quote riot and strike to inputed amount
+    // changes the quote riot and strike to inputed amount
     handleRiotAndStrikeAmount() {
         this.loads.push({
             loadType: 'Riot And Strike',
@@ -1904,7 +2023,7 @@ export class QuoteDetailsComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //changes the quote car stereo to inputed amount
+    // changes the quote car stereo to inputed amount
     handleCarStereoAmount() {
         this.loads.push({
             loadType: 'Car Stereo',
@@ -1914,7 +2033,7 @@ export class QuoteDetailsComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //changes the quote loss of use loading to inputed amount
+    // changes the quote loss of use loading to inputed amount
     handleLossOfUseAmount() {
         this.loads.push({
             loadType: 'Loss Of Use',
@@ -1924,7 +2043,7 @@ export class QuoteDetailsComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //changes the quote loss of use loading to inputed amount
+    // changes the quote loss of use loading to inputed amount
     handleTerritorialExtensionAmount() {
         this.loads.push({
             loadType: 'Territorial Extension',
@@ -1934,7 +2053,7 @@ export class QuoteDetailsComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //changes the quote loss of use loading to inputed amount
+    // changes the quote loss of use loading to inputed amount
     handleInexperiencedDriverAmount() {
         this.loads.push({
             loadType: 'Inexperienced Driver',
@@ -1944,7 +2063,7 @@ export class QuoteDetailsComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //changes the quote loss of use loading to inputed amount
+    // changes the quote loss of use loading to inputed amount
     handleUnderAgeDriverAmount() {
         this.loads.push({
             loadType: 'Under Age Driver',
@@ -1954,7 +2073,7 @@ export class QuoteDetailsComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //adds inputted discount to total discount amount
+    // adds inputted discount to total discount amount
     handleNoClaimsDiscountAmount() {
         this.discounts.push({
             discountType: 'No Claims Discount',
@@ -1964,7 +2083,7 @@ export class QuoteDetailsComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //adds inputted discount to total discount amount
+    // adds inputted discount to total discount amount
     handleLoyaltyDiscountAmount() {
         this.discounts.push({
             discountType: 'Loyalty Discount',
@@ -1974,7 +2093,7 @@ export class QuoteDetailsComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //adds inputted discount to total discount amount
+    // adds inputted discount to total discount amount
     handleValuedClientDiscountAmount() {
         this.discounts.push({
             discountType: 'Valued Client Discount',
@@ -1984,7 +2103,7 @@ export class QuoteDetailsComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    //adds inputted discount to total discount amount
+    // adds inputted discount to total discount amount
     handleLowTermAgreementDiscountAmount() {
         this.discounts.push({
             discountType: 'Low Term Agreement Discount',
@@ -1994,7 +2113,7 @@ export class QuoteDetailsComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    ///Draft quotation calculations
+    /// Draft quotation calculations
     handleDraftQuotation() {
         this.quoteLoadingTotal = 0;
         this.quoteDiscountTotal = 0;
@@ -2003,11 +2122,11 @@ export class QuoteDetailsComponent implements OnInit {
         this.quoteLevy = this.sumArray(this.risks, 'premiumLevy');
         this.quoteNetPremium = this.sumArray(this.risks, 'netPremium');
 
-        for (let risk of this.risks) {
+        for (const risk of this.risks) {
             this.quoteLoadingTotal += this.sumArray(risk.loads, 'amount');
         }
 
-        for (let risk of this.risks) {
+        for (const risk of this.risks) {
             this.quoteDiscountTotal += this.sumArray(risk.discounts, 'amount');
         }
 

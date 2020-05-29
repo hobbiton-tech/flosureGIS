@@ -10,16 +10,13 @@ import { first } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { NzMessageService } from 'ng-zorro-antd';
 import { Router } from '@angular/router';
-
 const BASE_URL = 'https://flosure-api.azurewebsites.net';
-
 export interface IQuoteDocument {
     id: string;
     clientID: string;
     receiptNumber: string;
     documentUrl: string;
 }
-
 export interface IAmazonS3Result {
     Etag: string;
     Location: string;
@@ -27,23 +24,19 @@ export interface IAmazonS3Result {
     Key: string;
     Bucket: string;
 }
-
 export interface IReceiptDocument {
     id: string;
     clientId: string;
     receiptNumber: string;
     receiptUrl: string;
 }
-
 interface IQuoteNumberRequest {
     // insuranceType: InsuranceType;
     branch: string;
 }
-
 interface IQuoteNumberResult {
     quoteNumber: string;
 }
-
 @Injectable({
     providedIn: 'root'
 })
@@ -55,10 +48,8 @@ export class QuotesService {
     quotation: Observable<MotorQuotationModel>;
     quote: MotorQuotationModel;
     myQuote: DocumentReference;
-
     quoteDocumentsCollection: AngularFirestoreCollection<IQuoteDocument>;
     quoteDocuments: Observable<IQuoteDocument[]>;
-
     private riskCollection: AngularFirestoreCollection<RiskModel>;
     risks: Observable<RiskModel[]>;
     risk: Observable<RiskModel>;
@@ -71,18 +62,14 @@ export class QuotesService {
         this.motorQuoteCollection = firebase.collection<MotorQuotationModel>(
             'motor_quotations'
         );
-
         this.quotations = this.motorQuoteCollection.valueChanges();
-
         this.riskCollection = firebase.collection<RiskModel>('risks');
         this.risks = this.riskCollection.valueChanges();
-
         this.quoteDocumentsCollection = firebase.collection<IQuoteDocument>(
             'quote-documents'
         );
         this.quoteDocuments = this.quoteDocumentsCollection.valueChanges();
     }
-
     async addQuoteDocuments(document: IQuoteDocument): Promise<void> {
         await this.quoteDocumentsCollection.doc(`${document.id}`).set(document);
     }
@@ -99,7 +86,6 @@ export class QuotesService {
                 });
         });
     }
-
     // get single risk
     getRisk(quoteNumber: string) {
         return this.firebase
@@ -115,11 +101,9 @@ export class QuotesService {
                 console.log('Error getting documents: ', error);
             });
     }
-
     getRisks(): Observable<RiskModel[]> {
         return this.risks;
     }
-
     getQuotes(): Observable<MotorQuotationModel[]> {
         return this.quotations;
     }
@@ -127,7 +111,6 @@ export class QuotesService {
     getQoute(): Observable<MotorQuotationModel[]> {
         return this.quotations;
     }
-
     async updateQuote(quote: MotorQuotationModel): Promise<void> {
         return this.motorQuoteCollection
             .doc(`${quote.id}`)
@@ -139,9 +122,7 @@ export class QuotesService {
                 console.log(err);
             });
     }
-
     //postgres db
-
     createMotorQuotation(motorQuotation: MotorQuotationModel) {
         let insuranceType = '';
         const productType = motorQuotation.risks[0].insuranceType;
@@ -150,21 +131,18 @@ export class QuotesService {
         } else {
             insuranceType = 'THP';
         }
-
         const quotationNumberRequest: IQuoteNumberRequest = {
             branch: motorQuotation.branch //get from db
         };
-
         this.http
             .get<IQuoteNumberResult>(
                 `https://flosure-premium-rates.herokuapp.com/aplus-quote/1/0/${insuranceType}`
             )
             .subscribe(async res => {
                 motorQuotation.quoteNumber = res.quoteNumber;
-
                 this.http
                     .post<MotorQuotationModel>(
-                        'http://localhost:3000/quotation',
+                        'https://flosure-postgres-api.herokuapp.com/quotation',
                         motorQuotation
                     )
                     .subscribe(
@@ -180,50 +158,43 @@ export class QuotesService {
                     );
             });
     }
-
     getMotorQuotations(): Observable<MotorQuotationModel[]> {
         return this.http.get<MotorQuotationModel[]>(
-            'http://localhost:3000/quotation'
+            'https://flosure-postgres-api.herokuapp.com/quotation'
         );
     }
-
     getMotorQuotationById(
         quotationId: string
     ): Observable<MotorQuotationModel> {
         return this.http.get<MotorQuotationModel>(
-            `http://localhost:3000/quotation/${quotationId}`
+            `https://flosure-postgres-api.herokuapp.com/quotation/${quotationId}`
         );
     }
-
     updateMotorQuotation(
         motorQuotation: MotorQuotationModel,
         quotationId: string
     ): Observable<MotorQuotationModel> {
         return this.http.put<MotorQuotationModel>(
-            `http://localhost:3000/quotation/${quotationId}`,
+            `https://flosure-postgres-api.herokuapp.com/quotation/${quotationId}`,
             motorQuotation
         );
     }
-
     /// POSTGES DB METHODS
     public addPolicyPG(dto: AddPolicyDTO): Observable<PolicyModelPG> {
         return this.http.post<PolicyModelPG>(`${BASE_URL}/policies/add`, dto);
     }
-
     public addRiskPG(dto: AddRiskDTO): Observable<RiskModelPG> {
         return this.http.post<RiskModelPG>(
             `${BASE_URL}/policies/risks/add`,
             dto
         );
     }
-
     public addLoadingPG(dto: LoadingDTO): Observable<RiskModelPG> {
         return this.http.post<RiskModelPG>(
             `${BASE_URL}/policies/loading/add`,
             dto
         );
     }
-
     public addDiscountPG(dto: DiscountDTO): Observable<RiskModelPG> {
         return this.http.post<RiskModelPG>(
             `${BASE_URL}/policies/discount/add`,
@@ -231,7 +202,6 @@ export class QuotesService {
         );
     }
 }
-
 export class PolicyModelPG {
     clientId: string;
     dateCreated: Date;
@@ -244,7 +214,6 @@ export class PolicyModelPG {
     startDate: Date;
     timeOfIssue: Date;
 }
-
 export class RiskModelPG {
     endDate: Date;
     id: string;
@@ -254,7 +223,6 @@ export class RiskModelPG {
     startDate: Date;
     sumInsured: number;
 }
-
 export class LoadingModelPG {
     id: number;
     riskId: string;
@@ -268,14 +236,12 @@ export class LoadingModelPG {
         | 'Territorial_Extension'
         | 'Under_Age_Driver';
 }
-
 export class DiscountModelPG {
     id: string;
     riskid: string;
     amount: number;
     discountType: 'LowTermAgreement' | 'Loyalty' | 'NoClaims' | 'ValuedClient';
 }
-
 export type ProductType = 'Private' | 'Commercial' | 'BusTaxi';
 export type InsuranceType = 'ThirdParty' | 'Comprehensive';
 export type LoadType =
@@ -291,14 +257,12 @@ export type DiscountType =
     | 'Loyalty Discount'
     | 'Valued Client Discount'
     | 'Low Term Agreement Discount';
-
 export interface AddPolicyDTO {
     clientId: string;
     intermediaryId: string;
     startDate: Date;
     endDate: Date;
 }
-
 export interface AddRiskDTO {
     policyId: string;
     sumInsured: number;
@@ -313,7 +277,6 @@ export interface AddRiskDTO {
     loading?: LoadingDTO;
     discount?: DiscountDTO;
 }
-
 export interface VehicleDTO {
     regNumber: string;
     vehicleMake: string;
@@ -324,19 +287,16 @@ export interface VehicleDTO {
     estimatedValue?: number;
     color: string;
 }
-
 export interface PremiumDTO {
     basicPremium: number;
     premiumLevy: number;
     netPremium: number;
     premiumRate: number;
 }
-
 export interface LoadingDTO {
     loadingType: LoadType;
     amount: number;
 }
-
 export interface DiscountDTO {
     discountType: DiscountType;
     amount: number;

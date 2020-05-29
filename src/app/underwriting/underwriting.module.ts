@@ -38,81 +38,86 @@ import { ViewBackupPolicyRisksComponent } from './components/endorsements/backup
 import { PolicyCreditNoteDocumentComponent } from './documents/policy-credit-note-document/policy-credit-note-document.component';
 
 import { IntermediaryDetailsComponent } from './components/endorsements/intermediary-details/intermediary-details.component';
+import { PolicyWordingComponent } from './documents/policy-wording/policy-wording.component';
 
 const routes: Routes = [
     {
         path: 'endorsements',
-        component: EndorsementsComponent
+        component: EndorsementsComponent,
     },
     {
         path: 'endorsements/revision-cover',
-        component: RevisionCoverComponent
+        component: RevisionCoverComponent,
     },
     {
         path: 'endorsements/view-endorsements',
-        component: ViewEndorsementsComponent
+        component: ViewEndorsementsComponent,
     },
     {
         path: 'endorsements/extension-cover',
-        component: ExtensionCoverComponent
+        component: ExtensionCoverComponent,
     },
     {
         path: 'endorsements/cancellation-cover',
-        component: CancellationCoverComponent
+        component: CancellationCoverComponent,
     },
     {
         path: 'endorsements/edit-policy',
-        component: EditPolicyComponent
+        component: EditPolicyComponent,
     },
     {
         path: 'endorsements/edit-cancellation',
-        component: EditCancellationComponent
+        component: EditCancellationComponent,
     },
     {
         path: 'endorsements/edit-extension',
-        component: EditExtensionComponent
+        component: EditExtensionComponent,
     },
     {
         path: 'policies',
-        component: PoliciesComponent
+        component: PoliciesComponent,
     },
     {
         path: 'policy-details',
-        component: PolicyDetailsComponent
+        component: PolicyDetailsComponent,
     },
     {
         path: 'policy-revision-details/:id',
-        component: PolicyRevisionDetailsComponent
+        component: PolicyRevisionDetailsComponent,
     },
     {
         path: 'policy-extension-details/:id',
-        component: PolicyExtensionDetailsComponent
+        component: PolicyExtensionDetailsComponent,
     },
     {
         path: 'policy-cancellation-details/:id',
-        component: PolicyCancellationDetailsComponent
+        component: PolicyCancellationDetailsComponent,
     },
     {
         path: 'backup-policy-details/:id',
-        component: BackupPolicyDetailsComponent
+        component: BackupPolicyDetailsComponent,
     },
     {
         path: 'policy-details/:id',
         component: PolicyDetailsComponent,
-        resolve: PolicyDetailsResolver
+        resolve: PolicyDetailsResolver,
     },
     {
         path: 'policy-renewal-list',
-        component: PolicyRenewalsComponent
+        component: PolicyRenewalsComponent,
     },
     {
         path: 'policy-renewal-details/:id',
-        component: PolicyRenewalsDetailsComponent
+        component: PolicyRenewalsDetailsComponent,
     },
     {
         path: 'intermediary-view/:id',
-        component: IntermediaryDetailsComponent
-    }
+        component: IntermediaryDetailsComponent,
+    },
+    {
+        path: 'policy-wording/:id',
+        component: PolicyWordingComponent,
+    },
 ];
 
 @NgModule({
@@ -143,7 +148,8 @@ const routes: Routes = [
         BackupPolicyDetailsComponent,
         ViewBackupPolicyRisksComponent,
         PolicyCreditNoteDocumentComponent,
-        IntermediaryDetailsComponent
+        IntermediaryDetailsComponent,
+        PolicyWordingComponent,
     ],
     imports: [
         CommonModule,
@@ -152,8 +158,8 @@ const routes: Routes = [
         ReactiveFormsModule,
         RouterModule.forChild(routes),
         PdfViewerModule,
-        NgxPrintModule
+        NgxPrintModule,
     ],
-    providers: [PolicyDetailsResolver, PoliciesService, EndorsementService]
+    providers: [PolicyDetailsResolver, PoliciesService, EndorsementService],
 })
 export class UnderWritingModule {}

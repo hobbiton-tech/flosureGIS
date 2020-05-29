@@ -18,10 +18,12 @@
         <nz-page-header
             (nzBack)="goToClientsList()"
             nzBackIcon
-            nzTitle="{{
-            client.clientType === 'Individual'
-            ? client.firstName + ' ' + client.lastName
-            : client.companyName }}"
+            nzTitle="Client ID: {{ client.clientID }}"
+            [nzSubtitle]="
+                client.clientType === 'Individual'
+                    ? client.firstName + ' ' + client.lastName
+                    : client.companyName 
+            "
         >
             <nz-page-header-extra>
                 <button
@@ -144,7 +146,7 @@
                                     <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.phoneNumber"
+                                        [(placeholder)]="client.phone"
                                         [disabled]="!isEditmode"
                                     />
                                 </nz-form-control>
@@ -183,7 +185,7 @@
                                     <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.phoneNumber"
+                                        [(placeholder)]="client.phone"
                                         [disabled]="!isEditmode"
                                     />
                                 </nz-form-control>
@@ -256,7 +258,7 @@
                                     <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.tpinNumber"
+                                        [(placeholder)]="client.taxPin"
                                         [disabled]="!isEditmode"
                                     />
                                 </nz-form-control>
@@ -282,7 +284,7 @@
                                 <nz-form-control nzSpan="17">
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.tpinNumber"
+                                        [(placeholder)]="client.taxPin"
                                         [disabled]="!isEditmode"
                                     />
                                 </nz-form-control>
@@ -297,7 +299,7 @@
                                     <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.phoneNumber"
+                                        [(placeholder)]="client.phone"
                                         [disabled]="!isEditmode"
                                     />
                                 </nz-form-control>
@@ -350,7 +352,7 @@
                                     <input
                                         nz-input
                                         [(placeholder)]="
-                                            client.firstName
+                                            client.contactFirstName
                                         "
                                         [disabled]="!isEditmode"
                                     />
@@ -377,7 +379,7 @@
                                 <nz-form-control nzSpan="17">
                                     <nz-select
                                         nzPlaceHolder="{{
-                                            client.lastName
+                                            client.contactLastName
                                         }}"
                                         [nzDisabled]="!isEditmode"
                                     ></nz-select>
@@ -401,7 +403,7 @@
                             <nz-form-control nzSpan="18">
                                 <input
                                     nz-input
-                                    [(placeholder)]="clientAccountDetails.accountName"
+                                    [(placeholder)]="client.accountName"
                                     [disabled]="!isEditmode"
                                 />
                             </nz-form-control>
@@ -413,7 +415,7 @@
                             <nz-form-control nzSpan="18">
                                 <input
                                     nz-input
-                                    [(placeholder)]="clientAccountDetails.accountNumber"
+                                    [(placeholder)]="client.accountNumber"
                                     [disabled]="!isEditmode"
                                 />
                             </nz-form-control>
@@ -426,7 +428,7 @@
                             >
                             <nz-form-control nzSpan="16">
                                 <nz-select
-                                    [nzPlaceHolder]="clientAccountDetails.bank"
+                                    [nzPlaceHolder]="client.bank"
                                     [nzDisabled]="!isEditmode"
                                 ></nz-select>
                             </nz-form-control>
@@ -437,7 +439,7 @@
                             >
                             <nz-form-control nzSpan="16">
                                 <nz-select
-                                    [nzPlaceHolder]="clientAccountDetails.branch"
+                                    [nzPlaceHolder]="client.branch"
                                     [nzDisabled]="!isEditmode"
                                 ></nz-select>
                             </nz-form-control>
@@ -516,7 +518,7 @@
                         style="cursor: pointer;"
                     >
                         <td>{{ data.claimId }}</td>
-                        <td>{{ data.id }}</td>
+                        <td>{{ data.riskId }}</td>
                         <td>{{ data.policyNumber }}</td>
                         <td>{{ data.lossDate | date }}</td>
                         <td>{{ data.status }}</td>

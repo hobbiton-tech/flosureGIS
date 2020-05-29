@@ -15,7 +15,6 @@ import {
 import { ClientsService } from '../../services/clients.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { BehaviorSubject } from 'rxjs';
-import { IClient, IClientDTO } from '../../models/client.model';
 
 @Component({
     selector: 'app-create-client',
@@ -51,7 +50,7 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
             middleName: ['', Validators.required],
             email: ['', Validators.required],
             dateOfBirth: ['', Validators.required],
-            phoneNumber: ['', Validators.required],
+            phone: ['', Validators.required],
             address: ['', Validators.required],
             gender: ['', Validators.required],
             sector: ['', Validators.required],
@@ -66,14 +65,14 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
 
         this.corporateClientForm = this.formBuilder.group({
             companyName: ['', Validators.required],
-            tpinNumber: ['', Validators.required],
+            taxPin: ['', Validators.required],
             registrationNumber: ['', Validators.required],
-            companyEmail: ['', Validators.required],
-            phoneNumber: ['', Validators.required],
-            companyAddress: ['', Validators.required],
+            email: ['', Validators.required],
+            phone: ['', Validators.required],
+            address: ['', Validators.required],
             sector: ['', Validators.required],
-            firstName: ['', Validators.required],
-            lastName: ['', Validators.required],
+            contactFirstName: ['', Validators.required],
+            contactLastName: ['', Validators.required],
             contactEmail: ['', Validators.required],
             contactPhone: ['', Validators.required],
             contactAddress: ['', Validators.required],
