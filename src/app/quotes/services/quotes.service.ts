@@ -69,7 +69,7 @@ export class QuotesService {
         private readonly router: Router
     ) {
         this.motorQuoteCollection = firebase.collection<MotorQuotationModel>(
-            'mortor_quotations'
+            'motor_quotations'
         );
 
         this.quotations = this.motorQuoteCollection.valueChanges();
@@ -164,7 +164,7 @@ export class QuotesService {
 
                 this.http
                     .post<MotorQuotationModel>(
-                        'https://flosure-postgres-api.herokuapp.com/quotation',
+                        'http://localhost:3000/quotation',
                         motorQuotation
                     )
                     .subscribe(
@@ -183,7 +183,7 @@ export class QuotesService {
 
     getMotorQuotations(): Observable<MotorQuotationModel[]> {
         return this.http.get<MotorQuotationModel[]>(
-            'https://flosure-postgres-api.herokuapp.com/quotation'
+            'http://localhost:3000/quotation'
         );
     }
 
@@ -191,7 +191,7 @@ export class QuotesService {
         quotationId: string
     ): Observable<MotorQuotationModel> {
         return this.http.get<MotorQuotationModel>(
-            `https://flosure-postgres-api.herokuapp.com/quotation/${quotationId}`
+            `http://localhost:3000/quotation/${quotationId}`
         );
     }
 
@@ -200,7 +200,7 @@ export class QuotesService {
         quotationId: string
     ): Observable<MotorQuotationModel> {
         return this.http.put<MotorQuotationModel>(
-            `https://flosure-postgres-api.herokuapp.com/quotation/${quotationId}`,
+            `http://localhost:3000/quotation/${quotationId}`,
             motorQuotation
         );
     }

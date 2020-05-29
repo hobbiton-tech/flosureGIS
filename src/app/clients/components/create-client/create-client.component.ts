@@ -99,8 +99,8 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
         console.log(event);
     }
 
-    async addIndividualClient(client: IClientDTO): Promise<void> {
-        await this.clientsService.createIndividualClient(client).subscribe(
+    async addIndividualClient(client: IIndividualClient): Promise<void> {
+        await this.clientsService.addIndividualClient(client).subscribe(
             async res => {
                 this.msg.success('Client Created successfully');
                 this.router.navigateByUrl('/flosure/clients/clients-list');
@@ -114,8 +114,8 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
         );
     }
 
-    async addCorporateClient(client: IClientDTO): Promise<void> {
-        await this.clientsService.createCorporateClient(client).subscribe(
+    async addCorporateClient(client: ICorporateClient): Promise<void> {
+        await this.clientsService.addCorporateClient(client).subscribe(
             async res => {
                 this.msg.success('Client Created successfully');
                 this.router.navigateByUrl('/flosure/clients/clients-list');

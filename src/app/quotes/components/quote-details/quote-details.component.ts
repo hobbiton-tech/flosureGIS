@@ -32,6 +32,7 @@ import {
     ISalesRepresentative
 } from 'src/app/settings/components/agents/models/agents.model';
 import { ImageElement } from 'canvg';
+import { DebitNote } from 'src/app/underwriting/documents/models/documents.model';
 
 type AOA = any[][];
 
@@ -151,6 +152,11 @@ export class QuoteDetailsComponent implements OnInit {
     premiumLoadingTotal: number;
     premiumLoadingsubTotal: number;
 
+    totalSumInsured: number;
+    totalBasicPremium: number;
+    totalLevy: number;
+    totalNetPremium: number;
+
     LevyRate: number = 3;
 
     increasedThirdPartyLimitsRate: number;
@@ -198,6 +204,7 @@ export class QuoteDetailsComponent implements OnInit {
     quoteBasicPremium: number;
     quoteLoadingTotal: number;
     quoteDiscountTotal: number;
+    quoteSumInsured: number;
     quoteLevy: number;
     quoteNetPremium: number;
 
@@ -1085,11 +1092,10 @@ export class QuoteDetailsComponent implements OnInit {
             town: 'string'
         };
 
-        const debit$ = ''
-        const cert$ = ''
+        const debit$ = '';
+        const cert$ = '';
 
         combineLatest([debit$, cert$]).subscribe(async ([debit, cert]) => {
-
             this.quote.status = 'Approved';
             await this.quotesService
                 .updateMotorQuotation(this.quote, this.quote.id)
@@ -1116,10 +1122,17 @@ export class QuoteDetailsComponent implements OnInit {
                 intermediaryName: this.quoteData.intermediaryName
             };
 
+            const debitNote: DebitNote = {
+                remarks: '-',
+                dateCreated: new Date(),
+                dateUpdated: new Date()
+            };
+
             // const policy = this.quoteDetailsForm.value as Policy;
             console.log(policy);
             await this.policiesService.createPolicy(policy).subscribe(res => {
                 console.log(res);
+                this.policiesService.createDebitNote(res.id, debitNote, res);
             });
 
             // await this.gqlQuotesService
@@ -1985,7 +1998,7 @@ export class QuoteDetailsComponent implements OnInit {
     handleDraftQuotation() {
         this.quoteLoadingTotal = 0;
         this.quoteDiscountTotal = 0;
-
+        this.quoteSumInsured = this.sumArray(this.risks, 'sumInsured');
         this.quoteBasicPremium = this.sumArray(this.risks, 'basicPremium');
         this.quoteLevy = this.sumArray(this.risks, 'premiumLevy');
         this.quoteNetPremium = this.sumArray(this.risks, 'netPremium');

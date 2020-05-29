@@ -28,6 +28,9 @@ export class ProductSetupsComponent implements OnInit {
     //single class
     singleClass: IClass;
 
+    //products
+    products: IProduct[];
+
     // Drawers
     addClassFormDrawerVisible = false;
     addProductFormDrawerVisible = false;
@@ -41,6 +44,12 @@ export class ProductSetupsComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        // this.productSetupsService.getProducts().subscribe(x => {
+        //     this.products = x;
+        //     console.log(this.products);
+        //     console.log(x);
+        // });
+
         this.route.params.subscribe(param => {
             this.classId = param.classId;
         });
@@ -48,7 +57,7 @@ export class ProductSetupsComponent implements OnInit {
         this.productSetupsService.getClasses().subscribe(classes => {
             this.classesList = classes;
 
-            this.productsList = this.classesList[0].Product;
+            this.productsList = this.classesList[0].products;
         });
 
         this.classUpdate.subscribe(update =>
@@ -56,7 +65,7 @@ export class ProductSetupsComponent implements OnInit {
                 ? this.productSetupsService.getClasses().subscribe(classes => {
                       this.classesList = classes;
 
-                      this.productsList = this.classesList[0].Product;
+                      this.productsList = this.classesList[0].products;
                   })
                 : ''
         );
@@ -84,7 +93,7 @@ export class ProductSetupsComponent implements OnInit {
                 x => x.id === selectedClass.id
             )[0];
 
-            this.productsList = this.singleClass.Product;
+            this.productsList = this.singleClass.products;
         });
     }
 

@@ -1,51 +1,67 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { MotorQuotationModel, RiskModel } from '../../models/quote.model';
 
 @Component({
-  selector: 'app-draft-quote-document',
-  templateUrl: './draft-quote-document.component.html',
-  styleUrls: ['./draft-quote-document.component.scss']
+    selector: 'app-draft-quote-document',
+    templateUrl: './draft-quote-document.component.html',
+    styleUrls: ['./draft-quote-document.component.scss']
 })
 export class DraftQuoteDocumentComponent implements OnInit {
+    @Input()
+    quoteNumber: string;
 
-  @Input()
-  quoteNumber: string;
+    @Input()
+    dateCreated: string;
 
-  @Input()
-  dateCreated: string;
+    @Input()
+    clientName: string;
 
-  @Input()
-  clientName: string;
+    @Input()
+    clientNumber: string;
 
-  @Input()
-  clientNumber: string;
+    @Input()
+    clientEmail: string;
 
-  @Input()
-  clientEmail: string;
+    @Input()
+    insuranceType: string;
 
-  @Input()
-  insuranceType: string;
+    @Input()
+    numberOfRisks: string;
 
-  @Input()
-  numberOfRisks: string;
+    @Input()
+    basicPremium: string;
 
-  @Input()
-  basicPremium: string;
+    @Input()
+    loadingAmount: string;
 
-  @Input()
-  loadingAmount: string;
+    @Input()
+    discountAmount: string;
 
-  @Input()
-  discountAmount: string;
+    @Input()
+    premiumLevy: string;
 
-  @Input()
-  premiumLevy: string;
+    @Input()
+    totalAmount: string;
 
-  @Input()
-  totalAmount: string;
+    @Input()
+    quoteData: MotorQuotationModel;
 
-  constructor() { }
+    @Input()
+    risks: RiskModel[];
 
-  ngOnInit(): void {
-  }
+    @Input()
+    totalSumInsured: number;
 
+    @Input()
+    totalBasicPremium: number;
+
+    @Input()
+    totalLevy: number;
+
+    @Input()
+    totalNetPremium: number;
+
+    constructor() {}
+
+    ngOnInit(): void {}
 }

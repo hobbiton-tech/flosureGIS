@@ -161,19 +161,19 @@ export class AgentsService {
             this.salesRepresentatives.length
         );
         return this.http.post<ISalesRepresentative>(
-            'https://flosure-postgres-api.herokuapp.com/intermediary/sales-representative',
+            'http://localhost:3000/intermediary/sales-representative',
             salesRepresentatives
         );
     }
     // getSalesRepresentatives(): Observable<ISalesRepresentative[]> {
     //     return this.http.get<ISalesRepresentative[]>(
-    //         'https://flosure-postgres-api.herokuapp.com/intermediary/sales-representative'
+    //         'http://localhost:3000/intermediary/sales-representative'
     //     );
     // }
 
     getSalesRepresentative(id: string): Observable<ISalesRepresentative> {
         return this.http.get<ISalesRepresentative>(
-            `https://flosure-postgres-api.herokuapp.com/intermediary/sales-representative/${id}`
+            `http://localhost:3000/intermediary/sales-representative/${id}`
         );
     }
 
@@ -182,14 +182,14 @@ export class AgentsService {
         id: string
     ): Observable<ISalesRepresentative> {
         return this.http.put<ISalesRepresentative>(
-            `https://flosure-postgres-api.herokuapp.com/intermediary/sales-representative/${id}`,
+            `http://localhost:3000/intermediary/sales-representative/${id}`,
             agent
         );
     }
 
     updateBroker(agent: IBroker, id: string): Observable<IBroker> {
         return this.http.put<IBroker>(
-            `https://flosure-postgres-api.herokuapp.com/intermediary/broker/${id}`,
+            `http://localhost:3000/intermediary/broker/${id}`,
             agent
         );
     }
@@ -203,21 +203,21 @@ export class AgentsService {
             this.brokers.length
         );
         return this.http.post<IBroker>(
-            'https://flosure-postgres-api.herokuapp.com/intermediary/broker',
+            'http://localhost:3000/intermediary/broker',
             broker
         );
     }
 
     getBroker(id: string): Observable<IBroker> {
         return this.http.get<IBroker>(
-            `https://flosure-postgres-api.herokuapp.com/intermediary/broker/${id}`
+            `http://localhost:3000/intermediary/broker/${id}`
 
         );
     }
 
     // getBrokers(): Observable<IBroker[]> {
     //     return this.http.get<IBroker[]>(
-    //         'https://flosure-postgres-api.herokuapp.com/intermediary/broker'
+    //         'http://localhost:3000/intermediary/broker'
     //     );
     // }
 
@@ -230,26 +230,26 @@ export class AgentsService {
             this.agents.length
         );
         return this.http.post<IAgent>(
-            'https://flosure-postgres-api.herokuapp.com/intermediary/agent',
+            'http://localhost:3000/intermediary/agent',
             agent
         );
     }
 
     // getAgent(id: string): Observable<IAgent> {
     //     return this.http.get<IAgent>(
-    //         `https://flosure-postgres-api.herokuapp.com/intermediary/agent/${id}`
+    //         `http://localhost:3000/intermediary/agent/${id}`
     //     );
     // }
 
     // getAgents(): Observable<IAgent[]> {
     //     return this.http.get<IAgent[]>(
-    //         'https://flosure-postgres-api.herokuapp.com/intermediary/agent'
+    //         'http://localhost:3000/intermediary/agent'
     //     );
     // }
 
     updateAgent(agent: IAgent, id: string): Observable<IAgent> {
         return this.http.put<IAgent>(
-            `https://flosure-postgres-api.herokuapp.com/intermediary/agent/${id}`,
+            `http://localhost:3000/intermediary/agent/${id}`,
             agent
         );
     }
@@ -267,19 +267,19 @@ export class AgentsService {
     //postgres
     getAgents(): Observable<IAgent[]> {
         return this.http.get<IAgent[]>(
-            'https://flosure-postgres-api.herokuapp.com/intermediary/agent'
+            'http://localhost:3000/intermediary/agent'
         );
     }
 
     getBrokers(): Observable<IBroker[]> {
         return this.http.get<IBroker[]>(
-            'https://flosure-postgres-api.herokuapp.com/intermediary/broker'
+            'http://localhost:3000/intermediary/broker'
         );
     }
 
     getSalesRepresentatives(): Observable<ISalesRepresentative[]> {
         return this.http.get<ISalesRepresentative[]>(
-            'https://flosure-postgres-api.herokuapp.com/intermediary/sales-representative'
+            'http://localhost:3000/intermediary/sales-representative'
         );
     }
 

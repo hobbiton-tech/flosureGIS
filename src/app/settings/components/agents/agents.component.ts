@@ -238,10 +238,10 @@ export class AgentsComponent implements OnInit {
         this.productSetupsService.getClasses().subscribe(classes => {
             this.selectedClass = classes.filter(
                 x =>
-                    x.name ===
+                    x.className ===
                     this.commissionSetupForm.get('productClass').value
             )[0];
-            this.productsList = this.selectedClass.Product;
+            this.productsList = this.selectedClass.products;
         });
     }
 
