@@ -30,6 +30,42 @@ export class ViewReceiptsComponent implements OnInit {
     key: string;
     printSrc: SafeUrl;
 
+    th = ['', 'thousand', 'million', 'billion', 'trillion'];
+    dg = [
+        'zero',
+        'one',
+        'two',
+        'three',
+        'four',
+        'five',
+        'six',
+        'seven',
+        'eight',
+        'nine',
+    ];
+    tn = [
+        'ten',
+        'eleven',
+        'twelve',
+        'thirteen',
+        'fourteen',
+        'fifteen',
+        'sixteen',
+        'seventeen',
+        'eighteen',
+        'nineteen',
+    ];
+    tw = [
+        'twenty',
+        'thirty',
+        'forty',
+        'fifty',
+        'sixty',
+        'seventy',
+        'eighty',
+        'ninety',
+    ];
+
     constructor(
         private receiptService: AccountService,
         private route: ActivatedRoute
@@ -69,31 +105,82 @@ export class ViewReceiptsComponent implements OnInit {
         };
 
         html2canvas(div, options).then((canvas) => {
-            //Initialize JSPDF
-            let doc = new jsPDF({
+            // Initialize JSPDF
+            const doc = new jsPDF({
                 unit: 'px',
                 format: 'a4',
             });
-            //Converting canvas to Image
-            let imgData = canvas.toDataURL('image/PNG');
-            //Add image Canvas to PDF
+            // Converting canvas to Image
+            const imgData = canvas.toDataURL('image/PNG');
+            // Add image Canvas to PDF
             doc.addImage(imgData, 'PNG', 0, 0);
 
-            let pdfOutput = doc.output();
+            const pdfOutput = doc.output();
             // using ArrayBuffer will allow you to put image inside PDF
-            let buffer = new ArrayBuffer(pdfOutput.length);
-            let array = new Uint8Array(buffer);
+            const buffer = new ArrayBuffer(pdfOutput.length);
+            const array = new Uint8Array(buffer);
             for (let i = 0; i < pdfOutput.length; i++) {
                 array[i] = pdfOutput.charCodeAt(i);
             }
 
-            //Name of pdf
+            // Name of pdf
             const fileName = 'receipt.pdf';
 
             // Make file
             doc.save(fileName);
             this.generatingPDF = false;
         });
+    }
+
+    toWords(s) {
+        s = s.toString();
+        s = s.replace(/[\, ]/g, '');
+        if (s != parseFloat(s)) {
+            return 'not a number';
+        }
+        let x = s.indexOf('.');
+        if (x == -1) {
+            x = s.length;
+        }
+        if (x > 15) {
+            return 'too big';
+        }
+        let n = s.split('');
+        let str = '';
+        let sk = 0;
+        for (let i = 0; i < x; i++) {
+            if ((x - i) % 3 == 2) {
+                if (n[i] == '1') {
+                    str += this.tn[Number(n[i + 1])] + ' ';
+                    i++;
+                    sk = 1;
+                } else if (n[i] != 0) {
+                    str += this.tw[n[i] - 2] + ' ';
+                    sk = 1;
+                }
+            } else if (n[i] != 0) {
+                str += this.dg[n[i]] + ' ';
+                if ((x - i) % 3 == 0) {
+                    str += 'hundred ';
+                }
+                sk = 1;
+            }
+
+            if ((x - i) % 3 == 1) {
+                if (sk) {
+                    str += this.th[(x - i - 1) / 3] + ' ';
+                }
+                sk = 0;
+            }
+        }
+        if (x != s.length) {
+            let y = s.length;
+            str += 'point ';
+            for (let i = x + 1; i < y; i++) {
+                str += this.dg[n[i]] + ' ';
+            }
+        }
+        return str.replace(/\s+/g, ' ');
     }
     // generateDocuments(): void {
     //     this.receiptService.getReciepts().subscribe((receipts) => {
