@@ -1094,8 +1094,8 @@ export class QuoteDetailsComponent implements OnInit {
     handleCancel(): void {
         this.isVisible = false;
     }
+
     generateDocuments(): void {
-        console.log('here');
         this.approvingQuote = true;
 
         // const debitNote: IDebitNoteDTO = {
@@ -1189,9 +1189,9 @@ export class QuoteDetailsComponent implements OnInit {
         console.log(policy);
 
         this.policiesService.createPolicy(policy).subscribe(res => {
-            console.log('response:');
             console.log(res);
             this.policiesService.createDebitNote(res.id, debitNote, res);
+
             for (const clause of this.clauses) {
                 clause.policyId = res.id;
                 this.productClauseService.updatePolicyClause(clause);
@@ -1214,38 +1214,44 @@ export class QuoteDetailsComponent implements OnInit {
                 this.wordings
             );
 
-            for (const risk of policy.risks) {
-                console.log('Risks>>>>', risk);
-                if (risk.insuranceType === 'ThirdParty') {
-                    console.log('Risk Type>>>>', risk.insuranceType);
-                    this.http.post(
-                        'https://zampointzidb.eservices.gov.zm/ZIDB/ReceiveInsurancePolicies',
-                        {
-                            insuranceType: 1,
-                            status: 1,
-                            registrationMark: risk.regNumber.replace(/\s/g, ''),
-                            dateFrom: risk.riskStartDate,
-                            dateTo: risk.riskEndDate,
-                            insurancePolicyNo: policy.policyNumber,
-                            chassisNumber: risk.chassisNumber
-                        }
-                    );
-                } else if (risk.insuranceType === 'Comprehensive') {
-                    console.log('Risk Type>>>>', risk.insuranceType);
-                    this.http.post(
-                        'https://zampointzidb.eservices.gov.zm/ZIDB/ReceiveInsurancePolicies',
-                        {
-                            insuranceType: 2,
-                            status: 1,
-                            registrationMark: risk.regNumber.replace(/\s/g, ''),
-                            dateFrom: risk.riskStartDate,
-                            dateTo: risk.riskEndDate,
-                            insurancePolicyNo: policy.policyNumber,
-                            chassisNumber: risk.chassisNumber
-                        }
-                    );
-                }
-            }
+            // for (const risk of policy.risks) {
+            //     console.log('Risks>>>>', risk);
+            //     if (risk.insuranceType === 'ThirdParty') {
+            //         console.log('Risk Type>>>>', risk.insuranceType);
+            //         this.http.post(
+            //             'https://zampointzidb.eservices.gov.zm/ZIDB/ReceiveInsurancePolicies',
+            //             {
+            //                 insuranceType: 1,
+            //                 status: 1,
+            //                 registrationMark: risk.regNumber.replace(
+            //                     /\s/g,
+            //                     ''
+            //                 ),
+            //                 dateFrom: risk.riskStartDate,
+            //                 dateTo: risk.riskEndDate,
+            //                 insurancePolicyNo: policy.policyNumber,
+            //                 chassisNumber: risk.chassisNumber,
+            //             }
+            //         );
+            //     } else if (risk.insuranceType === 'Comprehensive') {
+            //         console.log('Risk Type>>>>', risk.insuranceType);
+            //         this.http.post(
+            //             'https://zampointzidb.eservices.gov.zm/ZIDB/ReceiveInsurancePolicies',
+            //             {
+            //                 insuranceType: 2,
+            //                 status: 1,
+            //                 registrationMark: risk.regNumber.replace(
+            //                     /\s/g,
+            //                     ''
+            //                 ),
+            //                 dateFrom: risk.riskStartDate,
+            //                 dateTo: risk.riskEndDate,
+            //                 insurancePolicyNo: policy.policyNumber,
+            //                 chassisNumber: risk.chassisNumber,
+            //             }
+            //         );
+            //     }
+            // }
         });
 
         // await this.gqlQuotesService

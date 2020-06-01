@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import {
     AngularFirestore,
     AngularFirestoreCollection,
-    DocumentReference,
+    DocumentReference
 } from '@angular/fire/firestore';
 import { first } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
@@ -38,7 +38,7 @@ interface IQuoteNumberResult {
     quoteNumber: string;
 }
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
 export class QuotesService {
     private motorQuoteCollection: AngularFirestoreCollection<
@@ -60,7 +60,7 @@ export class QuotesService {
         private readonly router: Router
     ) {
         this.motorQuoteCollection = firebase.collection<MotorQuotationModel>(
-            'mortor_quotations'
+            'motor_quotations'
         );
         this.quotations = this.motorQuoteCollection.valueChanges();
         this.riskCollection = firebase.collection<RiskModel>('risks');
@@ -81,7 +81,7 @@ export class QuotesService {
                 .then(() => {
                     console.log(risk);
                 })
-                .catch((err) => {
+                .catch(err => {
                     console.log(err);
                 });
         });
@@ -92,12 +92,12 @@ export class QuotesService {
             .collection('risks')
             .ref.where('quoteNumber', '==', quoteNumber)
             .get()
-            .then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
+            .then(querySnapshot => {
+                querySnapshot.forEach(doc => {
                     console.log(doc.data());
                 });
             })
-            .catch((error) => {
+            .catch(error => {
                 console.log('Error getting documents: ', error);
             });
     }
@@ -115,10 +115,10 @@ export class QuotesService {
         return this.motorQuoteCollection
             .doc(`${quote.id}`)
             .update(quote)
-            .then((res) => {
+            .then(res => {
                 console.log(res);
             })
-            .catch((err) => {
+            .catch(err => {
                 console.log(err);
             });
     }
@@ -132,13 +132,13 @@ export class QuotesService {
             insuranceType = 'THP';
         }
         const quotationNumberRequest: IQuoteNumberRequest = {
-            branch: motorQuotation.branch, //get from db
+            branch: motorQuotation.branch //get from db
         };
         this.http
             .get<IQuoteNumberResult>(
                 `https://flosure-premium-rates.herokuapp.com/aplus-quote/1/0/${insuranceType}`
             )
-            .subscribe(async (res) => {
+            .subscribe(async res => {
                 motorQuotation.quoteNumber = res.quoteNumber;
                 this.http
                     .post<MotorQuotationModel>(
@@ -146,13 +146,13 @@ export class QuotesService {
                         motorQuotation
                     )
                     .subscribe(
-                        async (res) => {
+                        async res => {
                             this.msg.success('Quotation Successfully Created');
                             this.router.navigateByUrl(
                                 '/flosure/quotes/quotes-list'
                             );
                         },
-                        async (err) => {
+                        async err => {
                             this.msg.error('Quotation Creation failed');
                         }
                     );

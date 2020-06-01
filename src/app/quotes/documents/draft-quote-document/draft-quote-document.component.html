@@ -40,7 +40,7 @@
             <tr>
                 <td><strong>Name Of insured</strong></td>
                 <td><strong>:</strong></td>
-                <td><span>Name of insured</span></td>
+                <td><span>{{quoteData.client}}</span></td>
             </tr>
             <tr>
                 <td><strong>Postal Address</strong></td>
@@ -63,9 +63,9 @@
                 <td><span>Direct</span></td>
             </tr>
             <tr>
-                <td><strong>Prepared By</strong></td>
+                <td><strong>Prepared By:</strong></td>
                 <td><strong>:</strong></td>
-                <td><span>Deryck Musyani</span></td>
+                <td><span></span></td>
             </tr>
         </table>
 
@@ -114,7 +114,7 @@
 
         <tr class="information">
             <td colspan="2">
-                <nz-table style="width: 100%;" nzSize="small" #risksTable [nzData]="" nzFrontPagination="false"
+                <nz-table style="width: 100%;" nzSize="small" #risksTable [nzData]="risks" nzFrontPagination="false"
                     nzShowPagination="false">
         <tr style="font-size: 15;">
             <th>MAKE</th>
@@ -131,7 +131,7 @@
             <td>{{risk.vehicleModel}}</td>
             <td>{{risk.regNumber}}</td>
             <td>{{risk.sumInsured | number: '1.2-2'}}</td>
-            <td>{{risk.pemiumRate}}</td>
+            <td>5%</td>
             <td>{{risk.basicPremium | number: '1.2-2'}}</td>
             <td>{{risk.premiumLevy | number: '1.2-2'}}</td>
             <td>{{risk.netPremium | number: '1.2-2'}}</td>
@@ -145,7 +145,7 @@
             <tr>
                 <td><strong>Total Sum Insured</strong></td>
                 <td><strong>:</strong></td>
-                <td><span>K10</span></td>
+                <td><span>{{totalSumInsured | number: '1.2-2'}}</span></td>
             </tr>
 
             <tr>
@@ -157,19 +157,19 @@
             <tr>
                 <td><strong>Basic Premium</strong></td>
                 <td><strong>:</strong></td>
-                <td><span>K10</span></td>
+                <td><span>{{totalBasicPremium | number: '1.2-2'}}</span></td>
             </tr>
 
             <tr>
                 <td><strong>Levy @ 3%</strong></td>
                 <td><strong>:</strong></td>
-                <td><span>K10</span></td>
+                <td><span>{{totalLevy | number: '1.2-2'}}</span></td>
             </tr>
 
             <tr>
                 <td><strong>Total Premium</strong></td>
                 <td><strong>:</strong></td>
-                <td><span>K10</span></td>
+                <td><span>{{totalNetPremium | number: '1.2-2'}}</span></td>
             </tr>
 
             <tr>

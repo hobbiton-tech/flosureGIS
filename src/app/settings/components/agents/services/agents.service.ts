@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {
     AngularFirestore,
     AngularFirestoreCollection,
-    DocumentReference,
+    DocumentReference
 } from '@angular/fire/firestore';
 import { Observable, combineLatest } from 'rxjs';
 import { IAgent, IBroker, ISalesRepresentative } from '../models/agents.model';
@@ -11,11 +11,11 @@ import { first, combineAll } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 const httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
 export class AgentsService {
     private agentsCollection: AngularFirestoreCollection<IAgent>;
@@ -40,19 +40,17 @@ export class AgentsService {
         // >('sales_representatives');
         // this.salesRepresentatives = this.salesRepresentativesCollection.valueChanges();
 
-        this.getAgents().subscribe((totalAgents) => {
+        this.getAgents().subscribe(totalAgents => {
             this.agents = totalAgents;
         });
 
-        this.getBrokers().subscribe((totalBrokers) => {
+        this.getBrokers().subscribe(totalBrokers => {
             this.brokers = totalBrokers;
         });
 
-        this.getSalesRepresentatives().subscribe(
-            (totalSalesRepresentatives) => {
-                this.salesRepresentatives = totalSalesRepresentatives;
-            }
-        );
+        this.getSalesRepresentatives().subscribe(totalSalesRepresentatives => {
+            this.salesRepresentatives = totalSalesRepresentatives;
+        });
     }
 
     // async addAgent(agent: IAgent): Promise<void> {
@@ -211,7 +209,6 @@ export class AgentsService {
     getBroker(id: string): Observable<IBroker> {
         return this.http.get<IBroker>(
             `https://flosure-postgres-api.herokuapp.com/intermediary/broker/${id}`
-
         );
     }
 

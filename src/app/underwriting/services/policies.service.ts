@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Policy } from '../models/policy.model';
 import {
     AngularFirestore,
-    AngularFirestoreCollection,
+    AngularFirestoreCollection
 } from '@angular/fire/firestore';
 import 'firebase/firestore';
 import { filter, first } from 'rxjs/operators';
@@ -12,9 +12,28 @@ import { debounceTime, map, switchMap } from 'rxjs/operators';
 import { isTemplateRef, NzMessageService } from 'ng-zorro-antd';
 
 import { HttpClient } from '@angular/common/http';
+import {
+    DebitNote,
+    CreditNote,
+    CoverNote
+} from '../documents/models/documents.model';
+
+const BASE_URL = 'https://flosure-postgres-api.herokuapp.com';
+
+interface IDebitNoteResult {
+    invoiceNumber: string;
+}
+
+interface ICreditNoteResult {
+    invoiceNumber: string;
+}
+
+interface ICoverNoteResult {
+    coverNoteNumber: string;
+}
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
 export class PoliciesService {
     private policiesCollection: AngularFirestoreCollection<Policy>;
@@ -33,7 +52,14 @@ export class PoliciesService {
     // postgres db
     ///////////////////////
     createPolicy(policy: Policy): Observable<Policy> {
-        console.log(policy);
+        let insuranceType = '';
+        const productType = policy.risks[0].insuranceType;
+        if (productType == 'Comprehensive') {
+            insuranceType = 'MCP';
+        } else {
+            insuranceType = 'THP';
+        }
+
         return this.http.post<Policy>(
             'https://flosure-postgres-api.herokuapp.com/policy',
             policy
@@ -91,7 +117,7 @@ export class PoliciesService {
     ////////////////////////////////////////////
 
     async addPolicy(policy: Policy) {
-        this.policies.pipe(first()).subscribe(async (policies) => {
+        this.policies.pipe(first()).subscribe(async policies => {
             const today = new Date();
             policy.term = 1;
             policy.nameOfInsured = policy.client;
@@ -122,7 +148,7 @@ export class PoliciesService {
     }
 
     renewPolicy(policy: Policy) {
-        this.policies.pipe(first()).subscribe(async (policies) => {
+        this.policies.pipe(first()).subscribe(async policies => {
             const today = new Date();
             policy.client = policy.nameOfInsured;
             policy.dateOfIssue =
@@ -172,13 +198,13 @@ export class PoliciesService {
             .collection('policies')
             .ref.where('policyNumber', '==', policyNumber)
             .get()
-            .then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
+            .then(querySnapshot => {
+                querySnapshot.forEach(doc => {
                     console.log(doc.data());
                     this.policy = doc.data();
                 });
             })
-            .catch((error) => {
+            .catch(error => {
                 console.log('Error getting documents: ', error);
             });
 
@@ -198,7 +224,7 @@ export class PoliciesService {
     }
 
     getClientsPolicies(clientId: string): Observable<Policy[]> {
-        return this.policies.pipe(filter((policy) => clientId === clientId));
+        return this.policies.pipe(filter(policy => clientId === clientId));
     }
 
     getPolicies(): Observable<Policy[]> {
@@ -221,10 +247,155 @@ export class PoliciesService {
         const count = this.countGenerator(totalPolicies);
         const today = new Date();
         const dateString: string =
-            today.getFullYear().toString().substr(-2) +
+            today
+                .getFullYear()
+                .toString()
+                .substr(-2) +
             ('0' + (today.getMonth() + 1)).slice(-2) +
             +('0' + today.getDate()).slice(-2);
 
         return 'PO' + broker_name + dateString + count;
+    }
+
+    //documents
+    //debit note
+    createDebitNote(policyId: string, debitNote: DebitNote, policy: Policy) {
+        let insuranceType = '';
+        const productType = policy.risks[0].insuranceType;
+        if (productType == 'Comprehensive') {
+            insuranceType = 'MCP';
+        } else {
+            insuranceType = 'THP';
+        }
+
+        this.http
+            .get<IDebitNoteResult>(
+                `https://flosure-premium-rates.herokuapp.com/aplus-invoice/1/0/${insuranceType}`
+            )
+            .subscribe(async res => {
+                debitNote.debitNoteNumber = res.invoiceNumber;
+
+                this.http
+                    .post<DebitNote>(
+                        `${BASE_URL}/documents/debit-note/${policyId}`,
+                        debitNote
+                    )
+                    .subscribe(
+                        async res => {
+                            console.log(res);
+                        },
+                        async err => {
+                            console.log(err);
+                        }
+                    );
+            });
+    }
+
+    getDebitNotes(): Observable<DebitNote> {
+        return this.http.get<DebitNote>(`${BASE_URL}/documents/debit-notes`);
+    }
+
+    getDebitNoteById(debitNoteId: string): Observable<DebitNote> {
+        return this.http.get<DebitNote>(
+            `${BASE_URL}/documents/debit-note/${debitNoteId}`
+        );
+    }
+
+    updateDebitNote(
+        debitNote: DebitNote,
+        debitNoteId: string
+    ): Observable<DebitNote> {
+        return this.http.put<DebitNote>(
+            `${BASE_URL}/documents/debit-note/${debitNoteId}`,
+            debitNote
+        );
+    }
+
+    //credit note
+    createCreditNote(policyId: string, creditNote: CreditNote, policy: Policy) {
+        let insuranceType = '';
+        const productType = policy.risks[0].insuranceType;
+        if (productType == 'Comprehensive') {
+            insuranceType = 'MCP';
+        } else {
+            insuranceType = 'THP';
+        }
+
+        this.http
+            .get<ICreditNoteResult>(
+                `https://flosure-premium-rates.herokuapp.com/aplus-invoice/1/0/${insuranceType}`
+            )
+            .subscribe(async res => {
+                let tempCreditNoteNumber = res.invoiceNumber;
+                creditNote.creditNoteNumber = tempCreditNoteNumber.replace(
+                    'DR',
+                    'CR'
+                );
+
+                this.http
+                    .post<CreditNote>(
+                        `${BASE_URL}/documents/credit-note/${policyId}`,
+                        creditNote
+                    )
+                    .subscribe(
+                        async res => {
+                            console.log(res);
+                        },
+                        async err => {
+                            console.log(err);
+                        }
+                    );
+            });
+    }
+
+    getCreditNotes(): Observable<CreditNote> {
+        return this.http.get<CreditNote>(`${BASE_URL}/documents/credit-notes`);
+    }
+
+    getCreditNoteById(creditNoteId: string): Observable<CreditNote> {
+        return this.http.get<CreditNote>(
+            `${BASE_URL}/documents/credit-note/${creditNoteId}`
+        );
+    }
+
+    updateCreditNote(
+        creditNote: CreditNote,
+        creditNoteId: string
+    ): Observable<CreditNote> {
+        return this.http.put<CreditNote>(
+            `${BASE_URL}/documents/credit-note/${creditNoteId}`,
+            creditNote
+        );
+    }
+
+    //cover note
+    createCoverNote(
+        policyId: string,
+        coverNote: CoverNote
+    ): Observable<CoverNote> {
+        return this.http.post<CoverNote>(
+            `${BASE_URL}/documents/cover-note/${policyId}`,
+            coverNote
+        );
+    }
+
+    getCoverNotes(): Observable<CoverNote> {
+        return this.http.get<CoverNote>(`${BASE_URL}/documents/cover-notes`);
+    }
+
+    getCoverNoteById(coverNoteId: string): Observable<CoverNote> {
+        return this.http.get<CoverNote>(
+            `${BASE_URL}/documents/cover-note/${coverNoteId}`
+        );
+    }
+
+    updateCoverNote(
+        coverNote: CoverNote,
+        coverNoteId: string
+    ): Observable<CoverNote> {
+        return this.http.put<CoverNote>(
+            `${BASE_URL}/documents/cover-note/${coverNoteId}`,
+            coverNote
+        );
     }
 }

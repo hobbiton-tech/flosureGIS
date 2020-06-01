@@ -19,7 +19,6 @@ import { ClaimsService } from 'src/app/claims/services/claims-service.service';
 import { getDate } from 'date-fns';
 import { ITimestamp } from 'src/app/settings/components/insurance-companies/models/insurance-company.model';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { IClientDTO, IAccountDetails } from '../../models/client.model';
 
 @Component({
     selector: 'app-client-details',
@@ -29,12 +28,9 @@ import { IClientDTO, IAccountDetails } from '../../models/client.model';
 export class ClientDetailsComponent implements OnInit, AfterViewInit {
     isEditmode = false;
 
-    // client: IIndividualClient & ICorporateClient;
+    client: IIndividualClient & ICorporateClient;
     clientPolicies: Policy[] = [];
     clientClaims: Claim[] = [];
-
-    client: IClientDTO;
-    clientAccountDetails: IAccountDetails;
 
     individualClientForm: FormGroup;
     corporateClientForm: FormGroup;
@@ -101,12 +97,11 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
             this.id = param.id;
         });
 
-        this.clientsService.getClients().subscribe(clients => {
+        this.clientsService.getAllClients().subscribe(clients => {
             console.log(clients);
-            this.client = clients.filter(x => x.id === this.id)[0];
-
-            this.clientAccountDetails = this.client.AccountDetails[0];
-            console.log(this.clientAccountDetails);
+            this.client = [...clients[1], ...clients[0]].filter(
+                x => x.id === this.id
+            )[0] as IIndividualClient & ICorporateClient;
 
             console.log('CLIENTS', this.client);
 
@@ -140,7 +135,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
                     .setValue(this.client.dateOfBirth);
                 this.individualClientForm
                     .get('phone')
-                    .setValue(this.client.phoneNumber);
+                    .setValue(this.client.phone);
                 this.individualClientForm
                     .get('address')
                     .setValue(this.client.address);
@@ -150,27 +145,27 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
                 this.individualClientForm
                     .get('sector')
                     .setValue(this.client.sector);
-                // this.individualClientForm
-                //     .get('nationality')
-                //     .setValue(this.client.nationality);
+                this.individualClientForm
+                    .get('nationality')
+                    .setValue(this.client.nationality);
                 this.individualClientForm
                     .get('occupation')
                     .setValue(this.client.occupation);
                 this.individualClientForm
                     .get('accountName')
-                    .setValue(this.clientAccountDetails.accountName);
+                    .setValue(this.client.accountName);
                 this.individualClientForm
                     .get('accountNumber')
-                    .setValue(this.clientAccountDetails.accountNumber);
+                    .setValue(this.client.accountNumber);
                 this.individualClientForm
                     .get('accountType')
-                    .setValue(this.clientAccountDetails.accountType);
+                    .setValue(this.client.accountType);
                 this.individualClientForm
                     .get('bank')
-                    .setValue(this.clientAccountDetails.bank);
+                    .setValue(this.client.bank);
                 this.individualClientForm
                     .get('branch')
-                    .setValue(this.clientAccountDetails.branch);
+                    .setValue(this.client.branch);
             }
 
             if (this.client.clientType == 'Corporate') {
@@ -179,7 +174,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
                     .setValue(this.client.companyName);
                 this.corporateClientForm
                     .get('taxPin')
-                    .setValue(this.client.tpinNumber);
+                    .setValue(this.client.taxPin);
                 this.corporateClientForm
                     .get('registrationNumber')
                     .setValue(this.client.registrationNumber);
@@ -188,16 +183,16 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
                     .setValue(this.client.contactEmail);
                 this.corporateClientForm
                     .get('phone')
-                    .setValue(this.client.phoneNumber);
+                    .setValue(this.client.phone);
                 this.corporateClientForm
                     .get('address')
                     .setValue(this.client.address);
                 this.corporateClientForm
                     .get('contactFirstName')
-                    .setValue(this.client.firstName);
+                    .setValue(this.client.contactFirstName);
                 this.corporateClientForm
                     .get('contactLastName')
-                    .setValue(this.client.lastName);
+                    .setValue(this.client.contactLastName);
                 this.corporateClientForm
                     .get('contactEmail')
                     .setValue(this.client);
@@ -210,19 +205,17 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
 
                 this.corporateClientForm
                     .get('accountName')
-                    .setValue(this.clientAccountDetails.accountName);
+                    .setValue(this.client.accountName);
                 this.corporateClientForm
                     .get('accountNumber')
-                    .setValue(this.clientAccountDetails.accountNumber);
+                    .setValue(this.client.accountNumber);
                 this.corporateClientForm
                     .get('accountType')
                     .setValue(this.client.accountType);
-                this.corporateClientForm
-                    .get('bank')
-                    .setValue(this.clientAccountDetails.bank);
+                this.corporateClientForm.get('bank').setValue(this.client.bank);
                 this.corporateClientForm
                     .get('branch')
-                    .setValue(this.clientAccountDetails.branch);
+                    .setValue(this.client.branch);
             }
         });
 

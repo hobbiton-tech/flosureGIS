@@ -8,6 +8,7 @@ import { EndorsementService } from 'src/app/underwriting/services/endorsements.s
 import { Endorsement } from 'src/app/underwriting/models/endorsement.model';
 import * as moment from 'moment';
 import { NzMessageService } from 'ng-zorro-antd';
+import { CreditNote } from 'src/app/underwriting/documents/models/documents.model';
 
 @Component({
     selector: 'app-policy-cancellation-details',
@@ -189,6 +190,12 @@ export class PolicyCancellationDetailsComponent implements OnInit {
             status: 'Cancelled'
         };
 
+        const creditNote: CreditNote = {
+            remarks: '-',
+            dateCreated: new Date(),
+            dateUpdated: new Date()
+        };
+
         this.endorsementService
             .createEndorsement(this.policyData.id, endorsement)
             .subscribe(endorsement => {
@@ -198,6 +205,11 @@ export class PolicyCancellationDetailsComponent implements OnInit {
         this.policiesService.updatePolicy(policy).subscribe(policy => {
             res => {
                 console.log(res);
+                this.policiesService.createCreditNote(
+                    this.policyData.id,
+                    creditNote,
+                    this.policyData
+                );
                 // this.router.navigateByUrl(
                 // '/flosure/underwriting/endorsements/view-endorsements'
             };

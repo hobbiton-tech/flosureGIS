@@ -3970,7 +3970,9 @@
                 <app-draft-quote-document [quoteNumber]="quoteNumber" [clientName]="quoteData.client"
                     [dateCreated]="quoteData.dateCreated" [basicPremium]="quoteBasicPremium"
                     [loadingAmount]="premiumLoadingTotal" [discountAmount]="quoteDiscountTotal"
-                    [totalAmount]="quoteNetPremium" [premiumLevy]="quoteLevy" [numberOfRisks]="numberOfRisks">
+                    [totalAmount]="quoteNetPremium" [premiumLevy]="quoteLevy" [numberOfRisks]="numberOfRisks"
+                    [risks]="quoteData.risks" [quoteData]="quoteData" [totalSumInsured]="quoteSumInsured"
+                    [totalBasicPremium]="quoteBasicPremium" [totalLevy]="quoteLevy" [totalNetPremium]="quoteNetPremium">
                 </app-draft-quote-document>
             </nz-card>
             <ng-template #pdfQuoteActions>
