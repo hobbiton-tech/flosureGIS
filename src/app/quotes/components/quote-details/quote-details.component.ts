@@ -1226,34 +1226,33 @@ export class QuoteDetailsComponent implements OnInit {
 
             for (const risk of policy.risks) {
                 console.log('Risks>>>>', risk);
-                const headers_object = new HttpHeaders();
-                headers_object.set(
+                const headersObject = new HttpHeaders();
+                headersObject.set(
                     'Authorization',
                     'Basic ' + btoa('Douglas.Chilungu:aplusgeneral@2019')
                 );
 
+                const params: any[] = [
+                    {
+                        insuranceType: 1,
+                        status: 1,
+                        registrationMark: risk.regNumber.replace(/\s/g, ''),
+                        dateFrom: risk.riskStartDate,
+                        dateTo: risk.riskEndDate,
+                        insurancePolicyNo: policy.policyNumber,
+                        chassisNumber: risk.chassisNumber,
+                    },
+                ];
+
                 const httpOptions = {
-                    headers: headers_object,
+                    headers: headersObject,
                 };
-                console.log('HEADERS>>>>', headers_object);
+                console.log('HEADERS>>>>', headersObject);
                 if (risk.insuranceType === 'ThirdParty') {
                     this.http
-                        .post<any[]>(
+                        .post<any>(
                             'https://zampointzidb.eservices.gov.zm/ZIDB/ReceiveInsurancePolicies',
-                            [
-                                {
-                                    insuranceType: 1,
-                                    status: 1,
-                                    registrationMark: risk.regNumber.replace(
-                                        /\s/g,
-                                        ''
-                                    ),
-                                    dateFrom: risk.riskStartDate,
-                                    dateTo: risk.riskEndDate,
-                                    insurancePolicyNo: policy.policyNumber,
-                                    chassisNumber: risk.chassisNumber,
-                                },
-                            ],
+                            params,
                             httpOptions
                         )
                         .pipe(
@@ -1270,20 +1269,7 @@ export class QuoteDetailsComponent implements OnInit {
                     console.log('Risk Type>>>>', risk.insuranceType);
                     this.http.post<any[]>(
                         'https://zampointzidb.eservices.gov.zm/ZIDB/ReceiveInsurancePolicies',
-                        [
-                            {
-                                insuranceType: 2,
-                                status: 1,
-                                registrationMark: risk.regNumber.replace(
-                                    /\s/g,
-                                    ''
-                                ),
-                                dateFrom: risk.riskStartDate,
-                                dateTo: risk.riskEndDate,
-                                insurancePolicyNo: policy.policyNumber,
-                                chassisNumber: risk.chassisNumber,
-                            },
-                        ],
+                        params,
                         httpOptions
                     );
                     console.log(

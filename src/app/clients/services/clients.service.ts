@@ -19,7 +19,7 @@ import {
 } from '../models/client.model';
 import { IAccount } from 'src/app/settings/models/organizational/account.model';
 
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'https://flosure-postgres-api.herokuapp.com';
 
 @Injectable({
     providedIn: 'root',
@@ -188,20 +188,20 @@ export class ClientsService {
         );
         console.log(client);
         return this.http.post<ICorporateClient>(
-            'http://localhost:3000/clients/corporate',
+            'https://flosure-postgres-api.herokuapp.com/clients/corporate',
             client
         );
     }
 
     getCorporateClients(): Observable<ICorporateClient[]> {
         return this.http.get<ICorporateClient[]>(
-            'http://localhost:3000/clients/corporate'
+            'https://flosure-postgres-api.herokuapp.com/clients/corporate'
         );
     }
 
     getCorporateClient(id: string): Observable<ICorporateClient> {
         return this.http.get<ICorporateClient>(
-            `http://localhost:3000/clients/corporate/${id}`
+            `https://flosure-postgres-api.herokuapp.com/clients/corporate/${id}`
         );
     }
 
@@ -210,7 +210,7 @@ export class ClientsService {
         id: string
     ): Observable<ICorporateClient> {
         return this.http.put<ICorporateClient>(
-            `http://localhost:3000/clients/corporate/${id}`,
+            `https://flosure-postgres-api.herokuapp.com/clients/corporate/${id}`,
             client
         );
     }
@@ -228,20 +228,20 @@ export class ClientsService {
             this.individualClients.length
         );
         return this.http.post<IIndividualClient>(
-            'http://localhost:3000/clients/individual',
+            'https://flosure-postgres-api.herokuapp.com/clients/individual',
             client
         );
     }
 
     getIndividualClients(): Observable<IIndividualClient[]> {
         return this.http.get<IIndividualClient[]>(
-            'http://localhost:3000/clients/individual'
+            'https://flosure-postgres-api.herokuapp.com/clients/individual'
         );
     }
 
     getIndividualClient(id: string): Observable<IIndividualClient> {
         return this.http.get<IIndividualClient>(
-            `http://localhost:3000/clients/individual/${id}`
+            `https://flosure-postgres-api.herokuapp.com/clients/individual/${id}`
         );
     }
 
@@ -250,7 +250,7 @@ export class ClientsService {
         id: string
     ): Observable<IIndividualClient> {
         return this.http.put<IIndividualClient>(
-            `http://localhost:3000/clients/individual/${id}`,
+            `https://flosure-postgres-api.herokuapp.com/clients/individual/${id}`,
             client
         );
     }
