@@ -14,6 +14,8 @@ const httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
 
+const BASE_URL = 'http://localhost:3000';
+
 @Injectable({
     providedIn: 'root'
 })
@@ -159,7 +161,7 @@ export class AgentsService {
             this.salesRepresentatives.length
         );
         return this.http.post<ISalesRepresentative>(
-            'https://flosure-postgres-api.herokuapp.com/intermediary/sales-representative',
+            `${BASE_URL}/intermediary/sales-representative`,
             salesRepresentatives
         );
     }
@@ -171,7 +173,7 @@ export class AgentsService {
 
     getSalesRepresentative(id: string): Observable<ISalesRepresentative> {
         return this.http.get<ISalesRepresentative>(
-            `https://flosure-postgres-api.herokuapp.com/intermediary/sales-representative/${id}`
+            `${BASE_URL}/intermediary/sales-representative/${id}`
         );
     }
 
@@ -201,14 +203,14 @@ export class AgentsService {
             this.brokers.length
         );
         return this.http.post<IBroker>(
-            'https://flosure-postgres-api.herokuapp.com/intermediary/broker',
+            `${BASE_URL}/intermediary/broker`,
             broker
         );
     }
 
     getBroker(id: string): Observable<IBroker> {
         return this.http.get<IBroker>(
-            `https://flosure-postgres-api.herokuapp.com/intermediary/broker/${id}`
+            `${BASE_URL}/intermediary/broker/${id}`
         );
     }
 
@@ -224,10 +226,10 @@ export class AgentsService {
         agent.intermediaryId = this.generateIntermediaryID(
             'Agent',
             'AP',
-            this.agents.length
+            5
         );
         return this.http.post<IAgent>(
-            'https://flosure-postgres-api.herokuapp.com/intermediary/agent',
+            `${BASE_URL}/intermediary/agent`,
             agent
         );
     }
@@ -246,7 +248,7 @@ export class AgentsService {
 
     updateAgent(agent: IAgent, id: string): Observable<IAgent> {
         return this.http.put<IAgent>(
-            `https://flosure-postgres-api.herokuapp.com/intermediary/agent/${id}`,
+            `${BASE_URL}/intermediary/agent/${id}`,
             agent
         );
     }
@@ -264,19 +266,19 @@ export class AgentsService {
     //postgres
     getAgents(): Observable<IAgent[]> {
         return this.http.get<IAgent[]>(
-            'https://flosure-postgres-api.herokuapp.com/intermediary/agent'
+            `${BASE_URL}/intermediary/agent`
         );
     }
 
     getBrokers(): Observable<IBroker[]> {
         return this.http.get<IBroker[]>(
-            'https://flosure-postgres-api.herokuapp.com/intermediary/broker'
+            `${BASE_URL}/intermediary/broker`
         );
     }
 
     getSalesRepresentatives(): Observable<ISalesRepresentative[]> {
         return this.http.get<ISalesRepresentative[]>(
-            'https://flosure-postgres-api.herokuapp.com/intermediary/sales-representative'
+            `${BASE_URL}/intermediary/sales-representative`
         );
     }
 

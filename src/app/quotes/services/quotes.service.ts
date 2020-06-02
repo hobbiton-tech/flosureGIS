@@ -10,7 +10,9 @@ import { first } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { NzMessageService } from 'ng-zorro-antd';
 import { Router } from '@angular/router';
-const BASE_URL = 'https://flosure-api.azurewebsites.net';
+
+const BASE_URL = 'http://localhost:3000';
+// const BASE_URL = 'https://flosure-api.azurewebsites.net';
 export interface IQuoteDocument {
     id: string;
     clientID: string;
@@ -142,7 +144,7 @@ export class QuotesService {
                 motorQuotation.quoteNumber = res.quoteNumber;
                 this.http
                     .post<MotorQuotationModel>(
-                        'https://flosure-postgres-api.herokuapp.com/quotation',
+                        `${BASE_URL}/quotation`,
                         motorQuotation
                     )
                     .subscribe(
@@ -160,14 +162,14 @@ export class QuotesService {
     }
     getMotorQuotations(): Observable<MotorQuotationModel[]> {
         return this.http.get<MotorQuotationModel[]>(
-            'https://flosure-postgres-api.herokuapp.com/quotation'
+            `${BASE_URL}/quotation`
         );
     }
     getMotorQuotationById(
         quotationId: string
     ): Observable<MotorQuotationModel> {
         return this.http.get<MotorQuotationModel>(
-            `https://flosure-postgres-api.herokuapp.com/quotation/${quotationId}`
+            `${BASE_URL}/quotation/${quotationId}`
         );
     }
     updateMotorQuotation(
@@ -175,7 +177,7 @@ export class QuotesService {
         quotationId: string
     ): Observable<MotorQuotationModel> {
         return this.http.put<MotorQuotationModel>(
-            `https://flosure-postgres-api.herokuapp.com/quotation/${quotationId}`,
+            `${BASE_URL}/quotation/${quotationId}`,
             motorQuotation
         );
     }
