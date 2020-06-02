@@ -35,6 +35,7 @@ export class ProductSetupsServiceService {
     addClass(dto: IClass): Observable<IClass> {
         return this.http.post<IClass>(
             'https://flosure-postgres-api.herokuapp.com/class',
+
             dto
         );
     }

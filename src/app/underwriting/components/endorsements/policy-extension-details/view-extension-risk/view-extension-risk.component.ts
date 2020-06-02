@@ -343,7 +343,7 @@ export class ViewExtensionRiskComponent implements OnInit {
                 .setValue(risk.vehicleModel);
             this.riskDetailsForm
                 .get('yearOfManufacture')
-                .setValue(this.getYearOfManfTimeStamp(risk));
+                .setValue(risk.yearOfManufacture);
             this.riskDetailsForm.get('regNumber').setValue(risk.regNumber);
             this.riskDetailsForm
                 .get('engineNumber')
@@ -440,9 +440,9 @@ export class ViewExtensionRiskComponent implements OnInit {
         this.premiumDiscount = 0;
     }
 
-    getYearOfManfTimeStamp(risk: RiskModel): number {
-        return (risk.yearOfManufacture as ITimestamp).seconds * 1000;
-    }
+    // getYearOfManfTimeStamp(risk: RiskModel): number {
+    //     return (risk.yearOfManufacture as ITimestamp).seconds * 1000;
+    // }
 
     getStartDateTimeStamp(risk: RiskModel): number {
         return (risk.riskStartDate as ITimestamp).seconds * 1000;

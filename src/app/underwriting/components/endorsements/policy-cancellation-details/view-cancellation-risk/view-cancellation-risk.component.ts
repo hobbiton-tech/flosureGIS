@@ -325,9 +325,9 @@ export class ViewCancellationRiskComponent implements OnInit {
         this.netPremium = risk.netPremium;
     }
 
-    getYearOfManfTimeStamp(risk: RiskModel): number {
-        return (risk.yearOfManufacture as ITimestamp).seconds * 1000;
-    }
+    // getYearOfManfTimeStamp(risk: RiskModel): number {
+    //     return (risk.yearOfManufacture as ITimestamp).seconds * 1000;
+    // }
 
     getStartDateTimeStamp(risk: RiskModel): number {
         return (risk.riskStartDate as ITimestamp).seconds * 1000;

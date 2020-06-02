@@ -81,6 +81,8 @@ interface IRateRequest {
     styleUrls: ['./quote-details.component.scss'],
 })
 export class QuoteDetailsComponent implements OnInit {
+    
+
     clauses: IPolicyClauses[];
     wordings: IPolicyWording[];
     extensions: IPolicyExtension[];
@@ -910,7 +912,7 @@ export class QuoteDetailsComponent implements OnInit {
                 .setValue(risk.vehicleModel);
             this.riskComprehensiveForm
                 .get('yearOfManufacture')
-                .setValue(this.getYearOfManfTimeStamp(this.selectedRisk));
+                .setValue(risk.yearOfManufacture);
             this.riskComprehensiveForm
                 .get('regNumber')
                 .setValue(risk.regNumber);
@@ -1091,9 +1093,9 @@ export class QuoteDetailsComponent implements OnInit {
         }
     }
 
-    getYearOfManfTimeStamp(risk: RiskModel): number {
-        return (risk.yearOfManufacture as ITimestamp).seconds * 1000;
-    }
+    // getYearOfManfTimeStamp(risk: RiskModel): number {
+    //     return (risk.yearOfManufacture as ITimestamp).seconds * 1000;
+    // }
 
     getEndDateTimeStamp(quote: MotorQuotationModel): number {
         if (!this.quotesLoading) {
@@ -1201,7 +1203,9 @@ export class QuoteDetailsComponent implements OnInit {
         this.policiesService.createPolicy(policy).subscribe((res) => {
             console.log('response:');
             console.log(res);
+
             this.policiesService.createDebitNote(res.id, debitNote, res);
+
             for (const clause of this.clauses) {
                 clause.policyId = res.id;
                 this.productClauseService.updatePolicyClause(clause);

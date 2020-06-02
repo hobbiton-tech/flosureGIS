@@ -20,6 +20,9 @@ import {
 
 const BASE_URL = 'https://flosure-postgres-api.herokuapp.com';
 
+// const BASE_URL = 'http://localhost:3000';
+
+
 interface IDebitNoteResult {
     invoiceNumber: string;
 }
@@ -257,6 +260,13 @@ export class PoliciesService {
     //documents
     //debit note
     createDebitNote(policyId: string, debitNote: DebitNote, policy: Policy) {
+        console.log('create debit note method called');
+        console.log(policyId);
+        console.log('-------------------');
+        console.log(debitNote);
+        console.log('-------------------');
+        console.log(policy);
+
         let insuranceType = '';
         const productType = policy.risks[0].insuranceType;
         if (productType == 'Comprehensive') {
@@ -288,8 +298,8 @@ export class PoliciesService {
             });
     }
 
-    getDebitNotes(): Observable<DebitNote> {
-        return this.http.get<DebitNote>(`${BASE_URL}/documents/debit-notes`);
+    getDebitNotes(): Observable<DebitNote[]> {
+        return this.http.get<DebitNote[]>(`${BASE_URL}/documents/debit-notes`);
     }
 
     getDebitNoteById(debitNoteId: string): Observable<DebitNote> {
@@ -310,6 +320,13 @@ export class PoliciesService {
 
     //credit note
     createCreditNote(policyId: string, creditNote: CreditNote, policy: Policy) {
+        console.log('create debit note method called');
+        console.log(policyId);
+        console.log('-------------------');
+        console.log(creditNote);
+        console.log('-------------------');
+        console.log(policy);
+
         let insuranceType = '';
         const productType = policy.risks[0].insuranceType;
         if (productType == 'Comprehensive') {
@@ -345,8 +362,10 @@ export class PoliciesService {
             });
     }
 
-    getCreditNotes(): Observable<CreditNote> {
-        return this.http.get<CreditNote>(`${BASE_URL}/documents/credit-notes`);
+    getCreditNotes(): Observable<CreditNote[]> {
+        return this.http.get<CreditNote[]>(
+            `${BASE_URL}/documents/credit-notes`
+        );
     }
 
     getCreditNoteById(creditNoteId: string): Observable<CreditNote> {

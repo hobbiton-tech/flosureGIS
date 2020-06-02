@@ -227,6 +227,7 @@ export class ClientsService {
             'AP',
             this.individualClients.length
         );
+        console.log(client);
         return this.http.post<IIndividualClient>(
             'https://flosure-postgres-api.herokuapp.com/clients/individual',
             client
