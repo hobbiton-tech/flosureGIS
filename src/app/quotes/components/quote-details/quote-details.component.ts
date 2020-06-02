@@ -1226,42 +1226,56 @@ export class QuoteDetailsComponent implements OnInit {
 
             for (const risk of policy.risks) {
                 console.log('Risks>>>>', risk);
-                let headers = new HttpHeaders();
-                headers = headers.append(
+                let headers_object = new HttpHeaders();
+                headers_object.append(
                     'Authorization',
                     'Basic ' + btoa('Douglas.Chilungu:aplusgeneral@2019')
                 );
-                headers = headers.append('Content-Type', 'application/json');
+                headers_object.append('Content-Type', 'application/json');
+
+                const httpOptions = {
+                    headers: headers_object,
+                };
                 if (risk.insuranceType === 'ThirdParty') {
                     console.log('Risk Type>>>>', risk.insuranceType);
 
-                    this.http.post(
+                    this.http.post<any>(
                         'https://zampointzidb.eservices.gov.zm/ZIDB/ReceiveInsurancePolicies',
-                        {
-                            insuranceType: 1,
-                            status: 1,
-                            registrationMark: risk.regNumber.replace(/\s/g, ''),
-                            dateFrom: risk.riskStartDate,
-                            dateTo: risk.riskEndDate,
-                            insurancePolicyNo: policy.policyNumber,
-                            chassisNumber: risk.chassisNumber,
-                        },
-                        { headers }
+                        [
+                            {
+                                insuranceType: 1,
+                                status: 1,
+                                registrationMark: risk.regNumber.replace(
+                                    /\s/g,
+                                    ''
+                                ),
+                                dateFrom: risk.riskStartDate,
+                                dateTo: risk.riskEndDate,
+                                insurancePolicyNo: policy.policyNumber,
+                                chassisNumber: risk.chassisNumber,
+                            },
+                        ],
+                        httpOptions
                     );
                 } else if (risk.insuranceType === 'Comprehensive') {
                     console.log('Risk Type>>>>', risk.insuranceType);
-                    this.http.post(
+                    this.http.post<any>(
                         'https://zampointzidb.eservices.gov.zm/ZIDB/ReceiveInsurancePolicies',
-                        {
-                            insuranceType: 2,
-                            status: 1,
-                            registrationMark: risk.regNumber.replace(/\s/g, ''),
-                            dateFrom: risk.riskStartDate,
-                            dateTo: risk.riskEndDate,
-                            insurancePolicyNo: policy.policyNumber,
-                            chassisNumber: risk.chassisNumber,
-                        },
-                        { headers }
+                        [
+                            {
+                                insuranceType: 2,
+                                status: 1,
+                                registrationMark: risk.regNumber.replace(
+                                    /\s/g,
+                                    ''
+                                ),
+                                dateFrom: risk.riskStartDate,
+                                dateTo: risk.riskEndDate,
+                                insurancePolicyNo: policy.policyNumber,
+                                chassisNumber: risk.chassisNumber,
+                            },
+                        ],
+                        httpOptions
                     );
                 }
             }
