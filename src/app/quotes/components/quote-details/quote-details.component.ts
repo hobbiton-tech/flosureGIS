@@ -4,7 +4,7 @@ import {
     RiskModel,
     LoadModel,
     DiscountType,
-    DiscountModel
+    DiscountModel,
 } from '../../models/quote.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Policy } from 'src/app/underwriting/models/policy.model';
@@ -19,17 +19,17 @@ import { combineLatest, BehaviorSubject, Observable } from 'rxjs';
 import * as XLSX from 'xlsx';
 import {
     IIndividualClient,
-    ICorporateClient
+    ICorporateClient,
 } from 'src/app/clients/models/clients.model';
 import { UploadChangeParam, NzMessageService } from 'ng-zorro-antd';
 import { debounceTime, switchMap, map } from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import _ from 'lodash';
 import { AgentsService } from 'src/app/settings/components/agents/services/agents.service';
 import {
     IBroker,
     IAgent,
-    ISalesRepresentative
+    ISalesRepresentative,
 } from 'src/app/settings/components/agents/models/agents.model';
 import { ImageElement } from 'canvg';
 import { DebitNote } from 'src/app/underwriting/documents/models/documents.model';
@@ -37,7 +37,7 @@ import { ClausesService } from 'src/app/settings/components/underwriting-setups/
 import {
     IPolicyClauses,
     IPolicyWording,
-    IPolicyExtension
+    IPolicyExtension,
 } from 'src/app/settings/models/underwriting/clause.model';
 
 type AOA = any[][];
@@ -78,7 +78,7 @@ interface IRateRequest {
 @Component({
     selector: 'app-quote-details',
     templateUrl: './quote-details.component.html',
-    styleUrls: ['./quote-details.component.scss']
+    styleUrls: ['./quote-details.component.scss'],
 })
 export class QuoteDetailsComponent implements OnInit {
     clauses: IPolicyClauses[];
@@ -120,7 +120,7 @@ export class QuoteDetailsComponent implements OnInit {
     // excel template data
     data: AOA = [
         [1, 2],
-        [3, 4]
+        [3, 4],
     ];
     wopts: XLSX.WritingOptions = { bookType: 'xlsx', type: 'array' };
 
@@ -166,7 +166,7 @@ export class QuoteDetailsComponent implements OnInit {
     totalLevy: number;
     totalNetPremium: number;
 
-    LevyRate: number = 3;
+    LevyRate = 3;
 
     increasedThirdPartyLimitsRate: number;
     increasedThirdPartyLimitsAmount: number;
@@ -289,33 +289,33 @@ export class QuoteDetailsComponent implements OnInit {
 
     optionList = [
         { label: 'Motor Comprehensive', value: 'Comprehensive' },
-        { label: 'Motor Third Party', value: 'ThirdParty' }
+        { label: 'Motor Third Party', value: 'ThirdParty' },
     ];
     selectedValue = { label: 'Motor Comprehensive', value: 'Comprehensive' };
 
     motorComprehensiveloadingOptions = [
         {
             label: 'Increased Third Party Limit',
-            value: 'increasedThirdPartyLimits'
+            value: 'increasedThirdPartyLimits',
         },
         { label: 'Riot and strike', value: 'riotAndStrike' },
         { label: 'Car Stereo', value: 'carStereo' },
         { label: 'Territorial Extension', value: 'territorailExtension' },
         { label: 'Loss Of Use', value: 'lossOfUse' },
         { label: 'Inexperienced Driver', value: 'inexperiencedDriver' },
-        { label: 'Under Age Driver', value: 'underAgeDriver' }
+        { label: 'Under Age Driver', value: 'underAgeDriver' },
     ];
 
     motorThirdPartyloadingOptions = [
         {
             label: 'Increased Third Party Limit',
-            value: 'increasedThirdPartyLimits'
-        }
+            value: 'increasedThirdPartyLimits',
+        },
     ];
 
     selectedLoadingValue = {
         label: '',
-        value: ''
+        value: '',
     };
 
     // discounts
@@ -323,7 +323,7 @@ export class QuoteDetailsComponent implements OnInit {
         { label: 'No claims dicount', value: 'noClaimsDiscount' },
         { label: 'Loyalty Discount', value: 'loyaltyDiscount' },
         { label: 'Valued Client Discount', value: 'valuedClientDiscount' },
-        { label: 'Low Term Agreement', value: 'lowTermAgreementDiscount' }
+        { label: 'Low Term Agreement', value: 'lowTermAgreementDiscount' },
     ];
 
     selectedDiscountValue = { label: '', value: '' };
@@ -334,7 +334,7 @@ export class QuoteDetailsComponent implements OnInit {
         { label: 'Direct', value: 'direct' },
         { label: 'Broker', value: 'broker' },
         { label: 'Agent', value: 'agent' },
-        { label: 'Sales Representative', value: 'salesRepresentative' }
+        { label: 'Sales Representative', value: 'salesRepresentative' },
     ];
 
     quoteData: MotorQuotationModel = new MotorQuotationModel();
@@ -390,41 +390,45 @@ export class QuoteDetailsComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.route.params.subscribe(param => {
+        this.route.params.subscribe((param) => {
             this.quoteNumber = param.quoteNumber;
-            this.quotesService.getMotorQuotations().subscribe(quotes => {
+            this.quotesService.getMotorQuotations().subscribe((quotes) => {
                 this.quoteData = quotes.filter(
-                    x => x.quoteNumber === this.quoteNumber
+                    (x) => x.quoteNumber === this.quoteNumber
                 )[0];
                 this.quotesList = quotes;
                 this.quote = this.quotesList.filter(
-                    x => x.quoteNumber === this.quoteNumber
+                    (x) => x.quoteNumber === this.quoteNumber
                 )[0];
                 console.log('this.quote>>>>>', this.quoteData);
 
                 this.risks = this.quoteData.risks;
-                this.productClauseService.getPolicyClauses().subscribe(res => {
-                    this.clauses = res.filter(
-                        x => x.policyId === this.risks[0].id
-                    );
-                    console.log('CLAUSES>>>>>', this.clauses);
-                });
+                this.productClauseService
+                    .getPolicyClauses()
+                    .subscribe((res) => {
+                        this.clauses = res.filter(
+                            (x) => x.policyId === this.risks[0].id
+                        );
+                        console.log('CLAUSES>>>>>', this.clauses);
+                    });
 
                 this.productClauseService
                     .getPolicyExtensions()
-                    .subscribe(res => {
+                    .subscribe((res) => {
                         this.extensions = res.filter(
-                            x => x.policyId === this.risks[0].id
+                            (x) => x.policyId === this.risks[0].id
                         );
                         console.log('EXTENSIONS>>>>>', this.extensions);
                     });
 
-                this.productClauseService.getPolicyWordings().subscribe(res => {
-                    this.wordings = res.filter(
-                        x => x.policyId === this.risks[0].id
-                    );
-                    console.log('WORDINGS>>>>>', this.wordings);
-                });
+                this.productClauseService
+                    .getPolicyWordings()
+                    .subscribe((res) => {
+                        this.wordings = res.filter(
+                            (x) => x.policyId === this.risks[0].id
+                        );
+                        console.log('WORDINGS>>>>>', this.wordings);
+                    });
 
                 // if (this.quoteData.sourceOfBusiness == 'Agent') {
                 //     this.agent = this.intermediaries.filter(
@@ -458,7 +462,7 @@ export class QuoteDetailsComponent implements OnInit {
                 this.quoteDetailsForm
                     .get('sourceOfBusiness')
                     .setValue(this.quoteData.sourceOfBusiness, {
-                        onlySelf: true
+                        onlySelf: true,
                     });
                 this.quoteDetailsForm
                     .get('intermediaryName')
@@ -495,33 +499,35 @@ export class QuoteDetailsComponent implements OnInit {
             });
         });
 
-        this.clientsService.getAllClients().subscribe(clients => {
+        this.clientsService.getAllClients().subscribe((clients) => {
             this.clients = [...clients[0], ...clients[1]] as Array<
                 IIndividualClient & ICorporateClient
             >;
         });
 
-        this.agentsService.getAgents().subscribe(agents => {
+        this.agentsService.getAgents().subscribe((agents) => {
             this.agents = agents;
         });
 
-        this.agentsService.getBrokers().subscribe(brokers => {
+        this.agentsService.getBrokers().subscribe((brokers) => {
             this.brokers = brokers;
         });
 
         this.agentsService
             .getSalesRepresentatives()
-            .subscribe(salesRepresentatives => {
+            .subscribe((salesRepresentatives) => {
                 this.salesRepresentatives = salesRepresentatives;
             });
 
-        this.agentsService.getAllIntermediaries().subscribe(intermediaries => {
-            this.intermediaries = [
-                ...intermediaries[0],
-                ...intermediaries[1],
-                ...intermediaries[2]
-            ] as Array<IAgent & IBroker & ISalesRepresentative>;
-        });
+        this.agentsService
+            .getAllIntermediaries()
+            .subscribe((intermediaries) => {
+                this.intermediaries = [
+                    ...intermediaries[0],
+                    ...intermediaries[1],
+                    ...intermediaries[2],
+                ] as Array<IAgent & IBroker & ISalesRepresentative>;
+            });
 
         // start of initialize computations
         this.sumInsured = 0;
@@ -561,7 +567,7 @@ export class QuoteDetailsComponent implements OnInit {
             quarter: ['', Validators.required],
             underwritingYear: ['', Validators.required],
             sourceOfBusiness: ['', Validators.required],
-            intermediaryName: ['', Validators.required]
+            intermediaryName: ['', Validators.required],
         });
 
         this.riskComprehensiveForm = this.formBuilder.group({
@@ -576,7 +582,7 @@ export class QuoteDetailsComponent implements OnInit {
             yearOfManufacture: ['', Validators.required],
             color: ['', Validators.required],
             productType: ['', Validators.required],
-            insuranceType: ['Comprehensive']
+            insuranceType: ['Comprehensive'],
         });
 
         this.riskThirdPartyForm = this.formBuilder.group({
@@ -591,7 +597,7 @@ export class QuoteDetailsComponent implements OnInit {
             yearOfManufacture: ['', Validators.required],
             color: ['', [Validators.required]],
             productType: ['', [Validators.required]],
-            insuranceType: ['ThirdParty']
+            insuranceType: ['ThirdParty'],
         });
 
         // vehicle make loading
@@ -605,11 +611,13 @@ export class QuoteDetailsComponent implements OnInit {
                     })
                 );
 
-        const vehicleMakeOptionList$: Observable<string[]> = this.searchChange$
+        const vehicleMakeOptionList$: Observable<
+            string[]
+        > = this.searchChange$
             .asObservable()
             .pipe(debounceTime(500))
             .pipe(switchMap(getVehicleMakeList));
-        vehicleMakeOptionList$.subscribe(data => {
+        vehicleMakeOptionList$.subscribe((data) => {
             this.vehicleMakeOptionList = data;
             this.isVehicleMakeLoading = false;
         });
@@ -625,11 +633,13 @@ export class QuoteDetailsComponent implements OnInit {
                     })
                 );
 
-        const vehicleModelOptionList$: Observable<string[]> = this.searchChange$
+        const vehicleModelOptionList$: Observable<
+            string[]
+        > = this.searchChange$
             .asObservable()
             .pipe(debounceTime(500))
             .pipe(switchMap(getVehicleModelList));
-        vehicleModelOptionList$.subscribe(data => {
+        vehicleModelOptionList$.subscribe((data) => {
             this.vehicleModelOptionList = data;
             this.isVehicleModelLoading = false;
         });
@@ -675,14 +685,14 @@ export class QuoteDetailsComponent implements OnInit {
                 thirdPartyLimit: 0,
                 thirdPartyLimitRate: 0,
                 riotAndStrike: 0,
-                levy: 0
+                levy: 0,
             };
             this.http
                 .post<IRateResult>(
                     `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
                     request
                 )
-                .subscribe(data => {
+                .subscribe((data) => {
                     this.riskComprehensiveForm
                         .get('riskEndDate')
                         .setValue(data.endDate);
@@ -714,14 +724,14 @@ export class QuoteDetailsComponent implements OnInit {
                 thirdPartyLimit: 0,
                 thirdPartyLimitRate: 0,
                 riotAndStrike: 0,
-                levy: 0
+                levy: 0,
             };
             this.http
                 .post<IRateResult>(
                     `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
                     request
                 )
-                .subscribe(data => {
+                .subscribe((data) => {
                     this.riskThirdPartyForm
                         .get('riskEndDate')
                         .setValue(data.endDate);
@@ -750,14 +760,14 @@ export class QuoteDetailsComponent implements OnInit {
                 thirdPartyLimit: 0,
                 thirdPartyLimitRate: 0,
                 riotAndStrike: 0,
-                levy: 0
+                levy: 0,
             };
             this.http
                 .post<IRateResult>(
                     `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
                     request
                 )
-                .subscribe(data => {
+                .subscribe((data) => {
                     this.quoteDetailsForm.get('endDate').setValue(data.endDate);
                 });
         }
@@ -784,14 +794,14 @@ export class QuoteDetailsComponent implements OnInit {
                 thirdPartyLimit: 0,
                 thirdPartyLimitRate: 0,
                 riotAndStrike: 0,
-                levy: 0
+                levy: 0,
             };
             this.http
                 .post<IRateResult>(
                     `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
                     request
                 )
-                .subscribe(data => {
+                .subscribe((data) => {
                     this.basicPremium = Number(data.basicPremium);
                     this.handleNetPremium();
                 });
@@ -811,7 +821,7 @@ export class QuoteDetailsComponent implements OnInit {
             discountRate: this.premiumDiscountRate,
             premiumLevy: 0.03,
             netPremium: this.netPremium,
-            insuranceType: this.selectedValue.value
+            insuranceType: this.selectedValue.value,
         });
         this.risks = [...this.risks, ...some];
 
@@ -856,7 +866,7 @@ export class QuoteDetailsComponent implements OnInit {
             discountRate: this.premiumDiscountRate,
             premiumLevy: 0.03,
             netPremium: this.netPremium,
-            insuranceType: this.selectedValue.value
+            insuranceType: this.selectedValue.value,
         });
         this.risks = [...this.risks, ...some];
 
@@ -971,7 +981,7 @@ export class QuoteDetailsComponent implements OnInit {
 
     // remove risk from risks table
     removeRisk(regNumber: string): void {
-        this.risks = this.risks.filter(risk => risk.regNumber !== regNumber);
+        this.risks = this.risks.filter((risk) => risk.regNumber !== regNumber);
     }
 
     // save risks changes after editing
@@ -991,12 +1001,12 @@ export class QuoteDetailsComponent implements OnInit {
                 discountRate: this.premiumDiscountRate,
                 premiumLevy: this.basicPremiumLevy,
                 netPremium: this.netPremium,
-                insuranceType: this.selectedValue.value
+                insuranceType: this.selectedValue.value,
             };
             this.currentRiskEdit = some;
 
             const riskIndex = _.findIndex(this.risks, {
-                id: this.selectedRisk.id
+                id: this.selectedRisk.id,
             });
             this.risks.splice(riskIndex, 1, this.currentRiskEdit);
             this.risks = this.risks;
@@ -1012,12 +1022,12 @@ export class QuoteDetailsComponent implements OnInit {
                 discountRate: this.premiumDiscountRate,
                 premiumLevy: this.basicPremiumLevy,
                 netPremium: this.netPremium,
-                insuranceType: this.selectedValue.value
+                insuranceType: this.selectedValue.value,
             };
             this.selectedRisk = some;
 
             const riskIndex = _.findIndex(this.risks, {
-                id: this.selectedRisk.id
+                id: this.selectedRisk.id,
             });
             this.risks.splice(riskIndex, 1, this.currentRiskEdit);
         }
@@ -1156,7 +1166,7 @@ export class QuoteDetailsComponent implements OnInit {
         this.quote.status = 'Approved';
         this.quotesService
             .updateMotorQuotation(this.quote, this.quote.id)
-            .subscribe(quotation => res => console.log(res));
+            .subscribe((quotation) => (res) => console.log(res));
 
         // convert to policy
         const policy: Policy = {
@@ -1176,19 +1186,19 @@ export class QuoteDetailsComponent implements OnInit {
             underwritingYear: new Date(),
             user: localStorage.getItem('user'),
             sourceOfBusiness: this.quoteData.sourceOfBusiness,
-            intermediaryName: this.quoteData.intermediaryName
+            intermediaryName: this.quoteData.intermediaryName,
         };
 
         const debitNote: DebitNote = {
             remarks: '-',
             dateCreated: new Date(),
-            dateUpdated: new Date()
+            dateUpdated: new Date(),
         };
 
         // const policy = this.quoteDetailsForm.value as Policy;
         console.log(policy);
 
-        this.policiesService.createPolicy(policy).subscribe(res => {
+        this.policiesService.createPolicy(policy).subscribe((res) => {
             console.log('response:');
             console.log(res);
             this.policiesService.createDebitNote(res.id, debitNote, res);
@@ -1216,8 +1226,15 @@ export class QuoteDetailsComponent implements OnInit {
 
             for (const risk of policy.risks) {
                 console.log('Risks>>>>', risk);
+                let headers = new HttpHeaders();
+                headers = headers.append(
+                    'Authorization',
+                    'Basic ' + btoa('Douglas.Chilungu:aplusgeneral@2019')
+                );
+                headers = headers.append('Content-Type', 'application/json');
                 if (risk.insuranceType === 'ThirdParty') {
                     console.log('Risk Type>>>>', risk.insuranceType);
+
                     this.http.post(
                         'https://zampointzidb.eservices.gov.zm/ZIDB/ReceiveInsurancePolicies',
                         {
@@ -1227,8 +1244,9 @@ export class QuoteDetailsComponent implements OnInit {
                             dateFrom: risk.riskStartDate,
                             dateTo: risk.riskEndDate,
                             insurancePolicyNo: policy.policyNumber,
-                            chassisNumber: risk.chassisNumber
-                        }
+                            chassisNumber: risk.chassisNumber,
+                        },
+                        { headers }
                     );
                 } else if (risk.insuranceType === 'Comprehensive') {
                     console.log('Risk Type>>>>', risk.insuranceType);
@@ -1241,8 +1259,9 @@ export class QuoteDetailsComponent implements OnInit {
                             dateFrom: risk.riskStartDate,
                             dateTo: risk.riskEndDate,
                             insurancePolicyNo: policy.policyNumber,
-                            chassisNumber: risk.chassisNumber
-                        }
+                            chassisNumber: risk.chassisNumber,
+                        },
+                        { headers }
                     );
                 }
             }
@@ -1280,7 +1299,7 @@ export class QuoteDetailsComponent implements OnInit {
     }
 
     sumArray(items, prop) {
-        return items.reduce(function(a, b) {
+        return items.reduce(function (a, b) {
             return a + b[prop];
         }, 0);
     }
@@ -1291,7 +1310,7 @@ export class QuoteDetailsComponent implements OnInit {
             this.displayQuote = this.quote;
         }
 
-        this.displayQuote.risks = this.quote.risks.filter(quote => {
+        this.displayQuote.risks = this.quote.risks.filter((quote) => {
             return (
                 quote.insuranceType
                     .toLowerCase()
@@ -1342,8 +1361,8 @@ export class QuoteDetailsComponent implements OnInit {
                 'color',
                 'productType',
                 'sumInsured',
-                'netPremium'
-            ]
+                'netPremium',
+            ],
         ];
         const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(headings);
 
@@ -1382,7 +1401,7 @@ export class QuoteDetailsComponent implements OnInit {
             oReq.open('GET', this.fileLocation, true);
             oReq.responseType = 'arraybuffer';
 
-            oReq.onload = e => {
+            oReq.onload = (e) => {
                 const arraybuffer = oReq.response;
 
                 // //convert data to binary string
@@ -1395,7 +1414,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                 // call XLSX
                 const workbook = XLSX.read(bstr, { type: 'binary' });
-                workbook.SheetNames.forEach(sheetName => {
+                workbook.SheetNames.forEach((sheetName) => {
                     const imported_risks: RiskModel[] = XLSX.utils.sheet_to_json(
                         workbook.Sheets[sheetName]
                     );
@@ -1437,14 +1456,14 @@ export class QuoteDetailsComponent implements OnInit {
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
             riotAndStrike: Number(this.riotAndStrikeRate) / 100,
-            levy: 0.03
+            levy: 0.03,
         };
         this.http
             .post<IRateResult>(
                 `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
                 request
             )
-            .subscribe(data => {
+            .subscribe((data) => {
                 this.netPremium = Number(data.totalPremium);
                 this.computePremiumIsLoading = false;
             });
@@ -1471,14 +1490,14 @@ export class QuoteDetailsComponent implements OnInit {
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
             riotAndStrike: Number(this.riotAndStrikeRate) / 100,
-            levy: 0.03
+            levy: 0.03,
         };
         this.http
             .post<IRateResult>(
                 `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
                 request
             )
-            .subscribe(data => {
+            .subscribe((data) => {
                 this.netPremium = Number(data.totalPremium);
                 this.computePremiumIsLoading = false;
             });
@@ -1509,17 +1528,17 @@ export class QuoteDetailsComponent implements OnInit {
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
             riotAndStrike: Number(this.riotAndStrikeRate) / 100,
-            levy: 0.03
+            levy: 0.03,
         };
         this.http
             .post<IRateResult>(
                 `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
                 request
             )
-            .subscribe(data => {
+            .subscribe((data) => {
                 this.loads.push({
                     loadType: 'Riot And Strike',
-                    amount: Number(data.riotAndStrikePremium)
+                    amount: Number(data.riotAndStrikePremium),
                 });
                 this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
                 this.handleNetPremium();
@@ -1551,17 +1570,17 @@ export class QuoteDetailsComponent implements OnInit {
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
             riotAndStrike: Number(this.riotAndStrikeRate) / 100,
-            levy: 0.03
+            levy: 0.03,
         };
         this.http
             .post<IRateResult>(
                 `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
                 request
             )
-            .subscribe(data => {
+            .subscribe((data) => {
                 this.loads.push({
                     loadType: 'Increased Third Party Limit',
-                    amount: Number(data.thirdPartyLoadingPremium)
+                    amount: Number(data.thirdPartyLoadingPremium),
                 });
                 this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
                 this.handleNetPremium();
@@ -1591,17 +1610,17 @@ export class QuoteDetailsComponent implements OnInit {
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
             riotAndStrike: Number(this.riotAndStrikeRate) / 100,
-            levy: 0.03
+            levy: 0.03,
         };
         this.http
             .post<IRateResult>(
                 `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
                 request
             )
-            .subscribe(data => {
+            .subscribe((data) => {
                 this.loads.push({
                     loadType: 'Increased Third Party Limit',
-                    amount: Number(data.thirdPartyLoadingPremium)
+                    amount: Number(data.thirdPartyLoadingPremium),
                 });
                 this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
                 this.handleNetPremium();
@@ -1633,17 +1652,17 @@ export class QuoteDetailsComponent implements OnInit {
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
             riotAndStrike: Number(this.riotAndStrikeRate) / 100,
-            levy: 0.03
+            levy: 0.03,
         };
         this.http
             .post<IRateResult>(
                 `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
                 request
             )
-            .subscribe(data => {
+            .subscribe((data) => {
                 this.loads.push({
                     loadType: 'Car Stereo',
-                    amount: Number(data.carStereoPremium)
+                    amount: Number(data.carStereoPremium),
                 });
                 this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
                 this.handleNetPremium();
@@ -1675,17 +1694,17 @@ export class QuoteDetailsComponent implements OnInit {
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
             riotAndStrike: Number(this.riotAndStrikeRate) / 100,
-            levy: 0.03
+            levy: 0.03,
         };
         this.http
             .post<IRateResult>(
                 `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
                 request
             )
-            .subscribe(data => {
+            .subscribe((data) => {
                 this.loads.push({
                     loadType: 'Territorial Extension',
-                    amount: Number(data.territorialExtensionPremium)
+                    amount: Number(data.territorialExtensionPremium),
                 });
                 this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
                 this.handleNetPremium();
@@ -1717,17 +1736,17 @@ export class QuoteDetailsComponent implements OnInit {
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
             riotAndStrike: Number(this.riotAndStrikeRate) / 100,
-            levy: 0.03
+            levy: 0.03,
         };
         this.http
             .post<IRateResult>(
                 `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
                 request
             )
-            .subscribe(data => {
+            .subscribe((data) => {
                 this.loads.push({
                     loadType: 'Loss Of Use',
-                    amount: Number(data.lossOfUsePremium)
+                    amount: Number(data.lossOfUsePremium),
                 });
                 this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
                 this.handleNetPremium();
@@ -1777,19 +1796,19 @@ export class QuoteDetailsComponent implements OnInit {
     handleDiscount(discountType: DiscountType) {
         // following methods check if the repective loads are in the loads array
         const riotAndStrikeInLoads = this.loads.some(
-            item => item.loadType === 'Riot And Strike'
+            (item) => item.loadType === 'Riot And Strike'
         );
         const increaseThirdPartyLimitInLoads = this.loads.some(
-            item => item.loadType === 'Increased Third Party Limit'
+            (item) => item.loadType === 'Increased Third Party Limit'
         );
         const carStereoInLoads = this.loads.some(
-            item => item.loadType === 'Car Stereo'
+            (item) => item.loadType === 'Car Stereo'
         );
         const territorialExtensionInLoads = this.loads.some(
-            item => item.loadType === 'Territorial Extension'
+            (item) => item.loadType === 'Territorial Extension'
         );
         const lossOfUseInLoads = this.loads.some(
-            item => item.loadType === 'Loss Of Use'
+            (item) => item.loadType === 'Loss Of Use'
         );
 
         // if the checked loading are not in loads array set there values to Zero!
@@ -1834,14 +1853,14 @@ export class QuoteDetailsComponent implements OnInit {
                 thirdPartyLimitRate:
                     Number(this.increasedThirdPartyLimitsRate) / 100,
                 riotAndStrike: Number(this.riotAndStrikeRate) / 100,
-                levy: 0.03
+                levy: 0.03,
             };
             this.http
                 .post<IRateResult>(
                     `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
                     request
                 )
-                .subscribe(data => {
+                .subscribe((data) => {
                     this.premiumDiscount = Number(data.discount);
                     this.handleNetPremium();
                 });
@@ -1851,19 +1870,19 @@ export class QuoteDetailsComponent implements OnInit {
     handleDiscountThirdParty() {
         // following methods check if the repective loads are in the loads array
         const riotAndStrikeInLoads = this.loads.some(
-            item => item.loadType === 'Riot And Strike'
+            (item) => item.loadType === 'Riot And Strike'
         );
         const increaseThirdPartyLimitInLoads = this.loads.some(
-            item => item.loadType === 'Increased Third Party Limit'
+            (item) => item.loadType === 'Increased Third Party Limit'
         );
         const carStereoInLoads = this.loads.some(
-            item => item.loadType === 'Car Stereo'
+            (item) => item.loadType === 'Car Stereo'
         );
         const territorialExtensionInLoads = this.loads.some(
-            item => item.loadType === 'Territorial Extension'
+            (item) => item.loadType === 'Territorial Extension'
         );
         const lossOfUseInLoads = this.loads.some(
-            item => item.loadType === 'Loss Of Use'
+            (item) => item.loadType === 'Loss Of Use'
         );
 
         // if the checked loading are not in loads array set there values to Zero!
@@ -1907,14 +1926,14 @@ export class QuoteDetailsComponent implements OnInit {
                 thirdPartyLimitRate:
                     Number(this.increasedThirdPartyLimitsRate) / 100,
                 riotAndStrike: Number(this.riotAndStrikeRate) / 100,
-                levy: 0.03
+                levy: 0.03,
             };
             this.http
                 .post<IRateResult>(
                     `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
                     request
                 )
-                .subscribe(data => {
+                .subscribe((data) => {
                     this.premiumDiscount = Number(data.discount);
                     this.handleNetPremium();
                 });
@@ -2001,7 +2020,7 @@ export class QuoteDetailsComponent implements OnInit {
     handleIncreasedThirdPartyLimitAmount() {
         this.loads.push({
             loadType: 'Increased Third Party Limit',
-            amount: Number(this.increasedThirdPartyLimitAmount)
+            amount: Number(this.increasedThirdPartyLimitAmount),
         });
         this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
         this.handleNetPremium();
@@ -2011,7 +2030,7 @@ export class QuoteDetailsComponent implements OnInit {
     handleRiotAndStrikeAmount() {
         this.loads.push({
             loadType: 'Riot And Strike',
-            amount: Number(this.riotAndStrikeAmount)
+            amount: Number(this.riotAndStrikeAmount),
         });
         this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
         this.handleNetPremium();
@@ -2021,7 +2040,7 @@ export class QuoteDetailsComponent implements OnInit {
     handleCarStereoAmount() {
         this.loads.push({
             loadType: 'Car Stereo',
-            amount: Number(this.carStereoAmount)
+            amount: Number(this.carStereoAmount),
         });
         this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
         this.handleNetPremium();
@@ -2031,7 +2050,7 @@ export class QuoteDetailsComponent implements OnInit {
     handleLossOfUseAmount() {
         this.loads.push({
             loadType: 'Loss Of Use',
-            amount: Number(this.lossOfUseAmount)
+            amount: Number(this.lossOfUseAmount),
         });
         this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
         this.handleNetPremium();
@@ -2041,7 +2060,7 @@ export class QuoteDetailsComponent implements OnInit {
     handleTerritorialExtensionAmount() {
         this.loads.push({
             loadType: 'Territorial Extension',
-            amount: Number(this.territorialExtensionAmount)
+            amount: Number(this.territorialExtensionAmount),
         });
         this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
         this.handleNetPremium();
@@ -2051,7 +2070,7 @@ export class QuoteDetailsComponent implements OnInit {
     handleInexperiencedDriverAmount() {
         this.loads.push({
             loadType: 'Inexperienced Driver',
-            amount: Number(this.inexperiencedDriverAmount)
+            amount: Number(this.inexperiencedDriverAmount),
         });
         this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
         this.handleNetPremium();
@@ -2061,7 +2080,7 @@ export class QuoteDetailsComponent implements OnInit {
     handleUnderAgeDriverAmount() {
         this.loads.push({
             loadType: 'Under Age Driver',
-            amount: Number(this.underAgeDriverAmount)
+            amount: Number(this.underAgeDriverAmount),
         });
         this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
         this.handleNetPremium();
@@ -2071,7 +2090,7 @@ export class QuoteDetailsComponent implements OnInit {
     handleNoClaimsDiscountAmount() {
         this.discounts.push({
             discountType: 'No Claims Discount',
-            amount: Number(this.noClaimsDiscountAmount)
+            amount: Number(this.noClaimsDiscountAmount),
         });
         this.premiumDiscount = this.sumArray(this.discounts, 'amount');
         this.handleNetPremium();
@@ -2081,7 +2100,7 @@ export class QuoteDetailsComponent implements OnInit {
     handleLoyaltyDiscountAmount() {
         this.discounts.push({
             discountType: 'Loyalty Discount',
-            amount: Number(this.loyaltyDiscountAmount)
+            amount: Number(this.loyaltyDiscountAmount),
         });
         this.premiumDiscount = this.sumArray(this.discounts, 'amount');
         this.handleNetPremium();
@@ -2091,7 +2110,7 @@ export class QuoteDetailsComponent implements OnInit {
     handleValuedClientDiscountAmount() {
         this.discounts.push({
             discountType: 'Valued Client Discount',
-            amount: Number(this.valuedClientDiscountAmount)
+            amount: Number(this.valuedClientDiscountAmount),
         });
         this.premiumDiscount = this.sumArray(this.discounts, 'amount');
         this.handleNetPremium();
@@ -2101,7 +2120,7 @@ export class QuoteDetailsComponent implements OnInit {
     handleLowTermAgreementDiscountAmount() {
         this.discounts.push({
             discountType: 'Low Term Agreement Discount',
-            amount: Number(this.lowTermAgreementDiscountAmount)
+            amount: Number(this.lowTermAgreementDiscountAmount),
         });
         this.premiumDiscount = this.sumArray(this.discounts, 'amount');
         this.handleNetPremium();

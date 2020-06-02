@@ -85,7 +85,7 @@ interface IQuoteNumberResult {
 })
 export class CreateQuoteComponent implements OnInit {
     clauseList: IClause[];
-    wordingList: IWording[];
+    wordingList: IWording[] = [];
     extensionList: IExtension[];
     PolicyClause: any[];
     PolicyWording: any[];
@@ -99,6 +99,7 @@ export class CreateQuoteComponent implements OnInit {
     editClause: any;
     editExtension: any;
     editWording: any;
+    editCache: { [key: string]: { edit: boolean; data: IWording } } = {};
 
     newClauseWording: IPolicyClauses;
     newWordingWording: IPolicyWording;
@@ -570,6 +571,7 @@ export class CreateQuoteComponent implements OnInit {
         this.productClauseService.getWordings().subscribe((res) => {
             this.wordingList = res;
         });
+        this.updateEditCache();
     }
 
     handleComprehensiveRiskEndDateCalculation(): void {
@@ -1967,5 +1969,41 @@ export class CreateQuoteComponent implements OnInit {
     }
     handleEditWordingCancel() {
         this.isWordingEditVisible = false;
+    }
+
+    startEdit(id: string): void {
+        this.editCache[id].edit = true;
+    }
+
+    cancelEdit(id: string): void {
+        const index = this.selectedWordingValue.findIndex(
+            (item) => item.id === id
+        );
+        this.editCache[id] = {
+            data: { ...this.selectedWordingValue[index] },
+            edit: false,
+        };
+    }
+
+    saveEdit(id: string): void {
+        const index = this.selectedWordingValue.findIndex(
+            (item) => item.id === id
+        );
+        Object.assign(
+            this.selectedWordingValue[index],
+            this.editCache[id].data
+        );
+        this.editCache[id].edit = false;
+
+        console.log('EDITED WORDING>>>>', this.selectedWordingValue);
+    }
+
+    updateEditCache(): void {
+        this.selectedWordingValue.forEach((item) => {
+            this.editCache[item.id] = {
+                edit: false,
+                data: { ...item },
+            };
+        });
     }
 }

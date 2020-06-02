@@ -8465,7 +8465,11 @@
                 nzValidatingTip="Validating..."
                 [nzErrorTip]="clauseDeailsErrorTpl"
             >
-                <input nz-input formControlName="clauseDetails" />
+                <textarea
+                    formControlName="clauseDetails"
+                    nz-input
+                    rows="5"
+                ></textarea>
                 <ng-template #clauseDeailsErrorTpl let-control>
                     <ng-container *ngIf="control.hasError('required')">
                         Please input your clause details!
@@ -8528,7 +8532,11 @@
                 nzValidatingTip="Validating..."
                 [nzErrorTip]="extensionDescriptionErrorTpl"
             >
-                <input nz-input formControlName="description" />
+                <textarea
+                    formControlName="description"
+                    nz-input
+                    rows="5"
+                ></textarea>
                 <ng-template #extensionDescriptionErrorTpl let-control>
                     <ng-container *ngIf="control.hasError('required')">
                         Please input your description!
@@ -8591,7 +8599,11 @@
                 nzValidatingTip="Validating..."
                 [nzErrorTip]="extensionDescriptionErrorTpl"
             >
-                <input nz-input formControlName="description" />
+                <textarea
+                    formControlName="description"
+                    nz-input
+                    rows="5"
+                ></textarea>
                 <ng-template #extensionDescriptionErrorTpl let-control>
                     <ng-container *ngIf="control.hasError('required')">
                         Please input your description!

@@ -5,27 +5,20 @@ import { Observable } from 'rxjs';
 import { User } from '../models/users.model';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class UsersService {
     constructor(private http: HttpClient) {}
 
     addUser(dto: User): Observable<User> {
-        return this.http.post<User>(
-            'https://flosure-postgres-api.herokuapp.com/users',
-            dto
-        );
+        return this.http.post<User>('http://localhost:3000users', dto);
     }
 
     getUsers(): Observable<User[]> {
-        return this.http.get<User[]>(
-            'https://flosure-postgres-api.herokuapp.com/users'
-        );
+        return this.http.get<User[]>('http://localhost:3000users');
     }
 
     getSingleUser(userId: string): Observable<User> {
-        return this.http.get<User>(
-            `https://flosure-postgres-api.herokuapp.com/${userId}`
-        );
+        return this.http.get<User>(`http://localhost:3000${userId}`);
     }
 }

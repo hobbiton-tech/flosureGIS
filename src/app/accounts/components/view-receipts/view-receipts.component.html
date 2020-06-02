@@ -113,13 +113,21 @@
                                     >Captured By: {{ receipt.capturedBy }}</span
                                 >
                             </td>
-                            <td class="td3">
-                                <span style="font-weight: bold;"
-                                    >Date issued :
-                                    {{ receipt.todayDate | date }}</span
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <span
+                                    style="
+                                        font-weight: bold;
+                                        margin-right: 1000px;
+                                    "
+                                    >Date issued :{{
+                                        receipt.todayDate | date
+                                    }}</span
                                 >
                             </td>
                         </tr>
+
                         <tr>
                             <td class="td2">
                                 <span style="font-weight: bold;"
@@ -127,6 +135,8 @@
                                     {{ receipt.receivedFrom }}</span
                                 >
                             </td>
+                            <td></td>
+                            <td></td>
                             <td class="td3">
                                 <span style="font-weight: bold;"
                                     >On Behalf Of:
@@ -136,10 +146,17 @@
                         </tr>
                         <tr>
                             <td></td>
+                            <td></td>
+                            <td></td>
                             <td class="td3">
                                 <span style="font-weight: bold;"
                                     >Amount In Words:
-                                    {{ toWords(receipt.sumInDigits) }}</span
+                                    {{
+                                        toWords(
+                                            receipt.sumInDigits
+                                                | number: '1.2-2'
+                                        )
+                                    }}</span
                                 >
                             </td>
                         </tr>
