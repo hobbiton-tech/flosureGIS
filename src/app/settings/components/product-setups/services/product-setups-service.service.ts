@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'https://flosure-postgres-api.herokuapp.com';
 
 @Injectable({
     providedIn: 'root',
@@ -33,35 +33,35 @@ export class ProductSetupsServiceService {
     // }
 
     addClass(dto: IClass): Observable<IClass> {
-
         return this.http.post<IClass>(
-            'http://localhost:3000/class',
+            'https://flosure-postgres-api.herokuapp.com/class',
+
             dto
         );
     }
 
     getClasses(): Observable<IClass[]> {
         return this.http.get<IClass[]>(
-            'http://localhost:3000/class'
+            'https://flosure-postgres-api.herokuapp.com/class'
         );
     }
 
     addProduct(dto: IProduct, id: string): Observable<IProduct> {
         return this.http.post<IProduct>(
-            `http://localhost:3000/product/${id}`,
+            `https://flosure-postgres-api.herokuapp.com/product/${id}`,
             dto
         );
     }
 
     getProducts(id: string): Observable<IProduct[]> {
         return this.http.get<IProduct[]>(
-            `http://localhost:3000/product/class-products/${id}`
+            `https://flosure-postgres-api.herokuapp.com/product/class-products/${id}`
         );
     }
 
     getProductsNo(): Observable<IProduct[]> {
         return this.http.get<IProduct[]>(
-            `http://localhost:3000/product/class-products`
+            `https://flosure-postgres-api.herokuapp.com/product/class-products`
         );
     }
 }

@@ -11,7 +11,7 @@ import { v4 } from 'uuid';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'https://flosure-postgres-api.herokuapp.com';
 
 @Injectable({
     providedIn: 'root',
@@ -88,25 +88,20 @@ export class EndorsementService {
         console.log('endorsement: ');
         console.log(endorsement);
         return this.http.post<Endorsement>(
-
-            `http://localhost:3000/endorsement/${policyId}`,
+            `https://flosure-postgres-api.herokuapp.comendorsement/${policyId}`,
 
             endorsement
         );
     }
     getEndorsements(): Observable<Endorsement[]> {
-
         return this.http.get<Endorsement[]>(
-            'http://localhost:3000/endorsement'
+            'https://flosure-postgres-api.herokuapp.com/endorsement'
         );
-
     }
 
     getEndorsementById(endorsementId: string): Observable<Endorsement> {
         return this.http.get<Endorsement>(
-
-            `http://localhost:3000/endorsement/${endorsementId}`
-
+            `https://flosure-postgres-api.herokuapp.comendorsement/${endorsementId}`
         );
     }
 
@@ -115,8 +110,7 @@ export class EndorsementService {
         endorsementId: string
     ): Observable<Endorsement> {
         return this.http.put<Endorsement>(
-
-            `http://localhost:3000/endorsement/${endorsementId}`,
+            `https://flosure-postgres-api.herokuapp.comendorsement/${endorsementId}`,
 
             endorsement
         );
