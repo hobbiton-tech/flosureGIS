@@ -20,6 +20,7 @@ import { Endorsement } from 'src/app/underwriting/models/endorsement.model';
 import { EndorsementService } from 'src/app/underwriting/services/endorsements.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { BehaviorSubject } from 'rxjs';
+import { DebitNote } from 'src/app/underwriting/documents/models/documents.model';
 
 @Component({
     selector: 'app-policy-revision-details',
@@ -27,6 +28,9 @@ import { BehaviorSubject } from 'rxjs';
     styleUrls: ['./policy-revision-details.component.scss']
 })
 export class PolicyRevisionDetailsComponent implements OnInit {
+    //loading feedback
+    updatingPolicy: boolean = false;
+
     editedRisk: RiskModel;
 
     addedRisk: RiskModel;
@@ -178,6 +182,8 @@ export class PolicyRevisionDetailsComponent implements OnInit {
 
     //endorse policy
     endorsePolicy() {
+        this.updatingPolicy = true;
+
         const endorsement: Endorsement = {
             ...this.endorsementForm.value,
             type: 'Revision_Of_Cover',
@@ -212,16 +218,28 @@ export class PolicyRevisionDetailsComponent implements OnInit {
                 res => console.log(res);
             });
 
+        const debitNote: DebitNote = {
+            remarks: '-',
+            dateCreated: new Date(),
+            dateUpdated: new Date()
+        };
+
         // this.policiesService.createBackupPolicy(policy);
 
         this.policiesService.updatePolicy(policy).subscribe(policy => {
             res => {
+                // this.policiesService.createDebitNote(
+                //     policy.id,
+                //     debitNote,
+                //     policy
+                // );
                 // this.router.navigateByUrl(
                 //     '/flosure/underwriting/endorsements/view-endorsements'
                 // );
             };
 
             this.msg.success('Endorsement Successful');
+            this.updatingPolicy = false;
         });
     }
 

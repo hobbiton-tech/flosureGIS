@@ -11,14 +11,23 @@ export class UsersService {
     constructor(private http: HttpClient) {}
 
     addUser(dto: User): Observable<User> {
-        return this.http.post<User>('http://localhost:3000users', dto);
+
+        return this.http.post<User>(
+            'http://localhost:3000/users',
+            dto
+        );
     }
 
     getUsers(): Observable<User[]> {
-        return this.http.get<User[]>('http://localhost:3000users');
+        return this.http.get<User[]>(
+            'http://localhost:3000/users'
+        );
     }
 
     getSingleUser(userId: string): Observable<User> {
-        return this.http.get<User>(`http://localhost:3000${userId}`);
+        return this.http.get<User>(
+            `http://localhost:3000/${userId}`
+        );
+
     }
 }

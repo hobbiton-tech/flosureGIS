@@ -10,6 +10,9 @@ import { NzMessageService } from 'ng-zorro-antd';
     styleUrls: ['./add-class.component.scss']
 })
 export class AddClassComponent implements OnInit {
+    //loading feedback
+    addingClass: boolean = false;
+
     @Input()
     isAddClassFormDrawerVisible: boolean;
 
@@ -30,8 +33,8 @@ export class AddClassComponent implements OnInit {
             className: ['', Validators.required],
             classCode: ['', Validators.required],
             classDescription: ['', Validators.required],
-            policyNumberPrefix: ['', Validators.required],
-            claimNumberPrefix: ['', Validators.required]
+            classPolicyNumberPrefix: ['', Validators.required],
+            classClaimNumberPrefix: ['', Validators.required]
         });
     }
 
@@ -42,13 +45,16 @@ export class AddClassComponent implements OnInit {
     }
 
     async addClass(classDto: IClass) {
+        this.addingClass = true;
         await this.productSetupsService.addClass(classDto).subscribe(
             res => {
                 this.msg.success('Class Added successfully');
+                this.addingClass = false;
                 this.closeAddClassFormDrawer();
             },
             err => {
                 this.msg.error('Failed to add class');
+                this.addingClass = false;
             }
         );
     }

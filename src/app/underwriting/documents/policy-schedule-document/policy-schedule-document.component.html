@@ -1,35 +1,23 @@
-<div
-    style="
+<div style="
         display: flex;
         margin-bottom: 15px;
         align-items: flex-end;
         width: 100%;
-    "
->
-    <button
-        nz-button
-        nzType="primary"
-        style="margin-right: 8px;"
-        (click)="htmlToPdf()"
-    >
+    ">
+    <!-- <button nz-button nzType="primary" style="margin-right: 8px;" (click)="htmlToPdf()">
         Download
-    </button>
-    <button
-        nz-button
-        nzType="primary"
-        [useExistingCss]="true"
-        [printSectionId]="'debitPrintSection'"
-        ngxPrint
-    >
+    </button> -->
+    <button nz-button nzType="primary" [useExistingCss]="true" [printSectionId]="'debitPrintSection'" ngxPrint>
         Print
     </button>
 </div>
 
 <div id="debitPrintSection">
-    <div>
+    <div class="invoice-box">
 
         <h2 class="heading">A PLUS GENERAL INSURANCE LIMITED</h2>
-        <P class="centerheading">Schedule attaching to and forming part of <strong>Private Motor</strong> Car Policy No.
+        <P class="centerheading">Schedule attaching to and forming part of <strong>{{policy.risks[0].productType}}
+                Motor</strong> Car Policy No.
             {{policy.policyNumber}}</P>
 
         <p>To form part of a valid insurance contract this Schedule must bear the Company’s computer policy number, be
@@ -41,8 +29,8 @@
                     style="float: right;">Agency:
                     {{policy.sourceOfBusiness ? (policy.sourceOfBusiness == 'direct' ? 'Direct' : policy.intermediaryName): '-'}}<span
                         style="font-weight: bold;">{{policy.intermediaryName}}</span></span></p>
-            <p>Address: <span style="float: right;">Email: <span
-                        style="font-weight: bold;">{{clientEmail}}</span></span></p>
+            <p>Address: {{client.address}}<span style="float: right;">Email: <span
+                        style="font-weight: bold;">{{client.email ? client.email : '-'}}</span></span></p>
             <p>Business or Profession: <span style="font-weight: bold;">TBA</span><span style="float: right;">Currency:
                     <span style="font-weight: bold;">{{policy.currency}}</span></span></p>
             Period Of Insurance:
@@ -86,7 +74,7 @@
                 <td>{{risk.engineNumber}}</td>
                 <td>{{risk.chassisNumber}}</td>
                 <td>TBA</td>
-                <td>{{risk.yearOfManufacture | date}}</td>
+                <td>{{getYearOfManufacture(risk)}}</td>
                 <td>TBA</td>
                 <td>{{risk.estimatedValue ? risk.estimatedValue : 'N/A'}}</td>
                 <td>{{risk.insuranceType}}</td>

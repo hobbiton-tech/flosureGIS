@@ -33,11 +33,17 @@ export class ProductSetupsServiceService {
     // }
 
     addClass(dto: IClass): Observable<IClass> {
-        return this.http.post<IClass>('http://localhost:3000/class', dto);
+
+        return this.http.post<IClass>(
+            'http://localhost:3000/class',
+            dto
+        );
     }
 
     getClasses(): Observable<IClass[]> {
-        return this.http.get<IClass[]>('http://localhost:3000/class');
+        return this.http.get<IClass[]>(
+            'http://localhost:3000/class'
+        );
     }
 
     addProduct(dto: IProduct, id: string): Observable<IProduct> {

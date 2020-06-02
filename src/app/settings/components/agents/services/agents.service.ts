@@ -161,19 +161,25 @@ export class AgentsService {
             this.salesRepresentatives.length
         );
         return this.http.post<ISalesRepresentative>(
-            'http://localhost:3000intermediary/sales-representative',
+
+            'http://localhost:3000/intermediary/sales-representative',
+
             salesRepresentatives
         );
     }
     // getSalesRepresentatives(): Observable<ISalesRepresentative[]> {
     //     return this.http.get<ISalesRepresentative[]>(
-    //         'http://localhost:3000intermediary/sales-representative'
+
+    //         'http://localhost:3000/intermediary/sales-representative'
+
     //     );
     // }
 
     getSalesRepresentative(id: string): Observable<ISalesRepresentative> {
         return this.http.get<ISalesRepresentative>(
-            `http://localhost:3000intermediary/sales-representative/${id}`
+
+            `http://localhost:3000/intermediary/sales-representative/${id}`
+
         );
     }
 
@@ -182,14 +188,18 @@ export class AgentsService {
         id: string
     ): Observable<ISalesRepresentative> {
         return this.http.put<ISalesRepresentative>(
-            `http://localhost:3000intermediary/sales-representative/${id}`,
+
+            `http://localhost:3000/intermediary/sales-representative/${id}`,
+
             agent
         );
     }
 
     updateBroker(agent: IBroker, id: string): Observable<IBroker> {
         return this.http.put<IBroker>(
-            `http://localhost:3000intermediary/broker/${id}`,
+
+            `http://localhost:3000/intermediary/broker/${id}`,
+
             agent
         );
     }
@@ -203,20 +213,26 @@ export class AgentsService {
             this.brokers.length
         );
         return this.http.post<IBroker>(
-            'http://localhost:3000intermediary/broker',
+
+            'http://localhost:3000/intermediary/broker',
+
             broker
         );
     }
 
     getBroker(id: string): Observable<IBroker> {
         return this.http.get<IBroker>(
-            `http://localhost:3000intermediary/broker/${id}`
+
+            `http://localhost:3000/intermediary/broker/${id}`
+
         );
     }
 
     // getBrokers(): Observable<IBroker[]> {
     //     return this.http.get<IBroker[]>(
-    //         'http://localhost:3000intermediary/broker'
+
+    //         'http://localhost:3000/intermediary/broker'
+
     //     );
     // }
 
@@ -229,26 +245,34 @@ export class AgentsService {
             this.agents.length
         );
         return this.http.post<IAgent>(
-            'http://localhost:3000intermediary/agent',
+
+            'http://localhost:3000/intermediary/agent',
+
             agent
         );
     }
 
     // getAgent(id: string): Observable<IAgent> {
     //     return this.http.get<IAgent>(
-    //         `http://localhost:3000intermediary/agent/${id}`
+
+    //         `http://localhost:3000/intermediary/agent/${id}`
+
     //     );
     // }
 
     // getAgents(): Observable<IAgent[]> {
     //     return this.http.get<IAgent[]>(
-    //         'http://localhost:3000intermediary/agent'
+
+    //         'http://localhost:3000/intermediary/agent'
+
     //     );
     // }
 
     updateAgent(agent: IAgent, id: string): Observable<IAgent> {
         return this.http.put<IAgent>(
-            `http://localhost:3000intermediary/agent/${id}`,
+
+            `http://localhost:3000/intermediary/agent/${id}`,
+
             agent
         );
     }
@@ -266,19 +290,25 @@ export class AgentsService {
     //postgres
     getAgents(): Observable<IAgent[]> {
         return this.http.get<IAgent[]>(
-            'http://localhost:3000intermediary/agent'
+
+            'http://localhost:3000/intermediary/agent'
+
         );
     }
 
     getBrokers(): Observable<IBroker[]> {
         return this.http.get<IBroker[]>(
-            'http://localhost:3000intermediary/broker'
+
+            'http://localhost:3000/intermediary/broker'
+
         );
     }
 
     getSalesRepresentatives(): Observable<ISalesRepresentative[]> {
         return this.http.get<ISalesRepresentative[]>(
-            'http://localhost:3000intermediary/sales-representative'
+
+            'http://localhost:3000/intermediary/sales-representative'
+
         );
     }
 

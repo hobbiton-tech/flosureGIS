@@ -88,17 +88,25 @@ export class EndorsementService {
         console.log('endorsement: ');
         console.log(endorsement);
         return this.http.post<Endorsement>(
-            `http://localhost:3000endorsement/${policyId}`,
+
+            `http://localhost:3000/endorsement/${policyId}`,
+
             endorsement
         );
     }
     getEndorsements(): Observable<Endorsement[]> {
-        return this.http.get<Endorsement[]>('http://localhost:3000endorsement');
+
+        return this.http.get<Endorsement[]>(
+            'http://localhost:3000/endorsement'
+        );
+
     }
 
     getEndorsementById(endorsementId: string): Observable<Endorsement> {
         return this.http.get<Endorsement>(
-            `http://localhost:3000endorsement/${endorsementId}`
+
+            `http://localhost:3000/endorsement/${endorsementId}`
+
         );
     }
 
@@ -107,7 +115,9 @@ export class EndorsementService {
         endorsementId: string
     ): Observable<Endorsement> {
         return this.http.put<Endorsement>(
-            `http://localhost:3000endorsement/${endorsementId}`,
+
+            `http://localhost:3000/endorsement/${endorsementId}`,
+
             endorsement
         );
     }

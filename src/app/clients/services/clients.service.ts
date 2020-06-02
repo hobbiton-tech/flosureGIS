@@ -227,6 +227,7 @@ export class ClientsService {
             'AP',
             this.individualClients.length
         );
+        console.log(client);
         return this.http.post<IIndividualClient>(
             'http://localhost:3000/clients/individual',
             client
