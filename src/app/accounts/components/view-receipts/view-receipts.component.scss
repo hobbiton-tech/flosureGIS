@@ -25,7 +25,9 @@
     text-align: left !important;
 }
 .td3 {
-    text-align: right !important;
+    text-align: left !important;
+    overflow-wrap: break-word;
+    padding-left: 1000px;
 }
 .invoice-box table tr.top table td {
     padding-bottom: 20px;

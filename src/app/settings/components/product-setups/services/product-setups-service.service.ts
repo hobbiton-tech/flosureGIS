@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 const BASE_URL = 'http://localhost:3000';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class ProductSetupsServiceService {
     constructor(private http: HttpClient) {}
@@ -33,6 +33,7 @@ export class ProductSetupsServiceService {
     // }
 
     addClass(dto: IClass): Observable<IClass> {
+
         return this.http.post<IClass>(
             'http://localhost:3000/class',
             dto

@@ -5,7 +5,7 @@ import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class CommisionSetupsService {
     constructor(private http: HttpClient) {}

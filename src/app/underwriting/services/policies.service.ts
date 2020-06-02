@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Policy } from '../models/policy.model';
 import {
     AngularFirestore,
-    AngularFirestoreCollection
+    AngularFirestoreCollection,
 } from '@angular/fire/firestore';
 import 'firebase/firestore';
 import { filter, first } from 'rxjs/operators';
@@ -15,11 +15,13 @@ import { HttpClient } from '@angular/common/http';
 import {
     DebitNote,
     CreditNote,
-    CoverNote
+    CoverNote,
 } from '../documents/models/documents.model';
 
 const BASE_URL = 'http://localhost:3000';
+
 // const BASE_URL = 'http://localhost:3000';
+
 
 interface IDebitNoteResult {
     invoiceNumber: string;
@@ -34,7 +36,7 @@ interface ICoverNoteResult {
 }
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class PoliciesService {
     private policiesCollection: AngularFirestoreCollection<Policy>;
@@ -110,7 +112,7 @@ export class PoliciesService {
     ////////////////////////////////////////////
 
     async addPolicy(policy: Policy) {
-        this.policies.pipe(first()).subscribe(async policies => {
+        this.policies.pipe(first()).subscribe(async (policies) => {
             const today = new Date();
             policy.term = 1;
             policy.nameOfInsured = policy.client;
@@ -141,7 +143,7 @@ export class PoliciesService {
     }
 
     renewPolicy(policy: Policy) {
-        this.policies.pipe(first()).subscribe(async policies => {
+        this.policies.pipe(first()).subscribe(async (policies) => {
             const today = new Date();
             policy.client = policy.nameOfInsured;
             policy.dateOfIssue =
@@ -165,10 +167,10 @@ export class PoliciesService {
                     policy
                 )
                 .subscribe(
-                    data => {
+                    (data) => {
                         this.msg.success('Policy Successfully Updated');
                     },
-                    error => {
+                    (error) => {
                         this.msg.error('Failed');
                     }
                 );
@@ -191,13 +193,13 @@ export class PoliciesService {
             .collection('policies')
             .ref.where('policyNumber', '==', policyNumber)
             .get()
-            .then(querySnapshot => {
-                querySnapshot.forEach(doc => {
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
                     console.log(doc.data());
                     this.policy = doc.data();
                 });
             })
-            .catch(error => {
+            .catch((error) => {
                 console.log('Error getting documents: ', error);
             });
 
@@ -217,7 +219,7 @@ export class PoliciesService {
     }
 
     getClientsPolicies(clientId: string): Observable<Policy[]> {
-        return this.policies.pipe(filter(policy => clientId === clientId));
+        return this.policies.pipe(filter((policy) => clientId === clientId));
     }
 
     getPolicies(): Observable<Policy[]> {
@@ -238,10 +240,7 @@ export class PoliciesService {
         const count = this.countGenerator(totalPolicies);
         const today = new Date();
         const dateString: string =
-            today
-                .getFullYear()
-                .toString()
-                .substr(-2) +
+            today.getFullYear().toString().substr(-2) +
             ('0' + (today.getMonth() + 1)).slice(-2) +
             +('0' + today.getDate()).slice(-2);
 
@@ -270,7 +269,7 @@ export class PoliciesService {
             .get<IDebitNoteResult>(
                 `https://flosure-premium-rates.herokuapp.com/aplus-invoice/1/0/${insuranceType}`
             )
-            .subscribe(async res => {
+            .subscribe(async (res) => {
                 debitNote.debitNoteNumber = res.invoiceNumber;
 
                 this.http
@@ -279,10 +278,10 @@ export class PoliciesService {
                         debitNote
                     )
                     .subscribe(
-                        async res => {
+                        async (res) => {
                             console.log(res);
                         },
-                        async err => {
+                        async (err) => {
                             console.log(err);
                         }
                     );
@@ -330,7 +329,7 @@ export class PoliciesService {
             .get<ICreditNoteResult>(
                 `https://flosure-premium-rates.herokuapp.com/aplus-invoice/1/0/${insuranceType}`
             )
-            .subscribe(async res => {
+            .subscribe(async (res) => {
                 let tempCreditNoteNumber = res.invoiceNumber;
                 creditNote.creditNoteNumber = tempCreditNoteNumber.replace(
                     'DR',
@@ -343,10 +342,10 @@ export class PoliciesService {
                         creditNote
                     )
                     .subscribe(
-                        async res => {
+                        async (res) => {
                             console.log(res);
                         },
-                        async err => {
+                        async (err) => {
                             console.log(err);
                         }
                     );
