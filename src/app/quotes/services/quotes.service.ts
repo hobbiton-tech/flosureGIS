@@ -142,7 +142,7 @@ export class QuotesService {
                 motorQuotation.quoteNumber = res.quoteNumber;
                 this.http
                     .post<MotorQuotationModel>(
-                        'https://flosure-postgres-api.herokuapp.com/quotation',
+                        'http://localhost:3000/quotation',
                         motorQuotation
                     )
                     .subscribe(
@@ -160,14 +160,14 @@ export class QuotesService {
     }
     getMotorQuotations(): Observable<MotorQuotationModel[]> {
         return this.http.get<MotorQuotationModel[]>(
-            'https://flosure-postgres-api.herokuapp.com/quotation'
+            'http://localhost:3000/quotation'
         );
     }
     getMotorQuotationById(
         quotationId: string
     ): Observable<MotorQuotationModel> {
         return this.http.get<MotorQuotationModel>(
-            `https://flosure-postgres-api.herokuapp.com/quotation/${quotationId}`
+            `http://localhost:3000/quotation/${quotationId}`
         );
     }
     updateMotorQuotation(
@@ -175,7 +175,7 @@ export class QuotesService {
         quotationId: string
     ): Observable<MotorQuotationModel> {
         return this.http.put<MotorQuotationModel>(
-            `https://flosure-postgres-api.herokuapp.com/quotation/${quotationId}`,
+            `http://localhost:3000/quotation/${quotationId}`,
             motorQuotation
         );
     }

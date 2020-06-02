@@ -18,7 +18,8 @@ import {
     CoverNote
 } from '../documents/models/documents.model';
 
-const BASE_URL = 'https://flosure-postgres-api.herokuapp.com';
+const BASE_URL = 'http://localhost:3000';
+// const BASE_URL = 'http://localhost:3000';
 
 interface IDebitNoteResult {
     invoiceNumber: string;
@@ -60,47 +61,39 @@ export class PoliciesService {
             insuranceType = 'THP';
         }
 
-        return this.http.post<Policy>(
-            'https://flosure-postgres-api.herokuapp.com/policy',
-            policy
-        );
+        return this.http.post<Policy>('http://localhost:3000/policy', policy);
     }
 
     // getPolicies(): Observable<Policy[]> {
-    //     return this.http.get<Policy[]>('https://flosure-postgres-api.herokuapp.com/policy');
+    //     return this.http.get<Policy[]>('http://localhost:3000/policy');
     // }
 
     // getPolicyById(policyId: string): Observable<Policy> {
     //     return this.http.get<Policy>(
-    //         `https://flosure-postgres-api.herokuapp.com/policy/${policyId}`
+    //         `http://localhost:3000/policy/${policyId}`
     //     );
     //     return this.policiesCollection.doc<Policy>(policyId).valueChanges();
     // }
 
     updatePolicy(policy: Policy): Observable<Policy> {
         return this.http.put<Policy>(
-            `https://flosure-postgres-api.herokuapp.com/policy/${policy.id}`,
+            `http://localhost:3000/policy/${policy.id}`,
             policy
         );
     }
 
     // backup policies
     createBackupPolicy(policy: Policy): Observable<Policy> {
-        return this.http.post<Policy>(
-            'https://flosure-postgres-api.herokuapp.com/policy',
-            policy
-        );
+        return this.http.post<Policy>('http://localhost:3000/policy', policy);
     }
 
     getBackupPolicies(): Observable<Policy[]> {
-        return this.http.get<Policy[]>(
-            'https://flosure-postgres-api.herokuapp.com/policy'
-        );
+        return this.http.get<Policy[]>('http://localhost:3000/policy');
     }
 
     getBackupPolicyById(policyId: string): Observable<Policy> {
         return this.http.get<Policy>(
-            `https://flosure-postgres-api.herokuapp.com/policy/${policyId}`
+            `http://localhost:3000/policy/${policyId}`
         );
         // return this.policiesCollection.doc<Policy>(policyId).valueChanges();
     }
@@ -109,7 +102,7 @@ export class PoliciesService {
         console.log('policy details:');
         console.log(policy);
         return this.http.put<Policy>(
-            `https://flosure-postgres-api.herokuapp.com/policy/${policyId}`,
+            `http://localhost:3000/policy/${policyId}`,
             policy
         );
     }
@@ -168,7 +161,7 @@ export class PoliciesService {
             console.log(policy);
             this.http
                 .put<Policy>(
-                    `https://flosure-postgres-api.herokuapp.com/policy/${policy.id}`,
+                    `http://localhost:3000/policy/${policy.id}`,
                     policy
                 )
                 .subscribe(
@@ -217,7 +210,7 @@ export class PoliciesService {
 
     getPolicyById(policyId: string): Observable<Policy> {
         return this.http.get<Policy>(
-            `https://flosure-postgres-api.herokuapp.com/policy/${policyId}`
+            `http://localhost:3000/policy/${policyId}`
         );
 
         // return this.policiesCollection.doc<Policy>(policyId).valueChanges();
@@ -228,9 +221,7 @@ export class PoliciesService {
     }
 
     getPolicies(): Observable<Policy[]> {
-        return this.http.get<Policy[]>(
-            'https://flosure-postgres-api.herokuapp.com/policy'
-        );
+        return this.http.get<Policy[]>('http://localhost:3000/policy');
         // return this.policies;
     }
 
@@ -260,6 +251,13 @@ export class PoliciesService {
     //documents
     //debit note
     createDebitNote(policyId: string, debitNote: DebitNote, policy: Policy) {
+        console.log('create debit note method called');
+        console.log(policyId);
+        console.log('-------------------');
+        console.log(debitNote);
+        console.log('-------------------');
+        console.log(policy);
+
         let insuranceType = '';
         const productType = policy.risks[0].insuranceType;
         if (productType == 'Comprehensive') {
@@ -291,8 +289,8 @@ export class PoliciesService {
             });
     }
 
-    getDebitNotes(): Observable<DebitNote> {
-        return this.http.get<DebitNote>(`${BASE_URL}/documents/debit-notes`);
+    getDebitNotes(): Observable<DebitNote[]> {
+        return this.http.get<DebitNote[]>(`${BASE_URL}/documents/debit-notes`);
     }
 
     getDebitNoteById(debitNoteId: string): Observable<DebitNote> {
@@ -313,6 +311,13 @@ export class PoliciesService {
 
     //credit note
     createCreditNote(policyId: string, creditNote: CreditNote, policy: Policy) {
+        console.log('create debit note method called');
+        console.log(policyId);
+        console.log('-------------------');
+        console.log(creditNote);
+        console.log('-------------------');
+        console.log(policy);
+
         let insuranceType = '';
         const productType = policy.risks[0].insuranceType;
         if (productType == 'Comprehensive') {
@@ -348,8 +353,10 @@ export class PoliciesService {
             });
     }
 
-    getCreditNotes(): Observable<CreditNote> {
-        return this.http.get<CreditNote>(`${BASE_URL}/documents/credit-notes`);
+    getCreditNotes(): Observable<CreditNote[]> {
+        return this.http.get<CreditNote[]>(
+            `${BASE_URL}/documents/credit-notes`
+        );
     }
 
     getCreditNoteById(creditNoteId: string): Observable<CreditNote> {

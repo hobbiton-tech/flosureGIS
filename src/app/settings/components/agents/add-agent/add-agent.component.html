@@ -1,5 +1,9 @@
+
 <nz-drawer [nzClosable]="false" [nzVisible]="isAddAgentsFormDrawerVisible" nzPlacement="left" nzTitle="Add Agent"
     (nzOnClose)="closeDrawer()" [nzWidth]="900">
+
+    <nz-spin [nzSize]="'large'" [nzSpinning]="addingIntermediary" [nzTip]="'Adding Intermediaty...'">
+
     <div>
     <form>
         <nz-row>
@@ -919,5 +923,5 @@ nzOrientation="left"
 </form>
 </div>
 <!-- SALES REPRESENTATIVE INTERMEDIARY END -->
-
+</nz-spin>
 </nz-drawer>

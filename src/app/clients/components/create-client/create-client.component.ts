@@ -22,6 +22,9 @@ import { BehaviorSubject } from 'rxjs';
     styleUrls: ['./create-client.component.scss']
 })
 export class CreateClientComponent implements OnInit, AfterViewInit {
+    //feedback loading
+    creatingClient: boolean = false;
+
     @Output()
     closeAddAgentsFormDrawerVisible: EventEmitter<any> = new EventEmitter();
 
@@ -99,12 +102,15 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
     }
 
     async addIndividualClient(client: IIndividualClient): Promise<void> {
+        this.creatingClient = true;
         await this.clientsService.addIndividualClient(client).subscribe(
             async res => {
+                this.creatingClient = false;
                 this.msg.success('Client Created successfully');
                 this.router.navigateByUrl('/flosure/clients/clients-list');
             },
             async err => {
+                this.creatingClient = false;
                 this.msg.error('Client Creation failed');
             },
             async () => {
@@ -114,8 +120,10 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
     }
 
     async addCorporateClient(client: ICorporateClient): Promise<void> {
+        this.creatingClient = true;
         await this.clientsService.addCorporateClient(client).subscribe(
             async res => {
+                this.creatingClient = true;
                 this.msg.success('Client Created successfully');
                 this.router.navigateByUrl('/flosure/clients/clients-list');
             },

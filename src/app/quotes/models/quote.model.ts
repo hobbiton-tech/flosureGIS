@@ -34,7 +34,7 @@ export class RiskModel {
     regNumber: string;
     vehicleMake: string;
     vehicleModel: string;
-    yearOfManufacture: Date | ITimestamp;
+    yearOfManufacture: Date;
     engineNumber: string;
     chassisNumber: string;
     color: string;

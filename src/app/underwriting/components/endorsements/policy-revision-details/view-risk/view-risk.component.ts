@@ -630,9 +630,9 @@ export class ViewRiskComponent implements OnInit {
         this.premiumDiscount = 0;
     }
 
-    getYearOfManfTimeStamp(risk: RiskModel): number {
-        return (risk.yearOfManufacture as ITimestamp).seconds * 1000;
-    }
+    // getYearOfManfTimeStamp(risk: RiskModel): number {
+    //     return (risk.yearOfManufacture as ITimestamp).seconds * 1000;
+    // }
 
     getStartDateTimeStamp(risk: RiskModel): number {
         return (risk.riskStartDate as ITimestamp).seconds * 1000;

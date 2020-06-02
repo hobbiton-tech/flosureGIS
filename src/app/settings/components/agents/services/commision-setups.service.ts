@@ -12,14 +12,14 @@ export class CommisionSetupsService {
 
     addCommissionSetup(dto: ICommissionSetup): Observable<ICommissionSetup> {
         return this.http.post<ICommissionSetup>(
-            'https://flosure-postgres-api.herokuapp.com/commission-setups',
+            'http://localhost:3000/commission-setups',
             dto
         );
     }
 
     getCommissionSetups(): Observable<ICommissionSetup[]> {
         return this.http.get<ICommissionSetup[]>(
-            'https://flosure-postgres-api.herokuapp.com/commission-setups'
+            'http://localhost:3000/commission-setups'
         );
     }
 }

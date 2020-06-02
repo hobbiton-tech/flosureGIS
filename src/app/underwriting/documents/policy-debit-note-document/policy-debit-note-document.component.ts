@@ -3,6 +3,11 @@ import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { RiskModel } from 'src/app/quotes/models/quote.model';
 import { Policy } from '../../models/policy.model';
+import { DebitNote } from '../models/documents.model';
+import {
+    IIndividualClient,
+    ICorporateClient
+} from 'src/app/clients/models/clients.model';
 
 @Component({
     selector: 'app-policy-debit-note-document',
@@ -55,6 +60,12 @@ export class PolicyDebitNoteDocumentComponent implements OnInit {
     @Input()
     policy: Policy;
 
+    @Input()
+    debitNote: DebitNote[];
+
+    @Input()
+    client: IIndividualClient & ICorporateClient;
+
     subTotal: number;
 
     constructor() {}
@@ -62,10 +73,11 @@ export class PolicyDebitNoteDocumentComponent implements OnInit {
     generatingPDF = false;
 
     ngOnInit(): void {
+        console.log(this.debitNote);
         this.subTotal = this.sumArray(this.policy.risks, 'basicPremium');
     }
 
-    htmlToPdf() {
+    htmlToPdf(quality = 1) {
         this.generatingPDF = true;
         const div = document.getElementById('debitPrintSection');
         const options = {
@@ -76,11 +88,11 @@ export class PolicyDebitNoteDocumentComponent implements OnInit {
 
         html2canvas(div, options).then(canvas => {
             let doc = new jsPDF({
-                unit: 'px',
+                unit: 'mm',
                 format: 'a4'
             });
             let imgData = canvas.toDataURL('image/PNG');
-            doc.addImage(imgData, 'PNG', 0, 0);
+            doc.addImage(imgData, 'PNG', 0, 0, 211, 298);
 
             let pdfOutput = doc.output();
             let buffer = new ArrayBuffer(pdfOutput.length);
@@ -88,7 +100,7 @@ export class PolicyDebitNoteDocumentComponent implements OnInit {
             for (let i = 0; i < pdfOutput.length; i++) {
                 array[i] = pdfOutput.charCodeAt(i);
             }
-            const fileName = 'policy-debitNote.pdf';
+            const fileName = `${this.policy.policyNumber}-debitNote.pdf`;
             doc.save(fileName);
             this.generatingPDF = false;
         });

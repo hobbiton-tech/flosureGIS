@@ -6,13 +6,13 @@ import html2canvas from 'html2canvas';
 import {
     IPolicyClauses,
     IPolicyWording,
-    IPolicyExtension,
+    IPolicyExtension
 } from 'src/app/settings/models/underwriting/clause.model';
 
 @Component({
     selector: 'app-policy-wording',
     templateUrl: './policy-wording.component.html',
-    styleUrls: ['./policy-wording.component.scss'],
+    styleUrls: ['./policy-wording.component.scss']
 })
 export class PolicyWordingComponent implements OnInit {
     @Input()
@@ -82,16 +82,16 @@ export class PolicyWordingComponent implements OnInit {
         const options = {
             background: 'white',
             height: div.clientHeight,
-            width: div.clientWidth,
+            width: div.clientWidth
         };
 
-        html2canvas(div, options).then((canvas) => {
+        html2canvas(div, options).then(canvas => {
             let doc = new jsPDF({
-                unit: 'px',
-                format: 'a4',
+                unit: 'mm',
+                format: 'a4'
             });
             let imgData = canvas.toDataURL('image/PNG');
-            doc.addImage(imgData, 'PNG', 0, 0);
+            doc.addImage(imgData, 'PNG', 0, 0, 211, 298);
 
             let pdfOutput = doc.output();
             let buffer = new ArrayBuffer(pdfOutput.length);
@@ -99,14 +99,14 @@ export class PolicyWordingComponent implements OnInit {
             for (let i = 0; i < pdfOutput.length; i++) {
                 array[i] = pdfOutput.charCodeAt(i);
             }
-            const fileName = 'policy-wordingNote.pdf';
+            const fileName = `${this.policy.policyNumber}-wordingNote.pdf`;
             doc.save(fileName);
             this.generatingPDF = false;
         });
     }
 
     sumArray(items, prop) {
-        return items.reduce(function (a, b) {
+        return items.reduce(function(a, b) {
             return a + b[prop];
         }, 0);
     }
