@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MotorQuotationModel, RiskModel } from '../../models/quote.model';
+import * as jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 @Component({
     selector: 'app-draft-quote-document',

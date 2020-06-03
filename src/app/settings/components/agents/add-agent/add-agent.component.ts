@@ -17,6 +17,9 @@ import { IAgent, IBroker, ISalesRepresentative } from '../models/agents.model';
     styleUrls: ['./add-agent.component.scss']
 })
 export class AddAgentComponent implements OnInit {
+    //loading feedback
+    addingIntermediary: boolean = false;
+
     @Input()
     isAddAgentsFormDrawerVisible: boolean;
 
@@ -112,34 +115,49 @@ export class AddAgentComponent implements OnInit {
     }
 
     async addAgentIntermediary(agent: IAgent) {
+        this.addingIntermediary = true;
         await this.agentService.addAgent(agent).subscribe(
             res => {
                 this.msg.success('Agent added successfully')
+                this.addingIntermediary = false;
                 this.closeDrawer();
             },
-            err => { this.msg.error('Failed to add Agent') }
+            err => {
+                this.msg.error('Failed to add Agent')
+                this.addingIntermediary = false;
+            }
         );
     }
 
     async addBrokerIntermediary(broker: IBroker) {
+        this.addingIntermediary = true
         await this.agentService.addBroker(broker).subscribe(
             res => {
                 this.msg.success('Broker added successfully')
+                this.addingIntermediary = false;
                 this.closeDrawer();
             },
-            err => { this.msg.error('Failed to add Broker') }
+            err => {
+                this.msg.error('Failed to add Broker')
+                this.addingIntermediary = false;
+            }
         );
     }
 
     async addSalesRepresentativeIntermediary(
         salesRepresentative: ISalesRepresentative
     ) {
+        this.addingIntermediary = true;
         await this.agentService.addSalesRepresentative(salesRepresentative).subscribe(
             res => {
                 this.msg.success('Sales representative added successfully')
+                this.addingIntermediary = false;
                 this.closeDrawer();
             },
-            err => { this.msg.error('Failed to add Sales representative') }
+            err => {
+                this.msg.error('Failed to add Sales representative')
+                this.addingIntermediary = false;
+            }
         );
     }
 

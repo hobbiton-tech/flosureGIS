@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { User } from '../models/users.model';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class UsersService {
     constructor(private http: HttpClient) {}
@@ -13,6 +13,7 @@ export class UsersService {
     addUser(dto: User): Observable<User> {
         return this.http.post<User>(
             'https://flosure-postgres-api.herokuapp.com/users',
+
             dto
         );
     }

@@ -16,6 +16,8 @@ import { CreditNote } from 'src/app/underwriting/documents/models/documents.mode
     styleUrls: ['./policy-cancellation-details.component.scss']
 })
 export class PolicyCancellationDetailsComponent implements OnInit {
+    //loading feedback
+    cancellingPolicy: boolean = false;
     editedRisk: RiskModel;
 
     //policy details form
@@ -34,6 +36,9 @@ export class PolicyCancellationDetailsComponent implements OnInit {
 
     //Editable fields
     isEditmode = false;
+
+    //creditNote
+    creditNotes: CreditNote[];
 
     // For Modal
     clientName: string;
@@ -86,6 +91,10 @@ export class PolicyCancellationDetailsComponent implements OnInit {
         this.endorsementForm = this.formBuilder.group({
             effectDate: ['', Validators.required],
             remark: ['', Validators.required]
+        });
+
+        this.policiesService.getCreditNotes().subscribe(creditNotes => {
+            this.creditNotes = creditNotes;
         });
 
         this.route.params.subscribe(id => {
@@ -172,6 +181,7 @@ export class PolicyCancellationDetailsComponent implements OnInit {
 
     //endorse policy
     endorsePolicy() {
+        this.cancellingPolicy = true;
         console.log('endorse policy clicked!!');
 
         const endorsement: Endorsement = {
@@ -191,7 +201,7 @@ export class PolicyCancellationDetailsComponent implements OnInit {
         };
 
         const creditNote: CreditNote = {
-            remarks: '-',
+            remarks: this.endorsementForm.get('remark').value,
             dateCreated: new Date(),
             dateUpdated: new Date()
         };
@@ -204,17 +214,18 @@ export class PolicyCancellationDetailsComponent implements OnInit {
 
         this.policiesService.updatePolicy(policy).subscribe(policy => {
             res => {
-                console.log(res);
-                this.policiesService.createCreditNote(
-                    this.policyData.id,
-                    creditNote,
-                    this.policyData
-                );
                 // this.router.navigateByUrl(
                 // '/flosure/underwriting/endorsements/view-endorsements'
             };
 
+            this.policiesService.createCreditNote(
+                this.policyData.id,
+                creditNote,
+                this.policyData
+            );
+
             this.msg.success('Cancellation Successful');
+            this.cancellingPolicy = false;
         });
 
         this.creditNoteAmount = this.policyCancellationBalance();
