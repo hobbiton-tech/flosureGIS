@@ -158,6 +158,20 @@ export class QuotesService {
                     );
             });
     }
+
+    postRtsa(params) {
+        console.log('PARAMS>>>>>>>', params);
+        this.http
+            .post<any>(`https://rtsa-api.herokuapp.com/rtsa`, params)
+            .subscribe(
+                async (res) => {
+                    console.log(res);
+                },
+                async (err) => {
+                    console.log(err);
+                }
+            );
+    }
     getMotorQuotations(): Observable<MotorQuotationModel[]> {
         return this.http.get<MotorQuotationModel[]>(
             'https://flosure-postgres-api.herokuapp.com/quotation'

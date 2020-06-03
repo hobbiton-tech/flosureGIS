@@ -23,7 +23,7 @@ import {
 } from 'src/app/clients/models/clients.model';
 import { UploadChangeParam, NzMessageService } from 'ng-zorro-antd';
 import { debounceTime, switchMap, map } from 'rxjs/operators';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import _ from 'lodash';
 import { AgentsService } from 'src/app/settings/components/agents/services/agents.service';
 import {
@@ -81,8 +81,10 @@ interface IRateRequest {
     styleUrls: ['./quote-details.component.scss'],
 })
 export class QuoteDetailsComponent implements OnInit {
-    
-
+    private header = new HttpHeaders({
+        'content-type': 'application/json',
+        Authorization: 'Douglas.Chilungu:aplusgeneral@2019',
+    });
     clauses: IPolicyClauses[];
     wordings: IPolicyWording[];
     extensions: IPolicyExtension[];
@@ -1230,52 +1232,38 @@ export class QuoteDetailsComponent implements OnInit {
 
             for (const risk of policy.risks) {
                 console.log('Risks>>>>', risk);
-                const headersObject = new HttpHeaders();
-                headersObject.set(
-                    'Authorization',
-                    'Basic ' + btoa('Douglas.Chilungu:aplusgeneral@2019')
-                );
 
-                const params: any[] = [
-                    {
-                        insuranceType: 1,
-                        status: 1,
-                        registrationMark: risk.regNumber.replace(/\s/g, ''),
-                        dateFrom: risk.riskStartDate,
-                        dateTo: risk.riskEndDate,
-                        insurancePolicyNo: policy.policyNumber,
-                        chassisNumber: risk.chassisNumber,
-                    },
-                ];
-
-                const httpOptions = {
-                    headers: headersObject,
+                const params = {
+                    insuranceType: 0,
+                    status: 0,
+                    registrationMark: risk.regNumber.replace(/\s/g, ''),
+                    dateFrom: risk.riskStartDate,
+                    dateTo: risk.riskEndDate,
+                    insurancePolicyNo: policy.policyNumber,
+                    chassisNumber: risk.chassisNumber,
                 };
-                console.log('HEADERS>>>>', headersObject);
+
+                console.log('PARAMS>>>>>>', params);
+
+                this.quotesService.postRtsa(params);
+
                 if (risk.insuranceType === 'ThirdParty') {
-                    this.http
-                        .post<any>(
-                            'https://zampointzidb.eservices.gov.zm/ZIDB/ReceiveInsurancePolicies',
-                            params,
-                            httpOptions
-                        )
-                        .pipe(
-                            map((res) => {
-                                console.log('RTSA RESULTS', res);
-                            })
-                        );
-                    console.log(
-                        'Risk Type>>>>',
-                        risk.insuranceType,
-                        policy.policyNumber
-                    );
+                    const num = 1;
                 } else if (risk.insuranceType === 'Comprehensive') {
-                    console.log('Risk Type>>>>', risk.insuranceType);
-                    this.http.post<any[]>(
-                        'https://zampointzidb.eservices.gov.zm/ZIDB/ReceiveInsurancePolicies',
-                        params,
-                        httpOptions
-                    );
+                    const numa = 1;
+
+                    // const params: any[] = [
+                    //     {
+                    //         insuranceType: 1,
+                    //         status: 1,
+                    //         registrationMark: risk.regNumber.replace(/\s/g, ''),
+                    //         dateFrom: risk.riskStartDate,
+                    //         dateTo: risk.riskEndDate,
+                    //         insurancePolicyNo: policy.policyNumber,
+                    //         chassisNumber: risk.chassisNumber,
+                    //     },
+                    // ];
+
                     console.log(
                         'Risk Type>>>>',
                         risk.insuranceType,
