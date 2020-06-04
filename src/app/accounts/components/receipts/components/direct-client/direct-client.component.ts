@@ -31,6 +31,7 @@ export class DirectClientComponent implements OnInit {
     cancelReceipt: IReceiptModel = new IReceiptModel();
     reinstateReceipt: IReceiptModel = new IReceiptModel();
     size = 'large';
+    paymentMethod = '';
 
     recStatus = 'Receipted';
 
@@ -105,8 +106,7 @@ export class DirectClientComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.policeServices.getPolicies().subscribe(quotes => {
-
+        this.policeServices.getPolicies().subscribe((quotes) => {
             this.unreceiptedList = _.filter(
                 quotes,
                 (x) =>
@@ -256,5 +256,10 @@ export class DirectClientComponent implements OnInit {
         this.router.navigateByUrl('/flosure/accounts/view-receipt/' + this._id);
         // this.isConfirmLoading = true;
         // this.generateDocuments();
+    }
+
+    paymentMethodChange(value) {
+        console.log('ON CHANGE>>>>', value);
+        this.paymentMethod = value;
     }
 }
