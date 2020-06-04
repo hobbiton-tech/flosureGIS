@@ -136,7 +136,7 @@ export class QuotesService {
         };
         this.http
             .get<IQuoteNumberResult>(
-                `https://flosure-premium-rates.herokuapp.com/aplus-quote/1/0/${insuranceType}`
+                `https://new-rates-api.now.sh/aplus-quote/1/0/${insuranceType}`
             )
             .subscribe(async (res) => {
                 motorQuotation.quoteNumber = res.quoteNumber;

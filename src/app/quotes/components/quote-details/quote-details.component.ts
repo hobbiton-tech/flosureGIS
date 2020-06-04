@@ -693,7 +693,7 @@ export class QuoteDetailsComponent implements OnInit {
             };
             this.http
                 .post<IRateResult>(
-                    `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                    `https://new-rates-api.now.sh/rates/comprehensive`,
                     request
                 )
                 .subscribe((data) => {
@@ -732,7 +732,7 @@ export class QuoteDetailsComponent implements OnInit {
             };
             this.http
                 .post<IRateResult>(
-                    `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                    `https://new-rates-api.now.sh/rates/comprehensive`,
                     request
                 )
                 .subscribe((data) => {
@@ -768,7 +768,7 @@ export class QuoteDetailsComponent implements OnInit {
             };
             this.http
                 .post<IRateResult>(
-                    `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                    `https://new-rates-api.now.sh/rates/comprehensive`,
                     request
                 )
                 .subscribe((data) => {
@@ -802,7 +802,7 @@ export class QuoteDetailsComponent implements OnInit {
             };
             this.http
                 .post<IRateResult>(
-                    `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                    `https://new-rates-api.now.sh/rates/comprehensive`,
                     request
                 )
                 .subscribe((data) => {
@@ -1233,36 +1233,33 @@ export class QuoteDetailsComponent implements OnInit {
             for (const risk of policy.risks) {
                 console.log('Risks>>>>', risk);
 
-                const params = {
-                    insuranceType: 0,
-                    status: 0,
-                    registrationMark: risk.regNumber.replace(/\s/g, ''),
-                    dateFrom: risk.riskStartDate,
-                    dateTo: risk.riskEndDate,
-                    insurancePolicyNo: policy.policyNumber,
-                    chassisNumber: risk.chassisNumber,
-                };
-
-                console.log('PARAMS>>>>>>', params);
-
-                this.quotesService.postRtsa(params);
-
                 if (risk.insuranceType === 'ThirdParty') {
-                    const num = 1;
-                } else if (risk.insuranceType === 'Comprehensive') {
-                    const numa = 1;
+                    const params = {
+                        insuranceType: 1,
+                        status: 1,
+                        registrationMark: risk.regNumber.replace(/\s/g, ''),
+                        dateFrom: risk.riskStartDate,
+                        dateTo: risk.riskEndDate,
+                        insurancePolicyNo: policy.policyNumber,
+                        chassisNumber: risk.chassisNumber,
+                    };
 
-                    // const params: any[] = [
-                    //     {
-                    //         insuranceType: 1,
-                    //         status: 1,
-                    //         registrationMark: risk.regNumber.replace(/\s/g, ''),
-                    //         dateFrom: risk.riskStartDate,
-                    //         dateTo: risk.riskEndDate,
-                    //         insurancePolicyNo: policy.policyNumber,
-                    //         chassisNumber: risk.chassisNumber,
-                    //     },
-                    // ];
+                    console.log('PARAMS>>>>>>', params);
+
+                    this.quotesService.postRtsa(params);
+                } else if (risk.insuranceType === 'Comprehensive') {
+                    const params = {
+                        insuranceType: 2,
+                        status: 1,
+                        registrationMark: risk.regNumber.replace(/\s/g, ''),
+                        dateFrom: risk.riskStartDate,
+                        dateTo: risk.riskEndDate,
+                        insurancePolicyNo: policy.policyNumber,
+                        chassisNumber: risk.chassisNumber,
+                    };
+                    console.log('PARAMS>>>>>>', params);
+
+                    this.quotesService.postRtsa(params);
 
                     console.log(
                         'Risk Type>>>>',
@@ -1466,7 +1463,7 @@ export class QuoteDetailsComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://new-rates-api.now.sh/rates/comprehensive`,
                 request
             )
             .subscribe((data) => {
@@ -1500,7 +1497,7 @@ export class QuoteDetailsComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://new-rates-api.now.sh/rates/comprehensive`,
                 request
             )
             .subscribe((data) => {
@@ -1538,7 +1535,7 @@ export class QuoteDetailsComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://new-rates-api.now.sh/rates/comprehensive`,
                 request
             )
             .subscribe((data) => {
@@ -1580,7 +1577,7 @@ export class QuoteDetailsComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://new-rates-api.now.sh/rates/comprehensive`,
                 request
             )
             .subscribe((data) => {
@@ -1620,7 +1617,7 @@ export class QuoteDetailsComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://new-rates-api.now.sh/rates/comprehensive`,
                 request
             )
             .subscribe((data) => {
@@ -1662,7 +1659,7 @@ export class QuoteDetailsComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://new-rates-api.now.sh/rates/comprehensive`,
                 request
             )
             .subscribe((data) => {
@@ -1704,7 +1701,7 @@ export class QuoteDetailsComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://new-rates-api.now.sh/rates/comprehensive`,
                 request
             )
             .subscribe((data) => {
@@ -1746,7 +1743,7 @@ export class QuoteDetailsComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://new-rates-api.now.sh/rates/comprehensive`,
                 request
             )
             .subscribe((data) => {
@@ -1863,7 +1860,7 @@ export class QuoteDetailsComponent implements OnInit {
             };
             this.http
                 .post<IRateResult>(
-                    `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                    `https://new-rates-api.now.sh/rates/comprehensive`,
                     request
                 )
                 .subscribe((data) => {
@@ -1936,7 +1933,7 @@ export class QuoteDetailsComponent implements OnInit {
             };
             this.http
                 .post<IRateResult>(
-                    `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                    `https://new-rates-api.now.sh/rates/comprehensive`,
                     request
                 )
                 .subscribe((data) => {

@@ -276,7 +276,7 @@ export class PoliciesService {
 
         this.http
             .get<IDebitNoteResult>(
-                `https://flosure-premium-rates.herokuapp.com/aplus-invoice/1/0/${insuranceType}`
+                `https://new-rates-api.now.sh/aplus-invoice/1/0/${insuranceType}`
             )
             .subscribe(async (res) => {
                 debitNote.debitNoteNumber = res.invoiceNumber;
@@ -336,7 +336,7 @@ export class PoliciesService {
 
         this.http
             .get<ICreditNoteResult>(
-                `https://flosure-premium-rates.herokuapp.com/aplus-invoice/1/0/${insuranceType}`
+                `https://new-rates-api.now.sh/aplus-invoice/1/0/${insuranceType}`
             )
             .subscribe(async (res) => {
                 let tempCreditNoteNumber = res.invoiceNumber;
