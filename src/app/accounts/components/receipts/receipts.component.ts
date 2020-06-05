@@ -14,14 +14,14 @@ import { Router } from '@angular/router';
 import { Policy } from 'src/app/underwriting/models/policy.model';
 import {
     IAgent,
-    IBroker
+    IBroker,
 } from 'src/app/settings/components/agents/models/agents.model';
 import { AgentsService } from 'src/app/settings/components/agents/services/agents.service';
 
 @Component({
     selector: 'app-receipts',
     templateUrl: './receipts.component.html',
-    styleUrls: ['./receipts.component.scss']
+    styleUrls: ['./receipts.component.scss'],
 })
 export class ReceiptsComponent implements OnInit {
     receiptForm: FormGroup;
@@ -76,22 +76,23 @@ export class ReceiptsComponent implements OnInit {
         { label: 'Third Party Recovery', value: 'Third Party Recovery' },
         {
             label: 'Imprest Retirement Receipt',
-            value: 'Imprest Retirement Receipt'
+            value: 'Imprest Retirement Receipt',
         },
         { label: 'Third Party Recovery', value: 'Third Party Recovery' },
-        { label: 'General Receipt', value: 'General Receipt' }
+        { label: 'General Receipt', value: 'General Receipt' },
     ];
 
     paymentMethodList = [
         { label: 'Cash', value: 'cash' },
         { label: 'EFT', value: 'eft' },
-        { label: 'Bank Transfer', value: 'bank transfer' }
+        { label: 'Bank Transfer', value: 'bank transfer' },
     ];
 
     typeOfClient = ['Direct', 'Agent', 'Broker', 'Sales Representatives'];
 
     selectedType = 'Direct';
     selectedAgent = '';
+    receiptNewCount: number;
 
     constructor(
         private receiptService: AccountService,
@@ -112,54 +113,55 @@ export class ReceiptsComponent implements OnInit {
             sumInWords: [''],
             dateReceived: [''],
             todayDate: [this.today],
-            remarks: ['']
+            remarks: [''],
         });
 
         this.cancelForm = this.formBuilder.group({
-            remarks: ['', Validators.required]
+            remarks: ['', Validators.required],
         });
         this.reinstateForm = this.formBuilder.group({
-            remarks: ['', Validators.required]
+            remarks: ['', Validators.required],
         });
     }
 
     ngOnInit(): void {
-        this.agentService.getBrokers().subscribe(brokers => {
+        this.agentService.getBrokers().subscribe((brokers) => {
             this.brokerList = brokers;
 
             console.log('===================');
             console.log(this.brokerList);
         });
-        // this.receiptService.getPolicies().subscribe((quotes) => {
-        //       this.unreceiptedList = _.filter(
-        //           quotes,
-        //           (x) => x.receiptStatus === 'Unreceipted'
-        //       );
-        //       this.receiptsCount = _.filter(
-        //           quotes,
-        //           (x) => x.receiptStatus === 'Unreceipted'
-        //       ).length;
-        //       console.log('======= Unreceipt List =======');
-        //       console.log(this.unreceiptedList);
-        //   });
+        this.receiptService.getPolicies().subscribe((quotes) => {
+            this.unreceiptedList = _.filter(
+                quotes,
+                (x) => x.receiptStatus === 'Unreceipted'
+            );
+            this.receiptsCount = _.filter(
+                quotes,
+                (x) => x.receiptStatus === 'Unreceipted'
+            ).length;
+            console.log('======= Unreceipt List =======');
+            console.log(this.unreceiptedList);
+        });
 
-        // this.receiptService.getReciepts().subscribe((receipts) => {
-        //       this.receiptedList = _.filter(
-        //           receipts,
-        //           (x) => x.receiptStatus === 'Receipted'
-        //       );
+        this.receiptService.getReciepts().subscribe((receipts) => {
+            this.receiptedList = _.filter(
+                receipts,
+                (x) => x.receiptStatus === 'Receipted'
+            );
 
-        //       console.log('======= Receipt List =======');
-        //       console.log(this.receiptedList);
+            console.log('======= Receipt List =======');
+            console.log(this.receiptedList);
 
-        //       this.cancelReceiptList = _.filter(
-        //           receipts,
-        //           (x) => x.receiptStatus === 'Cancelled'
-        //       );
+            this.cancelReceiptList = _.filter(
+                receipts,
+                (x) => x.receiptStatus === 'Cancelled'
+            );
 
-        //       console.log('======= Cancelled Receipt List =======');
-        //       console.log(this.cancelReceiptList);
-        //   });
+            console.log('======= Cancelled Receipt List =======');
+            console.log(this.cancelReceiptList);
+            this.receiptNewCount = receipts.length;
+        });
     }
 
     showBrokerReceiptModal(): void {
@@ -183,17 +185,21 @@ export class ReceiptsComponent implements OnInit {
                 receiptStatus: this.recStatus,
                 todayDate: new Date(),
                 sourceOfBusiness: 'broker',
-                intermediaryName: this.receiptForm.controls.onBehalfOf.value
+                intermediaryName: this.receiptForm.controls.onBehalfOf.value,
             };
 
             this.receiptNum = this._id;
             await this.receiptService
-                .addReceipt(receipt, this.policy.risks[0].insuranceType)
-                .then(mess => {
+                .addReceipt(
+                    receipt,
+                    this.policy.risks[0].insuranceType,
+                    this.receiptNewCount
+                )
+                .then((mess) => {
                     this.message.success('Receipt Successfully created');
                     console.log(mess);
                 })
-                .catch(err => {
+                .catch((err) => {
                     this.message.warning('Receipt Failed');
                     console.log(err);
                 });
