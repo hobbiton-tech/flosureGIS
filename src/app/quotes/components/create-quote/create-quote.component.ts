@@ -86,6 +86,10 @@ interface IQuoteNumberResult {
 export class CreateQuoteComponent implements OnInit {
     //loading feedback
     creatingQuote: boolean = false;
+    quotesList: MotorQuotationModel[];
+    displayQuotesList: MotorQuotationModel[];
+    quotesCount = 0;
+    lastItem: any;
 
     clauseList: IClause[] = [];
     wordingList: IWording[] = [];
@@ -427,6 +431,17 @@ export class CreateQuoteComponent implements OnInit {
             receiptStatus: ['Unreceipted'],
             sourceOfBusiness: ['', Validators.required],
             intermediaryName: [''],
+        });
+
+        this.quoteService.getMotorQuotations().subscribe((quotes) => {
+            this.quotesList = quotes;
+            this.quotesCount = quotes.length;
+            console.log('======= Quote List =======');
+            console.log(this.quotesList);
+
+            this.displayQuotesList = this.quotesList;
+
+            this.lastItem = this.quotesList[this.quotesList.length - 1];
         });
 
         this.clientsService.getAllClients().subscribe((clients) => {
@@ -1146,7 +1161,7 @@ export class CreateQuoteComponent implements OnInit {
             this.productClauseService.addPolicyWording(this.newWordingWording);
         }
 
-        await this.quoteService.createMotorQuotation(quote);
+        await this.quoteService.createMotorQuotation(quote, this.quotesCount);
         this.creatingQuote = false;
     }
 

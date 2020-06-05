@@ -1246,7 +1246,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                     console.log('PARAMS>>>>>>', params);
 
-                    this.quotesService.postRtsa(params);
+                    // this.quotesService.postRtsa(params);
                 } else if (risk.insuranceType === 'Comprehensive') {
                     const params = {
                         insuranceType: 2,
@@ -1259,7 +1259,7 @@ export class QuoteDetailsComponent implements OnInit {
                     };
                     console.log('PARAMS>>>>>>', params);
 
-                    this.quotesService.postRtsa(params);
+                    // this.quotesService.postRtsa(params);
 
                     console.log(
                         'Risk Type>>>>',
@@ -1269,32 +1269,6 @@ export class QuoteDetailsComponent implements OnInit {
                 }
             }
         });
-
-        // await this.gqlQuotesService
-        //     .addCertificate({
-        //         clientId: localStorage.getItem('clientId'), // Added from the policy service
-        //         policyNumber: localStorage.getItem('policyNumber'), // Added in the policy service.
-        //         certificateUrl: cert.Location
-        //     })
-        //     .then(res => {
-        //         // console.log('GQL', res);
-        //         res.subscribe(x => {
-        //             console.log('GLQ', x);
-        //         });
-        //     });
-
-        // await this.gqlQuotesService
-        //     .addDebitNote({
-        //         clientId: localStorage.getItem('clientId'), // Added from the policy service,
-        //         policyNumber: localStorage.getItem('policyNumber'), // Added in the policy service.
-        //         debitNoteUrl: debit.Location
-        //     })
-        //     .then(res => {
-        //         res.subscribe(x => {
-        //             console.log('GLQ', x);
-        //         });
-        //         // console.log('GQL', res);
-        //     });
 
         this.isQuoteApproved = true;
         this.approvingQuote = false;

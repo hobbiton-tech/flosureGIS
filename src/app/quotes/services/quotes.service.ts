@@ -123,7 +123,7 @@ export class QuotesService {
             });
     }
     //postgres db
-    createMotorQuotation(motorQuotation: MotorQuotationModel) {
+    createMotorQuotation(motorQuotation: MotorQuotationModel, count: number) {
         let insuranceType = '';
         const productType = motorQuotation.risks[0].insuranceType;
         if (productType == 'Comprehensive') {
