@@ -93,7 +93,7 @@ export class DirectClientComponent implements OnInit {
             narration: ['', Validators.required],
             sumInWords: [''],
             dateReceived: [''],
-            todayDate: [this.today],
+            todayDate: [''],
             remarks: [''],
         });
 

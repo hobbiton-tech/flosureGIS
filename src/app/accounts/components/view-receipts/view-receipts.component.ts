@@ -29,6 +29,7 @@ export class ViewReceiptsComponent implements OnInit {
     loadingReceipt = false;
     key: string;
     printSrc: SafeUrl;
+    newDate = new Date();
 
     th = ['', 'thousand', 'million', 'billion', 'trillion'];
     dg = [
