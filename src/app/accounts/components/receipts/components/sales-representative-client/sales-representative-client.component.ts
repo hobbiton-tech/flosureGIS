@@ -13,7 +13,7 @@ import { v4 } from 'uuid';
 @Component({
     selector: 'app-sales-representative-client',
     templateUrl: './sales-representative-client.component.html',
-    styleUrls: ['./sales-representative-client.component.scss']
+    styleUrls: ['./sales-representative-client.component.scss'],
 })
 export class SalesRepresentativeClientComponent implements OnInit {
     receiptForm: FormGroup;
@@ -63,22 +63,23 @@ export class SalesRepresentativeClientComponent implements OnInit {
     // generated PDFs
     receiptURl = '';
     showReceiptModal = false;
+    receiptNewCount: number;
 
     optionList = [
         { label: 'Premium Payment', value: 'Premium Payment' },
         { label: 'Third Party Recovery', value: 'Third Party Recovery' },
         {
             label: 'Imprest Retirement Receipt',
-            value: 'Imprest Retirement Receipt'
+            value: 'Imprest Retirement Receipt',
         },
         { label: 'Third Party Recovery', value: 'Third Party Recovery' },
-        { label: 'General Receipt', value: 'General Receipt' }
+        { label: 'General Receipt', value: 'General Receipt' },
     ];
 
     paymentMethodList = [
         { label: 'Cash', value: 'cash' },
         { label: 'EFT', value: 'eft' },
-        { label: 'Bank Transfer', value: 'bank transfer' }
+        { label: 'Bank Transfer', value: 'bank transfer' },
     ];
 
     typeOfClient = ['Direct', 'Agent', 'Broker'];
@@ -108,28 +109,28 @@ export class SalesRepresentativeClientComponent implements OnInit {
             sumInWords: [''],
             dateReceived: [''],
             todayDate: [this.today],
-            remarks: ['']
+            remarks: [''],
         });
 
         this.cancelForm = this.formBuilder.group({
-            remarks: ['', Validators.required]
+            remarks: ['', Validators.required],
         });
         this.reinstateForm = this.formBuilder.group({
-            remarks: ['', Validators.required]
+            remarks: ['', Validators.required],
         });
     }
 
     ngOnInit(): void {
-        this.agentService.getSalesRepresentatives().subscribe(salesRep => {
+        this.agentService.getSalesRepresentatives().subscribe((salesRep) => {
             this.salesRepList = salesRep;
 
             console.log('===================');
             console.log(this.salesRepList);
         });
-        this.receiptService.getPolicies().subscribe(quotes => {
+        this.receiptService.getPolicies().subscribe((quotes) => {
             this.listofUnreceiptedReceipts = _.filter(
                 quotes,
-                x =>
+                (x) =>
                     x.receiptStatus === 'Unreceipted' &&
                     x.sourceOfBusiness === 'salesRepresentative'
             );
@@ -137,7 +138,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
 
             this.receiptsCount = _.filter(
                 quotes,
-                x =>
+                (x) =>
                     x.receiptStatus === 'Unreceipted' &&
                     x.sourceOfBusiness === 'salesRepresentative'
             ).length;
@@ -145,10 +146,10 @@ export class SalesRepresentativeClientComponent implements OnInit {
             console.log(this.listofUnreceiptedReceipts);
         });
 
-        this.receiptService.getReciepts().subscribe(receipts => {
+        this.receiptService.getReciepts().subscribe((receipts) => {
             this.receiptedList = _.filter(
                 receipts,
-                x =>
+                (x) =>
                     x.receiptStatus === 'Receipted' &&
                     x.sourceOfBusiness === 'salesRepresentative'
             );
@@ -158,13 +159,14 @@ export class SalesRepresentativeClientComponent implements OnInit {
 
             this.cancelReceiptList = _.filter(
                 receipts,
-                x =>
+                (x) =>
                     x.receiptStatus === 'Cancelled' &&
                     x.sourceOfBusiness === 'salesRepresentative'
             );
 
             console.log('======= Cancelled Receipt List =======');
             console.log(this.cancelReceiptList);
+            this.receiptNewCount = receipts.length;
         });
     }
 
@@ -175,7 +177,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
         console.log('Receipts', this.listofUnreceiptedReceipts);
 
         this.displayedListOfUnreceiptedReceipts = this.listofUnreceiptedReceipts.filter(
-            x => x.intermediaryName === value
+            (x) => x.intermediaryName === value
         );
         console.log(this.listofUnreceiptedReceipts);
         console.log('SELECTED', value);
@@ -212,17 +214,21 @@ export class SalesRepresentativeClientComponent implements OnInit {
                 sumInDigits: this.policyAmount,
                 todayDate: new Date(),
                 sourceOfBusiness: this.sourceOfBusiness,
-                intermediaryName: this.intermediaryName
+                intermediaryName: this.intermediaryName,
             };
 
             this.receiptNum = this._id;
             await this.receiptService
-                .addReceipt(receipt, this.policy.risks[0].insuranceType)
-                .then(mess => {
+                .addReceipt(
+                    receipt,
+                    this.policy.risks[0].insuranceType,
+                    this.receiptNewCount
+                )
+                .then((mess) => {
                     this.message.success('Receipt Successfully created');
                     console.log(mess);
                 })
-                .catch(err => {
+                .catch((err) => {
                     this.message.warning('Receipt Failed');
                     console.log(err);
                 });
