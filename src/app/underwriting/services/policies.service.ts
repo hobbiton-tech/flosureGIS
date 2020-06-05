@@ -258,7 +258,12 @@ export class PoliciesService {
 
     //documents
     //debit note
-    createDebitNote(policyId: string, debitNote: DebitNote, policy: Policy) {
+    createDebitNote(
+        policyId: string,
+        debitNote: DebitNote,
+        policy: Policy,
+        count: number
+    ) {
         console.log('create debit note method called');
         console.log(policyId);
         console.log('-------------------');
@@ -276,7 +281,7 @@ export class PoliciesService {
 
         this.http
             .get<IDebitNoteResult>(
-                `https://new-rates-api.now.sh/aplus-invoice/1/0/${insuranceType}`
+                `https://new-rates-api.now.sh/aplus-invoice/1/0/${insuranceType}/${count}`
             )
             .subscribe(async (res) => {
                 debitNote.debitNoteNumber = res.invoiceNumber;

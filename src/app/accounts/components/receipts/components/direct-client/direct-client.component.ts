@@ -76,6 +76,7 @@ export class DirectClientComponent implements OnInit {
     ];
     sourceOfBusiness: string;
     intermediaryName: string;
+    receiptNewCount: number;
     constructor(
         private receiptService: AccountService,
         private policeServices: PoliciesService,
@@ -143,6 +144,8 @@ export class DirectClientComponent implements OnInit {
 
             console.log('======= Cancelled Receipt List =======');
             console.log(this.cancelReceiptList);
+
+            this.receiptNewCount = receipts.length;
         });
     }
 
@@ -182,7 +185,11 @@ export class DirectClientComponent implements OnInit {
 
             this.receiptNum = this._id;
             await this.receiptService
-                .addReceipt(receipt, this.policy.risks[0].insuranceType)
+                .addReceipt(
+                    receipt,
+                    this.policy.risks[0].insuranceType,
+                    this.receiptNewCount
+                )
                 .then((mess) => {
                     this.message.success('Receipt Successfully created');
                     console.log(mess);
