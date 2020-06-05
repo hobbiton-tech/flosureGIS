@@ -424,7 +424,7 @@ export class AddRiskComponent implements OnInit {
             };
             this.http
                 .post<IRateResult>(
-                    `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                    `https://new-rates-api.now.sh/rates/comprehensive`,
                     request
                 )
                 .subscribe(data => {
@@ -457,7 +457,7 @@ export class AddRiskComponent implements OnInit {
             };
             this.http
                 .post<IRateResult>(
-                    `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                    `https://new-rates-api.now.sh/rates/comprehensive`,
                     request
                 )
                 .subscribe(data => {
@@ -704,7 +704,7 @@ export class AddRiskComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://new-rates-api.now.sh/rates/comprehensive`,
                 request
             )
             .subscribe(data => {
@@ -777,7 +777,7 @@ export class AddRiskComponent implements OnInit {
             };
             this.http
                 .post<IRateResult>(
-                    `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                    `https://new-rates-api.now.sh/rates/comprehensive`,
                     request
                 )
                 .subscribe(data => {
@@ -813,7 +813,7 @@ export class AddRiskComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://new-rates-api.now.sh/rates/comprehensive`,
                 request
             )
             .subscribe(data => {
@@ -850,7 +850,7 @@ export class AddRiskComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://new-rates-api.now.sh/rates/comprehensive`,
                 request
             )
             .subscribe(data => {
@@ -890,7 +890,7 @@ export class AddRiskComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://new-rates-api.now.sh/rates/comprehensive`,
                 request
             )
             .subscribe(data => {
@@ -930,7 +930,7 @@ export class AddRiskComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://new-rates-api.now.sh/rates/comprehensive`,
                 request
             )
             .subscribe(data => {
@@ -970,7 +970,7 @@ export class AddRiskComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://new-rates-api.now.sh/rates/comprehensive`,
                 request
             )
             .subscribe(data => {
@@ -1010,7 +1010,7 @@ export class AddRiskComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://new-rates-api.now.sh/rates/comprehensive`,
                 request
             )
             .subscribe(data => {
@@ -1050,7 +1050,7 @@ export class AddRiskComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://new-rates-api.now.sh/rates/comprehensive`,
                 request
             )
             .subscribe(data => {

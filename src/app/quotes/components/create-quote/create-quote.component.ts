@@ -87,6 +87,9 @@ export class CreateQuoteComponent implements OnInit {
     //loading feedback
     creatingQuote: boolean = false;
 
+    //yearpicker
+    year = null;
+
     clauseList: IClause[];
     wordingList: IWording[];
     extensionList: IExtension[];
@@ -599,7 +602,7 @@ export class CreateQuoteComponent implements OnInit {
             };
             this.http
                 .post<IRateResult>(
-                    `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                    `https://new-rates-api.now.sh/rates/comprehensive`,
                     request
                 )
                 .subscribe(data => {
@@ -638,7 +641,7 @@ export class CreateQuoteComponent implements OnInit {
             };
             this.http
                 .post<IRateResult>(
-                    `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                    `https://new-rates-api.now.sh/rates/comprehensive`,
                     request
                 )
                 .subscribe(data => {
@@ -674,7 +677,7 @@ export class CreateQuoteComponent implements OnInit {
             };
             this.http
                 .post<IRateResult>(
-                    `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                    `https://new-rates-api.now.sh/rates/comprehensive`,
                     request
                 )
                 .subscribe(data => {
@@ -708,7 +711,7 @@ export class CreateQuoteComponent implements OnInit {
             };
             this.http
                 .post<IRateResult>(
-                    `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                    `https://new-rates-api.now.sh/rates/comprehensive`,
                     request
                 )
                 .subscribe(data => {
@@ -1042,7 +1045,6 @@ export class CreateQuoteComponent implements OnInit {
     }
 
     async addQuote(): Promise<void> {
-        this.creatingQuote = true;
         const quote: MotorQuotationModel = {
             ...this.quoteForm.value,
             dateCreated: new Date(),
@@ -1110,6 +1112,7 @@ export class CreateQuoteComponent implements OnInit {
         //         this.msg.error('Quotation Creation Failed');
         //     });
 
+        this.creatingQuote = true;
         // postgres
         for (const clause of this.selectedClauseValue) {
             this.newClauseWording = {
@@ -1139,9 +1142,9 @@ export class CreateQuoteComponent implements OnInit {
             };
             this.productClauseService.addPolicyWording(this.newWordingWording);
         }
-
+        this.creatingQuote = true;
         await this.quoteService.createMotorQuotation(quote);
-        this.creatingQuote = false;
+        // this.creatingQuote = false;
     }
 
     showModal(): void {
@@ -1322,7 +1325,7 @@ export class CreateQuoteComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://new-rates-api.now.sh/rates/comprehensive`,
                 request
             )
             .subscribe(data => {
@@ -1397,7 +1400,7 @@ export class CreateQuoteComponent implements OnInit {
             };
             this.http
                 .post<IRateResult>(
-                    `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                    `https://new-rates-api.now.sh/rates/comprehensive`,
                     request
                 )
                 .subscribe(data => {
@@ -1435,7 +1438,7 @@ export class CreateQuoteComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://new-rates-api.now.sh/rates/comprehensive`,
                 request
             )
             .subscribe(data => {
@@ -1474,7 +1477,7 @@ export class CreateQuoteComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://new-rates-api.now.sh/rates/comprehensive`,
                 request
             )
             .subscribe(data => {
@@ -1516,7 +1519,7 @@ export class CreateQuoteComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://new-rates-api.now.sh/rates/comprehensive`,
                 request
             )
             .subscribe(data => {
@@ -1556,7 +1559,7 @@ export class CreateQuoteComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://new-rates-api.now.sh/rates/comprehensive`,
                 request
             )
             .subscribe(data => {
@@ -1598,7 +1601,7 @@ export class CreateQuoteComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://new-rates-api.now.sh/rates/comprehensive`,
                 request
             )
             .subscribe(data => {
@@ -1640,7 +1643,7 @@ export class CreateQuoteComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://new-rates-api.now.sh/rates/comprehensive`,
                 request
             )
             .subscribe(data => {
@@ -1682,7 +1685,7 @@ export class CreateQuoteComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://new-rates-api.now.sh/rates/comprehensive`,
                 request
             )
             .subscribe(data => {
@@ -1968,5 +1971,9 @@ export class CreateQuoteComponent implements OnInit {
     }
     handleEditWordingCancel() {
         this.isWordingEditVisible = false;
+    }
+
+    onChange(result: Date): void {
+        console.log('onChange: ', result);
     }
 }
