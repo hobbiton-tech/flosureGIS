@@ -13,7 +13,7 @@ import { v4 } from 'uuid';
 @Component({
     selector: 'app-broker-client',
     templateUrl: './broker-client.component.html',
-    styleUrls: ['./broker-client.component.scss']
+    styleUrls: ['./broker-client.component.scss'],
 })
 export class BrokerClientComponent implements OnInit {
     receiptForm: FormGroup;
@@ -53,6 +53,7 @@ export class BrokerClientComponent implements OnInit {
     isVisibleClientType = false;
     isOkClientTypeLoading = false;
     agent: any;
+    receiptNewCount: number;
 
     // modal
     isReceiptVisible = false;
@@ -69,16 +70,16 @@ export class BrokerClientComponent implements OnInit {
         { label: 'Third Party Recovery', value: 'Third Party Recovery' },
         {
             label: 'Imprest Retirement Receipt',
-            value: 'Imprest Retirement Receipt'
+            value: 'Imprest Retirement Receipt',
         },
         { label: 'Third Party Recovery', value: 'Third Party Recovery' },
-        { label: 'General Receipt', value: 'General Receipt' }
+        { label: 'General Receipt', value: 'General Receipt' },
     ];
 
     paymentMethodList = [
         { label: 'Cash', value: 'cash' },
         { label: 'EFT', value: 'eft' },
-        { label: 'Bank Transfer', value: 'bank transfer' }
+        { label: 'Bank Transfer', value: 'bank transfer' },
     ];
 
     typeOfClient = ['Direct', 'Agent', 'Broker'];
@@ -108,28 +109,28 @@ export class BrokerClientComponent implements OnInit {
             sumInWords: [''],
             dateReceived: [''],
             todayDate: [this.today],
-            remarks: ['']
+            remarks: [''],
         });
 
         this.cancelForm = this.formBuilder.group({
-            remarks: ['', Validators.required]
+            remarks: ['', Validators.required],
         });
         this.reinstateForm = this.formBuilder.group({
-            remarks: ['', Validators.required]
+            remarks: ['', Validators.required],
         });
     }
 
     ngOnInit(): void {
-        this.agentService.getBrokers().subscribe(brokers => {
+        this.agentService.getBrokers().subscribe((brokers) => {
             this.brokerList = brokers;
 
             console.log('===================');
             console.log(this.brokerList);
         });
-        this.receiptService.getPolicies().subscribe(quotes => {
+        this.receiptService.getPolicies().subscribe((quotes) => {
             this.listofUnreceiptedReceipts = _.filter(
                 quotes,
-                x =>
+                (x) =>
                     x.receiptStatus === 'Unreceipted' &&
                     x.sourceOfBusiness === 'broker'
             );
@@ -138,7 +139,7 @@ export class BrokerClientComponent implements OnInit {
 
             this.receiptsCount = _.filter(
                 quotes,
-                x =>
+                (x) =>
                     x.receiptStatus === 'Unreceipted' &&
                     x.sourceOfBusiness === 'broker'
             ).length;
@@ -146,10 +147,10 @@ export class BrokerClientComponent implements OnInit {
             console.log(this.listofUnreceiptedReceipts);
         });
 
-        this.receiptService.getReciepts().subscribe(receipts => {
+        this.receiptService.getReciepts().subscribe((receipts) => {
             this.receiptedList = _.filter(
                 receipts,
-                x =>
+                (x) =>
                     x.receiptStatus === 'Receipted' &&
                     x.sourceOfBusiness === 'broker'
             );
@@ -159,20 +160,21 @@ export class BrokerClientComponent implements OnInit {
 
             this.cancelReceiptList = _.filter(
                 receipts,
-                x =>
+                (x) =>
                     x.receiptStatus === 'Cancelled' &&
                     x.sourceOfBusiness === 'broker'
             );
 
             console.log('======= Cancelled Receipt List =======');
             console.log(this.cancelReceiptList);
+            this.receiptNewCount = receipts.length;
         });
     }
 
     log(value): void {
         // this.listOfPolicies = this.policies.filter((x) => x.client === value);
         this.displayedListOfUnreceiptedReceipts = this.listofUnreceiptedReceipts.filter(
-            x => x.intermediaryName === value
+            (x) => x.intermediaryName === value
         );
         console.log(value);
     }
@@ -208,17 +210,21 @@ export class BrokerClientComponent implements OnInit {
                 sumInDigits: this.policyAmount,
                 todayDate: new Date(),
                 sourceOfBusiness: this.sourceOfBusiness,
-                intermediaryName: this.intermediaryName
+                intermediaryName: this.intermediaryName,
             };
 
             this.receiptNum = this._id;
             await this.receiptService
-                .addReceipt(receipt, this.policy.risks[0].insuranceType)
-                .then(mess => {
+                .addReceipt(
+                    receipt,
+                    this.policy.risks[0].insuranceType,
+                    this.receiptNewCount
+                )
+                .then((mess) => {
                     this.message.success('Receipt Successfully created');
                     console.log(mess);
                 })
-                .catch(err => {
+                .catch((err) => {
                     this.message.warning('Receipt Failed');
                     console.log(err);
                 });

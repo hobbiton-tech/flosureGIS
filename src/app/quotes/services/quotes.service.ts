@@ -123,7 +123,7 @@ export class QuotesService {
             });
     }
     //postgres db
-    createMotorQuotation(motorQuotation: MotorQuotationModel) {
+    createMotorQuotation(motorQuotation: MotorQuotationModel, count: number) {
         let insuranceType = '';
         const productType = motorQuotation.risks[0].insuranceType;
         if (productType == 'Comprehensive') {
@@ -136,7 +136,7 @@ export class QuotesService {
         };
         this.http
             .get<IQuoteNumberResult>(
-                `https://new-rates-api.now.sh/aplus-quote/1/0/${insuranceType}`
+                `https://new-rates-api.now.sh/aplus-quote/1/0/${insuranceType}/${count}`
             )
             .subscribe(async (res) => {
                 motorQuotation.quoteNumber = res.quoteNumber;
