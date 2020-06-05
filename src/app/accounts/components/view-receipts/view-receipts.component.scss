@@ -82,3 +82,18 @@
 .rtl table tr td:nth-child(2) {
     text-align: left;
 }
+
+body {
+    font-family: Arial;
+    font-size: 19.3px;
+}
+.pos {
+    position: absolute;
+    z-index: 0;
+    left: 0px;
+    top: 0px;
+}
+
+.align {
+    text-align: center;
+}
