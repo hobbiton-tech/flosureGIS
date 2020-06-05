@@ -61,7 +61,10 @@ export class PoliciesService {
             insuranceType = 'THP';
         }
 
-        return this.http.post<Policy>('https://flosure-postgres-api.herokuapp.com/policy', policy);
+        return this.http.post<Policy>(
+            'https://flosure-postgres-api.herokuapp.com/policy',
+            policy
+        );
     }
 
     // getPolicies(): Observable<Policy[]> {
@@ -84,11 +87,16 @@ export class PoliciesService {
 
     // backup policies
     createBackupPolicy(policy: Policy): Observable<Policy> {
-        return this.http.post<Policy>('https://flosure-postgres-api.herokuapp.com/policy', policy);
+        return this.http.post<Policy>(
+            'https://flosure-postgres-api.herokuapp.com/policy',
+            policy
+        );
     }
 
     getBackupPolicies(): Observable<Policy[]> {
-        return this.http.get<Policy[]>('https://flosure-postgres-api.herokuapp.com/policy');
+        return this.http.get<Policy[]>(
+            'https://flosure-postgres-api.herokuapp.com/policy'
+        );
     }
 
     getBackupPolicyById(policyId: string): Observable<Policy> {
@@ -221,7 +229,9 @@ export class PoliciesService {
     }
 
     getPolicies(): Observable<Policy[]> {
-        return this.http.get<Policy[]>('https://flosure-postgres-api.herokuapp.com/policy');
+        return this.http.get<Policy[]>(
+            'https://flosure-postgres-api.herokuapp.com/policy'
+        );
         // return this.policies;
     }
 

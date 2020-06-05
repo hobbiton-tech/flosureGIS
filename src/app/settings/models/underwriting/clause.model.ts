@@ -20,27 +20,27 @@ export interface IExtension {
 }
 
 export interface IPolicyClauses {
-    id: string;
-    policyId: string;
-    heading: string;
-    productId: string;
-    clauseDetails: string;
+    id?: string;
+    policyId?: string;
+    heading?: string;
+    productId?: string;
+    clauseDetails?: string;
 }
 
 export interface IPolicyWording {
-    id: string;
-    policyId: string;
-    wordingId: string;
-    heading: string;
-    description: string;
+    id?: string;
+    policyId?: string;
+    wordingId?: string;
+    heading?: string;
+    description?: string;
 }
 
 export interface IPolicyExtension {
-    id: string;
-    policyId: string;
-    extensionId: string;
-    heading: string;
-    description: string;
+    id?: string;
+    policyId?: string;
+    extensionId?: string;
+    heading?: string;
+    description?: string;
 }
 
 // const createClause = () => {

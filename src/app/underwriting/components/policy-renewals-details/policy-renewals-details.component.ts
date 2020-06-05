@@ -1323,8 +1323,8 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
             town: 'string',
         };
 
-        const debit$ = ''
-        const cert$ = ''
+        const debit$ = '';
+        const cert$ = '';
 
         combineLatest([debit$, cert$]).subscribe(async ([debit, cert]) => {
             // this.debitNoteURL = debit.Location;

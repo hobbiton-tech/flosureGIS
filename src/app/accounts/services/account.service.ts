@@ -68,9 +68,7 @@ export class AccountService {
 
             this.http
                 .get<IReceiptNumberResult>(
-
                     'https://new-rates-api.now.sh/savenda-receipts/1'
-
                 )
                 .subscribe(async res => {
                     receipt.receiptNumber = res.receiptNumber;

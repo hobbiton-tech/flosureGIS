@@ -6,13 +6,13 @@ import html2canvas from 'html2canvas';
 import {
     IPolicyClauses,
     IPolicyWording,
-    IPolicyExtension
+    IPolicyExtension,
 } from 'src/app/settings/models/underwriting/clause.model';
 
 @Component({
     selector: 'app-policy-wording',
     templateUrl: './policy-wording.component.html',
-    styleUrls: ['./policy-wording.component.scss']
+    styleUrls: ['./policy-wording.component.scss'],
 })
 export class PolicyWordingComponent implements OnInit {
     @Input()
@@ -82,20 +82,20 @@ export class PolicyWordingComponent implements OnInit {
         const options = {
             background: 'white',
             height: div.clientHeight,
-            width: div.clientWidth
+            width: div.clientWidth,
         };
 
-        html2canvas(div, options).then(canvas => {
-            let doc = new jsPDF({
+        html2canvas(div, options).then((canvas) => {
+            const doc = new jsPDF({
                 unit: 'mm',
-                format: 'a4'
+                format: 'a4',
             });
-            let imgData = canvas.toDataURL('image/PNG');
+            const imgData = canvas.toDataURL('image/PNG');
             doc.addImage(imgData, 'PNG', 0, 0, 211, 298);
 
-            let pdfOutput = doc.output();
-            let buffer = new ArrayBuffer(pdfOutput.length);
-            let array = new Uint8Array(buffer);
+            const pdfOutput = doc.output();
+            const buffer = new ArrayBuffer(pdfOutput.length);
+            const array = new Uint8Array(buffer);
             for (let i = 0; i < pdfOutput.length; i++) {
                 array[i] = pdfOutput.charCodeAt(i);
             }
@@ -106,7 +106,7 @@ export class PolicyWordingComponent implements OnInit {
     }
 
     sumArray(items, prop) {
-        return items.reduce(function(a, b) {
+        return items.reduce(function (a, b) {
             return a + b[prop];
         }, 0);
     }

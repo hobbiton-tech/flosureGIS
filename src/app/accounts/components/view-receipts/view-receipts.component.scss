@@ -25,7 +25,9 @@
     text-align: left !important;
 }
 .td3 {
-    text-align: right !important;
+    text-align: left !important;
+    overflow-wrap: break-word;
+    padding-left: 1000px;
 }
 .invoice-box table tr.top table td {
     padding-bottom: 20px;
@@ -79,4 +81,19 @@
 }
 .rtl table tr td:nth-child(2) {
     text-align: left;
+}
+
+body {
+    font-family: Arial;
+    font-size: 19.3px;
+}
+.pos {
+    position: absolute;
+    z-index: 0;
+    left: 0px;
+    top: 0px;
+}
+
+.align {
+    text-align: center;
 }

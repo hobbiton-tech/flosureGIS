@@ -33,11 +33,16 @@ export class ProductSetupsServiceService {
     // }
 
     addClass(dto: IClass): Observable<IClass> {
-        return this.http.post<IClass>('https://flosure-postgres-api.herokuapp.com/class', dto);
+        return this.http.post<IClass>(
+            'https://flosure-postgres-api.herokuapp.com/class',
+            dto
+        );
     }
 
     getClasses(): Observable<IClass[]> {
-        return this.http.get<IClass[]>('https://flosure-postgres-api.herokuapp.com/class');
+        return this.http.get<IClass[]>(
+            'https://flosure-postgres-api.herokuapp.com/class'
+        );
     }
 
     addProduct(dto: IProduct, id: string): Observable<IProduct> {

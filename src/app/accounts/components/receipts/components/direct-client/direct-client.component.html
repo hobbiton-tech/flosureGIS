@@ -216,6 +216,9 @@
                                                 formControlName="paymentMethod"
                                                 nzAllowClear
                                                 nzPlaceHolder="Choose payment Method"
+                                                (ngModelChange)="
+                                                    paymentMethodChange($event)
+                                                "
                                             >
                                                 <nz-option
                                                     *ngFor="

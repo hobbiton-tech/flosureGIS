@@ -98,13 +98,14 @@ export class CreateQuoteComponent implements OnInit {
     PolicyExtension: any[];
     selectedClauseValue: any[];
     isClauseEditVisible = false;
-    selectedExtensionValue: any[];
+    selectedExtensionValue: any[] = [];
     isExtensionEditVisible = false;
-    selectedWordingValue: any[];
+    selectedWordingValue: any[] = [];
     isWordingEditVisible = false;
     editClause: any;
     editExtension: any;
     editWording: any;
+    editCache: { [key: string]: { edit: boolean; data: IWording } } = {};
 
     newClauseWording: IPolicyClauses;
     newWordingWording: IPolicyWording;
@@ -572,6 +573,7 @@ export class CreateQuoteComponent implements OnInit {
         this.productClauseService.getWordings().subscribe(res => {
             this.wordingList = res;
         });
+        this.updateEditCache();
     }
 
     handleComprehensiveRiskEndDateCalculation(): void {
@@ -1973,7 +1975,39 @@ export class CreateQuoteComponent implements OnInit {
         this.isWordingEditVisible = false;
     }
 
-    onChange(result: Date): void {
-        console.log('onChange: ', result);
+    startEdit(id: string): void {
+        this.editCache[id].edit = true;
+    }
+
+    cancelEdit(id: string): void {
+        const index = this.selectedWordingValue.findIndex(
+            item => item.id === id
+        );
+        this.editCache[id] = {
+            data: { ...this.selectedWordingValue[index] },
+            edit: false
+        };
+    }
+
+    saveEdit(id: string): void {
+        const index = this.selectedWordingValue.findIndex(
+            item => item.id === id
+        );
+        Object.assign(
+            this.selectedWordingValue[index],
+            this.editCache[id].data
+        );
+        this.editCache[id].edit = false;
+
+        console.log('EDITED WORDING>>>>', this.selectedWordingValue);
+    }
+
+    updateEditCache(): void {
+        this.selectedWordingValue.forEach(item => {
+            this.editCache[item.id] = {
+                edit: false,
+                data: { ...item }
+            };
+        });
     }
 }

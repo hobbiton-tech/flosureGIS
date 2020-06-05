@@ -5203,7 +5203,8 @@
                 <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
                 <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..."
                     [nzErrorTip]="clauseDeailsErrorTpl">
-                    <input nz-input formControlName="clauseDetails" />
+                    <textarea formControlName="clauseDetails" nz-input rows="5"></textarea>
+
                     <ng-template #clauseDeailsErrorTpl let-control>
                         <ng-container *ngIf="control.hasError('required')">
                             Please input your clause details!
@@ -5254,7 +5255,8 @@
                 <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
                 <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..."
                     [nzErrorTip]="extensionDescriptionErrorTpl">
-                    <input nz-input formControlName="description" />
+                    <textarea formControlName="description" nz-input rows="5"></textarea>
+
                     <ng-template #extensionDescriptionErrorTpl let-control>
                         <ng-container *ngIf="control.hasError('required')">
                             Please input your description!
@@ -5305,7 +5307,8 @@
                 <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
                 <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..."
                     [nzErrorTip]="extensionDescriptionErrorTpl">
-                    <input nz-input formControlName="description" />
+                    <textarea formControlName="description" nz-input rows="5"></textarea>
+
                     <ng-template #extensionDescriptionErrorTpl let-control>
                         <ng-container *ngIf="control.hasError('required')">
                             Please input your description!

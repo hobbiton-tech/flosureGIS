@@ -11,14 +11,21 @@ export class UsersService {
     constructor(private http: HttpClient) {}
 
     addUser(dto: User): Observable<User> {
-        return this.http.post<User>('https://flosure-postgres-api.herokuapp.com/users', dto);
+        return this.http.post<User>(
+            'https://flosure-postgres-api.herokuapp.com/users',
+            dto
+        );
     }
 
     getUsers(): Observable<User[]> {
-        return this.http.get<User[]>('https://flosure-postgres-api.herokuapp.com/users');
+        return this.http.get<User[]>(
+            'https://flosure-postgres-api.herokuapp.com/users'
+        );
     }
 
     getSingleUser(userId: string): Observable<User> {
-        return this.http.get<User>(`https://flosure-postgres-api.herokuapp.com/${userId}`);
+        return this.http.get<User>(
+            `https://flosure-postgres-api.herokuapp.com/${userId}`
+        );
     }
 }
