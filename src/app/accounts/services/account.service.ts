@@ -53,7 +53,8 @@ export class AccountService {
     // add receipt
     async addReceipt(
         receipt: IReceiptModel,
-        insuranceType: InsuranceType
+        insuranceType: InsuranceType,
+        count: number
     ): Promise<void> {
         this.receipts.pipe(first()).subscribe(async receipts => {
             // receipt.id = v4();
@@ -68,7 +69,7 @@ export class AccountService {
 
             this.http
                 .get<IReceiptNumberResult>(
-                    'https://new-rates-api.now.sh/savenda-receipts/1'
+                    `https://new-rates-api.now.sh/savenda-receipts/1/${count}`
                 )
                 .subscribe(async res => {
                     receipt.receiptNumber = res.receiptNumber;

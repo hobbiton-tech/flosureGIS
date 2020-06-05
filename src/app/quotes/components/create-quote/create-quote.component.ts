@@ -86,6 +86,10 @@ interface IQuoteNumberResult {
 export class CreateQuoteComponent implements OnInit {
     //loading feedback
     creatingQuote: boolean = false;
+    quotesList: MotorQuotationModel[];
+    displayQuotesList: MotorQuotationModel[];
+    quotesCount = 0;
+    lastItem: any;
 
     //yearpicker
     year = null;
@@ -1145,8 +1149,11 @@ export class CreateQuoteComponent implements OnInit {
             this.productClauseService.addPolicyWording(this.newWordingWording);
         }
         this.creatingQuote = true;
-        await this.quoteService.createMotorQuotation(quote);
+        // await this.quoteService.createMotorQuotation(quote);
         // this.creatingQuote = false;
+
+        await this.quoteService.createMotorQuotation(quote, this.quotesCount);
+        this.creatingQuote = false;
     }
 
     showModal(): void {

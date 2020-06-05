@@ -379,6 +379,7 @@ export class QuoteDetailsComponent implements OnInit {
     showQuoteModal = false;
 
     paymentPlan = 'NotCreated';
+    policiesCount: number;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -500,6 +501,10 @@ export class QuoteDetailsComponent implements OnInit {
 
                 this.numberOfRisks = this.risks.length;
                 this.premiumLoadingTotal = 0;
+            });
+
+            this.policiesService.getPolicies().subscribe((policies) => {
+                this.policiesCount = policies.length;
             });
         });
 
@@ -1206,7 +1211,12 @@ export class QuoteDetailsComponent implements OnInit {
             console.log('response:');
             console.log(res);
 
-            this.policiesService.createDebitNote(res.id, debitNote, res);
+            this.policiesService.createDebitNote(
+                res.id,
+                debitNote,
+                res,
+                this.policiesCount
+            );
 
             for (const clause of this.clauses) {
                 clause.policyId = res.id;
@@ -1246,7 +1256,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                     console.log('PARAMS>>>>>>', params);
 
-                    this.quotesService.postRtsa(params);
+                    // this.quotesService.postRtsa(params);
                 } else if (risk.insuranceType === 'Comprehensive') {
                     const params = {
                         insuranceType: 2,
@@ -1259,7 +1269,7 @@ export class QuoteDetailsComponent implements OnInit {
                     };
                     console.log('PARAMS>>>>>>', params);
 
-                    this.quotesService.postRtsa(params);
+                    // this.quotesService.postRtsa(params);
 
                     console.log(
                         'Risk Type>>>>',
@@ -1269,32 +1279,6 @@ export class QuoteDetailsComponent implements OnInit {
                 }
             }
         });
-
-        // await this.gqlQuotesService
-        //     .addCertificate({
-        //         clientId: localStorage.getItem('clientId'), // Added from the policy service
-        //         policyNumber: localStorage.getItem('policyNumber'), // Added in the policy service.
-        //         certificateUrl: cert.Location
-        //     })
-        //     .then(res => {
-        //         // console.log('GQL', res);
-        //         res.subscribe(x => {
-        //             console.log('GLQ', x);
-        //         });
-        //     });
-
-        // await this.gqlQuotesService
-        //     .addDebitNote({
-        //         clientId: localStorage.getItem('clientId'), // Added from the policy service,
-        //         policyNumber: localStorage.getItem('policyNumber'), // Added in the policy service.
-        //         debitNoteUrl: debit.Location
-        //     })
-        //     .then(res => {
-        //         res.subscribe(x => {
-        //             console.log('GLQ', x);
-        //         });
-        //         // console.log('GQL', res);
-        //     });
 
         this.isQuoteApproved = true;
         this.approvingQuote = false;
