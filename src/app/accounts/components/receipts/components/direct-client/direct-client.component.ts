@@ -146,6 +146,7 @@ export class DirectClientComponent implements OnInit {
             console.log(this.cancelReceiptList);
 
             this.receiptNewCount = receipts.length;
+            console.log('Total Number of Receipts>>>>', this.receiptNewCount);
         });
     }
 
