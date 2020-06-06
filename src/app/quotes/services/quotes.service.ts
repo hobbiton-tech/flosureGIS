@@ -291,6 +291,7 @@ export interface AddRiskDTO {
     loading?: LoadingDTO;
     discount?: DiscountDTO;
 }
+//
 export interface VehicleDTO {
     regNumber: string;
     vehicleMake: string;
