@@ -436,6 +436,7 @@ export class CreateQuoteComponent implements OnInit {
         this.quoteService.getMotorQuotations().subscribe((quotes) => {
             this.quotesList = quotes;
             this.quotesCount = quotes.length;
+            console.log('Quote Count', this.quotesCount);
             console.log('======= Quote List =======');
             console.log(this.quotesList);
 
