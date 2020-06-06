@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 const BASE_URL = 'https://flosure-postgres-api.herokuapp.com';
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
 export class ProductSetupsServiceService {
     constructor(private http: HttpClient) {}
@@ -35,7 +35,6 @@ export class ProductSetupsServiceService {
     addClass(dto: IClass): Observable<IClass> {
         return this.http.post<IClass>(
             'https://flosure-postgres-api.herokuapp.com/class',
-
             dto
         );
     }
