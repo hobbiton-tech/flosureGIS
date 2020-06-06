@@ -433,7 +433,21 @@ export class CreateQuoteComponent implements OnInit {
             status: ['Draft'],
             receiptStatus: ['Unreceipted'],
             sourceOfBusiness: ['', Validators.required],
-            intermediaryName: ['']
+
+            intermediaryName: [''],
+        });
+
+        this.quoteService.getMotorQuotations().subscribe((quotes) => {
+            this.quotesList = quotes;
+            this.quotesCount = quotes.length;
+            console.log('Quote Count', this.quotesCount);
+            console.log('======= Quote List =======');
+            console.log(this.quotesList);
+
+            this.displayQuotesList = this.quotesList;
+
+            this.lastItem = this.quotesList[this.quotesList.length - 1];
+
         });
 
         this.clientsService.getAllClients().subscribe(clients => {
