@@ -94,13 +94,13 @@ export class CreateQuoteComponent implements OnInit {
     //yearpicker
     year = null;
 
-    clauseList: IClause[];
-    wordingList: IWording[];
-    extensionList: IExtension[];
-    PolicyClause: any[];
-    PolicyWording: any[];
-    PolicyExtension: any[];
-    selectedClauseValue: any[];
+    clauseList: IClause[] = [];
+    wordingList: IWording[] = [];
+    extensionList: IExtension[] = [];
+    PolicyClause: any[] = [];
+    PolicyWording: any[] = [];
+    PolicyExtension: any[] = [];
+    selectedClauseValue: any[] = [];
     isClauseEditVisible = false;
     selectedExtensionValue: any[] = [];
     isExtensionEditVisible = false;
