@@ -14,8 +14,29 @@
 
 <div id="debitPrintSection">
     <div class="invoice-box">
+        <table cellpadding="0" cellspacing="0">
+            <tr class="top" style="border: none;">
+                <td style="border: none;">
+                    <table>
+                        <tr style="border: none;">
+                            <td class="title" style="border: none;">
+                                <img src="/assets/images/apluslogo.png" style="width: 100%; max-width: 240px;" />
+                            </td>
+                            <td style="font-size: 11px; float: right !important; border: none">
+                                A Plus General Insurance<br />
+                                Plot No. 402, Roma Park, Zambezi Road<br />
+                                P.O. Box 31700, Lusaka Zambia<br />
+                                Tel: +260 211 239865/6 - Tele/Fax:+260 211 239867<br />
+                                E-mail: info@aplusgeneral.com<br />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <hr style="width:100%; height:2px; background-color: black;">
 
-        <h2 class="heading">A PLUS GENERAL INSURANCE LIMITED</h2>
+        <!-- <h2 class="heading">A PLUS GENERAL INSURANCE LIMITED</h2> -->
         <P class="centerheading">Schedule attaching to and forming part of <strong>{{policy.risks[0].productType}}
                 Motor</strong> Car Policy No.
             {{policy.policyNumber}}</P>
@@ -28,7 +49,7 @@
             <p>Name Of Insured: <span style="font-weight: bold;">{{policy.nameOfInsured}}</span><span
                     style="float: right;">Agency:
                     {{policy.sourceOfBusiness ? (policy.sourceOfBusiness == 'direct' ? 'Direct' : policy.intermediaryName): '-'}}<span
-                        style="font-weight: bold;">{{policy.intermediaryName}}</span></span></p>
+                        style="font-weight: bold;"></span></span></p>
             <p>Address: {{client.address}}<span style="float: right;">Email:
                     {{policy.sourceOfBusiness ? (policy.sourceOfBusiness == 'direct' ? 'info@aplusgeneral.com' : policy.user): '-'}}<span
                         style="font-weight: bold;"></span></span></p>
