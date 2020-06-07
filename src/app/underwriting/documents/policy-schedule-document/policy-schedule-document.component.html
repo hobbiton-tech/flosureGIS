@@ -50,10 +50,10 @@
                     style="float: right;">Agency:
                     {{policy.sourceOfBusiness ? (policy.sourceOfBusiness == 'direct' ? 'Direct' : policy.intermediaryName): '-'}}<span
                         style="font-weight: bold;"></span></span></p>
-            <p>Address: {{client.address}}<span style="float: right;">Email:
+            <p>Address: {{client ? client.address : 'TBA'}}<span style="float: right;">Email:
                     {{policy.sourceOfBusiness ? (policy.sourceOfBusiness == 'direct' ? 'info@aplusgeneral.com' : policy.user): '-'}}<span
                         style="font-weight: bold;"></span></span></p>
-            <p>Email: {{client.email ? client.email : '-'}}<span style="float: right;"><span
+            <p>Email: {{client ? client.email : 'TBA'}}<span style="float: right;"><span
                         style="font-weight: bold;"></span></span></p>
             <p>Business or Profession: <span style="font-weight: bold;">TBA</span><span style="float: right;">Currency:
                     <span style="font-weight: bold;">{{policy.currency}}</span></span></p>
