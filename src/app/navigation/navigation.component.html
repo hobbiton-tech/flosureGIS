@@ -215,14 +215,16 @@
                 </li>
                 <li nz-submenu nzTitle="Reports" nzIcon="reconciliation">
                     <ul>
+                  
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/reports/policies">
+                                Debtors 
+                            </a>
+                        </li>
                         <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/reports/claims">Claims</a>
                         </li>
-                        <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/reports/policies">
-                                Policies
-                            </a>
-                        </li>
+                  
                       <li nz-menu-item nzMatchRouter>
                         <a routerLink="/flosure/reports/underwriting">
                           Underwriting

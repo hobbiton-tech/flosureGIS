@@ -14,8 +14,8 @@ const httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
 
-const BASE_URL = 'http://localhost:3000';
-
+// const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'https://flosure-postgres-api.herokuapp.com';
 @Injectable({
     providedIn: 'root'
 })
@@ -210,7 +210,7 @@ export class AgentsService {
 
     getBroker(id: string): Observable<IBroker> {
         return this.http.get<IBroker>(
-            `${BASE_URL}/intermediary/broker/${id}`
+        `https://flosure-postgres-api.herokuapp.com/intermediary/broker/${id}`
         );
     }
 
@@ -266,19 +266,19 @@ export class AgentsService {
     //postgres
     getAgents(): Observable<IAgent[]> {
         return this.http.get<IAgent[]>(
-            `${BASE_URL}/intermediary/agent`
+            `https://flosure-postgres-api.herokuapp.com/intermediary/agent`
         );
     }
 
     getBrokers(): Observable<IBroker[]> {
         return this.http.get<IBroker[]>(
-            `${BASE_URL}/intermediary/broker`
+            `https://flosure-postgres-api.herokuapp.com/intermediary/broker`
         );
     }
 
     getSalesRepresentatives(): Observable<ISalesRepresentative[]> {
         return this.http.get<ISalesRepresentative[]>(
-            `${BASE_URL}/intermediary/sales-representative`
+            `https://flosure-postgres-api.herokuapp.com/intermediary/sales-representative`
         );
     }
 

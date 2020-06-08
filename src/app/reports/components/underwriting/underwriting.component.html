@@ -1,113 +1,598 @@
-<div style="margin: 10px;">
-    <div style="margin-bottom: 20px; background: #fff;">
-        <nz-page-header>
-            <nz-page-header-title>Underwriting Report</nz-page-header-title>
-            <nz-page-header-subtitle></nz-page-header-subtitle>
-            <nz-page-header-extra>
-                <!-- <button nz-button>View Summary</button> -->
-            </nz-page-header-extra>
-            <nz-page-header-content>
-                <nz-descriptions [nzColumn]="3">
-                    <!-- <nz-descriptions-item
-              nzTitle="Total Policies"
-              [nzSpan]="1"
-              ></nz-descriptions-item
-          > -->
-                    <!-- <nz-descriptions-item nzTitle="Draft Policies" [nzSpan]="1">130</nz-descriptions-item>
-<nz-descriptions-item nzTitle="Confirmed Policies" [nzSpan]="1">101</nz-descriptions-item> -->
-                </nz-descriptions>
-            </nz-page-header-content>
-        </nz-page-header>
+<div style="background: #ececec; padding: 30px;">
+    <div nz-row [nzGutter]="8">
+        <div nz-col [nzSpan]="8">
+            <nz-card [nzTitle]="'Quotation Report'" [nzHoverable]="true">
+                <button nz-button [nzType]="'default'" (click)="showModal()">
+                    Quotation Listing Report
+                </button>
+                <br />
+                <br />
+
+                <button
+                    nz-button
+                    [nzType]="'default'"
+                    (click)="showAnalysisReportModal()"
+                >
+                    Quotation Analysis Report
+                </button>
+                <br />
+                <br />
+                <button
+                    nz-button
+                    [nzType]="'default'"
+                    (click)="showIntermediaryModal()"
+                >
+                    Intermediary Quotation Listing Report
+                </button>
+                <!-- <ng-template #tClients>
+                    <a routerLink="/flosure/clients/clients-list">View</a>
+                </ng-template> -->
+            </nz-card>
+        </div>
+        <div nz-col [nzSpan]="8">
+            <nz-card [nzTitle]="'Renewal Report'" [nzHoverable]="true">
+                <button
+                    nz-button
+                    [nzType]="'default'"
+                    (click)="showRenewalReportModal()"
+                >
+                    Renewal List
+                </button>
+            </nz-card>
+        </div>
+        <div nz-col [nzSpan]="8">
+            <nz-card
+                [nzTitle]="'Premium Production Report'"
+                [nzHoverable]="true"
+            >
+                <button
+                    nz-button
+                    [nzType]="'default'"
+                    (click)="showDebitNoteReportModal()"
+                >
+                    Debit Note Listing Report
+                </button>
+                <br /><br />
+                <button
+                    nz-button
+                    [nzType]="'default'"
+                    (click)="showProductionReportModal()"
+                >
+                    Production Report
+                </button>
+                <br />
+                <br />
+                <button
+                    nz-button
+                    [nzType]="'default'"
+                    (click)="showPremiumWorkingReportModal()"
+                >
+                    Premium Working Report
+                </button>
+            </nz-card>
+        </div>
     </div>
-    <nz-card>
-        <div style="margin-bottom: 20px;">
-            <nz-row style="margin-bottom: 20px;" [nzGutter]="20">
-                <div nz-col [nzSpan]="14">
-                    <form nz-form [formGroup]="dateForm">
-                        <nz-row>
-                            <div nz-col [nzSpan]="10">
-                                <nz-form-item>
-                                    <nz-form-label
-                                        [nzSpan]="8"
-                                        nzFor="fromDate"
-                                        nzRequired
-                                        >From Date</nz-form-label
-                                    >
-                                    <nz-form-control [nzSpan]="14">
-                                        <nz-date-picker
-                                            #fromDate
-                                            formControlName="fromDate"
-                                            name="fromDate"
-                                            id="fromDate"
-                                            placeholder="From date"
-                                        ></nz-date-picker>
-                                    </nz-form-control>
-                                </nz-form-item>
-                            </div>
 
-                            <div nz-col [nzSpan]="10">
-                                <nz-form-item>
-                                    <nz-form-label
-                                        [nzSpan]="8"
-                                        nzFor="toDate"
-                                        nzRequired
-                                        >End Date</nz-form-label
+    <!-- <ng-template #clientStats>
+    <div *ngIf="clientsLoading">
+        <nz-spin nzSimple></nz-spin>
+    </div>
+    <div *ngIf="!clientsLoading">
+        {{ clientsCount | number }}
+    </div>
+</ng-template>
+
+<ng-template #claimsStats>
+    <div *ngIf="claimsLoading">
+        <nz-spin nzSimple></nz-spin>
+    </div>
+    <div *ngIf="!claimsLoading">
+        {{ claimsCount | number }}
+    </div>
+</ng-template>
+
+<ng-template #policiesStats>
+    <div *ngIf="policiesLoading">
+        <nz-spin nzSimple></nz-spin>
+    </div>
+    <div *ngIf="!policiesLoading">
+        {{ policiesCount | number }}
+    </div>
+</ng-template>
+
+<ng-template #activePolicy>
+    <div *ngIf="policiesLoading">
+        <nz-spin nzSimple></nz-spin>
+    </div>
+    <div *ngIf="!policiesLoading">
+        {{ activePolices | number }}
+    </div>
+</ng-template>
+
+<ng-template #expiredPolicy>
+    <div *ngIf="policiesLoading">
+        <nz-spin nzSimple></nz-spin>
+    </div>
+    <div *ngIf="!policiesLoading">
+        {{ inactivePolicies | number }}
+    </div>
+</ng-template> -->
+    <nz-modal
+        [(nzVisible)]="isVisible"
+        nzTitle=" Quotation Listing Report"
+        (nzOnCancel)="handleCancel()"
+        [nzWidth]="1500"
+        (nzOnOk)="handleOk()"
+    >
+        <div style="margin: 20px;">
+            <nz-card>
+                <div style="margin-bottom: 20px;">
+                    <nz-row style="margin-bottom: 20px;" [nzGutter]="20">
+                        <div nz-col [nzSpan]="14">
+                            <form nz-form [formGroup]="dateForm">
+                                <nz-row>
+                                    <div nz-col [nzSpan]="10">
+                                        <nz-form-item>
+                                            <nz-form-label
+                                                [nzSpan]="8"
+                                                nzFor="fromDate"
+                                                nzRequired
+                                                >From Date</nz-form-label
+                                            >
+                                            <nz-form-control [nzSpan]="14">
+                                                <nz-date-picker
+                                                    #fromDate
+                                                    formControlName="fromDate"
+                                                    name="fromDate"
+                                                    id="fromDate"
+                                                    placeholder="From date"
+                                                ></nz-date-picker>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+
+                                    <div nz-col [nzSpan]="10">
+                                        <nz-form-item>
+                                            <nz-form-label
+                                                [nzSpan]="8"
+                                                nzFor="toDate"
+                                                nzRequired
+                                                >End Date</nz-form-label
+                                            >
+                                            <nz-form-control [nzSpan]="14">
+                                                <nz-date-picker
+                                                    #toDate
+                                                    formControlName="toDate"
+                                                    name="toDate"
+                                                    id="toDate"
+                                                    placeholder="To Date"
+                                                ></nz-date-picker>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div
+                                        nz-col
+                                        [nzSpan]="4"
+                                        style="float: left;"
                                     >
-                                    <nz-form-control [nzSpan]="14">
-                                        <nz-date-picker
-                                            #toDate
-                                            formControlName="toDate"
-                                            name="toDate"
-                                            id="toDate"
-                                            placeholder="To Date"
-                                        ></nz-date-picker>
-                                    </nz-form-control>
-                                </nz-form-item>
-                            </div>
-                            <div nz-col [nzSpan]="4" style="float: left;">
-                                <nz-form-item>
-                                    <nz-form-control [nzSpan]="4">
-                                        <button nz-button nzType="success">
-                                            Submit
-                                        </button>
-                                    </nz-form-control>
-                                </nz-form-item>
-                            </div>
-                        </nz-row>
-                    </form>
+                                        <nz-form-item>
+                                            <nz-form-control [nzSpan]="4">
+                                                <button
+                                                    nz-button
+                                                    nzType="success"
+                                                >
+                                                    Submit
+                                                </button>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                </nz-row>
+                            </form>
+                        </div>
+
+                        <div nz-col [nzSpan]="3" style="float: right;">
+                            <button
+                                nz-button
+                                nzType="primary"
+                                (click)=" downloadQuotationReportListExcel()"
+                            >
+                                Export EXCEL
+                            </button>
+                        </div>
+                        <div nz-col [nzSpan]="3" style="float: right;">
+                            <button
+                                nz-button
+                                (click)="downloadQuotationReportListPdf()"
+                                nzType="danger"
+                            >
+                                Export PDF
+                            </button>
+                        </div>
+                    </nz-row>
+                    <nz-row style="margin-bottom: 20px;" [nzGutter]="20">
+                        <div nz-col [nzSpan]="18">
+                            <nz-input-group [nzSuffix]="suffixIconSearch">
+                                <input
+                                    type="text"
+                                    nz-input
+                                    placeholder="Search by client, First Name, Last Name"
+                                />
+                            </nz-input-group>
+                            <ng-template #suffixIconSearch>
+                                <i nz-icon nzType="search"></i>
+                            </ng-template>
+                        </div>
+                        <div nz-col [nzSpan]="6" style="float: right;">
+                            <nz-input-group>
+                                <nz-select
+                                    nzShowSearch
+                                    nzAllowClear
+                                    nzPlaceHolder="Select client type."
+                                >
+                                    <!-- <nz-option
+                                        nzLabel="All"
+                                        nzValue="All"
+                                    ></nz-option>
+                                    <nz-option
+                                        nzLabel="Sales Representative"
+                                        nzValue="Sales Representative"
+                                    ></nz-option>
+                                    <nz-option
+                                        nzLabel="Agent"
+                                        nzValue="Agent"
+                                    ></nz-option>
+                                    <nz-option
+                                        nzLabel="Broker"
+                                        nzValue="Broker"
+                                    ></nz-option> -->
+                                </nz-select>
+                            </nz-input-group>
+                        </div>
+                    </nz-row>
+                    <div id="content" #content>
+                        <nz-table id="Table" #reportsTable>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Quotation Number</th>
+                                    <th>Client</th>
+                                    <th>Transaction Date</th>
+                                    <th>Underwriter</th>
+                                    <th>Intermediary Name</th>
+                                    <th>Branch</th>
+                                    <th>Source of Business</th>
+                                    <th>Product Type</th>
+                                    <th>Sum Insured</th>
+                                    <th>Gross Premium</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr
+                                    *ngFor="
+                                        let report of displayQuotationReport;
+                                        let i = index
+                                    "
+                                >
+                                    <td>{{ i + 1 }}</td>
+                                    <td>{{ report.quoteNumber }}</td>
+                                    <td>{{ report.client }}</td>
+                                    <td>{{ report.dateCreated | date }}</td>
+                                    <td>{{ report.user }}</td>
+                                    <td>{{ report.intermediaryName }}</td>
+                                    <td>{{ report.branch }}</td>
+                                    <td>{{ report.sourceOfBusiness }}</td>
+                                    <td>{{ 'Motor' }}</td>
+                                    <td>{{ report.basicPremiumSubTotal }}</td>
+                                    <td>{{ report.basicPremiumSubTotal }}</td>
+                                    <td>
+                                        <nz-badge
+                                            [nzStatus]="
+                                                report.status === 'Draft'
+                                                    ? 'warning'
+                                                    : 'success'
+                                            "
+                                            [nzText]="report.status"
+                                        ></nz-badge>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </nz-table>
+                    </div>
                 </div>
+            </nz-card>
+        </div>
+    </nz-modal>
 
-                <div nz-col [nzSpan]="6" style="float: right;">
-                    <button
-                        nz-button
-                        (click)="downloadPremiumProductionReport()"
-                        nzType="success"
+    <nz-modal
+        [(nzVisible)]="isAnalysisReportVisible"
+        nzTitle=" Quotation Listing Report"
+        (nzOnCancel)="handleCancel()"
+        [nzWidth]="1200"
+        (nzOnOk)="handleOk()"
+    >
+        <div style="margin: 20px;">
+            <nz-card>
+                <div style="margin-bottom: 20px;">
+                    <nz-row style="margin-bottom: 20px;" [nzGutter]="20">
+                        <div nz-col [nzSpan]="14">
+                            <form nz-form [formGroup]="dateForm">
+                                <nz-row>
+                                    <div nz-col [nzSpan]="10">
+                                        <nz-form-item>
+                                            <nz-form-label
+                                                [nzSpan]="8"
+                                                nzFor="fromDate"
+                                                nzRequired
+                                                >From Date</nz-form-label
+                                            >
+                                            <nz-form-control [nzSpan]="14">
+                                                <nz-date-picker
+                                                    #fromDate
+                                                    formControlName="fromDate"
+                                                    name="fromDate"
+                                                    id="fromDate"
+                                                    placeholder="From date"
+                                                ></nz-date-picker>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+
+                                    <div nz-col [nzSpan]="10">
+                                        <nz-form-item>
+                                            <nz-form-label
+                                                [nzSpan]="8"
+                                                nzFor="toDate"
+                                                nzRequired
+                                                >End Date</nz-form-label
+                                            >
+                                            <nz-form-control [nzSpan]="14">
+                                                <nz-date-picker
+                                                    #toDate
+                                                    formControlName="toDate"
+                                                    name="toDate"
+                                                    id="toDate"
+                                                    placeholder="To Date"
+                                                ></nz-date-picker>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div
+                                        nz-col
+                                        [nzSpan]="4"
+                                        style="float: left;"
+                                    >
+                                        <nz-form-item>
+                                            <nz-form-control [nzSpan]="4">
+                                                <button
+                                                    nz-button
+                                                    nzType="success"
+                                                >
+                                                    Submit
+                                                </button>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                </nz-row>
+                            </form>
+                        </div>
+
+                        <div nz-col [nzSpan]="3" style="float: right;">
+                            <button nz-button nzType="primary">
+                                Export Excel
+                            </button>
+                        </div>
+                        <div nz-col [nzSpan]="3" style="float: right;">
+                            <button
+                                nz-button
+                                (click)="downloadAnalysisListPdf()"
+                                nzType="danger"
+                            >
+                                Export PDF
+                            </button>
+                        </div>
+                    </nz-row>
+                    <nz-row style="margin-bottom: 20px;" [nzGutter]="20">
+                        <div nz-col [nzSpan]="18">
+                            <nz-input-group [nzSuffix]="suffixIconSearch">
+                                <input
+                                    type="text"
+                                    nz-input
+                                    placeholder="Search by client, First Name, Last Name"
+                                />
+                            </nz-input-group>
+                            <ng-template #suffixIconSearch>
+                                <i nz-icon nzType="search"></i>
+                            </ng-template>
+                        </div>
+                        <div nz-col [nzSpan]="6" style="float: right;">
+                            <nz-input-group>
+                                <nz-select
+                                    nzShowSearch
+                                    nzAllowClear
+                                    nzPlaceHolder="Select client type."
+                                >
+                                    <!-- <nz-option
+                                    nzLabel="All"
+                                    nzValue="All"
+                                ></nz-option>
+                                <nz-option
+                                    nzLabel="Sales Representative"
+                                    nzValue="Sales Representative"
+                                ></nz-option>
+                                <nz-option
+                                    nzLabel="Agent"
+                                    nzValue="Agent"
+                                ></nz-option>
+                                <nz-option
+                                    nzLabel="Broker"
+                                    nzValue="Broker"
+                                ></nz-option>-->
+                                </nz-select>
+                            </nz-input-group>
+                        </div>
+                    </nz-row>
+
+                    <nz-table
+                        id="Table"
+                        #analysisTable
+                        [nzData]="formatIntermediaryReport"
+                        [nzSize]="'small'"
+                        [nzBordered]="true"
+                        style="background-color: white;"
                     >
-                        Export Report
-                    </button>
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Branch</th>
+                                <th>Intermediary Name</th>
+                                <th>Number of Quotation</th>
+                                <th>Number Converted</th>
+                                <th>Acquisition Ratio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="
+                                    let intermediary of analysisTable.data;
+                                    let i = index
+                                "
+                            >
+                                <td>{{ i + 1 }}</td>
+                                <td>{{ intermediary.getFullName }}</td>
+                                <td>
+                                    {{ intermediary.getQuoteCount }}
+                                </td>
+                                <td>
+                                    {{ intermediary.getPolicyCount }}
+                                </td>
+                                <td>{{ intermediary.getRatio }}</td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
                 </div>
-            </nz-row>
-            <nz-row style="margin-bottom: 20px;" [nzGutter]="20">
-                <div nz-col [nzSpan]="18">
-                    <nz-input-group [nzSuffix]="suffixIconSearch">
-                        <input
-                            type="text"
-                            nz-input
-                            placeholder="Search Branch"
-                        />
-                    </nz-input-group>
-                    <ng-template #suffixIconSearch>
-                        <i nz-icon nzType="search"></i>
-                    </ng-template>
-                </div>
-                <div nz-col [nzSpan]="6" style="float: right;">
-                    <nz-input-group>
-                        <nz-select
-                            nzShowSearch
-                            nzAllowClear
-                            nzPlaceHolder="Select Intermediary type."
-                        >
-                            <!-- <nz-option nzLabel="All" nzValue="All"></nz-option>
+            </nz-card>
+        </div>
+    </nz-modal>
+
+    <!-- Renewal Report -->
+    <nz-modal
+        [(nzVisible)]="isRenewalReportVisible"
+        nzTitle="Renewal Report"
+        (nzOnCancel)="handleCancel()"
+        [nzWidth]="1200"
+        (nzOnOk)="handleOk()"
+    >
+        <div style="margin: 20px;">
+            <nz-card>
+                <div style="margin-bottom: 20px;">
+                    <nz-row style="margin-bottom: 20px;" [nzGutter]="20">
+                        <div nz-col [nzSpan]="14">
+                            <form nz-form [formGroup]="dateForm">
+                                <nz-row>
+                                    <div nz-col [nzSpan]="10">
+                                        <nz-form-item>
+                                            <nz-form-label
+                                                [nzSpan]="8"
+                                                nzFor="fromDate"
+                                                nzRequired
+                                                >From Date</nz-form-label
+                                            >
+                                            <nz-form-control [nzSpan]="14">
+                                                <nz-date-picker
+                                                    #fromDate
+                                                    formControlName="fromDate"
+                                                    name="fromDate"
+                                                    id="fromDate"
+                                                    placeholder="From date"
+                                                ></nz-date-picker>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+
+                                    <div nz-col [nzSpan]="10">
+                                        <nz-form-item>
+                                            <nz-form-label
+                                                [nzSpan]="8"
+                                                nzFor="toDate"
+                                                nzRequired
+                                                >End Date</nz-form-label
+                                            >
+                                            <nz-form-control [nzSpan]="14">
+                                                <nz-date-picker
+                                                    #toDate
+                                                    formControlName="toDate"
+                                                    name="toDate"
+                                                    id="toDate"
+                                                    placeholder="To Date"
+                                                ></nz-date-picker>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div
+                                        nz-col
+                                        [nzSpan]="4"
+                                        style="float: left;"
+                                    >
+                                        <nz-form-item>
+                                            <nz-form-control [nzSpan]="4">
+                                                <button
+                                                    nz-button
+                                                    nzType="success"
+                                                >
+                                                    Submit
+                                                </button>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                </nz-row>
+                            </form>
+                        </div>
+
+                        <div nz-col [nzSpan]="3" style="float: right;">
+                            <button nz-button nzType="primary">
+                                Export Excel
+                            </button>
+                        </div>
+                        <div nz-col [nzSpan]="3" style="float: right;">
+                            <button
+                                nz-button
+                                (click)="downloadRenewalListPdf()"
+                                nzType="danger"
+                            >
+                                Export PDF
+                            </button>
+                        </div>
+                    </nz-row>
+                    <nz-row style="margin-bottom: 20px;" [nzGutter]="20">
+                        <div nz-col [nzSpan]="18">
+                            <nz-input-group [nzSuffix]="suffixIconSearch">
+                                <input
+                                    type="text"
+                                    nz-input
+                                    placeholder="Search by client, First Name, Last Name"
+                                />
+                            </nz-input-group>
+                            <ng-template #suffixIconSearch>
+                                <i nz-icon nzType="search"></i>
+                            </ng-template>
+                        </div>
+                        <div nz-col [nzSpan]="6" style="float: right;">
+                            <nz-input-group>
+                                <nz-select
+                                    nzShowSearch
+                                    nzAllowClear
+                                    nzPlaceHolder="Select client type."
+                                >
+                                    <!-- <nz-option
+                                nzLabel="All"
+                                nzValue="All"
+                            ></nz-option>
+                            <nz-option
+                                nzLabel="Sales Representative"
+                                nzValue="Sales Representative"
+                            ></nz-option>
                             <nz-option
                                 nzLabel="Agent"
                                 nzValue="Agent"
@@ -115,61 +600,595 @@
                             <nz-option
                                 nzLabel="Broker"
                                 nzValue="Broker"
+                            ></nz-option>-->
+                                </nz-select>
+                            </nz-input-group>
+                        </div>
+                    </nz-row>
+
+                    <nz-table
+                        id="Table"
+                        #analysisTable
+                        [nzData]="formatIntermediaryReport"
+                        [nzSize]="'small'"
+                        [nzBordered]="true"
+                        style="background-color: white;"
+                    >
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Policy number</th>
+                                <th>Client</th>
+                                <th>Intermediary name</th>
+                                <th>Contact number</th>
+                                <th>Renewal date</th>
+                                <th>Renewal premium due</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="
+                                    let renewal of analysisTable.data;
+                                    let i = index
+                                "
+                                style="cursor: pointer;"
+                            >
+                                <td>{{ i + 1 }}</td>
+                                <td>{{ renewal.policyNumber }}</td>
+                                <td>{{ renewal.client }}</td>
+                                <td>{{ renewal.intermediaryName }}</td>
+                                <td>{{ renewal.contactNumber }}</td>
+                                <td>{{ renewal.renewalDate }}</td>
+                                <td>{{ renewal.renewalPremiumDue }}</td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+            </nz-card>
+        </div>
+    </nz-modal>
+
+    <!-- Underwriting Report -->
+
+    <!-- Premium Working Report  -->
+    <nz-modal
+        [(nzVisible)]="isPremiumWorkingReportVisible"
+        nzTitle="Premium Working Report "
+        (nzOnCancel)="handleCancel()"
+        [nzWidth]="1200"
+        (nzOnOk)="handleOk()"
+    >
+        <div style="margin: 20px;">
+            <nz-card>
+                <div style="margin-bottom: 20px;">
+                    <nz-row style="margin-bottom: 20px;" [nzGutter]="20">
+                        <div nz-col [nzSpan]="14">
+                            <form nz-form [formGroup]="dateForm">
+                                <nz-row>
+                                    <div nz-col [nzSpan]="10">
+                                        <nz-form-item>
+                                            <nz-form-label
+                                                [nzSpan]="8"
+                                                nzFor="fromDate"
+                                                nzRequired
+                                                >From Date</nz-form-label
+                                            >
+                                            <nz-form-control [nzSpan]="14">
+                                                <nz-date-picker
+                                                    #fromDate
+                                                    formControlName="fromDate"
+                                                    name="fromDate"
+                                                    id="fromDate"
+                                                    placeholder="From date"
+                                                ></nz-date-picker>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+
+                                    <div nz-col [nzSpan]="10">
+                                        <nz-form-item>
+                                            <nz-form-label
+                                                [nzSpan]="8"
+                                                nzFor="toDate"
+                                                nzRequired
+                                                >End Date</nz-form-label
+                                            >
+                                            <nz-form-control [nzSpan]="14">
+                                                <nz-date-picker
+                                                    #toDate
+                                                    formControlName="toDate"
+                                                    name="toDate"
+                                                    id="toDate"
+                                                    placeholder="To Date"
+                                                ></nz-date-picker>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div
+                                        nz-col
+                                        [nzSpan]="4"
+                                        style="float: left;"
+                                    >
+                                        <nz-form-item>
+                                            <nz-form-control [nzSpan]="4">
+                                                <button
+                                                    nz-button
+                                                    nzType="success"
+                                                >
+                                                    Submit
+                                                </button>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                </nz-row>
+                            </form>
+                        </div>
+
+                        <div nz-col [nzSpan]="3" style="float: right;">
+                            <button nz-button nzType="primary">
+                                Export Excel
+                            </button>
+                        </div>
+                        <div nz-col [nzSpan]="3" style="float: right;">
+                            <button
+                                nz-button
+                                (click)="downloadPremiumWorkingPdf()"
+                                nzType="danger"
+                            >
+                                Export PDF
+                            </button>
+                        </div>
+                    </nz-row>
+                    <nz-row style="margin-bottom: 20px;" [nzGutter]="20">
+                        <div nz-col [nzSpan]="18">
+                            <nz-input-group [nzSuffix]="suffixIconSearch">
+                                <input
+                                    type="text"
+                                    nz-input
+                                    placeholder="Search by client, First Name, Last Name"
+                                />
+                            </nz-input-group>
+                            <ng-template #suffixIconSearch>
+                                <i nz-icon nzType="search"></i>
+                            </ng-template>
+                        </div>
+                        <div nz-col [nzSpan]="6" style="float: right;">
+                            <nz-input-group>
+                                <nz-select
+                                    nzShowSearch
+                                    nzAllowClear
+                                    nzPlaceHolder="Select client type."
+                                >
+                                    <!-- <nz-option
+                        nzLabel="All"
+                        nzValue="All"
+                    ></nz-option>
+                    <nz-option
+                        nzLabel="Sales Representative"
+                        nzValue="Sales Representative"
+                    ></nz-option>
+                    <nz-option
+                        nzLabel="Agent"
+                        nzValue="Agent"
+                    ></nz-option>
+                    <nz-option
+                        nzLabel="Broker"
+                        nzValue="Broker"
+                    ></nz-option>-->
+                                </nz-select>
+                            </nz-input-group>
+                        </div>
+                    </nz-row>
+
+                    <nz-table
+                        id="Table"
+                        #analysisTable
+                        [nzData]="displayPolicyReport"
+                        [nzSize]="'small'"
+                        [nzBordered]="true"
+                        style="background-color: white;"
+                    >
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Policy Number</th>
+                                <th>Debit note number</th>
+                                <th>Gross Premium</th>
+                                <th>Discount</th>
+                                <th>Loading</th>
+                                <th>Net Premium</th>
+                                <th>Insurance Levy</th>
+                                <th>Premium Due</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let production of analysisTable.data; let i = index"
+                                style="cursor: pointer;"
+                            >
+                            <td>{{ i + 1}}</td>
+                                <td>{{ production.policyNumber }}</td>
+                                <td>{{ production.debitNoteNumber }}</td>
+                                <td>{{ production.grossPremium }}</td>
+                                <td>{{ production.discount }}</td>
+                                <td>{{ production.loading }}</td>
+                                <td>{{ production.netPremium }}</td>
+                                <td>{{ production.insuranceLevy }}</td>
+                                <td>{{ production.expiryDate | date }}</td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+            </nz-card>
+        </div>
+    </nz-modal>
+
+    <!-- debit note report -->
+    <nz-modal
+        [(nzVisible)]="isDebitNoteReportVisible"
+        nzTitle="Debit Note Report"
+        (nzOnCancel)="handleCancel()"
+        [nzWidth]="1500"
+        (nzOnOk)="handleOk()"
+    >
+        <div style="margin: 20px;">
+            <nz-card>
+                <div style="margin-bottom: 20px;">
+                    <nz-row style="margin-bottom: 20px;" [nzGutter]="20">
+                        <div nz-col [nzSpan]="14">
+                            <form nz-form [formGroup]="dateForm">
+                                <nz-row>
+                                    <div nz-col [nzSpan]="10">
+                                        <nz-form-item>
+                                            <nz-form-label
+                                                [nzSpan]="8"
+                                                nzFor="fromDate"
+                                                nzRequired
+                                                >From Date</nz-form-label
+                                            >
+                                            <nz-form-control [nzSpan]="14">
+                                                <nz-date-picker
+                                                    #fromDate
+                                                    formControlName="fromDate"
+                                                    name="fromDate"
+                                                    id="fromDate"
+                                                    placeholder="From date"
+                                                ></nz-date-picker>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+
+                                    <div nz-col [nzSpan]="10">
+                                        <nz-form-item>
+                                            <nz-form-label
+                                                [nzSpan]="8"
+                                                nzFor="toDate"
+                                                nzRequired
+                                                >End Date</nz-form-label
+                                            >
+                                            <nz-form-control [nzSpan]="14">
+                                                <nz-date-picker
+                                                    #toDate
+                                                    formControlName="toDate"
+                                                    name="toDate"
+                                                    id="toDate"
+                                                    placeholder="To Date"
+                                                ></nz-date-picker>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div
+                                        nz-col
+                                        [nzSpan]="4"
+                                        style="float: left;"
+                                    >
+                                        <nz-form-item>
+                                            <nz-form-control [nzSpan]="4">
+                                                <button
+                                                    nz-button
+                                                    nzType="success"
+                                                >
+                                                    Submit
+                                                </button>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                </nz-row>
+                            </form>
+                        </div>
+
+                        <div nz-col [nzSpan]="3" style="float: right;">
+                            <button nz-button nzType="primary">
+                                Export Excel
+                            </button>
+                        </div>
+                        <div nz-col [nzSpan]="3" style="float: right;">
+                            <button
+                                nz-button
+                                (click)="downloadDebitNoteReportPdf()"
+                                nzType="danger"
+                            >
+                                Export PDF
+                            </button>
+                        </div>
+                    </nz-row>
+                    <nz-row style="margin-bottom: 20px;" [nzGutter]="20">
+                        <div nz-col [nzSpan]="18">
+                            <nz-input-group [nzSuffix]="suffixIconSearch">
+                                <input
+                                    type="text"
+                                    nz-input
+                                    placeholder="Search by client, First Name, Last Name"
+                                />
+                            </nz-input-group>
+                            <ng-template #suffixIconSearch>
+                                <i nz-icon nzType="search"></i>
+                            </ng-template>
+                        </div>
+                        <div nz-col [nzSpan]="6" style="float: right;">
+                            <nz-input-group>
+                                <nz-select
+                                    nzShowSearch
+                                    nzAllowClear
+                                    nzPlaceHolder="Select client type."
+                                >
+                                    <!-- <nz-option
+                            nzLabel="All"
+                            nzValue="All"
+                        ></nz-option>
+                        <nz-option
+                            nzLabel="Sales Representative"
+                            nzValue="Sales Representative"
+                        ></nz-option>
+                        <nz-option
+                            nzLabel="Agent"
+                            nzValue="Agent"
+                        ></nz-option>
+                        <nz-option
+                            nzLabel="Broker"
+                            nzValue="Broker"
+                        ></nz-option>-->
+                                </nz-select>
+                            </nz-input-group>
+                        </div>
+                    </nz-row>
+
+                    <nz-table
+                        id="Table"
+                        #analysisTable
+                        [nzData]="displayPolicyReport"
+                        [nzSize]="'small'"
+                       
+                        style="background-color: white;"
+                    >
+                        <thead>
+                            <tr>
+                                <th>Policy number</th>
+                                <th>Client</th>
+                                <th>Intermediary name</th>
+                                <th>Transaction Date</th>
+                                <th>Underwriter</th>
+                                <th>Branch</th>
+                                <th>Class of Business</th>
+                                <th>Product</th>
+                                <!-- <th>Risk ID</th> -->
+                                <th>Sum Insured</th>
+                                <th>Gross Premium</th>
+                                <th>Insurance Levy</th>
+                                <th>Commission amount</th>
+                                <th>Currency</th>
+                                <th>Endorsement Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let production of analysisTable.data"
+                                style="cursor: pointer;"
+                            >
+                                <td>{{ production.policyNumber }}</td>
+                                <td>{{ production.client }}</td>
+                                <td>{{ production.intermediaryName }}</td>
+                                <td>{{ production.startDate | date }}</td>
+                                <td>{{ production.preparedBy }}</td>
+                                <td>{{ production.branch }}</td>
+                                <td>{{ production.sourceOfBusiness }}</td>
+                                <td>{{ 'Motor' }}</td>
+                                <!-- <td>{{ production.RiskID }}</td> -->
+                                <td>{{ production.sumInsured }}</td>
+                                <td>{{ production.netPremium }}</td>
+                                <td>{{ production.insuranceLevy }}</td>
+                                <td>{{ production.commissionAmount }}</td>
+                                <td>{{ production.currency }}</td>
+                                <td>{{ production.endorsementType }}</td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+            </nz-card>
+        </div>
+    </nz-modal>
+
+    <!-- production report -->
+    <nz-modal
+        [(nzVisible)]="isProductionReportVisible"
+        nzTitle="Production Report"
+        (nzOnCancel)="handleCancel()"
+        [nzWidth]="1500"
+        (nzOnOk)="handleOk()"
+    >
+        <div style="margin: 20px;">
+            <nz-card>
+                <div style="margin-bottom: 20px;">
+                    <nz-row style="margin-bottom: 20px;" [nzGutter]="20">
+                        <div nz-col [nzSpan]="14">
+                            <form nz-form [formGroup]="dateForm">
+                                <nz-row>
+                                    <div nz-col [nzSpan]="10">
+                                        <nz-form-item>
+                                            <nz-form-label
+                                                [nzSpan]="8"
+                                                nzFor="fromDate"
+                                                nzRequired
+                                                >From Date</nz-form-label
+                                            >
+                                            <nz-form-control [nzSpan]="14">
+                                                <nz-date-picker
+                                                    #fromDate
+                                                    formControlName="fromDate"
+                                                    name="fromDate"
+                                                    id="fromDate"
+                                                    placeholder="From date"
+                                                ></nz-date-picker>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+
+                                    <div nz-col [nzSpan]="10">
+                                        <nz-form-item>
+                                            <nz-form-label
+                                                [nzSpan]="8"
+                                                nzFor="toDate"
+                                                nzRequired
+                                                >End Date</nz-form-label
+                                            >
+                                            <nz-form-control [nzSpan]="14">
+                                                <nz-date-picker
+                                                    #toDate
+                                                    formControlName="toDate"
+                                                    name="toDate"
+                                                    id="toDate"
+                                                    placeholder="To Date"
+                                                ></nz-date-picker>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div
+                                        nz-col
+                                        [nzSpan]="4"
+                                        style="float: left;"
+                                    >
+                                        <nz-form-item>
+                                            <nz-form-control [nzSpan]="4">
+                                                <button
+                                                    nz-button
+                                                    nzType="success"
+                                                >
+                                                    Submit
+                                                </button>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                </nz-row>
+                            </form>
+                        </div>
+
+                        <div nz-col [nzSpan]="3" style="float: right;">
+                            <button nz-button nzType="primary">
+                                Export Excel
+                            </button>
+                        </div>
+                        <div nz-col [nzSpan]="3" style="float: right;">
+                            <button
+                                nz-button
+                                (click)="downloadProductionListPdf()"
+                                nzType="danger"
+                            >
+                                Export PDF
+                            </button>
+                        </div>
+                    </nz-row>
+                    <nz-row style="margin-bottom: 20px;" [nzGutter]="20">
+                        <div nz-col [nzSpan]="18">
+                            <nz-input-group [nzSuffix]="suffixIconSearch">
+                                <input
+                                    type="text"
+                                    nz-input
+                                    placeholder="Search by client, First Name, Last Name"
+                                />
+                            </nz-input-group>
+                            <ng-template #suffixIconSearch>
+                                <i nz-icon nzType="search"></i>
+                            </ng-template>
+                        </div>
+                        <div nz-col [nzSpan]="6" style="float: right;">
+                            <nz-input-group>
+                                <nz-select
+                                    nzShowSearch
+                                    nzAllowClear
+                                    nzPlaceHolder="Select client type."
+                                >
+                                    <!-- <nz-option
+                                nzLabel="All"
+                                nzValue="All"
                             ></nz-option>
                             <nz-option
-                                nzLabel="Sale Representative"
-                                nzValue="Sale Representative"
-                            ></nz-option> -->
-                        </nz-select>
-                    </nz-input-group>
-                </div>
-            </nz-row>
+                                nzLabel="Sales Representative"
+                                nzValue="Sales Representative"
+                            ></nz-option>
+                            <nz-option
+                                nzLabel="Agent"
+                                nzValue="Agent"
+                            ></nz-option>
+                            <nz-option
+                                nzLabel="Broker"
+                                nzValue="Broker"
+                            ></nz-option>-->
+                                </nz-select>
+                            </nz-input-group>
+                        </div>
+                    </nz-row>
 
-            <nz-table
-                id="premiumReportTable"
-                #policiesTable
-                [nzData]="displayPremiumProductionList"
-                [nzSize]="'small'"
-                [nzBordered]="true"
-            >
-                <thead>
-                    <tr>
-                        <th>Policy Number</th>
-                        <th>Endorsement Number</th>
-                        <th>Endorsement Type</th>
-                        <th>Class</th>
-                        <th>Debit No</th>
-                        <th>Credit No</th>
-                        <th>Name of Insured</th>
-                        <th>Intermediary Name</th>
-                        <th>Cover Period</th>
-                        <th>Sum Insured</th>
-                        <th>Premium</th>
-                        <th>Commission</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let policy of policiesTable.data">
-                        <td>{{ policy.quoteNumber }}</td>
-                        <td>{{ policy.endorsementNumber }}</td>
-                        <td>{{ policy.endorsementType }}</td>
-                        <td>{{ 'Motor' }}</td>
-                        <td>
-                            {{ policy.creditNote.certificateNumber }}
-                        </td>
-                        <td>{{ policy.debitNote.creditNoteNumber }}</td>
-                        <td>{{ policy.nameOfInsured }}</td>
-                        <td>{{ policy.firstName }} - {{ policy.lastName }}</td>
-                        <td>
-                            {{ policy.startDate | date }} -
-                            {{ policy.endDate | date }}
-                        </td>
-                        <td>{{ policy.sumInsured }}</td>
-                        <td>{{ policy.premium }}</td>
-                        <td>{{ policy.commission }}</td>
-                    </tr>
-                </tbody>
-            </nz-table>
+                    <nz-table
+                        id="Table"
+                        #analysisTable
+                        [nzData]="displayPolicyReport"
+                        [nzSize]="'small'"
+                        [nzBordered]="true"
+                        style="background-color: white;"
+                    >
+                        <thead>
+                            <tr>
+                                <th>Policy number</th>
+                                <th>Client</th>
+                                <th>Intermediary name</th>
+                                <th>Transaction Date</th>
+                                <th>Underwriter</th>
+                                <th>Branch</th>
+                                <th>Class of Business</th>
+                                <th>Product</th>
+                                <!-- <th>Risk ID</th> -->
+                                <th>Sum Insured</th>
+                                <th>Gross Premium</th>
+                                <th>Insurance Levy</th>
+                                <th>Commission amount</th>
+                                <th>Currency</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let production of analysisTable.data"
+                                style="cursor: pointer;"
+                            >
+                                <!-- <td></td> -->
+                                <td>{{ production.policyNumber }}</td>
+                                <td>{{ production.client }}</td>
+                                <td>{{ production.intermediaryName }}</td>
+                                <td>{{ production.startDate | date }}</td>
+                                <td>{{ production.preparedBy }}</td>
+                                <td>{{ production.Branch }}</td>
+                                <td>{{ production.sourceOfBusiness }}</td>
+                                <td>{{ 'Motor' }}</td>
+                                <!-- <td>{{ production.riskID }}</td> -->
+                                <td>{{ production.sumInsured }}</td>
+                                <td>{{ production.netPremium }}</td>
+                                <td>{{ production.insuranceLevy }}</td>
+                                <td>{{ production.commissionAmount }}</td>
+                                <td>{{ production.currency }}</td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+            </nz-card>
         </div>
-    </nz-card>
+    </nz-modal>
 </div>

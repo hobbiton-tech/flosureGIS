@@ -17,7 +17,8 @@ import { MotorQuotationModel } from 'src/app/quotes/models/quote.model';
 const httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
 };
-const BASE_URL = 'http://localhost:3000';
+// const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'https://flosure-postgres-api.herokuapp.com';
 @Injectable({
     providedIn: 'root',
 })
@@ -37,7 +38,7 @@ export class PremiumService {
     }
 
     generatePremiumReport(){
-        return this.http.get<any>(`${BASE_URL}/report`)
+        return this.http.get<any>(`${BASE_URL}/quotation`)
     }
 
     generateReport() {
