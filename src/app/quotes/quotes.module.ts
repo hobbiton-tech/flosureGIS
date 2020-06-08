@@ -16,6 +16,7 @@ import { QuoteComponent } from './documents/quote/quote.component';
 import { QuoteDocumentComponent } from './documents/quote-document/quote-document.component';
 import { DraftQuoteDocumentComponent } from './documents/draft-quote-document/draft-quote-document.component';
 import { NgxPrintModule } from 'ngx-print';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 
 const routes: Routes = [
     {
@@ -50,7 +51,8 @@ const routes: Routes = [
         PdfViewerModule,
         HttpClientModule,
         RouterModule.forChild(routes),
-        NgxPrintModule
+        NgxPrintModule,
+        NzDatePickerModule
     ],
     exports: [QuotesComponent, CreateQuoteComponent],
     providers: [QuotesService]

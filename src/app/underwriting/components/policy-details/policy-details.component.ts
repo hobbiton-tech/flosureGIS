@@ -226,14 +226,27 @@ export class PolicyDetailsComponent implements OnInit {
                 ICorporateClient & IIndividualClient
             >;
 
-            this.client = this.clientsList.filter(
-                (x) =>
-                    x.firstName + ' ' + x.lastName ||
-                    x.companyName === this.policyData.client
+            console.log('clients: ');
+            console.log(clients);
+
+            this.client = this.clientsList.filter((x) =>
+                x.companyName
+                    ? x.companyName === this.policyData.client
+                    : x.firstName + ' ' + x.lastName === this.policyData.client
             )[0] as IIndividualClient & ICorporateClient;
 
-            console.log('client');
-            console.log(this.client);
+            console.log('HERE =>>>>>');
+            console.log(
+                this.clientsList.filter(
+                    (x) => x.firstName + ' ' + x.lastName === 'Changa Lesa'
+                )[0] as IIndividualClient & ICorporateClient
+            );
+
+            // console.log('policy data client:');
+            // console.log(this.policyData.client);
+
+            // console.log('client');
+            // console.log(this.client);
         });
 
         this.policyDetailsForm = this.formBuilder.group({

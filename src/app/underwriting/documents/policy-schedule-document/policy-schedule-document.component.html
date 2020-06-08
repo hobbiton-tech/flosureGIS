@@ -29,29 +29,37 @@
                     style="float: right;">Agency:
                     {{policy.sourceOfBusiness ? (policy.sourceOfBusiness == 'direct' ? 'Direct' : policy.intermediaryName): '-'}}<span
                         style="font-weight: bold;">{{policy.intermediaryName}}</span></span></p>
-            <p>Address: {{client.address}}<span style="float: right;">Email: <span
-                        style="font-weight: bold;">{{client.email ? client.email : '-'}}</span></span></p>
+            <p>Address: {{client.address}}<span style="float: right;">Email:
+                    {{policy.sourceOfBusiness ? (policy.sourceOfBusiness == 'direct' ? 'info@aplusgeneral.com' : policy.user): '-'}}<span
+                        style="font-weight: bold;"></span></span></p>
+            <p>Email: {{client.email ? client.email : '-'}}<span style="float: right;"><span
+                        style="font-weight: bold;"></span></span></p>
             <p>Business or Profession: <span style="font-weight: bold;">TBA</span><span style="float: right;">Currency:
                     <span style="font-weight: bold;">{{policy.currency}}</span></span></p>
-            Period Of Insurance:
-            <ol type="A">
-                <li>From <span style="font-weight: bold;">{{coverFrom | date}}</span> to
-                    <span style="font-weight: bold;">{{coverTo | date}}</span> both dates inclusive and no other for the
-                    purpose
-                    of this insurance</li>
-                <li>Any subsequent period for which the Insured shall pay and the company shall agree to accept a
-                    Renewal premium</li>
-            </ol>
 
-
-            <p>Motor Vehicle: Any of the following
-                <span style="float: right;">
+            <p>
+                Period Of Insurance:
+                <ol type="A">
+                    <li>From <span style="font-weight: bold;">{{coverFrom | date}}</span> to
+                        <span style="font-weight: bold;">{{coverTo | date}}</span> both dates inclusive and no other for
+                        the
+                        purpose
+                        of this insurance</li>
+                    <li>Any subsequent period for which the Insured shall pay and the company shall agree to accept a
+                        Renewal premium</li>
+                </ol>
+                <span style="float: right; text-align: left;">
                     Premium: {{policy.currency == 'ZMW' ? 'K' : '$'}}{{basicPremium | number: '1.2-2'}}<br />
                     3% Levy: {{policy.currency == 'ZMW' ? 'K' : '$'}}{{premiumLevy | number: '1.2-2'}}<br />
                     Total Premium: {{policy.currency == 'ZMW' ? 'K' : '$'}}{{totalAmount | number: '1.2-2'}}<br />
                 </span>
-            </p>
+
+
+
+
+                <p>Motor Vehicle: Any of the following</p>
         </div>
+        <br />
         <br />
 
         <nz-table style="width: 100%;" #risksTable [nzData]="policy.risks" nzFrontPagination="false"
@@ -77,7 +85,7 @@
                 <td>{{getYearOfManufacture(risk)}}</td>
                 <td>TBA</td>
                 <td>{{risk.estimatedValue ? risk.estimatedValue : 'N/A'}}</td>
-                <td>{{risk.insuranceType}}</td>
+                <td>{{risk.insuranceType == 'ThirdParty' ? 'Third Party' : 'Comprehensive'}}</td>
             </tr>
         </nz-table>
         <br />

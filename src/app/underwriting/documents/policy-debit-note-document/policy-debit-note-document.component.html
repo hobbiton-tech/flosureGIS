@@ -95,7 +95,8 @@
 
                 <td class="td2" style="border: 1px solid black;"></td>
                 <td style="border: 1px solid black;">
-                    {{risk.regNumber}}, {{risk.vehicleMake}} {{risk.vehicleModel}} - {{ risk.insuranceType }}
+                    {{risk.regNumber}}, {{risk.vehicleMake}} {{risk.vehicleModel}} -
+                    {{ risk.insuranceType == 'ThirdParty' ? 'Third Party' : 'Comprehensive' }}
                 </td>
                 <td id="td3" style="border: 1px solid black;">
                     {{ risk.basicPremium | number: '1.2-2' }}
