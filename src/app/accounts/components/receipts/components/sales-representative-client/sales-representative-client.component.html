@@ -25,11 +25,20 @@
                                     nzPlaceHolder="Select Sale"
                                     (ngModelChange)="log($event)"
                                     nzAllowClear
+                                    style="width: 200px;"
                                 >
                                     <nz-option
                                         *ngFor="let salesRep of salesRepList"
-                                        [nzValue]="salesRep.companyName"
-                                        [nzLabel]="salesRep.companyName"
+                                        [nzValue]="
+                                            salesRep.contactFirstName +
+                                            ' ' +
+                                            salesRep.contactLastName
+                                        "
+                                        [nzLabel]="
+                                            salesRep.contactFirstName +
+                                            ' ' +
+                                            salesRep.contactLastName
+                                        "
                                     ></nz-option>
                                 </nz-select>
                             </div>
@@ -160,7 +169,10 @@
                                                 name="sumInDigits"
                                                 type="number"
                                                 id="sumInDigits"
-                                                placeholder="{{ policyAmount }}"
+                                                placeholder="{{
+                                                    policyAmount
+                                                        | number: '1.2-2'
+                                                }}"
                                                 readonly
                                             />
                                             <!-- <span

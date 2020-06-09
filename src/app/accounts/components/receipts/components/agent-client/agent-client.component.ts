@@ -9,6 +9,7 @@ import _ from 'lodash';
 import { v4 } from 'uuid';
 import { AgentsService } from 'src/app/settings/components/agents/services/agents.service';
 import { IAgent } from 'src/app/settings/components/agents/models/agents.model';
+import { PoliciesService } from 'src/app/underwriting/services/policies.service';
 
 @Component({
     selector: 'app-agent-client',
@@ -96,7 +97,8 @@ export class AgentClientComponent implements OnInit {
         private formBuilder: FormBuilder,
         private message: NzMessageService,
         private router: Router,
-        private agentService: AgentsService
+        private agentService: AgentsService,
+        private policeServices: PoliciesService
     ) {
         this.receiptForm = this.formBuilder.group({
             receivedFrom: ['', Validators.required],
@@ -127,7 +129,7 @@ export class AgentClientComponent implements OnInit {
             console.log('===================');
             console.log(this.agentList);
         });
-        this.receiptService.getPolicies().subscribe((quotes) => {
+        this.policeServices.getPolicies().subscribe((quotes) => {
             this.listofUnreceiptedReceipts = _.filter(
                 quotes,
                 (x) =>

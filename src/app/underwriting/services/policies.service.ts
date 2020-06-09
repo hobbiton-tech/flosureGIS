@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Policy } from '../models/policy.model';
 import {
     AngularFirestore,
-    AngularFirestoreCollection
+    AngularFirestoreCollection,
 } from '@angular/fire/firestore';
 import 'firebase/firestore';
 import { filter, first } from 'rxjs/operators';
@@ -15,11 +15,12 @@ import { HttpClient } from '@angular/common/http';
 import {
     DebitNote,
     CreditNote,
-    CoverNote
+    CoverNote,
 } from '../documents/models/documents.model';
 
-const BASE_URL = 'https://flosure-postgres-api.herokuapp.com';
-// const BASE_URL = 'https://flosure-postgres-api.herokuapp.com';
+const BASE_URL = 'http://104.248.247.78:3000';
+
+// const BASE_URL = 'http://104.248.247.78:3000';
 
 interface IDebitNoteResult {
     invoiceNumber: string;
@@ -34,7 +35,7 @@ interface ICoverNoteResult {
 }
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class PoliciesService {
     private policiesCollection: AngularFirestoreCollection<Policy>;
@@ -62,25 +63,25 @@ export class PoliciesService {
         }
 
         return this.http.post<Policy>(
-            'https://flosure-postgres-api.herokuapp.com/policy',
+            'http://104.248.247.78:3000/policy',
             policy
         );
     }
 
     // getPolicies(): Observable<Policy[]> {
-    //     return this.http.get<Policy[]>('https://flosure-postgres-api.herokuapp.com/policy');
+    //     return this.http.get<Policy[]>('http://104.248.247.78:3000/policy');
     // }
 
     // getPolicyById(policyId: string): Observable<Policy> {
     //     return this.http.get<Policy>(
-    //         `https://flosure-postgres-api.herokuapp.com/policy/${policyId}`
+    //         `http://104.248.247.78:3000/policy/${policyId}`
     //     );
     //     return this.policiesCollection.doc<Policy>(policyId).valueChanges();
     // }
 
     updatePolicy(policy: Policy): Observable<Policy> {
         return this.http.put<Policy>(
-            `https://flosure-postgres-api.herokuapp.com/policy/${policy.id}`,
+            `http://104.248.247.78:3000/policy/${policy.id}`,
             policy
         );
     }
@@ -88,20 +89,18 @@ export class PoliciesService {
     // backup policies
     createBackupPolicy(policy: Policy): Observable<Policy> {
         return this.http.post<Policy>(
-            'https://flosure-postgres-api.herokuapp.com/policy',
+            'http://104.248.247.78:3000/policy',
             policy
         );
     }
 
     getBackupPolicies(): Observable<Policy[]> {
-        return this.http.get<Policy[]>(
-            'https://flosure-postgres-api.herokuapp.com/policy'
-        );
+        return this.http.get<Policy[]>('http://104.248.247.78:3000/policy');
     }
 
     getBackupPolicyById(policyId: string): Observable<Policy> {
         return this.http.get<Policy>(
-            `https://flosure-postgres-api.herokuapp.com/policy/${policyId}`
+            `http://104.248.247.78:3000/policy/${policyId}`
         );
         // return this.policiesCollection.doc<Policy>(policyId).valueChanges();
     }
@@ -110,7 +109,7 @@ export class PoliciesService {
         console.log('policy details:');
         console.log(policy);
         return this.http.put<Policy>(
-            `https://flosure-postgres-api.herokuapp.com/policy/${policyId}`,
+            `http://104.248.247.78:3000/policy/${policyId}`,
             policy
         );
     }
@@ -118,7 +117,7 @@ export class PoliciesService {
     ////////////////////////////////////////////
 
     async addPolicy(policy: Policy) {
-        this.policies.pipe(first()).subscribe(async policies => {
+        this.policies.pipe(first()).subscribe(async (policies) => {
             const today = new Date();
             policy.term = 1;
             policy.nameOfInsured = policy.client;
@@ -149,7 +148,7 @@ export class PoliciesService {
     }
 
     renewPolicy(policy: Policy) {
-        this.policies.pipe(first()).subscribe(async policies => {
+        this.policies.pipe(first()).subscribe(async (policies) => {
             const today = new Date();
             policy.client = policy.nameOfInsured;
             policy.dateOfIssue =
@@ -169,14 +168,14 @@ export class PoliciesService {
             console.log(policy);
             this.http
                 .put<Policy>(
-                    `https://flosure-postgres-api.herokuapp.com/policy/${policy.id}`,
+                    `http://104.248.247.78:3000/policy/${policy.id}`,
                     policy
                 )
                 .subscribe(
-                    data => {
+                    (data) => {
                         this.msg.success('Policy Successfully Updated');
                     },
-                    error => {
+                    (error) => {
                         this.msg.error('Failed');
                     }
                 );
@@ -199,13 +198,13 @@ export class PoliciesService {
             .collection('policies')
             .ref.where('policyNumber', '==', policyNumber)
             .get()
-            .then(querySnapshot => {
-                querySnapshot.forEach(doc => {
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
                     console.log(doc.data());
                     this.policy = doc.data();
                 });
             })
-            .catch(error => {
+            .catch((error) => {
                 console.log('Error getting documents: ', error);
             });
 
@@ -218,20 +217,18 @@ export class PoliciesService {
 
     getPolicyById(policyId: string): Observable<Policy> {
         return this.http.get<Policy>(
-            `https://flosure-postgres-api.herokuapp.com/policy/${policyId}`
+            `http://104.248.247.78:3000/policy/${policyId}`
         );
 
         // return this.policiesCollection.doc<Policy>(policyId).valueChanges();
     }
 
     getClientsPolicies(clientId: string): Observable<Policy[]> {
-        return this.policies.pipe(filter(policy => clientId === clientId));
+        return this.policies.pipe(filter((policy) => clientId === clientId));
     }
 
     getPolicies(): Observable<Policy[]> {
-        return this.http.get<Policy[]>(
-            'https://flosure-postgres-api.herokuapp.com/policy'
-        );
+        return this.http.get<Policy[]>('http://104.248.247.78:3000/policy');
         // return this.policies;
     }
 
@@ -248,10 +245,7 @@ export class PoliciesService {
         const count = this.countGenerator(totalPolicies);
         const today = new Date();
         const dateString: string =
-            today
-                .getFullYear()
-                .toString()
-                .substr(-2) +
+            today.getFullYear().toString().substr(-2) +
             ('0' + (today.getMonth() + 1)).slice(-2) +
             +('0' + today.getDate()).slice(-2);
 
@@ -285,7 +279,7 @@ export class PoliciesService {
             .get<IDebitNoteResult>(
                 `https://new-rates-api.now.sh/aplus-invoice/1/0/${insuranceType}/${count}`
             )
-            .subscribe(async res => {
+            .subscribe(async (res) => {
                 debitNote.debitNoteNumber = res.invoiceNumber;
 
                 this.http
@@ -294,10 +288,10 @@ export class PoliciesService {
                         debitNote
                     )
                     .subscribe(
-                        async res => {
+                        async (res) => {
                             console.log(res);
                         },
-                        async err => {
+                        async (err) => {
                             console.log(err);
                         }
                     );
@@ -345,7 +339,7 @@ export class PoliciesService {
             .get<ICreditNoteResult>(
                 `https://new-rates-api.now.sh/aplus-invoice/1/0/${insuranceType}`
             )
-            .subscribe(async res => {
+            .subscribe(async (res) => {
                 let tempCreditNoteNumber = res.invoiceNumber;
                 creditNote.creditNoteNumber = tempCreditNoteNumber.replace(
                     'DR',
@@ -358,10 +352,10 @@ export class PoliciesService {
                         creditNote
                     )
                     .subscribe(
-                        async res => {
+                        async (res) => {
                             console.log(res);
                         },
-                        async err => {
+                        async (err) => {
                             console.log(err);
                         }
                     );
