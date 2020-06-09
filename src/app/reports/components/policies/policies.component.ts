@@ -162,10 +162,10 @@ export class PoliciesComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        let t = new Date(Date.parse(this.dateForm.get('toDate').value));
-        let f = new Date(Date.parse(this.dateForm.get('fromDate').value));
+        let t = this.dateForm.get('toDate').value;
+        let f = this.dateForm.get('fromDate').value;
 
-        console.log(t, f);
+        console.log('this->', t, f);
 
         this.policiesService.getPolicies().subscribe((policies) => {
             this.displayDirectClientStatements = policies;

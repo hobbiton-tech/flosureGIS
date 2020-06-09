@@ -12,6 +12,8 @@ import {
 import { switchMap } from 'rxjs/operators';
 import { forkJoin, Observable } from 'rxjs';
 import { MotorQuotationModel } from 'src/app/quotes/models/quote.model';
+import { DebitNote } from 'src/app/underwriting/documents/models/documents.model';
+import { Policy } from 'src/app/underwriting/models/policy.model';
 
 
 const httpOptions = {
@@ -39,6 +41,18 @@ export class PremiumService {
 
     generatePremiumReport(){
         return this.http.get<any>(`${BASE_URL}/quotation`)
+    }
+
+    // getDebitNotes(): Observable<DebitNote[]> {
+    //     return this.http.get<DebitNote[]>(`${BASE_URL}/documents/debit-notes`);
+    // }
+
+
+    getPolicies(): Observable<Policy> {
+        return this.http.get<Policy>(
+            'https://flosure-postgres-api.herokuapp.com/policy'
+        );
+        // return this.policies;
     }
 
     generateReport() {

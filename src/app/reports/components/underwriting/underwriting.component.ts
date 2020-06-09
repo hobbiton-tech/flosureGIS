@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { PremiumService } from '../../services/premium.service';
 import { map, filter, tap } from 'rxjs/operators';
 import { from } from 'rxjs';
@@ -27,8 +27,12 @@ import { PoliciesService } from 'src/app/underwriting/services/policies.service'
 import * as jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
+import * as moment from 'moment';
+
 import * as XLSX from 'xlsx';
 import { PolicyDto } from '../../model/quotation.model';
+import { DebitNote } from 'src/app/underwriting/documents/models/documents.model';
+import _ from 'lodash';
 
 interface FilterMotorQuotation extends MotorQuotationModel {
     client: string;
@@ -43,12 +47,29 @@ interface FilterMotorQuotation extends MotorQuotationModel {
     productType: string;
 }
 
+interface Motor extends MotorQuotationModel{
+    sumInsured: number;
+    grossPremium: number;
+}
+
+interface PremiumReport extends Policy {
+    policyNumber: string;
+    // debitNote: any;
+    grossPremium: string;
+    loading: number;
+    discount: number;
+    netPremium: number;
+    levy: number;
+    premiumDue: number;
+}
+
 export type QuoteStatus = 'Draft' | 'Approved';
 
 interface IFormattedAnalysisReport
     extends IAgent,
         IBroker,
         ISalesRepresentative {
+    getFullName: string;
     getQuoteCount: number;
     getPolicyCount: number;
     getRatio: number;
@@ -63,13 +84,23 @@ export class UnderwritingComponent implements OnInit {
     isVisible = false;
     visible = false;
 
+    //search string when filtering clients
+    searchString: string;
+
     isAnalysisReportVisible = false;
     isReportVisible = false;
 
     //Qoutation Listing Report
     displayQuotationReport: MotorQuotationModel[];
+    motorList: MotorQuotationModel[];
+    motor: Motor[];
 
-    displayPolicyReport: Policy[] = []; 
+    displayPolicyReport: Policy[] = [];
+    policyList: Policy[] = [];
+
+    displayDebitNote: DebitNote[] = [];
+    debitNoteList: DebitNote[] = [];
+    filterNote: DebitNote[] = [];
 
     // Quotation Analysis Report
     intermediariesList: Array<IAgent & IBroker & ISalesRepresentative>;
@@ -78,6 +109,7 @@ export class UnderwritingComponent implements OnInit {
 
     policiesList: Policy[];
     filteredPoliciesList: Policy[] = [];
+    filterPremiumList: Array<PremiumReport>;
 
     quotesList: MotorQuotationModel[];
     filteredQuotesList: MotorQuotationModel[] = [];
@@ -88,43 +120,37 @@ export class UnderwritingComponent implements OnInit {
     isPremiumWorkingReportVisible = false;
     isDebitNoteReportVisible = false;
     isProductionReportVisible = false;
+    isIntermediaryQuotationListingReport = false;
 
     dateForm: FormGroup;
 
     timeDay = new Date();
     fileName = 'PremiumReportTable' + this.timeDay + '.xlsx';
 
-    @ViewChild('content') content: ElementRef;
 
-    public savaPDF(): void{
-      let content = this.content.nativeElement;
-      let doc = new jsPDF('l', 'pt', 'a4');
-      let _elementHandlers ={
-          '#editor': function(element, renderer){
-              return true;
-          }
-      };
-
-     var res =  doc.fromHTML(content.innerHTML, 15, 15, {
-          'width': 700,
-          'elementHandlers': _elementHandlers
-      });
-
-      doc.save('test.pdf')
-    }
+    filterPremiumReport: any;
+    displayPremiumReport: Policy[];
 
     constructor(
         private premiumService: PremiumService,
         private agentsService: AgentsService,
         private quotationService: QuotesService,
-        private policiesService: PoliciesService
-    ) {}
+        private policiesService: PoliciesService,
+        private formBuilder: FormBuilder
+    ) {
+        this.dateForm = this.formBuilder.group({
+            fromDate: ['', Validators.required],
+            toDate: ['', Validators.required],
+        });
+    }
 
     showModal(): void {
         this.isVisible = true;
     }
 
-    showIntermediaryModal(): void {}
+    showIntermediaryModal(): void {
+        this.isIntermediaryQuotationListingReport = true;
+    }
 
     showAnalysisReportModal(): void {
         this.isAnalysisReportVisible = true;
@@ -146,16 +172,93 @@ export class UnderwritingComponent implements OnInit {
         this.isPremiumWorkingReportVisible = true;
     }
 
+    // sum up specific values in array
+    sumArray(items, prop) {
+        return items.reduce(function (a, b) {
+            return a + b[prop];
+        }, 0);
+    }
+
     ngOnInit(): void {
+        // this._getFilterReportList(t, f);
+
+        this.quotationService.getMotorQuotations().subscribe((d) => {
+            this.motorList = d;
+            this.motor = this.motorList.map((m) => ({
+                ...m,
+                sumInsured: this.sumArray(m.risks, 'sumInsured'),
+                grossPremium: this.sumArray(m.risks, 'basicPremium'),    
+            }));
+            console.log('Motor--->', this.displayQuotationReport);
+        });
+
+        let sourceOfBusiness = 'direct';
+
         this.quotationService.getMotorQuotations().subscribe((d) => {
             this.displayQuotationReport = d;
-            console.log('Motor--->', this.displayQuotationReport);
+
+            this.filteredQuotesList = this.displayQuotationReport.filter(
+                (x) => x.sourceOfBusiness !== sourceOfBusiness
+            );
+
+            this.displayQuotationReport = this.filteredQuotesList;
+            // console.log(this.filteredQuotesList)
+
+            console.log('Am filter--->', this.filteredQuotesList);
         });
 
         this.policiesService.getPolicies().subscribe((policies) => {
             this.displayPolicyReport = policies;
             console.log('Policy--->', this.displayPolicyReport);
         });
+
+        this.policiesService.getPolicies().subscribe((policies) => {
+            this.displayPolicyReport = policies;
+        });
+
+        // this.premiumService.getDebitNotes().subscribe((debit) => {
+        //     this.displayDebitNote = debit;
+        // });
+
+        console.log('debit', this.displayDebitNote);
+
+        this.policiesService.getPolicies().subscribe((policy) => {
+            this.displayPremiumReport = policy;
+            this.filterPremiumList = this.displayPremiumReport.map((x) => ({
+                ...x,
+                policyNumber: x.policyNumber,
+                // debitNote: this.getDebitNote(x.id),
+                grossPremium: this.sumArray(x.risks, 'basicPremium'),
+                loading: this.sumArray(x.risks, 'loadingTotal'),
+                discount: this.sumArray(x.risks, 'discountTotal'),
+                netPremium: this.sumArray(x.risks, 'netPremium'),
+                levy: this.sumArray(x.risks, 'premiumLevy'),
+                premiumDue: x.sumInsured,
+            }));
+
+            this.displayPremiumReport = this.filterPremiumList;
+            console.log('New Policy', this.filterPremiumList);
+        });
+
+        // var hash = Object.create(null);
+        // this.displayPolicyReport.concat(this.displayDebitNote).forEach(function(obj) {
+        //     hash[obj.id] = Object.assign(hash[obj.id] || {}, obj);
+        // });
+        // var a3 = Object.keys(hash).map(function(key) {
+        //     return hash[key];
+        // });
+
+        // var merge = (Policy, DebitNote) => ({...Policy, ...DebitNote});
+        // _.zipWith(this.displayPolicyReport, this.displayDebitNote, merge)
+
+        var merged = _.map(this.displayPolicyReport, function (item) {
+            return _.assign(
+                item,
+                _.find(this.displayDebitNote, ['id', item.id])
+            );
+        });
+
+        console.log('Merged objects->', merged);
 
         this.agentsService
             .getAllIntermediaries()
@@ -182,6 +285,15 @@ export class UnderwritingComponent implements OnInit {
             });
     }
 
+    // getDebitNote(id: string) {
+    //     this.premiumService.getDebitNotes().subscribe((x) => {
+    //         this.debitNoteList = x;
+    //         // this.filterNote = this.debitNoteList.filter(
+    //         //     // (x) => x.policy == id
+    //         // );
+    //     });
+    // }
+
     handleOk(): void {
         this.isVisible = false;
         this.isAnalysisReportVisible = false;
@@ -189,6 +301,7 @@ export class UnderwritingComponent implements OnInit {
         this.isPremiumWorkingReportVisible = false;
         this.isDebitNoteReportVisible = false;
         this.isProductionReportVisible = false;
+        this.isIntermediaryQuotationListingReport = false;
     }
 
     handleCancel(): void {
@@ -199,6 +312,7 @@ export class UnderwritingComponent implements OnInit {
         this.isPremiumWorkingReportVisible = false;
         this.isDebitNoteReportVisible = false;
         this.isProductionReportVisible = false;
+        this.isIntermediaryQuotationListingReport = false;
     }
 
     //Quotation Listing Report functions
@@ -210,7 +324,7 @@ export class UnderwritingComponent implements OnInit {
         }`;
     }
 
-    getIntermediaryQuoteCount(intermediary: any): any {
+    getIntermediaryQuoteCount(intermediary: any): number {
         this.quotationService.getMotorQuotations().subscribe((quotes) => {
             this.quotesList = quotes;
 
@@ -221,33 +335,26 @@ export class UnderwritingComponent implements OnInit {
                       ' ' +
                       intermediary.contactLastName
             );
-
-            // return `${this.filteredQuotesList.length}`;
-
-            //console.log('QuotesList', this.quotesList);
-            // console.log('FILTERED QUOTES===>', this.filteredQuotesList.length);
-
-            return this.filteredQuotesList.length;
         });
+        console.log('-------->-->->', this.filteredQuotesList)
         return this.filteredQuotesList.length;
     }
 
-    getIntermediaryPolicyCount(intermediary: any): any {
+    getIntermediaryPolicyCount(intermediary: any): number {
         this.policiesService.getPolicies().subscribe((policies) => {
             console.log(policies);
 
             this.policiesList = policies;
             this.filteredPoliciesList = this.policiesList.filter((x) =>
-                x.intermediaryName == intermediary.companyName
+                x.intermediaryName === intermediary.companyName
                     ? intermediary.companyName
                     : intermediary.contactFirstName +
                       ' ' +
                       intermediary.contactLastName
             );
-            // return `${this.filteredPoliciesList.length}`;
-            // console.log('=>>>>' + this.filteredPoliciesList.length);
-            return this.filteredPoliciesList.length;
         });
+
+        // console.log('=>>>>' + this.filteredPoliciesList.length);
 
         return this.filteredPoliciesList.length;
     }
@@ -472,7 +579,7 @@ export class UnderwritingComponent implements OnInit {
                 'PNG',
                 headerData.settings.margin.left,
                 20,
-                60,
+                150,
                 60
             );
 
@@ -571,7 +678,7 @@ export class UnderwritingComponent implements OnInit {
                 'PNG',
                 headerData.settings.margin.left,
                 20,
-                60,
+                150,
                 60
             );
         };
@@ -651,7 +758,7 @@ export class UnderwritingComponent implements OnInit {
                 'PNG',
                 headerData.settings.margin.left,
                 20,
-                60,
+                150,
                 60
             );
         };
@@ -740,7 +847,7 @@ export class UnderwritingComponent implements OnInit {
                 'PNG',
                 headerData.settings.margin.left,
                 20,
-                60,
+                150,
                 60
             );
         };
@@ -828,7 +935,7 @@ export class UnderwritingComponent implements OnInit {
                 'PNG',
                 headerData.settings.margin.left,
                 20,
-                60,
+                150,
                 60
             );
         };
@@ -884,31 +991,48 @@ export class UnderwritingComponent implements OnInit {
         doc.save('PremiumWorkingReport.pdf');
     }
 
-    //   _getFilterReportList(fromDate: Date, toDate: Date): void {
-    //     if (fromDate === null || (!fromDate && toDate == null) || !toDate) {
-    //         this.displayPremiumProductionList = this.filterPremiumReport;
-    //     }
+    _getFilterReportList() {
+        let toDate = new Date(this.dateForm.get('toDate').value);
+        let fromDate = new Date(this.dateForm.get('fromDate').value);
 
-    //     this.premiumReportService.generatePremiumProductionReport()
-    //         .pipe(
-    //             map((premium) =>
-    //                 from(premium).pipe(
-    //                     // filter(
-    //                     //     (d: Client) =>
-    //                     //         d.dateCreated >= this.dateForm.get('fromDate').value &&
-    //                     //         d.dateCreated <= this.dateForm.get('toDate').value
-    //                     // )
-    //                 )
-    //             ),
-    //             tap((premium) =>
-    //             premium.subscribe((d) => {
-    //                     this.filterPremiumReport.push(d);
-    //                     console.log(this.filterPremiumReport)
-    //                 })
-    //             )
-    //         )
-    //         .subscribe();
-    // }
+        let t = JSON.stringify(toDate);
+        t = t.slice(1, 11);
+
+        let f = JSON.stringify(fromDate);
+        f = f.slice(1, 11);
+
+        let ff: moment.Moment = moment(f);
+        let tt: moment.Moment = moment(t);
+
+        console.log('this->day', ff, tt);
+
+        if (fromDate !== null || (!fromDate && toDate !== null) || !toDate) {
+            this.displayQuotationReport = this.filterPremiumReport;
+        }
+
+        this.quotationService
+            .getMotorQuotations()
+            .pipe(
+                map((premium) =>
+                    from(premium).pipe(
+                        filter((d: MotorQuotationModel) => {
+                            // let date = new Date(d.dateCreated)
+                            let myDate: moment.Moment = moment(d.dateCreated);
+                            console.log('This Old->', myDate);
+
+                            return myDate >= ff && myDate <= tt;
+                        })
+                    )
+                ),
+                tap((premium) =>
+                    premium.subscribe((d) => {
+                        this.filterPremiumReport.push(d);
+                        console.log(this.filterPremiumReport);
+                    })
+                )
+            )
+            .subscribe();
+    }
 
     downloadQuotationReportListExcel() {
         let element = document.getElementById('Table');
@@ -919,5 +1043,65 @@ export class UnderwritingComponent implements OnInit {
 
         /* save to file */
         XLSX.writeFile(wb, this.fileName);
+    }
+
+    search(value: string): void {
+        if (value === '' || !value) {
+            this.displayQuotationReport = this.motorList;
+        }
+
+        this.displayQuotationReport = this.motorList.filter((motor) => {
+            if (motor.sourceOfBusiness === 'agent') {
+                return (
+                    motor.quoteNumber
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    motor.intermediaryName
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    motor.status.toLowerCase().includes(value.toLowerCase()) ||
+                    motor.branch.toLowerCase().includes(value.toLowerCase()) ||
+                    motor.client.toLowerCase().includes(value.toLowerCase()) ||
+                    motor.sourceOfBusiness
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    motor.basicPremiumSubTotal
+                        .toString()
+                        .includes(value.toLowerCase())
+                );
+            } else if (motor.sourceOfBusiness === 'broker') {
+                return (
+                    motor.quoteNumber
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    motor.intermediaryName
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    motor.status.toLowerCase().includes(value.toLowerCase()) ||
+                    motor.branch.toLowerCase().includes(value.toLowerCase()) ||
+                    motor.client.toLowerCase().includes(value.toLowerCase()) ||
+                    motor.sourceOfBusiness
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    motor.basicPremiumSubTotal
+                        .toString()
+                        .includes(value.toLowerCase())
+                );
+            } else {
+                motor.quoteNumber.toLowerCase().includes(value.toLowerCase()) ||
+                    motor.intermediaryName
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    motor.status.toLowerCase().includes(value.toLowerCase()) ||
+                    motor.branch.toLowerCase().includes(value.toLowerCase()) ||
+                    motor.client.toLowerCase().includes(value.toLowerCase()) ||
+                    motor.sourceOfBusiness
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    motor.basicPremiumSubTotal
+                        .toString()
+                        .includes(value.toLowerCase());
+            }
+        });
     }
 }
