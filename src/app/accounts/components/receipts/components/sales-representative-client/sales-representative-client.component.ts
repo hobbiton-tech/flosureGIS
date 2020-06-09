@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { AgentsService } from 'src/app/settings/components/agents/services/agents.service';
 import _ from 'lodash';
 import { v4 } from 'uuid';
+import { PoliciesService } from 'src/app/underwriting/services/policies.service';
 
 @Component({
     selector: 'app-sales-representative-client',
@@ -87,7 +88,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
     selectedType = 'Direct';
     selectedSale: any;
     listofUnreceiptedReceipts: Policy[];
-    displayedListOfUnreceiptedReceipts: Policy[];
+    displayedListOfUnreceiptedReceipts: Policy[] = [];
     sourceOfBusiness: string;
     intermediaryName: string;
 
@@ -95,6 +96,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
         private receiptService: AccountService,
         private formBuilder: FormBuilder,
         private message: NzMessageService,
+        private policeServices: PoliciesService,
         private router: Router,
         private agentService: AgentsService
     ) {
@@ -127,13 +129,14 @@ export class SalesRepresentativeClientComponent implements OnInit {
             console.log('===================');
             console.log(this.salesRepList);
         });
-        this.receiptService.getPolicies().subscribe((quotes) => {
+        this.policeServices.getPolicies().subscribe((quotes) => {
             this.listofUnreceiptedReceipts = _.filter(
                 quotes,
                 (x) =>
                     x.receiptStatus === 'Unreceipted' &&
                     x.sourceOfBusiness === 'salesRepresentative'
             );
+
             this.displayedListOfUnreceiptedReceipts = this.listofUnreceiptedReceipts;
 
             this.receiptsCount = _.filter(
@@ -180,7 +183,12 @@ export class SalesRepresentativeClientComponent implements OnInit {
             (x) => x.intermediaryName === value
         );
         console.log(this.listofUnreceiptedReceipts);
-        console.log('SELECTED', value);
+        console.log(
+            'SELECTED',
+            value,
+            this.displayedListOfUnreceiptedReceipts,
+            this.selectedSale
+        );
     }
 
     showModal(unreceipted: Policy): void {

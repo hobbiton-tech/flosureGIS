@@ -140,6 +140,7 @@ export class QuotesService {
             )
             .subscribe(async (res) => {
                 motorQuotation.quoteNumber = res.quoteNumber;
+                console.log('WHAT THE >>>>', motorQuotation);
                 this.http
                     .post<MotorQuotationModel>(
                         'http://104.248.247.78:3000/quotation',

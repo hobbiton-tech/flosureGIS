@@ -55,6 +55,7 @@ export class PolicyDetailsComponent implements OnInit {
     displayPolicy: Policy;
     policyUpdate: Policy = new Policy();
     isLoading = false;
+    isOkLoading = false;
 
     paymentPlan = 'NotCreated';
 
@@ -121,6 +122,10 @@ export class PolicyDetailsComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.isOkLoading = true;
+        setTimeout(() => {
+            this.isOkLoading = false;
+        }, 3000);
         this.route.params.subscribe((id) => {
             this.policiesService.getPolicyById(id.id).subscribe((policy) => {
                 console.log('CHECKING ID GET', policy);
