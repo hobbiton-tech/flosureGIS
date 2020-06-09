@@ -13,6 +13,7 @@ export class PoliciesComponent implements OnInit {
     policiesList: Policy[];
     displayPoliciesList: Policy[];
     policiesCount = 0;
+    isOkLoading = false;
 
     issuedBy = localStorage.getItem('user');
 
@@ -24,6 +25,10 @@ export class PoliciesComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        this.isOkLoading = true;
+        setTimeout(() => {
+            this.isOkLoading = false;
+        }, 3000);
         this.policiesService.getPolicies().subscribe((policies) => {
             this.policiesList = policies;
             this.policiesCount = policies.length;
@@ -38,8 +43,6 @@ export class PoliciesComponent implements OnInit {
         );
     }
 
-
-  
     search(value: string): void {
         if (value === '' || !value) {
             // this.displayPoliciesList = this.policiesList
