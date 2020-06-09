@@ -455,26 +455,14 @@
     (nzOnOk)="isDebitNotePDFVisible = false"
 >
     <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Debit Document">
-        <app-policy-debit-note-document
-            *ngIf="!risksLoading"
-            [clientName]="clientName"
-            [clientNumber]="clientNumber"
-            [clientEmail]="clientEmail"
-            [agency]="agency"
-            [policyNumber]="policyNumber"
-            [classOfBusiness]="classOfBusiness"
-            [coverFrom]="coverForm"
-            [coverTo]="coverTo"
-            [basicPremium]="basicPremium"
-            [loadingAmount]="loadingAmount"
-            [discountAmount]="discountAmount"
-            [premiumLevy]="premiumLevy"
-            [totalAmount]="totalAmount"
-            [risk]="policyRisk"
-            [policy]="policyData"
-            [debitNote]="debitNotes"
-            [client]="client"
-        >
+
+        <app-policy-debit-note-document *ngIf="!risksLoading" [clientName]="clientName" [clientNumber]="clientNumber"
+            [clientEmail]="clientEmail" [agency]="agency" [policyNumber]="policyNumber"
+            [classOfBusiness]="classOfBusiness" [coverFrom]="coverForm" [coverTo]="coverTo"
+            [basicPremium]="basicPremium" [loadingAmount]="loadingAmount" [discountAmount]="discountAmount"
+            [premiumLevy]="premiumLevy" [totalAmount]="totalAmount" [risk]="policyRisk" [policy]="policyData"
+            [debitNote]="debitNotes" [client]="client" [policyDebitNote]="singleDebitNote">
+
         </app-policy-debit-note-document>
     </nz-card>
 </nz-modal>

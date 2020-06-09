@@ -42,6 +42,7 @@ export class PolicyDetailsComponent implements OnInit {
     extensions: IPolicyExtension[];
 
     debitNotes: DebitNote[];
+    singleDebitNote: DebitNote;
     latestDebitNote: DebitNote;
 
     //client details
@@ -155,6 +156,52 @@ export class PolicyDetailsComponent implements OnInit {
                         );
                     });
 
+                this.policiesService.getDebitNotes().subscribe(debitNotes => {
+                    this.debitNotes = debitNotes;
+
+                    console.log('debit notes');
+                    console.log(this.debitNotes);
+
+                    console.log('id: ', this.policyData.id);
+
+                    this.singleDebitNote = debitNotes.filter(
+                        x => x.policy.id === this.policyData.id
+                    )[0];
+
+                    console.log('Policy Debit Note:');
+                    console.log(this.singleDebitNote);
+                });
+
+                this.clientsService.getAllClients().subscribe(clients => {
+                    this.clientsList = [...clients[0], ...clients[1]] as Array<
+                        ICorporateClient & IIndividualClient
+                    >;
+
+                    console.log('clients: ');
+                    console.log(clients);
+
+                    this.client = this.clientsList.filter(x =>
+                        x.companyName
+                            ? x.companyName === this.policyData.client
+                            : x.firstName + ' ' + x.lastName ===
+                              this.policyData.client
+                    )[0] as IIndividualClient & ICorporateClient;
+
+                    console.log('HERE =>>>>>');
+                    console.log(
+                        this.clientsList.filter(
+                            x =>
+                                x.firstName + ' ' + x.lastName === 'Changa Lesa'
+                        )[0] as IIndividualClient & ICorporateClient
+                    );
+
+                    // console.log('policy data client:');
+                    // console.log(this.policyData.client);
+
+                    // console.log('client');
+                    // console.log(this.client);
+                });
+
                 this.risks = policy.risks;
 
                 this.policyRisk = policy.risks[0];
@@ -219,40 +266,41 @@ export class PolicyDetailsComponent implements OnInit {
             });
         });
 
-        this.policiesService.getDebitNotes().subscribe((debitNotes) => {
-            this.debitNotes = debitNotes;
 
-            console.log('debit notes');
-            console.log(this.debitNotes);
-        });
+//         this.policiesService.getDebitNotes().subscribe((debitNotes) => {
+//             this.debitNotes = debitNotes;
 
-        this.clientsService.getAllClients().subscribe((clients) => {
-            this.clientsList = [...clients[0], ...clients[1]] as Array<
-                ICorporateClient & IIndividualClient
-            >;
+//             console.log('debit notes');
+//             console.log(this.debitNotes);
+//         });
 
-            console.log('clients: ');
-            console.log(clients);
+//         this.clientsService.getAllClients().subscribe((clients) => {
+//             this.clientsList = [...clients[0], ...clients[1]] as Array<
+//                 ICorporateClient & IIndividualClient
+//             >;
 
-            this.client = this.clientsList.filter((x) =>
-                x.companyName
-                    ? x.companyName === this.policyData.client
-                    : x.firstName + ' ' + x.lastName === this.policyData.client
-            )[0] as IIndividualClient & ICorporateClient;
+//             console.log('clients: ');
+//             console.log(clients);
 
-            console.log('HERE =>>>>>');
-            console.log(
-                this.clientsList.filter(
-                    (x) => x.firstName + ' ' + x.lastName === 'Changa Lesa'
-                )[0] as IIndividualClient & ICorporateClient
-            );
+//             this.client = this.clientsList.filter((x) =>
+//                 x.companyName
+//                     ? x.companyName === this.policyData.client
+//                     : x.firstName + ' ' + x.lastName === this.policyData.client
+//             )[0] as IIndividualClient & ICorporateClient;
 
-            // console.log('policy data client:');
-            // console.log(this.policyData.client);
+//             console.log('HERE =>>>>>');
+//             console.log(
+//                 this.clientsList.filter(
+//                     (x) => x.firstName + ' ' + x.lastName === 'Changa Lesa'
+//                 )[0] as IIndividualClient & ICorporateClient
+//             );
 
-            // console.log('client');
-            // console.log(this.client);
-        });
+//             // console.log('policy data client:');
+//             // console.log(this.policyData.client);
+
+//             // console.log('client');
+//             // console.log(this.client);
+//         });
 
         this.policyDetailsForm = this.formBuilder.group({
             client: ['', Validators.required],

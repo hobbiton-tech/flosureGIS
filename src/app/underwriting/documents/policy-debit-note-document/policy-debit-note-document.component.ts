@@ -64,6 +64,9 @@ export class PolicyDebitNoteDocumentComponent implements OnInit {
     debitNote: DebitNote[];
 
     @Input()
+    policyDebitNote: DebitNote;
+
+    @Input()
     client: IIndividualClient & ICorporateClient;
 
     subTotal: number;
@@ -73,7 +76,8 @@ export class PolicyDebitNoteDocumentComponent implements OnInit {
     generatingPDF = false;
 
     ngOnInit(): void {
-        console.log(this.debitNote);
+        console.log('recieved debit note:');
+        console.log(this.policyDebitNote);
         this.subTotal = this.sumArray(this.policy.risks, 'basicPremium');
     }
 
