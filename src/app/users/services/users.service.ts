@@ -12,17 +12,21 @@ export class UsersService {
 
     addUser(dto: User): Observable<User> {
         return this.http.post<User>(
-            'http://104.248.247.78:3000/users',
+            'https://flosure-postgres-api.herokuapp.com/users',
 
             dto
         );
     }
 
     getUsers(): Observable<User[]> {
-        return this.http.get<User[]>('http://104.248.247.78:3000/users');
+        return this.http.get<User[]>(
+            'https://flosure-postgres-api.herokuapp.com/users'
+        );
     }
 
     getSingleUser(userId: string): Observable<User> {
-        return this.http.get<User>(`http://104.248.247.78:3000/${userId}`);
+        return this.http.get<User>(
+            `https://flosure-postgres-api.herokuapp.com/${userId}`
+        );
     }
 }
