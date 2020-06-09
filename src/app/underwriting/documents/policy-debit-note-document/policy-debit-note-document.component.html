@@ -46,7 +46,7 @@
             <tr class="subTitle">
                 <td>
                     <p style="float: right !important;"><span style="font-weight: bold;">No:</span>
-                        {{debitNote[0].debitNoteNumber}}</p>
+                        {{policyDebitNote ? policyDebitNote.debitNoteNumber : '-'}}</p>
                     <span style="font-weight: bold;">TPIN:</span><span
                         style="font-weight: bold; color: red;">1002167568</span>
                 </td>
@@ -57,16 +57,17 @@
         <table>
             <tr>
                 <td><span style="font-weight: bold;">Insured: {{ policy.nameOfInsured }}</span></td>
-                <td><span style="font-weight: bold;">Agent:
+                <td style="float: right !important"><span style="font-weight: bold;">Date:
+                        {{policyDebitNote ? (policyDebitNote.dateCreated | date) : '-'}}</span></td>
+            </tr>
+            <tr>
+                <td><span style="font-weight: bold;">Address: {{client ? client.address : '-'}}</span></td>
+                <td style="float: right !important"><span style="font-weight: bold;">Agent:
                         {{policy.sourceOfBusiness == 'direct' ? 'Direct' : policy.intermediaryName}}</span></td>
             </tr>
             <tr>
-                <td><span style="font-weight: bold;">Address: {{client.address}}</span></td>
-                <td><span style="font-weight: bold;">Terms:</span></td>
-            </tr>
-            <tr>
-                <td><span style="font-weight: bold;">Telephone: {{client.phone}}</span></td>
-                <td><span style="font-weight: bold;"></span></td>
+                <td><span style="font-weight: bold;">Telephone: {{client ? client.phone : '-'}}</span></td>
+                <!-- <td style="float: right !important"><span style="font-weight: bold;">Terms: </span></td> -->
             </tr>
         </table>
         <br />
@@ -105,21 +106,21 @@
             <tr>
                 <td></td>
                 <td></td>
-                <td style="text-align: right !important; font-weight: bold">Sub Total:</td>
+                <td style="float: right !important; font-weight: bold">Sub Total:</td>
                 <td style="border: 1px solid black;">
                     <span>{{ subTotal | number: '1.2-2' }}</span></td>
             </tr>
             <tr>
                 <td></td>
                 <td></td>
-                <td style="text-align: right !important; font-weight: bold">Insurance Levy 3%:</td>
+                <td style="float: right !important; font-weight: bold">Insurance Levy 3%:</td>
                 <td style="border: 1px solid black;">
                     <span>{{ premiumLevy | number: '1.2-2' }}</span></td>
             </tr>
             <tr>
                 <td></td>
                 <td></td>
-                <td style="text-align: right !important; font-weight: bold">Total:</td>
+                <td style="float: right !important; font-weight: bold">Total:</td>
                 <td style="border: 1px solid black;">
                     <span>{{ policy.netPremium | number: '1.2-2' }}</span></td>
             </tr>
