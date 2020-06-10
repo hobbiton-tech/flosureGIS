@@ -246,6 +246,7 @@
                                             <nz-select
                                                 name="paymentMethod"
                                                 formControlName="paymentMethod"
+                                                (ngModelChange)="method($event)"
                                                 nzAllowClear
                                                 nzPlaceHolder="Choose payment Method"
                                             >
@@ -303,6 +304,43 @@
                                             >
                                                 Please enter your Narration!
                                             </span>
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                </div>
+                                <div
+                                    *ngIf="paymentMethod === 'cheque'"
+                                    nz-col
+                                    [nzSpan]="12"
+                                >
+                                    <nz-form-item>
+                                        <nz-form-label
+                                            [nzSpan]="8"
+                                            nzFor="cheqNumber"
+                                            >Cheque Number</nz-form-label
+                                        >
+                                        <nz-form-control [nzSpan]="16">
+                                            <input
+                                                nz-input
+                                                formControlName="cheqNumber"
+                                                name="cheqNumber"
+                                                type="text"
+                                                id="cheqNumber"
+                                                nzRequired
+                                                placeholder="Cheque Number"
+                                            />
+                                            <!-- <span
+                                                class="text-danger"
+                                                *ngIf="
+                                                    (receiptFormControl
+                                                        .receivedFrom.touched ||
+                                                        submitted) &&
+                                                    receiptFormControl
+                                                        .receivedFrom.errors
+                                                        ?.required
+                                                "
+                                            >
+                                                Please enter Depositor's name!
+                                            </span> -->
                                         </nz-form-control>
                                     </nz-form-item>
                                 </div>

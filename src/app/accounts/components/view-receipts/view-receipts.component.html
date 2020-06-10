@@ -200,7 +200,7 @@
                                 <P ALIGN="LEFT"
                                     ><FONT FACE="Arial, serif"
                                         ><FONT SIZE="2">{{
-                                            receipt.invoceNumber
+                                            receipt.invoiceNumber
                                         }}</FONT></FONT
                                     ></P
                                 >
@@ -371,7 +371,7 @@
                                     <P ALIGN="LEFT"
                                         ><FONT FACE="Arial, serif"
                                             ><FONT SIZE="2"
-                                                >Date Inssued:
+                                                >Date Issued:
                                                 {{
                                                     receipt.todayDate | date
                                                 }}</FONT
@@ -476,6 +476,27 @@
                                         ></P
                                     >
                                 </TD>
+                                <ng-container
+                                    *ngIf="receipt.paymentMethod === 'cheque'"
+                                >
+                                    <TD
+                                        WIDTH="191"
+                                        HEIGHT="5"
+                                        BGCOLOR="#ffffff"
+                                        STYLE="border: none; padding: 0in"
+                                    >
+                                        <P ALIGN="LEFT"
+                                            ><FONT FACE="Arial, serif"
+                                                ><FONT SIZE="2"
+                                                    >Cheque Number:
+                                                    {{
+                                                        receipt.cheqNumber
+                                                    }}</FONT
+                                                ></FONT
+                                            ></P
+                                        >
+                                    </TD>
+                                </ng-container>
                             </TR>
                         </TBODY>
                     </TABLE>
