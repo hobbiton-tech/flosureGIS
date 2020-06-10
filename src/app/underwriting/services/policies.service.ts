@@ -80,6 +80,7 @@ export class PoliciesService {
     // }
 
     updatePolicy(policy: Policy): Observable<Policy> {
+        console.log('POLICY NUMBER>>>>', policy);
         return this.http.put<Policy>(
             `https://flosure-postgres-api.herokuapp.com/policy/${policy.id}`,
             policy
@@ -281,7 +282,7 @@ export class PoliciesService {
 
         this.http
             .get<IDebitNoteResult>(
-                `https://new-rates-api.now.sh/aplus-invoice/1/0/${insuranceType}/${count}`
+                `https://flosure-rates-api.herokuapp.com/aplus-invoice/1/0/${insuranceType}/${count}`
             )
             .subscribe(async (res) => {
                 debitNote.debitNoteNumber = res.invoiceNumber;
@@ -341,7 +342,7 @@ export class PoliciesService {
 
         this.http
             .get<ICreditNoteResult>(
-                `https://new-rates-api.now.sh/aplus-invoice/1/0/${insuranceType}`
+                `https://flosure-rates-api.herokuapp.com/aplus-invoice/1/0/${insuranceType}`
             )
             .subscribe(async (res) => {
                 let tempCreditNoteNumber = res.invoiceNumber;
