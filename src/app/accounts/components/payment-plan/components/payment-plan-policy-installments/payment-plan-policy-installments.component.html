@@ -19,7 +19,11 @@
                     </nz-descriptions>
                 </nz-page-header-content>
                 <nz-page-header-extra>
-                    <button nz-button nzType="primary">
+                    <button
+                        nz-button
+                        nzType="primary"
+                        (click)="showPolicyModal()"
+                    >
                         Add Policy
                     </button>
                 </nz-page-header-extra>
@@ -161,12 +165,12 @@
                                     <th>Client</th>
                                     <th>Amount</th>
                                     <th>Status</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr
                                     *ngFor="let receipt of receiptTable.data"
-                                    (click)="viewPolicyDetails(policy)"
                                     style="cursor: pointer;"
                                 >
                                     <td>{{ receipt.receiptNumber }}</td>
@@ -178,22 +182,24 @@
                                         }}
                                     </td>
                                     <td>{{ receipt.allocationStatus }}</td>
-                                    <!-- <td>
-                                    <div
-                                        *ngIf="
-                                            policy.allocationStatus !==
-                                            'Allocated'
-                                        "
-                                    >
-                                        <button
-                                            nz-button
-                                            nzType="primary"
-                                            (click)="showAllocationModal()"
+                                    <td>
+                                        <div
+                                            *ngIf="
+                                                receipt.allocationStatus !==
+                                                'Allocated'
+                                            "
                                         >
-                                            Allocate
-                                        </button>
-                                    </div>
-                                </td> -->
+                                            <button
+                                                nz-button
+                                                nzType="primary"
+                                                (click)="
+                                                    showAllocationModal(receipt)
+                                                "
+                                            >
+                                                Allocate
+                                            </button>
+                                        </div>
+                                    </td>
                                 </tr>
                             </tbody>
                         </nz-table>
@@ -230,25 +236,25 @@
                                 <th>Cover From</th>
                                 <th>Cover To</th>
                                 <th>Client Name</th>
-                                <th>Agent</th>
+                                <th>Premium</th>
+                                <th>Allocated Amount</th>
                                 <th>Status</th>
-                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr
                                 *ngFor="let policy of policiesTable.data"
-                                (click)="viewPolicyDetails(policy)"
                                 style="cursor: pointer;"
                             >
                                 <td>{{ policy.policyNumber }}</td>
                                 <td>{{ policy.startDate | date }}</td>
                                 <td>{{ policy.endDate | date }}</td>
                                 <td>{{ policy.client }}</td>
-                                <td>{{ policy.user }}</td>
+                                <td>{{ policy.netPremium }}</td>
+                                <td>{{ policy.allocatedAmount }}</td>
                                 <td>{{ policy.allocationStatus }}</td>
-                                <td>
-                                    <div
+                                <!--<td>
+                                     <div
                                         *ngIf="
                                             policy.allocationStatus !==
                                             'Allocated'
@@ -262,7 +268,7 @@
                                             Allocate
                                         </button>
                                     </div>
-                                </td>
+                                </td> -->
                             </tr>
                         </tbody>
                     </nz-table>
@@ -383,7 +389,7 @@
                                     nzRequired
                                     placeholder="Received From"
                                 />
-                                <span
+                                <!-- <span
                                     class="text-danger"
                                     *ngIf="
                                         (receiptFormControl.receivedFrom
@@ -394,7 +400,7 @@
                                     "
                                 >
                                     Please enter Depositor's name!
-                                </span>
+                                </span> -->
                             </nz-form-control>
                         </nz-form-item>
                     </div>
@@ -415,8 +421,8 @@
                                     id="sumInDigits"
                                     formControlName="sumInDigits"
                                 />
-                                !--
-                                <span
+
+                                <!-- <span
                                     class="text-danger"
                                     *ngIf="
                                         (receiptFormControl.sumInDigits
@@ -428,7 +434,7 @@
                                 >
                                     Please enter sum in digits!
                                 </span>
-                                --
+                                -- -->
                             </nz-form-control>
                         </nz-form-item>
                     </div>
@@ -456,7 +462,7 @@
                                         [nzLabel]="option.label"
                                     ></nz-option>
                                 </nz-select>
-                                <span
+                                <!-- <span
                                     class="text-danger"
                                     *ngIf="
                                         (receiptFormControl.receiptType
@@ -467,7 +473,7 @@
                                     "
                                 >
                                     Please choose receipt type!
-                                </span>
+                                </span> -->
                             </nz-form-control>
                         </nz-form-item>
                     </div>
@@ -492,7 +498,7 @@
                                         [nzLabel]="method.label"
                                     ></nz-option>
                                 </nz-select>
-                                <span
+                                <!-- <span
                                     class="text-danger"
                                     *ngIf="
                                         (receiptFormControl.paymentMethod
@@ -503,7 +509,7 @@
                                     "
                                 >
                                     Please choose payment method!
-                                </span>
+                                </span> -->
                             </nz-form-control>
                         </nz-form-item>
                     </div>
@@ -524,7 +530,7 @@
                                     rows="2"
                                     placeholder="Write Your Narration Here"
                                 ></textarea>
-                                <span
+                                <!-- <span
                                     class="text-danger"
                                     *ngIf="
                                         (receiptFormControl.narration.touched ||
@@ -534,7 +540,84 @@
                                     "
                                 >
                                     Please enter your Narration!
+                                </span> -->
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+            </form>
+        </nz-card>
+    </nz-modal>
+
+    <nz-modal
+        [(nzVisible)]="isAllocationVisible"
+        nzTitle="Allocation Form"
+        (nzOnCancel)="handleAllocationCancel()"
+        (nzOnOk)="handleAllocationOk()"
+        [nzOkLoading]="isOkLoading"
+        [nzWidth]="'1200'"
+    >
+        <nz-card
+            style="width: 90%; margin: 0 auto;"
+            [nzBordered]="true"
+            nzTitle="Allocation Details"
+        >
+            <form [formGroup]="allocationForm" nz-form>
+                <div nz-row>
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label
+                                [nzSpan]="8"
+                                nzFor="sumInDigits"
+                                nzRequired
+                                >Amount</nz-form-label
+                            >
+                            <nz-form-control [nzSpan]="16">
+                                <input
+                                    nz-input
+                                    name="sumInDigits"
+                                    type="number"
+                                    id="sumInDigits"
+                                    formControlName="sumInDigits"
+                                    placeholder="{{ amount }}"
+                                    readonly
+                                />
+                                <!--
+                                <span
+                                    class="text-danger"
+                                    *ngIf="
+                                        (receiptFormControl.sumInDigits
+                                            .touched ||
+                                            submitted) &&
+                                        receiptFormControl.sumInDigits.errors
+                                            ?.required
+                                    "
+                                >
+                                    Please enter sum in digits!
                                 </span>
+                              -->
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="12" nzFor="policies"
+                                >Policy</nz-form-label
+                            >
+                            <nz-form-control nzSpan="12">
+                                <nz-select
+                                    formControlName="policies"
+                                    [(ngModel)]="selectedPolicies"
+                                    nzMode="multiple"
+                                    nzPlaceHolder="Please select"
+                                >
+                                    <nz-option
+                                        *ngFor="let option of listOfPolicies"
+                                        [nzLabel]="option.policyNumber"
+                                        [nzValue]="option"
+                                    ></nz-option>
+                                </nz-select>
                             </nz-form-control>
                         </nz-form-item>
                     </div>

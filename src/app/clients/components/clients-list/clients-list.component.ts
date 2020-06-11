@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {
     IIndividualClient,
-    ICorporateClient,
+    ICorporateClient
 } from '../../models/clients.model';
 import { Router } from '@angular/router';
 import { ClientsService } from '../../services/clients.service';
@@ -14,12 +14,14 @@ import { BehaviorSubject } from 'rxjs';
 @Component({
     selector: 'app-clients-list',
     templateUrl: './clients-list.component.html',
-    styleUrls: ['./clients-list.component.scss'],
+    styleUrls: ['./clients-list.component.scss']
 })
 export class ClientsListComponent implements OnInit {
     clientList: Array<IIndividualClient & ICorporateClient>;
     displayClientList: Array<IIndividualClient & ICorporateClient>;
     searchedClientList: Array<IIndividualClient & ICorporateClient>;
+
+    clientUpdate = new BehaviorSubject<boolean>(false);
 
     isAddClientDrawerOpen = false;
 
@@ -44,7 +46,7 @@ export class ClientsListComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.clientsService.getAllClients().subscribe((clients) => {
+        this.clientsService.getAllClients().subscribe(clients => {
             this.individualClients = clients[0];
             this.corporateClients = clients[1];
 
@@ -60,6 +62,27 @@ export class ClientsListComponent implements OnInit {
 
             this.clientsLoading = false;
         });
+
+        this.clientUpdate.subscribe(update =>
+            update === true
+                ? this.clientsService.getAllClients().subscribe(clients => {
+                      this.individualClients = clients[0];
+                      this.corporateClients = clients[1];
+
+                      this.totalIndividualClients = clients[0].length;
+                      this.totalCorporateClients = clients[1].length;
+
+                      this.clientList = [...clients[0], ...clients[1]] as Array<
+                          ICorporateClient & IIndividualClient
+                      >;
+                      this.displayClientList = this.clientList;
+
+                      this.totalClients = this.clientList.length;
+
+                      this.clientsLoading = false;
+                  })
+                : ''
+        );
     }
 
     viewDetails(client: IIndividualClient | ICorporateClient): void {
@@ -96,7 +119,7 @@ export class ClientsListComponent implements OnInit {
             this.displayClientList = this.clientList;
         }
 
-        this.displayClientList = this.clientList.filter((client) => {
+        this.displayClientList = this.clientList.filter(client => {
             if (client.clientType === 'Individual') {
                 return (
                     client.clientID
@@ -141,5 +164,9 @@ export class ClientsListComponent implements OnInit {
 
         /* save to file */
         XLSX.writeFile(wb, this.fileName);
+    }
+
+    recieveUpdate($event) {
+        this.clientUpdate.next($event);
     }
 }

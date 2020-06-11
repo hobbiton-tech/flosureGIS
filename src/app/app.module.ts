@@ -17,30 +17,46 @@ import { LoginComponent } from './login/login.component';
 import { AngularFireStorageModule, BUCKET } from '@angular/fire/storage';
 import { environment } from '../environments/environment';
 import 'firebase/storage';
-import { RatesComponent } from './app/settings/components/rates/rates.component';
-import { GraphQLModule } from './graphql.module';
+
 import { SlackService } from './slack.service';
 
 registerLocaleData(en);
 
+// const firebaseConfig = {
+//     apiKey: 'AIzaSyDzwhgLq4-nMHpJ1xldhHwPwpjOHc4sZV0',
+//     authDomain: 'flosure-backend.firebaseapp.com',
+//     databaseURL: 'https://flosure-backend.firebaseio.com',
+//     projectId: 'flosure-backend',
+//     storageBucket: 'flosure-backend.appspot.com',
+//     messagingSenderId: '167483416678',
+//     appId: '1:167483416678:web:dcd089c936275ee33f4da7',
+//     measurementId: 'G-4565Y5EHD4'
+// };
+
+// const firebaseConfig = {
+//     apiKey: 'AIzaSyCIwedzdF9Og67CsT8oChO8UkMBk1OVQPE',
+//     authDomain: 'savenda-insurance.firebaseapp.com',
+//     databaseURL: 'https://savenda-insurance.firebaseio.com',
+//     projectId: 'savenda-insurance',
+//     storageBucket: 'savenda-insurance.appspot.com',
+//     messagingSenderId: '795733102142',
+//     appId: '1:795733102142:web:62eaa45624e4473e35cb6f',
+//     measurementId: 'G-SCN3RMBTB7',
+// };
+
 const firebaseConfig = {
-    apiKey: "AIzaSyCex2KRIQS6ZFM7BnIIfHzM1Zn31hd5rl4",
-    authDomain: "flosure-golden-lotus.firebaseapp.com",
-    databaseURL: "https://flosure-golden-lotus.firebaseio.com",
-    projectId: "flosure-golden-lotus",
-    storageBucket: "flosure-golden-lotus.appspot.com",
-    messagingSenderId: "586554297839",
-    appId: "1:586554297839:web:32083a80f3f6e0511a7a1a",
-    measurementId: "G-ZQGFJ0M16G"
-  };
+    apiKey: 'AIzaSyA4otys77Tb4bX7uXJONdquRlj0HCzzn1M',
+    authDomain: 'aplus-insurance.firebaseapp.com',
+    databaseURL: 'https://aplus-insurance.firebaseio.com',
+    projectId: 'aplus-insurance',
+    storageBucket: 'aplus-insurance.appspot.com',
+    messagingSenderId: '526693014551',
+    appId: '1:526693014551:web:edce6fd10c1c52742dd052',
+    measurementId: 'G-GNB5VZE6XQ'
+};
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        NavigationComponent,
-        LoginComponent,
-        RatesComponent,
-    ],
+    declarations: [AppComponent, NavigationComponent, LoginComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,
@@ -52,7 +68,6 @@ const firebaseConfig = {
         AngularFireModule.initializeApp(firebaseConfig),
         AngularFireDatabaseModule,
         AngularFireStorageModule,
-        GraphQLModule,
     ],
     providers: [{ provide: NZ_I18N, useValue: en_US }, SlackService],
     bootstrap: [AppComponent],

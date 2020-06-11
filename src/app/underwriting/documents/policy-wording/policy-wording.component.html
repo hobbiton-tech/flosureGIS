@@ -1,0 +1,76 @@
+<div style="
+        display: flex;
+        margin-bottom: 15px;
+        align-items: flex-end;
+        width: 100%;
+    ">
+    <!-- <button nz-button nzType="primary" style="margin-right: 8px;" (click)="htmlToPdf()">
+        Download
+    </button> -->
+    <button nz-button nzType="primary" [useExistingCss]="true" [printSectionId]="'wordingPrintSection'" ngxPrint>
+        Print
+    </button>
+</div>
+
+<div id="wordingPrintSection">
+    <div class="invoice-box">
+        <table cellpadding="0" cellspacing="0">
+            <tr class="top">
+                <td colspan="6">
+                    <table>
+                        <tr>
+                            <td class="title">
+                                <img src="/assets/images/apluslogo.png" style="width: 100%; max-width: 240px;" />
+                            </td>
+                            <td>
+                                A Plus General Insurance<br />
+                                Plot No. 402, Roma Park, Zambezi Road<br />
+                                P.O. Box 31700, Lusaka Zambia<br />
+                                Tel: +260 211 239865/6 - Tele/Fax:+260 211 239867<br />
+                                E-mail: info@aplusgeneral.com<br />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <hr style="width: 100%; height: 2px; background-color: red;" />
+        <br />
+        <br />
+        <br />
+        <div *ngFor="let wording of policyWording">
+            <h2 id="title">{{ wording.heading }}</h2>
+            <br />
+            <p>
+                {{ wording.description }}
+            </p>
+        </div>
+        <div class="bottom">
+            <p>
+                .......................................................
+            </p>
+            <p>For and on behalf of</p>
+            <p style="font-weight: bold;">
+                A PLUS GENERAL INSURANCE LIMITED
+            </p>
+        </div>
+        <br />
+        <br />
+        <br />
+        <br />
+        <div *ngFor="let clause of policyClauses">
+            <h3 id="title">{{ clause.heading }}</h3>
+            <!-- <h4 class="bottom" style="font-weight: bold;">
+        (Loss or Damage to the Motor Car)
+    </h4> -->
+            <p>{{ clause.clauseDetails }}</p>
+        </div>
+        <div *ngFor="let extension of policyExtension">
+            <h3 id="title">{{ extension.heading }}</h3>
+            <!-- <h4 class="bottom" style="font-weight: bold;">
+        (Loss or Damage to the Motor Car)
+    </h4> -->
+            <p>{{ extension.description }}</p>
+        </div>
+    </div>
+</div>

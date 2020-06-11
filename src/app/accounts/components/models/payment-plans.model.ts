@@ -29,6 +29,7 @@ export class PolicyPaymentPlan {
     clientCode: string;
     netPremium: number;
     allocationStatus: AllocationStatus;
+    allocatedAmount: number;
 }
 
 export class InstallmentsModel {

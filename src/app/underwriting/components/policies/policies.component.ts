@@ -12,7 +12,8 @@ import { PoliciesService } from '../../services/policies.service';
 export class PoliciesComponent implements OnInit {
     policiesList: Policy[];
     displayPoliciesList: Policy[];
-    policiesCount: number = 0;
+    policiesCount = 0;
+    isOkLoading = false;
 
     issuedBy = localStorage.getItem('user');
 
@@ -24,6 +25,10 @@ export class PoliciesComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        this.isOkLoading = true;
+        setTimeout(() => {
+            this.isOkLoading = false;
+        }, 3000);
         this.policiesService.getPolicies().subscribe((policies) => {
             this.policiesList = policies;
             this.policiesCount = policies.length;
@@ -40,21 +45,20 @@ export class PoliciesComponent implements OnInit {
 
     search(value: string): void {
         if (value === '' || !value) {
-            this.displayPoliciesList = this.policiesList;
+            // this.displayPoliciesList = this.policiesList
+            this.displayPoliciesList = this.policiesList.filter((policy) => {
+                return (
+                    policy.policyNumber
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    policy.client
+                        .toLocaleLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    policy.preparedBy
+                        .toLocaleLowerCase()
+                        .includes(value.toLowerCase())
+                );
+            });
         }
-
-        this.displayPoliciesList = this.policiesList.filter((policy) => {
-            return (
-                policy.policyNumber
-                    .toLowerCase()
-                    .includes(value.toLowerCase()) ||
-                policy.client
-                    .toLocaleLowerCase()
-                    .includes(value.toLowerCase()) ||
-                policy.preparedBy
-                    .toLocaleLowerCase()
-                    .includes(value.toLowerCase())
-            );
-        });
     }
 }

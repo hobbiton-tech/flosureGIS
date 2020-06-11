@@ -3,11 +3,12 @@ import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { RiskModel, ITimestamp } from 'src/app/quotes/models/quote.model';
 import { Policy } from '../../models/policy.model';
+import moment from 'moment';
 
 @Component({
     selector: 'app-policy-certificate-document',
     templateUrl: './policy-certificate-document.component.html',
-    styleUrls: ['./policy-certificate-document.component.scss'],
+    styleUrls: ['./policy-certificate-document.component.scss']
 })
 export class PolicyCertificateDocumentComponent implements OnInit {
     @Input()
@@ -43,6 +44,13 @@ export class PolicyCertificateDocumentComponent implements OnInit {
 
     ngOnInit(): void {}
 
+    getYearOfManufacture(risk: RiskModel) {
+        let year: string = moment(risk.yearOfManufacture)
+            .year()
+            .toString();
+        return year;
+    }
+
     htmlToPdf() {
         this.generatingPDF = true;
         const div = document.getElementById('printSection');
@@ -54,16 +62,21 @@ export class PolicyCertificateDocumentComponent implements OnInit {
         //     },
         // };
         const options = {
+            scale: 1.32,
+            allowTaint: true,
+            onclone: doc => {
+                doc.querySelector('div').style.transform = 'none';
+            },
             background: 'white',
             height: div.clientHeight,
-            width: div.clientWidth,
+            width: div.clientWidth
         };
 
-        html2canvas(div, options).then((canvas) => {
+        html2canvas(div, options).then(canvas => {
             //Initialize JSPDF
             let doc = new jsPDF({
                 unit: 'px',
-                format: 'a4',
+                format: 'a4'
             });
             //Converting canvas to Image
             let imgData = canvas.toDataURL('image/PNG');

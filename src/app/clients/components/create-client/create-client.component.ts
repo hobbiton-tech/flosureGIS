@@ -2,7 +2,9 @@ import {
     Component,
     OnInit,
     AfterViewInit,
-    ChangeDetectorRef
+    ChangeDetectorRef,
+    Output,
+    EventEmitter
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -11,6 +13,8 @@ import {
     ICorporateClient
 } from '../../models/clients.model';
 import { ClientsService } from '../../services/clients.service';
+import { NzMessageService } from 'ng-zorro-antd';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
     selector: 'app-create-client',
@@ -18,8 +22,16 @@ import { ClientsService } from '../../services/clients.service';
     styleUrls: ['./create-client.component.scss']
 })
 export class CreateClientComponent implements OnInit, AfterViewInit {
+    //feedback loading
+    creatingClient: boolean = false;
+
+    @Output()
+    closeAddAgentsFormDrawerVisible: EventEmitter<any> = new EventEmitter();
+
     individualClientForm: FormGroup;
     corporateClientForm: FormGroup;
+
+    userUpdate = new BehaviorSubject<boolean>(false);
 
     selectedClientType: string;
 
@@ -27,6 +39,7 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
         private router: Router,
         private formBuilder: FormBuilder,
         private clientsService: ClientsService,
+        private msg: NzMessageService,
         private cdr: ChangeDetectorRef
     ) {
         this.individualClientForm = this.formBuilder.group({
@@ -89,11 +102,39 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
     }
 
     async addIndividualClient(client: IIndividualClient): Promise<void> {
-        await this.clientsService.addIndividualClient(client);
+        this.creatingClient = true;
+        await this.clientsService.addIndividualClient(client).subscribe(
+            async res => {
+                this.creatingClient = false;
+                this.msg.success('Client Created successfully');
+                this.router.navigateByUrl('/flosure/clients/clients-list');
+            },
+            async err => {
+                this.creatingClient = false;
+                this.msg.error('Client Creation failed');
+            },
+            async () => {
+                this.closeDrawer();
+            }
+        );
     }
 
     async addCorporateClient(client: ICorporateClient): Promise<void> {
-        await this.clientsService.addCorporateClient(client);
+        this.creatingClient = true;
+        await this.clientsService.addCorporateClient(client).subscribe(
+            async res => {
+                this.creatingClient = true;
+                this.msg.success('Client Created successfully');
+                this.router.navigateByUrl('/flosure/clients/clients-list');
+            },
+            async err => {
+                this.msg.error('Client Creation failed');
+            },
+
+            async () => {
+                this.closeDrawer();
+            }
+        );
     }
 
     submitIndividualClient(): void {
@@ -137,5 +178,9 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
         //         }
         //     );
         // }
+    }
+
+    closeDrawer(): void {
+        this.closeAddAgentsFormDrawerVisible.emit(true);
     }
 }

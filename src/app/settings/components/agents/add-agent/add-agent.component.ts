@@ -17,11 +17,16 @@ import { IAgent, IBroker, ISalesRepresentative } from '../models/agents.model';
     styleUrls: ['./add-agent.component.scss']
 })
 export class AddAgentComponent implements OnInit {
+    //loading feedback
+    addingIntermediary: boolean = false;
+
     @Input()
     isAddAgentsFormDrawerVisible: boolean;
 
     @Output()
     closeAddAgentsFormDrawerVisible: EventEmitter<any> = new EventEmitter();
+
+    update: boolean = true;
 
     agentForm: FormGroup;
     brokerForm: FormGroup;
@@ -33,16 +38,21 @@ export class AddAgentComponent implements OnInit {
         private formBuilder: FormBuilder,
         private cdr: ChangeDetectorRef,
         private agentService: AgentsService,
-        private message: NzMessageService
+        private msg: NzMessageService
     ) {
         //agent form
         this.agentForm = this.formBuilder.group({
             intermediaryType: ['Agent'],
-            contactFirstName: ['', Validators.required],
-            contactLastName: ['', Validators.required],
+            companyName: ['', Validators.required],
+            tPinNumber: ['', Validators.required],
             email: ['', Validators.required],
             phone: ['', Validators.required],
             address: ['', Validators.required],
+            contactFirstName: ['', Validators.required],
+            contactLastName: ['', Validators.required],
+            contactEmail: ['', Validators.required],
+            contactPhone: ['', Validators.required],
+            contactAddress: ['', Validators.required],
             accountName: ['', Validators.required],
             accountNumber: ['', Validators.required],
             accountType: ['', Validators.required],
@@ -97,7 +107,7 @@ export class AddAgentComponent implements OnInit {
     }
 
     closeDrawer(): void {
-        this.closeAddAgentsFormDrawerVisible.emit();
+        this.closeAddAgentsFormDrawerVisible.emit(true);
     }
 
     changeIntermediaryType(event): void {
@@ -105,17 +115,50 @@ export class AddAgentComponent implements OnInit {
     }
 
     async addAgentIntermediary(agent: IAgent) {
-        await this.agentService.addAgent(agent);
+        this.addingIntermediary = true;
+        await this.agentService.addAgent(agent).subscribe(
+            res => {
+                this.msg.success('Agent added successfully')
+                this.addingIntermediary = false;
+                this.closeDrawer();
+            },
+            err => {
+                this.msg.error('Failed to add Agent')
+                this.addingIntermediary = false;
+            }
+        );
     }
 
     async addBrokerIntermediary(broker: IBroker) {
-        await this.agentService.addBroker(broker);
+        this.addingIntermediary = true
+        await this.agentService.addBroker(broker).subscribe(
+            res => {
+                this.msg.success('Broker added successfully')
+                this.addingIntermediary = false;
+                this.closeDrawer();
+            },
+            err => {
+                this.msg.error('Failed to add Broker')
+                this.addingIntermediary = false;
+            }
+        );
     }
 
     async addSalesRepresentativeIntermediary(
         salesRepresentative: ISalesRepresentative
     ) {
-        await this.agentService.addSalesRepresentative(salesRepresentative);
+        this.addingIntermediary = true;
+        await this.agentService.addSalesRepresentative(salesRepresentative).subscribe(
+            res => {
+                this.msg.success('Sales representative added successfully')
+                this.addingIntermediary = false;
+                this.closeDrawer();
+            },
+            err => {
+                this.msg.error('Failed to add Sales representative')
+                this.addingIntermediary = false;
+            }
+        );
     }
 
     submitAgentIntermediary() {

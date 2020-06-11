@@ -7,20 +7,16 @@ import {
     DocumentReference,
 } from '@angular/fire/firestore';
 import { first } from 'rxjs/operators';
-import { v4 } from 'uuid';
-import { IQuoteDTO } from '../models/quote.dto';
-import { IDebitNoteDTO } from '../models/debit-note.dto';
-import { ICertificateDTO } from '../models/certificate.dto';
-import { IReceiptDTO } from '../models/receipt.dto';
 import { HttpClient } from '@angular/common/http';
-
+import { NzMessageService } from 'ng-zorro-antd';
+import { Router } from '@angular/router';
+const BASE_URL = 'https://flosure-api.azurewebsites.net';
 export interface IQuoteDocument {
     id: string;
     clientID: string;
     receiptNumber: string;
     documentUrl: string;
 }
-
 export interface IAmazonS3Result {
     Etag: string;
     Location: string;
@@ -28,18 +24,19 @@ export interface IAmazonS3Result {
     Key: string;
     Bucket: string;
 }
-
 export interface IReceiptDocument {
     id: string;
     clientId: string;
     receiptNumber: string;
     receiptUrl: string;
 }
-
-interface IQuoteNumberResult {
-    resultQuoteNumber: string;
+interface IQuoteNumberRequest {
+    // insuranceType: InsuranceType;
+    branch: string;
 }
-
+interface IQuoteNumberResult {
+    quoteNumber: string;
+}
 @Injectable({
     providedIn: 'root',
 })
@@ -51,50 +48,28 @@ export class QuotesService {
     quotation: Observable<MotorQuotationModel>;
     quote: MotorQuotationModel;
     myQuote: DocumentReference;
-
     quoteDocumentsCollection: AngularFirestoreCollection<IQuoteDocument>;
     quoteDocuments: Observable<IQuoteDocument[]>;
-
     private riskCollection: AngularFirestoreCollection<RiskModel>;
     risks: Observable<RiskModel[]>;
     risk: Observable<RiskModel>;
-    constructor(private firebase: AngularFirestore, private http: HttpClient) {
+    constructor(
+        private firebase: AngularFirestore,
+        private http: HttpClient,
+        private msg: NzMessageService,
+        private readonly router: Router
+    ) {
         this.motorQuoteCollection = firebase.collection<MotorQuotationModel>(
-            'mortor_quotations'
+            'motor_quotations'
         );
-
         this.quotations = this.motorQuoteCollection.valueChanges();
-
         this.riskCollection = firebase.collection<RiskModel>('risks');
         this.risks = this.riskCollection.valueChanges();
-
         this.quoteDocumentsCollection = firebase.collection<IQuoteDocument>(
             'quote-documents'
         );
         this.quoteDocuments = this.quoteDocumentsCollection.valueChanges();
     }
-
-    // add quotation
-    async addMotorQuotation(quotation: MotorQuotationModel): Promise<void> {
-        this.quotations.pipe(first()).subscribe(async () => {
-            quotation.id = v4();
-            this.http
-                .get<IQuoteNumberResult>(
-                    'https://flosure-premium-rates.herokuapp.com/quotes'
-                )
-                .subscribe(async (res) => {
-                    quotation.quoteNumber = res.resultQuoteNumber;
-                    await this.motorQuoteCollection
-                        .doc(quotation.id)
-                        .set(quotation)
-                        .then(() => {})
-                        .catch((err) => {
-                            console.log(err);
-                        });
-                });
-        });
-    }
-
     async addQuoteDocuments(document: IQuoteDocument): Promise<void> {
         await this.quoteDocumentsCollection.doc(`${document.id}`).set(document);
     }
@@ -111,7 +86,6 @@ export class QuotesService {
                 });
         });
     }
-
     // get single risk
     getRisk(quoteNumber: string) {
         return this.firebase
@@ -127,44 +101,16 @@ export class QuotesService {
                 console.log('Error getting documents: ', error);
             });
     }
-
     getRisks(): Observable<RiskModel[]> {
         return this.risks;
     }
-
     getQuotes(): Observable<MotorQuotationModel[]> {
         return this.quotations;
     }
-
-    // Genereating quote number
-    generateQuoteNumber(): string {
-        var quotationNumber: string = '';
-        this.http
-            .get<IQuoteNumberResult>(
-                `https://flosure-premium-rates.herokuapp.com/quotes`
-            )
-            .subscribe((data) => {
-                quotationNumber = data.resultQuoteNumber;
-            });
-        return quotationNumber;
-    }
-
-    // Genereating quote number
-    // generateQuoteNumber(brokerCode: string, totalQuotes: number) {
-    //     const today = new Date();
-    //     const dateString: string =
-    //         today.getFullYear().toString().substr(-2) +
-    //         ('0' + (today.getMonth() + 1)).slice(-2) +
-    //         +('0' + today.getDate()).slice(-2);
-    //     const count = this.countGenerator(totalQuotes);
-    //     return 'QO' + brokerCode + dateString + count;
-    // }
-
     // Get Quotes
     getQoute(): Observable<MotorQuotationModel[]> {
         return this.quotations;
     }
-
     async updateQuote(quote: MotorQuotationModel): Promise<void> {
         return this.motorQuoteCollection
             .doc(`${quote.id}`)
@@ -176,32 +122,197 @@ export class QuotesService {
                 console.log(err);
             });
     }
+    //postgres db
+    createMotorQuotation(motorQuotation: MotorQuotationModel, count) {
+        let insuranceType = '';
+        const productType = motorQuotation.risks[0].insuranceType;
+        if (productType == 'Comprehensive') {
+            insuranceType = 'MCP';
+        } else {
+            insuranceType = 'THP';
+        }
+        const quotationNumberRequest: IQuoteNumberRequest = {
+            branch: motorQuotation.branch, //get from db
+        };
+        this.http
+            .get<IQuoteNumberResult>(
+                `https://flosure-rates-api.herokuapp.com/aplus-quote/1/0/${insuranceType}/${count}`
+            )
+            .subscribe(async (res) => {
+                motorQuotation.quoteNumber = res.quoteNumber;
+                console.log('WHAT THE >>>>', motorQuotation);
+                this.http
+                    .post<MotorQuotationModel>(
+                        'https://flosure-postgres-api.herokuapp.com/quotation',
+                        motorQuotation
+                    )
+                    .subscribe(
+                        async (res) => {
+                            this.msg.success('Quotation Successfully Created');
+                            this.router.navigateByUrl(
+                                '/flosure/quotes/quotes-list'
+                            );
+                        },
+                        async (err) => {
+                            this.msg.error('Quotation Creation failed');
+                        }
+                    );
+            });
+    }
 
-    generateQuote(dto: IQuoteDTO): Observable<IAmazonS3Result> {
-        return this.http.post<IAmazonS3Result>(
-            'https://flosure-pdf-service.herokuapp.com/quotation',
+    postRtsa(params) {
+        console.log('PARAMS>>>>>>>', params);
+        this.http
+            .post<any>(`https://rtsa-api.herokuapp.com/rtsa`, params)
+            .subscribe(
+                async (res) => {
+                    console.log(res);
+                },
+                async (err) => {
+                    console.log(err);
+                }
+            );
+    }
+    getMotorQuotations(): Observable<MotorQuotationModel[]> {
+        return this.http.get<MotorQuotationModel[]>(
+            'https://flosure-postgres-api.herokuapp.com/quotation'
+        );
+    }
+    getMotorQuotationById(
+        quotationId: string
+    ): Observable<MotorQuotationModel> {
+        return this.http.get<MotorQuotationModel>(
+            `https://flosure-postgres-api.herokuapp.com/quotation/${quotationId}`
+        );
+    }
+    updateMotorQuotation(
+        motorQuotation: MotorQuotationModel,
+        quotationId: string
+    ): Observable<MotorQuotationModel> {
+        return this.http.put<MotorQuotationModel>(
+            `https://flosure-postgres-api.herokuapp.com/quotation/${quotationId}`,
+            motorQuotation
+        );
+    }
+    /// POSTGES DB METHODS
+    public addPolicyPG(dto: AddPolicyDTO): Observable<PolicyModelPG> {
+        return this.http.post<PolicyModelPG>(`${BASE_URL}/policies/add`, dto);
+    }
+    public addRiskPG(dto: AddRiskDTO): Observable<RiskModelPG> {
+        return this.http.post<RiskModelPG>(
+            `${BASE_URL}/policies/risks/add`,
             dto
         );
     }
-
-    generateDebitNote(dto: IDebitNoteDTO): Observable<IAmazonS3Result> {
-        return this.http.post<IAmazonS3Result>(
-            'https://flosure-pdf-service.herokuapp.com/debit-note',
+    public addLoadingPG(dto: LoadingDTO): Observable<RiskModelPG> {
+        return this.http.post<RiskModelPG>(
+            `${BASE_URL}/policies/loading/add`,
             dto
         );
     }
-
-    generateCertificate(dto: ICertificateDTO): Observable<IAmazonS3Result> {
-        return this.http.post<IAmazonS3Result>(
-            'https://flosure-pdf-service.herokuapp.com/certificate',
+    public addDiscountPG(dto: DiscountDTO): Observable<RiskModelPG> {
+        return this.http.post<RiskModelPG>(
+            `${BASE_URL}/policies/discount/add`,
             dto
         );
     }
-
-    generateReceipt(dto: IReceiptDTO): Observable<IAmazonS3Result> {
-        return this.http.post<IAmazonS3Result>(
-            'https://flosure-pdf-service.herokuapp.com/reciept',
-            dto
-        );
-    }
+}
+export class PolicyModelPG {
+    clientId: string;
+    dateCreated: Date;
+    dateOfIssue: Date;
+    dateUpdated: Date;
+    endDate: Date;
+    id: string;
+    intermediaryId: string;
+    policyNumber: string;
+    startDate: Date;
+    timeOfIssue: Date;
+}
+export class RiskModelPG {
+    endDate: Date;
+    id: string;
+    insuranceType: InsuranceType;
+    policyid: string;
+    productType: ProductType;
+    startDate: Date;
+    sumInsured: number;
+}
+export class LoadingModelPG {
+    id: number;
+    riskId: string;
+    amount: number;
+    loadingType:
+        | 'Car_Stereo'
+        | 'Increased_Third_Party_Limit'
+        | 'Inexperienced_Driver'
+        | 'Loss_Of_Use'
+        | 'Riot_And_Strike'
+        | 'Territorial_Extension'
+        | 'Under_Age_Driver';
+}
+export class DiscountModelPG {
+    id: string;
+    riskid: string;
+    amount: number;
+    discountType: 'LowTermAgreement' | 'Loyalty' | 'NoClaims' | 'ValuedClient';
+}
+export type ProductType = 'Private' | 'Commercial' | 'BusTaxi';
+export type InsuranceType = 'ThirdParty' | 'Comprehensive';
+export type LoadType =
+    | 'Increased Third Party Limit'
+    | 'Riot And Strike'
+    | 'Car Stereo'
+    | 'Territorial Extension'
+    | 'Loss Of Use'
+    | 'Inexperienced Driver'
+    | 'Under Age Driver';
+export type DiscountType =
+    | 'No Claims Discount'
+    | 'Loyalty Discount'
+    | 'Valued Client Discount'
+    | 'Low Term Agreement Discount';
+export interface AddPolicyDTO {
+    clientId: string;
+    intermediaryId: string;
+    startDate: Date;
+    endDate: Date;
+}
+export interface AddRiskDTO {
+    policyId: string;
+    sumInsured: number;
+    startDate: Date;
+    endDate: Date;
+    basicPremium: number;
+    premiumLevy: number;
+    productType: ProductType;
+    insuranceType: InsuranceType;
+    vehicle: VehicleDTO;
+    premium: PremiumDTO;
+    loading?: LoadingDTO;
+    discount?: DiscountDTO;
+}
+export interface VehicleDTO {
+    regNumber: string;
+    vehicleMake: string;
+    vehicleModel: string;
+    yearOfManufacture: string;
+    engineNumber?: string;
+    chassisNumber?: string;
+    estimatedValue?: number;
+    color: string;
+}
+export interface PremiumDTO {
+    basicPremium: number;
+    premiumLevy: number;
+    netPremium: number;
+    premiumRate: number;
+}
+export interface LoadingDTO {
+    loadingType: LoadType;
+    amount: number;
+}
+export interface DiscountDTO {
+    discountType: DiscountType;
+    amount: number;
 }

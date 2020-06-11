@@ -6,11 +6,25 @@ import { PoliciesService } from '../../services/policies.service';
 import {
     IPaymentModel,
     InstallmentsModel,
+    PlanReceipt,
 } from 'src/app/accounts/components/models/payment-plans.model';
 import { v4 } from 'uuid';
 import { PaymentPlanService } from 'src/app/accounts/services/payment-plan.service';
 import { AccountService } from 'src/app/accounts/services/account.service';
 import { RiskModel } from 'src/app/quotes/models/quote.model';
+import { IReceiptModel } from 'src/app/accounts/components/models/receipts.model';
+import { ClausesService } from 'src/app/settings/components/underwriting-setups/services/clauses.service';
+import {
+    IPolicyClauses,
+    IPolicyWording,
+    IPolicyExtension,
+} from 'src/app/settings/models/underwriting/clause.model';
+import { DebitNote } from '../../documents/models/documents.model';
+import { ClientsService } from 'src/app/clients/services/clients.service';
+import {
+    IIndividualClient,
+    ICorporateClient,
+} from 'src/app/clients/models/clients.model';
 
 @Component({
     selector: 'app-policy-details',
@@ -23,6 +37,18 @@ export class PolicyDetailsComponent implements OnInit {
     paymentPlanForm: FormGroup;
     policydata: Policy[] = [];
 
+    clauses: IPolicyClauses[];
+    wordings: IPolicyWording[];
+    extensions: IPolicyExtension[];
+
+    debitNotes: DebitNote[];
+    singleDebitNote: DebitNote;
+    latestDebitNote: DebitNote;
+
+    //client details
+    client: IIndividualClient & ICorporateClient;
+    clientsList: Array<IIndividualClient & ICorporateClient>;
+
     policiesList: Policy[];
     policyNumber: string;
     policyData: Policy = new Policy();
@@ -30,6 +56,7 @@ export class PolicyDetailsComponent implements OnInit {
     displayPolicy: Policy;
     policyUpdate: Policy = new Policy();
     isLoading = false;
+    isOkLoading = false;
 
     paymentPlan = 'NotCreated';
 
@@ -40,6 +67,8 @@ export class PolicyDetailsComponent implements OnInit {
     searchString: string;
 
     isEditmode = false;
+
+    selectedRisk: RiskModel = new RiskModel();
 
     // PDFS
     isCertificatePDFVisible = false;
@@ -62,6 +91,7 @@ export class PolicyDetailsComponent implements OnInit {
     loadingAmount: string;
     discountAmount: string;
     totalAmount: string;
+    premiumLevy: string;
 
     optionList = [
         { label: 'Full Payment', value: 'fully' },
@@ -72,7 +102,8 @@ export class PolicyDetailsComponent implements OnInit {
     planId: string;
     // clientName: any;
     netPremium: any;
-    formattedeDate: string;
+    formattedeDate: Date;
+    _id: string;
 
     constructor(
         private readonly router: Router,
@@ -80,7 +111,9 @@ export class PolicyDetailsComponent implements OnInit {
         private formBuilder: FormBuilder,
         private policiesService: PoliciesService,
         private paymentPlanService: PaymentPlanService,
-        private receiptService: AccountService
+        private receiptService: AccountService,
+        private productClauseService: ClausesService,
+        private clientsService: ClientsService
     ) {
         this.paymentPlanForm = this.formBuilder.group({
             numberOfInstallments: ['', Validators.required],
@@ -90,14 +123,89 @@ export class PolicyDetailsComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.isOkLoading = true;
+        setTimeout(() => {
+            this.isOkLoading = false;
+        }, 3000);
         this.route.params.subscribe((id) => {
-            this.policiesService.getPolicyById(id['id']).subscribe((policy) => {
+            this.policiesService.getPolicyById(id.id).subscribe((policy) => {
                 console.log('CHECKING ID GET', policy);
                 this.policyData = policy;
+
+                this.productClauseService
+                    .getPolicyClauses()
+                    .subscribe((res) => {
+                        this.clauses = res.filter(
+                            (x) => x.policyId === this.policyData.id
+                        );
+                    });
+
+                this.productClauseService
+                    .getPolicyExtensions()
+                    .subscribe((res) => {
+                        this.extensions = res.filter(
+                            (x) => x.policyId === this.policyData.id
+                        );
+                    });
+
+                this.productClauseService
+                    .getPolicyWordings()
+                    .subscribe((res) => {
+                        this.wordings = res.filter(
+                            (x) => x.policyId === this.policyData.id
+                        );
+                    });
+
+                this.policiesService.getDebitNotes().subscribe(debitNotes => {
+                    this.debitNotes = debitNotes;
+
+                    console.log('debit notes');
+                    console.log(this.debitNotes);
+
+                    console.log('id: ', this.policyData.id);
+
+                    this.singleDebitNote = debitNotes.filter(
+                        x => x.policy.id === this.policyData.id
+                    )[0];
+
+                    console.log('Policy Debit Note:');
+                    console.log(this.singleDebitNote);
+                });
+
+                this.clientsService.getAllClients().subscribe(clients => {
+                    this.clientsList = [...clients[0], ...clients[1]] as Array<
+                        ICorporateClient & IIndividualClient
+                    >;
+
+                    console.log('clients: ');
+                    console.log(clients);
+
+                    this.client = this.clientsList.filter(x =>
+                        x.companyName
+                            ? x.companyName === this.policyData.client
+                            : x.firstName + ' ' + x.lastName ===
+                              this.policyData.client
+                    )[0] as IIndividualClient & ICorporateClient;
+
+                    console.log('HERE =>>>>>');
+                    console.log(
+                        this.clientsList.filter(
+                            x =>
+                                x.firstName + ' ' + x.lastName === 'Changa Lesa'
+                        )[0] as IIndividualClient & ICorporateClient
+                    );
+
+                    // console.log('policy data client:');
+                    // console.log(this.policyData.client);
+
+                    // console.log('client');
+                    // console.log(this.client);
+                });
 
                 this.risks = policy.risks;
 
                 this.policyRisk = policy.risks[0];
+
                 this.clientName = policy.client;
                 this.clientNumber = '+260976748392';
                 this.clientEmail = policy.client + '@gmail.com'; // TODO: Track client data
@@ -110,6 +218,14 @@ export class PolicyDetailsComponent implements OnInit {
                 this.totalAmount = policy.netPremium.toString();
                 this.issueDate = policy.dateOfIssue.toString();
                 this.issueTime = policy.dateOfIssue.toString();
+                this.premiumLevy = this.sumArray(
+                    this.risks,
+                    'premiumLevy'
+                ).toString();
+                this.basicPremium = this.sumArray(
+                    this.risks,
+                    'basicPremium'
+                ).toString();
 
                 // set values of fields
                 this.policyDetailsForm
@@ -149,16 +265,43 @@ export class PolicyDetailsComponent implements OnInit {
                 this.risksLoading = false;
             });
         });
-        // this.route.data.subscribe((data: Policy) => {
-        //     console.log('RESOLVED', data);
-        //     this.route.params.subscribe((param) => {
-        //         this.policyNumber = param.policyNumber;
-        //         this.policiesService.getPolicies().subscribe((policies) => {
 
-        //         });
-        //     });
-        // });
-        // policy details form
+
+//         this.policiesService.getDebitNotes().subscribe((debitNotes) => {
+//             this.debitNotes = debitNotes;
+
+//             console.log('debit notes');
+//             console.log(this.debitNotes);
+//         });
+
+//         this.clientsService.getAllClients().subscribe((clients) => {
+//             this.clientsList = [...clients[0], ...clients[1]] as Array<
+//                 ICorporateClient & IIndividualClient
+//             >;
+
+//             console.log('clients: ');
+//             console.log(clients);
+
+//             this.client = this.clientsList.filter((x) =>
+//                 x.companyName
+//                     ? x.companyName === this.policyData.client
+//                     : x.firstName + ' ' + x.lastName === this.policyData.client
+//             )[0] as IIndividualClient & ICorporateClient;
+
+//             console.log('HERE =>>>>>');
+//             console.log(
+//                 this.clientsList.filter(
+//                     (x) => x.firstName + ' ' + x.lastName === 'Changa Lesa'
+//                 )[0] as IIndividualClient & ICorporateClient
+//             );
+
+//             // console.log('policy data client:');
+//             // console.log(this.policyData.client);
+
+//             // console.log('client');
+//             // console.log(this.client);
+//         });
+
         this.policyDetailsForm = this.formBuilder.group({
             client: ['', Validators.required],
             nameOfInsured: ['', Validators.required],
@@ -217,13 +360,13 @@ export class PolicyDetailsComponent implements OnInit {
         // });
     }
 
-    getTimeStamp(policy: Policy): number {
-        return (policy.startDate as ITimestamp).seconds;
-    }
+    // getTimeStamp(policy: Policy): number {
+    //     return (policy.startDate as ITimestamp).seconds;
+    // }
 
-    getEndDateTimeStamp(policy: Policy): number {
-        return (policy.endDate as ITimestamp).seconds;
-    }
+    // getEndDateTimeStamp(policy: Policy): number {
+    //     return (policy.endDate as ITimestamp).seconds;
+    // }
 
     goToPoliciesList(): void {
         this.router.navigateByUrl('/flosure/underwriting/policies');
@@ -238,6 +381,7 @@ export class PolicyDetailsComponent implements OnInit {
     }
 
     handleOk(policyData): void {
+        this.policyUpdate = policyData;
         if (this.selectedValue === 'plan') {
             let pAmount = 0;
             let policyCount = 0;
@@ -246,8 +390,6 @@ export class PolicyDetailsComponent implements OnInit {
                 ...policyData,
             });
 
-            this.policyUpdate = policyData;
-
             pAmount = pAmount + policyData.netPremium;
             policyCount++;
 
@@ -255,7 +397,12 @@ export class PolicyDetailsComponent implements OnInit {
             this.netPremium = this.netPremium + policyData.netPremium;
             // this.policyPlan = policyPlan;
             this.policyUpdate.paymentPlan = 'Created';
-            this.receiptService.updatePolicy(this.policyUpdate);
+            console.log(this.policyUpdate);
+            this.policiesService
+                .updatePolicy(this.policyUpdate)
+                .subscribe((res) => {
+                    console.log('policy update>>>>', this.policyUpdate);
+                });
 
             const eDate = new Date(
                 this.paymentPlanForm.controls.startDate.value
@@ -264,7 +411,7 @@ export class PolicyDetailsComponent implements OnInit {
                 eDate.getMonth() +
                     this.paymentPlanForm.controls.numberOfInstallments.value
             );
-            this.formattedeDate = eDate.toISOString().slice(0, 10);
+            this.formattedeDate = eDate;
 
             const dAmount =
                 pAmount -
@@ -281,7 +428,7 @@ export class PolicyDetailsComponent implements OnInit {
             );
             while (iDate <= eDate) {
                 iDate.setMonth(iDate.getMonth() + 1);
-                this.formattedDate = iDate.toISOString().slice(0, 10);
+                this.formattedDate = iDate;
 
                 installment.push({
                     installmentAmount: iAmount,
@@ -317,12 +464,58 @@ export class PolicyDetailsComponent implements OnInit {
                 endDate: this.formattedeDate,
             };
 
+            console.log('..........Payment Plan..........');
+            console.log(plan);
+
+            this._id = v4();
+            const receipt: IReceiptModel = {
+                id: this._id,
+                paymentMethod: '',
+                receivedFrom: policyData.client,
+                onBehalfOf: policyData.client,
+                // receivedFrom: this.paymentPlanForm.controls.clientName.value,
+                // onBehalfOf: this.paymentPlanForm.controls.clientName.value,
+                capturedBy: 'charles malama',
+                policyNumber: '',
+                receiptStatus: 'Receipted',
+                narration: 'Payment Plan',
+                receiptType: 'Premium Payment',
+                sumInDigits: this.paymentPlanForm.controls
+                    .initialInstallmentAmount.value,
+                todayDate: new Date(),
+            };
+
+            const planReceipt: PlanReceipt[] = [];
+            planReceipt.push({
+                id: this._id,
+                onBehalfOf: policyData.client,
+                allocationStatus: 'Unallocated',
+                sumInDigits: this.paymentPlanForm.controls
+                    .initialInstallmentAmount.value,
+                policyNumber: '',
+            });
+
+            plan.planReceipt = planReceipt;
+            console.log('=====================');
+
+            console.log(receipt, plan);
+
             // add payment plan
-            this.paymentPlanService.addPaymentPlan(plan);
+            this.paymentPlanService.addPaymentPlanReceipt(receipt, plan);
+
+            console.log('What is happening');
+            // this.paymentPlanService.addPaymentPlan(plan);
             this.paymentPlanForm.reset();
             this.isVisible = false;
             this.router.navigateByUrl('flosure/accounts/payment-plan');
         } else if (this.selectedValue === 'fully') {
+            this.policyUpdate.paymentPlan = 'Created';
+            console.log(this.policyUpdate);
+            this.policiesService
+                .updatePolicy(this.policyUpdate)
+                .subscribe((res) => {
+                    console.log('policy update>>>>', this.policyUpdate);
+                });
             this.router.navigateByUrl('/flosure/accounts/receipts');
         }
 
@@ -331,5 +524,16 @@ export class PolicyDetailsComponent implements OnInit {
 
     handleCancel(): void {
         this.isVisible = false;
+    }
+
+    isCertificateVisible(risk: RiskModel) {
+        this.selectedRisk = risk;
+        this.isCertificatePDFVisible = true;
+    }
+
+    sumArray(items, prop) {
+        return items.reduce(function (a, b) {
+            return a + b[prop];
+        }, 0);
     }
 }

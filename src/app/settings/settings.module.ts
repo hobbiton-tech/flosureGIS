@@ -21,6 +21,13 @@ import { AgentsComponent } from './components/agents/agents.component';
 import { AgentsService } from './components/agents/services/agents.service';
 import { AddAgentComponent } from './components/agents/add-agent/add-agent.component';
 import { AddTaxComponent } from './components/rates/components/add-tax/add-tax.component';
+import { ProductSetupsComponent } from './components/product-setups/product-setups.component';
+import { AddClassComponent } from './components/product-setups/components/add-class/add-class.component';
+import { AddProductComponent } from './components/product-setups/components/add-product/add-product.component';
+import { AddCoverTypeComponent } from './components/product-setups/components/add-cover-type/add-cover-type.component';
+import { AddPerilComponent } from './components/product-setups/components/add-peril/add-peril.component';
+import { AddProductCommissionComponent } from './components/agents/add-product-commission/add-product-commission.component';
+import { ClausesService } from './components/underwriting-setups/services/clauses.service';
 
 const routes: Routes = [
     {
@@ -29,14 +36,14 @@ const routes: Routes = [
     },
     {
         path: 'rates',
-        component: RatesComponent
+        component: RatesComponent,
     },
     {
         path: 'add-insurance-company',
         component: AddInsuranceCompanyComponent,
     },
     {
-        path: 'underwriting',
+        path: 'clauses',
         component: UnderwritingSetupsComponent,
     },
     {
@@ -54,6 +61,10 @@ const routes: Routes = [
     {
         path: 'add-agents',
         component: AddAgentComponent,
+    },
+    {
+        path: 'product-setups',
+        component: ProductSetupsComponent,
     },
 ];
 
@@ -76,7 +87,13 @@ const routes: Routes = [
         AddRateComponent,
         AgentsComponent,
         AddAgentComponent,
-        AddTaxComponent
+        AddTaxComponent,
+        ProductSetupsComponent,
+        AddClassComponent,
+        AddProductComponent,
+        AddCoverTypeComponent,
+        AddPerilComponent,
+        AddProductCommissionComponent,
     ],
     imports: [
         CommonModule,
@@ -85,6 +102,6 @@ const routes: Routes = [
         ReactiveFormsModule,
         RouterModule.forChild(routes),
     ],
-    providers: [AgentsService],
+    providers: [AgentsService, ClausesService],
 })
 export class SettingsModule {}

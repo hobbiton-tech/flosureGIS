@@ -1,14 +1,21 @@
 export interface IAgent {
     id: string;
     intermediaryId: string;
-    firstName: string;
-    lastName: string;
+    companyName: string;
+    tPinNumber: string;
+    registrationNumber: string;
     email: string;
     phone: string;
     address: string;
+    contactFirstName: string;
+    contactLastName: string;
+    contactEmail: string;
+    contactPhone: string;
+    contactAddress: string;
     accountName: string;
-    accountNumber: number;
+    accountNumber: string;
     accountType: string;
+    bank: string;
     branch: string;
     dateCreated: Date;
     intermediaryType: IntermediaryType;
@@ -29,7 +36,7 @@ export interface IBroker {
     contactPhone: string;
     contactAddress: string;
     accountName: string;
-    accountNumber: number;
+    accountNumber: string;
     accountType: string;
     bank: string;
     branch: string;
@@ -46,7 +53,7 @@ export interface ISalesRepresentative {
     contactPhone: string;
     contactAddess: string;
     accountName: string;
-    accountNumber: number;
+    accountNumber: string;
     accountType: string;
     bank: string;
     branch: string;

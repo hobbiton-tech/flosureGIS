@@ -9,7 +9,30 @@ import 'firebase/firestore';
 import { filter, first } from 'rxjs/operators';
 import { v4 } from 'uuid';
 import { debounceTime, map, switchMap } from 'rxjs/operators';
-import { isTemplateRef } from 'ng-zorro-antd';
+import { isTemplateRef, NzMessageService } from 'ng-zorro-antd';
+
+import { HttpClient } from '@angular/common/http';
+import {
+    DebitNote,
+    CreditNote,
+    CoverNote,
+} from '../documents/models/documents.model';
+
+const BASE_URL = 'https://flosure-postgres-api.herokuapp.com';
+
+// const BASE_URL = 'https://flosure-postgres-api.herokuapp.com';
+
+interface IDebitNoteResult {
+    invoiceNumber: string;
+}
+
+interface ICreditNoteResult {
+    invoiceNumber: string;
+}
+
+interface ICoverNoteResult {
+    coverNoteNumber: string;
+}
 
 @Injectable({
     providedIn: 'root',
@@ -19,14 +42,87 @@ export class PoliciesService {
     policies: Observable<Policy[]>;
     policy: any;
 
-    constructor(private firebase: AngularFirestore) {
+    constructor(
+        private firebase: AngularFirestore,
+        private msg: NzMessageService,
+        private http: HttpClient
+    ) {
         this.policiesCollection = firebase.collection<Policy>('policies');
         this.policies = this.policiesCollection.valueChanges();
     }
 
+    // postgres db
+    ///////////////////////
+    createPolicy(policy: Policy): Observable<Policy> {
+        let insuranceType = '';
+        const productType = policy.risks[0].insuranceType;
+        if (productType == 'Comprehensive') {
+            insuranceType = 'MCP';
+        } else {
+            insuranceType = 'THP';
+        }
+
+        return this.http.post<Policy>(
+            'https://flosure-postgres-api.herokuapp.com/policy',
+            policy
+        );
+    }
+
+    // getPolicies(): Observable<Policy[]> {
+    //     return this.http.get<Policy[]>('https://flosure-postgres-api.herokuapp.com/policy');
+    // }
+
+    // getPolicyById(policyId: string): Observable<Policy> {
+    //     return this.http.get<Policy>(
+    //         `https://flosure-postgres-api.herokuapp.com/policy/${policyId}`
+    //     );
+    //     return this.policiesCollection.doc<Policy>(policyId).valueChanges();
+    // }
+
+    updatePolicy(policy: Policy): Observable<Policy> {
+        console.log('POLICY NUMBER>>>>', policy);
+        return this.http.put<Policy>(
+            `https://flosure-postgres-api.herokuapp.com/policy/${policy.id}`,
+            policy
+        );
+    }
+
+    // backup policies
+    createBackupPolicy(policy: Policy): Observable<Policy> {
+        return this.http.post<Policy>(
+            'https://flosure-postgres-api.herokuapp.com/policy',
+            policy
+        );
+    }
+
+    getBackupPolicies(): Observable<Policy[]> {
+        return this.http.get<Policy[]>(
+            'https://flosure-postgres-api.herokuapp.com/policy'
+        );
+    }
+
+    getBackupPolicyById(policyId: string): Observable<Policy> {
+        return this.http.get<Policy>(
+            `https://flosure-postgres-api.herokuapp.com/policy/${policyId}`
+        );
+        // return this.policiesCollection.doc<Policy>(policyId).valueChanges();
+    }
+
+    updateBackupPolicy(policy: Policy, policyId: string): Observable<Policy> {
+        console.log('policy details:');
+        console.log(policy);
+        return this.http.put<Policy>(
+            `https://flosure-postgres-api.herokuapp.com/policy/${policyId}`,
+            policy
+        );
+    }
+
+    ////////////////////////////////////////////
+
     async addPolicy(policy: Policy) {
         this.policies.pipe(first()).subscribe(async (policies) => {
             const today = new Date();
+            policy.term = 1;
             policy.nameOfInsured = policy.client;
             policy.dateOfIssue =
                 today.getDay() +
@@ -54,6 +150,51 @@ export class PoliciesService {
         });
     }
 
+    renewPolicy(policy: Policy) {
+        this.policies.pipe(first()).subscribe(async (policies) => {
+            const today = new Date();
+            policy.client = policy.nameOfInsured;
+            policy.dateOfIssue =
+                today.getDay() +
+                '-' +
+                today.getMonth() +
+                '-' +
+                today.getFullYear();
+            policy.timeOfIssue = today.getHours() + ':' + today.getMinutes();
+            policy.expiryDate = policy.endDate;
+            policy.status = 'Active';
+            localStorage.removeItem('policyNumber');
+            localStorage.setItem('policyNumber', policy.policyNumber);
+            localStorage.removeItem('clientId');
+            localStorage.setItem('clientId', policy.nameOfInsured); // TODO: Need to change to client code.
+            console.log('POLICY NUMBER>>>>', policy.id);
+            console.log(policy);
+            this.http
+                .put<Policy>(
+                    `https://flosure-postgres-api.herokuapp.com/policy/${policy.id}`,
+                    policy
+                )
+                .subscribe(
+                    (data) => {
+                        this.msg.success('Policy Successfully Updated');
+                    },
+                    (error) => {
+                        this.msg.error('Failed');
+                    }
+                );
+
+            // this.policiesCollection
+            //     .doc(policy.id)
+            //     .update(policy)
+            //     .then((res) => {
+            //         this.msg.success('Policy Successfully Updated');
+            //     })
+            //     .catch(() => {
+            //         this.msg.error('Failed');
+            //     });
+        });
+    }
+
     // get single risk
     getPolicy(policyNumber: string): Promise<void> {
         this.firebase
@@ -78,7 +219,11 @@ export class PoliciesService {
     }
 
     getPolicyById(policyId: string): Observable<Policy> {
-        return this.policiesCollection.doc<Policy>(policyId).valueChanges();
+        return this.http.get<Policy>(
+            `https://flosure-postgres-api.herokuapp.com/policy/${policyId}`
+        );
+
+        // return this.policiesCollection.doc<Policy>(policyId).valueChanges();
     }
 
     getClientsPolicies(clientId: string): Observable<Policy[]> {
@@ -86,7 +231,10 @@ export class PoliciesService {
     }
 
     getPolicies(): Observable<Policy[]> {
-        return this.policies;
+        return this.http.get<Policy[]>(
+            'https://flosure-postgres-api.herokuapp.com/policy'
+        );
+        // return this.policies;
     }
 
     countGenerator(number) {
@@ -107,5 +255,168 @@ export class PoliciesService {
             +('0' + today.getDate()).slice(-2);
 
         return 'PO' + broker_name + dateString + count;
+    }
+
+    //documents
+    //debit note
+    createDebitNote(
+        policyId: string,
+        debitNote: DebitNote,
+        policy: Policy,
+        count: number
+    ) {
+        console.log('create debit note method called');
+        console.log(policyId);
+        console.log('-------------------');
+        console.log(debitNote);
+        console.log('-------------------');
+        console.log(policy);
+
+        let insuranceType = '';
+        const productType = policy.risks[0].insuranceType;
+        if (productType == 'Comprehensive') {
+            insuranceType = 'MCP';
+        } else {
+            insuranceType = 'THP';
+        }
+
+        this.http
+            .get<IDebitNoteResult>(
+                `https://flosure-rates-api.herokuapp.com/aplus-invoice/1/0/${insuranceType}/${count}`
+            )
+            .subscribe(async (res) => {
+                debitNote.debitNoteNumber = res.invoiceNumber;
+
+                this.http
+                    .post<DebitNote>(
+                        `${BASE_URL}/documents/debit-note/${policyId}`,
+                        debitNote
+                    )
+                    .subscribe(
+                        async (res) => {
+                            console.log(res);
+                        },
+                        async (err) => {
+                            console.log(err);
+                        }
+                    );
+            });
+    }
+
+    getDebitNotes(): Observable<DebitNote[]> {
+        return this.http.get<DebitNote[]>(`${BASE_URL}/documents/debit-notes`);
+    }
+
+    getDebitNoteById(debitNoteId: string): Observable<DebitNote> {
+        return this.http.get<DebitNote>(
+            `${BASE_URL}/documents/debit-note/${debitNoteId}`
+        );
+    }
+
+    updateDebitNote(
+        debitNote: DebitNote,
+        debitNoteId: string
+    ): Observable<DebitNote> {
+        return this.http.put<DebitNote>(
+            `${BASE_URL}/documents/debit-note/${debitNoteId}`,
+            debitNote
+        );
+    }
+
+    //credit note
+    createCreditNote(policyId: string, creditNote: CreditNote, policy: Policy) {
+        console.log('create debit note method called');
+        console.log(policyId);
+        console.log('-------------------');
+        console.log(creditNote);
+        console.log('-------------------');
+        console.log(policy);
+
+        let insuranceType = '';
+        const productType = policy.risks[0].insuranceType;
+        if (productType == 'Comprehensive') {
+            insuranceType = 'MCP';
+        } else {
+            insuranceType = 'THP';
+        }
+
+        this.http
+            .get<ICreditNoteResult>(
+                `https://flosure-rates-api.herokuapp.com/aplus-invoice/1/0/${insuranceType}`
+            )
+            .subscribe(async (res) => {
+                let tempCreditNoteNumber = res.invoiceNumber;
+                creditNote.creditNoteNumber = tempCreditNoteNumber.replace(
+                    'DR',
+                    'CR'
+                );
+
+                this.http
+                    .post<CreditNote>(
+                        `${BASE_URL}/documents/credit-note/${policyId}`,
+                        creditNote
+                    )
+                    .subscribe(
+                        async (res) => {
+                            console.log(res);
+                        },
+                        async (err) => {
+                            console.log(err);
+                        }
+                    );
+            });
+    }
+
+    getCreditNotes(): Observable<CreditNote[]> {
+        return this.http.get<CreditNote[]>(
+            `${BASE_URL}/documents/credit-notes`
+        );
+    }
+
+    getCreditNoteById(creditNoteId: string): Observable<CreditNote> {
+        return this.http.get<CreditNote>(
+            `${BASE_URL}/documents/credit-note/${creditNoteId}`
+        );
+    }
+
+    updateCreditNote(
+        creditNote: CreditNote,
+        creditNoteId: string
+    ): Observable<CreditNote> {
+        return this.http.put<CreditNote>(
+            `${BASE_URL}/documents/credit-note/${creditNoteId}`,
+            creditNote
+        );
+    }
+
+    //cover note
+    createCoverNote(
+        policyId: string,
+        coverNote: CoverNote
+    ): Observable<CoverNote> {
+        return this.http.post<CoverNote>(
+            `${BASE_URL}/documents/cover-note/${policyId}`,
+            coverNote
+        );
+    }
+
+    getCoverNotes(): Observable<CoverNote> {
+        return this.http.get<CoverNote>(`${BASE_URL}/documents/cover-notes`);
+    }
+
+    getCoverNoteById(coverNoteId: string): Observable<CoverNote> {
+        return this.http.get<CoverNote>(
+            `${BASE_URL}/documents/cover-note/${coverNoteId}`
+        );
+    }
+
+    updateCoverNote(
+        coverNote: CoverNote,
+        coverNoteId: string
+    ): Observable<CoverNote> {
+        return this.http.put<CoverNote>(
+            `${BASE_URL}/documents/cover-note/${coverNoteId}`,
+            coverNote
+        );
     }
 }

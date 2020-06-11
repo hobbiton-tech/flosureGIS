@@ -16,6 +16,8 @@ export class MotorQuotationModel {
     status: QuoteStatus;
     basicPremiumSubTotal: number;
     receiptStatus: ReceiptStatus;
+    sourceOfBusiness: string;
+    intermediaryName: string;
     quarter: string;
 }
 
@@ -25,13 +27,14 @@ export class LoadModel {
 }
 
 export class RiskModel {
-    riskId: string;
+    id: string;
     riskStartDate: Date | ITimestamp;
     riskEndDate: Date | ITimestamp;
     riskQuarter: number;
     regNumber: string;
     vehicleMake: string;
     vehicleModel: string;
+    yearOfManufacture: Date;
     engineNumber: string;
     chassisNumber: string;
     color: string;
@@ -43,7 +46,8 @@ export class RiskModel {
     basicPremium: number;
     loads: LoadModel[];
     loadingTotal: number;
-    discount: number;
+    discountTotal: number;
+    discounts: DiscountModel[];
     discountSubTotal: number;
     discountRate: number;
     premiumLevy: number;
@@ -72,6 +76,11 @@ export class Load {
     value: number;
 }
 
+export class DiscountModel {
+    discountType: DiscountType;
+    amount: number;
+}
+
 export type ReceiptStatus = 'Unreceipted' | 'Receipted';
 export type ProductType = 'Private' | 'Commercial' | 'Bus/Taxi';
 
@@ -82,6 +91,20 @@ export type LoadType =
     | 'Riot And Strike'
     | 'Car Stereo'
     | 'Territorial Extension'
-    | 'Loss Of Use';
+    | 'Loss Of Use'
+    | 'Inexperienced Driver'
+    | 'Under Age Driver';
+
+export type DiscountType =
+    | 'No Claims Discount'
+    | 'Loyalty Discount'
+    | 'Valued Client Discount'
+    | 'Low Term Agreement Discount';
+
+export type SourceOfBusinessType =
+    | 'Direct'
+    | 'Broker'
+    | 'Agent'
+    | 'Sales Representative';
 
 export type InsuranceType = 'ThirdParty' | 'Comprehensive';

@@ -21,8 +21,8 @@
             nzTitle="Client ID: {{ client.clientID }}"
             [nzSubtitle]="
                 client.clientType === 'Individual'
-                    ? client.firstName + ' ' + client.lastName + ' ' + '(Created on' + ' ' + (getTimeStamp(client) * 1000 | date) + ')'
-                    : client.companyName + ' ' + '(Created on' + ' ' + (getTimeStamp(client) * 1000 | date) + ')'
+                    ? client.firstName + ' ' + client.lastName
+                    : client.companyName 
             "
         >
             <nz-page-header-extra>
@@ -52,7 +52,7 @@
                     nzText="Personal Details"
                     nzOrientation="left"
                 ></nz-divider>
-                <form nz-form>
+                <form nz-form [formGroup]="individualClientForm">
                     <div nz-row nzGutter="0">
                         <div nz-col nzSpan="12">
                             <nz-form-item>
@@ -89,7 +89,7 @@
                                 >
                                 <nz-form-control nzSpan="17">
                                     <nz-select
-                                        nzPlaceHolder="{{ client.idType }}"
+                                        nzPlaceHolder="{{ client.title }}"
                                         [nzDisabled]="!isEditmode"
                                     ></nz-select>
                                 </nz-form-control>
@@ -114,12 +114,13 @@
                                 >
                                 <nz-form-control nzSpan="17">
                                     <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
-                                    <input
+                                    <!-- <input
+                                    formControlName="dateOfBirth"
                                         nz-input
-                                        [(placeholder)]="client.dateOfBirth"
-                                        nzFormat="dd.MM.yyyy"
                                         [disabled]="!isEditmode"
-                                    />
+                                    /> -->
+                                    <nz-date-picker formControlName="dateOfBirth" nzFormat="dd-MM-yyyy" [nzDisabled]="!isEditmode"
+                                [nzDisabled]="!isEditmode"></nz-date-picker>
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
@@ -234,7 +235,7 @@
                     nzText="Company Details"
                     nzOrientation="left"
                 ></nz-divider>
-                <form nz-form>
+                <form nz-form [formGroup]="corporateClientForm">
                     <div nz-row nzGutter="0">
                         <div nz-col nzSpan="12">
                             <nz-form-item>
@@ -269,10 +270,11 @@
                                     >Sector</nz-form-label
                                 >
                                 <nz-form-control nzSpan="17">
-                                    <nz-select
-                                        nzPlaceHolder="{{ client.idType }}"
-                                        [nzDisabled]="!isEditmode"
-                                    ></nz-select>
+                                    <input
+                                        nz-input
+                                        [(placeholder)]="client.sector"
+                                        [disabled]="!isEditmode"
+                                    />
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
