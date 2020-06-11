@@ -69,7 +69,7 @@ export class AccountService {
 
             this.http
                 .get<IReceiptNumberResult>(
-                    `https://flosure-rates-api.herokuapp.com/savenda-receipts/1/${count}`
+                    `https://flosure-number-generation.herokuapp.com/savenda-receipts/1`
                 )
                 .subscribe(async (res) => {
                     receipt.receiptNumber = res.receiptNumber;
