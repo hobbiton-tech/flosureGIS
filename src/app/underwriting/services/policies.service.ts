@@ -277,11 +277,11 @@ export class PoliciesService {
         }
 
         this.http
-            .get<IDebitNoteResult>(
-                `https://flosure-number-generation.herokuapp.com/aplus-invoice/1/0/${insuranceType}`
+            .get<any>(
+                `https://flosure-number-generation.herokuapp.com/aplus-invoice-number/1/0/${insuranceType}`
             )
             .subscribe(async (res) => {
-                debitNote.debitNoteNumber = res.invoiceNumber;
+                debitNote.debitNoteNumber = res.data.invoice_number;
 
                 this.http
                     .post<DebitNote>(
@@ -337,11 +337,11 @@ export class PoliciesService {
         }
 
         this.http
-            .get<ICreditNoteResult>(
-                `https://flosure-number-generation.herokuapp.com/aplus-invoice/1/0/${insuranceType}`
+            .get<any>(
+                `https://flosure-number-generation.herokuapp.com/aplus-invoice-number/1/0/${insuranceType}`
             )
             .subscribe(async (res) => {
-                let tempCreditNoteNumber = res.invoiceNumber;
+                let tempCreditNoteNumber = res.data.invoice_number;
                 creditNote.creditNoteNumber = tempCreditNoteNumber.replace(
                     'DR',
                     'CR'

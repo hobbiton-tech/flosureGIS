@@ -68,12 +68,12 @@ export class AccountService {
             }
 
             this.http
-                .get<IReceiptNumberResult>(
-                    `https://flosure-number-generation.herokuapp.com/savenda-receipts/1`
+                .get<any>(
+                    `https://flosure-number-generation.herokuapp.com/aplus-receipt-number/1`
                 )
                 .subscribe(async (res) => {
-                    receipt.receiptNumber = res.receiptNumber;
-                    console.log(res.receiptNumber);
+                    receipt.receiptNumber = res.data.receipt_number;
+                    console.log(res.data.receipt_number);
 
                     await this.receiptCollection
                         .doc(receipt.id)
