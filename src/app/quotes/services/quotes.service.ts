@@ -135,12 +135,13 @@ export class QuotesService {
             branch: motorQuotation.branch, //get from db
         };
         this.http
-            .get<IQuoteNumberResult>(
-                `https://flosure-number-generation.herokuapp.com/aplus-quote/1/0/${insuranceType}`
+            .get<any>(
+                `https://flosure-number-generation.herokuapp.com/aplus-quote-number/1/0/${insuranceType}`
+
             )
             .subscribe(async (res) => {
-                motorQuotation.quoteNumber = res.quoteNumber;
-                console.log('WHAT THE >>>>', motorQuotation);
+                motorQuotation.quoteNumber = res.data.quotation_number;
+                console.log('WHAT THE >>>>', res);
                 this.http
                     .post<MotorQuotationModel>(
                         'https://www.flosure-api.com/quotation',
