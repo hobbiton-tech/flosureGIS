@@ -180,7 +180,9 @@
                                                 <button
                                                     nz-button
                                                     nzType="success"
-                                                    (click)="_getFilterReportList()"
+                                                    (click)="
+                                                        _getFilterReportList()
+                                                    "
                                                 >
                                                     Submit
                                                 </button>
@@ -195,7 +197,7 @@
                             <button
                                 nz-button
                                 nzType="primary"
-                                (click)=" downloadQuotationReportListExcel()"
+                                (click)="downloadQuotationReportListExcel()"
                             >
                                 Export EXCEL
                             </button>
@@ -210,8 +212,6 @@
                             </button>
                         </div>
                     </nz-row>
-
-
 
                     <nz-row style="margin-bottom: 20px;" [nzGutter]="20">
                         <div nz-col [nzSpan]="18">
@@ -235,7 +235,10 @@
                                     nzAllowClear
                                     nzPlaceHolder="Select Intermediary Type"
                                 >
-                                    <nz-option nzLabel="All" nzValue="All"></nz-option>
+                                    <nz-option
+                                        nzLabel="All"
+                                        nzValue="All"
+                                    ></nz-option>
                                     <nz-option
                                         nzLabel="Agent"
                                         nzValue="Broker"
@@ -245,9 +248,9 @@
                                         nzValue="Broker"
                                     ></nz-option>
                                     <nz-option
-                                    nzLabel="Sale Representative"
-                                    nzValue="Sale Representative"
-                                ></nz-option>
+                                        nzLabel="Sale Representative"
+                                        nzValue="Sale Representative"
+                                    ></nz-option>
                                 </nz-select>
                             </nz-input-group>
                         </div>
@@ -273,23 +276,27 @@
                             </thead>
 
                             <tbody>
-                                <tr
-                                    *ngFor="
-                                        let report of motor;
-                                        let i = index
-                                    "
-                                >
+                                <tr *ngFor="let report of motor; let i = index">
                                     <td>{{ i + 1 }}</td>
                                     <td>{{ report.quoteNumber }}</td>
                                     <td>{{ report.client }}</td>
                                     <td>{{ report.dateCreated | date }}</td>
-                                    <td>{{ '' }}</td>
+                                    <td>{{ report.user }}</td>
                                     <td>{{ report.intermediaryName }}</td>
                                     <td>{{ report.branch }}</td>
                                     <td>{{ report.sourceOfBusiness }}</td>
                                     <td>{{ 'Motor' }}</td>
-                                    <td>{{ report.sumInsured }}</td>
-                                    <td>{{ report.grossPremium}}</td>
+                                    <td>
+                                        {{
+                                            report.sumInsured | number: '1.2-2'
+                                        }}
+                                    </td>
+                                    <td>
+                                        {{
+                                            report.grossPremium
+                                                | number: '1.2-2'
+                                        }}
+                                    </td>
                                     <td>
                                         <nz-badge
                                             [nzStatus]="
@@ -310,118 +317,118 @@
     </nz-modal>
 
     <nz-modal
-    [(nzVisible)]="isIntermediaryQuotationListingReport"
-    nzTitle=" Intermediary Quotation Listing Report"
-    (nzOnCancel)="handleCancel()"
-    [nzWidth]="1500"
-    (nzOnOk)="handleOk()"
->
-    <div style="margin: 20px;">
-        <nz-card>
-            <div style="margin-bottom: 20px;">
-                <nz-row style="margin-bottom: 20px;" [nzGutter]="20">
-                    <div nz-col [nzSpan]="14">
-                        <form nz-form [formGroup]="dateForm">
-                            <nz-row>
-                                <div nz-col [nzSpan]="10">
-                                    <nz-form-item>
-                                        <nz-form-label
-                                            [nzSpan]="8"
-                                            nzFor="fromDate"
-                                            nzRequired
-                                            >From Date</nz-form-label
-                                        >
-                                        <nz-form-control [nzSpan]="14">
-                                            <nz-date-picker
-                                                #fromDate
-                                                formControlName="fromDate"
-                                                name="fromDate"
-                                                id="fromDate"
-                                                placeholder="From date"
-                                            ></nz-date-picker>
-                                        </nz-form-control>
-                                    </nz-form-item>
-                                </div>
-
-                                <div nz-col [nzSpan]="10">
-                                    <nz-form-item>
-                                        <nz-form-label
-                                            [nzSpan]="8"
-                                            nzFor="toDate"
-                                            nzRequired
-                                            >End Date</nz-form-label
-                                        >
-                                        <nz-form-control [nzSpan]="14">
-                                            <nz-date-picker
-                                                #toDate
-                                                formControlName="toDate"
-                                                name="toDate"
-                                                id="toDate"
-                                                placeholder="To Date"
-                                            ></nz-date-picker>
-                                        </nz-form-control>
-                                    </nz-form-item>
-                                </div>
-                                <div
-                                    nz-col
-                                    [nzSpan]="4"
-                                    style="float: left;"
-                                >
-                                    <nz-form-item>
-                                        <nz-form-control [nzSpan]="4">
-                                            <button
-                                                nz-button
-                                                nzType="success"
+        [(nzVisible)]="isIntermediaryQuotationListingReport"
+        nzTitle=" Intermediary Quotation Listing Report"
+        (nzOnCancel)="handleCancel()"
+        [nzWidth]="1500"
+        (nzOnOk)="handleOk()"
+    >
+        <div style="margin: 20px;">
+            <nz-card>
+                <div style="margin-bottom: 20px;">
+                    <nz-row style="margin-bottom: 20px;" [nzGutter]="20">
+                        <div nz-col [nzSpan]="14">
+                            <form nz-form [formGroup]="dateForm">
+                                <nz-row>
+                                    <div nz-col [nzSpan]="10">
+                                        <nz-form-item>
+                                            <nz-form-label
+                                                [nzSpan]="8"
+                                                nzFor="fromDate"
+                                                nzRequired
+                                                >From Date</nz-form-label
                                             >
-                                                Submit
-                                            </button>
-                                        </nz-form-control>
-                                    </nz-form-item>
-                                </div>
-                            </nz-row>
-                        </form>
-                    </div>
+                                            <nz-form-control [nzSpan]="14">
+                                                <nz-date-picker
+                                                    #fromDate
+                                                    formControlName="fromDate"
+                                                    name="fromDate"
+                                                    id="fromDate"
+                                                    placeholder="From date"
+                                                ></nz-date-picker>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
 
-                    <div nz-col [nzSpan]="3" style="float: right;">
-                        <button
-                            nz-button
-                            nzType="primary"
-                            (click)=" downloadQuotationReportListExcel()"
-                        >
-                            Export EXCEL
-                        </button>
-                    </div>
-                    <div nz-col [nzSpan]="3" style="float: right;">
-                        <button
-                            nz-button
-                            (click)="downloadQuotationReportListPdf()"
-                            nzType="danger"
-                        >
-                            Export PDF
-                        </button>
-                    </div>
-                </nz-row>
-                <nz-row style="margin-bottom: 20px;" [nzGutter]="20">
-                    <div nz-col [nzSpan]="18">
-                        <nz-input-group [nzSuffix]="suffixIconSearch">
-                            <input
-                                type="text"
-                                nz-input
-                                placeholder="Search by branch"
-                            />
-                        </nz-input-group>
-                        <ng-template #suffixIconSearch>
-                            <i nz-icon nzType="search"></i>
-                        </ng-template>
-                    </div>
-                    <div nz-col [nzSpan]="6" style="float: right;">
-                        <nz-input-group>
-                            <nz-select
-                                nzShowSearch
-                                nzAllowClear
-                                nzPlaceHolder="Select Intermediary type."
+                                    <div nz-col [nzSpan]="10">
+                                        <nz-form-item>
+                                            <nz-form-label
+                                                [nzSpan]="8"
+                                                nzFor="toDate"
+                                                nzRequired
+                                                >End Date</nz-form-label
+                                            >
+                                            <nz-form-control [nzSpan]="14">
+                                                <nz-date-picker
+                                                    #toDate
+                                                    formControlName="toDate"
+                                                    name="toDate"
+                                                    id="toDate"
+                                                    placeholder="To Date"
+                                                ></nz-date-picker>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                    <div
+                                        nz-col
+                                        [nzSpan]="4"
+                                        style="float: left;"
+                                    >
+                                        <nz-form-item>
+                                            <nz-form-control [nzSpan]="4">
+                                                <button
+                                                    nz-button
+                                                    nzType="success"
+                                                >
+                                                    Submit
+                                                </button>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </div>
+                                </nz-row>
+                            </form>
+                        </div>
+
+                        <div nz-col [nzSpan]="3" style="float: right;">
+                            <button
+                                nz-button
+                                nzType="primary"
+                                (click)="downloadQuotationReportListExcel()"
                             >
-                                <!-- <nz-option
+                                Export EXCEL
+                            </button>
+                        </div>
+                        <div nz-col [nzSpan]="3" style="float: right;">
+                            <button
+                                nz-button
+                                (click)="downloadQuotationReportListPdf()"
+                                nzType="danger"
+                            >
+                                Export PDF
+                            </button>
+                        </div>
+                    </nz-row>
+                    <nz-row style="margin-bottom: 20px;" [nzGutter]="20">
+                        <div nz-col [nzSpan]="18">
+                            <nz-input-group [nzSuffix]="suffixIconSearch">
+                                <input
+                                    type="text"
+                                    nz-input
+                                    placeholder="Search by branch"
+                                />
+                            </nz-input-group>
+                            <ng-template #suffixIconSearch>
+                                <i nz-icon nzType="search"></i>
+                            </ng-template>
+                        </div>
+                        <div nz-col [nzSpan]="6" style="float: right;">
+                            <nz-input-group>
+                                <nz-select
+                                    nzShowSearch
+                                    nzAllowClear
+                                    nzPlaceHolder="Select Intermediary type."
+                                >
+                                    <!-- <nz-option
                                     nzLabel="All"
                                     nzValue="All"
                                 ></nz-option>
@@ -437,65 +444,74 @@
                                     nzLabel="Broker"
                                     nzValue="Broker"
                                 ></nz-option> -->
-                            </nz-select>
-                        </nz-input-group>
-                    </div>
-                </nz-row>
-                <div id="content" #content>
-                    <nz-table id="Table" #reportsTable>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Quotation Number</th>
-                                <th>Client</th>
-                                <th>Transaction Date</th>
-                                <th>Underwriter</th>
-                                <th>Intermediary Name</th>
-                                <th>Branch</th>
-                                <th>Source of Business</th>
-                                <th>Product Type</th>
-                                <th>Sum Insured</th>
-                                <th>Gross Premium</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
+                                </nz-select>
+                            </nz-input-group>
+                        </div>
+                    </nz-row>
+                    <div id="content" #content>
+                        <nz-table id="Table" #reportsTable>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Quotation Number</th>
+                                    <th>Client</th>
+                                    <th>Transaction Date</th>
+                                    <th>Underwriter</th>
+                                    <th>Intermediary Name</th>
+                                    <th>Branch</th>
+                                    <th>Source of Business</th>
+                                    <th>Product Type</th>
+                                    <th>Sum Insured</th>
+                                    <th>Gross Premium</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
 
-                        <tbody>
-                            <tr
-                                *ngFor="
-                                    let report of motor;
-                                    let i = index
-                                "
-                            >
-                                <td>{{ i + 1 }}</td>
-                                <td>{{ report.quoteNumber }}</td>
-                                <td>{{ report.client }}</td>
-                                <td>{{ report.dateCreated | date }}</td>
-                                <td>{{ ''}}</td>
-                                <td>{{ report.intermediaryName }}</td>
-                                <td>{{ report.branch }}</td>
-                                <td>{{ report.sourceOfBusiness }}</td>
-                                <td>{{ 'Motor' }}</td>
-                                <td>{{ report.sumInsured  | number: '1.2-2'  }}</td>
-                                <td>{{ report.grossPremium  | number: '1.2-2'  }}</td>
-                                <td>
-                                    <nz-badge
-                                        [nzStatus]="
-                                            report.status === 'Draft'
-                                                ? 'warning'
-                                                : 'success'
-                                        "
-                                        [nzText]="report.status"
-                                    ></nz-badge>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </nz-table>
+                            <tbody>
+                                <tr
+                                    *ngFor="
+                                        let report of filterMotor;
+                                        let i = index
+                                    "
+                                >
+                                    <td>{{ i + 1 }}</td>
+                                    <td>{{ report.quoteNumber }}</td>
+                                    <td>{{ report.client }}</td>
+                                    <td>{{ report.dateCreated | date }}</td>
+                                    <td>{{ report.user }}</td>
+                                    <td>{{ report.intermediaryName }}</td>
+                                    <td>{{ report.branch }}</td>
+                                    <td>{{ report.sourceOfBusiness }}</td>
+                                    <td>{{ 'Motor' }}</td>
+                                    <td>
+                                        {{
+                                            report.sumInsured | number: '1.2-2'
+                                        }}
+                                    </td>
+                                    <td>
+                                        {{
+                                            report.grossPremium
+                                                | number: '1.2-2'
+                                        }}
+                                    </td>
+                                    <td>
+                                        <nz-badge
+                                            [nzStatus]="
+                                                report.status === 'Draft'
+                                                    ? 'warning'
+                                                    : 'success'
+                                            "
+                                            [nzText]="report.status"
+                                        ></nz-badge>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </nz-table>
+                    </div>
                 </div>
-            </div>
-        </nz-card>
-    </div>
-</nz-modal>
+            </nz-card>
+        </div>
+    </nz-modal>
 
     <nz-modal
         [(nzVisible)]="isAnalysisReportVisible"
@@ -647,13 +663,13 @@
                         <tbody>
                             <tr
                                 *ngFor="
-                                    let intermediary of analysisTable.data;
+                                    let intermediary of formatIntermediaryReport;
                                     let i = index
                                 "
                             >
                                 <td>{{ i + 1 }}</td>
-                                <td>{{'Branch'}}</td>
-                                <td>{{ intermediary.intermediaryName }}</td>
+                                <td>{{ 'Branch' }}</td>
+                                <td>{{ intermediary.getFullName }}</td>
                                 <td>
                                     {{ intermediary.getQuoteCount }}
                                 </td>
@@ -821,7 +837,7 @@
                         <tbody>
                             <tr
                                 *ngFor="
-                                    let renewal of analysisTable.data;
+                                    let renewal of filterPremiumList;
                                     let i = index
                                 "
                                 style="cursor: pointer;"
@@ -830,9 +846,14 @@
                                 <td>{{ renewal.policyNumber }}</td>
                                 <td>{{ renewal.client }}</td>
                                 <td>{{ renewal.intermediaryName }}</td>
-                                <td>{{ renewal.contactNumber }}</td>
-                                <td>{{ renewal.renewalDate }}</td>
-                                <td>{{ renewal.renewalPremiumDue }}</td>
+                                <td>{{ renewal.clientCode }}</td>
+                                <td>{{ renewal.expiryDate }}</td>
+                                <td>
+                                    {{
+                                        renewal.sumInsured
+                                            | number: '1.2-2'
+                                    }}
+                                </td>
                             </tr>
                         </tbody>
                     </nz-table>
@@ -996,11 +1017,14 @@
                         </thead>
                         <tbody>
                             <tr
-                                *ngFor="let production of filterPremiumList; let i = index"
+                                *ngFor="
+                                    let production of filterDebitNote;
+                                    let i = index
+                                "
                                 style="cursor: pointer;"
                             >
-                            <td>{{ i + 1}}</td>
-                            <!-- policyNumber: string;
+                                <td>{{ i + 1 }}</td>
+                                <!-- policyNumber: string;
                             grossPremium: string;
                             loading: number;
                             discount: number;
@@ -1008,13 +1032,24 @@
                             levy: number;
                             premiumDue: number; -->
                                 <td>{{ production.policyNumber }}</td>
-                                <td>{{ '' }}</td>
-                                <td>{{ production.grossPremium }}</td>
-                                <td>{{ production.discount }}</td>
-                                <td>{{ production.loading }}</td>
-                                <td>{{ production.netPremium }}</td>
-                                <td>{{ production.levy }}</td>
-                                <td>{{ production.sumInsured }}</td>
+                                <td>{{ production.debitNoteNumber }}</td>
+                                <td>
+                                    {{ production.discount | number: '1.2-2' }}
+                                </td>
+                                <td>
+                                    {{ production.loading | number: '1.2-2' }}
+                                </td>
+                                <td>
+                                    {{
+                                        production.netPremium | number: '1.2-2'
+                                    }}
+                                </td>
+                                <td>{{ production.levy | number: '1.2-2' }}</td>
+                                <td>
+                                    {{
+                                        production.premiumDue | number: '1.2-2'
+                                    }}
+                                </td>
                             </tr>
                         </tbody>
                     </nz-table>
@@ -1158,11 +1193,12 @@
                         #analysisTable
                         [nzData]="filterPremiumList"
                         [nzSize]="'small'"
-                       
                         style="background-color: white;"
                     >
                         <thead>
                             <tr>
+                                <th>No</th>
+                                <th>Debit Note Number</th>
                                 <th>Policy number</th>
                                 <th>Client</th>
                                 <th>Intermediary name</th>
@@ -1182,22 +1218,42 @@
                         </thead>
                         <tbody>
                             <tr
-                                *ngFor="let production of analysisTable.data"
+                                *ngFor="
+                                    let production of filterDebitNote;
+                                    let i = index
+                                "
                                 style="cursor: pointer;"
                             >
+                                <td>{{ i + 1 }}</td>
+                                <td>{{ production.debitNoteNumber }}</td>
                                 <td>{{ production.policyNumber }}</td>
-                                <td>{{ production.client }}</td>
-                                <td>{{ production.intermediaryName }}</td>
-                                <td>{{ production.startDate | date }}</td>
-                                <td>{{ production.preparedBy }}</td>
-                                <td>{{ production.branch }}</td>
-                                <td>{{ production.sourceOfBusiness }}</td>
-                                <td>{{ production.productType }}</td>
-                                <td>{{ production.sumInsured }}</td>
-                                <td>{{ production.netPremium }}</td>
-                                <td>{{ production.levy }}</td>
+                                <td>{{ production.policy.client }}</td>
+                                <td>
+                                    {{ production.policy.intermediaryName }}
+                                </td>
+                                <td>
+                                    {{ production.policy.startDate | date }}
+                                </td>
+                                <td>{{ production.policy.user }}</td>
+                                <td>{{ production.policy.branch }}</td>
+                                <td>
+                                    {{ production.policy.sourceOfBusiness }}
+                                </td>
+                                <td>{{ production.policy.productType }}</td>
+                                <td>
+                                    {{
+                                        production.policy.sumInsured
+                                            | number: '1.2-2'
+                                    }}
+                                </td>
+                                <td>
+                                    {{
+                                        production.netPremium | number: '1.2-2'
+                                    }}
+                                </td>
+                                <td>{{ production.levy | number: '1.2-2' }}</td>
                                 <!-- <td>{{ production.commissionAmount }}</td> -->
-                                <td>{{ production.currency }}</td>
+                                <td>{{ production.policy.currency }}</td>
                                 <td>{{ 'New Business' }}</td>
                             </tr>
                         </tbody>
@@ -1347,6 +1403,7 @@
                     >
                         <thead>
                             <tr>
+                                <th>No</th>
                                 <th>Policy number</th>
                                 <th>Client</th>
                                 <th>Intermediary name</th>
@@ -1365,24 +1422,35 @@
                         </thead>
                         <tbody>
                             <tr
-                                *ngFor="let production of analysisTable.data"
+                                *ngFor="
+                                    let production of filterPremiumList;
+                                    let i = index
+                                "
                                 style="cursor: pointer;"
                             >
-                                <!-- <td></td> -->
+                                <td>{{ i + 1 }}</td>
                                 <td>{{ production.policyNumber }}</td>
                                 <td>{{ production.client }}</td>
                                 <td>{{ production.intermediaryName }}</td>
                                 <td>{{ production.startDate | date }}</td>
-                                <td>{{ production.preparedBy }}</td>
-                                <td>{{ production.Branch }}</td>
+                                <td>{{ production.user }}</td>
+                                <td>{{ production.branch }}</td>
                                 <td>{{ production.sourceOfBusiness }}</td>
                                 <td>{{ production.productType }}</td>
                                 <!-- <td>{{ production.riskID }}</td> -->
-                                <td>{{ production.sumInsured }}</td>
-                                <td>{{ production.netPremium }}</td>
-                                <td>{{ production.risks.premiumLevy  }}</td>
+                                <td>
+                                    {{
+                                        production.sumInsured | number: '1.2-2'
+                                    }}
+                                </td>
+                                <td>
+                                    {{
+                                        production.netPremium | number: '1.2-2'
+                                    }}
+                                </td>
+                                <td>{{ production.levy | number: '1.2-2' }}</td>
                                 <td>{{ production.commissionAmount }}</td>
-                                <td>{{ production.currency }}</td>
+                                <td>{{ production.commission }}</td>
                             </tr>
                         </tbody>
                     </nz-table>

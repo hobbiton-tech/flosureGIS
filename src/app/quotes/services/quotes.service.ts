@@ -12,7 +12,8 @@ import { NzMessageService } from 'ng-zorro-antd';
 import { Router } from '@angular/router';
 
 // const BASE_URL = 'http://localhost:3000';
-const BASE_URL = 'https://flosure-postgres-api.herokuapp.com';
+const BASE_URL = 'http://104.248.247.78:3000'
+//const BASE_URL = 'https://flosure-postgres-api.herokuapp.com';
 // const BASE_URL = 'https://flosure-api.azurewebsites.net';
 export interface IQuoteDocument {
     id: string;

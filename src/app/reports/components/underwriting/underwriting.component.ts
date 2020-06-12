@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { PremiumService } from '../../services/premium.service';
 import { map, filter, tap } from 'rxjs/operators';
-import { from } from 'rxjs';
+import { from, Observable, Subject } from 'rxjs';
 import { PremiumDTO } from 'src/app/quotes/services/quotes.service';
 import {
     IPremiumReport,
@@ -31,8 +31,11 @@ import * as moment from 'moment';
 
 import * as XLSX from 'xlsx';
 import { PolicyDto } from '../../model/quotation.model';
-import { DebitNote } from 'src/app/underwriting/documents/models/documents.model';
+// import { DebitNote } from 'src/app/underwriting/documents/models/documents.model';
+import { DebitNote } from '../../../underwriting/documents/models/documents.model';
 import _ from 'lodash';
+import { CommisionSetupsService } from 'src/app/settings/components/agents/services/commision-setups.service';
+import { ICommissionSetup } from 'src/app/settings/components/agents/models/commission-setup.model';
 
 interface FilterMotorQuotation extends MotorQuotationModel {
     client: string;
@@ -47,22 +50,33 @@ interface FilterMotorQuotation extends MotorQuotationModel {
     productType: string;
 }
 
-interface Motor extends MotorQuotationModel{
+interface Motor extends MotorQuotationModel {
     sumInsured: number;
     grossPremium: number;
 }
 
 interface PremiumReport extends Policy {
     policyNumber: string;
-    // debitNote: any;
+    debitNoteNumber: any;
     grossPremium: string;
     loading: number;
     discount: number;
     netPremium: number;
     levy: number;
     premiumDue: number;
+    commissionAmount: any;
+    commission: number;
 }
-
+interface filterDebitNote extends DebitNote {
+    policyNumber: string;
+    grossPremium: string;
+    loading: number;
+    discount: number;
+    netPremium: number;
+    levy: number;
+    premiumDue: number;
+    commissionAmount: number;
+}
 export type QuoteStatus = 'Draft' | 'Approved';
 
 interface IFormattedAnalysisReport
@@ -70,7 +84,7 @@ interface IFormattedAnalysisReport
         IBroker,
         ISalesRepresentative {
     getFullName: string;
-    getQuoteCount: number;
+    getQuoteCount: any;
     getPolicyCount: number;
     getRatio: number;
 }
@@ -94,13 +108,22 @@ export class UnderwritingComponent implements OnInit {
     displayQuotationReport: MotorQuotationModel[];
     motorList: MotorQuotationModel[];
     motor: Motor[];
+    filterMotor: Motor[];
 
     displayPolicyReport: Policy[] = [];
     policyList: Policy[] = [];
 
     displayDebitNote: DebitNote[] = [];
-    debitNoteList: DebitNote[] = [];
-    filterNote: DebitNote[] = [];
+    // debitNoteList: DebitNote[] = [];
+    // filterNote: DebitNote[] = [];
+
+    commission: any;
+
+    debitNotes: DebitNote[];
+    filterDebitNote: Array<filterDebitNote>;
+    finalDebitNote: Array<filterDebitNote>;
+    singleDebitNote: DebitNote;
+    latestDebitNote: DebitNote;
 
     // Quotation Analysis Report
     intermediariesList: Array<IAgent & IBroker & ISalesRepresentative>;
@@ -112,7 +135,7 @@ export class UnderwritingComponent implements OnInit {
     filterPremiumList: Array<PremiumReport>;
 
     quotesList: MotorQuotationModel[];
-    filteredQuotesList: MotorQuotationModel[] = [];
+    filteredQuotesList: any;
 
     // renewal report
     isRenewalReportVisible = false;
@@ -127,13 +150,17 @@ export class UnderwritingComponent implements OnInit {
     timeDay = new Date();
     fileName = 'PremiumReportTable' + this.timeDay + '.xlsx';
 
-
     filterPremiumReport: any;
     displayPremiumReport: Policy[];
+
+    public noLength;
+    public try;
+    debitNumber: any;
 
     constructor(
         private premiumService: PremiumService,
         private agentsService: AgentsService,
+        private commissionService: CommisionSetupsService,
         private quotationService: QuotesService,
         private policiesService: PoliciesService,
         private formBuilder: FormBuilder
@@ -172,7 +199,6 @@ export class UnderwritingComponent implements OnInit {
         this.isPremiumWorkingReportVisible = true;
     }
 
-    // sum up specific values in array
     sumArray(items, prop) {
         return items.reduce(function (a, b) {
             return a + b[prop];
@@ -187,74 +213,95 @@ export class UnderwritingComponent implements OnInit {
             this.motor = this.motorList.map((m) => ({
                 ...m,
                 sumInsured: this.sumArray(m.risks, 'sumInsured'),
-                grossPremium: this.sumArray(m.risks, 'basicPremium'),    
+                grossPremium: this.sumArray(m.risks, 'basicPremium'),
             }));
             console.log('Motor--->', this.displayQuotationReport);
+
+            this.filterMotor = this.motor.filter(
+                (x) => x.sourceOfBusiness !== sourceOfBusiness
+            );
         });
 
         let sourceOfBusiness = 'direct';
 
-        this.quotationService.getMotorQuotations().subscribe((d) => {
-            this.displayQuotationReport = d;
+        // this.quotationService.getMotorQuotations().subscribe((d) => {
+        //     this.displayQuotationReport = d;
 
-            this.filteredQuotesList = this.displayQuotationReport.filter(
-                (x) => x.sourceOfBusiness !== sourceOfBusiness
-            );
+        //     this.filteredQuotesList = this.displayQuotationReport.filter(
+        //         (x) => x.sourceOfBusiness !== sourceOfBusiness
+        //     );
 
-            this.displayQuotationReport = this.filteredQuotesList;
-            // console.log(this.filteredQuotesList)
+        //     this.displayQuotationReport = this.filteredQuotesList;
+        //     // console.log(this.filteredQuotesList)
 
-            console.log('Am filter--->', this.filteredQuotesList);
-        });
-
-        this.policiesService.getPolicies().subscribe((policies) => {
-            this.displayPolicyReport = policies;
-            console.log('Policy--->', this.displayPolicyReport);
-        });
-
-        this.policiesService.getPolicies().subscribe((policies) => {
-            this.displayPolicyReport = policies;
-        });
-
-        // this.premiumService.getDebitNotes().subscribe((debit) => {
-        //     this.displayDebitNote = debit;
+        //     // console.log('Am filter--->', this.filteredQuotesList);
         // });
 
-        console.log('debit', this.displayDebitNote);
+        // this.policiesService.getPolicies().subscribe((policies) => {
+        //     this.displayPolicyReport = policies;
+        //     console.log('Policy--->', this.displayPolicyReport);
+        // });
+
+        // this.policiesService.getPolicies().subscribe((policies) => {
+        //     this.displayPolicyReport = policies;
+        // });
+
+        // this.policiesService.getDebitNotes().subscribe((debit) => {
+        //     this.filterDebitNote = debit.map((x) => ({
+        //         ...x,
+        //         policyNumber: x.policy.policyNumber,
+        //         grossPremium: this.sumArray(x.policy.risks, 'basicPremium'),
+        //         loading: this.sumArray(x.policy.risks, 'loadingTotal'),
+        //         discount: this.sumArray(x.policy.risks, 'discountTotal'),
+        //         netPremium: this.sumArray(x.policy.risks, 'netPremium'),
+        //         levy: this.sumArray(x.policy.risks, 'premiumLevy'),
+        //         premiumDue: x.policy.sumInsured,
+        //         commissionAmount: this.getCommission(
+        //             x.policy.intermediaryName
+        //         ).subscribe(),
+        //     }));
+        // });
+
+        // console.log('debit', this.displayDebitNote);
 
         this.policiesService.getPolicies().subscribe((policy) => {
             this.displayPremiumReport = policy;
+
             this.filterPremiumList = this.displayPremiumReport.map((x) => ({
                 ...x,
                 policyNumber: x.policyNumber,
-                // debitNote: this.getDebitNote(x.id),
+                debitNoteNumber: this.getDebitNote(x.id),
                 grossPremium: this.sumArray(x.risks, 'basicPremium'),
                 loading: this.sumArray(x.risks, 'loadingTotal'),
                 discount: this.sumArray(x.risks, 'discountTotal'),
                 netPremium: this.sumArray(x.risks, 'netPremium'),
                 levy: this.sumArray(x.risks, 'premiumLevy'),
                 premiumDue: x.sumInsured,
+                commissionAmount: this.getCommission(x.intermediaryName),
+                commission: this.commission,
             }));
 
             this.displayPremiumReport = this.filterPremiumList;
-            console.log('New Policy', this.filterPremiumList);
+            console.log('New Policy--->', this.filterPremiumList);
         });
 
-        // var hash = Object.create(null);
-        // this.displayPolicyReport.concat(this.displayDebitNote).forEach(function(obj) {
-        //     hash[obj.id] = Object.assign(hash[obj.id] || {}, obj);
-        // });
-        // var a3 = Object.keys(hash).map(function(key) {
-        //     return hash[key];
+        // this.policiesService.getDebitNotes().subscribe((debit) => {
+        //     this.debitNotes = debit;
+
+        //     console.log(this.debitNotes);
+
+        //     this.filterDebitNote = this.debitNotes.map((x) => ({
+        //         ...x,
+        //         policy: x.policy,
+        //     }));
+
+        //     console.log('Policy Debit Note:', this.filterDebitNote);
         // });
 
-        // var merge = (Policy, DebitNote) => ({...Policy, ...DebitNote});
-        // _.zipWith(this.displayPolicyReport, this.displayDebitNote, merge)
-
-        var merged = _.map(this.displayPolicyReport, function (item) {
+        var merged = _.map(this.displayDebitNote, function (item) {
             return _.assign(
                 item,
-                _.find(this.displayDebitNote, ['id', item.id])
+                _.find(this.displayPolicyReport, ['id', item.policy.id])
             );
         });
 
@@ -285,15 +332,77 @@ export class UnderwritingComponent implements OnInit {
             });
     }
 
-    // getDebitNote(id: string) {
-    //     this.premiumService.getDebitNotes().subscribe((x) => {
-    //         this.debitNoteList = x;
-    //         // this.filterNote = this.debitNoteList.filter(
-    //         //     // (x) => x.policy == id
-    //         // );
-    //     });
-    // }
+    getIntermediaryQuoteCount(intermediary: any) {
+        // let quote: any;
+        // var subject = new Subject<string>();
+        this.quotationService.getMotorQuotations().subscribe((quotes) => {
+            this.noLength = quotes.filter(
+                (item) => item.intermediaryName === 'hobbiton'
+            ).length;
 
+            
+            // .filter((x) => x.intermediaryName == 'Mr')
+            // .map((x) => ({
+            //     ...x,
+            // }));
+
+            // quote = this.filteredQuotesList.length
+            // console.log('length->', this.filteredQuotesList);
+            // subject.next(quote);
+        });
+
+        const count = this.noLength;
+        console.log('test one on one', count);
+        // return subject.asObservable();
+    }
+
+    getCommission(name: string) {
+        this.commissionService.getCommissionSetups().subscribe((x) =>
+            x
+                .filter((x) => x.intermediaryName === 'hobbiton')
+                .map((m) => {
+                    this.commission = m.commission;
+                    // console.log('this comm',commission)
+                })
+        );
+
+        console.log('This Knew->', this.commission);
+        return this.commission;
+    }
+
+    getDebitNote(id: string) {
+       
+        var subject = new Subject<string>();
+        this.policiesService.getDebitNotes().subscribe((debitNotes) => {
+            this.debitNotes = debitNotes;
+            debitNotes
+                .filter((x) => x.policy.id === id)
+                .map((m) => {
+                    this.debitNumber = m.debitNoteNumber;
+                    console.log('new Debit', this.debitNumber);
+                    subject.next(this.debitNumber);
+                });
+
+            // this.singleDebitNote = debitNotes.filter(
+            //     (x) => x.policy.id === id
+            // )[0];
+
+            console.log('Policy Debit Note:', this.debitNumber);
+
+            // console.log(this.singleDebitNote.debitNoteNumber);
+
+            // return this.singleDebitNote.debitNoteNumber;
+        });
+
+        console.log('here', this.debitNotes)
+
+   
+
+
+        // return this.singleDebitNote.debitNoteNumber
+    }
+
+  
     handleOk(): void {
         this.isVisible = false;
         this.isAnalysisReportVisible = false;
@@ -324,37 +433,38 @@ export class UnderwritingComponent implements OnInit {
         }`;
     }
 
-    getIntermediaryQuoteCount(intermediary: any): number {
-        this.quotationService.getMotorQuotations().subscribe((quotes) => {
-            this.quotesList = quotes;
+    // getIntermediaryQuoteCount(intermediary: any): number {
+    //     this.quotationService.getMotorQuotations().subscribe((quotes) => {
+    //         this.quotesList = quotes;
 
-            this.filteredQuotesList = this.quotesList.filter((x) =>
-                x.intermediaryName == intermediary.companyName
-                    ? intermediary.companyName
-                    : intermediary.contactFirstName +
-                      ' ' +
-                      intermediary.contactLastName
-            );
-        });
-        console.log('-------->-->->', this.filteredQuotesList)
-        return this.filteredQuotesList.length;
-    }
+    //         this.filteredQuotesList = this.quotesList.filter((x) =>
+    //             x.intermediaryName == intermediary.companyName
+    //                 ? intermediary.companyName
+    //                 : intermediary.contactFirstName +
+    //                   ' ' +
+    //                   intermediary.contactLastName
+    //         );
+    //     });
+    //     console.log('-------->-->->', this.filteredQuotesList.length);
+    //     return this.filteredQuotesList.length;
+    // }
 
     getIntermediaryPolicyCount(intermediary: any): number {
         this.policiesService.getPolicies().subscribe((policies) => {
             console.log(policies);
 
             this.policiesList = policies;
-            this.filteredPoliciesList = this.policiesList.filter((x) =>
-                x.intermediaryName === intermediary.companyName
-                    ? intermediary.companyName
-                    : intermediary.contactFirstName +
-                      ' ' +
-                      intermediary.contactLastName
-            );
+            this.try = this.policiesList.filter(
+                (x) => x.intermediaryName === 'hobbiton'
+                // intermediary.companyName
+                //     ? intermediary.companyName
+                //     : intermediary.contactFirstName +
+                //       ' ' +
+                //       intermediary.contactLastName
+            ).length;
         });
 
-        // console.log('=>>>>' + this.filteredPoliciesList.length);
+        console.log('am test you=>>>>' + this.try);
 
         return this.filteredPoliciesList.length;
     }
@@ -528,12 +638,11 @@ export class UnderwritingComponent implements OnInit {
         //     options
         // );
 
-        let content = this.content.nativeElement;
-
+        // let content = this.content.nativeElement;
+        doc.setFontSize(11);
         //@ts-ignore
         doc.autoTable({
-            html: content,
-            fontSize: 9,
+            html: 'Table',
             margin: { top: 80 },
             didDrawPage: header,
         });

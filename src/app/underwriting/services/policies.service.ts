@@ -18,7 +18,9 @@ import {
     CoverNote
 } from '../documents/models/documents.model';
 
-const BASE_URL = 'https://flosure-postgres-api.herokuapp.com';
+// const BASE_URL ='http://localhost:3000';
+const BASE_URL = 'http://104.248.247.78:3000'
+// const BASE_URL = 'https://flosure-postgres-api.herokuapp.com';
 
 interface IDebitNoteResult {
     invoiceNumber: string;
@@ -229,7 +231,7 @@ export class PoliciesService {
 
     getPolicies(): Observable<Policy[]> {
         return this.http.get<Policy[]>(
-            'https://flosure-postgres-api.herokuapp.com/policy'
+            `${BASE_URL}/policy`
         );
         // return this.policies;
     }
@@ -291,8 +293,8 @@ export class PoliciesService {
             });
     }
 
-    getDebitNotes(): Observable<DebitNote> {
-        return this.http.get<DebitNote>(`${BASE_URL}/documents/debit-notes`);
+    getDebitNotes(): Observable<DebitNote[]> {
+        return this.http.get<DebitNote[]>(`${BASE_URL}/documents/debit-notes`);
     }
 
     getDebitNoteById(debitNoteId: string): Observable<DebitNote> {
