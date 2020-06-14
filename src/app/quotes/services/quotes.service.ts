@@ -137,6 +137,7 @@ export class QuotesService {
         this.http
             .get<any>(
                 `https://flosure-number-generation.herokuapp.com/aplus-quote-number/1/0/${insuranceType}`
+
             )
             .subscribe(async (res) => {
                 motorQuotation.quoteNumber = res.data.quotation_number;
@@ -292,6 +293,7 @@ export interface AddRiskDTO {
     loading?: LoadingDTO;
     discount?: DiscountDTO;
 }
+//
 export interface VehicleDTO {
     regNumber: string;
     vehicleMake: string;
