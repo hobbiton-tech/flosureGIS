@@ -83,8 +83,7 @@
         <br />
         <br />
 
-        <nz-table style="width: 100%;" #risksTable [nzData]="policy.risks" nzFrontPagination="false"
-            nzShowPagination="false">
+        <table style="width: 100%;" #risksTable nzFrontPagination="false" nzShowPagination="false">
 
             <tr>
                 <th>Reg No.</th>
@@ -97,7 +96,7 @@
                 <th>Insured's estimated value including Accessories and Spares</th>
                 <th>Insurance Provided</th>
             </tr>
-            <tr *ngFor="let risk of risksTable.data">
+            <tr *ngFor="let risk of policy.risks">
                 <td>{{risk.regNumber}}</td>
                 <td>{{risk.vehicleMake}}/{{risk.vehicleModel}}</td>
                 <td>{{risk.engineNumber}}</td>
@@ -105,10 +104,10 @@
                 <td>TBA</td>
                 <td>{{getYearOfManufacture(risk)}}</td>
                 <td>TBA</td>
-                <td>{{risk.estimatedValue ? risk.estimatedValue : 'N/A'}}</td>
+                <td>{{risk.estimatedValue ? risk.estimatedValue : 'TBA'}}</td>
                 <td>{{risk.insuranceType == 'ThirdParty' ? 'Third Party' : 'Comprehensive'}}</td>
             </tr>
-        </nz-table>
+        </table>
         <br />
 
 

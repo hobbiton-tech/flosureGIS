@@ -73,17 +73,16 @@
         <br />
 
 
-        <nz-table style="width: 100%; font-size: 12px;" #risksTable [nzData]="policy.risks" nzFrontPagination="false"
-            nzShowPagination="false">
+        <table style="width: 100%; font-size: 12px;" #risksTable nzFrontPagination="false" nzShowPagination="false">
 
             <tr class="heading">
-                <th style="border: 1px solid black;">
+                <th style="border: 1px solid black; border-collapse: collapse;">
                     Binder No.
                 </th>
-                <th class="td2" style="border: 1px solid black;">
+                <th class="td2" style="border: 1px solid black; border-collapse: collapse;">
                     Cover No.
                 </th>
-                <th style="border: 1px solid black;">
+                <th style="border: 1px solid black; border-collapse: collapse;">
                     Insured's Name & Asset
                 </th>
                 <th id="td3" style="border: 1px solid black;">
@@ -91,15 +90,15 @@
                 </th>
             </tr>
 
-            <tr *ngFor="let risk of risksTable.data" class="details">
-                <td style="border: 1px solid black;"></td>
+            <tr *ngFor="let risk of policy.risks" class="details">
+                <td style="border: 1px solid black; border-collapse: collapse;"></td>
 
-                <td class="td2" style="border: 1px solid black;"></td>
+                <td class="td2" style="border: 1px solid black; border-collapse: collapse;"></td>
                 <td style="border: 1px solid black;">
                     {{risk.regNumber}}, {{risk.vehicleMake}} {{risk.vehicleModel}} -
                     {{ risk.insuranceType == 'ThirdParty' ? 'Third Party' : 'Comprehensive' }}
                 </td>
-                <td id="td3" style="border: 1px solid black;">
+                <td id="td3" style="border: 1px solid black; border-collapse: collapse;">
                     {{ risk.basicPremium | number: '1.2-2' }}
                 </td>
             </tr>
@@ -107,24 +106,24 @@
                 <td></td>
                 <td></td>
                 <td style="float: right !important; font-weight: bold">Sub Total:</td>
-                <td style="border: 1px solid black;">
+                <td style="border: 1px solid black; border-collapse: collapse;">
                     <span>{{ subTotal | number: '1.2-2' }}</span></td>
             </tr>
             <tr>
                 <td></td>
                 <td></td>
                 <td style="float: right !important; font-weight: bold">Insurance Levy 3%:</td>
-                <td style="border: 1px solid black;">
+                <td style="border: 1px solid black; border-collapse: collapse;">
                     <span>{{ premiumLevy | number: '1.2-2' }}</span></td>
             </tr>
             <tr>
                 <td></td>
                 <td></td>
                 <td style="float: right !important; font-weight: bold">Total:</td>
-                <td style="border: 1px solid black;">
+                <td style="border: 1px solid black; border-collapse: collapse;">
                     <span>{{ policy.netPremium | number: '1.2-2' }}</span></td>
             </tr>
-        </nz-table>
+        </table>
 
         <!-- <p style="text-align: right; font-weight: bold;">
             Sub Total:
