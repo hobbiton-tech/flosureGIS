@@ -184,6 +184,8 @@ export class CreateQuoteComponent implements OnInit {
     motor: any;
     quoteForm: FormGroup;
     riskThirdPartyForm: FormGroup;
+    riskActOnlyForm: FormGroup;
+    riskThirdPartyFireAndTheftForm: FormGroup;
     riskComprehensiveForm: FormGroup;
     clients: Array<IIndividualClient & ICorporateClient>;
     premiumLoadingForm: FormGroup;
@@ -333,10 +335,15 @@ export class CreateQuoteComponent implements OnInit {
     quoteNumber: string;
 
     optionList = [
+        { label: 'Act Only Cover', value: 'ActOnly' },
+        { label: 'Full Third Party', value: 'ThirdParty' },
+        {
+            label: 'Third Party Fire And Theft',
+            value: 'ThirdPartyFireAndTheft',
+        },
         { label: 'Motor Comprehensive', value: 'Comprehensive' },
-        { label: 'Motor Third Party', value: 'ThirdParty' },
     ];
-    selectedValue = { label: 'Motor Comprehensive', value: 'Comprehensive' };
+    selectedValue = { label: 'Act Only', value: 'ActOnly' };
 
     motorComprehensiveloadingOptions = [
         {
@@ -496,6 +503,36 @@ export class CreateQuoteComponent implements OnInit {
             insuranceType: ['ThirdParty'],
         });
 
+        this.riskActOnlyForm = this.formBuilder.group({
+            riskStartDate: ['', Validators.required],
+            riskQuarter: ['', Validators.required],
+            riskEndDate: ['', Validators.required],
+            regNumber: ['', [Validators.required]],
+            vehicleMake: ['', [Validators.required]],
+            vehicleModel: ['', [Validators.required]],
+            engineNumber: [''],
+            chassisNumber: ['', [Validators.required]],
+            yearOfManufacture: ['', Validators.required],
+            color: ['', [Validators.required]],
+            productType: ['', [Validators.required]],
+            insuranceType: ['ActOnly'],
+        });
+
+        this.riskThirdPartyFireAndTheftForm = this.formBuilder.group({
+            riskStartDate: ['', Validators.required],
+            riskQuarter: ['', Validators.required],
+            riskEndDate: ['', Validators.required],
+            regNumber: ['', [Validators.required]],
+            vehicleMake: ['', [Validators.required]],
+            vehicleModel: ['', [Validators.required]],
+            engineNumber: [''],
+            chassisNumber: ['', [Validators.required]],
+            yearOfManufacture: ['', Validators.required],
+            color: ['', [Validators.required]],
+            productType: ['', [Validators.required]],
+            insuranceType: ['ThirdPartyFireAndTheft'],
+        });
+
         // vehicle make loading
         const getVehicleMakeList = (name: string) =>
             this.http
@@ -621,7 +658,7 @@ export class CreateQuoteComponent implements OnInit {
             };
             this.http
                 .post<IRateResult>(
-                    `https://new-rates-api.now.sh/rates/comprehensive`,
+                    `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                     request
                 )
                 .subscribe((data) => {
@@ -660,11 +697,90 @@ export class CreateQuoteComponent implements OnInit {
             };
             this.http
                 .post<IRateResult>(
-                    `https://new-rates-api.now.sh/rates/comprehensive`,
+                    `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                     request
                 )
                 .subscribe((data) => {
                     this.riskThirdPartyForm
+                        .get('riskEndDate')
+                        .setValue(data.endDate);
+                });
+        }
+    }
+
+    handleThirdPartyFireandTheftRiskEndDateCalculation(): void {
+        this.handleBasicPremiumCalculationThirdPartyFireAndTheft();
+        if (
+            this.riskThirdPartyFireAndTheftForm.get('riskStartDate').value !=
+                '' &&
+            this.riskThirdPartyFireAndTheftForm.get('riskQuarter').value != ''
+        ) {
+            const request: IRateRequest = {
+                sumInsured: 0,
+                premiumRate: 0,
+                startDate: this.riskThirdPartyFireAndTheftForm.get(
+                    'riskStartDate'
+                ).value,
+                quarter: Number(
+                    this.riskThirdPartyFireAndTheftForm.get('riskQuarter').value
+                ),
+                appliedDiscount: 0,
+                discount: 0,
+                carStereo: 0,
+                carStereoRate: 0,
+                lossOfUseDays: 0,
+                lossOfUseRate: 0,
+                territorialExtensionWeeks: 0,
+                territorialExtensionCountries: 0,
+                thirdPartyLimit: 0,
+                thirdPartyLimitRate: 0,
+                riotAndStrike: 0,
+                levy: 0,
+            };
+            this.http
+                .post<IRateResult>(
+                    `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
+                    request
+                )
+                .subscribe((data) => {
+                    this.riskThirdPartyFireAndTheftForm
+                        .get('riskEndDate')
+                        .setValue(data.endDate);
+                });
+        }
+    }
+
+    handleActOnlyRiskEndDateCalculation(): void {
+        this.handleBasicPremiumCalculationActOnly();
+        if (
+            this.riskActOnlyForm.get('riskStartDate').value != '' &&
+            this.riskActOnlyForm.get('riskQuarter').value != ''
+        ) {
+            const request: IRateRequest = {
+                sumInsured: 0,
+                premiumRate: 0,
+                startDate: this.riskActOnlyForm.get('riskStartDate').value,
+                quarter: Number(this.riskActOnlyForm.get('riskQuarter').value),
+                appliedDiscount: 0,
+                discount: 0,
+                carStereo: 0,
+                carStereoRate: 0,
+                lossOfUseDays: 0,
+                lossOfUseRate: 0,
+                territorialExtensionWeeks: 0,
+                territorialExtensionCountries: 0,
+                thirdPartyLimit: 0,
+                thirdPartyLimitRate: 0,
+                riotAndStrike: 0,
+                levy: 0,
+            };
+            this.http
+                .post<IRateResult>(
+                    `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
+                    request
+                )
+                .subscribe((data) => {
+                    this.riskActOnlyForm
                         .get('riskEndDate')
                         .setValue(data.endDate);
                 });
@@ -696,7 +812,7 @@ export class CreateQuoteComponent implements OnInit {
             };
             this.http
                 .post<IRateResult>(
-                    `https://new-rates-api.now.sh/rates/comprehensive`,
+                    `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                     request
                 )
                 .subscribe((data) => {
@@ -730,7 +846,7 @@ export class CreateQuoteComponent implements OnInit {
             };
             this.http
                 .post<IRateResult>(
-                    `https://new-rates-api.now.sh/rates/comprehensive`,
+                    `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                     request
                 )
                 .subscribe((data) => {
@@ -796,6 +912,156 @@ export class CreateQuoteComponent implements OnInit {
         this.handleNetPremium();
     }
 
+    handleBasicPremiumCalculationActOnly(): void {
+        if (
+            this.riskActOnlyForm.get('productType').value != '' &&
+            this.riskActOnlyForm.get('riskQuarter').value != ''
+        ) {
+            if (this.riskActOnlyForm.get('productType').value == 'Private') {
+                if (this.riskActOnlyForm.get('riskQuarter').value == 1) {
+                    this.basicPremium = 165;
+                }
+                if (this.riskActOnlyForm.get('riskQuarter').value == 2) {
+                    this.basicPremium = 280;
+                }
+                if (this.riskActOnlyForm.get('riskQuarter').value == 3) {
+                    this.basicPremium = 370;
+                }
+                if (this.riskActOnlyForm.get('riskQuarter').value == 4) {
+                    this.basicPremium = 464;
+                }
+            }
+            if (this.riskActOnlyForm.get('productType').value == 'Commercial') {
+                if (this.riskActOnlyForm.get('riskQuarter').value == 1) {
+                    this.basicPremium = 199;
+                }
+                if (this.riskActOnlyForm.get('riskQuarter').value == 2) {
+                    this.basicPremium = 340;
+                }
+                if (this.riskActOnlyForm.get('riskQuarter').value == 3) {
+                    this.basicPremium = 452;
+                }
+                if (this.riskActOnlyForm.get('riskQuarter').value == 4) {
+                    this.basicPremium = 566;
+                }
+            }
+            if (this.riskActOnlyForm.get('productType').value == 'Bus/Taxi') {
+                if (this.riskActOnlyForm.get('riskQuarter').value == 1) {
+                    this.basicPremium = 270;
+                }
+                if (this.riskActOnlyForm.get('riskQuarter').value == 2) {
+                    this.basicPremium = 464;
+                }
+                if (this.riskActOnlyForm.get('riskQuarter').value == 3) {
+                    this.basicPremium = 618;
+                }
+                if (this.riskActOnlyForm.get('riskQuarter').value == 4) {
+                    this.basicPremium = 772;
+                }
+            }
+        }
+
+        this.handleNetPremium();
+    }
+
+    handleBasicPremiumCalculationThirdPartyFireAndTheft(): void {
+        if (
+            this.riskThirdPartyFireAndTheftForm.get('productType').value !=
+                '' &&
+            this.riskThirdPartyFireAndTheftForm.get('riskQuarter').value != ''
+        ) {
+            if (
+                this.riskThirdPartyFireAndTheftForm.get('productType').value ==
+                'Private'
+            ) {
+                if (
+                    this.riskThirdPartyFireAndTheftForm.get('riskQuarter')
+                        .value == 1
+                ) {
+                    this.basicPremium = 165;
+                }
+                if (
+                    this.riskThirdPartyFireAndTheftForm.get('riskQuarter')
+                        .value == 2
+                ) {
+                    this.basicPremium = 280;
+                }
+                if (
+                    this.riskThirdPartyFireAndTheftForm.get('riskQuarter')
+                        .value == 3
+                ) {
+                    this.basicPremium = 370;
+                }
+                if (
+                    this.riskThirdPartyFireAndTheftForm.get('riskQuarter')
+                        .value == 4
+                ) {
+                    this.basicPremium = 464;
+                }
+            }
+            if (
+                this.riskThirdPartyFireAndTheftForm.get('productType').value ==
+                'Commercial'
+            ) {
+                if (
+                    this.riskThirdPartyFireAndTheftForm.get('riskQuarter')
+                        .value == 1
+                ) {
+                    this.basicPremium = 199;
+                }
+                if (
+                    this.riskThirdPartyFireAndTheftForm.get('riskQuarter')
+                        .value == 2
+                ) {
+                    this.basicPremium = 340;
+                }
+                if (
+                    this.riskThirdPartyFireAndTheftForm.get('riskQuarter')
+                        .value == 3
+                ) {
+                    this.basicPremium = 452;
+                }
+                if (
+                    this.riskThirdPartyFireAndTheftForm.get('riskQuarter')
+                        .value == 4
+                ) {
+                    this.basicPremium = 566;
+                }
+            }
+            if (
+                this.riskThirdPartyFireAndTheftForm.get('productType').value ==
+                'Bus/Taxi'
+            ) {
+                if (
+                    this.riskThirdPartyFireAndTheftForm.get('riskQuarter')
+                        .value == 1
+                ) {
+                    this.basicPremium = 270;
+                }
+                if (
+                    this.riskThirdPartyFireAndTheftForm.get('riskQuarter')
+                        .value == 2
+                ) {
+                    this.basicPremium = 464;
+                }
+                if (
+                    this.riskThirdPartyFireAndTheftForm.get('riskQuarter')
+                        .value == 3
+                ) {
+                    this.basicPremium = 618;
+                }
+                if (
+                    this.riskThirdPartyFireAndTheftForm.get('riskQuarter')
+                        .value == 4
+                ) {
+                    this.basicPremium = 772;
+                }
+            }
+        }
+
+        this.handleNetPremium();
+    }
+
     // onSubmit() {
     //     const some = this.quoteForm.value;
     //     this.quoteService.addMotorQuotation(some);
@@ -840,10 +1106,112 @@ export class CreateQuoteComponent implements OnInit {
         console.log(this.risks);
     }
 
+    // add Act Only risk
+    addActOnlyRisk(): void {
+        const some: RiskModel[] = [];
+        some.push({
+            ...this.riskActOnlyForm.value,
+            id: v4(),
+            sumInsured: 0,
+            premiumRate: 0,
+            basicPremium: this.basicPremium,
+            loads: this.loads,
+            discounts: this.discounts,
+            loadingTotal: this.premiumLoadingTotal,
+            discountTotal: this.premiumDiscount,
+            discountRate: this.premiumDiscountRate,
+            premiumLevy: this.basicPremiumLevy,
+            netPremium: this.netPremium,
+            insuranceType: this.selectedValue.value,
+        });
+        this.risks = [...this.risks, ...some];
+
+        // reset form after submitting
+        this.riskActOnlyForm.reset();
+        (this.sumInsured = 0),
+            (this.premiumRate = 0),
+            (this.basicPremium = 0),
+            (this.loads = []),
+            (this.premiumLoadingTotal = 0),
+            (this.premiumDiscountRate = 0),
+            (this.netPremium = 0);
+        this.basicPremiumLevy = 0;
+        this.premiumDiscount = 0;
+
+        this.isAddRiskPanelOpen = false;
+        console.log(this.risks);
+    }
+
+    // add third party Fire And Theft risk
+    addThirdPartyFireAndTheftRisk(): void {
+        const some: RiskModel[] = [];
+        some.push({
+            ...this.riskThirdPartyFireAndTheftForm.value,
+            id: v4(),
+            sumInsured: 0,
+            premiumRate: 0,
+            basicPremium: this.basicPremium,
+            loads: this.loads,
+            discounts: this.discounts,
+            loadingTotal: this.premiumLoadingTotal,
+            discountTotal: this.premiumDiscount,
+            discountRate: this.premiumDiscountRate,
+            premiumLevy: this.basicPremiumLevy,
+            netPremium: this.netPremium,
+            insuranceType: this.selectedValue.value,
+        });
+        this.risks = [...this.risks, ...some];
+
+        // reset form after submitting
+        this.riskThirdPartyFireAndTheftForm.reset();
+        (this.sumInsured = 0),
+            (this.premiumRate = 0),
+            (this.basicPremium = 0),
+            (this.loads = []),
+            (this.premiumLoadingTotal = 0),
+            (this.premiumDiscountRate = 0),
+            (this.netPremium = 0);
+        this.basicPremiumLevy = 0;
+        this.premiumDiscount = 0;
+
+        this.isAddRiskPanelOpen = false;
+        console.log(this.risks);
+    }
+
     // reset third party risk form
     resetThirdPartyRiskForm(e: MouseEvent) {
         e.preventDefault();
         this.riskComprehensiveForm.reset();
+        (this.sumInsured = 0),
+            (this.premiumRate = 0),
+            (this.basicPremium = 0),
+            (this.loads = []),
+            (this.premiumLoadingTotal = 0),
+            (this.premiumDiscountRate = 0),
+            (this.netPremium = 0);
+        this.basicPremiumLevy = 0;
+        this.premiumDiscount = 0;
+    }
+
+    // reset third party risk form
+    resetActOnlyForm(e: MouseEvent) {
+        e.preventDefault();
+        this.riskActOnlyForm.reset();
+        (this.sumInsured = 0),
+            (this.premiumRate = 0),
+            (this.basicPremium = 0),
+            (this.loads = []),
+            (this.premiumLoadingTotal = 0),
+            (this.premiumDiscountRate = 0),
+            (this.netPremium = 0);
+        this.basicPremiumLevy = 0;
+        this.premiumDiscount = 0;
+    }
+
+    // reset third party risk form
+    resetThirdPartyFireAndTheftRiskForm(e: MouseEvent) {
+        e.preventDefault();
+        this.riskThirdPartyFireAndTheftForm.reset();
         (this.sumInsured = 0),
             (this.premiumRate = 0),
             (this.basicPremium = 0),
@@ -909,6 +1277,8 @@ export class CreateQuoteComponent implements OnInit {
     resetForms() {
         this.riskComprehensiveForm.reset();
         this.riskThirdPartyForm.reset();
+        this.riskActOnlyForm.reset();
+        this.riskThirdPartyFireAndTheftForm.reset();
         (this.sumInsured = 0),
             (this.premiumRate = 0),
             (this.basicPremium = 0),
@@ -957,14 +1327,14 @@ export class CreateQuoteComponent implements OnInit {
                 .get('riskEndDate')
                 .setValue(risk.riskEndDate);
             this.riskComprehensiveForm.get('color').setValue(risk.color);
-        } else {
-            this.riskComprehensiveForm
+        } else if (this.selectedValue.value === 'ThirdParty') {
+            this.riskThirdPartyForm
                 .get('vehicleMake')
                 .setValue(risk.vehicleMake);
-            this.riskComprehensiveForm
+            this.riskThirdPartyForm
                 .get('vehicleModel')
                 .setValue(risk.vehicleModel);
-            this.riskComprehensiveForm
+            this.riskThirdPartyForm
                 .get('yearOfManufacture')
                 .setValue(risk.yearOfManufacture);
             this.riskThirdPartyForm.get('regNumber').setValue(risk.regNumber);
@@ -987,6 +1357,62 @@ export class CreateQuoteComponent implements OnInit {
                 .get('riskEndDate')
                 .setValue(risk.riskEndDate);
             this.riskThirdPartyForm.get('color').setValue(risk.color);
+        } else if (this.selectedValue.value === 'ActOnly') {
+            this.riskActOnlyForm.get('vehicleMake').setValue(risk.vehicleMake);
+            this.riskActOnlyForm
+                .get('vehicleModel')
+                .setValue(risk.vehicleModel);
+            this.riskActOnlyForm
+                .get('yearOfManufacture')
+                .setValue(risk.yearOfManufacture);
+            this.riskActOnlyForm.get('regNumber').setValue(risk.regNumber);
+            this.riskActOnlyForm
+                .get('engineNumber')
+                .setValue(risk.engineNumber);
+            this.riskActOnlyForm
+                .get('chassisNumber')
+                .setValue(risk.chassisNumber);
+            this.riskActOnlyForm.get('productType').setValue(risk.productType);
+            this.riskActOnlyForm
+                .get('riskStartDate')
+                .setValue(risk.riskStartDate);
+            this.riskActOnlyForm.get('riskQuarter').setValue(risk.riskQuarter);
+            this.riskActOnlyForm.get('riskEndDate').setValue(risk.riskEndDate);
+            this.riskActOnlyForm.get('color').setValue(risk.color);
+        } else if (this.selectedValue.value === 'ThirdPartyFireAndTheft') {
+            this.riskThirdPartyFireAndTheftForm
+                .get('vehicleMake')
+                .setValue(risk.vehicleMake);
+            this.riskThirdPartyFireAndTheftForm
+                .get('vehicleModel')
+                .setValue(risk.vehicleModel);
+            this.riskThirdPartyFireAndTheftForm
+                .get('yearOfManufacture')
+                .setValue(risk.yearOfManufacture);
+            this.riskThirdPartyFireAndTheftForm
+                .get('regNumber')
+                .setValue(risk.regNumber);
+            this.riskThirdPartyFireAndTheftForm
+                .get('engineNumber')
+                .setValue(risk.engineNumber);
+            this.riskThirdPartyFireAndTheftForm
+                .get('chassisNumber')
+                .setValue(risk.chassisNumber);
+            this.riskThirdPartyFireAndTheftForm
+                .get('productType')
+                .setValue(risk.productType);
+            this.riskThirdPartyFireAndTheftForm
+                .get('riskStartDate')
+                .setValue(risk.riskStartDate);
+            this.riskThirdPartyFireAndTheftForm
+                .get('riskQuarter')
+                .setValue(risk.riskQuarter);
+            this.riskThirdPartyFireAndTheftForm
+                .get('riskEndDate')
+                .setValue(risk.riskEndDate);
+            this.riskThirdPartyFireAndTheftForm
+                .get('color')
+                .setValue(risk.color);
         }
 
         this.selectedVehicleMake = risk.vehicleMake;
@@ -1032,10 +1458,50 @@ export class CreateQuoteComponent implements OnInit {
             });
             this.risks.splice(riskIndex, 1, this.currentRiskEdit);
             this.risks = this.risks;
-        } else {
+        } else if (this.selectedValue.value === 'ThirdParty') {
             // third party risk
             const some: RiskModel = {
                 ...this.riskThirdPartyForm.value,
+                sumInsured: 0,
+                premiumRate: 0,
+                basicPremium: this.basicPremium,
+                loads: this.loads,
+                loadingTotal: this.premiumLoadingTotal,
+                discountRate: this.premiumDiscountRate,
+                premiumLevy: this.basicPremiumLevy,
+                netPremium: this.netPremium,
+                insuranceType: this.selectedValue.value,
+            };
+            this.selectedRisk = some;
+
+            const riskIndex = _.findIndex(this.risks, {
+                id: this.selectedRisk.id,
+            });
+            this.risks.splice(riskIndex, 1, this.currentRiskEdit);
+        } else if (this.selectedValue.value === 'ActOnly') {
+            // third party risk
+            const some: RiskModel = {
+                ...this.riskActOnlyForm.value,
+                sumInsured: 0,
+                premiumRate: 0,
+                basicPremium: this.basicPremium,
+                loads: this.loads,
+                loadingTotal: this.premiumLoadingTotal,
+                discountRate: this.premiumDiscountRate,
+                premiumLevy: this.basicPremiumLevy,
+                netPremium: this.netPremium,
+                insuranceType: this.selectedValue.value,
+            };
+            this.selectedRisk = some;
+
+            const riskIndex = _.findIndex(this.risks, {
+                id: this.selectedRisk.id,
+            });
+            this.risks.splice(riskIndex, 1, this.currentRiskEdit);
+        } else if (this.selectedValue.value === 'ThirdPartyFireAndTheft') {
+            // third party risk
+            const some: RiskModel = {
+                ...this.riskThirdPartyFireAndTheftForm.value,
                 sumInsured: 0,
                 premiumRate: 0,
                 basicPremium: this.basicPremium,
@@ -1344,7 +1810,7 @@ export class CreateQuoteComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://new-rates-api.now.sh/rates/comprehensive`,
+                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                 request
             )
             .subscribe((data) => {
@@ -1419,7 +1885,7 @@ export class CreateQuoteComponent implements OnInit {
             };
             this.http
                 .post<IRateResult>(
-                    `https://new-rates-api.now.sh/rates/comprehensive`,
+                    `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                     request
                 )
                 .subscribe((data) => {
@@ -1457,7 +1923,7 @@ export class CreateQuoteComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://new-rates-api.now.sh/rates/comprehensive`,
+                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                 request
             )
             .subscribe((data) => {
@@ -1496,7 +1962,7 @@ export class CreateQuoteComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://new-rates-api.now.sh/rates/comprehensive`,
+                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                 request
             )
             .subscribe((data) => {
@@ -1538,7 +2004,7 @@ export class CreateQuoteComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://new-rates-api.now.sh/rates/comprehensive`,
+                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                 request
             )
             .subscribe((data) => {
@@ -1578,7 +2044,90 @@ export class CreateQuoteComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://new-rates-api.now.sh/rates/comprehensive`,
+                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
+                request
+            )
+            .subscribe((data) => {
+                this.loads.push({
+                    loadType: 'Increased Third Party Limit',
+                    amount: Number(data.thirdPartyLoadingPremium),
+                });
+                this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+                this.handleNetPremium();
+                this.computeIncreasedThirdPartyLimitIsLoading = false;
+            });
+    }
+
+    computeIncreasedThirdPartyLimitActOnly() {
+        this.computeIncreasedThirdPartyLimitIsLoading = true;
+
+        const request: IRateRequest = {
+            sumInsured: 0,
+            premiumRate: 0,
+            startDate: this.riskActOnlyForm.get('riskStartDate').value,
+            quarter: Number(this.riskActOnlyForm.get('riskQuarter').value),
+            appliedDiscount: this.premiumDiscount,
+            discount: Number(this.premiumDiscountRate) / 100,
+            carStereo: Number(this.carStereoValue),
+            carStereoRate: Number(this.carStereoRate) / 100,
+            lossOfUseDays: Number(this.lossOfUseDays),
+            lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+            territorialExtensionWeeks: Number(this.territorialExtensionWeeks),
+            territorialExtensionCountries: Number(
+                this.territorialExtensionCountries
+            ),
+            thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
+            thirdPartyLimitRate:
+                Number(this.increasedThirdPartyLimitsRate) / 100,
+            riotAndStrike: Number(this.riotAndStrikeRate) / 100,
+            levy: 0.03,
+        };
+        this.http
+            .post<IRateResult>(
+                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
+                request
+            )
+            .subscribe((data) => {
+                this.loads.push({
+                    loadType: 'Increased Third Party Limit',
+                    amount: Number(data.thirdPartyLoadingPremium),
+                });
+                this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+                this.handleNetPremium();
+                this.computeIncreasedThirdPartyLimitIsLoading = false;
+            });
+    }
+
+    computeIncreasedThirdPartyLimitFireAndTheft() {
+        this.computeIncreasedThirdPartyLimitIsLoading = true;
+
+        const request: IRateRequest = {
+            sumInsured: 0,
+            premiumRate: 0,
+            startDate: this.riskThirdPartyFireAndTheftForm.get('riskStartDate')
+                .value,
+            quarter: Number(
+                this.riskThirdPartyFireAndTheftForm.get('riskQuarter').value
+            ),
+            appliedDiscount: this.premiumDiscount,
+            discount: Number(this.premiumDiscountRate) / 100,
+            carStereo: Number(this.carStereoValue),
+            carStereoRate: Number(this.carStereoRate) / 100,
+            lossOfUseDays: Number(this.lossOfUseDays),
+            lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
+            territorialExtensionWeeks: Number(this.territorialExtensionWeeks),
+            territorialExtensionCountries: Number(
+                this.territorialExtensionCountries
+            ),
+            thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
+            thirdPartyLimitRate:
+                Number(this.increasedThirdPartyLimitsRate) / 100,
+            riotAndStrike: Number(this.riotAndStrikeRate) / 100,
+            levy: 0.03,
+        };
+        this.http
+            .post<IRateResult>(
+                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                 request
             )
             .subscribe((data) => {
@@ -1620,7 +2169,7 @@ export class CreateQuoteComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://new-rates-api.now.sh/rates/comprehensive`,
+                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                 request
             )
             .subscribe((data) => {
@@ -1662,7 +2211,7 @@ export class CreateQuoteComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://new-rates-api.now.sh/rates/comprehensive`,
+                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                 request
             )
             .subscribe((data) => {
@@ -1704,7 +2253,7 @@ export class CreateQuoteComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://new-rates-api.now.sh/rates/comprehensive`,
+                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                 request
             )
             .subscribe((data) => {

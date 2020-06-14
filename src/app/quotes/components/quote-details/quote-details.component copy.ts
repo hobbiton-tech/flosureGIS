@@ -689,7 +689,7 @@ export class QuoteDetailsComponent implements OnInit {
             };
             this.http
                 .post<IRateResult>(
-                    `https://new-rates-api.now.sh/rates/comprehensive`,
+                    `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                     request
                 )
                 .subscribe((data) => {
@@ -728,7 +728,7 @@ export class QuoteDetailsComponent implements OnInit {
             };
             this.http
                 .post<IRateResult>(
-                    `https://new-rates-api.now.sh/rates/comprehensive`,
+                    `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                     request
                 )
                 .subscribe((data) => {
@@ -764,7 +764,7 @@ export class QuoteDetailsComponent implements OnInit {
             };
             this.http
                 .post<IRateResult>(
-                    `https://new-rates-api.now.sh/rates/comprehensive`,
+                    `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                     request
                 )
                 .subscribe((data) => {
@@ -798,7 +798,7 @@ export class QuoteDetailsComponent implements OnInit {
             };
             this.http
                 .post<IRateResult>(
-                    `https://new-rates-api.now.sh/rates/comprehensive`,
+                    `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                     request
                 )
                 .subscribe((data) => {
@@ -1457,7 +1457,7 @@ export class QuoteDetailsComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://new-rates-api.now.sh/rates/comprehensive`,
+                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                 request
             )
             .subscribe((data) => {
@@ -1491,7 +1491,7 @@ export class QuoteDetailsComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://new-rates-api.now.sh/rates/comprehensive`,
+                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                 request
             )
             .subscribe((data) => {
@@ -1529,7 +1529,7 @@ export class QuoteDetailsComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://new-rates-api.now.sh/rates/comprehensive`,
+                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                 request
             )
             .subscribe((data) => {
@@ -1571,7 +1571,7 @@ export class QuoteDetailsComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://new-rates-api.now.sh/rates/comprehensive`,
+                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                 request
             )
             .subscribe((data) => {
@@ -1611,7 +1611,7 @@ export class QuoteDetailsComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://new-rates-api.now.sh/rates/comprehensive`,
+                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                 request
             )
             .subscribe((data) => {
@@ -1653,7 +1653,7 @@ export class QuoteDetailsComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://new-rates-api.now.sh/rates/comprehensive`,
+                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                 request
             )
             .subscribe((data) => {
@@ -1695,7 +1695,7 @@ export class QuoteDetailsComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://new-rates-api.now.sh/rates/comprehensive`,
+                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                 request
             )
             .subscribe((data) => {
@@ -1737,7 +1737,7 @@ export class QuoteDetailsComponent implements OnInit {
         };
         this.http
             .post<IRateResult>(
-                `https://new-rates-api.now.sh/rates/comprehensive`,
+                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                 request
             )
             .subscribe((data) => {
@@ -1854,7 +1854,7 @@ export class QuoteDetailsComponent implements OnInit {
             };
             this.http
                 .post<IRateResult>(
-                    `https://new-rates-api.now.sh/rates/comprehensive`,
+                    `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                     request
                 )
                 .subscribe((data) => {
@@ -1927,7 +1927,7 @@ export class QuoteDetailsComponent implements OnInit {
             };
             this.http
                 .post<IRateResult>(
-                    `https://new-rates-api.now.sh/rates/comprehensive`,
+                    `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                     request
                 )
                 .subscribe((data) => {

@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import _ from 'lodash';
 import { v4 } from 'uuid';
 import { PoliciesService } from 'src/app/underwriting/services/policies.service';
+import { DebitNote } from 'src/app/underwriting/documents/models/documents.model';
 
 @Component({
     selector: 'app-direct-client',
@@ -77,6 +78,9 @@ export class DirectClientComponent implements OnInit {
     sourceOfBusiness: string;
     intermediaryName: string;
     receiptNewCount: number;
+    debitnoteList: DebitNote[] = [];
+    debitnote: DebitNote;
+
     constructor(
         private receiptService: AccountService,
         private policeServices: PoliciesService,
@@ -96,6 +100,7 @@ export class DirectClientComponent implements OnInit {
             dateReceived: [''],
             todayDate: [''],
             remarks: [''],
+            cheqNumber: [''],
         });
 
         this.cancelForm = this.formBuilder.group({
@@ -122,6 +127,10 @@ export class DirectClientComponent implements OnInit {
             ).length;
             console.log('======= Unreceipt List =======');
             console.log(this.unreceiptedList);
+        });
+
+        this.policeServices.getDebitNotes().subscribe((invoice) => {
+            this.debitnoteList = invoice;
         });
 
         this.receiptService.getReciepts().subscribe((receipts) => {
@@ -156,6 +165,9 @@ export class DirectClientComponent implements OnInit {
         this.policyNumber = unreceipted.policyNumber;
         this.user = unreceipted.user;
         this.policy = unreceipted;
+        this.debitnote = this.debitnoteList.filter(
+            (x) => x.policy.id === unreceipted.id
+        )[0];
         this.policyAmount = unreceipted.netPremium;
         this.sourceOfBusiness = unreceipted.sourceOfBusiness;
         this.intermediaryName = unreceipted.intermediaryName;
@@ -168,6 +180,7 @@ export class DirectClientComponent implements OnInit {
 
     async handleOk() {
         this.submitted = true;
+        console.log('DEBIT NOTE NUMBER>>>>>', this.debitnote.debitNoteNumber);
         if (this.receiptForm.valid) {
             this.isOkLoading = true;
             this._id = v4();
@@ -180,8 +193,9 @@ export class DirectClientComponent implements OnInit {
                 receiptStatus: this.recStatus,
                 sumInDigits: this.policyAmount,
                 todayDate: new Date(),
+                invoiceNumber: this.debitnote.debitNoteNumber,
                 sourceOfBusiness: this.sourceOfBusiness,
-                intermediaryName: 'direct',
+                intermediaryName: this.intermediaryName,
             };
 
             this.receiptNum = this._id;
@@ -200,21 +214,21 @@ export class DirectClientComponent implements OnInit {
                     console.log(err);
                 });
             this.receiptForm.reset();
+            setTimeout(() => {
+                this.isVisible = false;
+                this.isOkLoading = false;
+            }, 30);
 
             this.policy.receiptStatus = 'Receipted';
             this.policy.paymentPlan = 'Created';
             console.log('<++++++++++++++++++CLAIN+++++++++>');
             console.log(this.policy);
 
-            await this.receiptService.updatePolicy(this.policy);
-            setTimeout(() => {
-                this.isVisible = false;
-                this.isOkLoading = false;
-            }, 3000);
+            await this.policeServices.updatePolicy(this.policy);
+
             this.generateID(this._id);
         }
     }
-
     handleCancel(): void {
         this.isVisible = false;
     }
