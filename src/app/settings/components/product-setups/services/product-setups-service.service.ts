@@ -5,10 +5,10 @@ import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
-const BASE_URL = 'https://flosure-postgres-api.herokuapp.com';
+const BASE_URL = 'http://104.248.247.78:3000';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class ProductSetupsServiceService {
     constructor(private http: HttpClient) {}
@@ -34,33 +34,32 @@ export class ProductSetupsServiceService {
 
     addClass(dto: IClass): Observable<IClass> {
         return this.http.post<IClass>(
-            'https://flosure-postgres-api.herokuapp.com/class',
+            'http://104.248.247.78:3000/class',
+
             dto
         );
     }
 
     getClasses(): Observable<IClass[]> {
-        return this.http.get<IClass[]>(
-            'https://flosure-postgres-api.herokuapp.com/class'
-        );
+        return this.http.get<IClass[]>('http://104.248.247.78:3000/class');
     }
 
     addProduct(dto: IProduct, id: string): Observable<IProduct> {
         return this.http.post<IProduct>(
-            `https://flosure-postgres-api.herokuapp.com/product/${id}`,
+            `http://104.248.247.78:3000/product/${id}`,
             dto
         );
     }
 
     getProducts(id: string): Observable<IProduct[]> {
         return this.http.get<IProduct[]>(
-            `https://flosure-postgres-api.herokuapp.com/product/class-products/${id}`
+            `http://104.248.247.78:3000/product/class-products/${id}`
         );
     }
 
     getProductsNo(): Observable<IProduct[]> {
         return this.http.get<IProduct[]>(
-            `https://flosure-postgres-api.herokuapp.com/product/class-products`
+            `http://104.248.247.78:3000/product/class-products`
         );
     }
 }
