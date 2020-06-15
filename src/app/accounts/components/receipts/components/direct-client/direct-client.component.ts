@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import _ from 'lodash';
 import { v4 } from 'uuid';
 import { PoliciesService } from 'src/app/underwriting/services/policies.service';
+import { DebitNote } from 'src/app/underwriting/documents/models/documents.model';
 
 @Component({
     selector: 'app-direct-client',
@@ -31,6 +32,7 @@ export class DirectClientComponent implements OnInit {
     cancelReceipt: IReceiptModel = new IReceiptModel();
     reinstateReceipt: IReceiptModel = new IReceiptModel();
     size = 'large';
+    paymentMethod = '';
 
     recStatus = 'Receipted';
 
@@ -72,9 +74,15 @@ export class DirectClientComponent implements OnInit {
         { label: 'Cash', value: 'cash' },
         { label: 'EFT', value: 'eft' },
         { label: 'Bank Transfer', value: 'bank transfer' },
+        { label: 'Cheque', value: 'cheque' },
     ];
     sourceOfBusiness: string;
     intermediaryName: string;
+    receiptNewCount: number;
+    debitnoteList: DebitNote[] = [];
+    debitnote: DebitNote;
+    currency: string;
+
     constructor(
         private receiptService: AccountService,
         private policeServices: PoliciesService,
@@ -92,8 +100,9 @@ export class DirectClientComponent implements OnInit {
             narration: ['', Validators.required],
             sumInWords: [''],
             dateReceived: [''],
-            todayDate: [this.today],
+            todayDate: [''],
             remarks: [''],
+            cheqNumber: [''],
         });
 
         this.cancelForm = this.formBuilder.group({
@@ -105,8 +114,8 @@ export class DirectClientComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.policeServices.getPolicies().subscribe(quotes => {
-
+        this.policeServices.getPolicies().subscribe((quotes) => {
+            console.log('CHECK RECEIPTS>>>>', quotes);
             this.unreceiptedList = _.filter(
                 quotes,
                 (x) =>
@@ -121,6 +130,10 @@ export class DirectClientComponent implements OnInit {
             ).length;
             console.log('======= Unreceipt List =======');
             console.log(this.unreceiptedList);
+        });
+
+        this.policeServices.getDebitNotes().subscribe((invoice) => {
+            this.debitnoteList = invoice;
         });
 
         this.receiptService.getReciepts().subscribe((receipts) => {
@@ -143,6 +156,9 @@ export class DirectClientComponent implements OnInit {
 
             console.log('======= Cancelled Receipt List =======');
             console.log(this.cancelReceiptList);
+
+            this.receiptNewCount = receipts.length;
+            console.log('Total Number of Receipts>>>>', this.receiptNewCount);
         });
     }
 
@@ -152,7 +168,11 @@ export class DirectClientComponent implements OnInit {
         this.policyNumber = unreceipted.policyNumber;
         this.user = unreceipted.user;
         this.policy = unreceipted;
+        this.debitnote = this.debitnoteList.filter(
+            (x) => x.policy.id === unreceipted.id
+        )[0];
         this.policyAmount = unreceipted.netPremium;
+        this.currency = unreceipted.currency;
         this.sourceOfBusiness = unreceipted.sourceOfBusiness;
         this.intermediaryName = unreceipted.intermediaryName;
         console.log(this.policyAmount);
@@ -164,6 +184,7 @@ export class DirectClientComponent implements OnInit {
 
     async handleOk() {
         this.submitted = true;
+        console.log('DEBIT NOTE NUMBER>>>>>', this.debitnote.debitNoteNumber);
         if (this.receiptForm.valid) {
             this.isOkLoading = true;
             this._id = v4();
@@ -176,15 +197,27 @@ export class DirectClientComponent implements OnInit {
                 receiptStatus: this.recStatus,
                 sumInDigits: this.policyAmount,
                 todayDate: new Date(),
+                invoiceNumber: this.debitnote.debitNoteNumber,
                 sourceOfBusiness: this.sourceOfBusiness,
-                intermediaryName: 'direct',
+                intermediaryName: this.intermediaryName,
+                currency: this.currency,
             };
 
             this.receiptNum = this._id;
             await this.receiptService
-                .addReceipt(receipt, this.policy.risks[0].insuranceType)
+                .addReceipt(
+                    receipt,
+                    this.policy.risks[0].insuranceType,
+                    this.receiptNewCount
+                )
                 .then((mess) => {
                     this.message.success('Receipt Successfully created');
+                    this.policy.receiptStatus = 'Receipted';
+                    this.policy.paymentPlan = 'Created';
+                    console.log('<++++++++++++++++++CLAIN+++++++++>');
+                    console.log(this.policy);
+
+                    this.policeServices.updatePolicy(this.policy).subscribe();
                     console.log(mess);
                 })
                 .catch((err) => {
@@ -192,21 +225,14 @@ export class DirectClientComponent implements OnInit {
                     console.log(err);
                 });
             this.receiptForm.reset();
-
-            this.policy.receiptStatus = 'Receipted';
-            this.policy.paymentPlan = 'Created';
-            console.log('<++++++++++++++++++CLAIN+++++++++>');
-            console.log(this.policy);
-
-            await this.receiptService.updatePolicy(this.policy);
             setTimeout(() => {
                 this.isVisible = false;
                 this.isOkLoading = false;
-            }, 3000);
+            }, 30);
+
             this.generateID(this._id);
         }
     }
-
     handleCancel(): void {
         this.isVisible = false;
     }
@@ -256,5 +282,10 @@ export class DirectClientComponent implements OnInit {
         this.router.navigateByUrl('/flosure/accounts/view-receipt/' + this._id);
         // this.isConfirmLoading = true;
         // this.generateDocuments();
+    }
+
+    paymentMethodChange(value) {
+        console.log('ON CHANGE>>>>', value);
+        this.paymentMethod = value;
     }
 }

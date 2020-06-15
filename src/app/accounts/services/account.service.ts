@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
     AngularFirestore,
-    AngularFirestoreCollection
+    AngularFirestoreCollection,
 } from '@angular/fire/firestore';
 import 'firebase/firestore';
 import { filter, first } from 'rxjs/operators';
@@ -22,7 +22,7 @@ interface IReceiptNumberResult {
 }
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class AccountService {
     private policyCollection: AngularFirestoreCollection<Policy>;
@@ -53,9 +53,10 @@ export class AccountService {
     // add receipt
     async addReceipt(
         receipt: IReceiptModel,
-        insuranceType: InsuranceType
+        insuranceType: InsuranceType,
+        count: number
     ): Promise<void> {
-        this.receipts.pipe(first()).subscribe(async receipts => {
+        this.receipts.pipe(first()).subscribe(async (receipts) => {
             // receipt.id = v4();
 
             let insuranceTyp = '';
@@ -67,24 +68,22 @@ export class AccountService {
             }
 
             this.http
-                .get<IReceiptNumberResult>(
-
-                    'https://flosure-premium-rates.herokuapp.com/savenda-receipts/1'
-
+                .get<any>(
+                    `https://flosure-number-generation.herokuapp.com/aplus-receipt-number/1`
                 )
-                .subscribe(async res => {
-                    receipt.receiptNumber = res.receiptNumber;
-                    console.log(res.receiptNumber);
+                .subscribe(async (res) => {
+                    receipt.receiptNumber = res.data.receipt_number;
+                    console.log(res.data.receipt_number);
 
                     await this.receiptCollection
                         .doc(receipt.id)
                         .set(receipt)
-                        .then(mess => {
+                        .then((mess) => {
                             this.message.success(
                                 'Receipt Successfully created'
                             );
                         })
-                        .catch(err => {
+                        .catch((err) => {
                             this.message.warning('Receipt Failed');
                             console.log(err);
                         });
@@ -96,10 +95,10 @@ export class AccountService {
         return this.policyCollection
             .doc(`${policy.id}`)
             .update(policy)
-            .then(res => {
+            .then((res) => {
                 console.log(res);
             })
-            .catch(err => {
+            .catch((err) => {
                 console.log(err);
             });
     }
@@ -108,10 +107,10 @@ export class AccountService {
         return this.receiptCollection
             .doc(`${receipt.id}`)
             .update(receipt)
-            .then(res => {
+            .then((res) => {
                 this.message.warning('Receipt Status Updateted');
             })
-            .catch(err => {
+            .catch((err) => {
                 console.log(err);
             });
     }
@@ -136,10 +135,7 @@ export class AccountService {
         const brokerCod = brokerCode;
         const today = new Date();
         const dateString: string =
-            today
-                .getFullYear()
-                .toString()
-                .substr(-2) +
+            today.getFullYear().toString().substr(-2) +
             ('0' + (today.getMonth() + 1)).slice(-2) +
             +('0' + today.getDate()).slice(-2);
         const count = this.countGenerator(totalReceipts);
@@ -160,10 +156,10 @@ export class AccountService {
     printPDF(uri: string) {
         this.http
             .get(uri, { responseType: 'blob' as 'json' })
-            .subscribe(res => {
+            .subscribe((res) => {
                 const myBlobPart: BlobPart = res as BlobPart;
                 const file = new Blob([myBlobPart], {
-                    type: 'your media type'
+                    type: 'your media type',
                 });
                 const fileURL = URL.createObjectURL(file);
                 console.log(fileURL);

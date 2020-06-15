@@ -3,6 +3,11 @@ import { RiskModel } from 'src/app/quotes/models/quote.model';
 import { Policy } from '../../models/policy.model';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import {
+    ICorporateClient,
+    IIndividualClient
+} from 'src/app/clients/models/clients.model';
+import moment from 'moment';
 
 @Component({
     selector: 'app-policy-schedule-document',
@@ -58,7 +63,12 @@ export class PolicyScheduleDocumentComponent implements OnInit {
     @Input()
     premiumLevy: string;
 
+    @Input()
+    client: IIndividualClient & ICorporateClient;
+
     todayDate: Date;
+
+    yearOfManufacture: string;
 
     constructor() {}
 
@@ -66,6 +76,13 @@ export class PolicyScheduleDocumentComponent implements OnInit {
 
     ngOnInit(): void {
         this.todayDate = new Date();
+    }
+
+    getYearOfManufacture(risk: RiskModel) {
+        let year: string = moment(risk.yearOfManufacture)
+            .year()
+            .toString();
+        return year;
     }
 
     htmlToPdf() {
@@ -79,11 +96,11 @@ export class PolicyScheduleDocumentComponent implements OnInit {
 
         html2canvas(div, options).then(canvas => {
             let doc = new jsPDF({
-                unit: 'px',
-                format: 'a4'
+                unit: 'mm',
+                format: 'a3'
             });
             let imgData = canvas.toDataURL('image/PNG');
-            doc.addImage(imgData, 'PNG', 0, 0);
+            doc.addImage(imgData, 'PNG', 0, 0, 297, 420);
 
             let pdfOutput = doc.output();
             let buffer = new ArrayBuffer(pdfOutput.length);
@@ -91,7 +108,7 @@ export class PolicyScheduleDocumentComponent implements OnInit {
             for (let i = 0; i < pdfOutput.length; i++) {
                 array[i] = pdfOutput.charCodeAt(i);
             }
-            const fileName = 'policy-debitNote.pdf';
+            const fileName = `${this.policy.policyNumber}-motor-schedule.pdf`;
             doc.save(fileName);
             this.generatingPDF = false;
         });

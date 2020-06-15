@@ -18,6 +18,9 @@ export class IReceiptModel {
     remarks?: string;
     sourceOfBusiness?: string;
     intermediaryName?: string;
+    cheqNumber?: string;
+    invoiceNumber?: string;
+    currency?: string;
 }
 
 export type SourceOfBusinessType =

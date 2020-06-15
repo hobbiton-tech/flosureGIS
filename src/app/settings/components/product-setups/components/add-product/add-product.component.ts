@@ -12,6 +12,9 @@ import { NzMessageService } from 'ng-zorro-antd';
     styleUrls: ['./add-product.component.scss']
 })
 export class AddProductComponent implements OnInit {
+    //loading feedback
+    addingProduct: boolean = false;
+
     @Input()
     isAddProductFormDrawerVisible: boolean;
 
@@ -40,11 +43,11 @@ export class AddProductComponent implements OnInit {
         private msg: NzMessageService
     ) {
         this.productForm = this.formBuilder.group({
-            producName: ['', Validators.required],
+            productName: ['', Validators.required],
             productCode: ['', Validators.required],
             productDescription: ['', Validators.required],
-            policyNumberPrefix: ['', Validators.required],
-            claimNumberPrefix: ['', Validators.required]
+            productPolicyNumberPrefix: ['', Validators.required],
+            productClaimNumberPrefix: ['', Validators.required]
         });
     }
 
@@ -63,15 +66,18 @@ export class AddProductComponent implements OnInit {
     }
 
     async addProduct(productDto: IProduct) {
+        this.addingProduct = true;
         await this.productSetupsService
             .addProduct(productDto, this.selectedClass.id)
             .subscribe(
                 res => {
                     this.msg.success('Product Added successfully');
+                    this.addingProduct = false;
                     this.closeAddProductFormDrawer();
                 },
                 err => {
                     this.msg.error('Failed to add product');
+                    this.addingProduct = false;
                 }
             );
     }

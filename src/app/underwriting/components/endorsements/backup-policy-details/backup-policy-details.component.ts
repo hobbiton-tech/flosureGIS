@@ -19,6 +19,7 @@ import _ from 'lodash';
 import { Endorsement } from 'src/app/underwriting/models/endorsement.model';
 import { EndorsementService } from 'src/app/underwriting/services/endorsements.service';
 import * as moment from 'moment';
+import { CreditNote } from 'src/app/underwriting/documents/models/documents.model';
 
 @Component({
     selector: 'app-backup-policy-details',
@@ -33,6 +34,10 @@ export class BackupPolicyDetailsComponent implements OnInit {
     //modals
     addRiskFormModalVisible = false;
     viewRiskFormModalVisible = false;
+
+    //for credit note
+    creditNotes: CreditNote[];
+    latestCreditNote: CreditNote;
 
     //policy details form
     backupPolicyForm: FormGroup;
@@ -96,6 +101,10 @@ export class BackupPolicyDetailsComponent implements OnInit {
             expiryDate: ['', Validators.required],
             quarter: ['', Validators.required],
             town: ['', Validators.required]
+        });
+
+        this.policiesService.getCreditNotes().subscribe(creditNotes => {
+            this.creditNotes = creditNotes;
         });
 
         // this.endorsementForm = this.formBuilder.group({

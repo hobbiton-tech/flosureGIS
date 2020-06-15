@@ -4,7 +4,7 @@ import {
     DiscountModel,
     LoadModel,
     RiskModel,
-    DiscountType
+    DiscountType,
 } from 'src/app/quotes/models/quote.model';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, debounceTime, switchMap } from 'rxjs/operators';
@@ -50,7 +50,7 @@ interface IRateRequest {
 @Component({
     selector: 'app-view-risk',
     templateUrl: './view-risk.component.html',
-    styleUrls: ['./view-risk.component.scss']
+    styleUrls: ['./view-risk.component.scss'],
 })
 export class ViewRiskComponent implements OnInit {
     ///////////////////Risk Details Starts here//////////////////////////
@@ -226,39 +226,39 @@ export class ViewRiskComponent implements OnInit {
 
     optionList = [
         { label: 'Motor Comprehensive', value: 'Comprehensive' },
-        { label: 'Motor Third Party', value: 'ThirdParty' }
+        { label: 'Motor Third Party', value: 'ThirdParty' },
     ];
     selectedValue = { label: 'Motor Comprehensive', value: 'Comprehensive' };
 
     motorComprehensiveloadingOptions = [
         {
             label: 'Increased Third Party Limit',
-            value: 'increasedThirdPartyLimits'
+            value: 'increasedThirdPartyLimits',
         },
         { label: 'Riot and strike', value: 'riotAndStrike' },
         { label: 'Car Stereo', value: 'carStereo' },
         { label: 'Territorial Extension', value: 'territorailExtension' },
         { label: 'Loss Of Use', value: 'lossOfUse' },
         { label: 'Inexperienced Driver', value: 'inexperiencedDriver' },
-        { label: 'Under Age Driver', value: 'underAgeDriver' }
+        { label: 'Under Age Driver', value: 'underAgeDriver' },
     ];
 
     motorThirdPartyloadingOptions = [
         {
             label: 'Increased Third Party Limit',
-            value: 'increasedThirdPartyLimits'
-        }
+            value: 'increasedThirdPartyLimits',
+        },
     ];
     selectedLoadingValue = {
         label: '',
-        value: ''
+        value: '',
     };
 
     //motor third party rates
     motorThirdPartyRates = {
         pirvate: { Q1: 165, Q2: 280, Q3: 370, Q4: 464 },
         commercial: { Q1: 199, Q2: 340, Q3: 452, Q4: 566 },
-        'bus/taxi': { Q1: 270, Q2: 464, Q3: 618, Q4: 772 }
+        'bus/taxi': { Q1: 270, Q2: 464, Q3: 618, Q4: 772 },
     };
 
     //discounts
@@ -266,7 +266,7 @@ export class ViewRiskComponent implements OnInit {
         { label: 'No claims dicount', value: 'noClaimsDiscount' },
         { label: 'Loyalty Discount', value: 'loyaltyDiscount' },
         { label: 'Valued Client Discount', value: 'valuedClientDiscount' },
-        { label: 'Low Term Agreement', value: 'lowTermAgreementDiscount' }
+        { label: 'Low Term Agreement', value: 'lowTermAgreementDiscount' },
     ];
 
     selectedDiscountValue = { label: '', value: '' };
@@ -277,7 +277,7 @@ export class ViewRiskComponent implements OnInit {
         { label: 'Direct', value: 'direct' },
         { label: 'Broker', value: 'broker' },
         { label: 'Agent', value: 'agent' },
-        { label: 'Sales Representative', value: 'salesRepresentative' }
+        { label: 'Sales Representative', value: 'salesRepresentative' },
     ];
 
     startValue: Date | null = null;
@@ -290,7 +290,7 @@ export class ViewRiskComponent implements OnInit {
     log(value: { label: string; value: string }): void {
         this.selectedLoadingValue = {
             label: 'Increased Third Party Limit',
-            value: 'increasedThirdPartyLimits'
+            value: 'increasedThirdPartyLimits',
         };
         console.log(value);
     }
@@ -340,7 +340,7 @@ export class ViewRiskComponent implements OnInit {
             yearOfManufacture: ['', Validators.required],
             color: ['', [Validators.required]],
             // sumInsured: ['', Validators.required],
-            productType: ['', Validators.required]
+            productType: ['', Validators.required],
         });
 
         // vehicle make loading
@@ -354,11 +354,13 @@ export class ViewRiskComponent implements OnInit {
                     })
                 );
 
-        const vehicleMakeOptionList$: Observable<string[]> = this.searchChange$
+        const vehicleMakeOptionList$: Observable<
+            string[]
+        > = this.searchChange$
             .asObservable()
             .pipe(debounceTime(500))
             .pipe(switchMap(getVehicleMakeList));
-        vehicleMakeOptionList$.subscribe(data => {
+        vehicleMakeOptionList$.subscribe((data) => {
             this.vehicleMakeOptionList = data;
             this.isVehicleMakeLoading = false;
         });
@@ -374,11 +376,13 @@ export class ViewRiskComponent implements OnInit {
                     })
                 );
 
-        const vehicleModelOptionList$: Observable<string[]> = this.searchChange$
+        const vehicleModelOptionList$: Observable<
+            string[]
+        > = this.searchChange$
             .asObservable()
             .pipe(debounceTime(500))
             .pipe(switchMap(getVehicleModelList));
-        vehicleModelOptionList$.subscribe(data => {
+        vehicleModelOptionList$.subscribe((data) => {
             this.vehicleModelOptionList = data;
             this.isVehicleModelLoading = false;
         });
@@ -432,14 +436,14 @@ export class ViewRiskComponent implements OnInit {
                 thirdPartyLimit: 0,
                 thirdPartyLimitRate: 0,
                 riotAndStrike: 0,
-                levy: 0
+                levy: 0,
             };
             this.http
                 .post<IRateResult>(
-                    `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                    `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                     request
                 )
-                .subscribe(data => {
+                .subscribe((data) => {
                     this.riskDetailsForm
                         .get('riskEndDate')
                         .setValue(data.endDate);
@@ -465,14 +469,14 @@ export class ViewRiskComponent implements OnInit {
                 thirdPartyLimit: 0,
                 thirdPartyLimitRate: 0,
                 riotAndStrike: 0,
-                levy: 0
+                levy: 0,
             };
             this.http
                 .post<IRateResult>(
-                    `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                    `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                     request
                 )
-                .subscribe(data => {
+                .subscribe((data) => {
                     this.basicPremium = Number(data.basicPremium);
                     this.handleNetPremium();
                 });
@@ -547,7 +551,7 @@ export class ViewRiskComponent implements OnInit {
             discountRate: this.premiumDiscountRate,
             premiumLevy: this.basicPremiumLevy,
             netPremium: this.netPremium,
-            insuranceType: this.selectedValue.value
+            insuranceType: this.selectedValue.value,
         });
         this.risks = [...this.risks, ...some];
 
@@ -595,7 +599,7 @@ export class ViewRiskComponent implements OnInit {
             discountRate: this.premiumDiscountRate,
             premiumLevy: this.basicPremiumLevy,
             netPremium: this.netPremium,
-            insuranceType: this.selectedValue.value
+            insuranceType: this.selectedValue.value,
         });
         this.risks = [...this.risks, ...some];
 
@@ -630,9 +634,9 @@ export class ViewRiskComponent implements OnInit {
         this.premiumDiscount = 0;
     }
 
-    getYearOfManfTimeStamp(risk: RiskModel): number {
-        return (risk.yearOfManufacture as ITimestamp).seconds * 1000;
-    }
+    // getYearOfManfTimeStamp(risk: RiskModel): number {
+    //     return (risk.yearOfManufacture as ITimestamp).seconds * 1000;
+    // }
 
     getStartDateTimeStamp(risk: RiskModel): number {
         return (risk.riskStartDate as ITimestamp).seconds * 1000;
@@ -732,7 +736,7 @@ export class ViewRiskComponent implements OnInit {
                 netPremium: this.netPremium,
                 insuranceType: this.selectedValue.value,
                 estimatedValue: 0,
-                id: this.currentRiskEdit.id
+                id: this.currentRiskEdit.id,
             };
             this.currentRiskEdit = some;
         } else {
@@ -749,7 +753,7 @@ export class ViewRiskComponent implements OnInit {
                 premiumLevy: this.basicPremiumLevy,
                 netPremium: this.netPremium,
                 insuranceType: this.selectedValue.value,
-                id: this.currentRiskEdit.id
+                id: this.currentRiskEdit.id,
             };
             this.currentRiskEdit = some;
         }
@@ -775,12 +779,12 @@ export class ViewRiskComponent implements OnInit {
                 discountRate: this.premiumDiscountRate,
                 premiumLevy: this.basicPremiumLevy,
                 netPremium: this.netPremium,
-                insuranceType: this.selectedValue.value
+                insuranceType: this.selectedValue.value,
             };
             this.currentRiskEdit = some;
 
             var riskIndex = _.findIndex(this.risks, {
-                id: this.riskData.id
+                id: this.riskData.id,
             });
             this.risks.splice(riskIndex, 1, this.currentRiskEdit);
             this.risks = this.risks;
@@ -797,14 +801,14 @@ export class ViewRiskComponent implements OnInit {
                 discountRate: this.premiumDiscountRate,
                 premiumLevy: this.basicPremiumLevy,
                 netPremium: this.netPremium,
-                insuranceType: this.selectedValue.value
+                insuranceType: this.selectedValue.value,
             };
             this.currentRiskEdit = some;
             console.log('some:');
             console.log(some);
 
             var riskIndex = _.findIndex(this.risks, {
-                id: this.riskData.id
+                id: this.riskData.id,
             });
             this.risks.splice(riskIndex, 1, this.currentRiskEdit);
         }
@@ -846,16 +850,16 @@ export class ViewRiskComponent implements OnInit {
         this.handleDiscountIsLoading = true;
         //following methods check if the repective loads are in the loads array
         const riotAndStrikeInLoads = this.loads.some(
-            item => item.loadType === 'Riot And Strike'
+            (item) => item.loadType === 'Riot And Strike'
         );
         const increaseThirdPartyLimitInLoads = this.loads.some(
-            item => item.loadType === 'Increased Third Party Limit'
+            (item) => item.loadType === 'Increased Third Party Limit'
         );
         const carStereoInLoads = this.loads.some(
-            item => item.loadType === 'Car Stereo'
+            (item) => item.loadType === 'Car Stereo'
         );
         const lossOfUseInLoads = this.loads.some(
-            item => item.loadType === 'Loss Of Use'
+            (item) => item.loadType === 'Loss Of Use'
         );
 
         //if the checked loading are not in loads array set there values to Zero!
@@ -894,17 +898,17 @@ export class ViewRiskComponent implements OnInit {
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
             riotAndStrike: Number(this.riotAndStrikeRate) / 100,
-            levy: 0.03
+            levy: 0.03,
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                 request
             )
-            .subscribe(data => {
+            .subscribe((data) => {
                 this.discounts.push({
                     discountType: discountType,
-                    amount: Number(data.discount)
+                    amount: Number(data.discount),
                 });
                 this.premiumDiscount = this.sumArray(this.discounts, 'amount');
                 this.handleNetPremium();
@@ -916,16 +920,16 @@ export class ViewRiskComponent implements OnInit {
         this.handleDiscountIsLoading = true;
         //following methods check if the repective loads are in the loads array
         const riotAndStrikeInLoads = this.loads.some(
-            item => item.loadType === 'Riot And Strike'
+            (item) => item.loadType === 'Riot And Strike'
         );
         const increaseThirdPartyLimitInLoads = this.loads.some(
-            item => item.loadType === 'Increased Third Party Limit'
+            (item) => item.loadType === 'Increased Third Party Limit'
         );
         const carStereoInLoads = this.loads.some(
-            item => item.loadType === 'Car Stereo'
+            (item) => item.loadType === 'Car Stereo'
         );
         const lossOfUseInLoads = this.loads.some(
-            item => item.loadType === 'Loss Of Use'
+            (item) => item.loadType === 'Loss Of Use'
         );
 
         //if the checked loading are not in loads array set there values to Zero!
@@ -967,14 +971,14 @@ export class ViewRiskComponent implements OnInit {
                 thirdPartyLimitRate:
                     Number(this.increasedThirdPartyLimitsRate) / 100,
                 riotAndStrike: Number(this.riotAndStrikeRate) / 100,
-                levy: 0.03
+                levy: 0.03,
             };
             this.http
                 .post<IRateResult>(
-                    `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                    `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                     request
                 )
-                .subscribe(data => {
+                .subscribe((data) => {
                     this.premiumDiscount = Number(data.discount);
                     this.handleNetPremium();
                     this.handleDiscountIsLoading = false;
@@ -1003,14 +1007,14 @@ export class ViewRiskComponent implements OnInit {
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
             riotAndStrike: Number(this.riotAndStrikeRate) / 100,
-            levy: 0.03
+            levy: 0.03,
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                 request
             )
-            .subscribe(data => {
+            .subscribe((data) => {
                 this.netPremium = Number(data.totalPremium);
                 this.handleNetPremium();
                 this.computePremiumIsLoading = false;
@@ -1040,17 +1044,17 @@ export class ViewRiskComponent implements OnInit {
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
             riotAndStrike: Number(this.riotAndStrikeRate) / 100,
-            levy: 0.03
+            levy: 0.03,
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                 request
             )
-            .subscribe(data => {
+            .subscribe((data) => {
                 this.loads.push({
                     loadType: 'Riot And Strike',
-                    amount: Number(data.riotAndStrikePremium)
+                    amount: Number(data.riotAndStrikePremium),
                 });
                 this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
                 this.handleNetPremium();
@@ -1080,17 +1084,17 @@ export class ViewRiskComponent implements OnInit {
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
             riotAndStrike: Number(this.riotAndStrikeRate) / 100,
-            levy: 0.03
+            levy: 0.03,
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                 request
             )
-            .subscribe(data => {
+            .subscribe((data) => {
                 this.loads.push({
                     loadType: 'Increased Third Party Limit',
-                    amount: Number(data.thirdPartyLoadingPremium)
+                    amount: Number(data.thirdPartyLoadingPremium),
                 });
                 this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
                 this.handleNetPremium();
@@ -1120,17 +1124,17 @@ export class ViewRiskComponent implements OnInit {
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
             riotAndStrike: Number(this.riotAndStrikeRate) / 100,
-            levy: 0.03
+            levy: 0.03,
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                 request
             )
-            .subscribe(data => {
+            .subscribe((data) => {
                 this.loads.push({
                     loadType: 'Increased Third Party Limit',
-                    amount: Number(data.thirdPartyLoadingPremium)
+                    amount: Number(data.thirdPartyLoadingPremium),
                 });
                 this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
                 this.handleNetPremium();
@@ -1160,17 +1164,17 @@ export class ViewRiskComponent implements OnInit {
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
             riotAndStrike: Number(this.riotAndStrikeRate) / 100,
-            levy: 0.03
+            levy: 0.03,
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                 request
             )
-            .subscribe(data => {
+            .subscribe((data) => {
                 this.loads.push({
                     loadType: 'Car Stereo',
-                    amount: Number(data.carStereoPremium)
+                    amount: Number(data.carStereoPremium),
                 });
                 this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
                 this.handleNetPremium();
@@ -1200,17 +1204,17 @@ export class ViewRiskComponent implements OnInit {
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
             riotAndStrike: Number(this.riotAndStrikeRate) / 100,
-            levy: 0.03
+            levy: 0.03,
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                 request
             )
-            .subscribe(data => {
+            .subscribe((data) => {
                 this.loads.push({
                     loadType: 'Territorial Extension',
-                    amount: Number(data.territorialExtensionPremium)
+                    amount: Number(data.territorialExtensionPremium),
                 });
                 this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
                 this.handleNetPremium();
@@ -1240,17 +1244,17 @@ export class ViewRiskComponent implements OnInit {
             thirdPartyLimitRate:
                 Number(this.increasedThirdPartyLimitsRate) / 100,
             riotAndStrike: Number(this.riotAndStrikeRate) / 100,
-            levy: 0.03
+            levy: 0.03,
         };
         this.http
             .post<IRateResult>(
-                `https://flosure-premium-rates.herokuapp.com/rates/comprehensive`,
+                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                 request
             )
-            .subscribe(data => {
+            .subscribe((data) => {
                 this.loads.push({
                     loadType: 'Loss Of Use',
-                    amount: Number(data.lossOfUsePremium)
+                    amount: Number(data.lossOfUsePremium),
                 });
                 this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
                 this.handleNetPremium();
@@ -1299,7 +1303,7 @@ export class ViewRiskComponent implements OnInit {
 
     //sum up specific values in array
     sumArray(items, prop) {
-        return items.reduce(function(a, b) {
+        return items.reduce(function (a, b) {
             return a + b[prop];
         }, 0);
     }
@@ -1328,7 +1332,7 @@ export class ViewRiskComponent implements OnInit {
     handleIncreasedThirdPartyLimitAmount() {
         this.loads.push({
             loadType: 'Increased Third Party Limit',
-            amount: Number(this.increasedThirdPartyLimitAmount)
+            amount: Number(this.increasedThirdPartyLimitAmount),
         });
         this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
         this.handleNetPremium();
@@ -1338,7 +1342,7 @@ export class ViewRiskComponent implements OnInit {
     handleRiotAndStrikeAmount() {
         this.loads.push({
             loadType: 'Riot And Strike',
-            amount: Number(this.riotAndStrikeAmount)
+            amount: Number(this.riotAndStrikeAmount),
         });
         this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
         this.handleNetPremium();
@@ -1348,7 +1352,7 @@ export class ViewRiskComponent implements OnInit {
     handleCarStereoAmount() {
         this.loads.push({
             loadType: 'Car Stereo',
-            amount: Number(this.carStereoAmount)
+            amount: Number(this.carStereoAmount),
         });
         this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
         this.handleNetPremium();
@@ -1358,7 +1362,7 @@ export class ViewRiskComponent implements OnInit {
     handleLossOfUseAmount() {
         this.loads.push({
             loadType: 'Loss Of Use',
-            amount: Number(this.lossOfUseAmount)
+            amount: Number(this.lossOfUseAmount),
         });
         this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
         this.handleNetPremium();
@@ -1368,7 +1372,7 @@ export class ViewRiskComponent implements OnInit {
     handleTerritorialExtensionAmount() {
         this.loads.push({
             loadType: 'Territorial Extension',
-            amount: Number(this.territorialExtensionAmount)
+            amount: Number(this.territorialExtensionAmount),
         });
         this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
         this.handleNetPremium();
@@ -1378,7 +1382,7 @@ export class ViewRiskComponent implements OnInit {
     handleInexperiencedDriverAmount() {
         this.loads.push({
             loadType: 'Inexperienced Driver',
-            amount: Number(this.inexperiencedDriverAmount)
+            amount: Number(this.inexperiencedDriverAmount),
         });
         this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
         this.handleNetPremium();
@@ -1388,7 +1392,7 @@ export class ViewRiskComponent implements OnInit {
     handleUnderAgeDriverAmount() {
         this.loads.push({
             loadType: 'Under Age Driver',
-            amount: Number(this.underAgeDriverAmount)
+            amount: Number(this.underAgeDriverAmount),
         });
         this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
         this.handleNetPremium();
@@ -1398,7 +1402,7 @@ export class ViewRiskComponent implements OnInit {
     handleNoClaimsDiscountAmount() {
         this.discounts.push({
             discountType: 'No Claims Discount',
-            amount: Number(this.noClaimsDiscountAmount)
+            amount: Number(this.noClaimsDiscountAmount),
         });
         this.premiumDiscount = this.sumArray(this.discounts, 'amount');
         this.handleNetPremium();
@@ -1408,7 +1412,7 @@ export class ViewRiskComponent implements OnInit {
     handleLoyaltyDiscountAmount() {
         this.discounts.push({
             discountType: 'Loyalty Discount',
-            amount: Number(this.loyaltyDiscountAmount)
+            amount: Number(this.loyaltyDiscountAmount),
         });
         this.premiumDiscount = this.sumArray(this.discounts, 'amount');
         this.handleNetPremium();
@@ -1418,7 +1422,7 @@ export class ViewRiskComponent implements OnInit {
     handleValuedClientDiscountAmount() {
         this.discounts.push({
             discountType: 'Valued Client Discount',
-            amount: Number(this.valuedClientDiscountAmount)
+            amount: Number(this.valuedClientDiscountAmount),
         });
         this.premiumDiscount = this.sumArray(this.discounts, 'amount');
         this.handleNetPremium();
@@ -1428,7 +1432,7 @@ export class ViewRiskComponent implements OnInit {
     handleLowTermAgreementDiscountAmount() {
         this.discounts.push({
             discountType: 'Low Term Agreement Discount',
-            amount: Number(this.lowTermAgreementDiscountAmount)
+            amount: Number(this.lowTermAgreementDiscountAmount),
         });
         this.premiumDiscount = this.sumArray(this.discounts, 'amount');
         this.handleNetPremium();

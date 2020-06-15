@@ -9,11 +9,13 @@ import { Router } from '@angular/router';
 import { AgentsService } from 'src/app/settings/components/agents/services/agents.service';
 import _ from 'lodash';
 import { v4 } from 'uuid';
+import { PoliciesService } from 'src/app/underwriting/services/policies.service';
+import { DebitNote } from 'src/app/underwriting/documents/models/documents.model';
 
 @Component({
     selector: 'app-broker-client',
     templateUrl: './broker-client.component.html',
-    styleUrls: ['./broker-client.component.scss']
+    styleUrls: ['./broker-client.component.scss'],
 })
 export class BrokerClientComponent implements OnInit {
     receiptForm: FormGroup;
@@ -53,6 +55,7 @@ export class BrokerClientComponent implements OnInit {
     isVisibleClientType = false;
     isOkClientTypeLoading = false;
     agent: any;
+    receiptNewCount: number;
 
     // modal
     isReceiptVisible = false;
@@ -69,16 +72,16 @@ export class BrokerClientComponent implements OnInit {
         { label: 'Third Party Recovery', value: 'Third Party Recovery' },
         {
             label: 'Imprest Retirement Receipt',
-            value: 'Imprest Retirement Receipt'
+            value: 'Imprest Retirement Receipt',
         },
         { label: 'Third Party Recovery', value: 'Third Party Recovery' },
-        { label: 'General Receipt', value: 'General Receipt' }
+        { label: 'General Receipt', value: 'General Receipt' },
     ];
 
     paymentMethodList = [
         { label: 'Cash', value: 'cash' },
         { label: 'EFT', value: 'eft' },
-        { label: 'Bank Transfer', value: 'bank transfer' }
+        { label: 'Bank Transfer', value: 'bank transfer' },
     ];
 
     typeOfClient = ['Direct', 'Agent', 'Broker'];
@@ -89,13 +92,18 @@ export class BrokerClientComponent implements OnInit {
     displayedListOfUnreceiptedReceipts: Policy[];
     sourceOfBusiness: string;
     intermediaryName: string;
+    paymentMethod = '';
+    debitnoteList: DebitNote[] = [];
+    debitnote: DebitNote;
+    currency: string;
 
     constructor(
         private receiptService: AccountService,
         private formBuilder: FormBuilder,
         private message: NzMessageService,
         private router: Router,
-        private agentService: AgentsService
+        private agentService: AgentsService,
+        private policeServices: PoliciesService
     ) {
         this.receiptForm = this.formBuilder.group({
             receivedFrom: ['', Validators.required],
@@ -108,28 +116,29 @@ export class BrokerClientComponent implements OnInit {
             sumInWords: [''],
             dateReceived: [''],
             todayDate: [this.today],
-            remarks: ['']
+            remarks: [''],
+            cheqNumber: [''],
         });
 
         this.cancelForm = this.formBuilder.group({
-            remarks: ['', Validators.required]
+            remarks: ['', Validators.required],
         });
         this.reinstateForm = this.formBuilder.group({
-            remarks: ['', Validators.required]
+            remarks: ['', Validators.required],
         });
     }
 
     ngOnInit(): void {
-        this.agentService.getBrokers().subscribe(brokers => {
+        this.agentService.getBrokers().subscribe((brokers) => {
             this.brokerList = brokers;
 
             console.log('===================');
             console.log(this.brokerList);
         });
-        this.receiptService.getPolicies().subscribe(quotes => {
+        this.policeServices.getPolicies().subscribe((quotes) => {
             this.listofUnreceiptedReceipts = _.filter(
                 quotes,
-                x =>
+                (x) =>
                     x.receiptStatus === 'Unreceipted' &&
                     x.sourceOfBusiness === 'broker'
             );
@@ -138,7 +147,7 @@ export class BrokerClientComponent implements OnInit {
 
             this.receiptsCount = _.filter(
                 quotes,
-                x =>
+                (x) =>
                     x.receiptStatus === 'Unreceipted' &&
                     x.sourceOfBusiness === 'broker'
             ).length;
@@ -146,10 +155,14 @@ export class BrokerClientComponent implements OnInit {
             console.log(this.listofUnreceiptedReceipts);
         });
 
-        this.receiptService.getReciepts().subscribe(receipts => {
+        this.policeServices.getDebitNotes().subscribe((invoice) => {
+            this.debitnoteList = invoice;
+        });
+
+        this.receiptService.getReciepts().subscribe((receipts) => {
             this.receiptedList = _.filter(
                 receipts,
-                x =>
+                (x) =>
                     x.receiptStatus === 'Receipted' &&
                     x.sourceOfBusiness === 'broker'
             );
@@ -159,20 +172,21 @@ export class BrokerClientComponent implements OnInit {
 
             this.cancelReceiptList = _.filter(
                 receipts,
-                x =>
+                (x) =>
                     x.receiptStatus === 'Cancelled' &&
                     x.sourceOfBusiness === 'broker'
             );
 
             console.log('======= Cancelled Receipt List =======');
             console.log(this.cancelReceiptList);
+            this.receiptNewCount = receipts.length;
         });
     }
 
     log(value): void {
         // this.listOfPolicies = this.policies.filter((x) => x.client === value);
         this.displayedListOfUnreceiptedReceipts = this.listofUnreceiptedReceipts.filter(
-            x => x.intermediaryName === value
+            (x) => x.intermediaryName === value
         );
         console.log(value);
     }
@@ -183,7 +197,11 @@ export class BrokerClientComponent implements OnInit {
         this.policyNumber = unreceipted.policyNumber;
         this.user = unreceipted.user;
         this.policy = unreceipted;
+        this.debitnote = this.debitnoteList.filter(
+            (x) => x.policy.id === unreceipted.id
+        )[0];
         this.policyAmount = unreceipted.netPremium;
+        this.currency = unreceipted.currency;
         this.sourceOfBusiness = unreceipted.sourceOfBusiness;
         this.intermediaryName = unreceipted.intermediaryName;
         console.log(this.policyAmount);
@@ -195,6 +213,7 @@ export class BrokerClientComponent implements OnInit {
 
     async handleOk() {
         this.submitted = true;
+        console.log('DEBIT NOTE NUMBER>>>>>', this.debitnote.debitNoteNumber);
         if (this.receiptForm.valid) {
             this.isOkLoading = true;
             this._id = v4();
@@ -207,18 +226,30 @@ export class BrokerClientComponent implements OnInit {
                 receiptStatus: this.recStatus,
                 sumInDigits: this.policyAmount,
                 todayDate: new Date(),
+                invoiceNumber: this.debitnote.debitNoteNumber,
                 sourceOfBusiness: this.sourceOfBusiness,
-                intermediaryName: this.intermediaryName
+                intermediaryName: this.intermediaryName,
+                currency: this.currency,
             };
 
             this.receiptNum = this._id;
             await this.receiptService
-                .addReceipt(receipt, this.policy.risks[0].insuranceType)
-                .then(mess => {
+                .addReceipt(
+                    receipt,
+                    this.policy.risks[0].insuranceType,
+                    this.receiptNewCount
+                )
+                .then((mess) => {
                     this.message.success('Receipt Successfully created');
+                    this.policy.receiptStatus = 'Receipted';
+                    this.policy.paymentPlan = 'Created';
+                    console.log('<++++++++++++++++++CLAIN+++++++++>');
+                    console.log(this.policy);
+
+                    this.policeServices.updatePolicy(this.policy).subscribe();
                     console.log(mess);
                 })
-                .catch(err => {
+                .catch((err) => {
                     this.message.warning('Receipt Failed');
                     console.log(err);
                 });
@@ -227,14 +258,6 @@ export class BrokerClientComponent implements OnInit {
                 this.isVisible = false;
                 this.isOkLoading = false;
             }, 30);
-
-            this.policy.receiptStatus = 'Receipted';
-            this.policy.paymentPlan = 'Created';
-            console.log('<++++++++++++++++++CLAIN+++++++++>');
-            console.log(this.policy);
-
-            await this.receiptService.updatePolicy(this.policy);
-
             this.generateID(this._id);
         }
     }
@@ -304,5 +327,9 @@ export class BrokerClientComponent implements OnInit {
 
     handleCancelClientType(): void {
         this.isVisibleClientType = false;
+    }
+
+    method(value) {
+        this.paymentMethod = value;
     }
 }

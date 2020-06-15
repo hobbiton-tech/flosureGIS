@@ -4,9 +4,9 @@
         align-items: flex-end;
         width: 100%;
     ">
-    <button nz-button nzType="primary" style="margin-right: 8px;" (click)="htmlToPdf()">
+    <!-- <button nz-button nzType="primary" style="margin-right: 8px;" (click)="htmlToPdf()">
         Download
-    </button>
+    </button> -->
     <button nz-button nzType="primary" [useExistingCss]="true" [printSectionId]="'creditPrintSection'" ngxPrint>
         Print
     </button>
@@ -19,9 +19,9 @@
                     <table>
                         <tr>
                             <td class="title">
-                                <img src="assets/images/apluslogo.png" style="width: 100%; max-width: 240px;" />
+                                <img src="/assets/images/apluslogo.png" style="width: 100%; max-width: 240px;" />
                             </td>
-                            <td>
+                            <td style="font-size: 11px; float: right !important">
                                 A Plus General Insurance<br />
                                 Plot No. 402, Roma Park, Zambezi Road<br />
                                 P.O. Box 31700, Lusaka Zambia<br />
@@ -44,7 +44,7 @@
             </tr>
             <tr class="subTitle">
                 <td>
-                    <p style="float: right !important;">No. [credit note no.]</p>
+                    <p style="float: right !important;">No: {{creditNote[0].creditNoteNumber}}</p>
                     <span style="font-weight: bold;">TPIN:</span><span
                         style="font-weight: bold; color: red;">1002167568</span><br />
                     <span style="font-weight: bold;">VAT No:</span><span
@@ -57,7 +57,7 @@
         <table>
             <tr>
                 <td><span style="font-weight: bold;">Policy cert No: {{ policy.policyNumber }}</span></td>
-                <td><span style="font-weight: bold;">Date: [credit note date]</span></td>
+                <td><span style="font-weight: bold;">Date: {{creditNote[0].dateCreated | date}}</span></td>
             </tr>
 
             <tr>
@@ -70,11 +70,12 @@
                 <td><span style="font-weight: bold;"></span></td>
             </tr>
             <tr>
-                <td><span style="font-weight: bold;">Period From: [start date] to [end date]</span></td>
+                <td><span style="font-weight: bold;">Period From: {{policy.startDate | date}} to
+                        {{policy.endDate | date}}</span></td>
                 <td><span style="font-weight: bold;"></span></td>
             </tr>
             <tr>
-                <td><span style="font-weight: bold;">Reason of Credit Note:</span></td>
+                <td><span style="font-weight: bold;">Reason of Credit Note: {{creditNote[0].remarks}}</span></td>
                 <td><span style="font-weight: bold;"></span></td>
             </tr>
         </table>
@@ -89,24 +90,24 @@
                     Details
                 </td>
                 <td id="td3" style="border: 1px solid black;">
-                    Amount(ZMK)
+                    Amount({{policy.currency == 'ZMW' ? 'K' : '$'}})
                 </td>
             </tr>
             <tr class="details" style="border: 1px solid black;">
-                <td style="border: 1px solid black;">some Binder No</td>
-                <td class="td2" style="border: 1px solid black;">Some details</td>
+                <td style="border: 1px solid black;"></td>
+                <td class="td2" style="border: 1px solid black;"></td>
                 <td id="td3" style="border: 1px solid black;">{{ creditNoteAmount | number: '1.2-2' }}</td>
             </tr>
         </table>
 
-        <p style="text-align: right; font-weight: bold;">
-            TOTAL:
+        <p style="text-align: right; font-weight: bold; margin-top: 5px;">
+            TOTAL: {{policy.currency == 'ZMW' ? 'K' : '$'}}
             <span id="td3">{{ creditNoteAmount | number: '1.2-2' }}</span>
         </p>
 
         <br />
 
-        <p>Issued by:</p><br />
-        <p>Authorised by:</p>
+        <p>Issued by:.....................................................</p><br />
+        <p>Authorised by:.................................................</p>
     </div>
 </div>

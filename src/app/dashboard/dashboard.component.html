@@ -63,7 +63,7 @@
             </nz-card>
         </div>
         <div nz-col [nzSpan]="8">
-            <nz-card [nzTitle]="'Gross Written Premium (ZMw)'">
+            <nz-card [nzTitle]="'Gross Written Premium (ZMW)'">
                 <nz-statistic
                     [nzValue]="commissionEarned | number"
                 ></nz-statistic>
@@ -116,10 +116,10 @@
                                 <td>{{ policy.policyNumber }}</td>
                                 <td>{{ policy.risks[0].insuranceType }}</td>
                                 <td>
-                                    {{ policy.startDate | date}}
+                                    {{ policy.startDate | date }}
                                 </td>
                                 <td>
-                                    {{ policy.endDate | date}}
+                                    {{ policy.endDate | date }}
                                 </td>
                                 <td>{{ policy.client }}</td>
                                 <td>{{ policy.user }}</td>

@@ -9,11 +9,13 @@ import _ from 'lodash';
 import { v4 } from 'uuid';
 import { AgentsService } from 'src/app/settings/components/agents/services/agents.service';
 import { IAgent } from 'src/app/settings/components/agents/models/agents.model';
+import { PoliciesService } from 'src/app/underwriting/services/policies.service';
+import { DebitNote } from 'src/app/underwriting/documents/models/documents.model';
 
 @Component({
     selector: 'app-agent-client',
     templateUrl: './agent-client.component.html',
-    styleUrls: ['./agent-client.component.scss']
+    styleUrls: ['./agent-client.component.scss'],
 })
 export class AgentClientComponent implements OnInit {
     receiptForm: FormGroup;
@@ -69,16 +71,16 @@ export class AgentClientComponent implements OnInit {
         { label: 'Third Party Recovery', value: 'Third Party Recovery' },
         {
             label: 'Imprest Retirement Receipt',
-            value: 'Imprest Retirement Receipt'
+            value: 'Imprest Retirement Receipt',
         },
         { label: 'Third Party Recovery', value: 'Third Party Recovery' },
-        { label: 'General Receipt', value: 'General Receipt' }
+        { label: 'General Receipt', value: 'General Receipt' },
     ];
 
     paymentMethodList = [
         { label: 'Cash', value: 'cash' },
         { label: 'EFT', value: 'eft' },
-        { label: 'Bank Transfer', value: 'bank transfer' }
+        { label: 'Bank Transfer', value: 'bank transfer' },
     ];
 
     typeOfClient = ['Direct', 'Agent', 'Broker'];
@@ -89,13 +91,19 @@ export class AgentClientComponent implements OnInit {
     displayedListOfUnreceiptedReceipts: Policy[];
     sourceOfBusiness: string;
     intermediaryName: string;
+    receiptNewCount: any;
+    debitnoteList: DebitNote[] = [];
+    debitnote: DebitNote;
+    paymentMethod = '';
+    currency: string;
 
     constructor(
         private receiptService: AccountService,
         private formBuilder: FormBuilder,
         private message: NzMessageService,
         private router: Router,
-        private agentService: AgentsService
+        private agentService: AgentsService,
+        private policeServices: PoliciesService
     ) {
         this.receiptForm = this.formBuilder.group({
             receivedFrom: ['', Validators.required],
@@ -108,28 +116,29 @@ export class AgentClientComponent implements OnInit {
             sumInWords: [''],
             dateReceived: [''],
             todayDate: [this.today],
-            remarks: ['']
+            remarks: [''],
+            cheqNumber: [''],
         });
 
         this.cancelForm = this.formBuilder.group({
-            remarks: ['', Validators.required]
+            remarks: ['', Validators.required],
         });
         this.reinstateForm = this.formBuilder.group({
-            remarks: ['', Validators.required]
+            remarks: ['', Validators.required],
         });
     }
 
     ngOnInit(): void {
-        this.agentService.getAgents().subscribe(agents => {
+        this.agentService.getAgents().subscribe((agents) => {
             this.agentList = agents;
 
             console.log('===================');
             console.log(this.agentList);
         });
-        this.receiptService.getPolicies().subscribe(quotes => {
+        this.policeServices.getPolicies().subscribe((quotes) => {
             this.listofUnreceiptedReceipts = _.filter(
                 quotes,
-                x =>
+                (x) =>
                     x.receiptStatus === 'Unreceipted' &&
                     x.sourceOfBusiness === 'agent'
             );
@@ -137,7 +146,7 @@ export class AgentClientComponent implements OnInit {
 
             this.receiptsCount = _.filter(
                 quotes,
-                x =>
+                (x) =>
                     x.receiptStatus === 'Unreceipted' &&
                     x.sourceOfBusiness === 'agent'
             ).length;
@@ -145,10 +154,14 @@ export class AgentClientComponent implements OnInit {
             console.log(this.listofUnreceiptedReceipts);
         });
 
-        this.receiptService.getReciepts().subscribe(receipts => {
+        this.policeServices.getDebitNotes().subscribe((invoice) => {
+            this.debitnoteList = invoice;
+        });
+
+        this.receiptService.getReciepts().subscribe((receipts) => {
             this.receiptedList = _.filter(
                 receipts,
-                x =>
+                (x) =>
                     x.receiptStatus === 'Receipted' &&
                     x.sourceOfBusiness === 'agent'
             );
@@ -158,13 +171,14 @@ export class AgentClientComponent implements OnInit {
 
             this.cancelReceiptList = _.filter(
                 receipts,
-                x =>
+                (x) =>
                     x.receiptStatus === 'Cancelled' &&
                     x.sourceOfBusiness === 'agent'
             );
 
             console.log('======= Cancelled Receipt List =======');
             console.log(this.cancelReceiptList);
+            this.receiptNewCount = receipts.length;
         });
     }
 
@@ -175,7 +189,7 @@ export class AgentClientComponent implements OnInit {
         console.log('Receipts', this.listofUnreceiptedReceipts);
 
         this.displayedListOfUnreceiptedReceipts = this.listofUnreceiptedReceipts.filter(
-            x => x.intermediaryName === value
+            (x) => x.intermediaryName === value
         );
         console.log(this.listofUnreceiptedReceipts);
         console.log('SELECRED', value);
@@ -187,7 +201,11 @@ export class AgentClientComponent implements OnInit {
         this.policyNumber = unreceipted.policyNumber;
         this.user = unreceipted.user;
         this.policy = unreceipted;
+        this.debitnote = this.debitnoteList.filter(
+            (x) => x.policy.id === unreceipted.id
+        )[0];
         this.policyAmount = unreceipted.netPremium;
+        this.currency = unreceipted.currency;
         this.sourceOfBusiness = unreceipted.sourceOfBusiness;
         this.intermediaryName = unreceipted.intermediaryName;
         console.log(this.policyAmount);
@@ -199,6 +217,7 @@ export class AgentClientComponent implements OnInit {
 
     async handleOk() {
         this.submitted = true;
+        console.log('DEBIT NOTE NUMBER>>>>>', this.debitnote.debitNoteNumber);
         if (this.receiptForm.valid) {
             this.isOkLoading = true;
             this._id = v4();
@@ -211,18 +230,30 @@ export class AgentClientComponent implements OnInit {
                 receiptStatus: this.recStatus,
                 sumInDigits: this.policyAmount,
                 todayDate: new Date(),
+                invoiceNumber: this.debitnote.debitNoteNumber,
                 sourceOfBusiness: this.sourceOfBusiness,
-                intermediaryName: this.intermediaryName
+                intermediaryName: this.intermediaryName,
+                currency: this.currency,
             };
 
             this.receiptNum = this._id;
             await this.receiptService
-                .addReceipt(receipt, this.policy.risks[0].insuranceType)
-                .then(mess => {
+                .addReceipt(
+                    receipt,
+                    this.policy.risks[0].insuranceType,
+                    this.receiptNewCount
+                )
+                .then((mess) => {
                     this.message.success('Receipt Successfully created');
+                    this.policy.receiptStatus = 'Receipted';
+                    this.policy.paymentPlan = 'Created';
+                    console.log('<++++++++++++++++++CLAIN+++++++++>');
+                    console.log(this.policy);
+
+                    this.policeServices.updatePolicy(this.policy).subscribe();
                     console.log(mess);
                 })
-                .catch(err => {
+                .catch((err) => {
                     this.message.warning('Receipt Failed');
                     console.log(err);
                 });
@@ -231,13 +262,6 @@ export class AgentClientComponent implements OnInit {
                 this.isVisible = false;
                 this.isOkLoading = false;
             }, 30);
-
-            this.policy.receiptStatus = 'Receipted';
-            this.policy.paymentPlan = 'Created';
-            console.log('<++++++++++++++++++CLAIN+++++++++>');
-            console.log(this.policy);
-
-            await this.receiptService.updatePolicy(this.policy);
 
             this.generateID(this._id);
         }
@@ -308,5 +332,9 @@ export class AgentClientComponent implements OnInit {
 
     handleCancelClientType(): void {
         this.isVisibleClientType = false;
+    }
+
+    method(value) {
+        this.paymentMethod = value;
     }
 }

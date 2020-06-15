@@ -3,6 +3,7 @@ import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { RiskModel, ITimestamp } from 'src/app/quotes/models/quote.model';
 import { Policy } from '../../models/policy.model';
+import moment from 'moment';
 
 @Component({
     selector: 'app-policy-certificate-document',
@@ -42,6 +43,13 @@ export class PolicyCertificateDocumentComponent implements OnInit {
     constructor() {}
 
     ngOnInit(): void {}
+
+    getYearOfManufacture(risk: RiskModel) {
+        let year: string = moment(risk.yearOfManufacture)
+            .year()
+            .toString();
+        return year;
+    }
 
     htmlToPdf() {
         this.generatingPDF = true;

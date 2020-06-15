@@ -19,9 +19,9 @@ import {
 } from '../models/client.model';
 import { IAccount } from 'src/app/settings/models/organizational/account.model';
 
-// const BASE_URL = 'http://localhost:3000';
-const BASE_URL = 'https://flosure-api.com'
-// const BASE_URL = 'https://flosure-postgres-api.herokuapp.com';
+
+const BASE_URL = 'https://www.flosure-api.com';
+
 
 @Injectable({
     providedIn: 'root',
@@ -89,94 +89,96 @@ export class ClientsService {
     // }
 
     //New flosure api
-    // createIndividualClient(client: IClientDTO) {
-    //     const clnt: IClient = {
-    //         clientType: 'Individual',
-    //         firstName: client.firstName,
-    //         lastName: client.lastName,
-    //         phoneNumber: client.phoneNumber,
-    //         email: client.email,
-    //         address: client.address,
-    //         idType: client.idType,
-    //         idNumber: client.idNumber,
-    //         title: client.title,
-    //         maritalStatus: client.maritalStatus,
-    //         gender: client.gender,
-    //         sector: client.sector,
-    //         occupation: client.occupation,
-    //         dateOfBirth: client.dateOfBirth
-    //     };
 
-    //     const account: IAccountDetails = {
-    //         bank: client.bank,
-    //         branch: client.branch,
-    //         tpinNumber: client.tpinNumber,
-    //         accountName: client.accountName,
-    //         accountNumber: client.accountNumber,
-    //         accountType: client.accountType
-    //     };
+    createIndividualClient(client: IClientDTO) {
+        const clnt: IClient = {
+            clientType: 'Individual',
+            firstName: client.firstName,
+            lastName: client.lastName,
+            phoneNumber: client.phoneNumber,
+            email: client.email,
+            address: client.address,
+            idType: client.idType,
+            idNumber: client.idNumber,
+            title: client.title,
+            maritalStatus: client.maritalStatus,
+            gender: client.gender,
+            sector: client.sector,
+            occupation: client.occupation,
+            dateOfBirth: client.dateOfBirth,
+        };
 
-    //     const addAccountDetails$ = id =>
-    //         this.http.post<IAccountDetails>(
-    //             `${BASE_URL}/clients/account-details`,
-    //             { clientId: id, ...account }
-    //         );
+        const account: IAccountDetails = {
+            bank: client.bank,
+            branch: client.branch,
+            tpinNumber: client.tpinNumber,
+            accountName: client.accountName,
+            accountNumber: client.accountNumber,
+            accountType: client.accountType,
+        };
 
-    //     return this.http
-    //         .post<IClient>(`${BASE_URL}/clients`, clnt)
-    //         .pipe(switchMap(x => addAccountDetails$(x.id)));
-    // }
+        const addAccountDetails$ = (id) =>
+            this.http.post<IAccountDetails>(
+                `${BASE_URL}/clients/account-details`,
+                { clientId: id, ...account }
+            );
 
-    // createCorporateClient(client: IClientDTO) {
-    //     const clnt: IClientCorporate = {
-    //         clientType: 'Corporate',
-    //         firstName: client.firstName,
-    //         lastName: client.lastName,
-    //         phoneNumber: client.phoneNumber,
-    //         email: client.email,
-    //         address: client.address,
-    //         sector: client.sector,
-    //         status: client.status
-    //     };
+        return this.http
+            .post<IClient>(`${BASE_URL}/clients`, clnt)
+            .pipe(switchMap((x) => addAccountDetails$(x.id)));
+    }
 
-    //     const companyDetails: ICompanyDetails = {
-    //         registrationNumber: client.registrationNumber,
-    //         companyName: client.companyName,
-    //         companyAddress: client.companyAddress,
-    //         companyEmail: client.companyEmail,
-    //         tpinNumber: client.tpinNumber
-    //     };
+    createCorporateClient(client: IClientDTO) {
+        const clnt: IClientCorporate = {
+            clientType: 'Corporate',
+            firstName: client.firstName,
+            lastName: client.lastName,
+            phoneNumber: client.phoneNumber,
+            email: client.email,
+            address: client.address,
+            sector: client.sector,
+            status: client.status,
+        };
 
-    //     const account: IAccountDetails = {
-    //         bank: client.bank,
-    //         branch: client.branch,
-    //         tpinNumber: client.tpinNumber,
-    //         accountName: client.accountName,
-    //         accountNumber: client.accountNumber,
-    //         accountType: client.accountType
-    //     };
+        const companyDetails: ICompanyDetails = {
+            registrationNumber: client.registrationNumber,
+            companyName: client.companyName,
+            companyAddress: client.companyAddress,
+            companyEmail: client.companyEmail,
+            tpinNumber: client.tpinNumber,
+        };
 
-    //     const addAccountDetails$ = id =>
-    //         this.http.post<IAccountDetails>(
-    //             `${BASE_URL}/clients/account-details`,
-    //             { clientId: id, ...account }
-    //         );
+        const account: IAccountDetails = {
+            bank: client.bank,
+            branch: client.branch,
+            tpinNumber: client.tpinNumber,
+            accountName: client.accountName,
+            accountNumber: client.accountNumber,
+            accountType: client.accountType,
+        };
 
-    //     const addCompanyDetails$ = id =>
-    //         this.http.post<ICompanyDetails>(
-    //             `${BASE_URL}/clients/company-details`,
-    //             { clientId: id, ...companyDetails }
-    //         );
+        const addAccountDetails$ = (id) =>
+            this.http.post<IAccountDetails>(
+                `${BASE_URL}/clients/account-details`,
+                { clientId: id, ...account }
+            );
 
-    //     return this.http
-    //         .post<IClient>(`${BASE_URL}/clients`, clnt)
-    //         .pipe(switchMap(x => addCompanyDetails$(x.id)));
-    // }
+        const addCompanyDetails$ = (id) =>
+            this.http.post<ICompanyDetails>(
+                `${BASE_URL}/clients/company-details`,
+                { clientId: id, ...companyDetails }
+            );
+
+        return this.http
+            .post<IClient>(`${BASE_URL}/clients`, clnt)
+            .pipe(switchMap((x) => addCompanyDetails$(x.id)));
+    }
+
 
     getClients(): Observable<IClientDTO[]> {
         return this.http.get<IClientDTO[]>(`${BASE_URL}/clients`);
     }
-    /////////////
+ 
 
     addCorporateClient(client: ICorporateClient): Observable<ICorporateClient> {
         client.clientType = 'Corporate';
@@ -190,20 +192,26 @@ export class ClientsService {
         );
         console.log(client);
         return this.http.post<ICorporateClient>(
-            `${BASE_URL}/clients/corporate`,
+
+            'https://www.flosure-api.com/clients/corporate',
+
             client
         );
     }
 
     getCorporateClients(): Observable<ICorporateClient[]> {
         return this.http.get<ICorporateClient[]>(
-            `${BASE_URL}/clients/corporate`
+
+            'https://www.flosure-api.com/clients/corporate'
+
         );
     }
 
     getCorporateClient(id: string): Observable<ICorporateClient> {
         return this.http.get<ICorporateClient>(
-            `${BASE_URL}/clients/corporate/${id}`
+
+            `https://www.flosure-api.com/clients/corporate/${id}`
+
         );
     }
 
@@ -212,7 +220,9 @@ export class ClientsService {
         id: string
     ): Observable<ICorporateClient> {
         return this.http.put<ICorporateClient>(
-            `${BASE_URL}/clients/corporate/${id}`,
+
+            `https://www.flosure-api.com/clients/corporate/${id}`,
+
             client
         );
     }
@@ -229,21 +239,28 @@ export class ClientsService {
             'AP',
           2
         );
+        console.log(client);
         return this.http.post<IIndividualClient>(
-            `${BASE_URL}/clients/individual`,
+
+            'https://www.flosure-api.com/clients/individual',
+
             client
         );
     }
 
     getIndividualClients(): Observable<IIndividualClient[]> {
         return this.http.get<IIndividualClient[]>(
-            `${BASE_URL}/clients/individual`
+
+            'https://www.flosure-api.com/clients/individual'
+
         );
     }
 
     getIndividualClient(id: string): Observable<IIndividualClient> {
         return this.http.get<IIndividualClient>(
-            `${BASE_URL}/clients/individual/${id}`
+
+            `https://www.flosure-api.com/clients/individual/${id}`
+
         );
     }
 
@@ -252,7 +269,7 @@ export class ClientsService {
         id: string
     ): Observable<IIndividualClient> {
         return this.http.put<IIndividualClient>(
-            `https://flosure-postgres-api.herokuapp.com/clients/individual/${id}`,
+            `https://www.flosure-api.com/clients/individual/${id}`,
             client
         );
     }

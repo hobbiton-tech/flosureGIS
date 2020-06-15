@@ -4,9 +4,9 @@
         align-items: flex-end;
         width: 100%;
     ">
-    <button nz-button nzType="primary" style="margin-right: 8px;" (click)="htmlToPdf()">
+    <!-- <button nz-button nzType="primary" style="margin-right: 8px;" (click)="htmlToPdf()">
         Download
-    </button>
+    </button> -->
     <button nz-button nzType="primary" [useExistingCss]="true" [printSectionId]="'debitPrintSection'" ngxPrint>
         Print
     </button>
@@ -20,9 +20,9 @@
                     <table>
                         <tr>
                             <td class="title">
-                                <img src="assets/images/apluslogo.png" style="width: 100%; max-width: 240px;" />
+                                <img src="/assets/images/apluslogo.png" style="width: 100%; max-width: 240px;" />
                             </td>
-                            <td>
+                            <td style="font-size: 11px; float: right !important">
                                 A Plus General Insurance<br />
                                 Plot No. 402, Roma Park, Zambezi Road<br />
                                 P.O. Box 31700, Lusaka Zambia<br />
@@ -45,7 +45,8 @@
             </tr>
             <tr class="subTitle">
                 <td>
-                    <p style="float: right !important;">No. [debit note no.]</p>
+                    <p style="float: right !important;"><span style="font-weight: bold;">No:</span>
+                        {{policyDebitNote ? policyDebitNote.debitNoteNumber : '-'}}</p>
                     <span style="font-weight: bold;">TPIN:</span><span
                         style="font-weight: bold; color: red;">1002167568</span>
                 </td>
@@ -56,22 +57,24 @@
         <table>
             <tr>
                 <td><span style="font-weight: bold;">Insured: {{ policy.nameOfInsured }}</span></td>
-                <td><span style="font-weight: bold;">Agent: [Agent name]</span></td>
+                <td style="float: right !important"><span style="font-weight: bold;">Date:
+                        {{policyDebitNote ? (policyDebitNote.dateCreated | date) : '-'}}</span></td>
             </tr>
             <tr>
-                <td><span style="font-weight: bold;">Address:</span></td>
-                <td><span style="font-weight: bold;">Terms:</span></td>
+                <td><span style="font-weight: bold;">Address: {{client ? client.address : '-'}}</span></td>
+                <td style="float: right !important"><span style="font-weight: bold;">Agent:
+                        {{policy.sourceOfBusiness == 'direct' ? 'Direct' : policy.intermediaryName}}</span></td>
             </tr>
             <tr>
-                <td><span style="font-weight: bold;">Telephone:</span></td>
-                <td><span style="font-weight: bold;"></span></td>
+                <td><span style="font-weight: bold;">Telephone: {{client ? client.phone : '-'}}</span></td>
+                <!-- <td style="float: right !important"><span style="font-weight: bold;">Terms: </span></td> -->
             </tr>
         </table>
         <br />
 
 
-        <nz-table style="width: 100%;" style="border: 1px solid black; border-collapse: collapse;" #risksTable
-            [nzData]="policy.risks" nzFrontPagination="false" nzShowPagination="false">
+        <nz-table style="width: 100%; font-size: 12px;" #risksTable [nzData]="policy.risks" nzFrontPagination="false"
+            nzShowPagination="false">
 
             <tr class="heading">
                 <th style="border: 1px solid black;">
@@ -84,7 +87,7 @@
                     Insured's Name & Asset
                 </th>
                 <th id="td3" style="border: 1px solid black;">
-                    Premium
+                    Premium ({{policy.currency == 'ZMW' ? 'K' : '$'}})
                 </th>
             </tr>
 
@@ -93,26 +96,48 @@
 
                 <td class="td2" style="border: 1px solid black;"></td>
                 <td style="border: 1px solid black;">
-                    {{risk.regNumber}}, {{risk.vehicleMake}} {{risk.vehicleModel}} - {{ risk.insuranceType }}
+                    {{risk.regNumber}}, {{risk.vehicleMake}} {{risk.vehicleModel}} -
+                    {{ risk.insuranceType == 'ThirdParty' ? 'Third Party' : 'Comprehensive' }}
                 </td>
                 <td id="td3" style="border: 1px solid black;">
-                    {{ risk.netPremium | number: '1.2-2' }}
+                    {{ risk.basicPremium | number: '1.2-2' }}
                 </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td style="float: right !important; font-weight: bold">Sub Total:</td>
+                <td style="border: 1px solid black;">
+                    <span>{{ subTotal | number: '1.2-2' }}</span></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td style="float: right !important; font-weight: bold">Insurance Levy 3%:</td>
+                <td style="border: 1px solid black;">
+                    <span>{{ premiumLevy | number: '1.2-2' }}</span></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td style="float: right !important; font-weight: bold">Total:</td>
+                <td style="border: 1px solid black;">
+                    <span>{{ policy.netPremium | number: '1.2-2' }}</span></td>
             </tr>
         </nz-table>
 
-        <p style="text-align: right; font-weight: bold;">
+        <!-- <p style="text-align: right; font-weight: bold;">
             Sub Total:
-            <span>{{ subTotal | number: '1.2-2' }}</span>
+            <span>{{policy.currency == 'ZMW' ? 'K' : '$'}}{{ subTotal | number: '1.2-2' }}</span>
         </p>
         <p style="text-align: right; font-weight: bold;">
             Insurance Levy 3%:
-            <span>{{ premiumLevy | number: '1.2-2' }}</span>
+            <span>{{policy.currency == 'ZMW' ? 'K' : '$'}}{{ premiumLevy | number: '1.2-2' }}</span>
         </p>
         <p style="text-align: right; font-weight: bold;">
             Total:
-            <span>{{ policy.netPremium | number: '1.2-2' }}</span>
-        </p>
+            <span>{{policy.currency == 'ZMW' ? 'K' : '$'}}{{ policy.netPremium | number: '1.2-2' }}</span>
+        </p> -->
         <br />
         <p style="font-weight: bold; text-align: left;">
             Prepared By: ................................................<span style="float: right;">
