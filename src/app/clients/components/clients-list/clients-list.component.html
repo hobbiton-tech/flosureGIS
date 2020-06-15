@@ -12,24 +12,41 @@
             <nz-page-header>
                 <nz-page-header-title>Registered Clients</nz-page-header-title>
                 <nz-page-header-extra>
-                    <button nz-button (click)="isAddClientDrawerOpen = true" nzType="primary">
+                    <button
+                        nz-button
+                        (click)="isAddClientDrawerOpen = true"
+                        nzType="primary"
+                    >
                         Add New Client
                     </button>
-                    <button nz-button (click)="downloadClientsList()" nzType="primary">
+                    <button
+                        nz-button
+                        (click)="downloadClientsList()"
+                        nzType="primary"
+                    >
                         Download Client List
                     </button>
                 </nz-page-header-extra>
                 <nz-page-header-content>
                     <nz-row [nzGutter]="1">
                         <nz-col [nzSpan]="6">
-                            <nz-statistic [nzValueTemplate]="clientsTotal" [nzTitle]="'Total Clients'"></nz-statistic>
+                            <nz-statistic
+                                [nzValueTemplate]="clientsTotal"
+                                [nzTitle]="'Total Clients'"
+                            ></nz-statistic>
                         </nz-col>
                         <nz-col [nzSpan]="6">
-                            <nz-statistic [nzValueTemplate]="individaulTotal" [nzTitle]="'Individual Clients'">
+                            <nz-statistic
+                                [nzValueTemplate]="individaulTotal"
+                                [nzTitle]="'Individual Clients'"
+                            >
                             </nz-statistic>
                         </nz-col>
                         <nz-col [nzSpan]="6">
-                            <nz-statistic [nzValueTemplate]="corporateTotal" [nzTitle]="'Corporate Clients'">
+                            <nz-statistic
+                                [nzValueTemplate]="corporateTotal"
+                                [nzTitle]="'Corporate Clients'"
+                            >
                             </nz-statistic>
                         </nz-col>
                     </nz-row>
@@ -42,8 +59,13 @@
             <nz-row style="margin-bottom: 20px;" [nzGutter]="20">
                 <div nz-col [nzSpan]="18">
                     <nz-input-group [nzSuffix]="suffixIconSearch">
-                        <input type="text" nz-input placeholder="Search by client, First Name, Last Name"
-                            [(ngModel)]="searchString" (ngModelChange)="search($event)" />
+                        <input
+                            type="text"
+                            nz-input
+                            placeholder="Search by client, First Name, Last Name"
+                            [(ngModel)]="searchString"
+                            (ngModelChange)="search($event)"
+                        />
                     </nz-input-group>
                     <ng-template #suffixIconSearch>
                         <i nz-icon nzType="search"></i>
@@ -51,17 +73,33 @@
                 </div>
                 <div nz-col [nzSpan]="6" style="float: right;">
                     <nz-input-group>
-                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select client type.">
+                        <nz-select
+                            nzShowSearch
+                            nzAllowClear
+                            nzPlaceHolder="Select client type."
+                        >
                             <nz-option nzLabel="All" nzValue="All"></nz-option>
-                            <nz-option nzLabel="Individaul" nzValue="Corporate"></nz-option>
-                            <nz-option nzLabel="Corporate" nzValue="Corporate"></nz-option>
+                            <nz-option
+                                nzLabel="Individual"
+                                nzValue="Corporate"
+                            ></nz-option>
+                            <nz-option
+                                nzLabel="Corporate"
+                                nzValue="Corporate"
+                            ></nz-option>
                         </nz-select>
                     </nz-input-group>
                 </div>
             </nz-row>
 
-            <nz-table id="clientsTable" #clientsTable [nzData]="displayClientList" [nzSize]="'small'"
-                [nzBordered]="true" style="background-color: white;">
+            <nz-table
+                id="clientsTable"
+                #clientsTable
+                [nzData]="displayClientList"
+                [nzSize]="'small'"
+                [nzBordered]="true"
+                style="background-color: white;"
+            >
                 <thead>
                     <tr>
                         <th>Client ID</th>
@@ -73,7 +111,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let client of clientsTable.data" (click)="viewDetails(client)" style="cursor: pointer;">
+                    <tr
+                        *ngFor="let client of clientsTable.data"
+                        (click)="viewDetails(client)"
+                        style="cursor: pointer;"
+                    >
                         <td>{{ client.clientID }}</td>
                         <td>
                             {{
@@ -86,11 +128,14 @@
                         <td>{{ client.phone }}</td>
                         <td>{{ client.clientType }}</td>
                         <td>
-                            <nz-badge [nzStatus]="
+                            <nz-badge
+                                [nzStatus]="
                                     client.status === 'Inactive'
                                         ? 'error'
                                         : 'success'
-                                " [nzText]="client.status">
+                                "
+                                [nzText]="client.status"
+                            >
                             </nz-badge>
                         </td>
                     </tr>
@@ -129,20 +174,29 @@
 
 <!-- Drawer for adding app-clients -->
 <!-- TODO: Should move this to a seperate component -->
-<nz-drawer [nzBodyStyle]="{
+<nz-drawer
+    [nzBodyStyle]="{
         height: 'calc(100% - 55px)',
         overflow: 'auto',
         'padding-bottom': '53px'
-    }" [nzPlacement]="'left'" [nzMaskClosable]="false" [nzWidth]="900" [nzVisible]="isAddClientDrawerOpen"
-    nzTitle="Create Client" (nzOnClose)="isAddClientDrawerOpen = false">
+    }"
+    [nzPlacement]="'left'"
+    [nzMaskClosable]="false"
+    [nzWidth]="900"
+    [nzVisible]="isAddClientDrawerOpen"
+    nzTitle="Create Client"
+    (nzOnClose)="isAddClientDrawerOpen = false"
+>
     <!-- <app-personal-details></app-personal-details>
     <app-contact-person></app-contact-person>
     <app-employement-information></app-employement-information>
     <app-company-details></app-company-details>
     <app-bank-details></app-bank-details>
     <app-company-bank-details></app-company-bank-details> -->
-    <app-create-client (closeAddAgentsFormDrawerVisible)="isAddClientDrawerOpen = false"
-        (closeAddAgentsFormDrawerVisible)="recieveUpdate($event)"></app-create-client>
+    <app-create-client
+        (closeAddAgentsFormDrawerVisible)="isAddClientDrawerOpen = false"
+        (closeAddAgentsFormDrawerVisible)="recieveUpdate($event)"
+    ></app-create-client>
 
     <!-- <div class="footer">
         <button

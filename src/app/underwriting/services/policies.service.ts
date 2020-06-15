@@ -18,9 +18,11 @@ import {
     CoverNote,
 } from '../documents/models/documents.model';
 
+
 const BASE_URL = 'https://www.flosure-api.com';
 
 // const BASE_URL = 'https://www.flosure-api.com';
+
 
 interface IDebitNoteResult {
     invoiceNumber: string;
@@ -229,7 +231,9 @@ export class PoliciesService {
     }
 
     getPolicies(): Observable<Policy[]> {
+
         return this.http.get<Policy[]>('https://www.flosure-api.com/policy');
+
         // return this.policies;
     }
 

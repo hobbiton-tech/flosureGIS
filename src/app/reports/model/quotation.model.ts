@@ -1,7 +1,4 @@
-import { RiskModel } from 'src/app/quotes/models/quote.model';
-import { DebitNote } from '../documents/models/documents.model';
-
-export class Policy {
+export class PolicyDto {
     id: string;
     policyNumber: string;
     product: string;
@@ -23,8 +20,7 @@ export class Policy {
     user: string;
     town: string;
     productType: ProductType;
-    risks: RiskModel[];
-    debitNotes: DebitNote[];
+    risks: Risks;
     netPremium: number;
     underwritingYear: Date | ITimestamp;
     receiptStatus: ReceiptStatus;
@@ -34,6 +30,35 @@ export class Policy {
     remarks?: string;
     term: number;
 }
+
+export class Risks {
+    id: string;
+    riskStartDate: Date | ITimestamp;
+    riskEndDate: Date | ITimestamp;
+    riskQuarter: number;
+    regNumber: string;
+    vehicleMake: string;
+    vehicleModel: string;
+    yearOfManufacture: Date | ITimestamp;
+    engineNumber: string;
+    chassisNumber: string;
+    color: string;
+    estimatedValue?: number;
+    productType: ProductType;
+    insuranceType: InsuranceType;
+    sumInsured?: number;
+    premiumRate?: number;
+    basicPremium: number;
+    loadingTotal: number;
+    discountTotal: number;
+    discountSubTotal: number;
+    discountRate: number;
+    premiumLevy: number;
+    netPremium: number;
+    quotation: PolicyDto;
+}
+
+
 
 export interface ITimestamp {
     seconds: number;

@@ -156,7 +156,7 @@ export class PolicyDetailsComponent implements OnInit {
                         );
                     });
 
-                this.policiesService.getDebitNotes().subscribe(debitNotes => {
+                this.policiesService.getDebitNotes().subscribe((debitNotes) => {
                     this.debitNotes = debitNotes;
 
                     console.log('debit notes');
@@ -165,14 +165,14 @@ export class PolicyDetailsComponent implements OnInit {
                     console.log('id: ', this.policyData.id);
 
                     this.singleDebitNote = debitNotes.filter(
-                        x => x.policy.id === this.policyData.id
+                        (x) => x.policy.id === this.policyData.id
                     )[0];
 
                     console.log('Policy Debit Note:');
                     console.log(this.singleDebitNote);
                 });
 
-                this.clientsService.getAllClients().subscribe(clients => {
+                this.clientsService.getAllClients().subscribe((clients) => {
                     this.clientsList = [...clients[0], ...clients[1]] as Array<
                         ICorporateClient & IIndividualClient
                     >;
@@ -180,7 +180,7 @@ export class PolicyDetailsComponent implements OnInit {
                     console.log('clients: ');
                     console.log(clients);
 
-                    this.client = this.clientsList.filter(x =>
+                    this.client = this.clientsList.filter((x) =>
                         x.companyName
                             ? x.companyName === this.policyData.client
                             : x.firstName + ' ' + x.lastName ===
@@ -190,7 +190,7 @@ export class PolicyDetailsComponent implements OnInit {
                     console.log('HERE =>>>>>');
                     console.log(
                         this.clientsList.filter(
-                            x =>
+                            (x) =>
                                 x.firstName + ' ' + x.lastName === 'Changa Lesa'
                         )[0] as IIndividualClient & ICorporateClient
                     );
@@ -227,6 +227,10 @@ export class PolicyDetailsComponent implements OnInit {
                     'basicPremium'
                 ).toString();
 
+                const doo = new Date(this.policyData.endDate);
+                const nd = new Date(
+                    doo.getTime() - doo.getTimezoneOffset() * -60000
+                );
                 // set values of fields
                 this.policyDetailsForm
                     .get('client')
@@ -237,9 +241,7 @@ export class PolicyDetailsComponent implements OnInit {
                 this.policyDetailsForm
                     .get('startDate')
                     .setValue(this.policyData.startDate);
-                this.policyDetailsForm
-                    .get('endDate')
-                    .setValue(this.policyData.endDate);
+                this.policyDetailsForm.get('endDate').setValue(nd);
                 this.policyDetailsForm
                     .get('sumInsured')
                     .setValue(this.policyData.sumInsured);
@@ -255,9 +257,7 @@ export class PolicyDetailsComponent implements OnInit {
                 this.policyDetailsForm
                     .get('dateOfIssue')
                     .setValue(this.policyData.dateOfIssue);
-                this.policyDetailsForm
-                    .get('expiryDate')
-                    .setValue(this.policyData.endDate);
+                this.policyDetailsForm.get('expiryDate').setValue(nd);
                 this.policyDetailsForm
                     .get('quarter')
                     .setValue(this.policyData.quarter);
@@ -266,41 +266,40 @@ export class PolicyDetailsComponent implements OnInit {
             });
         });
 
+        //         this.policiesService.getDebitNotes().subscribe((debitNotes) => {
+        //             this.debitNotes = debitNotes;
 
-//         this.policiesService.getDebitNotes().subscribe((debitNotes) => {
-//             this.debitNotes = debitNotes;
+        //             console.log('debit notes');
+        //             console.log(this.debitNotes);
+        //         });
 
-//             console.log('debit notes');
-//             console.log(this.debitNotes);
-//         });
+        //         this.clientsService.getAllClients().subscribe((clients) => {
+        //             this.clientsList = [...clients[0], ...clients[1]] as Array<
+        //                 ICorporateClient & IIndividualClient
+        //             >;
 
-//         this.clientsService.getAllClients().subscribe((clients) => {
-//             this.clientsList = [...clients[0], ...clients[1]] as Array<
-//                 ICorporateClient & IIndividualClient
-//             >;
+        //             console.log('clients: ');
+        //             console.log(clients);
 
-//             console.log('clients: ');
-//             console.log(clients);
+        //             this.client = this.clientsList.filter((x) =>
+        //                 x.companyName
+        //                     ? x.companyName === this.policyData.client
+        //                     : x.firstName + ' ' + x.lastName === this.policyData.client
+        //             )[0] as IIndividualClient & ICorporateClient;
 
-//             this.client = this.clientsList.filter((x) =>
-//                 x.companyName
-//                     ? x.companyName === this.policyData.client
-//                     : x.firstName + ' ' + x.lastName === this.policyData.client
-//             )[0] as IIndividualClient & ICorporateClient;
+        //             console.log('HERE =>>>>>');
+        //             console.log(
+        //                 this.clientsList.filter(
+        //                     (x) => x.firstName + ' ' + x.lastName === 'Changa Lesa'
+        //                 )[0] as IIndividualClient & ICorporateClient
+        //             );
 
-//             console.log('HERE =>>>>>');
-//             console.log(
-//                 this.clientsList.filter(
-//                     (x) => x.firstName + ' ' + x.lastName === 'Changa Lesa'
-//                 )[0] as IIndividualClient & ICorporateClient
-//             );
+        //             // console.log('policy data client:');
+        //             // console.log(this.policyData.client);
 
-//             // console.log('policy data client:');
-//             // console.log(this.policyData.client);
-
-//             // console.log('client');
-//             // console.log(this.client);
-//         });
+        //             // console.log('client');
+        //             // console.log(this.client);
+        //         });
 
         this.policyDetailsForm = this.formBuilder.group({
             client: ['', Validators.required],
