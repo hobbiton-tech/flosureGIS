@@ -74,12 +74,14 @@ export class DirectClientComponent implements OnInit {
         { label: 'Cash', value: 'cash' },
         { label: 'EFT', value: 'eft' },
         { label: 'Bank Transfer', value: 'bank transfer' },
+        { label: 'Cheque', value: 'cheque' },
     ];
     sourceOfBusiness: string;
     intermediaryName: string;
     receiptNewCount: number;
     debitnoteList: DebitNote[] = [];
     debitnote: DebitNote;
+    currency: string;
 
     constructor(
         private receiptService: AccountService,
@@ -113,6 +115,7 @@ export class DirectClientComponent implements OnInit {
 
     ngOnInit(): void {
         this.policeServices.getPolicies().subscribe((quotes) => {
+            console.log('CHECK RECEIPTS>>>>', quotes);
             this.unreceiptedList = _.filter(
                 quotes,
                 (x) =>
@@ -169,6 +172,7 @@ export class DirectClientComponent implements OnInit {
             (x) => x.policy.id === unreceipted.id
         )[0];
         this.policyAmount = unreceipted.netPremium;
+        this.currency = unreceipted.currency;
         this.sourceOfBusiness = unreceipted.sourceOfBusiness;
         this.intermediaryName = unreceipted.intermediaryName;
         console.log(this.policyAmount);
@@ -196,6 +200,7 @@ export class DirectClientComponent implements OnInit {
                 invoiceNumber: this.debitnote.debitNoteNumber,
                 sourceOfBusiness: this.sourceOfBusiness,
                 intermediaryName: this.intermediaryName,
+                currency: this.currency,
             };
 
             this.receiptNum = this._id;
@@ -207,6 +212,12 @@ export class DirectClientComponent implements OnInit {
                 )
                 .then((mess) => {
                     this.message.success('Receipt Successfully created');
+                    this.policy.receiptStatus = 'Receipted';
+                    this.policy.paymentPlan = 'Created';
+                    console.log('<++++++++++++++++++CLAIN+++++++++>');
+                    console.log(this.policy);
+
+                    this.policeServices.updatePolicy(this.policy).subscribe();
                     console.log(mess);
                 })
                 .catch((err) => {
@@ -218,13 +229,6 @@ export class DirectClientComponent implements OnInit {
                 this.isVisible = false;
                 this.isOkLoading = false;
             }, 30);
-
-            this.policy.receiptStatus = 'Receipted';
-            this.policy.paymentPlan = 'Created';
-            console.log('<++++++++++++++++++CLAIN+++++++++>');
-            console.log(this.policy);
-
-            await this.policeServices.updatePolicy(this.policy);
 
             this.generateID(this._id);
         }

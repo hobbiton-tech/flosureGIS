@@ -97,6 +97,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
     intermediaryName: string;
     debitnoteList: DebitNote[] = [];
     debitnote: DebitNote;
+    currency: string;
 
     constructor(
         private receiptService: AccountService,
@@ -212,6 +213,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
             (x) => x.policy.id === unreceipted.id
         )[0];
         this.policyAmount = unreceipted.netPremium;
+        this.currency = unreceipted.currency;
         this.sourceOfBusiness = unreceipted.sourceOfBusiness;
         this.intermediaryName = unreceipted.intermediaryName;
         console.log(this.policyAmount);
@@ -239,6 +241,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
                 invoiceNumber: this.debitnote.debitNoteNumber,
                 sourceOfBusiness: this.sourceOfBusiness,
                 intermediaryName: this.intermediaryName,
+                currency: this.currency,
             };
 
             this.receiptNum = this._id;
@@ -250,6 +253,12 @@ export class SalesRepresentativeClientComponent implements OnInit {
                 )
                 .then((mess) => {
                     this.message.success('Receipt Successfully created');
+                    this.policy.receiptStatus = 'Receipted';
+                    this.policy.paymentPlan = 'Created';
+                    console.log('<++++++++++++++++++CLAIN+++++++++>');
+                    console.log(this.policy);
+
+                    this.policeServices.updatePolicy(this.policy).subscribe();
                     console.log(mess);
                 })
                 .catch((err) => {
@@ -261,13 +270,6 @@ export class SalesRepresentativeClientComponent implements OnInit {
                 this.isVisible = false;
                 this.isOkLoading = false;
             }, 30);
-
-            this.policy.receiptStatus = 'Receipted';
-            this.policy.paymentPlan = 'Created';
-            console.log('<++++++++++++++++++CLAIN+++++++++>');
-            console.log(this.policy);
-
-            await this.policeServices.updatePolicy(this.policy);
 
             this.generateID(this._id);
         }
