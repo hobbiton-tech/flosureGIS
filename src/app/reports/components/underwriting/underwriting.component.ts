@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { PremiumService } from '../../services/premium.service';
 import { map, filter, tap } from 'rxjs/operators';
-import { from, Observable, Subject } from 'rxjs';
+import { from, Observable, Subject, of } from 'rxjs';
 import { PremiumDTO } from 'src/app/quotes/services/quotes.service';
 import {
     IPremiumReport,
@@ -33,9 +33,10 @@ import * as XLSX from 'xlsx';
 import { PolicyDto } from '../../model/quotation.model';
 // import { DebitNote } from 'src/app/underwriting/documents/models/documents.model';
 import { DebitNote } from '../../../underwriting/documents/models/documents.model';
-import _ from 'lodash';
+import _, { result } from 'lodash';
 import { CommisionSetupsService } from 'src/app/settings/components/agents/services/commision-setups.service';
 import { ICommissionSetup } from 'src/app/settings/components/agents/models/commission-setup.model';
+import { quotes } from 'html2canvas/dist/types/css/property-descriptors/quotes';
 
 interface FilterMotorQuotation extends MotorQuotationModel {
     client: string;
@@ -57,26 +58,15 @@ interface Motor extends MotorQuotationModel {
 
 interface PremiumReport extends Policy {
     policyNumber: string;
-    debitNoteNumber: any;
+    debitNoteNumber: string;
     grossPremium: string;
     loading: number;
     discount: number;
     netPremium: number;
     levy: number;
     premiumDue: number;
-    commissionAmount: any;
-    commission: number;
 }
-interface filterDebitNote extends DebitNote {
-    policyNumber: string;
-    grossPremium: string;
-    loading: number;
-    discount: number;
-    netPremium: number;
-    levy: number;
-    premiumDue: number;
-    commissionAmount: number;
-}
+
 export type QuoteStatus = 'Draft' | 'Approved';
 
 interface IFormattedAnalysisReport
@@ -117,13 +107,8 @@ export class UnderwritingComponent implements OnInit {
     // debitNoteList: DebitNote[] = [];
     // filterNote: DebitNote[] = [];
 
-    commission: any;
-
-    debitNotes: DebitNote[];
-    filterDebitNote: Array<filterDebitNote>;
-    finalDebitNote: Array<filterDebitNote>;
-    singleDebitNote: DebitNote;
-    latestDebitNote: DebitNote;
+    commission: number;
+    intermediary: Array<IAgent & IBroker & ISalesRepresentative>;
 
     // Quotation Analysis Report
     intermediariesList: Array<IAgent & IBroker & ISalesRepresentative>;
@@ -156,6 +141,12 @@ export class UnderwritingComponent implements OnInit {
     public noLength;
     public try;
     debitNumber: any;
+
+    inter: any;
+
+    public why: any;
+
+    displayCommission: ICommissionSetup[];
 
     constructor(
         private premiumService: PremiumService,
@@ -206,7 +197,8 @@ export class UnderwritingComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        // this._getFilterReportList(t, f);
+
+        let sourceOfBusiness = 'direct';
 
         this.quotationService.getMotorQuotations().subscribe((d) => {
             this.motorList = d;
@@ -222,187 +214,111 @@ export class UnderwritingComponent implements OnInit {
             );
         });
 
-        let sourceOfBusiness = 'direct';
-
-        // this.quotationService.getMotorQuotations().subscribe((d) => {
-        //     this.displayQuotationReport = d;
-
-        //     this.filteredQuotesList = this.displayQuotationReport.filter(
-        //         (x) => x.sourceOfBusiness !== sourceOfBusiness
-        //     );
-
-        //     this.displayQuotationReport = this.filteredQuotesList;
-        //     // console.log(this.filteredQuotesList)
-
-        //     // console.log('Am filter--->', this.filteredQuotesList);
-        // });
-
-        // this.policiesService.getPolicies().subscribe((policies) => {
-        //     this.displayPolicyReport = policies;
-        //     console.log('Policy--->', this.displayPolicyReport);
-        // });
-
-        // this.policiesService.getPolicies().subscribe((policies) => {
-        //     this.displayPolicyReport = policies;
-        // });
-
-        // this.policiesService.getDebitNotes().subscribe((debit) => {
-        //     this.filterDebitNote = debit.map((x) => ({
-        //         ...x,
-        //         policyNumber: x.policy.policyNumber,
-        //         grossPremium: this.sumArray(x.policy.risks, 'basicPremium'),
-        //         loading: this.sumArray(x.policy.risks, 'loadingTotal'),
-        //         discount: this.sumArray(x.policy.risks, 'discountTotal'),
-        //         netPremium: this.sumArray(x.policy.risks, 'netPremium'),
-        //         levy: this.sumArray(x.policy.risks, 'premiumLevy'),
-        //         premiumDue: x.policy.sumInsured,
-        //         commissionAmount: this.getCommission(
-        //             x.policy.intermediaryName
-        //         ).subscribe(),
-        //     }));
-        // });
-
-        // console.log('debit', this.displayDebitNote);
-
         this.policiesService.getPolicies().subscribe((policy) => {
             this.displayPremiumReport = policy;
 
             this.filterPremiumList = this.displayPremiumReport.map((x) => ({
                 ...x,
                 policyNumber: x.policyNumber,
-                debitNoteNumber: this.getDebitNote(x.id),
+                debitNoteNumber: x.debitNotes[0].debitNoteNumber,
                 grossPremium: this.sumArray(x.risks, 'basicPremium'),
                 loading: this.sumArray(x.risks, 'loadingTotal'),
                 discount: this.sumArray(x.risks, 'discountTotal'),
                 netPremium: this.sumArray(x.risks, 'netPremium'),
                 levy: this.sumArray(x.risks, 'premiumLevy'),
                 premiumDue: x.sumInsured,
-                commissionAmount: this.getCommission(x.intermediaryName),
-                commission: this.commission,
             }));
 
             this.displayPremiumReport = this.filterPremiumList;
             console.log('New Policy--->', this.filterPremiumList);
         });
 
-        // this.policiesService.getDebitNotes().subscribe((debit) => {
-        //     this.debitNotes = debit;
 
-        //     console.log(this.debitNotes);
+        // this.agentsService
+        //     .getAllIntermediaries()
+        //     .subscribe((intermediaries) => {
+        //         this.intermediariesList = [
+        //             ...intermediaries[0],
+        //             ...intermediaries[1],
+        //             ...intermediaries[2],
+        //         ] as Array<IAgent & IBroker & ISalesRepresentative>;
 
-        //     this.filterDebitNote = this.debitNotes.map((x) => ({
-        //         ...x,
-        //         policy: x.policy,
-        //     }));
+        //         this.displayIntermediariesList = this.intermediariesList;
+        //         // console.log('Inter ======>', this.displayIntermediariesList);
 
-        //     console.log('Policy Debit Note:', this.filterDebitNote);
-        // });
+        //         this.formatIntermediaryReport = this.displayIntermediariesList.map(
+        //             (i) => ({
+        //                 ...i,
+        //                 getFullName: this.getFullName(i),
+        //                 getPolicyCount: this.getIntermediaryPolicyCount(i),
 
-        var merged = _.map(this.displayDebitNote, function (item) {
-            return _.assign(
-                item,
-                _.find(this.displayPolicyReport, ['id', item.policy.id])
-            );
-        });
-
-        console.log('Merged objects->', merged);
-
-        this.agentsService
-            .getAllIntermediaries()
-            .subscribe((intermediaries) => {
-                this.intermediariesList = [
-                    ...intermediaries[0],
-                    ...intermediaries[1],
-                    ...intermediaries[2],
-                ] as Array<IAgent & IBroker & ISalesRepresentative>;
-
-                this.displayIntermediariesList = this.intermediariesList;
-                console.log('Inter ======>', this.displayIntermediariesList);
-
-                this.formatIntermediaryReport = this.displayIntermediariesList.map(
-                    (i) => ({
-                        ...i,
-                        getFullName: this.getFullName(i),
-                        getPolicyCount: this.getIntermediaryPolicyCount(i),
-                        getQuoteCount: this.getIntermediaryQuoteCount(i),
-                        getRatio: this.getRatio(i),
-                    })
-                );
-                console.log('filter ==>', this.formatIntermediaryReport);
-            });
+        //                 //passing it here
+        //                 getQuoteCount: this.getIntermediaryQuoteCount(i).then(
+        //                     (result) => {
+        //                         console.log('am not good at angular', result);
+        //                     }
+        //                 ),
+        //                 getRatio: this.getRatio(i),
+        //             })
+        //         );
+        //         console.log('Intermediary Name', this.formatIntermediaryReport);
+        //     });
+        // console.log('Intermediary Name', this.intermediary);
     }
 
-    getIntermediaryQuoteCount(intermediary: any) {
-        // let quote: any;
-        // var subject = new Subject<string>();
-        this.quotationService.getMotorQuotations().subscribe((quotes) => {
-            this.noLength = quotes.filter(
-                (item) => item.intermediaryName === 'hobbiton'
-            ).length;
 
-            
-            // .filter((x) => x.intermediaryName == 'Mr')
-            // .map((x) => ({
-            //     ...x,
-            // }));
+    /// the function to get all quotation by per intermediary//
+    // async getIntermediaryQuoteCount(intermediary: any) {
+    //     let quote: any;
 
-            // quote = this.filteredQuotesList.length
-            // console.log('length->', this.filteredQuotesList);
-            // subject.next(quote);
-        });
+    //     await this.quotationService
+    //         .getMotorQuotations()
+    //         .toPromise()
+    //         .then((quotes: MotorQuotationModel[]) => {
+    //             this.quotesList = quotes;
 
-        const count = this.noLength;
-        console.log('test one on one', count);
-        // return subject.asObservable();
-    }
+    //             this.filteredQuotesList = this.quotesList.filter((item) =>
+    //                 item.intermediaryName === intermediary.companyName
+    //                     ? intermediary.companyName
+    //                     : intermediary.contactFirstName +
+    //                       ' ' +
+    //                       intermediary.contactLastName
+    //             );
+    //             // .map((x) => x.id);
 
-    getCommission(name: string) {
-        this.commissionService.getCommissionSetups().subscribe((x) =>
-            x
-                .filter((x) => x.intermediaryName === 'hobbiton')
-                .map((m) => {
-                    this.commission = m.commission;
-                    // console.log('this comm',commission)
-                })
-        );
+    //             quote = this.filteredQuotesList.length;
+    //             console.log('test one', quote);
+    //         });
 
-        console.log('This Knew->', this.commission);
-        return this.commission;
-    }
-
-    getDebitNote(id: string) {
-       
-        var subject = new Subject<string>();
-        this.policiesService.getDebitNotes().subscribe((debitNotes) => {
-            this.debitNotes = debitNotes;
-            debitNotes
-                .filter((x) => x.policy.id === id)
-                .map((m) => {
-                    this.debitNumber = m.debitNoteNumber;
-                    console.log('new Debit', this.debitNumber);
-                    subject.next(this.debitNumber);
-                });
-
-            // this.singleDebitNote = debitNotes.filter(
-            //     (x) => x.policy.id === id
-            // )[0];
-
-            console.log('Policy Debit Note:', this.debitNumber);
-
-            // console.log(this.singleDebitNote.debitNoteNumber);
-
-            // return this.singleDebitNote.debitNoteNumber;
-        });
-
-        console.log('here', this.debitNotes)
-
-   
+    //     console.log('test two', this.quotesList);
+    //     return quote;
+    // }
 
 
-        // return this.singleDebitNote.debitNoteNumber
-    }
 
-  
+
+    // getFullName(i: any): any {
+    //     return `${
+    //         i.companyName
+    //             ? i.companyName
+    //             : i.contactFirstName + '' + i.contactLastName
+    //     }`;
+    // }
+
+    // async getCommission(name: string) {
+    //     await this.commissionService.getCommissionSetups().subscribe((x) =>
+    //         x
+    //             .filter((x) => x.intermediaryName === name)
+    //             .map((m) => {
+    //                 this.commission = m.commission;
+    //                 // console.log('this comm',commission)
+    //             })
+    //     );
+
+    //     console.log('This Knew->', this.commission);
+    //     this.commission;
+    // }
+
     handleOk(): void {
         this.isVisible = false;
         this.isAnalysisReportVisible = false;
@@ -425,13 +341,6 @@ export class UnderwritingComponent implements OnInit {
     }
 
     //Quotation Listing Report functions
-    getFullName(i: any): any {
-        return `${
-            i.companyName
-                ? i.companyName
-                : i.contactFirstName + '' + i.contactLastName
-        }`;
-    }
 
     // getIntermediaryQuoteCount(intermediary: any): number {
     //     this.quotationService.getMotorQuotations().subscribe((quotes) => {
@@ -449,69 +358,64 @@ export class UnderwritingComponent implements OnInit {
     //     return this.filteredQuotesList.length;
     // }
 
-    getIntermediaryPolicyCount(intermediary: any): number {
-        this.policiesService.getPolicies().subscribe((policies) => {
-            console.log(policies);
+    // getIntermediaryPolicyCount(intermediary: any) {
+    //     this.policiesService.getPolicies().subscribe((policies) => {
+    //         console.log(policies);
 
-            this.policiesList = policies;
-            this.try = this.policiesList.filter(
-                (x) => x.intermediaryName === 'hobbiton'
-                // intermediary.companyName
-                //     ? intermediary.companyName
-                //     : intermediary.contactFirstName +
-                //       ' ' +
-                //       intermediary.contactLastName
-            ).length;
-        });
+    //         this.policiesList = policies;
+    //         this.try = this.policiesList.filter(
+    //             (x) => x.intermediaryName === 'hobbiton'
+    //             // intermediary.companyName
+    //             //     ? intermediary.companyName
+    //             //     : intermediary.contactFirstName +
+    //             //       ' ' +
+    //             //       intermediary.contactLastName
+    //         );
+    //     });
 
-        console.log('am test you=>>>>' + this.try);
+    //     console.log('am test you=>>>>' + this.try);
 
-        return this.filteredPoliciesList.length;
-    }
+    //     return this.try;
+    // }
 
-    getRatio(intermediary: any): any {
-        let quoteNumber;
-        let policyNumber;
+    // getRatio(intermediary: any): any {
+    //     let quoteNumber;
+    //     let policyNumber;
 
-        this.policiesService.getPolicies().subscribe((policies) => {
-            this.policiesList = policies;
-            this.filteredPoliciesList = this.policiesList.filter(
-                (x) => x.intermediaryName == 'hobbiton'
+    //     this.policiesService.getPolicies().subscribe((policies) => {
+    //         this.policiesList = policies;
+    //         this.filteredPoliciesList = this.policiesList.filter(
+    //             (x) => x.intermediaryName == 'hobbiton'
 
-                // intermediary.companyName
-                //     ? intermediary.companyName
-                //     : intermediary.contactFirstName +
-                //       ' ' +
-                //       intermediary.contactLastName
-            );
+    //             // intermediary.companyName
+    //             //     ? intermediary.companyName
+    //             //     : intermediary.contactFirstName +
+    //             //       ' ' +
+    //             //       intermediary.contactLastName
+    //         );
 
-            quoteNumber = this.filteredPoliciesList[0];
-        });
+    //         quoteNumber = this.filteredPoliciesList[0];
+    //     });
 
-        this.quotationService.getMotorQuotations().subscribe((policies) => {
-            this.quotesList = policies;
-            this.filteredQuotesList = this.quotesList.filter((x) =>
-                x.intermediaryName == intermediary.companyName
-                    ? intermediary.companyName
-                    : intermediary.contactFirstName +
-                      ' ' +
-                      intermediary.contactLastName
-            );
+    //     this.quotationService.getMotorQuotations().subscribe((policies) => {
+    //         this.quotesList = policies;
+    //         this.filteredQuotesList = this.quotesList.filter((x) =>
+    //             x.intermediaryName == intermediary.companyName
+    //                 ? intermediary.companyName
+    //                 : intermediary.contactFirstName +
+    //                   ' ' +
+    //                   intermediary.contactLastName
+    //         );
 
-            policyNumber = this.filteredQuotesList;
-        });
-        // console.log('Get=>>>>' + this.filteredQuotesList.length);
-        // console.log('Count=>>>>' + this.filteredPoliciesList.length);
+    //         policyNumber = this.filteredQuotesList;
+    //     });
+    //     // console.log('Get=>>>>' + this.filteredQuotesList.length);
+    //     // console.log('Count=>>>>' + this.filteredPoliciesList.length);
 
-        return (34 / 70) * 100;
-    }
+    //     return (34 / 70) * 100;
+    // }
 
     downloadQuotationReportListPdf() {
-        // const moment = require('moment');
-        // const today = moment();
-
-        // var todayDate = Date.toString("dd-MM-yy");
-
         console.log('Downloading Pdf....');
         let doc = new jsPDF('l', 'pt', 'a4');
         var img = new Image();
@@ -572,17 +476,11 @@ export class UnderwritingComponent implements OnInit {
         const head = [
             [
                 'No',
-                'Quotation Number',
-                'Client',
-                'Transaction Date',
-                'Underwriter',
-                'Intermediary',
                 'Branch',
-                'Source of Business',
-                'Product Type',
-                'Sum Insured',
-                'Gross Premium',
-                'Status',
+                'Client',
+                'Intermediary Name',
+                'Number of Quotation',
+                'Acquisition Ratio',
             ],
         ];
 
@@ -596,13 +494,8 @@ export class UnderwritingComponent implements OnInit {
             },
             head: head,
             styles: {
-                lineWidth: 0.01,
-                lineColor: 0,
-                fillStyle: 'DF',
-                halign: 'center',
-                valign: 'middle',
                 overflow: 'linebreak',
-                fontSize: 8,
+                fontSize: 10,
                 tableWidth: 'auto',
                 columnWidth: 'auto',
             },
@@ -620,26 +513,9 @@ export class UnderwritingComponent implements OnInit {
             doc.putTotalPages(totalPagesExp);
         }
 
-        // if( int i > 0){
-        //     doc.addPage(612, 791)
-        // }
-
-        // doc.setPage(i+1);
         //    doc.autoTable(columns, rows);
-        // doc.setFontSize(15);
+        doc.setFontSize(15);
 
-        //@ts-ignore
-        // doc.autoTable(
-        //     {
-        //         html: 'Table',
-        //         margin: { top: 80 },
-        //         didDrawPage: header,
-        //     },
-        //     options
-        // );
-
-        // let content = this.content.nativeElement;
-        doc.setFontSize(11);
         //@ts-ignore
         doc.autoTable({
             html: 'Table',
@@ -647,8 +523,82 @@ export class UnderwritingComponent implements OnInit {
             didDrawPage: header,
         });
         // autoTable(doc, { html: '#Table' });
-        doc.save('quotationReport.pdf');
+        doc.save('quotatioListingReport.pdf');
     }
+
+    // downloadQuotationReportListPdf() {
+    //     console.log('Downloading Pdf....');
+    //     let doc = new jsPDF('l', 'pt', 'a4');
+
+      
+    //     var company_logo = new Image();
+    //     company_logo.src = 'assets/images/apluslogo.png';
+
+
+
+    //     // A Plus General Insurance
+    //     // Plot No. 402, Roma Park, Zambezi Road
+    //     // P.O. Box 31700, Lusaka Zambia
+    //     // Tel: +260 211 239865/6 - Tele/Fax:+260 211 239867
+    //     // E-mail: info@aplusgeneral.com
+
+      
+       
+
+
+    //     const totalPagesExp = '{total_pages_count_string}';
+
+    //     var header = function (data) {
+    //         doc.setFontSize(8);
+    //         doc.setTextColor(40);
+    //         doc.setFontStyle('normal');
+    //     };
+
+    //     doc.setFontSize(8);
+    //     doc.setFontStyle('normal');
+
+    //     var options = {
+    //         beforePageContent: header,
+    //         margin: {
+    //             top: 50,
+    //         },
+    //         styles: {
+    //             overflow: 'linebreak',
+    //             fontSize: 8,
+    //             rowHeight: 'auto',
+    //             columnWidth: 'wrap',
+    //         },
+    //         columnStyles: {
+    //             1: { columnWidth: 'auto' },
+    //             2: { columnWidth: 'auto' },
+    //             3: { columnWidth: 'auto' },
+    //             4: { columnWidth: 'auto' },
+    //             5: { columnWidth: 'auto' },
+    //             6: { columnWidth: 'auto' },
+    //             7: { columnWidth: 'auto' },
+    //             8: { columnWidth: 'auto' },
+    //             9: { columnWidth: 'auto' },
+    //             10: { columnWidth: 'auto' },
+    //             11: { columnWidth: 'auto' },
+    //         },
+          
+    //     };
+    //     // const elem = document.getElementById('table');
+    //     // const data = doc.autoTableHtmlToJson(elem);
+    //     // doc.autoTable( data.columns, data.rows, options);
+
+    //     // Total page number plugin only available in jspdf v1.0+
+    //     if (typeof doc.putTotalPages === 'function') {
+    //         doc.putTotalPages(totalPagesExp);
+    //     }
+
+    //     //@ts-ignore
+    //     doc.autoTable({
+    //         html: 'Table',
+    //         didDrawPage: options,
+    //     });
+    //     doc.save('quotationReport.pdf');
+    // }
 
     downloadAnalysisListPdf() {
         console.log('Downloading Pdf....');
@@ -755,7 +705,7 @@ export class UnderwritingComponent implements OnInit {
         doc.autoTable({
             html: 'Table',
             margin: { top: 80 },
-            didDrawPage: header,
+            didDrawPage: options,
         });
         // autoTable(doc, { html: '#Table' });
         doc.save('quotationAnalysisReport.pdf');
@@ -835,7 +785,7 @@ export class UnderwritingComponent implements OnInit {
         doc.autoTable({
             html: 'Table',
             margin: { top: 80 },
-            didDrawPage: header,
+            didDrawPage: options,
         });
         // autoTable(doc, { html: '#Table' });
         doc.save('quotationRenewalReport.pdf');
@@ -859,7 +809,7 @@ export class UnderwritingComponent implements OnInit {
             doc.text(text, xOffset, 60);
             // doc.text(subtext, xOffset, 70)
 
-            doc.setFontSize(25);
+            doc.setFontSize(11);
             doc.setTextColor(40);
             doc.setFontStyle('normal');
             doc.addImage(
@@ -924,7 +874,7 @@ export class UnderwritingComponent implements OnInit {
         doc.autoTable({
             html: 'Table',
             margin: { top: 80 },
-            didDrawPage: header,
+            didDrawPage: options,
         });
         // autoTable(doc, { html: '#Table' });
         doc.save('DebitNoteReport.pdf');
@@ -1034,6 +984,10 @@ export class UnderwritingComponent implements OnInit {
 
             doc.setTextColor(173, 216, 230);
             doc.text(text, xOffset, 60);
+            doc.text(text, xOffset, 70);
+            doc.text(text, xOffset, 80);
+            doc.text(text, xOffset, 90);
+
             // doc.text(subtext, xOffset, 70)
 
             doc.setFontSize(25);
@@ -1099,6 +1053,7 @@ export class UnderwritingComponent implements OnInit {
         // autoTable(doc, { html: '#Table' });
         doc.save('PremiumWorkingReport.pdf');
     }
+    // toPdf function to print the pdfBody which is an array of jsonobjects holding the table data into pdf.
 
     _getFilterReportList() {
         let toDate = new Date(this.dateForm.get('toDate').value);
@@ -1119,28 +1074,54 @@ export class UnderwritingComponent implements OnInit {
             this.displayQuotationReport = this.filterPremiumReport;
         }
 
-        this.quotationService
-            .getMotorQuotations()
-            .pipe(
-                map((premium) =>
-                    from(premium).pipe(
-                        filter((d: MotorQuotationModel) => {
-                            // let date = new Date(d.dateCreated)
-                            let myDate: moment.Moment = moment(d.dateCreated);
-                            console.log('This Old->', myDate);
+        this.quotationService.getMotorQuotations().subscribe((d) => {
+            this.displayQuotationReport = d;
 
-                            return myDate >= ff && myDate <= tt;
-                        })
-                    )
-                ),
-                tap((premium) =>
-                    premium.subscribe((d) => {
-                        this.filterPremiumReport.push(d);
-                        console.log(this.filterPremiumReport);
-                    })
-                )
-            )
-            .subscribe();
+            this.filterPremiumReport = this.displayQuotationReport.filter(
+                (x) => {
+                    let myDate: moment.Moment = moment('2020-06-07');
+                    myDate >= ff && myDate <= tt;
+                }
+            );
+
+            console.log('hey am filter', this.filterPremiumReport);
+        });
+
+        // this.filterPremiumReport = this.quotationService
+        //     .getMotorQuotations()
+        //     .subscribe((filter) =>
+        //         filter.filter((f) => {
+        //             let myDate: moment.Moment = moment('2020-06-09');
+        //             myDate >= ff && myDate <= tt;
+        //         })
+        //     );
+
+        // console.log('hey am filter', this.filterPremiumReport);
+
+        // this.quotationService
+        //     .getMotorQuotations()
+        //     .pipe(
+        //         map((premium) =>
+        //             from(premium).pipe(
+        //                 filter((d: MotorQuotationModel) => {
+        //                     // let date = new Date(d.dateCreated)
+        //                     let myDate: moment.Moment = moment('2020-06-09');
+        //                     // let myDate: moment.Moment = moment(d.dateCreated, "YYYY-MM-DD");
+        //                     // let mydate = d.dateCreated * 1000 | date:'yyyy-MM-dd';
+        //                     console.log('This Old->', myDate);
+
+        //                     return myDate >= ff && myDate <= tt;
+        //                 })
+        //             )
+        //         ),
+        //         tap((premium) =>
+        //             premium.subscribe((d) => {
+        //                 this.filterPremiumReport.push(d);
+        //                 console.log(this.filterPremiumReport);
+        //             })
+        //         )
+        //     )
+        //     .subscribe();
     }
 
     downloadQuotationReportListExcel() {

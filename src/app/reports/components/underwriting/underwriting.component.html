@@ -5,16 +5,16 @@
                 <button nz-button [nzType]="'default'" (click)="showModal()">
                     Quotation Listing Report
                 </button>
-                <br />
-                <br />
+                <!-- <br />
+                <br /> -->
 
-                <button
+                <!-- <button
                     nz-button
                     [nzType]="'default'"
                     (click)="showAnalysisReportModal()"
                 >
                     Quotation Analysis Report
-                </button>
+                </button> -->
                 <br />
                 <br />
                 <button
@@ -265,12 +265,12 @@
                                     <th>Client</th>
                                     <th>Transaction Date</th>
                                     <th>Underwriter</th>
-                                    <th>Intermediary Name</th>
+                                    <th>Intermediary</th>
                                     <th>Branch</th>
                                     <th>Source of Business</th>
-                                    <th>Product Type</th>
+                                    <th>Product</th>
                                     <th>Sum Insured</th>
-                                    <th>Gross Premium</th>
+                                    <th>Premium</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
@@ -282,7 +282,7 @@
                                     <td>{{ report.client }}</td>
                                     <td>{{ report.dateCreated | date }}</td>
                                     <td>{{ report.user }}</td>
-                                    <td>{{ report.intermediaryName }}</td>
+                                    <td>{{ report.intermediaryName ? report.intermediaryName : 'direct'}}</td>
                                     <td>{{ report.branch }}</td>
                                     <td>{{ report.sourceOfBusiness }}</td>
                                     <td>{{ 'Motor' }}</td>
@@ -457,12 +457,12 @@
                                     <th>Client</th>
                                     <th>Transaction Date</th>
                                     <th>Underwriter</th>
-                                    <th>Intermediary Name</th>
+                                    <th>Intermediary</th>
                                     <th>Branch</th>
                                     <th>Source of Business</th>
-                                    <th>Product Type</th>
+                                    <th>Product</th>
                                     <th>Sum Insured</th>
-                                    <th>Gross Premium</th>
+                                    <th>Premium</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
@@ -515,7 +515,7 @@
 
     <nz-modal
         [(nzVisible)]="isAnalysisReportVisible"
-        nzTitle=" Quotation Listing Report"
+        nzTitle="Quotation Analysis Report"
         (nzOnCancel)="handleCancel()"
         [nzWidth]="1200"
         (nzOnOk)="handleOk()"
@@ -671,7 +671,7 @@
                                 <td>{{ 'Branch' }}</td>
                                 <td>{{ intermediary.getFullName }}</td>
                                 <td>
-                                    {{ intermediary.getQuoteCount }}
+                                    {{ intermediary.getQuoteCount}}
                                 </td>
                                 <td>
                                     {{ intermediary.getPolicyCount }}
@@ -828,8 +828,8 @@
                                 <th>#</th>
                                 <th>Policy number</th>
                                 <th>Client</th>
-                                <th>Intermediary name</th>
-                                <th>Contact number</th>
+                                <th>Intermediary</th>
+                                <!-- <th>Contact number</th> -->
                                 <th>Renewal date</th>
                                 <th>Renewal premium due</th>
                             </tr>
@@ -845,9 +845,9 @@
                                 <td>{{ i + 1 }}</td>
                                 <td>{{ renewal.policyNumber }}</td>
                                 <td>{{ renewal.client }}</td>
-                                <td>{{ renewal.intermediaryName }}</td>
-                                <td>{{ renewal.clientCode }}</td>
-                                <td>{{ renewal.expiryDate }}</td>
+                                <td>{{ renewal.intermediaryName ? renewal.intermediaryName : 'direct'  }}</td>
+                                <!-- <td>{{ renewal.clientCode }}</td> -->
+                                <td>{{ renewal.expiryDate | date }}</td>
                                 <td>
                                     {{
                                         renewal.sumInsured
@@ -1018,19 +1018,13 @@
                         <tbody>
                             <tr
                                 *ngFor="
-                                    let production of filterDebitNote;
+                                    let production of filterPremiumList;
                                     let i = index
                                 "
                                 style="cursor: pointer;"
                             >
                                 <td>{{ i + 1 }}</td>
-                                <!-- policyNumber: string;
-                            grossPremium: string;
-                            loading: number;
-                            discount: number;
-                            netPremium: number;
-                            levy: number;
-                            premiumDue: number; -->
+    
                                 <td>{{ production.policyNumber }}</td>
                                 <td>{{ production.debitNoteNumber }}</td>
                                 <td>
@@ -1063,7 +1057,7 @@
         [(nzVisible)]="isDebitNoteReportVisible"
         nzTitle="Debit Note Report"
         (nzOnCancel)="handleCancel()"
-        [nzWidth]="1500"
+        [nzWidth]="1700"
         (nzOnOk)="handleOk()"
     >
         <div style="margin: 20px;">
@@ -1198,28 +1192,27 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Debit Note Number</th>
+                                <th>Dr</th>
                                 <th>Policy number</th>
                                 <th>Client</th>
-                                <th>Intermediary name</th>
+                                <th>Intermediary</th>
                                 <th>Transaction Date</th>
                                 <th>Underwriter</th>
                                 <th>Branch</th>
-                                <th>Class of Business</th>
+                                <th>Class</th>
                                 <th>Product</th>
-                                <!-- <th>Risk ID</th> -->
                                 <th>Sum Insured</th>
-                                <th>Gross Premium</th>
-                                <th>Insurance Levy</th>
-                                <!-- <th>Commission amount</th> -->
+                                <th>Premium</th>
+                                <th>Levy</th>
+                                <th>Commission</th> 
                                 <th>Currency</th>
-                                <th>Endorsement Type</th>
+                                <th>Endor.Type</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr
                                 *ngFor="
-                                    let production of filterDebitNote;
+                                    let production of filterPremiumList;
                                     let i = index
                                 "
                                 style="cursor: pointer;"
@@ -1227,22 +1220,22 @@
                                 <td>{{ i + 1 }}</td>
                                 <td>{{ production.debitNoteNumber }}</td>
                                 <td>{{ production.policyNumber }}</td>
-                                <td>{{ production.policy.client }}</td>
+                                <td>{{ production.client }}</td>
                                 <td>
-                                    {{ production.policy.intermediaryName }}
+                                    {{ production.intermediaryName }}
                                 </td>
                                 <td>
-                                    {{ production.policy.startDate | date }}
+                                    {{ production.startDate | date }}
                                 </td>
-                                <td>{{ production.policy.user }}</td>
-                                <td>{{ production.policy.branch }}</td>
+                                <td>{{ production.user }}</td>
+                                <td>{{ production.branch }}</td>
                                 <td>
-                                    {{ production.policy.sourceOfBusiness }}
+                                    {{ production.sourceOfBusiness }}
                                 </td>
-                                <td>{{ production.policy.productType }}</td>
+                                <td>{{ production.risks[0].insuranceType }}</td>
                                 <td>
                                     {{
-                                        production.policy.sumInsured
+                                        production.sumInsured
                                             | number: '1.2-2'
                                     }}
                                 </td>
@@ -1252,8 +1245,8 @@
                                     }}
                                 </td>
                                 <td>{{ production.levy | number: '1.2-2' }}</td>
-                                <!-- <td>{{ production.commissionAmount }}</td> -->
-                                <td>{{ production.policy.currency }}</td>
+                                <td>{{ production.netPremium * 0.14 | number: '1.2-2' }}</td>
+                                <td>{{ production.currency }}</td>
                                 <td>{{ 'New Business' }}</td>
                             </tr>
                         </tbody>
@@ -1406,17 +1399,17 @@
                                 <th>No</th>
                                 <th>Policy number</th>
                                 <th>Client</th>
-                                <th>Intermediary name</th>
+                                <th>Intermediary</th>
                                 <th>Transaction Date</th>
                                 <th>Underwriter</th>
                                 <th>Branch</th>
-                                <th>Class of Business</th>
+                                <th>Class</th>
                                 <th>Product</th>
                                 <!-- <th>Risk ID</th> -->
                                 <th>Sum Insured</th>
-                                <th>Gross Premium</th>
-                                <th>Insurance Levy</th>
-                                <th>Commission amount</th>
+                                <th>Premium</th>
+                                <th>Levy</th>
+                                <th>Commission</th>
                                 <th>Currency</th>
                             </tr>
                         </thead>
@@ -1431,12 +1424,12 @@
                                 <td>{{ i + 1 }}</td>
                                 <td>{{ production.policyNumber }}</td>
                                 <td>{{ production.client }}</td>
-                                <td>{{ production.intermediaryName }}</td>
+                                <td>{{ production.intermediaryName ? production.intermediaryName : 'direct' }}</td>
                                 <td>{{ production.startDate | date }}</td>
                                 <td>{{ production.user }}</td>
                                 <td>{{ production.branch }}</td>
-                                <td>{{ production.sourceOfBusiness }}</td>
                                 <td>{{ production.productType }}</td>
+                                <td>{{ production.risks[0].insuranceType }}</td>
                                 <!-- <td>{{ production.riskID }}</td> -->
                                 <td>
                                     {{
@@ -1449,8 +1442,8 @@
                                     }}
                                 </td>
                                 <td>{{ production.levy | number: '1.2-2' }}</td>
-                                <td>{{ production.commissionAmount }}</td>
-                                <td>{{ production.commission }}</td>
+                                <td>{{ production.netPremium * 0.14 | number: '1.2-2' }}</td>
+                                <td>{{ production.currency }}</td>
                             </tr>
                         </tbody>
                     </nz-table>
