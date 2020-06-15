@@ -121,7 +121,7 @@
         [(nzVisible)]="isVisible"
         nzTitle=" Quotation Listing Report"
         (nzOnCancel)="handleCancel()"
-        [nzWidth]="1500"
+        [nzWidth]="1200"
         (nzOnOk)="handleOk()"
     >
         <div style="margin: 20px;">
@@ -231,6 +231,7 @@
                         <div nz-col [nzSpan]="6" style="float: right;">
                             <nz-input-group>
                                 <nz-select
+                                    style="width: 200px;"
                                     nzShowSearch
                                     nzAllowClear
                                     nzPlaceHolder="Select Intermediary Type"
@@ -282,7 +283,13 @@
                                     <td>{{ report.client }}</td>
                                     <td>{{ report.dateCreated | date }}</td>
                                     <td>{{ report.user }}</td>
-                                    <td>{{ report.intermediaryName ? report.intermediaryName : 'direct'}}</td>
+                                    <td>
+                                        {{
+                                            report.intermediaryName
+                                                ? report.intermediaryName
+                                                : 'direct'
+                                        }}
+                                    </td>
                                     <td>{{ report.branch }}</td>
                                     <td>{{ report.sourceOfBusiness }}</td>
                                     <td>{{ 'Motor' }}</td>
@@ -320,7 +327,7 @@
         [(nzVisible)]="isIntermediaryQuotationListingReport"
         nzTitle=" Intermediary Quotation Listing Report"
         (nzOnCancel)="handleCancel()"
-        [nzWidth]="1500"
+        [nzWidth]="1000"
         (nzOnOk)="handleOk()"
     >
         <div style="margin: 20px;">
@@ -424,6 +431,7 @@
                         <div nz-col [nzSpan]="6" style="float: right;">
                             <nz-input-group>
                                 <nz-select
+                                    style="width: 200px;"
                                     nzShowSearch
                                     nzAllowClear
                                     nzPlaceHolder="Select Intermediary type."
@@ -617,6 +625,7 @@
                         <div nz-col [nzSpan]="6" style="float: right;">
                             <nz-input-group>
                                 <nz-select
+                                    style="width: 200px;"
                                     nzShowSearch
                                     nzAllowClear
                                     nzPlaceHolder="Select client type."
@@ -671,7 +680,7 @@
                                 <td>{{ 'Branch' }}</td>
                                 <td>{{ intermediary.getFullName }}</td>
                                 <td>
-                                    {{ intermediary.getQuoteCount}}
+                                    {{ intermediary.getQuoteCount }}
                                 </td>
                                 <td>
                                     {{ intermediary.getPolicyCount }}
@@ -790,6 +799,7 @@
                         <div nz-col [nzSpan]="6" style="float: right;">
                             <nz-input-group>
                                 <nz-select
+                                    style="width: 200px;"
                                     nzShowSearch
                                     nzAllowClear
                                     nzPlaceHolder="Select client type."
@@ -845,14 +855,17 @@
                                 <td>{{ i + 1 }}</td>
                                 <td>{{ renewal.policyNumber }}</td>
                                 <td>{{ renewal.client }}</td>
-                                <td>{{ renewal.intermediaryName ? renewal.intermediaryName : 'direct'  }}</td>
+                                <td>
+                                    {{
+                                        renewal.intermediaryName
+                                            ? renewal.intermediaryName
+                                            : 'direct'
+                                    }}
+                                </td>
                                 <!-- <td>{{ renewal.clientCode }}</td> -->
                                 <td>{{ renewal.expiryDate | date }}</td>
                                 <td>
-                                    {{
-                                        renewal.sumInsured
-                                            | number: '1.2-2'
-                                    }}
+                                    {{ renewal.sumInsured | number: '1.2-2' }}
                                 </td>
                             </tr>
                         </tbody>
@@ -969,6 +982,7 @@
                         <div nz-col [nzSpan]="6" style="float: right;">
                             <nz-input-group>
                                 <nz-select
+                                    style="width: 200px;"
                                     nzShowSearch
                                     nzAllowClear
                                     nzPlaceHolder="Select client type."
@@ -1024,7 +1038,7 @@
                                 style="cursor: pointer;"
                             >
                                 <td>{{ i + 1 }}</td>
-    
+
                                 <td>{{ production.policyNumber }}</td>
                                 <td>{{ production.debitNoteNumber }}</td>
                                 <td>
@@ -1157,6 +1171,7 @@
                         <div nz-col [nzSpan]="6" style="float: right;">
                             <nz-input-group>
                                 <nz-select
+                                    style="width: 200px;"
                                     nzShowSearch
                                     nzAllowClear
                                     nzPlaceHolder="Select client type."
@@ -1204,7 +1219,7 @@
                                 <th>Sum Insured</th>
                                 <th>Premium</th>
                                 <th>Levy</th>
-                                <th>Commission</th> 
+                                <th>Commission</th>
                                 <th>Currency</th>
                                 <th>Endor.Type</th>
                             </tr>
@@ -1235,8 +1250,7 @@
                                 <td>{{ production.risks[0].insuranceType }}</td>
                                 <td>
                                     {{
-                                        production.sumInsured
-                                            | number: '1.2-2'
+                                        production.sumInsured | number: '1.2-2'
                                     }}
                                 </td>
                                 <td>
@@ -1245,7 +1259,12 @@
                                     }}
                                 </td>
                                 <td>{{ production.levy | number: '1.2-2' }}</td>
-                                <td>{{ production.netPremium * 0.14 | number: '1.2-2' }}</td>
+                                <td>
+                                    {{
+                                        production.netPremium * 0.14
+                                            | number: '1.2-2'
+                                    }}
+                                </td>
                                 <td>{{ production.currency }}</td>
                                 <td>{{ 'New Business' }}</td>
                             </tr>
@@ -1361,6 +1380,7 @@
                         <div nz-col [nzSpan]="6" style="float: right;">
                             <nz-input-group>
                                 <nz-select
+                                    style="width: 200px;"
                                     nzShowSearch
                                     nzAllowClear
                                     nzPlaceHolder="Select client type."
@@ -1424,7 +1444,13 @@
                                 <td>{{ i + 1 }}</td>
                                 <td>{{ production.policyNumber }}</td>
                                 <td>{{ production.client }}</td>
-                                <td>{{ production.intermediaryName ? production.intermediaryName : 'direct' }}</td>
+                                <td>
+                                    {{
+                                        production.intermediaryName
+                                            ? production.intermediaryName
+                                            : 'direct'
+                                    }}
+                                </td>
                                 <td>{{ production.startDate | date }}</td>
                                 <td>{{ production.user }}</td>
                                 <td>{{ production.branch }}</td>
@@ -1442,7 +1468,12 @@
                                     }}
                                 </td>
                                 <td>{{ production.levy | number: '1.2-2' }}</td>
-                                <td>{{ production.netPremium * 0.14 | number: '1.2-2' }}</td>
+                                <td>
+                                    {{
+                                        production.netPremium * 0.14
+                                            | number: '1.2-2'
+                                    }}
+                                </td>
                                 <td>{{ production.currency }}</td>
                             </tr>
                         </tbody>

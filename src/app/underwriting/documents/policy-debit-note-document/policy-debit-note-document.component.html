@@ -1,18 +1,25 @@
-<div style="
+<div
+    style="
         display: flex;
         margin-bottom: 15px;
         align-items: flex-end;
         width: 100%;
-    ">
+    "
+>
     <!-- <button nz-button nzType="primary" style="margin-right: 8px;" (click)="htmlToPdf()">
         Download
     </button> -->
-    <button nz-button nzType="primary" [useExistingCss]="true" [printSectionId]="'debitPrintSection'" ngxPrint>
+    <button
+        nz-button
+        nzType="primary"
+        [useExistingCss]="true"
+        [printSectionId]="'debitPrintSection'"
+        ngxPrint
+    >
         Print
     </button>
 </div>
 <div id="debitPrintSection">
-
     <div class="invoice-box">
         <table cellpadding="0" cellspacing="0">
             <tr class="top">
@@ -20,13 +27,22 @@
                     <table>
                         <tr>
                             <td class="title">
-                                <img src="/assets/images/apluslogo.png" style="width: 100%; max-width: 240px;" />
+                                <img
+                                    src="/assets/images/apluslogo.png"
+                                    style="width: 100%; max-width: 240px;"
+                                />
                             </td>
-                            <td style="font-size: 11px; float: right !important">
+                            <td
+                                style="
+                                    font-size: 11px;
+                                    float: right !important;
+                                "
+                            >
                                 A Plus General Insurance<br />
                                 Plot No. 402, Roma Park, Zambezi Road<br />
                                 P.O. Box 31700, Lusaka Zambia<br />
-                                Tel: +260 211 239865/6 - Tele/Fax:+260 211 239867<br />
+                                Tel: +260 211 239865/6 - Tele/Fax:+260 211
+                                239867<br />
                                 E-mail: info@aplusgeneral.com<br />
                             </td>
                         </tr>
@@ -35,7 +51,7 @@
             </tr>
         </table>
 
-        <hr style="width:100%; height:2px; background-color: black;">
+        <hr style="width: 100%; height: 2px; background-color: black;" />
 
         <table>
             <tr class="information">
@@ -45,10 +61,18 @@
             </tr>
             <tr class="subTitle">
                 <td>
-                    <p style="float: right !important;"><span style="font-weight: bold;">No:</span>
-                        {{policyDebitNote ? policyDebitNote.debitNoteNumber : '-'}}</p>
-                    <span style="font-weight: bold;">TPIN:</span><span
-                        style="font-weight: bold; color: red;">1002167568</span>
+                    <p style="float: right !important;">
+                        <span style="font-weight: bold;">No:</span>
+                        {{
+                            policyDebitNote
+                                ? policyDebitNote.debitNoteNumber
+                                : '-'
+                        }}
+                    </p>
+                    <span style="font-weight: bold;">TPIN:</span
+                    ><span style="font-weight: bold; color: red;"
+                        >1002167568</span
+                    >
                 </td>
             </tr>
         </table>
@@ -56,26 +80,57 @@
         <br />
         <table>
             <tr>
-                <td><span style="font-weight: bold;">Insured: {{ policy.nameOfInsured }}</span></td>
-                <td style="float: right !important"><span style="font-weight: bold;">Date:
-                        {{policyDebitNote ? (policyDebitNote.dateCreated | date) : '-'}}</span></td>
+                <td>
+                    <span style="font-weight: bold;"
+                        >Insured: {{ policy.nameOfInsured }}</span
+                    >
+                </td>
+                <td style="float: right !important;">
+                    <span style="font-weight: bold;"
+                        >Date:
+                        {{
+                            policyDebitNote
+                                ? (policyDebitNote.dateCreated | date)
+                                : '-'
+                        }}</span
+                    >
+                </td>
             </tr>
             <tr>
-                <td><span style="font-weight: bold;">Address: {{client ? client.address : '-'}}</span></td>
-                <td style="float: right !important"><span style="font-weight: bold;">Agent:
-                        {{policy.sourceOfBusiness == 'direct' ? 'Direct' : policy.intermediaryName}}</span></td>
+                <td>
+                    <span style="font-weight: bold;"
+                        >Address: {{ client ? client.address : '-' }}</span
+                    >
+                </td>
+                <td style="float: right !important;">
+                    <span style="font-weight: bold;"
+                        >Agent:
+                        {{
+                            policy.sourceOfBusiness == 'direct'
+                                ? 'Direct'
+                                : policy.intermediaryName
+                        }}</span
+                    >
+                </td>
             </tr>
             <tr>
-                <td><span style="font-weight: bold;">Telephone: {{client ? client.phone : '-'}}</span></td>
+                <td>
+                    <span style="font-weight: bold;"
+                        >Telephone: {{ client ? client.phone : '-' }}</span
+                    >
+                </td>
                 <!-- <td style="float: right !important"><span style="font-weight: bold;">Terms: </span></td> -->
             </tr>
         </table>
         <br />
 
-
-        <nz-table style="width: 100%; font-size: 12px;" #risksTable [nzData]="policy.risks" nzFrontPagination="false"
-            nzShowPagination="false">
-
+        <nz-table
+            style="width: 100%; font-size: 12px;"
+            #risksTable
+            [nzData]="policy.risks"
+            nzFrontPagination="false"
+            nzShowPagination="false"
+        >
             <tr class="heading">
                 <th style="border: 1px solid black;">
                     Binder No.
@@ -87,7 +142,7 @@
                     Insured's Name & Asset
                 </th>
                 <th id="td3" style="border: 1px solid black;">
-                    Premium ({{policy.currency == 'ZMW' ? 'K' : '$'}})
+                    Premium ({{ policy.currency == 'ZMW' ? 'K' : '$' }})
                 </th>
             </tr>
 
@@ -96,8 +151,23 @@
 
                 <td class="td2" style="border: 1px solid black;"></td>
                 <td style="border: 1px solid black;">
-                    {{risk.regNumber}}, {{risk.vehicleMake}} {{risk.vehicleModel}} -
-                    {{ risk.insuranceType == 'ThirdParty' ? 'Third Party' : 'Comprehensive' }}
+                    {{ risk.regNumber }}, {{ risk.vehicleMake }}
+                    {{ risk.vehicleModel }} -
+                    <ng-container *ngIf="risk.insuranceType === 'ThirdParty'">
+                        Third Party
+                    </ng-container>
+                    <ng-container *ngIf="risk.insuranceType === 'ActOnly'">
+                        Act Only Cover
+                    </ng-container>
+                    <ng-container
+                        *ngIf="risk.insuranceType === 'Comprehensive'"
+                    >
+                        Comprehensive
+                    </ng-container>
+                    <ng-container *ngIf="risk.insuranceType === 'FireAndTheft'">
+                        Third Party Fire and Theft
+                    </ng-container>
+                    <!-- {{ risk.insuranceType == 'ThirdParty' ? 'Third Party' : 'Comprehensive' }} -->
                 </td>
                 <td id="td3" style="border: 1px solid black;">
                     {{ risk.basicPremium | number: '1.2-2' }}
@@ -106,23 +176,32 @@
             <tr>
                 <td></td>
                 <td></td>
-                <td style="float: right !important; font-weight: bold">Sub Total:</td>
+                <td style="float: right !important; font-weight: bold;">
+                    Sub Total:
+                </td>
                 <td style="border: 1px solid black;">
-                    <span>{{ subTotal | number: '1.2-2' }}</span></td>
+                    <span>{{ subTotal | number: '1.2-2' }}</span>
+                </td>
             </tr>
             <tr>
                 <td></td>
                 <td></td>
-                <td style="float: right !important; font-weight: bold">Insurance Levy 3%:</td>
+                <td style="float: right !important; font-weight: bold;">
+                    Insurance Levy 3%:
+                </td>
                 <td style="border: 1px solid black;">
-                    <span>{{ premiumLevy | number: '1.2-2' }}</span></td>
+                    <span>{{ premiumLevy | number: '1.2-2' }}</span>
+                </td>
             </tr>
             <tr>
                 <td></td>
                 <td></td>
-                <td style="float: right !important; font-weight: bold">Total:</td>
+                <td style="float: right !important; font-weight: bold;">
+                    Total:
+                </td>
                 <td style="border: 1px solid black;">
-                    <span>{{ policy.netPremium | number: '1.2-2' }}</span></td>
+                    <span>{{ policy.netPremium | number: '1.2-2' }}</span>
+                </td>
             </tr>
         </nz-table>
 
@@ -140,15 +219,21 @@
         </p> -->
         <br />
         <p style="font-weight: bold; text-align: left;">
-            Prepared By: ................................................<span style="float: right;">
-                Sign:...............................................</span>
+            Prepared By: ................................................<span
+                style="float: right;"
+            >
+                Sign:...............................................</span
+            >
         </p>
 
         <br />
 
         <p style="font-weight: bold; text-align: left;">
-            Approved By: ................................................<span style="float: right;">
-                Sign:...............................................</span>
+            Approved By: ................................................<span
+                style="float: right;"
+            >
+                Sign:...............................................</span
+            >
         </p>
     </div>
 </div>
