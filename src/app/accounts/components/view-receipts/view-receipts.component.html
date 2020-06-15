@@ -83,8 +83,7 @@
                                     Tel: +260 211 239865/6 - Tele/Fax:+260 211
                                     239867<br />
                                     E-mail: info@aplusgeneral.com<br />
-                                    ></P
-                                >
+                                </P>
                             </TD>
                         </TR>
                         <TR>
@@ -540,7 +539,11 @@
                                             ><FONT
                                                 SIZE="2"
                                                 STYLE="font-size: 9pt"
-                                                ><B>AMOUNT(ZMW)</B></FONT
+                                                ><B
+                                                    >AMOUNT({{
+                                                        receipt.currency
+                                                    }})</B
+                                                ></FONT
                                             ></FONT
                                         ></P
                                     >
@@ -647,7 +650,7 @@
                                         <FONT FACE="Arial, serif"
                                             ><FONT SIZE="3"
                                                 ><B
-                                                    >ZMW
+                                                    >{{ receipt.currency }}
                                                     {{ receipt.sumInDigits }}
                                                 </B></FONT
                                             ></FONT

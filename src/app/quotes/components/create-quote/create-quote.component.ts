@@ -662,9 +662,11 @@ export class CreateQuoteComponent implements OnInit {
                     request
                 )
                 .subscribe((data) => {
-                    this.riskComprehensiveForm
-                        .get('riskEndDate')
-                        .setValue(data.endDate);
+                    const doo = new Date(data.endDate);
+                    const nd = new Date(
+                        doo.getTime() - doo.getTimezoneOffset() * -60000
+                    );
+                    this.riskComprehensiveForm.get('riskEndDate').setValue(nd);
                 });
         }
     }
@@ -701,9 +703,11 @@ export class CreateQuoteComponent implements OnInit {
                     request
                 )
                 .subscribe((data) => {
-                    this.riskThirdPartyForm
-                        .get('riskEndDate')
-                        .setValue(data.endDate);
+                    const doo = new Date(data.endDate);
+                    const nd = new Date(
+                        doo.getTime() - doo.getTimezoneOffset() * -60000
+                    );
+                    this.riskThirdPartyForm.get('riskEndDate').setValue(nd);
                 });
         }
     }
@@ -743,9 +747,13 @@ export class CreateQuoteComponent implements OnInit {
                     request
                 )
                 .subscribe((data) => {
+                    const doo = new Date(data.endDate);
+                    const nd = new Date(
+                        doo.getTime() - doo.getTimezoneOffset() * -60000
+                    );
                     this.riskThirdPartyFireAndTheftForm
                         .get('riskEndDate')
-                        .setValue(data.endDate);
+                        .setValue(nd);
                 });
         }
     }
@@ -780,9 +788,11 @@ export class CreateQuoteComponent implements OnInit {
                     request
                 )
                 .subscribe((data) => {
-                    this.riskActOnlyForm
-                        .get('riskEndDate')
-                        .setValue(data.endDate);
+                    const doo = new Date(data.endDate);
+                    const nd = new Date(
+                        doo.getTime() - doo.getTimezoneOffset() * -60000
+                    );
+                    this.riskActOnlyForm.get('riskEndDate').setValue(nd);
                 });
         }
     }
@@ -816,7 +826,11 @@ export class CreateQuoteComponent implements OnInit {
                     request
                 )
                 .subscribe((data) => {
-                    this.quoteForm.get('endDate').setValue(data.endDate);
+                    const doo = new Date(data.endDate);
+                    const nd = new Date(
+                        doo.getTime() - doo.getTimezoneOffset() * -60000
+                    );
+                    this.quoteForm.get('endDate').setValue(nd);
                 });
         }
     }
