@@ -117,16 +117,16 @@
                         style="cursor: pointer;"
                     >
                         <td>{{ client.clientID }}</td>
-                        <td>
+                        <td style="text-transform:capitalize;">
                             {{
                                 client.clientType === 'Individual'
-                                    ? client.firstName + ' ' + client.lastName
-                                    : client.companyName
+                                    ? capitalize(client.firstName + ' ' + client.lastName)
+                                    : capitalize(client.companyName) 
                             }}
                         </td>
                         <td>{{ client.email }}</td>
                         <td>{{ client.phone }}</td>
-                        <td>{{ client.clientType }}</td>
+                        <td>{{ client.clientType | titlecase}}</td>
                         <td>
                             <nz-badge
                                 [nzStatus]="
