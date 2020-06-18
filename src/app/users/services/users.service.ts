@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { User } from '../models/users.model';
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
 export class UsersService {
     constructor(private http: HttpClient) {}

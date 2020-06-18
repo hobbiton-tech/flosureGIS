@@ -254,11 +254,16 @@ export class PolicyDetailsComponent implements OnInit {
                     x => x.excessType === 'thirdPartyPropertyDamage'
                 )[0].amount;
 
+                const doo = new Date(policy.endDate);
+                const nd = new Date(
+                    doo.getTime() - doo.getTimezoneOffset() * -60000
+                );
+
                 this.clientName = policy.client;
                 this.clientNumber = '+260976748392';
                 this.clientEmail = policy.client + '@gmail.com'; // TODO: Track client data
                 this.agency = 'Direct'; // TODO: Track this guy too
-                this.coverForm = policy.startDate.toString();
+                this.coverForm = nd.toString();
                 this.coverTo = policy.endDate.toString();
                 // this.basicPremium = this.policy
                 this.loadingAmount = '-';

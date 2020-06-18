@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {
     AngularFirestore,
     AngularFirestoreCollection,
-    DocumentReference,
+    DocumentReference
 } from '@angular/fire/firestore';
 import { Observable, combineLatest } from 'rxjs';
 import { IAgent, IBroker, ISalesRepresentative } from '../models/agents.model';
@@ -11,11 +11,11 @@ import { first, combineAll } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 const httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
 export class AgentsService {
     private agentsCollection: AngularFirestoreCollection<IAgent>;
@@ -40,19 +40,17 @@ export class AgentsService {
         // >('sales_representatives');
         // this.salesRepresentatives = this.salesRepresentativesCollection.valueChanges();
 
-        this.getAgents().subscribe((totalAgents) => {
+        this.getAgents().subscribe(totalAgents => {
             this.agents = totalAgents;
         });
 
-        this.getBrokers().subscribe((totalBrokers) => {
+        this.getBrokers().subscribe(totalBrokers => {
             this.brokers = totalBrokers;
         });
 
-        this.getSalesRepresentatives().subscribe(
-            (totalSalesRepresentatives) => {
-                this.salesRepresentatives = totalSalesRepresentatives;
-            }
-        );
+        this.getSalesRepresentatives().subscribe(totalSalesRepresentatives => {
+            this.salesRepresentatives = totalSalesRepresentatives;
+        });
     }
 
     // async addAgent(agent: IAgent): Promise<void> {
@@ -221,7 +219,7 @@ export class AgentsService {
 
     // getBrokers(): Observable<IBroker[]> {
     //     return this.http.get<IBroker[]>(
-    //         'http://104.248.247.78:3000intermediary/broker'
+    //         'http://104.248.247.78:3000/intermediary/broker'
 
     //     );
     // }
@@ -243,14 +241,14 @@ export class AgentsService {
 
     // getAgent(id: string): Observable<IAgent> {
     //     return this.http.get<IAgent>(
-    //         `http://104.248.247.78:3000intermediary/agent/${id}`
+    //         `http://104.248.247.78:3000/intermediary/agent/${id}`
 
     //     );
     // }
 
     // getAgents(): Observable<IAgent[]> {
     //     return this.http.get<IAgent[]>(
-    //         'http://104.248.247.78:3000intermediary/agent'
+    //         'http://104.248.247.78:3000/intermediary/agent'
 
     //     );
     // }

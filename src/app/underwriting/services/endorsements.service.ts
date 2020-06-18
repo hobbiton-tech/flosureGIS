@@ -1,6 +1,6 @@
 import {
     AngularFirestore,
-    AngularFirestoreCollection,
+    AngularFirestoreCollection
 } from '@angular/fire/firestore';
 import 'firebase/firestore';
 import { Endorsement } from '../models/endorsement.model';
@@ -11,10 +11,10 @@ import { v4 } from 'uuid';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-const BASE_URL = 'http://104.248.247.78:3000';
+const BASE_URL = 'http://104.248.247.78:3000  ';
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
 export class EndorsementService {
     private endorsementsCollection: AngularFirestoreCollection<Endorsement>;
@@ -29,7 +29,7 @@ export class EndorsementService {
     }
 
     async addEndorsement(endorsement: Endorsement) {
-        this.endorsements.pipe(first()).subscribe(async (endorsements) => {
+        this.endorsements.pipe(first()).subscribe(async endorsements => {
             endorsement.id = v4();
             this.endorsementsCollection.doc(endorsement.id).set(endorsement);
         });
@@ -88,7 +88,7 @@ export class EndorsementService {
         console.log('endorsement: ');
         console.log(endorsement);
         return this.http.post<Endorsement>(
-            `http://104.248.247.78:3000endorsement/${policyId}`,
+            `http://104.248.247.78:3000/endorsement/${policyId}`,
 
             endorsement
         );
@@ -101,7 +101,7 @@ export class EndorsementService {
 
     getEndorsementById(endorsementId: string): Observable<Endorsement> {
         return this.http.get<Endorsement>(
-            `http://104.248.247.78:3000endorsement/${endorsementId}`
+            `http://104.248.247.78:3000/endorsement/${endorsementId}`
         );
     }
 
@@ -110,7 +110,7 @@ export class EndorsementService {
         endorsementId: string
     ): Observable<Endorsement> {
         return this.http.put<Endorsement>(
-            `http://104.248.247.78:3000endorsement/${endorsementId}`,
+            `http://104.248.247.78:3000/endorsement/${endorsementId}`,
 
             endorsement
         );
