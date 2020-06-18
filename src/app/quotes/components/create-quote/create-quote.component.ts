@@ -204,6 +204,8 @@ export class CreateQuoteComponent implements OnInit {
     motor: any;
     quoteForm: FormGroup;
     riskThirdPartyForm: FormGroup;
+    riskActOnlyForm: FormGroup;
+    riskThirdPartyFireAndTheftForm: FormGroup;
     riskComprehensiveForm: FormGroup;
     limitsOfLiabilityForm: FormGroup;
     excessesForm: FormGroup;
@@ -816,7 +818,6 @@ export class CreateQuoteComponent implements OnInit {
                     request
                 )
                 .subscribe(data => {
-
                     const doo = new Date(data.endDate);
                     const nd = new Date(
                         doo.getTime() - doo.getTimezoneOffset() * -60000
@@ -926,6 +927,156 @@ export class CreateQuoteComponent implements OnInit {
         this.handleNetPremium();
     }
 
+    handleBasicPremiumCalculationActOnly(): void {
+        if (
+            this.riskActOnlyForm.get('productType').value != '' &&
+            this.riskActOnlyForm.get('riskQuarter').value != ''
+        ) {
+            if (this.riskActOnlyForm.get('productType').value == 'Private') {
+                if (this.riskActOnlyForm.get('riskQuarter').value == 1) {
+                    this.basicPremium = 165;
+                }
+                if (this.riskActOnlyForm.get('riskQuarter').value == 2) {
+                    this.basicPremium = 280;
+                }
+                if (this.riskActOnlyForm.get('riskQuarter').value == 3) {
+                    this.basicPremium = 370;
+                }
+                if (this.riskActOnlyForm.get('riskQuarter').value == 4) {
+                    this.basicPremium = 464;
+                }
+            }
+            if (this.riskActOnlyForm.get('productType').value == 'Commercial') {
+                if (this.riskActOnlyForm.get('riskQuarter').value == 1) {
+                    this.basicPremium = 199;
+                }
+                if (this.riskActOnlyForm.get('riskQuarter').value == 2) {
+                    this.basicPremium = 340;
+                }
+                if (this.riskActOnlyForm.get('riskQuarter').value == 3) {
+                    this.basicPremium = 452;
+                }
+                if (this.riskActOnlyForm.get('riskQuarter').value == 4) {
+                    this.basicPremium = 566;
+                }
+            }
+            if (this.riskActOnlyForm.get('productType').value == 'Bus/Taxi') {
+                if (this.riskActOnlyForm.get('riskQuarter').value == 1) {
+                    this.basicPremium = 270;
+                }
+                if (this.riskActOnlyForm.get('riskQuarter').value == 2) {
+                    this.basicPremium = 464;
+                }
+                if (this.riskActOnlyForm.get('riskQuarter').value == 3) {
+                    this.basicPremium = 618;
+                }
+                if (this.riskActOnlyForm.get('riskQuarter').value == 4) {
+                    this.basicPremium = 772;
+                }
+            }
+        }
+
+        this.handleNetPremium();
+    }
+
+    handleBasicPremiumCalculationThirdPartyFireAndTheft(): void {
+        if (
+            this.riskThirdPartyFireAndTheftForm.get('productType').value !=
+                '' &&
+            this.riskThirdPartyFireAndTheftForm.get('riskQuarter').value != ''
+        ) {
+            if (
+                this.riskThirdPartyFireAndTheftForm.get('productType').value ==
+                'Private'
+            ) {
+                if (
+                    this.riskThirdPartyFireAndTheftForm.get('riskQuarter')
+                        .value == 1
+                ) {
+                    this.basicPremium = 165;
+                }
+                if (
+                    this.riskThirdPartyFireAndTheftForm.get('riskQuarter')
+                        .value == 2
+                ) {
+                    this.basicPremium = 280;
+                }
+                if (
+                    this.riskThirdPartyFireAndTheftForm.get('riskQuarter')
+                        .value == 3
+                ) {
+                    this.basicPremium = 370;
+                }
+                if (
+                    this.riskThirdPartyFireAndTheftForm.get('riskQuarter')
+                        .value == 4
+                ) {
+                    this.basicPremium = 464;
+                }
+            }
+            if (
+                this.riskThirdPartyFireAndTheftForm.get('productType').value ==
+                'Commercial'
+            ) {
+                if (
+                    this.riskThirdPartyFireAndTheftForm.get('riskQuarter')
+                        .value == 1
+                ) {
+                    this.basicPremium = 199;
+                }
+                if (
+                    this.riskThirdPartyFireAndTheftForm.get('riskQuarter')
+                        .value == 2
+                ) {
+                    this.basicPremium = 340;
+                }
+                if (
+                    this.riskThirdPartyFireAndTheftForm.get('riskQuarter')
+                        .value == 3
+                ) {
+                    this.basicPremium = 452;
+                }
+                if (
+                    this.riskThirdPartyFireAndTheftForm.get('riskQuarter')
+                        .value == 4
+                ) {
+                    this.basicPremium = 566;
+                }
+            }
+            if (
+                this.riskThirdPartyFireAndTheftForm.get('productType').value ==
+                'Bus/Taxi'
+            ) {
+                if (
+                    this.riskThirdPartyFireAndTheftForm.get('riskQuarter')
+                        .value == 1
+                ) {
+                    this.basicPremium = 270;
+                }
+                if (
+                    this.riskThirdPartyFireAndTheftForm.get('riskQuarter')
+                        .value == 2
+                ) {
+                    this.basicPremium = 464;
+                }
+                if (
+                    this.riskThirdPartyFireAndTheftForm.get('riskQuarter')
+                        .value == 3
+                ) {
+                    this.basicPremium = 618;
+                }
+                if (
+                    this.riskThirdPartyFireAndTheftForm.get('riskQuarter')
+                        .value == 4
+                ) {
+                    this.basicPremium = 772;
+                }
+            }
+        }
+
+        this.handleNetPremium();
+    }
+
     // onSubmit() {
     //     const some = this.quoteForm.value;
     //     this.quoteService.addMotorQuotation(some);
@@ -975,10 +1126,112 @@ export class CreateQuoteComponent implements OnInit {
         console.log(this.risks);
     }
 
+    // add Act Only risk
+    addActOnlyRisk(): void {
+        const some: RiskModel[] = [];
+        some.push({
+            ...this.riskActOnlyForm.value,
+            id: v4(),
+            sumInsured: 0,
+            premiumRate: 0,
+            basicPremium: this.basicPremium,
+            loads: this.loads,
+            discounts: this.discounts,
+            loadingTotal: this.premiumLoadingTotal,
+            discountTotal: this.premiumDiscount,
+            discountRate: this.premiumDiscountRate,
+            premiumLevy: this.basicPremiumLevy,
+            netPremium: this.netPremium,
+            insuranceType: this.selectedValue.value
+        });
+        this.risks = [...this.risks, ...some];
+
+        // reset form after submitting
+        this.riskActOnlyForm.reset();
+        (this.sumInsured = 0),
+            (this.premiumRate = 0),
+            (this.basicPremium = 0),
+            (this.loads = []),
+            (this.premiumLoadingTotal = 0),
+            (this.premiumDiscountRate = 0),
+            (this.netPremium = 0);
+        this.basicPremiumLevy = 0;
+        this.premiumDiscount = 0;
+
+        this.isAddRiskPanelOpen = false;
+        console.log(this.risks);
+    }
+
+    // add third party Fire And Theft risk
+    addThirdPartyFireAndTheftRisk(): void {
+        const some: RiskModel[] = [];
+        some.push({
+            ...this.riskThirdPartyFireAndTheftForm.value,
+            id: v4(),
+            sumInsured: 0,
+            premiumRate: 0,
+            basicPremium: this.basicPremium,
+            loads: this.loads,
+            discounts: this.discounts,
+            loadingTotal: this.premiumLoadingTotal,
+            discountTotal: this.premiumDiscount,
+            discountRate: this.premiumDiscountRate,
+            premiumLevy: this.basicPremiumLevy,
+            netPremium: this.netPremium,
+            insuranceType: this.selectedValue.value
+        });
+        this.risks = [...this.risks, ...some];
+
+        // reset form after submitting
+        this.riskThirdPartyFireAndTheftForm.reset();
+        (this.sumInsured = 0),
+            (this.premiumRate = 0),
+            (this.basicPremium = 0),
+            (this.loads = []),
+            (this.premiumLoadingTotal = 0),
+            (this.premiumDiscountRate = 0),
+            (this.netPremium = 0);
+        this.basicPremiumLevy = 0;
+        this.premiumDiscount = 0;
+
+        this.isAddRiskPanelOpen = false;
+        console.log(this.risks);
+    }
+
     // reset third party risk form
     resetThirdPartyRiskForm(e: MouseEvent) {
         e.preventDefault();
         this.riskComprehensiveForm.reset();
+        (this.sumInsured = 0),
+            (this.premiumRate = 0),
+            (this.basicPremium = 0),
+            (this.loads = []),
+            (this.premiumLoadingTotal = 0),
+            (this.premiumDiscountRate = 0),
+            (this.netPremium = 0);
+        this.basicPremiumLevy = 0;
+        this.premiumDiscount = 0;
+    }
+
+    // reset third party risk form
+    resetActOnlyForm(e: MouseEvent) {
+        e.preventDefault();
+        this.riskActOnlyForm.reset();
+        (this.sumInsured = 0),
+            (this.premiumRate = 0),
+            (this.basicPremium = 0),
+            (this.loads = []),
+            (this.premiumLoadingTotal = 0),
+            (this.premiumDiscountRate = 0),
+            (this.netPremium = 0);
+        this.basicPremiumLevy = 0;
+        this.premiumDiscount = 0;
+    }
+
+    // reset third party risk form
+    resetThirdPartyFireAndTheftRiskForm(e: MouseEvent) {
+        e.preventDefault();
+        this.riskThirdPartyFireAndTheftForm.reset();
         (this.sumInsured = 0),
             (this.premiumRate = 0),
             (this.basicPremium = 0),
@@ -1049,6 +1302,8 @@ export class CreateQuoteComponent implements OnInit {
     resetForms() {
         this.riskComprehensiveForm.reset();
         this.riskThirdPartyForm.reset();
+        this.riskActOnlyForm.reset();
+        this.riskThirdPartyFireAndTheftForm.reset();
         (this.sumInsured = 0),
             (this.premiumRate = 0),
             (this.basicPremium = 0),
@@ -1108,10 +1363,10 @@ export class CreateQuoteComponent implements OnInit {
             this.riskComprehensiveForm
                 .get('vehicleMake')
                 .setValue(risk.vehicleMake);
-            this.riskComprehensiveForm
+            this.riskThirdPartyForm
                 .get('vehicleModel')
                 .setValue(risk.vehicleModel);
-            this.riskComprehensiveForm
+            this.riskThirdPartyForm
                 .get('yearOfManufacture')
                 .setValue(risk.yearOfManufacture);
             this.riskThirdPartyForm.get('regNumber').setValue(risk.regNumber);
@@ -1189,7 +1444,7 @@ export class CreateQuoteComponent implements OnInit {
             });
             this.risks.splice(riskIndex, 1, this.currentRiskEdit);
             this.risks = this.risks;
-        } else {
+        } else if (this.selectedValue.value === 'ThirdParty') {
             // third party risk
             const some: RiskModel = {
                 ...this.riskThirdPartyForm.value,
@@ -1200,6 +1455,46 @@ export class CreateQuoteComponent implements OnInit {
                 discounts: this.discounts,
                 limitsOfLiability: this.limitsOfLiability,
                 excesses: this.excesses,
+                loadingTotal: this.premiumLoadingTotal,
+                discountRate: this.premiumDiscountRate,
+                premiumLevy: this.basicPremiumLevy,
+                netPremium: this.netPremium,
+                insuranceType: this.selectedValue.value
+            };
+            this.selectedRisk = some;
+
+            const riskIndex = _.findIndex(this.risks, {
+                id: this.selectedRisk.id
+            });
+            this.risks.splice(riskIndex, 1, this.currentRiskEdit);
+        } else if (this.selectedValue.value === 'ActOnly') {
+            // third party risk
+            const some: RiskModel = {
+                ...this.riskActOnlyForm.value,
+                sumInsured: 0,
+                premiumRate: 0,
+                basicPremium: this.basicPremium,
+                loads: this.loads,
+                loadingTotal: this.premiumLoadingTotal,
+                discountRate: this.premiumDiscountRate,
+                premiumLevy: this.basicPremiumLevy,
+                netPremium: this.netPremium,
+                insuranceType: this.selectedValue.value
+            };
+            this.selectedRisk = some;
+
+            const riskIndex = _.findIndex(this.risks, {
+                id: this.selectedRisk.id
+            });
+            this.risks.splice(riskIndex, 1, this.currentRiskEdit);
+        } else if (this.selectedValue.value === 'ThirdPartyFireAndTheft') {
+            // third party risk
+            const some: RiskModel = {
+                ...this.riskThirdPartyFireAndTheftForm.value,
+                sumInsured: 0,
+                premiumRate: 0,
+                basicPremium: this.basicPremium,
+                loads: this.loads,
                 loadingTotal: this.premiumLoadingTotal,
                 discountRate: this.premiumDiscountRate,
                 premiumLevy: this.basicPremiumLevy,

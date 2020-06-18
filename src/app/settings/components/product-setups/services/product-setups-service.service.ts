@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
-const BASE_URL = 'http://104.248.247.78:3000  ';
+const BASE_URL = 'https://www.flosure-api.com';
 
 @Injectable({
     providedIn: 'root'
@@ -34,32 +34,32 @@ export class ProductSetupsServiceService {
 
     addClass(dto: IClass): Observable<IClass> {
         return this.http.post<IClass>(
-            'http://104.248.247.78:3000/class',
+            ' https://www.flosure-api.com/class',
 
             dto
         );
     }
 
     getClasses(): Observable<IClass[]> {
-        return this.http.get<IClass[]>('http://104.248.247.78:3000/class');
+        return this.http.get<IClass[]>(' https://www.flosure-api.com/class');
     }
 
     addProduct(dto: IProduct, id: string): Observable<IProduct> {
         return this.http.post<IProduct>(
-            `http://104.248.247.78:3000/product/${id}`,
+            ` https://www.flosure-api.com/product/${id}`,
             dto
         );
     }
 
     getProducts(id: string): Observable<IProduct[]> {
         return this.http.get<IProduct[]>(
-            `http://104.248.247.78:3000/product/class-products/${id}`
+            ` https://www.flosure-api.com/product/class-products/${id}`
         );
     }
 
     getProductsNo(): Observable<IProduct[]> {
         return this.http.get<IProduct[]>(
-            `http://104.248.247.78:3000/product/class-products`
+            ` https://www.flosure-api.com/product/class-products`
         );
     }
 }

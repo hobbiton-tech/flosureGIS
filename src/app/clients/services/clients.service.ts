@@ -19,7 +19,7 @@ import {
 } from '../models/client.model';
 import { IAccount } from 'src/app/settings/models/organizational/account.model';
 
-const BASE_URL = 'http://104.248.247.78:3000';
+const BASE_URL = ' https://www.flosure-api.com';
 
 @Injectable({
     providedIn: 'root'
@@ -188,20 +188,20 @@ export class ClientsService {
         );
         console.log(client);
         return this.http.post<ICorporateClient>(
-            'http://104.248.247.78:3000/clients/corporate',
+            ' https://www.flosure-api.com/clients/corporate',
             client
         );
     }
 
     getCorporateClients(): Observable<ICorporateClient[]> {
         return this.http.get<ICorporateClient[]>(
-            'http://104.248.247.78:3000/clients/corporate'
+            ' https://www.flosure-api.com/clients/corporate'
         );
     }
 
     getCorporateClient(id: string): Observable<ICorporateClient> {
         return this.http.get<ICorporateClient>(
-            `http://104.248.247.78:3000/clients/corporate/${id}`
+            ` https://www.flosure-api.com/clients/corporate/${id}`
         );
     }
 
@@ -210,7 +210,7 @@ export class ClientsService {
         id: string
     ): Observable<ICorporateClient> {
         return this.http.put<ICorporateClient>(
-            `http://104.248.247.78:3000/clients/corporate/${id}`,
+            ` https://www.flosure-api.com/clients/corporate/${id}`,
             client
         );
     }
@@ -229,20 +229,20 @@ export class ClientsService {
         );
         console.log(client);
         return this.http.post<IIndividualClient>(
-            'http://104.248.247.78:3000/clients/individual',
+            ' https://www.flosure-api.com/clients/individual',
             client
         );
     }
 
     getIndividualClients(): Observable<IIndividualClient[]> {
         return this.http.get<IIndividualClient[]>(
-            'http://104.248.247.78:3000/clients/individual'
+            ' https://www.flosure-api.com/clients/individual'
         );
     }
 
     getIndividualClient(id: string): Observable<IIndividualClient> {
         return this.http.get<IIndividualClient>(
-            `http://104.248.247.78:3000/clients/individual/${id}`
+            ` https://www.flosure-api.com/clients/individual/${id}`
         );
     }
 
@@ -251,7 +251,7 @@ export class ClientsService {
         id: string
     ): Observable<IIndividualClient> {
         return this.http.put<IIndividualClient>(
-            `http://104.248.247.78:3000/clients/individual/${id}`,
+            ` https://www.flosure-api.com/clients/individual/${id}`,
             client
         );
     }

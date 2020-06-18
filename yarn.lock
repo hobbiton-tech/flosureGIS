@@ -7629,6 +7629,13 @@ next-tick@~1.0.0:
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
   integrity sha1-yobR/ogoFpsBICCOPchCS524NCw=
 
+ng-connection-service@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/ng-connection-service/-/ng-connection-service-1.0.4.tgz#02854a6eabd9a8fe44f0ad63024289652039a179"
+  integrity sha512-WrZfK+hUzrJS77ItxXI08rUN6Av77W3+LsaJEPufyo2wRe7Tn8xG18FHHEbbgqKkJeDT/yGJBH2xOaT+1jb22g==
+  dependencies:
+    tslib "^1.9.0"
+
 ng-zorro-antd@^8.5.2:
   version "8.5.2"
   resolved "https://registry.yarnpkg.com/ng-zorro-antd/-/ng-zorro-antd-8.5.2.tgz#575ea85a75df7bfcc8712e82f819b355fade6b2b"

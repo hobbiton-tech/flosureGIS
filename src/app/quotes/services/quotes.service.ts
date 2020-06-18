@@ -135,15 +135,15 @@ export class QuotesService {
             branch: motorQuotation.branch //get from db
         };
         this.http
-            .get<IQuoteNumberResult>(
-                `https://new-rates-api.now.sh/aplus-quote/1/0/${insuranceType}/${count}`
+            .get<any>(
+                `https://flosure-number-generation.herokuapp.com/aplus-quote-number/1/0/${insuranceType}`
             )
             .subscribe(async res => {
-                motorQuotation.quoteNumber = res.quoteNumber;
+                motorQuotation.quoteNumber = res.data.quotation_number;
                 console.log('WHAT THE >>>>', motorQuotation);
                 this.http
                     .post<MotorQuotationModel>(
-                        'http://104.248.247.78:3000/quotation',
+                        ' https://www.flosure-api.com/quotation',
                         motorQuotation
                     )
                     .subscribe(
@@ -175,14 +175,14 @@ export class QuotesService {
     }
     getMotorQuotations(): Observable<MotorQuotationModel[]> {
         return this.http.get<MotorQuotationModel[]>(
-            'http://104.248.247.78:3000/quotation'
+            ' https://www.flosure-api.com/quotation'
         );
     }
     getMotorQuotationById(
         quotationId: string
     ): Observable<MotorQuotationModel> {
         return this.http.get<MotorQuotationModel>(
-            `http://104.248.247.78:3000/quotation/${quotationId}`
+            ` https://www.flosure-api.com/quotation/${quotationId}`
         );
     }
     updateMotorQuotation(
@@ -190,7 +190,7 @@ export class QuotesService {
         quotationId: string
     ): Observable<MotorQuotationModel> {
         return this.http.put<MotorQuotationModel>(
-            `http://104.248.247.78:3000/quotation/${quotationId}`,
+            ` https://www.flosure-api.com/quotation/${quotationId}`,
             motorQuotation
         );
     }
@@ -292,6 +292,7 @@ export interface AddRiskDTO {
     loading?: LoadingDTO;
     discount?: DiscountDTO;
 }
+//
 export interface VehicleDTO {
     regNumber: string;
     vehicleMake: string;

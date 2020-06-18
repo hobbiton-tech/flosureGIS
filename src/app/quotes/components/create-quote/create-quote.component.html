@@ -4930,6 +4930,138 @@
                             </div>
                         </div>
                     </form>
+
+                    <nz-divider nzText="Schedule" nzOrientation="left"></nz-divider>
+
+
+                    <div nz-row nzGutter="10">
+                        <div nz-col nzSpan="12">
+                            <nz-card>
+                                <nz-divider nzText="Limits Of Liability" nzOrientation="left">
+                                </nz-divider>
+                                <form [formGroup]="limitsOfLiabilityForm">
+                                    <nz-form-item>
+                                        <nz-form-label [nzSpan]="10" nzFor="protectionAndRemoval" nzRequired>
+                                            Protection and Removal
+                                        </nz-form-label>
+                                        <nz-form-control nzSpan="5">
+                                            <input nz-input name="protectionAndRemoval"
+                                                formControlName="protectionAndRemoval" type="text"
+                                                id="protectionAndRemoval" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                    <nz-form-item>
+                                        <nz-form-label [nzSpan]="10" nzFor="deathBodilyInjury" nzRequired>
+                                            Death Bodily Injury (Per Event/Per Person)
+                                        </nz-form-label>
+                                        <nz-form-control nzSpan="5">
+                                            <div style="display: flex; flex-direction:row;">
+                                                <div style="display: flex; flex-direction:column;">
+                                                    <input nz-input name="deathBodilyInjuryPerEvent"
+                                                        formControlName="deathBodilyInjuryPerEvent" type="text"
+                                                        id="deathBodilyInjuryPerEvent" />
+                                                </div>
+                                                <div style="display: flex; flex-direction:column; margin-left: 3px">
+                                                    <input nz-input name="deathBodilyInjuryPerPerson"
+                                                        formControlName="deathBodilyInjuryPerPerson" type="text"
+                                                        id="deathBodilyInjuryPerPerson" />
+                                                </div>
+                                            </div>
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                    <nz-form-item>
+                                        <nz-form-label [nzSpan]="10" nzFor="propertyDamage" nzRequired>
+                                            Property Damage (Per Event)
+                                        </nz-form-label>
+                                        <nz-form-control nzSpan="5">
+                                            <input nz-input name="propertyDamage" formControlName="propertyDamage"
+                                                type="text" id="propertyDamage" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                    <nz-form-item>
+                                        <nz-form-label [nzSpan]="10" nzFor="medicalExpenses" nzRequired>
+                                            Medical Expenses (Per Accident/Per Person)
+                                        </nz-form-label>
+                                        <nz-form-control nzSpan="5">
+                                            <div style="display: flex; flex-direction:row;">
+                                                <div style="display: flex; flex-direction:column;">
+                                                    <input nz-input name="medicalExpensesPerAccident"
+                                                        formControlName="medicalExpensesPerAccident" type="text"
+                                                        id="medicalExpensesPerAccident" />
+                                                </div>
+                                                <div style="display: flex; flex-direction:column; margin-left: 3px">
+                                                    <input nz-input name="medicalExpensesPerPerson"
+                                                        formControlName="medicalExpensesPerPerson" type="text"
+                                                        id="medicalExpensesPerPerson" />
+                                                </div>
+                                            </div>
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                    <nz-form-item>
+                                        <nz-form-label [nzSpan]="10" nzFor="unauthourizedRepair" nzRequired>
+                                            Unauthorized Repair (Per Event)
+                                        </nz-form-label>
+                                        <nz-form-control nzSpan="5">
+                                            <input nz-input name="unauthourizedRepair"
+                                                formControlName="unauthourizedRepair" type="text"
+                                                id="unauthourizedRepair" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                </form>
+
+                            </nz-card>
+                        </div>
+
+                        <div nz-col nzSpan="12">
+                            <nz-card>
+                                <nz-divider nzText="Excesses" nzOrientation="left"></nz-divider>
+                                <form [formGroup]="excessesForm">
+                                    <nz-form-item>
+                                        <nz-form-label [nzSpan]="10" nzFor="collisionAndFire" nzRequired>
+                                            Collision And Fire
+                                        </nz-form-label>
+                                        <nz-form-control nzSpan="5">
+                                            <input nz-input name="collisionAndFire" formControlName="collisionAndFire"
+                                                type="text" id="collisionAndFire" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                    <nz-form-item>
+                                        <nz-form-label [nzSpan]="10" nzFor="theftOfVehicleWithAntiTheftDevice"
+                                            nzRequired>
+                                            Theft Of Vehicle With Anti Theft Device
+                                        </nz-form-label>
+                                        <nz-form-control nzSpan="5">
+                                            <input nz-input name="theftOfVehicleWithAntiTheftDevice"
+                                                formControlName="theftOfVehicleWithAntiTheftDevice" type="text"
+                                                id="theftOfVehicleWithAntiTheftDevice" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                    <nz-form-item>
+                                        <nz-form-label [nzSpan]="10" nzFor="theftOfVehicleWithoutAntiTheftDevice"
+                                            nzRequired>
+                                            Theft Of Vehicle Without Anti Theft Device
+                                        </nz-form-label>
+                                        <nz-form-control nzSpan="5">
+                                            <input nz-input name="theftOfVehicleWithoutAntiTheftDevice"
+                                                formControlName="theftOfVehicleWithoutAntiTheftDevice" type="text"
+                                                id="theftOfVehicleWithoutAntiTheftDevice" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                    <nz-form-item>
+                                        <nz-form-label [nzSpan]="10" nzFor="thirdPartyPropertyDamage" nzRequired>
+                                            Third Party Property Damage
+                                        </nz-form-label>
+                                        <nz-form-control nzSpan="5">
+                                            <input nz-input name="thirdPartyPropertyDamage"
+                                                formControlName="thirdPartyPropertyDamage" type="text"
+                                                id="thirdPartyPropertyDamage" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                    <nz-form-item></nz-form-item>
+                                </form>
+                            </nz-card>
+                        </div>
+                    </div>
                 </div>
 
                 <nz-divider nzText="Schedule" nzOrientation="left"></nz-divider>
@@ -5064,7 +5196,8 @@
                 <!-- Comprehensive risk details end here -->
 
                 <!-- Third party risk details start here -->
-                <div *ngIf="selectedValue?.value === 'ThirdParty'">
+                <div
+                    *ngIf="selectedValue?.value === 'ThirdParty' || selectedValue?.value === 'ActOnly' || selectedValue?.value === 'ThirdPartyFireAndTheft'">
                     <form [formGroup]="riskThirdPartyForm">
                         <div nz-row nzGutter="0">
                             <div nz-col nzSpan="8">
@@ -5271,7 +5404,7 @@
                                         <div *ngIf="isRiskDetailsEditmode">
                                             <div *ngIf="
                                                 selectedValue?.value ===
-                                                'ThirdParty'
+                                                'ThirdParty' || selectedValue?.value === 'ActOnly' || selectedValue?.value === 'ThirdPartyFireAndTheft'
                                             ">
                                                 <nz-form-item>
                                                     <nz-form-label [nzSpan]="10" nzFor="load">Add Load
@@ -5885,137 +6018,140 @@
                             </div>
                         </div>
                     </form>
+                    <nz-divider nzText="Schedule" nzOrientation="left"></nz-divider>
+
+
+                    <div nz-row nzGutter="10">
+                        <div nz-col nzSpan="12">
+                            <nz-card>
+                                <nz-divider nzText="Limits Of Liability" nzOrientation="left">
+                                </nz-divider>
+                                <form [formGroup]="limitsOfLiabilityForm">
+                                    <nz-form-item>
+                                        <nz-form-label [nzSpan]="10" nzFor="protectionAndRemoval" nzRequired>
+                                            Protection and Removal
+                                        </nz-form-label>
+                                        <nz-form-control nzSpan="5">
+                                            <input nz-input name="protectionAndRemoval"
+                                                formControlName="protectionAndRemoval" type="text"
+                                                id="protectionAndRemoval" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                    <nz-form-item>
+                                        <nz-form-label [nzSpan]="10" nzFor="deathBodilyInjury" nzRequired>
+                                            Death Bodily Injury (Per Event/Per Person)
+                                        </nz-form-label>
+                                        <nz-form-control nzSpan="5">
+                                            <div style="display: flex; flex-direction:row;">
+                                                <div style="display: flex; flex-direction:column;">
+                                                    <input nz-input name="deathBodilyInjuryPerEvent"
+                                                        formControlName="deathBodilyInjuryPerEvent" type="text"
+                                                        id="deathBodilyInjuryPerEvent" />
+                                                </div>
+                                                <div style="display: flex; flex-direction:column; margin-left: 3px">
+                                                    <input nz-input name="deathBodilyInjuryPerPerson"
+                                                        formControlName="deathBodilyInjuryPerPerson" type="text"
+                                                        id="deathBodilyInjuryPerPerson" />
+                                                </div>
+                                            </div>
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                    <nz-form-item>
+                                        <nz-form-label [nzSpan]="10" nzFor="propertyDamage" nzRequired>
+                                            Property Damage (Per Event)
+                                        </nz-form-label>
+                                        <nz-form-control nzSpan="5">
+                                            <input nz-input name="propertyDamage" formControlName="propertyDamage"
+                                                type="text" id="propertyDamage" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                    <nz-form-item>
+                                        <nz-form-label [nzSpan]="10" nzFor="medicalExpenses" nzRequired>
+                                            Medical Expenses (Per Accident/Per Person)
+                                        </nz-form-label>
+                                        <nz-form-control nzSpan="5">
+                                            <div style="display: flex; flex-direction:row;">
+                                                <div style="display: flex; flex-direction:column;">
+                                                    <input nz-input name="medicalExpensesPerAccident"
+                                                        formControlName="medicalExpensesPerAccident" type="text"
+                                                        id="medicalExpensesPerAccident" />
+                                                </div>
+                                                <div style="display: flex; flex-direction:column; margin-left: 3px">
+                                                    <input nz-input name="medicalExpensesPerPerson"
+                                                        formControlName="medicalExpensesPerPerson" type="text"
+                                                        id="medicalExpensesPerPerson" />
+                                                </div>
+                                            </div>
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                    <nz-form-item>
+                                        <nz-form-label [nzSpan]="10" nzFor="unauthourizedRepair" nzRequired>
+                                            Unauthorized Repair (Per Event)
+                                        </nz-form-label>
+                                        <nz-form-control nzSpan="5">
+                                            <input nz-input name="unauthourizedRepair"
+                                                formControlName="unauthourizedRepair" type="text"
+                                                id="unauthourizedRepair" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                </form>
+
+                            </nz-card>
+                        </div>
+
+                        <div nz-col nzSpan="12">
+                            <nz-card>
+                                <nz-divider nzText="Excesses" nzOrientation="left"></nz-divider>
+                                <form [formGroup]="excessesForm">
+                                    <nz-form-item>
+                                        <nz-form-label [nzSpan]="10" nzFor="collisionAndFire" nzRequired>
+                                            Collision And Fire
+                                        </nz-form-label>
+                                        <nz-form-control nzSpan="5">
+                                            <input nz-input name="collisionAndFire" formControlName="collisionAndFire"
+                                                type="text" id="collisionAndFire" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                    <nz-form-item>
+                                        <nz-form-label [nzSpan]="10" nzFor="theftOfVehicleWithAntiTheftDevice"
+                                            nzRequired>
+                                            Theft Of Vehicle With Anti Theft Device
+                                        </nz-form-label>
+                                        <nz-form-control nzSpan="5">
+                                            <input nz-input name="theftOfVehicleWithAntiTheftDevice"
+                                                formControlName="theftOfVehicleWithAntiTheftDevice" type="text"
+                                                id="theftOfVehicleWithAntiTheftDevice" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                    <nz-form-item>
+                                        <nz-form-label [nzSpan]="10" nzFor="theftOfVehicleWithoutAntiTheftDevice"
+                                            nzRequired>
+                                            Theft Of Vehicle Without Anti Theft Device
+                                        </nz-form-label>
+                                        <nz-form-control nzSpan="5">
+                                            <input nz-input name="theftOfVehicleWithoutAntiTheftDevice"
+                                                formControlName="theftOfVehicleWithoutAntiTheftDevice" type="text"
+                                                id="theftOfVehicleWithoutAntiTheftDevice" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                    <nz-form-item>
+                                        <nz-form-label [nzSpan]="10" nzFor="thirdPartyPropertyDamage" nzRequired>
+                                            Third Party Property Damage
+                                        </nz-form-label>
+                                        <nz-form-control nzSpan="5">
+                                            <input nz-input name="thirdPartyPropertyDamage"
+                                                formControlName="thirdPartyPropertyDamage" type="text"
+                                                id="thirdPartyPropertyDamage" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                    <nz-form-item></nz-form-item>
+                                </form>
+                            </nz-card>
+                        </div>
+                    </div>
                 </div>
 
-                <nz-divider nzText="Schedule" nzOrientation="left"></nz-divider>
 
-
-                <div nz-row nzGutter="10">
-                    <div nz-col nzSpan="12">
-                        <nz-card>
-                            <nz-divider nzText="Limits Of Liability" nzOrientation="left">
-                            </nz-divider>
-                            <form [formGroup]="limitsOfLiabilityForm">
-                                <nz-form-item>
-                                    <nz-form-label [nzSpan]="10" nzFor="protectionAndRemoval" nzRequired>
-                                        Protection and Removal
-                                    </nz-form-label>
-                                    <nz-form-control nzSpan="5">
-                                        <input nz-input name="protectionAndRemoval"
-                                            formControlName="protectionAndRemoval" type="text"
-                                            id="protectionAndRemoval" />
-                                    </nz-form-control>
-                                </nz-form-item>
-                                <nz-form-item>
-                                    <nz-form-label [nzSpan]="10" nzFor="deathBodilyInjury" nzRequired>
-                                        Death Bodily Injury (Per Event/Per Person)
-                                    </nz-form-label>
-                                    <nz-form-control nzSpan="5">
-                                        <div style="display: flex; flex-direction:row;">
-                                            <div style="display: flex; flex-direction:column;">
-                                                <input nz-input name="deathBodilyInjuryPerEvent"
-                                                    formControlName="deathBodilyInjuryPerEvent" type="text"
-                                                    id="deathBodilyInjuryPerEvent" />
-                                            </div>
-                                            <div style="display: flex; flex-direction:column; margin-left: 3px">
-                                                <input nz-input name="deathBodilyInjuryPerPerson"
-                                                    formControlName="deathBodilyInjuryPerPerson" type="text"
-                                                    id="deathBodilyInjuryPerPerson" />
-                                            </div>
-                                        </div>
-                                    </nz-form-control>
-                                </nz-form-item>
-                                <nz-form-item>
-                                    <nz-form-label [nzSpan]="10" nzFor="propertyDamage" nzRequired>
-                                        Property Damage (Per Event)
-                                    </nz-form-label>
-                                    <nz-form-control nzSpan="5">
-                                        <input nz-input name="propertyDamage" formControlName="propertyDamage"
-                                            type="text" id="propertyDamage" />
-                                    </nz-form-control>
-                                </nz-form-item>
-                                <nz-form-item>
-                                    <nz-form-label [nzSpan]="10" nzFor="medicalExpenses" nzRequired>
-                                        Medical Expenses (Per Accident/Per Person)
-                                    </nz-form-label>
-                                    <nz-form-control nzSpan="5">
-                                        <div style="display: flex; flex-direction:row;">
-                                            <div style="display: flex; flex-direction:column;">
-                                                <input nz-input name="medicalExpensesPerAccident"
-                                                    formControlName="medicalExpensesPerAccident" type="text"
-                                                    id="medicalExpensesPerAccident" />
-                                            </div>
-                                            <div style="display: flex; flex-direction:column; margin-left: 3px">
-                                                <input nz-input name="medicalExpensesPerPerson"
-                                                    formControlName="medicalExpensesPerPerson" type="text"
-                                                    id="medicalExpensesPerPerson" />
-                                            </div>
-                                        </div>
-                                    </nz-form-control>
-                                </nz-form-item>
-                                <nz-form-item>
-                                    <nz-form-label [nzSpan]="10" nzFor="unauthourizedRepair" nzRequired>
-                                        Unauthorized Repair (Per Event)
-                                    </nz-form-label>
-                                    <nz-form-control nzSpan="5">
-                                        <input nz-input name="unauthourizedRepair" formControlName="unauthourizedRepair"
-                                            type="text" id="unauthourizedRepair" />
-                                    </nz-form-control>
-                                </nz-form-item>
-                            </form>
-
-                        </nz-card>
-                    </div>
-
-                    <div nz-col nzSpan="12">
-                        <nz-card>
-                            <nz-divider nzText="Excesses" nzOrientation="left"></nz-divider>
-                            <form [formGroup]="excessesForm">
-                                <nz-form-item>
-                                    <nz-form-label [nzSpan]="10" nzFor="collisionAndFire" nzRequired>
-                                        Collision And Fire
-                                    </nz-form-label>
-                                    <nz-form-control nzSpan="5">
-                                        <input nz-input name="collisionAndFire" formControlName="collisionAndFire"
-                                            type="text" id="collisionAndFire" />
-                                    </nz-form-control>
-                                </nz-form-item>
-                                <nz-form-item>
-                                    <nz-form-label [nzSpan]="10" nzFor="theftOfVehicleWithAntiTheftDevice" nzRequired>
-                                        Theft Of Vehicle With Anti Theft Device
-                                    </nz-form-label>
-                                    <nz-form-control nzSpan="5">
-                                        <input nz-input name="theftOfVehicleWithAntiTheftDevice"
-                                            formControlName="theftOfVehicleWithAntiTheftDevice" type="text"
-                                            id="theftOfVehicleWithAntiTheftDevice" />
-                                    </nz-form-control>
-                                </nz-form-item>
-                                <nz-form-item>
-                                    <nz-form-label [nzSpan]="10" nzFor="theftOfVehicleWithoutAntiTheftDevice"
-                                        nzRequired>
-                                        Theft Of Vehicle Without Anti Theft Device
-                                    </nz-form-label>
-                                    <nz-form-control nzSpan="5">
-                                        <input nz-input name="theftOfVehicleWithoutAntiTheftDevice"
-                                            formControlName="theftOfVehicleWithoutAntiTheftDevice" type="text"
-                                            id="theftOfVehicleWithoutAntiTheftDevice" />
-                                    </nz-form-control>
-                                </nz-form-item>
-                                <nz-form-item>
-                                    <nz-form-label [nzSpan]="10" nzFor="thirdPartyPropertyDamage" nzRequired>
-                                        Third Party Property Damage
-                                    </nz-form-label>
-                                    <nz-form-control nzSpan="5">
-                                        <input nz-input name="thirdPartyPropertyDamage"
-                                            formControlName="thirdPartyPropertyDamage" type="text"
-                                            id="thirdPartyPropertyDamage" />
-                                    </nz-form-control>
-                                </nz-form-item>
-                                <nz-form-item></nz-form-item>
-                            </form>
-                        </nz-card>
-                    </div>
-                </div>
             </ng-template>
         </nz-modal>
         <!-- Risk Deatils Modal ends here-->

@@ -133,6 +133,34 @@ export class ViewReceiptsComponent implements OnInit {
         });
     }
 
+    htmlToPrint() {
+        const div = document.getElementById('printingSection');
+        const options = {
+            background: 'white',
+            height: div.clientHeight,
+            width: div.clientWidth,
+        };
+
+        html2canvas(div, options).then((canvas) => {
+            const doc = new jsPDF({
+                unit: 'mm',
+                format: 'a4',
+            });
+            const imgData = canvas.toDataURL('image/PNG');
+            doc.addImage(imgData, 'PNG', 0, 0, 211, 298);
+
+            const pdfOutput = doc.output();
+            const buffer = new ArrayBuffer(pdfOutput.length);
+            const array = new Uint8Array(buffer);
+            for (let i = 0; i < pdfOutput.length; i++) {
+                array[i] = pdfOutput.charCodeAt(i);
+            }
+            const fileName = `${this.receipt.receiptNumber}-receipt.pdf`;
+            doc.save(fileName);
+            this.generatingPDF = false;
+        });
+    }
+
     toWords(s) {
         s = s.toString();
         s = s.replace(/[\, ]/g, '');
@@ -146,7 +174,7 @@ export class ViewReceiptsComponent implements OnInit {
         if (x > 15) {
             return 'too big';
         }
-        let n = s.split('');
+        const n = s.split('');
         let str = '';
         let sk = 0;
         for (let i = 0; i < x; i++) {
@@ -175,7 +203,7 @@ export class ViewReceiptsComponent implements OnInit {
             }
         }
         if (x != s.length) {
-            let y = s.length;
+            const y = s.length;
             str += 'point ';
             for (let i = x + 1; i < y; i++) {
                 str += this.dg[n[i]] + ' ';

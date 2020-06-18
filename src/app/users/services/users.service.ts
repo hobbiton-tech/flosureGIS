@@ -12,17 +12,17 @@ export class UsersService {
 
     addUser(dto: User): Observable<User> {
         return this.http.post<User>(
-            'http://104.248.247.78:3000/users',
+            ' https://www.flosure-api.com/users',
 
             dto
         );
     }
 
     getUsers(): Observable<User[]> {
-        return this.http.get<User[]>('http://104.248.247.78:3000/users');
+        return this.http.get<User[]>(' https://www.flosure-api.com/users');
     }
 
     getSingleUser(userId: string): Observable<User> {
-        return this.http.get<User>(`http://104.248.247.78:3000/${userId}`);
+        return this.http.get<User>(` https://www.flosure-api.com/${userId}`);
     }
 }
