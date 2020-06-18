@@ -248,8 +248,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
             await this.receiptService
                 .addReceipt(
                     receipt,
-                    this.policy.risks[0].insuranceType,
-                    this.receiptNewCount
+                    this.policy.risks[0].insuranceType
                 )
                 .then((mess) => {
                     this.message.success('Receipt Successfully created');

@@ -15,4 +15,7 @@ export interface ITax {
     rate: number;
 }
 
-export type InsuranceType = 'ThirdParty' | 'Comprehensive';
+export type InsuranceType = | 'ThirdParty'
+| 'Comprehensive'
+| 'ThirdPartyFireAndTheft'
+| 'ActOnly';;

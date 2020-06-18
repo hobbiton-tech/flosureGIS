@@ -43,6 +43,7 @@ export class PoliciesService {
     private policiesCollection: AngularFirestoreCollection<Policy>;
     policies: Observable<Policy[]>;
     policy: any;
+    getDNote:any;
 
     constructor(
         private firebase: AngularFirestore,
@@ -287,7 +288,7 @@ export class PoliciesService {
             .subscribe(async (res) => {
                 debitNote.debitNoteNumber = res.data.invoice_number;
 
-                this.http
+             this.http
                     .post<DebitNote>(
                         `${BASE_URL}/documents/debit-note/${policyId}`,
                         debitNote

@@ -107,4 +107,8 @@ export type SourceOfBusinessType =
     | 'Agent'
     | 'Sales Representative';
 
-export type InsuranceType = 'ThirdParty' | 'Comprehensive';
+export type InsuranceType =
+    | 'ThirdParty'
+    | 'Comprehensive'
+    | 'ThirdPartyFireAndTheft'
+    | 'ActOnly';
