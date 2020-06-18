@@ -226,6 +226,13 @@
                                 >
                                     Certificate
                                 </button>
+                                <button
+                                    nz-button
+                                    nzType="default"
+                                    (click)="isNewCertificateVisible(risk)"
+                                >
+                                    New Certificate
+                                </button>
                                 <button></button>
                             </td>
                         </tr>
@@ -417,6 +424,66 @@
             </form>
         </div>
     </div>
+</nz-modal>
+
+<nz-modal
+    nzWidth="700"
+    nzTitle=""
+    [(nzVisible)]="isComprehensiveCertificatePdfVisible"
+    (nzOnCancel)="isComprehensiveCertificatePdfVisible = false"
+    (nzOnOk)="isComprehensiveCertificatePdfVisible = false"
+>
+    <nz-card [nzBordered]="true" nzTitle="Comprehensive Certificate Document">
+        <app-policy-comprehensive-certificate
+            *ngIf="!risksLoading"
+            [clientName]="clientName"
+            [clientNumber]="clientNumber"
+            [clientEmail]="clientEmail"
+            [insuredName]="clientName"
+            [policyNumber]="policyNumber"
+            [issueDate]="issueDate"
+            [basicPremium]="basicPremium"
+            [loadingAmount]="loadingAmount"
+            [discountAmount]="discountAmount"
+            [premiumLevy]="premiumLevy"
+            [totalAmount]="totalAmount"
+            [issueTime]="issueTime"
+            [policy]="policyData"
+            [policyRisk]="selectedRisk"
+        >
+            >
+        </app-policy-comprehensive-certificate>
+    </nz-card>
+</nz-modal>
+
+<nz-modal
+    nzWidth="700"
+    nzTitle=""
+    [(nzVisible)]="isThirdPartyCertificatePdfVisible"
+    (nzOnCancel)="isThirdPartyCertificatePdfVisible = false"
+    (nzOnOk)="isThirdPartyCertificatePdfVisible = false"
+>
+    <nz-card [nzBordered]="true" nzTitle="ThirdParty Certificate Document">
+        <app-policy-thirdparty-certificate
+            *ngIf="!risksLoading"
+            [clientName]="clientName"
+            [clientNumber]="clientNumber"
+            [clientEmail]="clientEmail"
+            [insuredName]="clientName"
+            [policyNumber]="policyNumber"
+            [issueDate]="issueDate"
+            [basicPremium]="basicPremium"
+            [loadingAmount]="loadingAmount"
+            [discountAmount]="discountAmount"
+            [premiumLevy]="premiumLevy"
+            [totalAmount]="totalAmount"
+            [issueTime]="issueTime"
+            [policy]="policyData"
+            [policyRisk]="selectedRisk"
+        >
+            >
+        </app-policy-thirdparty-certificate>
+    </nz-card>
 </nz-modal>
 
 <nz-modal
