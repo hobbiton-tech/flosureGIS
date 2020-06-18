@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {
     AngularFirestore,
     AngularFirestoreCollection,
-    DocumentReference
+    DocumentReference,
 } from '@angular/fire/firestore';
 import { Observable, combineLatest } from 'rxjs';
 import { IAgent, IBroker, ISalesRepresentative } from '../models/agents.model';
@@ -11,14 +11,14 @@ import { first, combineAll } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 const httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
 };
 
 // const BASE_URL = 'http://localhost:3000';
 // const BASE_URL = 'https://flosure-postgres-api.herokuapp.com';
 const BASE_URL = 'https://flosure-api.com';
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class AgentsService {
     private agentsCollection: AngularFirestoreCollection<IAgent>;
@@ -43,17 +43,19 @@ export class AgentsService {
         // >('sales_representatives');
         // this.salesRepresentatives = this.salesRepresentativesCollection.valueChanges();
 
-        this.getAgents().subscribe(totalAgents => {
+        this.getAgents().subscribe((totalAgents) => {
             this.agents = totalAgents;
         });
 
-        this.getBrokers().subscribe(totalBrokers => {
+        this.getBrokers().subscribe((totalBrokers) => {
             this.brokers = totalBrokers;
         });
 
-        this.getSalesRepresentatives().subscribe(totalSalesRepresentatives => {
-            this.salesRepresentatives = totalSalesRepresentatives;
-        });
+        this.getSalesRepresentatives().subscribe(
+            (totalSalesRepresentatives) => {
+                this.salesRepresentatives = totalSalesRepresentatives;
+            }
+        );
     }
 
     // async addAgent(agent: IAgent): Promise<void> {
@@ -162,19 +164,23 @@ export class AgentsService {
             this.salesRepresentatives.length
         );
         return this.http.post<ISalesRepresentative>(
-            `${BASE_URL}/intermediary/sales-representative`,
+
+            'https://www.flosure-api.com/intermediary/sales-representative',
             salesRepresentatives
         );
     }
     // getSalesRepresentatives(): Observable<ISalesRepresentative[]> {
     //     return this.http.get<ISalesRepresentative[]>(
-    //         'https://flosure-postgres-api.herokuapp.com/intermediary/sales-representative'
+    //         'https://www.flosure-api.comintermediary/sales-representative'
+
     //     );
     // }
 
     getSalesRepresentative(id: string): Observable<ISalesRepresentative> {
         return this.http.get<ISalesRepresentative>(
-            `${BASE_URL}/intermediary/sales-representative/${id}`
+
+            `https://www.flosure-api.com/intermediary/sales-representative/${id}`
+
         );
     }
 
@@ -183,14 +189,16 @@ export class AgentsService {
         id: string
     ): Observable<ISalesRepresentative> {
         return this.http.put<ISalesRepresentative>(
-            `https://flosure-postgres-api.herokuapp.com/intermediary/sales-representative/${id}`,
+            `https://www.flosure-api.com/intermediary/sales-representative/${id}`,
+
             agent
         );
     }
 
     updateBroker(agent: IBroker, id: string): Observable<IBroker> {
         return this.http.put<IBroker>(
-            `https://flosure-postgres-api.herokuapp.com/intermediary/broker/${id}`,
+            `https://www.flosure-api.com/intermediary/broker/${id}`,
+
             agent
         );
     }
@@ -204,20 +212,25 @@ export class AgentsService {
             this.brokers.length
         );
         return this.http.post<IBroker>(
-            `${BASE_URL}/intermediary/broker`,
+
+            'https://www.flosure-api.com/intermediary/broker',
+
             broker
         );
     }
 
     getBroker(id: string): Observable<IBroker> {
         return this.http.get<IBroker>(
-        `${BASE_URL}/intermediary/broker/${id}`
+
+            `https://www.flosure-api.com/intermediary/broker/${id}`
+
         );
     }
 
     // getBrokers(): Observable<IBroker[]> {
     //     return this.http.get<IBroker[]>(
-    //         'https://flosure-postgres-api.herokuapp.com/intermediary/broker'
+    //         'https://www.flosure-api.comintermediary/broker'
+
     //     );
     // }
 
@@ -230,26 +243,32 @@ export class AgentsService {
             5
         );
         return this.http.post<IAgent>(
-            `${BASE_URL}/intermediary/agent`,
+
+            'https://www.flosure-api.com/intermediary/agent',
+
             agent
         );
     }
 
     // getAgent(id: string): Observable<IAgent> {
     //     return this.http.get<IAgent>(
-    //         `https://flosure-postgres-api.herokuapp.com/intermediary/agent/${id}`
+    //         `https://www.flosure-api.comintermediary/agent/${id}`
+
     //     );
     // }
 
     // getAgents(): Observable<IAgent[]> {
     //     return this.http.get<IAgent[]>(
-    //         'https://flosure-postgres-api.herokuapp.com/intermediary/agent'
+    //         'https://www.flosure-api.comintermediary/agent'
+
     //     );
     // }
 
     updateAgent(agent: IAgent, id: string): Observable<IAgent> {
         return this.http.put<IAgent>(
-            `${BASE_URL}/intermediary/agent/${id}`,
+
+            `https://www.flosure-api.com/intermediary/agent/${id}`,
+
             agent
         );
     }
@@ -267,19 +286,25 @@ export class AgentsService {
     //postgres
     getAgents(): Observable<IAgent[]> {
         return this.http.get<IAgent[]>(
-            `${BASE_URL}/intermediary/agent`
+
+            'https://www.flosure-api.com/intermediary/agent'
+
         );
     }
 
     getBrokers(): Observable<IBroker[]> {
         return this.http.get<IBroker[]>(
-            `${BASE_URL}/intermediary/broker`
+
+            'https://www.flosure-api.com/intermediary/broker'
+
         );
     }
 
     getSalesRepresentatives(): Observable<ISalesRepresentative[]> {
         return this.http.get<ISalesRepresentative[]>(
-            `${BASE_URL}/intermediary/sales-representative`
+
+            'https://www.flosure-api.com/intermediary/sales-representative'
+
         );
     }
 

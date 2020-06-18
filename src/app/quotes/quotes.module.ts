@@ -15,6 +15,8 @@ import { RiskDetailsComponent } from './components/risk-details/risk-details.com
 import { QuoteComponent } from './documents/quote/quote.component';
 import { QuoteDocumentComponent } from './documents/quote-document/quote-document.component';
 import { DraftQuoteDocumentComponent } from './documents/draft-quote-document/draft-quote-document.component';
+import { NgxPrintModule } from 'ngx-print';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 
 const routes: Routes = [
     {
@@ -48,7 +50,9 @@ const routes: Routes = [
         ReactiveFormsModule,
         PdfViewerModule,
         HttpClientModule,
-        RouterModule.forChild(routes)
+        RouterModule.forChild(routes),
+        NgxPrintModule,
+        NzDatePickerModule
     ],
     exports: [QuotesComponent, CreateQuoteComponent],
     providers: [QuotesService]

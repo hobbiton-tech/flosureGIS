@@ -16,6 +16,9 @@ import { BehaviorSubject } from 'rxjs';
     styleUrls: ['./policy-extension-details.component.scss']
 })
 export class PolicyExtensionDetailsComponent implements OnInit {
+    //loading feedback
+    updatingPolicy: boolean = false;
+
     editedRisk: RiskModel;
 
     policyEndDate: Date;
@@ -143,6 +146,7 @@ export class PolicyExtensionDetailsComponent implements OnInit {
 
     //endorse policy
     endorsePolicy() {
+        this.updatingPolicy = true;
         console.log('endorse policy clicked!!');
 
         const endorsement: Endorsement = {
@@ -173,6 +177,7 @@ export class PolicyExtensionDetailsComponent implements OnInit {
                 // );
             };
             this.msg.success('Endorsement Successful');
+            this.updatingPolicy = false;
         });
     }
 

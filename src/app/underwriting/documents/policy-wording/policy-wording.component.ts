@@ -86,20 +86,20 @@ export class PolicyWordingComponent implements OnInit {
         };
 
         html2canvas(div, options).then((canvas) => {
-            let doc = new jsPDF({
-                unit: 'px',
+            const doc = new jsPDF({
+                unit: 'mm',
                 format: 'a4',
             });
-            let imgData = canvas.toDataURL('image/PNG');
-            doc.addImage(imgData, 'PNG', 0, 0);
+            const imgData = canvas.toDataURL('image/PNG');
+            doc.addImage(imgData, 'PNG', 0, 0, 211, 298);
 
-            let pdfOutput = doc.output();
-            let buffer = new ArrayBuffer(pdfOutput.length);
-            let array = new Uint8Array(buffer);
+            const pdfOutput = doc.output();
+            const buffer = new ArrayBuffer(pdfOutput.length);
+            const array = new Uint8Array(buffer);
             for (let i = 0; i < pdfOutput.length; i++) {
                 array[i] = pdfOutput.charCodeAt(i);
             }
-            const fileName = 'policy-wordingNote.pdf';
+            const fileName = `${this.policy.policyNumber}-wordingNote.pdf`;
             doc.save(fileName);
             this.generatingPDF = false;
         });

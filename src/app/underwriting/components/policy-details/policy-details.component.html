@@ -1,4 +1,8 @@
-<nz-spin [nzSpinning]="false">
+<nz-spin
+    nzSize="large"
+    nzTip="Policy Details Loading...."
+    [nzSpinning]="isOkLoading"
+>
     <div class="policy-detail">
         <div style="margin: 15px;">
             <nz-breadcrumb>
@@ -512,31 +516,21 @@
 
 <nz-modal
     style="width: 100%;"
-    nzWidth="800"
+    nzWidth="900"
     nzTitle=""
     [(nzVisible)]="isDebitNotePDFVisible"
     (nzOnCancel)="isDebitNotePDFVisible = false"
     (nzOnOk)="isDebitNotePDFVisible = false"
 >
     <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Debit Document">
-        <app-policy-debit-note-document
-            *ngIf="!risksLoading"
-            [clientName]="clientName"
-            [clientNumber]="clientNumber"
-            [clientEmail]="clientEmail"
-            [agency]="agency"
-            [policyNumber]="policyNumber"
-            [classOfBusiness]="classOfBusiness"
-            [coverFrom]="coverForm"
-            [coverTo]="coverTo"
-            [basicPremium]="basicPremium"
-            [loadingAmount]="loadingAmount"
-            [discountAmount]="discountAmount"
-            [premiumLevy]="premiumLevy"
-            [totalAmount]="totalAmount"
-            [risk]="policyRisk"
-            [policy]="policyData"
-        >
+
+        <app-policy-debit-note-document *ngIf="!risksLoading" [clientName]="clientName" [clientNumber]="clientNumber"
+            [clientEmail]="clientEmail" [agency]="agency" [policyNumber]="policyNumber"
+            [classOfBusiness]="classOfBusiness" [coverFrom]="coverForm" [coverTo]="coverTo"
+            [basicPremium]="basicPremium" [loadingAmount]="loadingAmount" [discountAmount]="discountAmount"
+            [premiumLevy]="premiumLevy" [totalAmount]="totalAmount" [risk]="policyRisk" [policy]="policyData"
+            [debitNote]="debitNotes" [client]="client" [policyDebitNote]="singleDebitNote">
+
         </app-policy-debit-note-document>
     </nz-card>
 </nz-modal>
@@ -544,7 +538,7 @@
 <nz-modal
     style="width: 150%;"
     nzTitle=""
-    nzWidth="800"
+    nzWidth="950"
     [(nzVisible)]="isSchedulePDFVisible"
     (nzOnCancel)="isSchedulePDFVisible = false"
     (nzOnOk)="isSchedulePDFVisible = false"
@@ -574,6 +568,7 @@
             [loadingAmount]="loadingAmount"
             [discountAmount]="discountAmount"
             [totalAmount]="totalAmount"
+            [client]="client"
         >
         </app-policy-schedule-document>
     </nz-card>
@@ -596,6 +591,8 @@
             [policyClauses]="clauses"
             [policyExtension]="extensions"
             [policyWording]="wordings"
-        ></app-policy-wording>
+            [policy]="policyData"
+        >
+        </app-policy-wording>
     </nz-card>
 </nz-modal>

@@ -19,6 +19,12 @@ import {
     IPolicyWording,
     IPolicyExtension,
 } from 'src/app/settings/models/underwriting/clause.model';
+import { DebitNote } from '../../documents/models/documents.model';
+import { ClientsService } from 'src/app/clients/services/clients.service';
+import {
+    IIndividualClient,
+    ICorporateClient,
+} from 'src/app/clients/models/clients.model';
 
 @Component({
     selector: 'app-policy-details',
@@ -35,6 +41,14 @@ export class PolicyDetailsComponent implements OnInit {
     wordings: IPolicyWording[];
     extensions: IPolicyExtension[];
 
+    debitNotes: DebitNote[];
+    singleDebitNote: DebitNote;
+    latestDebitNote: DebitNote;
+
+    //client details
+    client: IIndividualClient & ICorporateClient;
+    clientsList: Array<IIndividualClient & ICorporateClient>;
+
     policiesList: Policy[];
     policyNumber: string;
     policyData: Policy = new Policy();
@@ -42,6 +56,7 @@ export class PolicyDetailsComponent implements OnInit {
     displayPolicy: Policy;
     policyUpdate: Policy = new Policy();
     isLoading = false;
+    isOkLoading = false;
 
     paymentPlan = 'NotCreated';
 
@@ -101,7 +116,8 @@ export class PolicyDetailsComponent implements OnInit {
         private policiesService: PoliciesService,
         private paymentPlanService: PaymentPlanService,
         private receiptService: AccountService,
-        private productClauseService: ClausesService
+        private productClauseService: ClausesService,
+        private clientsService: ClientsService
     ) {
         this.paymentPlanForm = this.formBuilder.group({
             numberOfInstallments: ['', Validators.required],
@@ -111,6 +127,10 @@ export class PolicyDetailsComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.isOkLoading = true;
+        setTimeout(() => {
+            this.isOkLoading = false;
+        }, 3000);
         this.route.params.subscribe((id) => {
             this.policiesService.getPolicyById(id.id).subscribe((policy) => {
                 console.log('CHECKING ID GET', policy);
@@ -139,6 +159,52 @@ export class PolicyDetailsComponent implements OnInit {
                             (x) => x.policyId === this.policyData.id
                         );
                     });
+
+                this.policiesService.getDebitNotes().subscribe(debitNotes => {
+                    this.debitNotes = debitNotes;
+
+                    console.log('debit notes');
+                    console.log(this.debitNotes);
+
+                    console.log('id: ', this.policyData.id);
+
+                    this.singleDebitNote = debitNotes.filter(
+                        x => x.policy.id === this.policyData.id
+                    )[0];
+
+                    console.log('Policy Debit Note:');
+                    console.log(this.singleDebitNote);
+                });
+
+                this.clientsService.getAllClients().subscribe(clients => {
+                    this.clientsList = [...clients[0], ...clients[1]] as Array<
+                        ICorporateClient & IIndividualClient
+                    >;
+
+                    console.log('clients: ');
+                    console.log(clients);
+
+                    this.client = this.clientsList.filter(x =>
+                        x.companyName
+                            ? x.companyName === this.policyData.client
+                            : x.firstName + ' ' + x.lastName ===
+                              this.policyData.client
+                    )[0] as IIndividualClient & ICorporateClient;
+
+                    console.log('HERE =>>>>>');
+                    console.log(
+                        this.clientsList.filter(
+                            x =>
+                                x.firstName + ' ' + x.lastName === 'Changa Lesa'
+                        )[0] as IIndividualClient & ICorporateClient
+                    );
+
+                    // console.log('policy data client:');
+                    // console.log(this.policyData.client);
+
+                    // console.log('client');
+                    // console.log(this.client);
+                });
 
                 this.risks = policy.risks;
 
@@ -203,16 +269,43 @@ export class PolicyDetailsComponent implements OnInit {
                 this.risksLoading = false;
             });
         });
-        // this.route.data.subscribe((data: Policy) => {
-        //     console.log('RESOLVED', data);
-        //     this.route.params.subscribe((param) => {
-        //         this.policyNumber = param.policyNumber;
-        //         this.policiesService.getPolicies().subscribe((policies) => {
 
-        //         });
-        //     });
-        // });
-        // policy details form
+
+//         this.policiesService.getDebitNotes().subscribe((debitNotes) => {
+//             this.debitNotes = debitNotes;
+
+//             console.log('debit notes');
+//             console.log(this.debitNotes);
+//         });
+
+//         this.clientsService.getAllClients().subscribe((clients) => {
+//             this.clientsList = [...clients[0], ...clients[1]] as Array<
+//                 ICorporateClient & IIndividualClient
+//             >;
+
+//             console.log('clients: ');
+//             console.log(clients);
+
+//             this.client = this.clientsList.filter((x) =>
+//                 x.companyName
+//                     ? x.companyName === this.policyData.client
+//                     : x.firstName + ' ' + x.lastName === this.policyData.client
+//             )[0] as IIndividualClient & ICorporateClient;
+
+//             console.log('HERE =>>>>>');
+//             console.log(
+//                 this.clientsList.filter(
+//                     (x) => x.firstName + ' ' + x.lastName === 'Changa Lesa'
+//                 )[0] as IIndividualClient & ICorporateClient
+//             );
+
+//             // console.log('policy data client:');
+//             // console.log(this.policyData.client);
+
+//             // console.log('client');
+//             // console.log(this.client);
+//         });
+
         this.policyDetailsForm = this.formBuilder.group({
             client: ['', Validators.required],
             nameOfInsured: ['', Validators.required],
@@ -414,7 +507,7 @@ export class PolicyDetailsComponent implements OnInit {
             // add payment plan
             this.paymentPlanService.addPaymentPlanReceipt(receipt, plan);
 
-            // add payment plan
+            console.log('What is happening');
             // this.paymentPlanService.addPaymentPlan(plan);
             this.paymentPlanForm.reset();
             this.isVisible = false;

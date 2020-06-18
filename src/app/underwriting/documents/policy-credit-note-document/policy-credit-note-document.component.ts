@@ -3,6 +3,7 @@ import { Policy } from '../../models/policy.model';
 import { RiskModel } from 'src/app/quotes/models/quote.model';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { CreditNote } from '../models/documents.model';
 
 @Component({
     selector: 'app-policy-credit-note-document',
@@ -55,13 +56,18 @@ export class PolicyCreditNoteDocumentComponent implements OnInit {
     @Input()
     policy: Policy;
 
+    @Input()
+    creditNote: CreditNote[];
+
     today: Date = new Date();
 
     constructor() {}
 
     generatingPDF = false;
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        console.log(this.creditNote);
+    }
 
     htmlToPdf() {
         this.generatingPDF = true;
