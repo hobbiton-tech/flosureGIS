@@ -101,9 +101,9 @@
                 <td>{{risk.vehicleMake}}/{{risk.vehicleModel}}</td>
                 <td>{{risk.engineNumber}}</td>
                 <td>{{risk.chassisNumber}}</td>
-                <td>TBA</td>
+                <td>{{risk.cubicCapacity}}</td>
                 <td>{{getYearOfManufacture(risk)}}</td>
-                <td>TBA</td>
+                <td>{{risk.seatingCapacity}}</td>
                 <td>{{risk.estimatedValue ? risk.estimatedValue : 'TBA'}}</td>
                 <td>{{risk.insuranceType == 'ThirdParty' ? 'Third Party' : 'Comprehensive'}}</td>
             </tr>
@@ -122,25 +122,30 @@
                 <p style="font-weight: bold;">Limits of Liability</p>
                 <p>Limit of the amount of the Company’s liability under</p>
                 <p><span style="font-weight: bold;">Section I</span> - 3 (Protection and Removal) – <span
-                        style="font-weight: bold;">K500</span></p>
+                        style="font-weight: bold;">K{{protectionAndRemovalLiability | number: '1.2-2'}}</span></p>
                 <p><span style="font-weight: bold;">Section II</span> -1 (a) and 2 (a) (Liability to Third Parties –
                     death bodily injury) in respect of any one
                     claim or series
-                    Of claims arising out of one event: <span style="font-weight: bold;">K60,100 per event / K30,100 per
+                    Of claims arising out of one event: <span
+                        style="font-weight: bold;">K{{deathBodilyInjuryPerEventLiability | number: '1.2-2'}} per event /
+                        K{{deathBodilyInjuryPerPersonLiability | number: '1.2-2'}} per
                         person</span></p>
                 <p><span style="font-weight: bold;">Section II</span> - 1 (b) and 2 (b) (Liability to third Parties –
                     Property Damage) in respect of any claim
                     or series
-                    Of claims arising out of one event: <span style="font-weight: bold;">K30,000</span>
+                    Of claims arising out of one event: <span
+                        style="font-weight: bold;">K{{propertyDamageLiability | number: '1.2-2'}}</span>
                     <span>- arising from loss of use of a motor vehicle which is limited to in respect of any one claim
                         or series of claims arising out of one
                         Event – <span style="font-weight: bold;">NIL</span> per event</span></p>
                 <p>Section I-10 (Medical Expenses) in respect of any one accident/any one person <span
-                        style="font-weight: bold;">K100 / K50</span></p>
+                        style="font-weight: bold;">K{{medicalExpensesPerAccidentLiability | number: '1.2-2'}} /
+                        K{{medicalExpensesPerPersonLiability | number: '1.2-2'}}</span></p>
             </li>
         </ol>
 
-        <p><span style="font-weight: bold;">Unauthorized Repair Limit (Section 1 – 4 (a)): K500</span> any one event</p>
+        <p><span style="font-weight: bold;">Unauthorized Repair Limit (Section 1 – 4 (a)):
+                K{{unauthourizedRepairLiability | number: '1.2-2'}}</span> any one event</p>
         <p><span style="font-weight: bold;">Geographical Area</span>: Zambia and Congo DR Pedicle only</p>
         <p><span style="font-weight: bold;">Legislation</span>: Road Traffic Act of 1997 Cap 464 of Zambia</p>
         <p><span style="font-weight: bold;">Authorized Driver</span>: Any of the following:</p>
@@ -157,11 +162,14 @@
         </ol>
         <p><span style="font-weight: bold;">COMPULSORY Excesses to apply on each and every claim as follows:</span></p>
         <ol type="a">
-            <li>Collision &amp; Fire: 10% minimum: <span style="font-weight: bold;">K500</span></li>
-            <li>Theft of vehicle with anti theft device: 10% minimum: <span style="font-weight: bold;">K500</span></li>
-            <li>Theft of vehicle without anti theft device: 15% minimum: <span style="font-weight: bold;">K500</span>
+            <li>Collision &amp; Fire: 10% minimum: <span style="font-weight: bold;">K{{collisionAndFire}}</span></li>
+            <li>Theft of vehicle with anti theft device: 10% minimum: <span
+                    style="font-weight: bold;">K{{theftOfVehicleWithAntiTheftDevice}}</span></li>
+            <li>Theft of vehicle without anti theft device: 15% minimum: <span
+                    style="font-weight: bold;">K{{theftOfVehicleWithoutAntiTheftDevice}}</span>
             </li>
-            <li>Third Party Property damage: 10% minimum: <span style="font-weight: bold;">K500</span></li>
+            <li>Third Party Property damage: 10% minimum: <span
+                    style="font-weight: bold;">K{{thirdPartyPropertyDamage}}</span></li>
         </ol>
         <p><span style="font-weight: bold;">Limitations as to Use</span>:</p>
         <p>Use only for social domestic and pleasure purposes and for the Insured’s business. The Policy does not cover
