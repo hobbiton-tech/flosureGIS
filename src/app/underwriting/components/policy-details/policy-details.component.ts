@@ -76,6 +76,10 @@ export class PolicyDetailsComponent implements OnInit {
     isSchedulePDFVisible = false;
     isClausesPDFVisible = false;
 
+    isNewCertificatePdfVisible = false;
+    isThirdPartyCertificatePdfVisible = false;
+    isComprehensiveCertificatePdfVisible = false;
+
     // For Modal
     clientName: string;
     clientNumber: string;
@@ -581,6 +585,19 @@ export class PolicyDetailsComponent implements OnInit {
     isCertificateVisible(risk: RiskModel) {
         this.selectedRisk = risk;
         this.isCertificatePDFVisible = true;
+    }
+
+    isNewCertificateVisible(risk: RiskModel) {
+        this.selectedRisk = risk;
+        if (this.selectedRisk.insuranceType == 'Comprehensive') {
+            this.isComprehensiveCertificatePdfVisible = true;
+            this.isThirdPartyCertificatePdfVisible = false;
+        } else {
+            this.isComprehensiveCertificatePdfVisible = false;
+            this.isThirdPartyCertificatePdfVisible = true;
+        }
+
+        // this.isNewCertificatePdfVisible = true;
     }
 
     sumArray(items, prop) {
