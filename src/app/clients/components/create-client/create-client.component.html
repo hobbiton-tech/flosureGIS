@@ -45,7 +45,7 @@
             <div nz-row>
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                        <nz-form-label [nzSpan]="8" nzFor="title" nzRequired
+                        <nz-form-label [nzSpan]="8" nzFor="title"
                             >Title</nz-form-label
                         >
                         <nz-form-control [nzSpan]="14">
@@ -162,17 +162,25 @@
 
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                        <nz-form-label [nzSpan]="8" nzFor="idNumber" nzRequired
+                        <nz-form-label [nzSpan]="8" nzFor="idNumber" nzRequired 
                             >ID Number</nz-form-label
                         >
-                        <nz-form-control [nzSpan]="14">
-                            <input
+                        <nz-form-control [nzSpan]="14" nzHasFeedback  [nzErrorTip]="idNumberErrorTpl">
+                            <input 
                                 nz-input
                                 formControlName="idNumber"
                                 name="idNumber"
                                 id="idNumber"
                                 placeholder="ID Number"
                             />
+                            <ng-template #idNumberErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                  Please input your ID Number!
+                                </ng-container>
+                                <ng-container *ngIf="control.hasError('duplicated')">
+                                  The ID Number is already taken!
+                                </ng-container>
+                              </ng-template>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -181,25 +189,35 @@
             <div nz-row>
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
+                        
                         <nz-form-label
                             [nzSpan]="8"
                             nzFor="dateOfBirth"
                             >Date of Birth</nz-form-label
                         >
                         <nz-form-control [nzSpan]="14">
-                            <nz-date-picker
+                            <input
+                                nz-input
+                                formControlName="dateOfBirth"
+                                type="date"
+                                name="dateOfBirth"
+                                id="dateOfBirth"
+
+                                placeholder="Date of Birth"
+                            />
+                            <!-- <nz-date-picker
                                 formControlName="dateOfBirth"
                                 name="dateOfBirth"
                                 id="dateOfBirth"
                                 placeholder="Date of Birth"
-                            ></nz-date-picker>
+                            ></nz-date-picker> -->
                         </nz-form-control>
                     </nz-form-item>
                 </div>
 
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                        <nz-form-label [nzSpan]="8" nzFor="email" nzRequired
+                        <nz-form-label [nzSpan]="8" nzFor="email"
                             >Email</nz-form-label
                         >
                         <nz-form-control [nzSpan]="14">
@@ -219,7 +237,7 @@
             <div nz-row>
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                        <nz-form-label [nzSpan]="8" nzFor="phone" nzRequired
+                        <nz-form-label [nzSpan]="8" nzFor="phone"
                             >Phone</nz-form-label
                         >
                         <nz-form-control [nzSpan]="14">
@@ -236,7 +254,7 @@
 
                 <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                        <nz-form-label [nzSpan]="8" nzFor="address" nzRequired
+                        <nz-form-label [nzSpan]="8" nzFor="address"
                             >Address</nz-form-label
                         >
                         <nz-form-control [nzSpan]="14">
@@ -510,6 +528,7 @@
                             nz-button
                             nzType="primary"
                             style="margin-right: 8px;"
+                            [disabled]="!individualClientForm.valid"
                             (click)="submitIndividualClient()"
                         >
                             Add Client
@@ -566,7 +585,6 @@
                             <nz-form-label
                                 [nzSpan]="8"
                                 nzFor="taxPin"
-                                nzRequired
                                 >Tpin Number</nz-form-label
                             >
                             <nz-form-control [nzSpan]="15">
@@ -592,7 +610,7 @@
                                 nzRequired
                                 >Registration Number</nz-form-label
                             >
-                            <nz-form-control [nzSpan]="15">
+                            <nz-form-control [nzSpan]="15" nzHasFeedback  [nzErrorTip]="regNumberErrorTpl">
                                 <input
                                     nz-input
                                     formControlName="registrationNumber"
@@ -601,13 +619,21 @@
                                     id="registrationNumber"
                                     placeholder="Registration Number"
                                 />
+                                <ng-template #regNumberErrorTpl let-control>
+                                    <ng-container *ngIf="control.hasError('required')">
+                                      Please input your Registration Number!
+                                    </ng-container>
+                                    <ng-container *ngIf="control.hasError('duplicated')">
+                                      The Registration Number is already taken!
+                                    </ng-container>
+                                  </ng-template>
                             </nz-form-control>
                         </nz-form-item>
                     </div>
 
                     <div nz-col [nzSpan]="12">
                         <nz-form-item>
-                            <nz-form-label [nzSpan]="8" nzFor="email" nzRequired
+                            <nz-form-label [nzSpan]="8" nzFor="email"
                                 >Email</nz-form-label
                             >
                             <nz-form-control [nzSpan]="15">
@@ -627,7 +653,7 @@
                 <div nz-row>
                     <div nz-col [nzSpan]="12">
                         <nz-form-item>
-                            <nz-form-label [nzSpan]="8" nzFor="phone" nzRequired
+                            <nz-form-label [nzSpan]="8" nzFor="phone"
                                 >Phone</nz-form-label
                             >
                             <nz-form-control [nzSpan]="15">
@@ -647,7 +673,6 @@
                             <nz-form-label
                                 [nzSpan]="8"
                                 nzFor="address"
-                                nzRequired
                                 >Address</nz-form-label
                             >
                             <nz-form-control [nzSpan]="15">
@@ -941,6 +966,7 @@
                                 nz-button
                                 nzType="primary"
                                 style="margin-right: 8px;"
+                                [disabled]="!corporateClientForm.valid"
                             >
                                 Add Client
                             </button>

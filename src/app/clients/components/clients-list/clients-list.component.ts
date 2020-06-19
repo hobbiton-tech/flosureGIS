@@ -85,6 +85,14 @@ export class ClientsListComponent implements OnInit {
         );
     }
 
+    capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+      }
+
+      capitalize(s){
+        return s.toLowerCase().replace( /\b./g, function(a){ return a.toUpperCase(); } );
+    };
+
     viewDetails(client: IIndividualClient | ICorporateClient): void {
         this.router.navigateByUrl(
             '/flosure/clients/client-details/' + client.id

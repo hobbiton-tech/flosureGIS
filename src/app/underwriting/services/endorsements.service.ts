@@ -1,6 +1,6 @@
 import {
     AngularFirestore,
-    AngularFirestoreCollection,
+    AngularFirestoreCollection
 } from '@angular/fire/firestore';
 import 'firebase/firestore';
 import { Endorsement } from '../models/endorsement.model';
@@ -14,7 +14,7 @@ import { HttpClient } from '@angular/common/http';
 const BASE_URL = 'https://www.flosure-api.com';
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
 export class EndorsementService {
     private endorsementsCollection: AngularFirestoreCollection<Endorsement>;
@@ -29,7 +29,7 @@ export class EndorsementService {
     }
 
     async addEndorsement(endorsement: Endorsement) {
-        this.endorsements.pipe(first()).subscribe(async (endorsements) => {
+        this.endorsements.pipe(first()).subscribe(async endorsements => {
             endorsement.id = v4();
             this.endorsementsCollection.doc(endorsement.id).set(endorsement);
         });
@@ -88,20 +88,20 @@ export class EndorsementService {
         console.log('endorsement: ');
         console.log(endorsement);
         return this.http.post<Endorsement>(
-            `https://www.flosure-api.comendorsement/${policyId}`,
+            `https://www.flosure-api.com/endorsement/${policyId}`,
 
             endorsement
         );
     }
     getEndorsements(): Observable<Endorsement[]> {
         return this.http.get<Endorsement[]>(
-            'https://www.flosure-api.com/endorsement'
+            ' https://www.flosure-api.com/endorsement'
         );
     }
 
     getEndorsementById(endorsementId: string): Observable<Endorsement> {
         return this.http.get<Endorsement>(
-            `https://www.flosure-api.comendorsement/${endorsementId}`
+            `https://www.flosure-api.com/endorsement/${endorsementId}`
         );
     }
 
@@ -110,7 +110,7 @@ export class EndorsementService {
         endorsementId: string
     ): Observable<Endorsement> {
         return this.http.put<Endorsement>(
-            `https://www.flosure-api.comendorsement/${endorsementId}`,
+            `https://www.flosure-api.com/endorsement/${endorsementId}`,
 
             endorsement
         );

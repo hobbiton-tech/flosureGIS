@@ -208,7 +208,6 @@ export class DirectClientComponent implements OnInit {
                 .addReceipt(
                     receipt,
                     this.policy.risks[0].insuranceType,
-                    this.receiptNewCount
                 )
                 .then((mess) => {
                     this.message.success('Receipt Successfully created');

@@ -66,6 +66,39 @@ export class PolicyScheduleDocumentComponent implements OnInit {
     @Input()
     client: IIndividualClient & ICorporateClient;
 
+    @Input()
+    protectionAndRemovalLiability: number;
+
+    @Input()
+    deathBodilyInjuryPerEventLiability: number;
+
+    @Input()
+    deathBodilyInjuryPerPersonLiability: number;
+
+    @Input()
+    propertyDamageLiability: number;
+
+    @Input()
+    medicalExpensesPerAccidentLiability: number;
+
+    @Input()
+    medicalExpensesPerPersonLiability: number;
+
+    @Input()
+    unauthourizedRepairLiability: number;
+
+    @Input()
+    collisionAndFire: number;
+
+    @Input()
+    theftOfVehicleWithAntiTheftDevice: number;
+    
+    @Input()
+    theftOfVehicleWithoutAntiTheftDevice: number;
+    
+    @Input()
+    thirdPartyPropertyDamage: number;
+
     todayDate: Date;
 
     yearOfManufacture: string;
@@ -76,6 +109,8 @@ export class PolicyScheduleDocumentComponent implements OnInit {
 
     ngOnInit(): void {
         this.todayDate = new Date();
+        console.log('here');
+        console.log(this.protectionAndRemovalLiability);
     }
 
     getYearOfManufacture(risk: RiskModel) {

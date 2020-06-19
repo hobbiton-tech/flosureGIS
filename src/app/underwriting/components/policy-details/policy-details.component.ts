@@ -6,7 +6,7 @@ import { PoliciesService } from '../../services/policies.service';
 import {
     IPaymentModel,
     InstallmentsModel,
-    PlanReceipt,
+    PlanReceipt
 } from 'src/app/accounts/components/models/payment-plans.model';
 import { v4 } from 'uuid';
 import { PaymentPlanService } from 'src/app/accounts/services/payment-plan.service';
@@ -17,19 +17,19 @@ import { ClausesService } from 'src/app/settings/components/underwriting-setups/
 import {
     IPolicyClauses,
     IPolicyWording,
-    IPolicyExtension,
+    IPolicyExtension
 } from 'src/app/settings/models/underwriting/clause.model';
 import { DebitNote } from '../../documents/models/documents.model';
 import { ClientsService } from 'src/app/clients/services/clients.service';
 import {
     IIndividualClient,
-    ICorporateClient,
+    ICorporateClient
 } from 'src/app/clients/models/clients.model';
 
 @Component({
     selector: 'app-policy-details',
     templateUrl: './policy-details.component.html',
-    styleUrls: ['./policy-details.component.scss'],
+    styleUrls: ['./policy-details.component.scss']
 })
 export class PolicyDetailsComponent implements OnInit {
     isVisible = false;
@@ -97,9 +97,24 @@ export class PolicyDetailsComponent implements OnInit {
     totalAmount: string;
     premiumLevy: string;
 
+    //schedule limits of liability
+    protectionAndRemovalLiability: number;
+    deathBodilyInjuryPerEventLiability: number;
+    deathBodilyInjuryPerPersonLiability: number;
+    propertyDamageLiability: number;
+    medicalExpensesPerAccidentLiability: number;
+    medicalExpensesPerPersonLiability: number;
+    unauthourizedRepairLiability: number;
+
+    //schedule excesses
+    collisionAndFire: number;
+    theftOfVehicleWithAntiTheftDevice: number;
+    theftOfVehicleWithoutAntiTheftDevice: number;
+    thirdPartyPropertyDamage: number;
+
     optionList = [
         { label: 'Full Payment', value: 'fully' },
-        { label: 'Payment Plan', value: 'plan' },
+        { label: 'Payment Plan', value: 'plan' }
     ];
     selectedValue = 'fully';
     formattedDate: any;
@@ -122,7 +137,7 @@ export class PolicyDetailsComponent implements OnInit {
         this.paymentPlanForm = this.formBuilder.group({
             numberOfInstallments: ['', Validators.required],
             startDate: ['', Validators.required],
-            initialInstallmentAmount: ['', Validators.required],
+            initialInstallmentAmount: ['', Validators.required]
         });
     }
 
@@ -131,36 +146,32 @@ export class PolicyDetailsComponent implements OnInit {
         setTimeout(() => {
             this.isOkLoading = false;
         }, 3000);
-        this.route.params.subscribe((id) => {
-            this.policiesService.getPolicyById(id.id).subscribe((policy) => {
+        this.route.params.subscribe(id => {
+            this.policiesService.getPolicyById(id.id).subscribe(policy => {
                 console.log('CHECKING ID GET', policy);
                 this.policyData = policy;
 
-                this.productClauseService
-                    .getPolicyClauses()
-                    .subscribe((res) => {
-                        this.clauses = res.filter(
-                            (x) => x.policyId === this.policyData.id
-                        );
-                    });
+                this.productClauseService.getPolicyClauses().subscribe(res => {
+                    this.clauses = res.filter(
+                        x => x.policyId === this.policyData.id
+                    );
+                });
 
                 this.productClauseService
                     .getPolicyExtensions()
-                    .subscribe((res) => {
+                    .subscribe(res => {
                         this.extensions = res.filter(
-                            (x) => x.policyId === this.policyData.id
+                            x => x.policyId === this.policyData.id
                         );
                     });
 
-                this.productClauseService
-                    .getPolicyWordings()
-                    .subscribe((res) => {
-                        this.wordings = res.filter(
-                            (x) => x.policyId === this.policyData.id
-                        );
-                    });
+                this.productClauseService.getPolicyWordings().subscribe(res => {
+                    this.wordings = res.filter(
+                        x => x.policyId === this.policyData.id
+                    );
+                });
 
-                this.policiesService.getDebitNotes().subscribe(debitNotes => {
+                this.policiesService.getDebitNotes().subscribe((debitNotes) => {
                     this.debitNotes = debitNotes;
 
                     console.log('debit notes');
@@ -169,14 +180,14 @@ export class PolicyDetailsComponent implements OnInit {
                     console.log('id: ', this.policyData.id);
 
                     this.singleDebitNote = debitNotes.filter(
-                        x => x.policy.id === this.policyData.id
+                        (x) => x.policy.id === this.policyData.id
                     )[0];
 
                     console.log('Policy Debit Note:');
                     console.log(this.singleDebitNote);
                 });
 
-                this.clientsService.getAllClients().subscribe(clients => {
+                this.clientsService.getAllClients().subscribe((clients) => {
                     this.clientsList = [...clients[0], ...clients[1]] as Array<
                         ICorporateClient & IIndividualClient
                     >;
@@ -184,7 +195,7 @@ export class PolicyDetailsComponent implements OnInit {
                     console.log('clients: ');
                     console.log(clients);
 
-                    this.client = this.clientsList.filter(x =>
+                    this.client = this.clientsList.filter((x) =>
                         x.companyName
                             ? x.companyName === this.policyData.client
                             : x.firstName + ' ' + x.lastName ===
@@ -194,7 +205,7 @@ export class PolicyDetailsComponent implements OnInit {
                     console.log('HERE =>>>>>');
                     console.log(
                         this.clientsList.filter(
-                            x =>
+                            (x) =>
                                 x.firstName + ' ' + x.lastName === 'Changa Lesa'
                         )[0] as IIndividualClient & ICorporateClient
                     );
@@ -210,11 +221,53 @@ export class PolicyDetailsComponent implements OnInit {
 
                 this.policyRisk = policy.risks[0];
 
+                //limits Of Liability
+                this.protectionAndRemovalLiability = policy.risks[0].limitsOfLiability.filter(
+                    x => x.liabilityType === 'protectionAndRemoval'
+                )[0].amount;
+                this.deathBodilyInjuryPerEventLiability = policy.risks[0].limitsOfLiability.filter(
+                    x => x.liabilityType === 'deathBodilyInjuryPerEvent'
+                )[0].amount;
+                this.deathBodilyInjuryPerPersonLiability = policy.risks[0].limitsOfLiability.filter(
+                    x => x.liabilityType === 'deathBodilyInjuryPerPerson'
+                )[0].amount;
+                this.propertyDamageLiability = policy.risks[0].limitsOfLiability.filter(
+                    x => x.liabilityType === 'propertyDamage'
+                )[0].amount;
+                this.medicalExpensesPerAccidentLiability = policy.risks[0].limitsOfLiability.filter(
+                    x => x.liabilityType === 'medicalExpensesPerAccident'
+                )[0].amount;
+                this.medicalExpensesPerPersonLiability = policy.risks[0].limitsOfLiability.filter(
+                    x => x.liabilityType === 'medicalExpensesPerPerson'
+                )[0].amount;
+                this.unauthourizedRepairLiability = policy.risks[0].limitsOfLiability.filter(
+                    x => x.liabilityType === 'unauthourizedRepair'
+                )[0].amount;
+
+                //excesses
+                this.collisionAndFire = policy.risks[0].excesses.filter(
+                    x => x.excessType === 'collisionAndFire'
+                )[0].amount;
+                this.theftOfVehicleWithAntiTheftDevice = policy.risks[0].excesses.filter(
+                    x => x.excessType === 'theftOfVehicleWithAntiTheftDevice'
+                )[0].amount;
+                this.theftOfVehicleWithoutAntiTheftDevice = policy.risks[0].excesses.filter(
+                    x => x.excessType === 'theftOfVehicleWithoutAntiTheftDevice'
+                )[0].amount;
+                this.thirdPartyPropertyDamage = policy.risks[0].excesses.filter(
+                    x => x.excessType === 'thirdPartyPropertyDamage'
+                )[0].amount;
+
+                const doo = new Date(policy.endDate);
+                const nd = new Date(
+                    doo.getTime() - doo.getTimezoneOffset() * -60000
+                );
+
                 this.clientName = policy.client;
                 this.clientNumber = '+260976748392';
                 this.clientEmail = policy.client + '@gmail.com'; // TODO: Track client data
                 this.agency = 'Direct'; // TODO: Track this guy too
-                this.coverForm = policy.startDate.toString();
+                this.coverForm = nd.toString();
                 this.coverTo = policy.endDate.toString();
                 // this.basicPremium = this.policy
                 this.loadingAmount = '-';
@@ -231,6 +284,10 @@ export class PolicyDetailsComponent implements OnInit {
                     'basicPremium'
                 ).toString();
 
+                const doo = new Date(this.policyData.endDate);
+                const nd = new Date(
+                    doo.getTime() - doo.getTimezoneOffset() * -60000
+                );
                 // set values of fields
                 this.policyDetailsForm
                     .get('client')
@@ -241,9 +298,7 @@ export class PolicyDetailsComponent implements OnInit {
                 this.policyDetailsForm
                     .get('startDate')
                     .setValue(this.policyData.startDate);
-                this.policyDetailsForm
-                    .get('endDate')
-                    .setValue(this.policyData.endDate);
+                this.policyDetailsForm.get('endDate').setValue(nd);
                 this.policyDetailsForm
                     .get('sumInsured')
                     .setValue(this.policyData.sumInsured);
@@ -259,9 +314,7 @@ export class PolicyDetailsComponent implements OnInit {
                 this.policyDetailsForm
                     .get('dateOfIssue')
                     .setValue(this.policyData.dateOfIssue);
-                this.policyDetailsForm
-                    .get('expiryDate')
-                    .setValue(this.policyData.endDate);
+                this.policyDetailsForm.get('expiryDate').setValue(nd);
                 this.policyDetailsForm
                     .get('quarter')
                     .setValue(this.policyData.quarter);
@@ -270,41 +323,40 @@ export class PolicyDetailsComponent implements OnInit {
             });
         });
 
+        //         this.policiesService.getDebitNotes().subscribe((debitNotes) => {
+        //             this.debitNotes = debitNotes;
 
-//         this.policiesService.getDebitNotes().subscribe((debitNotes) => {
-//             this.debitNotes = debitNotes;
+        //             console.log('debit notes');
+        //             console.log(this.debitNotes);
+        //         });
 
-//             console.log('debit notes');
-//             console.log(this.debitNotes);
-//         });
+        //         this.clientsService.getAllClients().subscribe((clients) => {
+        //             this.clientsList = [...clients[0], ...clients[1]] as Array<
+        //                 ICorporateClient & IIndividualClient
+        //             >;
 
-//         this.clientsService.getAllClients().subscribe((clients) => {
-//             this.clientsList = [...clients[0], ...clients[1]] as Array<
-//                 ICorporateClient & IIndividualClient
-//             >;
+        //             console.log('clients: ');
+        //             console.log(clients);
 
-//             console.log('clients: ');
-//             console.log(clients);
+        //             this.client = this.clientsList.filter((x) =>
+        //                 x.companyName
+        //                     ? x.companyName === this.policyData.client
+        //                     : x.firstName + ' ' + x.lastName === this.policyData.client
+        //             )[0] as IIndividualClient & ICorporateClient;
 
-//             this.client = this.clientsList.filter((x) =>
-//                 x.companyName
-//                     ? x.companyName === this.policyData.client
-//                     : x.firstName + ' ' + x.lastName === this.policyData.client
-//             )[0] as IIndividualClient & ICorporateClient;
+        //             console.log('HERE =>>>>>');
+        //             console.log(
+        //                 this.clientsList.filter(
+        //                     (x) => x.firstName + ' ' + x.lastName === 'Changa Lesa'
+        //                 )[0] as IIndividualClient & ICorporateClient
+        //             );
 
-//             console.log('HERE =>>>>>');
-//             console.log(
-//                 this.clientsList.filter(
-//                     (x) => x.firstName + ' ' + x.lastName === 'Changa Lesa'
-//                 )[0] as IIndividualClient & ICorporateClient
-//             );
+        //             // console.log('policy data client:');
+        //             // console.log(this.policyData.client);
 
-//             // console.log('policy data client:');
-//             // console.log(this.policyData.client);
-
-//             // console.log('client');
-//             // console.log(this.client);
-//         });
+        //             // console.log('client');
+        //             // console.log(this.client);
+        //         });
 
         this.policyDetailsForm = this.formBuilder.group({
             client: ['', Validators.required],
@@ -320,7 +372,7 @@ export class PolicyDetailsComponent implements OnInit {
             dateOfIssue: ['', Validators.required],
             expiryDate: ['', Validators.required],
             quarter: ['', Validators.required],
-            town: ['', Validators.required],
+            town: ['', Validators.required]
         });
 
         // set values of fields
@@ -391,7 +443,7 @@ export class PolicyDetailsComponent implements OnInit {
             let policyCount = 0;
             const policyPlan: Policy[] = [];
             policyPlan.push({
-                ...policyData,
+                ...policyData
             });
 
             pAmount = pAmount + policyData.netPremium;
@@ -404,7 +456,7 @@ export class PolicyDetailsComponent implements OnInit {
             console.log(this.policyUpdate);
             this.policiesService
                 .updatePolicy(this.policyUpdate)
-                .subscribe((res) => {
+                .subscribe(res => {
                     console.log('policy update>>>>', this.policyUpdate);
                 });
 
@@ -438,7 +490,7 @@ export class PolicyDetailsComponent implements OnInit {
                     installmentAmount: iAmount,
                     installmentDate: this.formattedDate,
                     balance: iAmount,
-                    installmentStatus: 'UnPaid',
+                    installmentStatus: 'UnPaid'
                 });
             }
 
@@ -465,7 +517,7 @@ export class PolicyDetailsComponent implements OnInit {
                 amountOutstanding: dAmount,
                 installments: installment,
                 startDate: pDate,
-                endDate: this.formattedeDate,
+                endDate: this.formattedeDate
             };
 
             console.log('..........Payment Plan..........');
@@ -486,7 +538,7 @@ export class PolicyDetailsComponent implements OnInit {
                 receiptType: 'Premium Payment',
                 sumInDigits: this.paymentPlanForm.controls
                     .initialInstallmentAmount.value,
-                todayDate: new Date(),
+                todayDate: new Date()
             };
 
             const planReceipt: PlanReceipt[] = [];
@@ -496,7 +548,7 @@ export class PolicyDetailsComponent implements OnInit {
                 allocationStatus: 'Unallocated',
                 sumInDigits: this.paymentPlanForm.controls
                     .initialInstallmentAmount.value,
-                policyNumber: '',
+                policyNumber: ''
             });
 
             plan.planReceipt = planReceipt;
@@ -517,7 +569,7 @@ export class PolicyDetailsComponent implements OnInit {
             console.log(this.policyUpdate);
             this.policiesService
                 .updatePolicy(this.policyUpdate)
-                .subscribe((res) => {
+                .subscribe(res => {
                     console.log('policy update>>>>', this.policyUpdate);
                 });
             this.router.navigateByUrl('/flosure/accounts/receipts');
@@ -549,7 +601,7 @@ export class PolicyDetailsComponent implements OnInit {
     }
 
     sumArray(items, prop) {
-        return items.reduce(function (a, b) {
+        return items.reduce(function(a, b) {
             return a + b[prop];
         }, 0);
     }
