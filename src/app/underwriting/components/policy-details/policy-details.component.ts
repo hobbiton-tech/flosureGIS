@@ -280,10 +280,10 @@ export class PolicyDetailsComponent implements OnInit {
                     'basicPremium'
                 ).toString();
 
-                const doo = new Date(this.policyData.endDate);
-                const nd = new Date(
-                    doo.getTime() - doo.getTimezoneOffset() * -60000
-                );
+                // const doo = new Date(this.policyData.endDate);
+                // const nd = new Date(
+                //     doo.getTime() - doo.getTimezoneOffset() * -60000
+                // );
                 // set values of fields
                 this.policyDetailsForm
                     .get('client')
