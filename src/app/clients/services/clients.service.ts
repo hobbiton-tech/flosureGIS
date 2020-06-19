@@ -178,6 +178,7 @@ export class ClientsService {
         return this.http.get<IClientDTO[]>(`${BASE_URL}/clients`);
     }
 
+
     addCorporateClient(client: ICorporateClient): Observable<ICorporateClient> {
         this.http
             .get<any>(

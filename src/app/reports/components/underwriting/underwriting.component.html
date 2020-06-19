@@ -129,7 +129,7 @@
                 <div style="margin-bottom: 20px;">
                     <nz-row style="margin-bottom: 20px;" [nzGutter]="20">
                         <div nz-col [nzSpan]="14">
-                            <form nz-form [formGroup]="dateForm">
+                            <form nz-form [formGroup]="filterForm">
                                 <nz-row>
                                     <div nz-col [nzSpan]="10">
                                         <nz-form-item>
@@ -181,7 +181,9 @@
                                                     nz-button
                                                     nzType="success"
                                                     (click)="
-                                                        _getFilterReportList()
+                                                        _getFilterReportList(
+                                                            filterForm.value
+                                                        )
                                                     "
                                                 >
                                                     Submit
@@ -205,7 +207,7 @@
                         <div nz-col [nzSpan]="3" style="float: right;">
                             <button
                                 nz-button
-                                (click)="downloadQuotationReportListPdf()"
+                                (click)="downloadPDF('Table', 'Quotation Listing Report')"
                                 nzType="danger"
                             >
                                 Export PDF
@@ -219,7 +221,7 @@
                                 <input
                                     type="text"
                                     nz-input
-                                    placeholder="Search by client, First Name, Last Name"
+                                    placeholder="Search by branch"
                                     [(ngModel)]="searchString"
                                     (ngModelChange)="search($event)"
                                 />
@@ -257,67 +259,73 @@
                         </div>
                     </nz-row>
 
-                    <div id="content" #content>
-                        <nz-table id="Table" #reportsTable>
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Quotation Number</th>
-                                    <th>Client</th>
-                                    <th>Transaction Date</th>
-                                    <th>Underwriter</th>
-                                    <th>Intermediary</th>
-                                    <th>Branch</th>
-                                    <th>Source of Business</th>
-                                    <th>Product</th>
-                                    <th>Sum Insured</th>
-                                    <th>Premium</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
+                    <nz-table
+                        id="Table"
+                        #reportsTable
+                        [nzData]="displayedMotor"
+                        [nzSize]="'small'"
+                        [nzBordered]="true"
+                        style="background-color: white;"
+                    >
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Quotation Number</th>
+                                <th>Client</th>
+                                <th>Transaction Date</th>
+                                <th>Underwriter</th>
+                                <th>Intermediary</th>
+                                <th>Branch</th>
+                                <th>Source of Business</th>
+                                <th>Product</th>
+                                <th>Sum Insured</th>
+                                <th>Premium</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
 
-                            <tbody>
-                                <tr *ngFor="let report of motor; let i = index">
-                                    <td>{{ i + 1 }}</td>
-                                    <td>{{ report.quoteNumber }}</td>
-                                    <td>{{ report.client }}</td>
-                                    <td>{{ report.dateCreated | date }}</td>
-                                    <td>{{ report.user }}</td>
-                                    <td>
-                                        {{
-                                            report.intermediaryName
-                                                ? report.intermediaryName
-                                                : 'direct'
-                                        }}
-                                    </td>
-                                    <td>{{ report.branch }}</td>
-                                    <td>{{ report.sourceOfBusiness }}</td>
-                                    <td>{{ 'Motor' }}</td>
-                                    <td>
-                                        {{
-                                            report.sumInsured | number: '1.2-2'
-                                        }}
-                                    </td>
-                                    <td>
-                                        {{
-                                            report.grossPremium
-                                                | number: '1.2-2'
-                                        }}
-                                    </td>
-                                    <td>
-                                        <nz-badge
-                                            [nzStatus]="
-                                                report.status === 'Draft'
-                                                    ? 'warning'
-                                                    : 'success'
-                                            "
-                                            [nzText]="report.status"
-                                        ></nz-badge>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </nz-table>
-                    </div>
+                        <tbody>
+                            <tr
+                                *ngFor="
+                                    let report of reportsTable.data;
+                                    let i = index
+                                "
+                            >
+                                <td>{{ i + 1 }}</td>
+                                <td>{{ report.quoteNumber }}</td>
+                                <td>{{ report.client }}</td>
+                                <td>{{ report.dateCreated | date }}</td>
+                                <td>{{ report.user }}</td>
+                                <td>
+                                    {{
+                                        report.intermediaryName
+                                            ? report.intermediaryName
+                                            : 'direct'
+                                    }}
+                                </td>
+                                <td>{{ report.branch }}</td>
+                                <td>{{ report.sourceOfBusiness }}</td>
+                                <td>{{ 'Motor' }}</td>
+                                <td>
+                                    {{ report.sumInsured | number: '1.2-2' }}
+                                </td>
+                                <td>
+                                    {{ report.grossPremium | number: '1.2-2' }}
+                                </td>
+                                <td>
+                                    <nz-badge
+                                        [nzStatus]="
+                                            report.status === 'Draft'
+                                                ? 'warning'
+                                                : 'success'
+                                        "
+                                        [nzText]="report.status"
+                                    ></nz-badge>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+
                 </div>
             </nz-card>
         </div>
@@ -386,6 +394,11 @@
                                                 <button
                                                     nz-button
                                                     nzType="success"
+                                                    (click)="
+                                                        _getFilterReportList(
+                                                            filterForm.value
+                                                        )
+                                                    "
                                                 >
                                                     Submit
                                                 </button>
@@ -408,7 +421,7 @@
                         <div nz-col [nzSpan]="3" style="float: right;">
                             <button
                                 nz-button
-                                (click)="downloadQuotationReportListPdf()"
+                                (click)="downloadPDF('Table', 'Intermediary Quotation Listing Report')"
                                 nzType="danger"
                             >
                                 Export PDF
@@ -422,6 +435,8 @@
                                     type="text"
                                     nz-input
                                     placeholder="Search by branch"
+                                    [(ngModel)]="searchString"
+                                    (ngModelChange)="search($event)"
                                 />
                             </nz-input-group>
                             <ng-template #suffixIconSearch>
@@ -436,28 +451,35 @@
                                     nzAllowClear
                                     nzPlaceHolder="Select Intermediary type."
                                 >
-                                    <!-- <nz-option
-                                    nzLabel="All"
-                                    nzValue="All"
-                                ></nz-option>
-                                <nz-option
-                                    nzLabel="Sales Representative"
-                                    nzValue="Sales Representative"
-                                ></nz-option>
-                                <nz-option
-                                    nzLabel="Agent"
-                                    nzValue="Agent"
-                                ></nz-option>
-                                <nz-option
-                                    nzLabel="Broker"
-                                    nzValue="Broker"
-                                ></nz-option> -->
+                                    <nz-option
+                                        nzLabel="All"
+                                        nzValue="All"
+                                    ></nz-option>
+                                    <nz-option
+                                        nzLabel="Sales Representative"
+                                        nzValue="Sales Representative"
+                                    ></nz-option>
+                                    <nz-option
+                                        nzLabel="Agent"
+                                        nzValue="Agent"
+                                    ></nz-option>
+                                    <nz-option
+                                        nzLabel="Broker"
+                                        nzValue="Broker"
+                                    ></nz-option>
                                 </nz-select>
                             </nz-input-group>
                         </div>
                     </nz-row>
-                    <div id="content" #content>
-                        <nz-table id="Table" #reportsTable>
+
+                        <nz-table
+                            id="Table"
+                            #intermediaryTable
+                            [nzData]="displayedFilterMotor"
+                            [nzSize]="'small'"
+                            [nzBordered]="true"
+                            style="background-color: white;"
+                        >
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -478,7 +500,7 @@
                             <tbody>
                                 <tr
                                     *ngFor="
-                                        let report of filterMotor;
+                                        let report of intermediaryTable.data;
                                         let i = index
                                     "
                                 >
@@ -516,7 +538,7 @@
                             </tbody>
                         </nz-table>
                     </div>
-                </div>
+
             </nz-card>
         </div>
     </nz-modal>
@@ -584,6 +606,11 @@
                                                 <button
                                                     nz-button
                                                     nzType="success"
+                                                    (click)="
+                                                        _getFilterReportList(
+                                                            filterForm.value
+                                                        )
+                                                    "
                                                 >
                                                     Submit
                                                 </button>
@@ -595,14 +622,14 @@
                         </div>
 
                         <div nz-col [nzSpan]="3" style="float: right;">
-                            <button nz-button nzType="primary">
+                            <button nz-button nzType="primary" (click)="downloadQuotationReportListExcel()">
                                 Export Excel
                             </button>
                         </div>
                         <div nz-col [nzSpan]="3" style="float: right;">
                             <button
                                 nz-button
-                                (click)="downloadAnalysisListPdf()"
+                                (click)="downloadPDF('Table', 'Quotation Analysis Report')"
                                 nzType="danger"
                             >
                                 Export PDF
@@ -616,6 +643,8 @@
                                     type="text"
                                     nz-input
                                     placeholder="Search by client, First Name, Last Name"
+                                    [(ngModel)]="searchString"
+                                    (ngModelChange)="search($event)"
                                 />
                             </nz-input-group>
                             <ng-template #suffixIconSearch>
@@ -630,22 +659,22 @@
                                     nzAllowClear
                                     nzPlaceHolder="Select client type."
                                 >
-                                    <!-- <nz-option
-                                    nzLabel="All"
-                                    nzValue="All"
-                                ></nz-option>
-                                <nz-option
-                                    nzLabel="Sales Representative"
-                                    nzValue="Sales Representative"
-                                ></nz-option>
-                                <nz-option
-                                    nzLabel="Agent"
-                                    nzValue="Agent"
-                                ></nz-option>
-                                <nz-option
-                                    nzLabel="Broker"
-                                    nzValue="Broker"
-                                ></nz-option>-->
+                                    <nz-option
+                                        nzLabel="All"
+                                        nzValue="All"
+                                    ></nz-option>
+                                    <nz-option
+                                        nzLabel="Sales Representative"
+                                        nzValue="Sales Representative"
+                                    ></nz-option>
+                                    <nz-option
+                                        nzLabel="Agent"
+                                        nzValue="Agent"
+                                    ></nz-option>
+                                    <nz-option
+                                        nzLabel="Broker"
+                                        nzValue="Broker"
+                                    ></nz-option>
                                 </nz-select>
                             </nz-input-group>
                         </div>
@@ -654,7 +683,7 @@
                     <nz-table
                         id="Table"
                         #analysisTable
-                        [nzData]="formatIntermediaryReport"
+                        [nzData]=""
                         [nzSize]="'small'"
                         [nzBordered]="true"
                         style="background-color: white;"
@@ -670,13 +699,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr
-                                *ngFor="
-                                    let intermediary of formatIntermediaryReport;
-                                    let i = index
-                                "
-                            >
-                                <td>{{ i + 1 }}</td>
+                            <tr *ngFor="">
+                                <!-- <td>{{ i + 1 }}</td>
                                 <td>{{ 'Branch' }}</td>
                                 <td>{{ intermediary.getFullName }}</td>
                                 <td>
@@ -685,7 +709,7 @@
                                 <td>
                                     {{ intermediary.getPolicyCount }}
                                 </td>
-                                <td>{{ intermediary.getRatio }}</td>
+                                <td>{{ intermediary.getRatio }}</td> -->
                             </tr>
                         </tbody>
                     </nz-table>
@@ -699,7 +723,7 @@
         [(nzVisible)]="isRenewalReportVisible"
         nzTitle="Renewal Report"
         (nzOnCancel)="handleCancel()"
-        [nzWidth]="1200"
+        [nzWidth]="1000"
         (nzOnOk)="handleOk()"
     >
         <div style="margin: 20px;">
@@ -758,6 +782,11 @@
                                                 <button
                                                     nz-button
                                                     nzType="success"
+                                                    (click)="
+                                                        _getFilterReportList(
+                                                            filterForm.value
+                                                        )
+                                                    "
                                                 >
                                                     Submit
                                                 </button>
@@ -769,14 +798,14 @@
                         </div>
 
                         <div nz-col [nzSpan]="3" style="float: right;">
-                            <button nz-button nzType="primary">
+                            <button nz-button nzType="primary" (click)="downloadQuotationReportListExcel()">
                                 Export Excel
                             </button>
                         </div>
                         <div nz-col [nzSpan]="3" style="float: right;">
                             <button
                                 nz-button
-                                (click)="downloadRenewalListPdf()"
+                                (click)="downloadPDF('Table', 'Renewal Report')"
                                 nzType="danger"
                             >
                                 Export PDF
@@ -790,6 +819,8 @@
                                     type="text"
                                     nz-input
                                     placeholder="Search by client, First Name, Last Name"
+                                    [(ngModel)]="searchString"
+                                    (ngModelChange)="search($event)"
                                 />
                             </nz-input-group>
                             <ng-template #suffixIconSearch>
@@ -804,22 +835,22 @@
                                     nzAllowClear
                                     nzPlaceHolder="Select client type."
                                 >
-                                    <!-- <nz-option
-                                nzLabel="All"
-                                nzValue="All"
-                            ></nz-option>
-                            <nz-option
-                                nzLabel="Sales Representative"
-                                nzValue="Sales Representative"
-                            ></nz-option>
-                            <nz-option
-                                nzLabel="Agent"
-                                nzValue="Agent"
-                            ></nz-option>
-                            <nz-option
-                                nzLabel="Broker"
-                                nzValue="Broker"
-                            ></nz-option>-->
+                                    <nz-option
+                                        nzLabel="All"
+                                        nzValue="All"
+                                    ></nz-option>
+                                    <nz-option
+                                        nzLabel="Sales Representative"
+                                        nzValue="Sales Representative"
+                                    ></nz-option>
+                                    <nz-option
+                                        nzLabel="Agent"
+                                        nzValue="Agent"
+                                    ></nz-option>
+                                    <nz-option
+                                        nzLabel="Broker"
+                                        nzValue="Broker"
+                                    ></nz-option>
                                 </nz-select>
                             </nz-input-group>
                         </div>
@@ -827,8 +858,8 @@
 
                     <nz-table
                         id="Table"
-                        #analysisTable
-                        [nzData]="formatIntermediaryReport"
+                        #renewalTable
+                        [nzData]="displayPremiumReport"
                         [nzSize]="'small'"
                         [nzBordered]="true"
                         style="background-color: white;"
@@ -847,7 +878,7 @@
                         <tbody>
                             <tr
                                 *ngFor="
-                                    let renewal of filterPremiumList;
+                                    let renewal of renewalTable.data;
                                     let i = index
                                 "
                                 style="cursor: pointer;"
@@ -882,7 +913,7 @@
         [(nzVisible)]="isPremiumWorkingReportVisible"
         nzTitle="Premium Working Report "
         (nzOnCancel)="handleCancel()"
-        [nzWidth]="1200"
+        [nzWidth]="1000"
         (nzOnOk)="handleOk()"
     >
         <div style="margin: 20px;">
@@ -941,6 +972,11 @@
                                                 <button
                                                     nz-button
                                                     nzType="success"
+                                                    (click)="
+                                                        _getFilterReportList(
+                                                            filterForm.value
+                                                        )
+                                                    "
                                                 >
                                                     Submit
                                                 </button>
@@ -952,14 +988,14 @@
                         </div>
 
                         <div nz-col [nzSpan]="3" style="float: right;">
-                            <button nz-button nzType="primary">
+                            <button nz-button nzType="primary" (click)="downloadQuotationReportListExcel()">
                                 Export Excel
                             </button>
                         </div>
                         <div nz-col [nzSpan]="3" style="float: right;">
                             <button
                                 nz-button
-                                (click)="downloadPremiumWorkingPdf()"
+                                (click)="downloadPDF('Table', 'Premium Working Report')"
                                 nzType="danger"
                             >
                                 Export PDF
@@ -973,6 +1009,8 @@
                                     type="text"
                                     nz-input
                                     placeholder="Search by client, First Name, Last Name"
+                                    [(ngModel)]="searchString"
+                                    (ngModelChange)="search($event)"
                                 />
                             </nz-input-group>
                             <ng-template #suffixIconSearch>
@@ -987,22 +1025,22 @@
                                     nzAllowClear
                                     nzPlaceHolder="Select client type."
                                 >
-                                    <!-- <nz-option
-                        nzLabel="All"
-                        nzValue="All"
-                    ></nz-option>
-                    <nz-option
-                        nzLabel="Sales Representative"
-                        nzValue="Sales Representative"
-                    ></nz-option>
-                    <nz-option
-                        nzLabel="Agent"
-                        nzValue="Agent"
-                    ></nz-option>
-                    <nz-option
-                        nzLabel="Broker"
-                        nzValue="Broker"
-                    ></nz-option>-->
+                                    <nz-option
+                                        nzLabel="All"
+                                        nzValue="All"
+                                    ></nz-option>
+                                    <nz-option
+                                        nzLabel="Sales Representative"
+                                        nzValue="Sales Representative"
+                                    ></nz-option>
+                                    <nz-option
+                                        nzLabel="Agent"
+                                        nzValue="Agent"
+                                    ></nz-option>
+                                    <nz-option
+                                        nzLabel="Broker"
+                                        nzValue="Broker"
+                                    ></nz-option>
                                 </nz-select>
                             </nz-input-group>
                         </div>
@@ -1010,7 +1048,7 @@
 
                     <nz-table
                         id="Table"
-                        #analysisTable
+                        #premiumWorkingTable
                         [nzData]="displayPremiumReport"
                         [nzSize]="'small'"
                         [nzBordered]="true"
@@ -1032,7 +1070,7 @@
                         <tbody>
                             <tr
                                 *ngFor="
-                                    let production of filterPremiumList;
+                                    let production of premiumWorkingTable.data;
                                     let i = index
                                 "
                                 style="cursor: pointer;"
@@ -1041,6 +1079,7 @@
 
                                 <td>{{ production.policyNumber }}</td>
                                 <td>{{ production.debitNoteNumber }}</td>
+                                <td>{{ production.grossPremium }}</td>
                                 <td>
                                     {{ production.discount | number: '1.2-2' }}
                                 </td>
@@ -1055,7 +1094,7 @@
                                 <td>{{ production.levy | number: '1.2-2' }}</td>
                                 <td>
                                     {{
-                                        production.premiumDue | number: '1.2-2'
+                                        production.sumInsured | number: '1.2-2'
                                     }}
                                 </td>
                             </tr>
@@ -1071,7 +1110,7 @@
         [(nzVisible)]="isDebitNoteReportVisible"
         nzTitle="Debit Note Report"
         (nzOnCancel)="handleCancel()"
-        [nzWidth]="1700"
+        [nzWidth]="1000"
         (nzOnOk)="handleOk()"
     >
         <div style="margin: 20px;">
@@ -1130,6 +1169,11 @@
                                                 <button
                                                     nz-button
                                                     nzType="success"
+                                                    (click)="
+                                                        _getFilterReportList(
+                                                            filterForm.value
+                                                        )
+                                                    "
                                                 >
                                                     Submit
                                                 </button>
@@ -1141,14 +1185,14 @@
                         </div>
 
                         <div nz-col [nzSpan]="3" style="float: right;">
-                            <button nz-button nzType="primary">
+                            <button nz-button nzType="primary" (click)="downloadQuotationReportListExcel()">
                                 Export Excel
                             </button>
                         </div>
                         <div nz-col [nzSpan]="3" style="float: right;">
                             <button
                                 nz-button
-                                (click)="downloadDebitNoteReportPdf()"
+                                (click)="downloadPDF('Table', 'Debit Note Report')"
                                 nzType="danger"
                             >
                                 Export PDF
@@ -1162,6 +1206,8 @@
                                     type="text"
                                     nz-input
                                     placeholder="Search by client, First Name, Last Name"
+                                    [(ngModel)]="searchString"
+                                    (ngModelChange)="search($event)"
                                 />
                             </nz-input-group>
                             <ng-template #suffixIconSearch>
@@ -1176,22 +1222,22 @@
                                     nzAllowClear
                                     nzPlaceHolder="Select client type."
                                 >
-                                    <!-- <nz-option
-                            nzLabel="All"
-                            nzValue="All"
-                        ></nz-option>
-                        <nz-option
-                            nzLabel="Sales Representative"
-                            nzValue="Sales Representative"
-                        ></nz-option>
-                        <nz-option
-                            nzLabel="Agent"
-                            nzValue="Agent"
-                        ></nz-option>
-                        <nz-option
-                            nzLabel="Broker"
-                            nzValue="Broker"
-                        ></nz-option>-->
+                                    <nz-option
+                                        nzLabel="All"
+                                        nzValue="All"
+                                    ></nz-option>
+                                    <nz-option
+                                        nzLabel="Sales Representative"
+                                        nzValue="Sales Representative"
+                                    ></nz-option>
+                                    <nz-option
+                                        nzLabel="Agent"
+                                        nzValue="Agent"
+                                    ></nz-option>
+                                    <nz-option
+                                        nzLabel="Broker"
+                                        nzValue="Broker"
+                                    ></nz-option>
                                 </nz-select>
                             </nz-input-group>
                         </div>
@@ -1199,9 +1245,11 @@
 
                     <nz-table
                         id="Table"
-                        #analysisTable
-                        [nzData]="filterPremiumList"
+                        #debitNoteReportTable
+                        [nzData]="displayPremiumReport"
                         [nzSize]="'small'"
+                        [nzPageSize] = 50
+                        [nzScroll]="{x:1000,y:500}"
                         style="background-color: white;"
                     >
                         <thead>
@@ -1227,7 +1275,7 @@
                         <tbody>
                             <tr
                                 *ngFor="
-                                    let production of filterPremiumList;
+                                    let production of debitNoteReportTable.data;
                                     let i = index
                                 "
                                 style="cursor: pointer;"
@@ -1237,7 +1285,11 @@
                                 <td>{{ production.policyNumber }}</td>
                                 <td>{{ production.client }}</td>
                                 <td>
-                                    {{ production.intermediaryName }}
+                                    {{
+                                        production.intermediaryName
+                                            ? production.intermediaryName
+                                            : 'direct'
+                                    }}
                                 </td>
                                 <td>
                                     {{ production.startDate | date }}
@@ -1247,7 +1299,7 @@
                                 <td>
                                     {{ production.sourceOfBusiness }}
                                 </td>
-                                <td>{{ production.risks[0].insuranceType }}</td>
+                                <td>{{ '' }}</td>
                                 <td>
                                     {{
                                         production.sumInsured | number: '1.2-2'
@@ -1266,7 +1318,7 @@
                                     }}
                                 </td>
                                 <td>{{ production.currency }}</td>
-                                <td>{{ 'New Business' }}</td>
+                                <td>{{ '' }}</td>
                             </tr>
                         </tbody>
                     </nz-table>
@@ -1280,7 +1332,7 @@
         [(nzVisible)]="isProductionReportVisible"
         nzTitle="Production Report"
         (nzOnCancel)="handleCancel()"
-        [nzWidth]="1500"
+        [nzWidth]="1000"
         (nzOnOk)="handleOk()"
     >
         <div style="margin: 20px;">
@@ -1339,6 +1391,11 @@
                                                 <button
                                                     nz-button
                                                     nzType="success"
+                                                    (click)="
+                                                        _getFilterReportList(
+                                                            filterForm.value
+                                                        )
+                                                    "
                                                 >
                                                     Submit
                                                 </button>
@@ -1350,14 +1407,14 @@
                         </div>
 
                         <div nz-col [nzSpan]="3" style="float: right;">
-                            <button nz-button nzType="primary">
+                            <button nz-button nzType="primary" (click)="downloadQuotationReportListExcel()">
                                 Export Excel
                             </button>
                         </div>
                         <div nz-col [nzSpan]="3" style="float: right;">
                             <button
                                 nz-button
-                                (click)="downloadProductionListPdf()"
+                                (click)="downloadPDF('Table', 'Intermediary Quotation Listing Report')"
                                 nzType="danger"
                             >
                                 Export PDF
@@ -1371,6 +1428,8 @@
                                     type="text"
                                     nz-input
                                     placeholder="Search by client, First Name, Last Name"
+                                    [(ngModel)]="searchString"
+                                    (ngModelChange)="search($event)"
                                 />
                             </nz-input-group>
                             <ng-template #suffixIconSearch>
@@ -1385,22 +1444,22 @@
                                     nzAllowClear
                                     nzPlaceHolder="Select client type."
                                 >
-                                    <!-- <nz-option
-                                nzLabel="All"
-                                nzValue="All"
-                            ></nz-option>
-                            <nz-option
-                                nzLabel="Sales Representative"
-                                nzValue="Sales Representative"
-                            ></nz-option>
-                            <nz-option
-                                nzLabel="Agent"
-                                nzValue="Agent"
-                            ></nz-option>
-                            <nz-option
-                                nzLabel="Broker"
-                                nzValue="Broker"
-                            ></nz-option>-->
+                                    <nz-option
+                                        nzLabel="All"
+                                        nzValue="All"
+                                    ></nz-option>
+                                    <nz-option
+                                        nzLabel="Sales Representative"
+                                        nzValue="Sales Representative"
+                                    ></nz-option>
+                                    <nz-option
+                                        nzLabel="Agent"
+                                        nzValue="Agent"
+                                    ></nz-option>
+                                    <nz-option
+                                        nzLabel="Broker"
+                                        nzValue="Broker"
+                                    ></nz-option>
                                 </nz-select>
                             </nz-input-group>
                         </div>
@@ -1408,25 +1467,27 @@
 
                     <nz-table
                         id="Table"
-                        #analysisTable
-                        [nzData]="displayPolicyReport"
+                        #productionTable
+                        [nzData]="displayPremiumReport"
                         [nzSize]="'small'"
                         [nzBordered]="true"
+                        [nzPageSize] = 50
+                        [nzScroll]="{x:1000,y:500}"
                         style="background-color: white;"
                     >
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Policy number</th>
+                                <th>PolicyNumber</th>
                                 <th>Client</th>
                                 <th>Intermediary</th>
-                                <th>Transaction Date</th>
+                                <th>TransactionDate</th>
                                 <th>Underwriter</th>
                                 <th>Branch</th>
                                 <th>Class</th>
                                 <th>Product</th>
                                 <!-- <th>Risk ID</th> -->
-                                <th>Sum Insured</th>
+                                <th>SumInsured</th>
                                 <th>Premium</th>
                                 <th>Levy</th>
                                 <th>Commission</th>
@@ -1436,7 +1497,7 @@
                         <tbody>
                             <tr
                                 *ngFor="
-                                    let production of filterPremiumList;
+                                    let production of productionTable.data;
                                     let i = index
                                 "
                                 style="cursor: pointer;"
@@ -1455,7 +1516,7 @@
                                 <td>{{ production.user }}</td>
                                 <td>{{ production.branch }}</td>
                                 <td>{{ production.productType }}</td>
-                                <td>{{ production.risks[0].insuranceType }}</td>
+                                <td>{{ ''}}</td>
                                 <!-- <td>{{ production.riskID }}</td> -->
                                 <td>
                                     {{
@@ -1474,7 +1535,8 @@
                                             | number: '1.2-2'
                                     }}
                                 </td>
-                                <td>{{ production.currency }}</td>
+                                <!-- <td>{{ production.currency }}</td> -->
+
                             </tr>
                         </tbody>
                     </nz-table>
