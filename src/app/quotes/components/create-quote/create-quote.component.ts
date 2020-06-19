@@ -665,7 +665,7 @@ export class CreateQuoteComponent implements OnInit {
                     `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                     request
                 )
-                .subscribe(data => {
+                .subscribe((data) => {
                     const doo = new Date(data.endDate);
                     const nd = new Date(
                         doo.getTime() - doo.getTimezoneOffset() * -60000
@@ -822,7 +822,6 @@ export class CreateQuoteComponent implements OnInit {
                     const nd = new Date(
                         doo.getTime() - doo.getTimezoneOffset() * -60000
                     );
-
                     this.quoteForm.get('endDate').setValue(nd);
                 });
         }

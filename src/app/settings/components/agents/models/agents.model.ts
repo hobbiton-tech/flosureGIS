@@ -51,7 +51,7 @@ export interface ISalesRepresentative {
     contactLastName: string;
     contactEmail: string;
     contactPhone: string;
-    contactAddess: string;
+    contactAddress: string;
     accountName: string;
     accountNumber: string;
     accountType: string;

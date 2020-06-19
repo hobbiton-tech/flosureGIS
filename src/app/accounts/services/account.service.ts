@@ -54,7 +54,6 @@ export class AccountService {
     async addReceipt(
         receipt: IReceiptModel,
         insuranceType: InsuranceType,
-        count: number
     ): Promise<void> {
         this.receipts.pipe(first()).subscribe(async (receipts) => {
             // receipt.id = v4();
@@ -78,15 +77,15 @@ export class AccountService {
                     await this.receiptCollection
                         .doc(receipt.id)
                         .set(receipt)
-                        .then((mess) => {
-                            this.message.success(
-                                'Receipt Successfully created'
-                            );
-                        })
-                        .catch((err) => {
-                            this.message.warning('Receipt Failed');
-                            console.log(err);
-                        });
+                        // .then((mess) => {
+                        //     this.message.success(
+                        //         'Receipt Successfully created'
+                        //     );
+                        // })
+                        // .catch((err) => {
+                        //     this.message.warning('Receipt Failed');
+                        //     console.log(err);
+                        // });
                 });
         });
     }

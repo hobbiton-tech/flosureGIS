@@ -14,6 +14,9 @@ const httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
 
+// const BASE_URL = 'http://localhost:3000';
+// const BASE_URL = 'https://flosure-postgres-api.herokuapp.com';
+const BASE_URL = 'https://flosure-api.com';
 @Injectable({
     providedIn: 'root'
 })
@@ -159,8 +162,8 @@ export class AgentsService {
             this.salesRepresentatives.length
         );
         return this.http.post<ISalesRepresentative>(
-            ' https://www.flosure-api.com/intermediary/sales-representative',
 
+            'https://www.flosure-api.com/intermediary/sales-representative',
             salesRepresentatives
         );
     }
@@ -230,7 +233,7 @@ export class AgentsService {
         agent.intermediaryId = this.generateIntermediaryID(
             'Agent',
             'AP',
-            this.agents.length
+            5
         );
         return this.http.post<IAgent>(
             ' https://www.flosure-api.com/intermediary/agent',

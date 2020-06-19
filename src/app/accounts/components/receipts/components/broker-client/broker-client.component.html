@@ -21,6 +21,8 @@
                         <div nz-col nzSpan="12">
                             <div>
                                 <nz-select
+                                    nzShowSearch
+                                    nzAllowClear
                                     [(ngModel)]="selectedBroker"
                                     nzPlaceHolder="Select Broker"
                                     (ngModelChange)="log($event)"

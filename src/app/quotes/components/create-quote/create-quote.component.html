@@ -19,7 +19,12 @@
                         <nz-form-item>
                             <nz-form-label nzSpan="7" nzRequired>Client Name</nz-form-label>
                             <nz-form-control nzSpan="17">
-                                <nz-select formControlName="client" nzPlaceHolder="Select or create client">
+                                <nz-select
+                                    nzShowSearch
+                                    nzAllowClear
+                                    formControlName="client"
+                                    nzPlaceHolder="Select or create client"
+                                >
                                     <div *ngFor="let client of clients">
                                         <nz-option [nzValue]="
                                             client.clientType === 'Individual'
@@ -93,19 +98,29 @@
                                 <nz-form-label [nzSpan]="7" nzFor="intermediaryName" nzRequired>Sales Representative
                                 </nz-form-label>
                                 <nz-form-control nzSpan="17">
-                                    <nz-select name="intermediaryName" formControlName="intermediaryName" nzAllowClear
-                                        nzPlaceHolder="Select Sales Representative">
-                                        <nz-option *ngFor="
-                                            let option of salesRepresentatives
-                                        " [nzValue]="
-                                            option.contactFirstName +
-                                            ' ' +
-                                            option.contactLastName
-                                        " [nzLabel]="
-                                            option.contactFirstName +
-                                            ' ' +
-                                            option.contactLastName
-                                        "></nz-option>
+                                    <nz-select
+                                        nzShowSearch
+                                        nzAllowClear
+                                        name="intermediaryName"
+                                        formControlName="intermediaryName"
+                                        nzAllowClear
+                                        nzPlaceHolder="Select Sales Representative"
+                                    >
+                                        <nz-option
+                                            *ngFor="
+                                                let option of salesRepresentatives
+                                            "
+                                            [nzValue]="
+                                                option.contactFirstName +
+                                                ' ' +
+                                                option.contactLastName
+                                            "
+                                            [nzLabel]="
+                                                option.contactFirstName +
+                                                ' ' +
+                                                option.contactLastName
+                                            "
+                                        ></nz-option>
                                     </nz-select>
                                 </nz-form-control>
                             </nz-form-item>

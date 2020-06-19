@@ -19,7 +19,9 @@ import {
 } from '../models/client.model';
 import { IAccount } from 'src/app/settings/models/organizational/account.model';
 
-const BASE_URL = ' https://www.flosure-api.com';
+
+const BASE_URL = 'https://www.flosure-api.com';
+
 
 @Injectable({
     providedIn: 'root'
@@ -87,6 +89,7 @@ export class ClientsService {
     // }
 
     //New flosure api
+
     createIndividualClient(client: IClientDTO) {
         const clnt: IClient = {
             clientType: 'Individual',
@@ -171,10 +174,11 @@ export class ClientsService {
             .pipe(switchMap(x => addCompanyDetails$(x.id)));
     }
 
+
     getClients(): Observable<IClientDTO[]> {
         return this.http.get<IClientDTO[]>(`${BASE_URL}/clients`);
     }
-    /////////////
+ 
 
     addCorporateClient(client: ICorporateClient): Observable<ICorporateClient> {
         client.clientType = 'Corporate';
@@ -184,11 +188,13 @@ export class ClientsService {
         client.clientID = this.generateClientID(
             'Corporate',
             'AP',
-            this.corporateClients.length
+            1
         );
         console.log(client);
         return this.http.post<ICorporateClient>(
-            ' https://www.flosure-api.com/clients/corporate',
+
+            'https://www.flosure-api.com/clients/corporate',
+
             client
         );
     }
@@ -225,7 +231,7 @@ export class ClientsService {
         client.clientID = this.generateClientID(
             'Individual',
             'AP',
-            this.individualClients.length
+          2
         );
         console.log(client);
         return this.http.post<IIndividualClient>(
@@ -242,7 +248,9 @@ export class ClientsService {
 
     getIndividualClient(id: string): Observable<IIndividualClient> {
         return this.http.get<IIndividualClient>(
-            ` https://www.flosure-api.com/clients/individual/${id}`
+
+            `https://www.flosure-api.com/clients/individual/${id}`
+
         );
     }
 
