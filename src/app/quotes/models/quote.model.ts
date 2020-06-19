@@ -37,6 +37,9 @@ export class RiskModel {
     yearOfManufacture: Date;
     engineNumber: string;
     chassisNumber: string;
+    cubicCapacity: string;
+    seatingCapacity: string;
+    bodyType: BodyType;
     color: string;
     estimatedValue?: number;
     productType: ProductType;
@@ -52,6 +55,10 @@ export class RiskModel {
     discountRate: number;
     premiumLevy: number;
     netPremium: number;
+    numberOfDays: number;
+    expiryQuarter: string;
+    limitsOfLiability: LimitsOfLiability[];
+    excesses: Excess[];
 }
 
 export class MessageModel {
@@ -80,6 +87,30 @@ export class DiscountModel {
     discountType: DiscountType;
     amount: number;
 }
+
+export class LimitsOfLiability {
+    liabilityType: LiabilityType;
+    amount: number;
+}
+
+export class Excess {
+    excessType: ExcessType;
+    amount: number;
+}
+
+export type LiabilityType =
+    | 'protectionAndRemoval'
+    | 'deathBodilyInjuryPerEvent'
+    | 'deathBodilyInjuryPerPerson'
+    | 'propertyDamage'
+    | 'medicalExpensesPerAccident'
+    | 'medicalExpensesPerPerson'
+    | 'unauthourizedRepair';
+export type ExcessType =
+    | 'collisionAndFire'
+    | 'theftOfVehicleWithAntiTheftDevice'
+    | 'theftOfVehicleWithoutAntiTheftDevice'
+    | 'thirdPartyPropertyDamage';
 
 export type ReceiptStatus = 'Unreceipted' | 'Receipted';
 export type ProductType = 'Private' | 'Commercial' | 'Bus/Taxi';
@@ -110,5 +141,6 @@ export type SourceOfBusinessType =
 export type InsuranceType =
     | 'ThirdParty'
     | 'Comprehensive'
-    | 'ThirdPartyFireAndTheft'
-    | 'ActOnly';
+    | 'ActOnly'
+    | 'ThirdPartyFireAndTheft';
+export type BodyType = 'SEDAN' | 'VAN' | 'TRUCK' | 'SUV';

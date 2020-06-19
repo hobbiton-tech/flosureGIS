@@ -149,13 +149,8 @@
         <br />
         <br />
 
-        <nz-table
-            style="width: 100%;"
-            #risksTable
-            [nzData]="policy.risks"
-            nzFrontPagination="false"
-            nzShowPagination="false"
-        >
+        <table style="width: 100%;" #risksTable nzFrontPagination="false" nzShowPagination="false">
+
             <tr>
                 <th>Reg No.</th>
                 <th>Make/Model</th>
@@ -169,30 +164,18 @@
                 </th>
                 <th>Insurance Provided</th>
             </tr>
-            <tr *ngFor="let risk of risksTable.data">
-                <td>{{ risk.regNumber }}</td>
-                <td>{{ risk.vehicleMake }}/{{ risk.vehicleModel }}</td>
-                <td>{{ risk.engineNumber }}</td>
-                <td>{{ risk.chassisNumber }}</td>
-                <td>TBA</td>
-                <td>{{ getYearOfManufacture(risk) }}</td>
-                <td>TBA</td>
-                <td>{{ risk.estimatedValue ? risk.estimatedValue : 'N/A' }}</td>
-                <span *ngIf="risk.insuranceType === 'ThirdParty'">
-                    <td>Third Party</td>
-                </span>
-                <span *ngIf="risk.insuranceType === 'ActOnly'">
-                    <td>Act Only Cover</td>
-                </span>
-                <span *ngIf="risk.insuranceType === 'Comprehensive'">
-                    <td>Comprehensive</td>
-                </span>
-                <span *ngIf="risk.insuranceType === 'FireAndTheft'">
-                    <td>Third Party Fire and Theft</td>
-                </span>
-                <!-- <td>{{risk.insuranceType == 'ThirdParty' ? 'Third Party' : 'Comprehensive'}}</td> -->
+            <tr *ngFor="let risk of policy.risks">
+                <td>{{risk.regNumber}}</td>
+                <td>{{risk.vehicleMake}}/{{risk.vehicleModel}}</td>
+                <td>{{risk.engineNumber}}</td>
+                <td>{{risk.chassisNumber}}</td>
+                <td>{{risk.cubicCapacity}}</td>
+                <td>{{getYearOfManufacture(risk)}}</td>
+                <td>{{risk.seatingCapacity}}</td>
+                <td>{{risk.estimatedValue ? risk.estimatedValue : 'TBA'}}</td>
+                <td>{{risk.insuranceType == 'ThirdParty' ? 'Third Party' : 'Comprehensive'}}</td>
             </tr>
-        </nz-table>
+        </table>
         <br />
 
         <p style="font-weight: bold;">Insurance Provided.</p>
@@ -215,59 +198,34 @@
             <li>
                 <p style="font-weight: bold;">Limits of Liability</p>
                 <p>Limit of the amount of the Company’s liability under</p>
-                <p>
-                    <span style="font-weight: bold;">Section I</span> - 3
-                    (Protection and Removal) –
-                    <span style="font-weight: bold;">K500</span>
-                </p>
-                <p>
-                    <span style="font-weight: bold;">Section II</span> -1 (a)
-                    and 2 (a) (Liability to Third Parties – death bodily injury)
-                    in respect of any one claim or series Of claims arising out
-                    of one event:
-                    <span style="font-weight: bold;"
-                        >K60,100 per event / K30,100 per person</span
-                    >
-                </p>
-                <p>
-                    <span style="font-weight: bold;">Section II</span> - 1 (b)
-                    and 2 (b) (Liability to third Parties – Property Damage) in
-                    respect of any claim or series Of claims arising out of one
-                    event: <span style="font-weight: bold;">K30,000</span>
-                    <span
-                        >- arising from loss of use of a motor vehicle which is
-                        limited to in respect of any one claim or series of
-                        claims arising out of one Event –
-                        <span style="font-weight: bold;">NIL</span> per
-                        event</span
-                    >
-                </p>
-                <p>
-                    Section I-10 (Medical Expenses) in respect of any one
-                    accident/any one person
-                    <span style="font-weight: bold;">K100 / K50</span>
-                </p>
+                <p><span style="font-weight: bold;">Section I</span> - 3 (Protection and Removal) – <span
+                        style="font-weight: bold;">K{{protectionAndRemovalLiability | number: '1.2-2'}}</span></p>
+                <p><span style="font-weight: bold;">Section II</span> -1 (a) and 2 (a) (Liability to Third Parties –
+                    death bodily injury) in respect of any one
+                    claim or series
+                    Of claims arising out of one event: <span
+                        style="font-weight: bold;">K{{deathBodilyInjuryPerEventLiability | number: '1.2-2'}} per event /
+                        K{{deathBodilyInjuryPerPersonLiability | number: '1.2-2'}} per
+                        person</span></p>
+                <p><span style="font-weight: bold;">Section II</span> - 1 (b) and 2 (b) (Liability to third Parties –
+                    Property Damage) in respect of any claim
+                    or series
+                    Of claims arising out of one event: <span
+                        style="font-weight: bold;">K{{propertyDamageLiability | number: '1.2-2'}}</span>
+                    <span>- arising from loss of use of a motor vehicle which is limited to in respect of any one claim
+                        or series of claims arising out of one
+                        Event – <span style="font-weight: bold;">NIL</span> per event</span></p>
+                <p>Section I-10 (Medical Expenses) in respect of any one accident/any one person <span
+                        style="font-weight: bold;">K{{medicalExpensesPerAccidentLiability | number: '1.2-2'}} /
+                        K{{medicalExpensesPerPersonLiability | number: '1.2-2'}}</span></p>
             </li>
         </ol>
 
-        <p>
-            <span style="font-weight: bold;"
-                >Unauthorized Repair Limit (Section 1 – 4 (a)): K500</span
-            >
-            any one event
-        </p>
-        <p>
-            <span style="font-weight: bold;">Geographical Area</span>: Zambia
-            and Congo DR Pedicle only
-        </p>
-        <p>
-            <span style="font-weight: bold;">Legislation</span>: Road Traffic
-            Act of 1997 Cap 464 of Zambia
-        </p>
-        <p>
-            <span style="font-weight: bold;">Authorized Driver</span>: Any of
-            the following:
-        </p>
+        <p><span style="font-weight: bold;">Unauthorized Repair Limit (Section 1 – 4 (a)):
+                K{{unauthourizedRepairLiability | number: '1.2-2'}}</span> any one event</p>
+        <p><span style="font-weight: bold;">Geographical Area</span>: Zambia and Congo DR Pedicle only</p>
+        <p><span style="font-weight: bold;">Legislation</span>: Road Traffic Act of 1997 Cap 464 of Zambia</p>
+        <p><span style="font-weight: bold;">Authorized Driver</span>: Any of the following:</p>
 
         <ol type="a">
             <li>The Insured</li>
@@ -289,22 +247,15 @@
             >
         </p>
         <ol type="a">
-            <li>
-                Collision &amp; Fire: 10% minimum:
-                <span style="font-weight: bold;">K500</span>
+            <li>Collision &amp; Fire: 10% minimum: <span
+                    style="font-weight: bold;">K{{collisionAndFire | number: '1.2-2'}}</span></li>
+            <li>Theft of vehicle with anti theft device: 10% minimum: <span
+                    style="font-weight: bold;">K{{theftOfVehicleWithAntiTheftDevice | number: '1.2-2'}}</span></li>
+            <li>Theft of vehicle without anti theft device: 15% minimum: <span
+                    style="font-weight: bold;">K{{theftOfVehicleWithoutAntiTheftDevice | number: '1.2-2'}}</span>
             </li>
-            <li>
-                Theft of vehicle with anti theft device: 10% minimum:
-                <span style="font-weight: bold;">K500</span>
-            </li>
-            <li>
-                Theft of vehicle without anti theft device: 15% minimum:
-                <span style="font-weight: bold;">K500</span>
-            </li>
-            <li>
-                Third Party Property damage: 10% minimum:
-                <span style="font-weight: bold;">K500</span>
-            </li>
+            <li>Third Party Property damage: 10% minimum: <span
+                    style="font-weight: bold;">K{{thirdPartyPropertyDamage | number: '1.2-2'}}</span></li>
         </ol>
         <p><span style="font-weight: bold;">Limitations as to Use</span>:</p>
         <p>

@@ -1,3 +1,5 @@
+// import { InsuranceType } from 'src/app/quotes/models/quote.model';
+
 export interface IRate {
     id: string;
     insuranceProduct: InsuranceType;

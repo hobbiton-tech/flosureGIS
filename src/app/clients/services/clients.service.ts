@@ -3,7 +3,7 @@ import { Observable, combineLatest } from 'rxjs';
 import { IIndividualClient, ICorporateClient } from '../models/clients.model';
 import {
     AngularFirestore,
-    AngularFirestoreCollection,
+    AngularFirestoreCollection
 } from '@angular/fire/firestore';
 import { first, switchMap } from 'rxjs/operators';
 import { v4 } from 'uuid';
@@ -15,14 +15,14 @@ import {
     IAccountDetails,
     IClientDTO,
     IClientCorporate,
-    ICompanyDetails,
+    ICompanyDetails
 } from '../models/client.model';
 import { IAccount } from 'src/app/settings/models/organizational/account.model';
 
 const BASE_URL = 'https://www.flosure-api.com';
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
 export class ClientsService {
     private individualClientsCollection: AngularFirestoreCollection<
@@ -38,11 +38,11 @@ export class ClientsService {
     clientID = '';
 
     constructor(private http: HttpClient, private firebase: AngularFirestore) {
-        this.getIndividualClients().subscribe((totalIndividaulClients) => {
+        this.getIndividualClients().subscribe(totalIndividaulClients => {
             this.individualClients = totalIndividaulClients;
         });
 
-        this.getCorporateClients().subscribe((totalCorporateClients) => {
+        this.getCorporateClients().subscribe(totalCorporateClients => {
             this.corporateClients = totalCorporateClients;
         });
         // this.individualClientsCollection = this.firebase.collection<
@@ -105,7 +105,7 @@ export class ClientsService {
             gender: client.gender,
             sector: client.sector,
             occupation: client.occupation,
-            dateOfBirth: client.dateOfBirth,
+            dateOfBirth: client.dateOfBirth
         };
 
         const account: IAccountDetails = {
@@ -114,10 +114,10 @@ export class ClientsService {
             tpinNumber: client.tpinNumber,
             accountName: client.accountName,
             accountNumber: client.accountNumber,
-            accountType: client.accountType,
+            accountType: client.accountType
         };
 
-        const addAccountDetails$ = (id) =>
+        const addAccountDetails$ = id =>
             this.http.post<IAccountDetails>(
                 `${BASE_URL}/clients/account-details`,
                 { clientId: id, ...account }
@@ -125,7 +125,7 @@ export class ClientsService {
 
         return this.http
             .post<IClient>(`${BASE_URL}/clients`, clnt)
-            .pipe(switchMap((x) => addAccountDetails$(x.id)));
+            .pipe(switchMap(x => addAccountDetails$(x.id)));
     }
 
     createCorporateClient(client: IClientDTO) {
@@ -137,7 +137,7 @@ export class ClientsService {
             email: client.email,
             address: client.address,
             sector: client.sector,
-            status: client.status,
+            status: client.status
         };
 
         const companyDetails: ICompanyDetails = {
@@ -145,7 +145,7 @@ export class ClientsService {
             companyName: client.companyName,
             companyAddress: client.companyAddress,
             companyEmail: client.companyEmail,
-            tpinNumber: client.tpinNumber,
+            tpinNumber: client.tpinNumber
         };
 
         const account: IAccountDetails = {
@@ -154,16 +154,16 @@ export class ClientsService {
             tpinNumber: client.tpinNumber,
             accountName: client.accountName,
             accountNumber: client.accountNumber,
-            accountType: client.accountType,
+            accountType: client.accountType
         };
 
-        const addAccountDetails$ = (id) =>
+        const addAccountDetails$ = id =>
             this.http.post<IAccountDetails>(
                 `${BASE_URL}/clients/account-details`,
                 { clientId: id, ...account }
             );
 
-        const addCompanyDetails$ = (id) =>
+        const addCompanyDetails$ = id =>
             this.http.post<ICompanyDetails>(
                 `${BASE_URL}/clients/company-details`,
                 { clientId: id, ...companyDetails }
@@ -171,7 +171,7 @@ export class ClientsService {
 
         return this.http
             .post<IClient>(`${BASE_URL}/clients`, clnt)
-            .pipe(switchMap((x) => addCompanyDetails$(x.id)));
+            .pipe(switchMap(x => addCompanyDetails$(x.id)));
     }
 
     getClients(): Observable<IClientDTO[]> {
@@ -202,13 +202,17 @@ export class ClientsService {
 
     getCorporateClients(): Observable<ICorporateClient[]> {
         return this.http.get<ICorporateClient[]>(
+
             'https://www.flosure-api.com/clients/corporate'
+
         );
     }
 
     getCorporateClient(id: string): Observable<ICorporateClient> {
         return this.http.get<ICorporateClient>(
+
             `https://www.flosure-api.com/clients/corporate/${id}`
+
         );
     }
 
@@ -217,7 +221,9 @@ export class ClientsService {
         id: string
     ): Observable<ICorporateClient> {
         return this.http.put<ICorporateClient>(
+
             `https://www.flosure-api.com/clients/corporate/${id}`,
+
 
             client
         );
@@ -243,6 +249,7 @@ export class ClientsService {
 
         console.log(client);
         return this.http.post<IIndividualClient>(
+
             'https://www.flosure-api.com/clients/individual',
 
             client
@@ -251,7 +258,9 @@ export class ClientsService {
 
     getIndividualClients(): Observable<IIndividualClient[]> {
         return this.http.get<IIndividualClient[]>(
+
             'https://www.flosure-api.com/clients/individual'
+
         );
     }
 
@@ -266,7 +275,7 @@ export class ClientsService {
         id: string
     ): Observable<IIndividualClient> {
         return this.http.put<IIndividualClient>(
-            `https://www.flosure-api.com/clients/individual/${id}`,
+            ` https://www.flosure-api.com/clients/individual/${id}`,
             client
         );
     }

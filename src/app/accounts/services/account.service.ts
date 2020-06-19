@@ -15,7 +15,7 @@ import { HttpClient } from '@angular/common/http';
 import { NzMessageService } from 'ng-zorro-antd';
 import { PoliciesComponent } from 'src/app/underwriting/components/policies/policies.component';
 import { Policy } from 'src/app/underwriting/models/policy.model';
-import { InsuranceType } from 'src/app/settings/components/rates/models/rates.model';
+import { InsuranceType } from '../../quotes/models/quote.model';
 
 interface IReceiptNumberResult {
     receiptNumber: string;
