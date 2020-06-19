@@ -364,7 +364,7 @@
                 >
                     <tspan x="0" y="0">Time of Issue:</tspan>
                     <!-- TODO: Add time to model -->
-                    <tspan class="cls-11" y="0">{{ ' ' + '01:00' }}</tspan>
+                    <tspan class="cls-11" y="0">{{ ' ' + dateOfIssue | date: 'HH:MM:SS'}}</tspan>
                 </text>
                 <text
                     id="Expiry_Date:_30_06_20"
@@ -385,7 +385,7 @@
                 >
                     <tspan x="0" y="0">Quarter:</tspan>
                     <tspan class="cls-11" y="0">
-                        {{ ' ' + policyRisk.riskQuarter }}
+                        {{ ' ' + policyRisk.expiryQuarter }}
                     </tspan>
                 </text>
                 <text
@@ -462,7 +462,7 @@
                     transform="translate(27 137)"
                 >
                     <tspan x="0" y="0">
-                        CERTIFICATE NO: {{ policy.policyNumber }}
+                        CERTIFICATE NO:
                     </tspan>
                 </text>
                 <text
@@ -493,7 +493,7 @@
                     transform="translate(27 197)"
                 >
                     <tspan x="0" y="0">
-                        {{ policy.nameOfInsured }}
+                        {{ policy.nameOfInsured }} {{clientAddress}}
                     </tspan>
                 </text>
                 <text
@@ -542,7 +542,6 @@
                 >
                     <tspan x="0" y="0">
                         Extension to other countries:
-                        {{ premiumLevy | number: '1.2-2' }}
                     </tspan>
                 </text>
                 <text
@@ -552,7 +551,7 @@
                     transform="translate(27 317)"
                 >
                     <tspan x="0" y="0">
-                        Sum Insured: ZMW{{
+                        Sum Insured: {{policy.currency}}{{
                             policy.sumInsured | number: '1.2-2'
                         }}
                     </tspan>
@@ -564,7 +563,7 @@
                     transform="translate(27 337)"
                 >
                     <tspan x="0" y="0">
-                        Premium: ZMW{{ policy.sumInsured | number: '1.2-2' }}
+                        Premium: {{policy.currency}}{{ policy.netPremium | number: '1.2-2' }}
                     </tspan>
                 </text>
                 <text
@@ -574,7 +573,7 @@
                     transform="translate(27 357)"
                 >
                     <tspan x="0" y="0">
-                        NCD: ZMW{{ policy.sumInsured | number: '1.2-2' }}
+                        NCD: {{policy.currency}}{{ cndAmount | number: '1.2-2' }} 
                     </tspan>
                     <tspan x="0" y="13">
                         (i) Own Damage Excess 10% minimum
@@ -673,7 +672,7 @@
                     transform="translate(298 257)"
                 >
                     <tspan x="0" y="0" xml:space="preserve">
-                        Seating Capacity:
+                        Seating Capacity: {{policyRisk.seatingCapacity}}
                     </tspan>
                 </text>
 
@@ -817,10 +816,10 @@
                     transform="translate(27 460)"
                 >
                     <tspan x="0" y="0">
-                        Cover Operative for a period Of..............Day(s)
+                        Cover Operative for a period Of {{policyRisk.numberOfDays}}.Day(s)
                     </tspan>
                     <tspan x="0" y="16">
-                        From: ..........................Hours
+                        From:  {{dateOfIssue | date:'HH:MM:SS'}} Hours
                     </tspan>
                 </text>
 
@@ -899,7 +898,7 @@
                         obtaining
                     </tspan>
                     <tspan x="0" y="56">
-                        such license with the Roads and Roads -->
+                        such license with the Roads and Roads
                     </tspan>
                     <tspan x="0" y="70">
                         Traffic Act as amended

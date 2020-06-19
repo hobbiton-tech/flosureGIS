@@ -1473,6 +1473,7 @@ export class QuoteDetailsComponent implements OnInit {
                 const policy: Policy = {
                     ...this.quoteDetailsForm.value,
                     nameOfInsured: this.quoteData.client,
+                    clientCode: this.quoteData.clientCode,
                     policyNumber: this.quoteNumber.replace('Q', 'P'),
                     dateOfIssue: new Date(),
                     expiryDate: this.quoteData.endDate,

@@ -383,6 +383,8 @@ export class CreateQuoteComponent implements OnInit {
     startValue: Date | null = null;
     endValue: Date | null = null;
     endOpen = false;
+    clientCode: any;
+    clientName: any;
 
     compareFn = (o1: any, o2: any) =>
         o1 && o2 ? o1.value === o2.value : o1 === o2;
@@ -1519,10 +1521,18 @@ export class CreateQuoteComponent implements OnInit {
 
     async addQuote(): Promise<void> {
         this.creatingQuote = true;
+        this.clientCode = this.quoteForm.controls.client.value.id;
+        if(this.quoteForm.controls.client.value.clientType === 'Individual') {
+            this.clientName = this.quoteForm.controls.client.value.firstName + ' ' + this.quoteForm.controls.client.value.lastName;
+        }else {
+            this.clientName = this.quoteForm.controls.client.value.companyName
+        }
+        console.log("Client Details>>>>>>", this.clientCode, this.clientName)
         const quote: MotorQuotationModel = {
             ...this.quoteForm.value,
             dateCreated: new Date(),
-            clientCode: '',
+            clientCode: this.clientCode,
+            client: this.clientName,
             coverCode: '',
             underwritingYear: new Date(),
             branch: '',
@@ -1619,6 +1629,7 @@ export class CreateQuoteComponent implements OnInit {
         await this.quoteService.createMotorQuotation(quote, this.quotesCount);
         this.creatingQuote = false;
     }
+    
 
     showModal(): void {
         this.isVisible = true;

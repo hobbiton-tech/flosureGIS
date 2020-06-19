@@ -28,10 +28,8 @@
                                     <div *ngFor="let client of clients">
                                         <nz-option [nzValue]="
                                             client.clientType === 'Individual'
-                                                ? client.firstName +
-                                                  ' ' +
-                                                  client.lastName
-                                                : client.companyName
+                                                ? client
+                                                : client
                                         " [nzLabel]="
                                             client.clientType === 'Individual'
                                                 ? client.firstName +

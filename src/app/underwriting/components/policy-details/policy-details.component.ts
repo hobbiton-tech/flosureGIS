@@ -11,7 +11,7 @@ import {
 import { v4 } from 'uuid';
 import { PaymentPlanService } from 'src/app/accounts/services/payment-plan.service';
 import { AccountService } from 'src/app/accounts/services/account.service';
-import { RiskModel } from 'src/app/quotes/models/quote.model';
+import { RiskModel, DiscountModel } from 'src/app/quotes/models/quote.model';
 import { IReceiptModel } from 'src/app/accounts/components/models/receipts.model';
 import { ClausesService } from 'src/app/settings/components/underwriting-setups/services/clauses.service';
 import {
@@ -81,9 +81,10 @@ export class PolicyDetailsComponent implements OnInit {
     isComprehensiveCertificatePdfVisible = false;
 
     // For Modal
-    clientName: string;
-    clientNumber: string;
-    clientEmail: string;
+    clientName ='';
+    clientNumber='';
+    clientAddress='';
+    clientEmail='';
     policyRisk: RiskModel;
     issueDate: string;
     issueTime: string;
@@ -123,6 +124,8 @@ export class PolicyDetailsComponent implements OnInit {
     netPremium: any;
     formattedeDate: Date;
     _id: string;
+    cnd: DiscountModel;
+    cndAmount: number;
 
     constructor(
         private readonly router: Router,
@@ -196,19 +199,13 @@ export class PolicyDetailsComponent implements OnInit {
                     console.log(clients);
 
                     this.client = this.clientsList.filter((x) =>
-                        x.companyName
-                            ? x.companyName === this.policyData.client
-                            : x.firstName + ' ' + x.lastName ===
-                              this.policyData.client
+                        x.id === this.policyData.clientCode
                     )[0] as IIndividualClient & ICorporateClient;
 
-                    console.log('HERE =>>>>>');
-                    console.log(
-                        this.clientsList.filter(
-                            (x) =>
-                                x.firstName + ' ' + x.lastName === 'Changa Lesa'
-                        )[0] as IIndividualClient & ICorporateClient
-                    );
+                    console.log('HERE =>>>>>', this.client);
+                    this.clientNumber = this.client.phone;
+                    this.clientEmail = this.client.email;
+                    this.clientAddress = this.client.address;
 
                     // console.log('policy data client:');
                     // console.log(this.policyData.client);
@@ -218,8 +215,10 @@ export class PolicyDetailsComponent implements OnInit {
                 });
 
                 this.risks = policy.risks;
+                // this.discounts = risk.discounts;
 
                 this.policyRisk = policy.risks[0];
+                // this.loading = 
 
                 //limits Of Liability
                 this.protectionAndRemovalLiability = policy.risks[0].limitsOfLiability.filter(
@@ -263,9 +262,14 @@ export class PolicyDetailsComponent implements OnInit {
                     doo.getTime() - doo.getTimezoneOffset() * -60000
                 );
 
+                
+
+                
                 this.clientName = policy.client;
-                this.clientNumber = '+260976748392';
-                this.clientEmail = policy.client + '@gmail.com'; // TODO: Track client data
+                // if(this.client.phone === undefined) { this.clientNumber = ''; } else {}
+                // if(this.client.email === null || undefined) { this.clientEmail = ''; } else {}
+                // if(this.clientAddress === null || undefined) { this.clientAddress = ''; } else {}
+                 
                 this.agency = 'Direct'; // TODO: Track this guy too
                 this.coverForm = nd.toString();
                 this.coverTo = policy.endDate.toString();
@@ -584,12 +588,18 @@ export class PolicyDetailsComponent implements OnInit {
 
     isCertificateVisible(risk: RiskModel) {
         this.selectedRisk = risk;
+        
         this.isCertificatePDFVisible = true;
     }
 
     isNewCertificateVisible(risk: RiskModel) {
         this.selectedRisk = risk;
         if (this.selectedRisk.insuranceType == 'Comprehensive') {
+            this.cnd = risk.discounts.filter((x) => x.discountType === 'No Claims Discount')[0];
+        
+        this.cndAmount = Number(this.cnd.amount)
+
+        console.log('CND>>>>>',this.cndAmount)
             this.isComprehensiveCertificatePdfVisible = true;
             this.isThirdPartyCertificatePdfVisible = false;
         } else {
