@@ -180,20 +180,20 @@ export class ClientsService {
 
 
     addCorporateClient(client: ICorporateClient): Observable<ICorporateClient> {
-        this.http
-            .get<any>(
-                `https://flosure-number-generation.herokuapp.com/aplus-client-number/COR`
-            )
-            .subscribe((res) => {
-                console.log('Client ID>>>>>>', res.data.client_number);
-                this.clientID = res.data.client_number;
-            });
-        client.clientType = 'Corporate';
-        client.dateCreated = new Date();
-        client.dateUpdated = new Date();
-        client.status = 'Inactive';
-        client.clientID = this.clientID;
-        console.log(client);
+        // this.http
+        //     .get<any>(
+        //         `https://flosure-number-generation.herokuapp.com/aplus-client-number/COR`
+        //     )
+        //     .subscribe((res) => {
+        //         console.log('Client ID>>>>>>', res.data.client_number);
+        //         this.clientID = res.data.client_number;
+        //     });
+        // client.clientType = 'Corporate';
+        // client.dateCreated = new Date();
+        // client.dateUpdated = new Date();
+        // client.status = 'Inactive';
+        // client.clientID = this.clientID;
+        // console.log(client);
         return this.http.post<ICorporateClient>(
             'https://www.flosure-api.com/clients/corporate',
 
@@ -233,22 +233,15 @@ export class ClientsService {
     addIndividualClient(
         client: IIndividualClient
     ): Observable<IIndividualClient> {
-        this.http
-            .get<any>(
-                `https://flosure-number-generation.herokuapp.com/aplus-client-number/IND`
-            )
-            .subscribe((res) => {
-                console.log('Client ID>>>>>>', res.data.client_number);
-                this.clientID = res.data.client_number;
-            });
-        console.log('Client ID>>>>>>', this.clientID);
-        client.clientType = 'Individual';
-        client.dateCreated = new Date();
-        client.dateUpdated = new Date();
-        client.status = 'Inactive';
-        client.clientID = this.clientID;
-
-        console.log(client);
+        // this.http
+        //     .get<any>(
+        //         `https://flosure-number-generation.herokuapp.com/aplus-client-number/IND`
+        //     )
+        //     .subscribe((res) => {
+        //         console.log('Client ID>>>>>>', res.data.client_number);
+        //         this.clientID = res.data.client_number;
+        //     });
+        
         return this.http.post<IIndividualClient>(
 
             'https://www.flosure-api.com/clients/individual',
