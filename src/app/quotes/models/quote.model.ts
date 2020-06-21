@@ -91,6 +91,8 @@ export class DiscountModel {
 export class LimitsOfLiability {
     liabilityType: LiabilityType;
     amount: number;
+    rate: number;
+    premium;
 }
 
 export class Excess {
@@ -99,13 +101,11 @@ export class Excess {
 }
 
 export type LiabilityType =
-    | 'protectionAndRemoval'
-    | 'deathBodilyInjuryPerEvent'
-    | 'deathBodilyInjuryPerPerson'
+    | 'deathAndInjuryPerPerson'
+    | 'deathAndInjuryPerEvent'
     | 'propertyDamage'
-    | 'medicalExpensesPerAccident'
-    | 'medicalExpensesPerPerson'
-    | 'unauthourizedRepair';
+    | 'combinedLimits';
+    
 export type ExcessType =
     | 'collisionAndFire'
     | 'theftOfVehicleWithAntiTheftDevice'
@@ -124,7 +124,20 @@ export type LoadType =
     | 'Territorial Extension'
     | 'Loss Of Use'
     | 'Inexperienced Driver'
-    | 'Under Age Driver';
+    | 'Under Age Driver'
+    | 'Loss Of Keys'
+    | 'Malicious Damage'
+    | 'Medical Expenses'
+    | 'Injury/Death'
+    | 'Property Damage'
+    | 'Earthquake'
+    | 'Explosions'
+    | 'Financial Loss'
+    | 'Fire And Allied Perils'
+    | 'Legal Expenses'
+    | 'Landslide'
+    | 'Passenger Liability'
+    | 'Permanent Disability';
 
 export type DiscountType =
     | 'No Claims Discount'

@@ -48,7 +48,8 @@ import {
     DiscountOptions,
     SourceOfBusinessOptions,
     ProductTypeOptions,
-    InsuranceTypeOptions
+    InsuranceTypeOptions,
+    LimitsOfLiabilityOptions
 } from '../../selection-options';
 
 type AOA = any[][];
@@ -103,6 +104,7 @@ export class CreateQuoteComponent implements OnInit {
     sourceOfBusinessOptions = SourceOfBusinessOptions;
     productTypeOptions = ProductTypeOptions;
     insuranceTypeOptions = InsuranceTypeOptions;
+    limitsTypeOptions = LimitsOfLiabilityOptions;
 
     //loading feedback
     creatingQuote: boolean = false;
@@ -208,6 +210,7 @@ export class CreateQuoteComponent implements OnInit {
     riskThirdPartyFireAndTheftForm: FormGroup;
     riskComprehensiveForm: FormGroup;
     limitsOfLiabilityForm: FormGroup;
+    combinedLimitsForm: FormGroup;
     excessesForm: FormGroup;
     clients: Array<IIndividualClient & ICorporateClient>;
     premiumLoadingForm: FormGroup;
@@ -303,6 +306,20 @@ export class CreateQuoteComponent implements OnInit {
     // basic premium amount when user selects amount as basic premium input type
     basicPremiumAmount: number;
 
+    lossOfKeysAmount: number;
+    maliciousDamageAmount: number;
+    medicalExpensesAmount: number;
+    injuryAndDeathAmount: number;
+    propertyDamageAmount: number;
+    earthquakeAmount: number;
+    explosionsAmount: number;
+    financialLossAmount: number;
+    fireAndAlliedPerilsAmount: number;
+    legalExpensesAmount: number;
+    landslideAmount: number;
+    passengerLiabilityAmount: number;
+    permanentDisabilityAmount: number;
+
     // selected increase third party input type
     selectedIncreaseThirdPartyLimitInputTypeValue = 'rate';
     // increase third party amount
@@ -354,6 +371,53 @@ export class CreateQuoteComponent implements OnInit {
     // low term agreement discount amount
     lowTermAgreementDiscountAmount: number;
 
+    //standard limits
+    defaultDeathAndInjuryPerPersonMax = 30100;
+    defaultDeathAndInjuryPerEventMax = 60100;
+    defaultPropertyDamageMax = 30000;
+    defaultCombinedLimitsMax =
+        this.defaultDeathAndInjuryPerPersonMax +
+        this.defaultDeathAndInjuryPerEventMax +
+        this.defaultPropertyDamageMax;
+
+    //standard limits rates
+    defaultDeathAndInjuryPerPersonRate = 0;
+    defaultDeathAndInjuryPerEventRate = 0;
+    defaultPropertyDamageRate = 0;
+    defaultCombinedLimitsRate = 0;
+
+    //limits
+    deathAndInjuryPerPersonMax = this.defaultDeathAndInjuryPerPersonMax;
+    deathAndInjuryPerEventMax = this.defaultDeathAndInjuryPerEventMax;
+    propertyDamageMax = this.defaultPropertyDamageMax;
+    combinedLimitsMax =
+        this.deathAndInjuryPerPersonMax +
+        this.deathAndInjuryPerEventMax +
+        this.propertyDamageMax;
+
+    deathAndInjuryPerPerson = this.defaultDeathAndInjuryPerPersonMax;
+    deathAndInjuryPerEvent = this.defaultDeathAndInjuryPerEventMax;
+    propertyDamage = this.defaultPropertyDamageMax;
+    combinedLimits =
+        this.deathAndInjuryPerPerson +
+        this.deathAndInjuryPerEvent +
+        this.propertyDamage;
+
+    deathAndInjuryPerPersonPremium = 0;
+    deathAndInjuryPerEventPremium = 0;
+    propertyDamagePremium = 0;
+    combinedLimitsPremium = 0;
+    limitsTotalPremium =
+        this.deathAndInjuryPerPersonPremium +
+        this.deathAndInjuryPerEventPremium +
+        this.propertyDamagePremium +
+        this.combinedLimitsPremium;
+
+    deathAndInjuryPerPersonRate = this.defaultDeathAndInjuryPerPersonRate;
+    deathAndInjuryPerEventRate = this.defaultDeathAndInjuryPerEventRate;
+    propertyDamageRate = this.defaultPropertyDamageRate;
+    combinedLimitsRate = this.defaultCombinedLimitsRate;
+
     todayYear = null;
 
     // set risk tamplate table not vivible
@@ -363,6 +427,8 @@ export class CreateQuoteComponent implements OnInit {
     quoteNumber: string;
 
     selectedValue = { label: 'Motor Comprehensive', value: 'Comprehensive' };
+
+    selectedLimits = { label: 'Standard', value: 'standardLimits' };
 
     selectedLoadingValue = {
         label: '',
@@ -500,13 +566,22 @@ export class CreateQuoteComponent implements OnInit {
         });
 
         this.limitsOfLiabilityForm = this.formBuilder.group({
-            protectionAndRemoval: ['', Validators.required],
-            deathBodilyInjuryPerEvent: ['', Validators.required],
-            deathBodilyInjuryPerPerson: ['', Validators.required],
+            deathAndInjuryPerPerson: ['', Validators.required],
+            deathAndInjuryPerEvent: ['', Validators.required],
             propertyDamage: ['', Validators.required],
-            medicalExpensesPerAccident: ['', Validators.required],
-            medicalExpensesPerPerson: ['', Validators.required],
-            unauthourizedRepair: ['', Validators.required]
+            deathAndInjuryPerPersonPremium: ['', Validators.required],
+            deathAndInjuryPerEventPremium: ['', Validators.required],
+            propertyDamagePremium: ['', Validators.required],
+            deathAndInjuryPerPersonRate: ['', Validators.required],
+            deathAndInjuryPerEventRate: ['', Validators.required],
+            propertyDamageRate: ['', Validators.required]
+            // protectionAndRemoval: ['', Validators.required],
+            // deathBodilyInjuryPerEvent: ['', Validators.required],
+            // deathBodilyInjuryPerPerson: ['', Validators.required],
+            // propertyDamage: ['', Validators.required],
+            // medicalExpensesPerAccident: ['', Validators.required],
+            // medicalExpensesPerPerson: ['', Validators.required],
+            // unauthourizedRepair: ['', Validators.required]
         });
 
         this.excessesForm = this.formBuilder.group({
@@ -516,24 +591,44 @@ export class CreateQuoteComponent implements OnInit {
             thirdPartyPropertyDamage: ['', Validators.required]
         });
 
-        //set values for limits of liability
-        this.limitsOfLiabilityForm.get('protectionAndRemoval').setValue('500');
+        this.combinedLimitsForm = this.formBuilder.group({
+            combinedLimits: ['', Validators.required],
+            combinedLimitsPremium: ['', Validators.required],
+            combinedLimitsRate: ['', Validators.required]
+        });
+
+        //set default values for limits of liability
         this.limitsOfLiabilityForm
-            .get('deathBodilyInjuryPerEvent')
-            .setValue('60100');
-        this.limitsOfLiabilityForm
-            .get('deathBodilyInjuryPerPerson')
+            .get('deathAndInjuryPerPerson')
             .setValue('30100');
+        this.limitsOfLiabilityForm
+            .get('deathAndInjuryPerEvent')
+            .setValue('60100');
         this.limitsOfLiabilityForm.get('propertyDamage').setValue('30000');
         this.limitsOfLiabilityForm
-            .get('medicalExpensesPerAccident')
-            .setValue('100');
+            .get('deathAndInjuryPerPersonPremium')
+            .setValue('0');
         this.limitsOfLiabilityForm
-            .get('medicalExpensesPerPerson')
-            .setValue('50');
-        this.limitsOfLiabilityForm.get('unauthourizedRepair').setValue('500');
+            .get('deathAndInjuryPerEventPremium')
+            .setValue('0');
+        this.limitsOfLiabilityForm.get('propertyDamagePremium').setValue('0');
+        // this.limitsOfLiabilityForm.get('protectionAndRemoval').setValue('500');
+        // this.limitsOfLiabilityForm
+        //     .get('deathBodilyInjuryPerEvent')
+        //     .setValue('60100');
+        // this.limitsOfLiabilityForm
+        //     .get('deathBodilyInjuryPerPerson')
+        //     .setValue('30100');
+        // this.limitsOfLiabilityForm.get('propertyDamage').setValue('30000');
+        // this.limitsOfLiabilityForm
+        //     .get('medicalExpensesPerAccident')
+        //     .setValue('100');
+        // this.limitsOfLiabilityForm
+        //     .get('medicalExpensesPerPerson')
+        //     .setValue('50');
+        // this.limitsOfLiabilityForm.get('unauthourizedRepair').setValue('500');
 
-        //set values for excesses
+        //set defaults values for excesses
         this.excessesForm.get('collisionAndFire').setValue('500');
         this.excessesForm
             .get('theftOfVehicleWithAntiTheftDevice')
@@ -542,6 +637,24 @@ export class CreateQuoteComponent implements OnInit {
             .get('theftOfVehicleWithoutAntiTheftDevice')
             .setValue('500');
         this.excessesForm.get('thirdPartyPropertyDamage').setValue('500');
+
+        // set default value for combined limits
+        this.combinedLimitsForm
+            .get('combinedLimits')
+            .setValue(
+                Number(
+                    this.limitsOfLiabilityForm.get('deathAndInjuryPerPerson')
+                        .value
+                ) +
+                    Number(
+                        this.limitsOfLiabilityForm.get('deathAndInjuryPerEvent')
+                            .value
+                    ) +
+                    Number(
+                        this.limitsOfLiabilityForm.get('propertyDamage').value
+                    )
+            );
+        this.combinedLimitsForm.get('combinedLimitsPremium').setValue('0');
 
         // vehicle make loading
         const getVehicleMakeList = (name: string) =>
@@ -667,7 +780,7 @@ export class CreateQuoteComponent implements OnInit {
                     `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
                     request
                 )
-                .subscribe((data) => {
+                .subscribe(data => {
                     const doo = new Date(data.endDate);
                     const nd = new Date(
                         doo.getTime() - doo.getTimezoneOffset() * -60000
@@ -1249,6 +1362,9 @@ export class CreateQuoteComponent implements OnInit {
         this.addLimitsOfLiability();
         this.addExcesses();
 
+        console.log("here=>>>")
+        console.log(this.limitsOfLiability);
+
         const some: RiskModel[] = [];
         some.push({
             ...this.riskComprehensiveForm.value,
@@ -1522,12 +1638,15 @@ export class CreateQuoteComponent implements OnInit {
     async addQuote(): Promise<void> {
         this.creatingQuote = true;
         this.clientCode = this.quoteForm.controls.client.value.id;
-        if(this.quoteForm.controls.client.value.clientType === 'Individual') {
-            this.clientName = this.quoteForm.controls.client.value.firstName + ' ' + this.quoteForm.controls.client.value.lastName;
-        }else {
-            this.clientName = this.quoteForm.controls.client.value.companyName
+        if (this.quoteForm.controls.client.value.clientType === 'Individual') {
+            this.clientName =
+                this.quoteForm.controls.client.value.firstName +
+                ' ' +
+                this.quoteForm.controls.client.value.lastName;
+        } else {
+            this.clientName = this.quoteForm.controls.client.value.companyName;
         }
-        console.log("Client Details>>>>>>", this.clientCode, this.clientName)
+        console.log('Client Details>>>>>>', this.clientCode, this.clientName);
         const quote: MotorQuotationModel = {
             ...this.quoteForm.value,
             dateCreated: new Date(),
@@ -1629,7 +1748,6 @@ export class CreateQuoteComponent implements OnInit {
         await this.quoteService.createMotorQuotation(quote, this.quotesCount);
         this.creatingQuote = false;
     }
-    
 
     showModal(): void {
         this.isVisible = true;
@@ -2245,7 +2363,8 @@ export class CreateQuoteComponent implements OnInit {
             this.basicPremium +
             this.premiumLoadingTotal -
             this.premiumDiscount +
-            this.basicPremiumLevy;
+            this.basicPremiumLevy +
+            this.limitsTotalPremium;
     }
 
     // changes the quote basic premium to the inputed amount
@@ -2324,6 +2443,125 @@ export class CreateQuoteComponent implements OnInit {
         this.handleNetPremium();
     }
 
+    // /////////////////////
+    handleLossOfKeysAmount() {
+        this.loads.push({
+            loadType: 'Loss Of Keys',
+            amount: Number(this.lossOfKeysAmount)
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    handleMaliciousDamageAmount() {
+        this.loads.push({
+            loadType: 'Malicious Damage',
+            amount: Number(this.maliciousDamageAmount)
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    handleMedicalExpensesAmount() {
+        this.loads.push({
+            loadType: 'Medical Expenses',
+            amount: Number(this.medicalExpensesAmount)
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    handleInjuryAndDeathAmount() {
+        this.loads.push({
+            loadType: 'Injury/Death',
+            amount: Number(this.injuryAndDeathAmount)
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    handlePropertyDamageAmount() {
+        this.loads.push({
+            loadType: 'Property Damage',
+            amount: Number(this.propertyDamageAmount)
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    handleEarthquakeAmount() {
+        this.loads.push({
+            loadType: 'Earthquake',
+            amount: Number(this.earthquakeAmount)
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    handleExplosionsAmount() {
+        this.loads.push({
+            loadType: 'Explosions',
+            amount: Number(this.explosionsAmount)
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    handleFinancialLossAmount() {
+        this.loads.push({
+            loadType: 'Financial Loss',
+            amount: Number(this.financialLossAmount)
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    handleFireAndAlliedPerilsAmount() {
+        this.loads.push({
+            loadType: 'Fire And Allied Perils',
+            amount: Number(this.fireAndAlliedPerilsAmount)
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    handleLegalExpensesAmount() {
+        this.loads.push({
+            loadType: 'Legal Expenses',
+            amount: Number(this.legalExpensesAmount)
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    handleLandslideAmount() {
+        this.loads.push({
+            loadType: 'Landslide',
+            amount: Number(this.landslideAmount)
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    handlePassengerLiabilityAmount() {
+        this.loads.push({
+            loadType: 'Passenger Liability',
+            amount: Number(this.passengerLiabilityAmount)
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    handlePermanentDisabilityAmount() {
+        this.loads.push({
+            loadType: 'Permanent Disability',
+            amount: Number(this.permanentDisabilityAmount)
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+    // /////////////////////
+
     // adds inputted discount to total discount amount
     handleNoClaimsDiscountAmount() {
         this.discounts.push({
@@ -2364,18 +2602,7 @@ export class CreateQuoteComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    // onSelectWording(value) {
-    //     this.PolicyWording.push([...value]);
-    //     console.log('Check>>>>>>>>>>>', value);
-    // }
-    // onSelectExtension(value) {
-    //     this.PolicyExtension.push([...value]);
-    //     console.log('Checka>>>>>>>>>>>', value);
-    // }
-    // onSelectClause(value) {
-    //     console.log('Checkb>>>>>>>>>>>', value);
-    //     this.PolicyClause.push([...value]);
-    // }
+    
     onEditWording(value) {
         console.log('Checke>>>>>>>>>>>', value);
         this.editWording = value;
@@ -2495,55 +2722,31 @@ export class CreateQuoteComponent implements OnInit {
 
     addLimitsOfLiability(): void {
         this.limitsOfLiability.push({
-            liabilityType: 'protectionAndRemoval',
-            amount: Number(
-                this.limitsOfLiabilityForm.get('protectionAndRemoval').value
-            )
+            liabilityType: 'deathAndInjuryPerPerson',
+            amount: this.deathAndInjuryPerPerson,
+            rate: this.deathAndInjuryPerPersonRate,
+            premium: this.deathAndInjuryPerPersonPremium
         });
 
         this.limitsOfLiability.push({
-            liabilityType: 'deathBodilyInjuryPerEvent',
-            amount: Number(
-                this.limitsOfLiabilityForm.get('deathBodilyInjuryPerEvent')
-                    .value
-            )
-        });
-
-        this.limitsOfLiability.push({
-            liabilityType: 'deathBodilyInjuryPerPerson',
-            amount: Number(
-                this.limitsOfLiabilityForm.get('deathBodilyInjuryPerPerson')
-                    .value
-            )
+            liabilityType: 'deathAndInjuryPerEvent',
+            amount: this.deathAndInjuryPerEvent,
+            rate: this.deathAndInjuryPerEventRate,
+            premium: this.deathAndInjuryPerEventPremium
         });
 
         this.limitsOfLiability.push({
             liabilityType: 'propertyDamage',
-            amount: Number(
-                this.limitsOfLiabilityForm.get('propertyDamage').value
-            )
+            amount: this.propertyDamage,
+            rate: this.propertyDamageRate,
+            premium: this.propertyDamagePremium
         });
 
         this.limitsOfLiability.push({
-            liabilityType: 'medicalExpensesPerAccident',
-            amount: Number(
-                this.limitsOfLiabilityForm.get('medicalExpensesPerAccident')
-                    .value
-            )
-        });
-
-        this.limitsOfLiability.push({
-            liabilityType: 'medicalExpensesPerPerson',
-            amount: Number(
-                this.limitsOfLiabilityForm.get('medicalExpensesPerPerson').value
-            )
-        });
-
-        this.limitsOfLiability.push({
-            liabilityType: 'unauthourizedRepair',
-            amount: Number(
-                this.limitsOfLiabilityForm.get('unauthourizedRepair').value
-            )
+            liabilityType: 'combinedLimits',
+            amount: this.combinedLimits,
+            rate: this.combinedLimitsRate,
+            premium: this.combinedLimitsPremium
         });
     }
 
@@ -2574,5 +2777,72 @@ export class CreateQuoteComponent implements OnInit {
                 this.excessesForm.get('thirdPartyPropertyDamage').value
             )
         });
+    }
+
+    handleDeathAndInjuryPerPersonPremium(): void {
+        this.deathAndInjuryPerPersonPremium =
+            (Number(this.deathAndInjuryPerPerson) -
+                this.deathAndInjuryPerPersonMax) *
+            (this.deathAndInjuryPerPersonRate / 100);
+        this.limitsTotalPremium =
+            this.deathAndInjuryPerPersonPremium +
+            this.deathAndInjuryPerEventPremium +
+            this.propertyDamagePremium +
+            this.combinedLimitsPremium;
+        this.handleNetPremium();
+    }
+
+    handleDeathAndInjuryPerEventPremium(): void {
+        this.deathAndInjuryPerEventPremium =
+            (Number(this.deathAndInjuryPerEvent) -
+                this.deathAndInjuryPerEventMax) *
+            (this.deathAndInjuryPerEventRate / 100);
+        this.limitsTotalPremium =
+            this.deathAndInjuryPerPersonPremium +
+            this.deathAndInjuryPerEventPremium +
+            this.propertyDamagePremium +
+            this.combinedLimitsPremium;
+        this.handleNetPremium();
+    }
+
+    handlePropertyDamagePremium(): void {
+        this.propertyDamagePremium =
+            (Number(this.propertyDamage) - this.propertyDamageMax) *
+            (this.propertyDamageRate / 100);
+        this.limitsTotalPremium =
+            this.deathAndInjuryPerPersonPremium +
+            this.deathAndInjuryPerEventPremium +
+            this.propertyDamagePremium +
+            this.combinedLimitsPremium;
+        this.handleNetPremium();
+    }
+
+    handleCombinedLimitsPremium(): void {
+        this.combinedLimitsPremium =
+            (Number(this.combinedLimits) - this.combinedLimitsMax) *
+            (this.combinedLimitsRate / 100);
+        this.limitsTotalPremium =
+            this.deathAndInjuryPerPersonPremium +
+            this.deathAndInjuryPerEventPremium +
+            this.propertyDamagePremium +
+            this.combinedLimitsPremium;
+        this.handleNetPremium();
+    }
+
+    resetLimits(): void {
+        this.deathAndInjuryPerPerson = this.defaultDeathAndInjuryPerPersonMax;
+        this.deathAndInjuryPerEvent = this.defaultDeathAndInjuryPerEventMax;
+        this.propertyDamage = this.defaultPropertyDamageMax;
+        this.combinedLimits = this.defaultCombinedLimitsMax;
+        this.deathAndInjuryPerPersonPremium = 0;
+        this.deathAndInjuryPerEventPremium = 0;
+        this.propertyDamagePremium = 0;
+        this.combinedLimitsPremium = 0;
+        this.limitsTotalPremium = 0;
+
+        this.deathAndInjuryPerPersonRate = 0;
+        this.deathAndInjuryPerEventRate = 0;
+        this.propertyDamageRate = 0;
+        this.combinedLimitsRate = 0;
     }
 }

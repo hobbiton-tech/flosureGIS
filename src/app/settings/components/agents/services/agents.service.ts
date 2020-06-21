@@ -162,21 +162,20 @@ export class AgentsService {
             this.salesRepresentatives.length
         );
         return this.http.post<ISalesRepresentative>(
-
-            'https://www.flosure-api.com/intermediary/sales-representative',
+            'http://localhost:3000/intermediary/sales-representative',
             salesRepresentatives
         );
     }
     // getSalesRepresentatives(): Observable<ISalesRepresentative[]> {
     //     return this.http.get<ISalesRepresentative[]>(
-    //         ' https://www.flosure-api.comintermediary/sales-representative'
+    //         'https://www.flosure-api.comintermediary/sales-representative'
 
     //     );
     // }
 
     getSalesRepresentative(id: string): Observable<ISalesRepresentative> {
         return this.http.get<ISalesRepresentative>(
-            ` https://www.flosure-api.com/intermediary/sales-representative/${id}`
+            `https://www.flosure-api.com/intermediary/sales-representative/${id}`
         );
     }
 
@@ -185,7 +184,7 @@ export class AgentsService {
         id: string
     ): Observable<ISalesRepresentative> {
         return this.http.put<ISalesRepresentative>(
-            ` https://www.flosure-api.com/intermediary/sales-representative/${id}`,
+            `https://www.flosure-api.com/intermediary/sales-representative/${id}`,
 
             agent
         );
@@ -193,7 +192,7 @@ export class AgentsService {
 
     updateBroker(agent: IBroker, id: string): Observable<IBroker> {
         return this.http.put<IBroker>(
-            ` https://www.flosure-api.com/intermediary/broker/${id}`,
+            `https://www.flosure-api.com/intermediary/broker/${id}`,
 
             agent
         );
@@ -208,7 +207,7 @@ export class AgentsService {
             this.brokers.length
         );
         return this.http.post<IBroker>(
-            ' https://www.flosure-api.com/intermediary/broker',
+            'https://www.flosure-api.com/intermediary/broker',
 
             broker
         );
@@ -216,13 +215,13 @@ export class AgentsService {
 
     getBroker(id: string): Observable<IBroker> {
         return this.http.get<IBroker>(
-            ` https://www.flosure-api.com/intermediary/broker/${id}`
+            `https://www.flosure-api.com/intermediary/broker/${id}`
         );
     }
 
     // getBrokers(): Observable<IBroker[]> {
     //     return this.http.get<IBroker[]>(
-    //         'https://www.flosure-api.com/intermediary/broker'
+    //         'http://localhost:3000/intermediary/broker'
 
     //     );
     // }
@@ -230,13 +229,9 @@ export class AgentsService {
     addAgent(agent: IAgent): Observable<IAgent> {
         agent.dateCreated = new Date();
         agent.intermediaryType = 'Agent';
-        agent.intermediaryId = this.generateIntermediaryID(
-            'Agent',
-            'AP',
-            5
-        );
+        agent.intermediaryId = this.generateIntermediaryID('Agent', 'AP', 5);
         return this.http.post<IAgent>(
-            ' https://www.flosure-api.com/intermediary/agent',
+            'https://www.flosure-api.com/intermediary/agent',
 
             agent
         );
@@ -244,21 +239,21 @@ export class AgentsService {
 
     // getAgent(id: string): Observable<IAgent> {
     //     return this.http.get<IAgent>(
-    //         `https://www.flosure-api.com/intermediary/agent/${id}`
+    //         `http://localhost:3000/intermediary/agent/${id}`
 
     //     );
     // }
 
     // getAgents(): Observable<IAgent[]> {
     //     return this.http.get<IAgent[]>(
-    //         'https://www.flosure-api.com/intermediary/agent'
+    //         'http://localhost:3000/intermediary/agent'
 
     //     );
     // }
 
     updateAgent(agent: IAgent, id: string): Observable<IAgent> {
         return this.http.put<IAgent>(
-            ` https://www.flosure-api.com/intermediary/agent/${id}`,
+            `https://www.flosure-api.com/intermediary/agent/${id}`,
 
             agent
         );
@@ -277,19 +272,19 @@ export class AgentsService {
     //postgres
     getAgents(): Observable<IAgent[]> {
         return this.http.get<IAgent[]>(
-            ' https://www.flosure-api.com/intermediary/agent'
+            'https://www.flosure-api.com/intermediary/agent'
         );
     }
 
     getBrokers(): Observable<IBroker[]> {
         return this.http.get<IBroker[]>(
-            ' https://www.flosure-api.com/intermediary/broker'
+            'https://www.flosure-api.com/intermediary/broker'
         );
     }
 
     getSalesRepresentatives(): Observable<ISalesRepresentative[]> {
         return this.http.get<ISalesRepresentative[]>(
-            ' https://www.flosure-api.com/intermediary/sales-representative'
+            'https://www.flosure-api.com/intermediary/sales-representative'
         );
     }
 

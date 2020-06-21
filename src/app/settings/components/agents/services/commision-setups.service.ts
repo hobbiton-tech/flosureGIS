@@ -13,14 +13,14 @@ export class CommisionSetupsService {
 
     addCommissionSetup(dto: ICommissionSetup): Observable<ICommissionSetup> {
         return this.http.post<ICommissionSetup>(
-            ' https://www.flosure-api.com/commission-setups',
+            'https://www.flosure-api.com/commission-setups',
             dto
         );
     }
 
     getCommissionSetups(): Observable<ICommissionSetup[]> {
         return this.http.get<ICommissionSetup[]>(
-            ' https://www.flosure-api.com/commission-setups'
+            'https://www.flosure-api.com/commission-setups'
         );
     }
 }
