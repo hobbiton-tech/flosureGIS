@@ -11,7 +11,7 @@ import { v4 } from 'uuid';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-const BASE_URL = 'https://www.flosure-api.com';
+const BASE_URL = 'http://localhost:3000';
 
 @Injectable({
     providedIn: 'root'
@@ -88,20 +88,20 @@ export class EndorsementService {
         console.log('endorsement: ');
         console.log(endorsement);
         return this.http.post<Endorsement>(
-            `https://www.flosure-api.com/endorsement/${policyId}`,
+            `http://localhost:3000/endorsement/${policyId}`,
 
             endorsement
         );
     }
     getEndorsements(): Observable<Endorsement[]> {
         return this.http.get<Endorsement[]>(
-            ' https://www.flosure-api.com/endorsement'
+            'https://www.flosure-api.com/endorsement'
         );
     }
 
     getEndorsementById(endorsementId: string): Observable<Endorsement> {
         return this.http.get<Endorsement>(
-            `https://www.flosure-api.com/endorsement/${endorsementId}`
+            `http://localhost:3000/endorsement/${endorsementId}`
         );
     }
 
@@ -110,7 +110,7 @@ export class EndorsementService {
         endorsementId: string
     ): Observable<Endorsement> {
         return this.http.put<Endorsement>(
-            `https://www.flosure-api.com/endorsement/${endorsementId}`,
+            `http://localhost:3000/endorsement/${endorsementId}`,
 
             endorsement
         );

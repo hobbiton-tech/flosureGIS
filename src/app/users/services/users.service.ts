@@ -26,6 +26,7 @@ export class UsersService {
         private msg: NzMessageService) {}
 
 
+
          // Sign up with email/password
   SignUp(userData: UserModel) {
     const randomstring = Math.random().toString(36).slice(-8);
@@ -80,5 +81,6 @@ export class UsersService {
 
     getSingleUser(userId: string): Observable<UserModel> {
         return this.http.get<UserModel>(` https://www.flosure-api.com/${userId}`);
+
     }
 }

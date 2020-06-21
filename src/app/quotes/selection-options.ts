@@ -17,7 +17,20 @@ export const MotorComprehensiveLoadingOptions = [
     { label: 'Territorial Extension', value: 'territorailExtension' },
     { label: 'Loss Of Use', value: 'lossOfUse' },
     { label: 'Inexperienced Driver', value: 'inexperiencedDriver' },
-    { label: 'Under Age Driver', value: 'underAgeDriver' }
+    { label: 'Under Age Driver', value: 'underAgeDriver' },
+    { label: 'Loss Of Keys', value: 'lossOfKeys' },
+    { label: 'Malicious Damage', value: 'maliciousDamage' },
+    { label: 'Medical Expenses', value: 'medicalExpenses' },
+    { label: 'Injury/Death', value: 'injury/death' },
+    { label: 'Property Damage', value: 'propertyDamage' },
+    { label: 'Earthquake', value: 'earthquake' },
+    { label: 'Explosions', value: 'explosions' },
+    { label: 'Financial Loss', value: 'financialLoss' },
+    { label: 'Fire And Allied Perils', value: 'fireAndAlliedPerils' },
+    { label: 'Legal Expenses', value: 'legalExpenses' },
+    { label: 'Landslide', value: 'landslide' },
+    { label: 'Passenger Liability', value: 'passengerLiability' },
+    { label: 'Permanent Disability', value: 'permanentDisability' }
 ];
 
 //MOTOR THIRD PARTY LOADING OPTIONS
@@ -61,11 +74,8 @@ export const InsuranceTypeOptions = [
 
 //LIMITS OF LIABILITY OPTIONS
 export const LimitsOfLiabilityOptions = [
-    { label: 'Protection and Removal', value: 'ProtectionAndRemoval' },
-    { label: 'Death Bodily Injury', value: 'DeathBodilyInjusry' },
-    { label: 'Property Damage', value: 'PropertyDamage' },
-    { label: 'Medical Expenses', value: 'MedicalExpenses' },
-    { label: 'Unauthorized Repair Limit', value: 'UnauthorizedRepairLimit' }
+    { label: 'Combined', value: 'combinedLimits' },
+    { label: 'Standard', value: 'standardLimits' }
 ];
 
 //EXCESSES OPTIONS
@@ -81,3 +91,5 @@ export const ExcessesOptions = [
     },
     { label: 'Third Party Property Damage', value: 'ThirdPartyPropertyDamage' }
 ];
+
+//LIMITS OF LIABILITY OPTIONS
