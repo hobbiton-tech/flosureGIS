@@ -460,8 +460,8 @@
                                                             nzRequired
                                                             >Reg Number
                                                         </nz-form-label>
-                                                        <nz-form-control
-                                                            nzSpan="10"
+                                                        <nz-form-control 
+                                                            nzSpan="10" nzHasFeedback  [nzErrorTip]="regNumberErrorTpl1"
                                                         >
                                                             <input
                                                                 nz-input
@@ -470,6 +470,14 @@
                                                                 type="text"
                                                                 id="regNumber"
                                                             />
+                                                            <ng-template #regNumberErrorTpl1 let-control>
+                                                                <ng-container *ngIf="control.hasError('required')">
+                                                                  Please input your Registration Number!
+                                                                </ng-container>
+                                                                <ng-container *ngIf="control.hasError('duplicated')">
+                                                                  The Registration Number is already taken!
+                                                                </ng-container>
+                                                              </ng-template>
                                                         </nz-form-control>
                                                     </nz-form-item>
                                                 </div>
@@ -4565,7 +4573,7 @@
                                                             >Reg Number
                                                         </nz-form-label>
                                                         <nz-form-control
-                                                            nzSpan="10"
+                                                            nzSpan="10" [nzErrorTip]="regNumberErrorTpl2"
                                                         >
                                                             <input
                                                                 nz-input
@@ -4574,6 +4582,14 @@
                                                                 type="text"
                                                                 id="regNumber"
                                                             />
+                                                            <ng-template #regNumberErrorTpl2 let-control>
+                                                                <ng-container *ngIf="control.hasError('required')">
+                                                                  Please input your Registration Number!
+                                                                </ng-container>
+                                                                <ng-container *ngIf="control.hasError('duplicated')">
+                                                                  The Registration Number is already taken!
+                                                                </ng-container>
+                                                              </ng-template>
                                                         </nz-form-control>
                                                     </nz-form-item>
                                                 </div>
@@ -7533,7 +7549,7 @@
                                         nzRequired
                                         >Reg Number
                                     </nz-form-label>
-                                    <nz-form-control nzSpan="10">
+                                    <nz-form-control nzSpan="10" nzHasFeedback  [nzErrorTip]="regNumberErrorTpl3">
                                         <input
                                             nz-input
                                             name="regNumber"
@@ -7542,6 +7558,14 @@
                                             id="regNumber"
                                             [disabled]="!isRiskDetailsEditmode"
                                         />
+                                        <ng-template #regNumberErrorTpl3 let-control>
+                                            <ng-container *ngIf="control.hasError('required')">
+                                              Please input your Registration Number!
+                                            </ng-container>
+                                            <ng-container *ngIf="control.hasError('duplicated')">
+                                              The Registration Number is already taken!
+                                            </ng-container>
+                                          </ng-template>
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
@@ -11568,7 +11592,7 @@
                                         nzRequired
                                         >Reg Number
                                     </nz-form-label>
-                                    <nz-form-control nzSpan="10">
+                                    <nz-form-control nzSpan="10" nzHasFeedback  [nzErrorTip]="regNumberErrorTpl4">
                                         <input
                                             nz-input
                                             name="regNumber"
@@ -11577,6 +11601,14 @@
                                             id="regNumber"
                                             [disabled]="!isRiskDetailsEditmode"
                                         />
+                                        <ng-template #regNumberErrorTpl4 let-control>
+                                            <ng-container *ngIf="control.hasError('required')">
+                                              Please input your Registration Number!
+                                            </ng-container>
+                                            <ng-container *ngIf="control.hasError('duplicated')">
+                                              The Registration Number is already taken!
+                                            </ng-container>
+                                          </ng-template>
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
