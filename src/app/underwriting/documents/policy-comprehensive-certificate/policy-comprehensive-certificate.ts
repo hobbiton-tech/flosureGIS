@@ -9,6 +9,7 @@ import {
 import { Policy } from '../../models/policy.model';
 import moment from 'moment';
 import { IReceiptModel } from 'src/app/accounts/components/models/receipts.model';
+import { CoverNote } from '../models/documents.model';
 
 @Component({
     selector: 'app-policy-comprehensive-certificate',
@@ -66,6 +67,8 @@ export class PolicyComprehensiveCertificateComponent implements OnInit {
 
     @Input()
     policy: Policy;
+    @Input()
+    coverNot: CoverNote;
 
     subTotal: number;
 

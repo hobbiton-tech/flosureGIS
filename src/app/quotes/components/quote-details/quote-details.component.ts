@@ -34,7 +34,7 @@ import {
     ISalesRepresentative,
 } from 'src/app/settings/components/agents/models/agents.model';
 import { ImageElement } from 'canvg';
-import { DebitNote } from 'src/app/underwriting/documents/models/documents.model';
+import { DebitNote, CoverNote } from 'src/app/underwriting/documents/models/documents.model';
 import { ClausesService } from 'src/app/settings/components/underwriting-setups/services/clauses.service';
 import {
     IPolicyClauses,
@@ -473,6 +473,7 @@ export class QuoteDetailsComponent implements OnInit {
     isOkLoading = false;
     amount = '';
     policyId: string;
+    newRisks: RiskModel[];
 
     constructor(
         private formBuilder: FormBuilder,
@@ -1571,6 +1572,11 @@ export class QuoteDetailsComponent implements OnInit {
                     dateUpdated: new Date(),
                 };
 
+                const coverNote: CoverNote = {
+                    dateCreated: new Date(),
+                    dateUpdated: new Date()
+                }
+
                 // const policy = this.quoteDetailsForm.value as Policy;
                 console.log(policy);
 
@@ -1578,6 +1584,9 @@ export class QuoteDetailsComponent implements OnInit {
                     console.log('response:', res);
 
                     this.policyId = res.id;
+                    this.newRisks = res.risks;
+                    console.log('Risks>>>>>>>>', this.newRisks);
+                    
 
                     // this.policiesService.createDebitNote(
                     //     res.id,
@@ -1593,6 +1602,47 @@ export class QuoteDetailsComponent implements OnInit {
                     } else {
                         insuranceType = 'THP';
                     }
+
+                    for( const r of this.newRisks){
+
+                        let insuranceType = '';
+                        const productType = r.insuranceType;
+                        if (productType == 'Comprehensive') {
+                            insuranceType = 'MCP';
+                        } else {
+                            insuranceType = 'THP';
+                        }
+
+                        this.http
+                    .get<any>(
+                        `https://flosure-number-generation.herokuapp.com/aplus-certificate-number/1/0/${insuranceType}`
+                    )
+                    .subscribe(async (res) => {
+                        coverNote.certificateNumber = res.data.certificate_number;
+                        coverNote.policyId = r.id;
+                        console.log(
+                            'Cover Note>>>>',
+                            res.data.certificate_number
+                        );
+
+                        this.http
+                        .post<CoverNote>(
+                            `https://www.flosure-api.com/documents/cover-note`,
+                            coverNote
+                        )
+                        .subscribe(
+                            async (res) => {
+                                console.log(res);
+                            },
+                            async (err) => {
+                                console.log(err);
+                            }
+                        );
+
+                    });
+
+                    }
+                    
 
                     this.http
                         .get<any>(
@@ -1723,7 +1773,7 @@ export class QuoteDetailsComponent implements OnInit {
                     this.isOkLoading = false;
                 }, 3000);
 
-                this.generateID(this._id);
+                // this.generateID(this._id);
             }
             console.log('HOOOOORAY>>>>>>', this.getInsuranceType);
         } else if (this.quote.risks[0].insuranceType === 'Comprehensive') {
@@ -1944,7 +1994,7 @@ export class QuoteDetailsComponent implements OnInit {
                     this.isOkLoading = false;
                 }, 3000);
 
-                this.generateID(this._id);
+                // this.generateID(this._id);
             }
 
             console.log('WHAAAAAAAT>>>>>>', this.getInsuranceType);

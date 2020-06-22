@@ -20,5 +20,5 @@ export class CoverNote {
     certificateNumber?: string;
     dateCreated: Date;
     dateUpdated: Date;
-    policy?: Policy;
+    policyId?: string;
 }

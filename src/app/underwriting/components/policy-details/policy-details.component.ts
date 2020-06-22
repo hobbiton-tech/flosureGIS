@@ -19,12 +19,13 @@ import {
     IPolicyWording,
     IPolicyExtension,
 } from 'src/app/settings/models/underwriting/clause.model';
-import { DebitNote } from '../../documents/models/documents.model';
+import { DebitNote, CoverNote } from '../../documents/models/documents.model';
 import { ClientsService } from 'src/app/clients/services/clients.service';
 import {
     IIndividualClient,
     ICorporateClient,
 } from 'src/app/clients/models/clients.model';
+import { Http2ServerRequest } from 'http2';
 
 @Component({
     selector: 'app-policy-details',
@@ -126,6 +127,9 @@ export class PolicyDetailsComponent implements OnInit {
     cnd: DiscountModel;
     cndAmount = 0;
     receipt: IReceiptModel;
+    coverNote: CoverNote;
+    coverNot: CoverNote;
+    coverNotes: CoverNote[] = [];
 
     constructor(
         private readonly router: Router,
@@ -153,6 +157,14 @@ export class PolicyDetailsComponent implements OnInit {
             this.policiesService.getPolicyById(id.id).subscribe((policy) => {
                 console.log('CHECKING ID GET', policy);
                 this.policyData = policy;
+
+                this.policiesService.getCoverNotes().subscribe((res) => {
+                    console.log('RESULT COVER>>>>', res);
+                    this.coverNotes = res;
+                    
+                })
+
+                
 
                 this.productClauseService
                     .getPolicyClauses()
@@ -603,6 +615,8 @@ export class PolicyDetailsComponent implements OnInit {
             this.cnd = risk.discounts.filter(
                 (x) => x.discountType === 'No Claims Discount'
             )[0];
+
+                this.coverNot = this.coverNotes.filter((x) => x.policyId === risk.id)[0];
 
             if (this.cnd === undefined) {
                 this.cndAmount = 0;

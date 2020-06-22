@@ -397,8 +397,8 @@ export class PoliciesService {
         );
     }
 
-    getCoverNotes(): Observable<CoverNote> {
-        return this.http.get<CoverNote>(`${BASE_URL}/documents/cover-notes`);
+    getCoverNotes(): Observable<CoverNote[]> {
+        return this.http.get<CoverNote[]>(`${BASE_URL}/documents/cover-notes`);
     }
 
     getCoverNoteById(coverNoteId: string): Observable<CoverNote> {
