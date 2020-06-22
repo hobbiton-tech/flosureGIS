@@ -1,21 +1,38 @@
-<div style="
+<div
+    style="
         display: flex;
         margin-bottom: 15px;
         align-items: flex-end;
         width: 100%;
-    ">
-    <button nz-button nzType="primary" style="margin-right: 8px;" (click)="htmlToPdf()">
+    "
+>
+    <button
+        nz-button
+        nzType="primary"
+        style="margin-right: 8px;"
+        (click)="htmlToPdf()"
+    >
         Download
     </button>
-    <button nz-button nzType="primary" [useExistingCss]="true" [printSectionId]="'printSection'" ngxPrint>
+    <button
+        nz-button
+        nzType="primary"
+        [useExistingCss]="true"
+        [printSectionId]="'printSection'"
+        ngxPrint
+    >
         Print
     </button>
 </div>
 <nz-spin [nzSpinning]="generatingPDF">
     <div id="printSection">
-
-        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="595" height="842"
-            viewBox="0 0 595 842">
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            width="595"
+            height="842"
+            viewBox="0 0 595 842"
+        >
             <defs>
                 <style>
                     .cls-1 {
@@ -140,128 +157,271 @@
                         fill: #fff;
                     }
                 </style>
-                <pattern id="pattern" preserveAspectRatio="xMidYMid slice" width="100%" height="100%"
-                    viewBox="0 0 710 329">
-                    <image width="710" height="329" xlink:href="assets/images/apluslogo.png" />
+                <pattern
+                    id="pattern"
+                    preserveAspectRatio="xMidYMid slice"
+                    width="100%"
+                    height="100%"
+                    viewBox="0 0 710 329"
+                >
+                    <image
+                        width="710"
+                        height="329"
+                        xlink:href="assets/images/apluslogo.png"
+                    />
                 </pattern>
-                <pattern id="pattern-2" preserveAspectRatio="xMidYMid slice" width="100%" height="100%"
-                    viewBox="0 0 732 848">
-                    <image width="732" height="848" xlink:href="assets/images/coa-transparent.png" />
+                <pattern
+                    id="pattern-2"
+                    preserveAspectRatio="xMidYMid slice"
+                    width="100%"
+                    height="100%"
+                    viewBox="0 0 732 848"
+                >
+                    <image
+                        width="732"
+                        height="848"
+                        xlink:href="assets/images/coa-transparent.png"
+                    />
                 </pattern>
-                <pattern id="pattern-3" preserveAspectRatio="xMidYMid slice" width="100%" height="100%"
-                    viewBox="0 0 704 710">
-                    <image width="704" height="710" xlink:href="assets/images/rtsa-transparent.png" />
+                <pattern
+                    id="pattern-3"
+                    preserveAspectRatio="xMidYMid slice"
+                    width="100%"
+                    height="100%"
+                    viewBox="0 0 704 710"
+                >
+                    <image
+                        width="704"
+                        height="710"
+                        xlink:href="assets/images/rtsa-transparent.png"
+                    />
                 </pattern>
-                <pattern id="pattern-4" preserveAspectRatio="xMidYMid slice" width="100%" height="100%"
-                    viewBox="0 0 904 485">
-                    <image width="904" height="485" xlink:href="assets/images/cropped-cropped-IAZ-logo-1.png" />
+                <pattern
+                    id="pattern-4"
+                    preserveAspectRatio="xMidYMid slice"
+                    width="100%"
+                    height="100%"
+                    viewBox="0 0 904 485"
+                >
+                    <image
+                        width="904"
+                        height="485"
+                        xlink:href="assets/images/cropped-cropped-IAZ-logo-1.png"
+                    />
                 </pattern>
                 <clipPath id="clip-Certificate">
                     <rect width="595" height="900" />
                 </clipPath>
             </defs>
 
-
             <g id="Certificate" class="cls-1">
                 <rect class="cls-22" width="595" height="842" />
-                <rect id="golden-logo" class="cls-2" width="457" height="216" transform="translate(69 214)" />
-                <rect id="Rectangle_1" data-name="Rectangle 1" class="cls-3" width="595" height="842" />
-                <text id="CERTIFICATE_OF_MOTOR_INSURANCE" data-name="CERTIFICATE OF MOTOR INSURANCE" class="cls-4"
-                    transform="translate(121 105)">
+                <rect
+                    id="golden-logo"
+                    class="cls-2"
+                    width="457"
+                    height="216"
+                    transform="translate(69 214)"
+                />
+                <rect
+                    id="Rectangle_1"
+                    data-name="Rectangle 1"
+                    class="cls-3"
+                    width="595"
+                    height="842"
+                />
+                <text
+                    id="CERTIFICATE_OF_MOTOR_INSURANCE"
+                    data-name="CERTIFICATE OF MOTOR INSURANCE"
+                    class="cls-4"
+                    transform="translate(121 105)"
+                >
                     <tspan x="0" y="0">CERTIFICATE OF MOTOR INSURANCE</tspan>
                 </text>
 
-                <g id="Ellipse_1" data-name="Ellipse 1" class="cls-5" transform="translate(298 425)">
+                <g
+                    id="Ellipse_1"
+                    data-name="Ellipse 1"
+                    class="cls-5"
+                    transform="translate(298 425)"
+                >
                     <circle class="cls-20" cx="135" cy="135" r="135" />
                     <circle class="cls-21" cx="135" cy="135" r="134.5" />
                 </g>
 
-                <rect id="coa-transparent" class="cls-6" width="42" height="46" transform="translate(413 444)" />
-                <rect id="rtsa-transparent" class="cls-7" width="35" height="33" transform="translate(467 457)" />
-                <rect id="cropped-cropped-IAZ-logo-1" class="cls-8" width="44" height="40"
-                    transform="translate(357 456)" />
+                <rect
+                    id="coa-transparent"
+                    class="cls-6"
+                    width="42"
+                    height="46"
+                    transform="translate(413 444)"
+                />
+                <rect
+                    id="rtsa-transparent"
+                    class="cls-7"
+                    width="35"
+                    height="33"
+                    transform="translate(467 457)"
+                />
+                <rect
+                    id="cropped-cropped-IAZ-logo-1"
+                    class="cls-8"
+                    width="44"
+                    height="40"
+                    transform="translate(357 456)"
+                />
 
-                <text id="Disc_No:_47389" data-name="Disc No: 47389" class="cls-9"
-                    transform="translate(402 507)"></text>
-                <text id="Vehicle_Reg_No:_BAP_3102_ZM" data-name="Vehicle Reg No: BAP 3102 ZM" class="cls-9"
-                    transform="translate(321 523)">
+                <text
+                    id="Disc_No:_47389"
+                    data-name="Disc No: 47389"
+                    class="cls-9"
+                    transform="translate(402 507)"
+                ></text>
+                <text
+                    id="Vehicle_Reg_No:_BAP_3102_ZM"
+                    data-name="Vehicle Reg No: BAP 3102 ZM"
+                    class="cls-9"
+                    transform="translate(321 523)"
+                >
                     <tspan x="0" y="0">Vehicle Reg No:</tspan>
                     <tspan class="cls-11" y="0">
                         {{ policyRisk.regNumber }}
                     </tspan>
                 </text>
-                <text id="Make:_Toyota" data-name="Make: Toyota" class="cls-9" transform="translate(312 542)">
+                <text
+                    id="Make:_Toyota"
+                    data-name="Make: Toyota"
+                    class="cls-9"
+                    transform="translate(312 542)"
+                >
                     <tspan x="0" y="0">Make:</tspan>
                     <tspan class="cls-11" y="0">
                         {{ policyRisk.vehicleMake }}
                     </tspan>
                 </text>
-                <text id="Model:_Corolla" data-name="Model: Corolla" class="cls-9" transform="translate(437 542)">
+                <text
+                    id="Model:_Corolla"
+                    data-name="Model: Corolla"
+                    class="cls-9"
+                    transform="translate(437 542)"
+                >
                     <tspan x="0" y="0">Model:</tspan>
                     <tspan class="cls-11" y="0">
                         {{ policyRisk.vehicleModel }}
                     </tspan>
                 </text>
-                <text id="Color:_COLD" data-name="Color: COLD" class="cls-9" transform="translate(437 561)">
+                <text
+                    id="Color:_COLD"
+                    data-name="Color: COLD"
+                    class="cls-9"
+                    transform="translate(437 561)"
+                >
                     <tspan x="0" y="0">Color:</tspan>
                     <tspan class="cls-11" y="0">
                         {{ ' ' + policyRisk.color }}
                     </tspan>
                 </text>
-                <text id="Engine_No:_INZ-A711230" data-name="Engine No: INZ-A711230" class="cls-9"
-                    transform="translate(310 561)">
+                <text
+                    id="Engine_No:_INZ-A711230"
+                    data-name="Engine No: INZ-A711230"
+                    class="cls-9"
+                    transform="translate(310 561)"
+                >
                     <tspan x="0" y="0">Engine No:</tspan>
                     <tspan class="cls-11" y="0">
                         {{ policyRisk.engineNumber }}
                     </tspan>
                 </text>
-                <text id="Chassis_No:_Z0121-3181397" data-name="Chassis No: Z0121-3181397" class="cls-9"
-                    transform="translate(310 580)">
+                <text
+                    id="Chassis_No:_Z0121-3181397"
+                    data-name="Chassis No: Z0121-3181397"
+                    class="cls-9"
+                    transform="translate(310 580)"
+                >
                     <tspan x="0" y="0">Chassis No:</tspan>
                     <tspan class="cls-11" y="0">
                         {{ ' ' + policyRisk.chassisNumber }}
                     </tspan>
                 </text>
-                <text id="Date_of_Issue:_01_04_20" data-name="Date of Issue: 01/04/20" class="cls-9"
-                    transform="translate(321 599)">
+                <text
+                    id="Date_of_Issue:_01_04_20"
+                    data-name="Date of Issue: 01/04/20"
+                    class="cls-9"
+                    transform="translate(321 599)"
+                >
                     <tspan x="0" y="0">Date of Issue:</tspan>
                     <tspan class="cls-11" y="0">
                         {{ ' ' + issueDate | date }}
                     </tspan>
                 </text>
-                <text id="Time_of_Issue:_01:00" data-name="Time of Issue: 01:00" class="cls-9"
-                    transform="translate(437 599)">
+                <text
+                    id="Time_of_Issue:_01:00"
+                    data-name="Time of Issue: 01:00"
+                    class="cls-9"
+                    transform="translate(437 599)"
+                >
                     <tspan x="0" y="0">Time of Issue:</tspan>
                     <!-- TODO: Add time to model -->
-                    <tspan class="cls-11" y="0">{{ ' ' + '01:00' }}</tspan>
-                </text>
-                <text id="Expiry_Date:_30_06_20" data-name="Expiry Date: 30/06/20" class="cls-9"
-                    transform="translate(326 618)">
-                    <tspan x="0" y="0">Expiry Date:</tspan>
                     <tspan class="cls-11" y="0">
-                        {{  policyRisk.riskEndDate | date }}
+                        {{ ' ' + issueDate | date: 'HH:MM:SS' }}
                     </tspan>
                 </text>
-                <text id="Quarter:_4" data-name="Quarter: 4" class="cls-9" transform="translate(437 618)">
+                <text
+                    id="Expiry_Date:_30_06_20"
+                    data-name="Expiry Date: 30/06/20"
+                    class="cls-9"
+                    transform="translate(326 618)"
+                >
+                    <tspan x="0" y="0">Expiry Date:</tspan>
+                    <tspan class="cls-11" y="0">
+                        {{ policyRisk.riskEndDate | date }}
+                    </tspan>
+                </text>
+                <text
+                    id="Quarter:_4"
+                    data-name="Quarter: 4"
+                    class="cls-9"
+                    transform="translate(437 618)"
+                >
                     <tspan x="0" y="0">Quarter:</tspan>
                     <tspan class="cls-11" y="0">
                         {{ ' ' + policyRisk.expiryQuarter }}
                     </tspan>
                 </text>
-                <text id="Town:_Lusaka_Zambia" data-name="Town: Lusaka Zambia" class="cls-9"
-                    transform="translate(345 637)">
+                <text
+                    id="Town:_Lusaka_Zambia"
+                    data-name="Town: Lusaka Zambia"
+                    class="cls-9"
+                    transform="translate(345 637)"
+                >
                     <tspan x="0" y="0">Town:</tspan>
                     <tspan class="cls-11" y="0">
                         {{ ' ' + 'Lusaka Zambia' }}
                     </tspan>
                 </text>
-                <text id="Insurer" class="cls-12" transform="translate(420 653)">
+                <text
+                    id="Insurer"
+                    class="cls-12"
+                    transform="translate(420 653)"
+                >
                     <tspan x="0" y="0">Insurer</tspan>
                 </text>
-                <rect id="golden-logo-2" data-name="golden-logo" class="cls-13" width="62" height="29"
-                    transform="translate(405 657)" />
-                <rect id="golden-logo-3" data-name="golden-logo" class="cls-13" width="124" height="61"
-                    transform="translate(13 11)" />
+                <rect
+                    id="golden-logo-2"
+                    data-name="golden-logo"
+                    class="cls-13"
+                    width="62"
+                    height="29"
+                    transform="translate(405 657)"
+                />
+                <rect
+                    id="golden-logo-3"
+                    data-name="golden-logo"
+                    class="cls-13"
+                    width="124"
+                    height="61"
+                    transform="translate(13 11)"
+                />
                 <!-- <g id="Rectangle_2" data-name="Rectangle 2" class="cls-14" transform="translate(26 275)">
                     <rect class="cls-20" width="543" height="57" />
                     <rect class="cls-21" x="0.5" y="0.5" width="542" height="56" />
@@ -272,12 +432,12 @@
                     <tspan x="0" y="0">Particulars of Vehicle</tspan>
                 </text> -->
 
-
-
-
-
-                <text id=" DURATION_OF_COVER" data-name=" DURATION OF COVER" class="cls-17"
-                    transform="translate(400 0)">
+                <text
+                    id=" DURATION_OF_COVER"
+                    data-name=" DURATION OF COVER"
+                    class="cls-17"
+                    transform="translate(400 0)"
+                >
                     <tspan x="0" y="15">
                         Plot NO. 402, Roma Park, Zambezi Road
                     </tspan>
@@ -293,70 +453,116 @@
                     <tspan x="0" y="75">
                         www.aplusgeneral.co.zm
                     </tspan>
-
                 </text>
 
-
-
-
-
-
-                <text id="Policy_No:_50392" data-name="Policy No: 50392" class="cls-17" transform="translate(27 137)">
+                <text
+                    id="Policy_No:_50392"
+                    data-name="Policy No: 50392"
+                    class="cls-17"
+                    transform="translate(27 137)"
+                >
                     <tspan x="0" y="0">
-                        CERTIFICATE NO: {{ policy.policyNumber }}
+                        CERTIFICATE NO:
                     </tspan>
                 </text>
-                <text id="Cover_Type:_Comprehensive_Insurance" data-name="Cover Type: Comprehensive Insurance"
-                    class="cls-17" transform="translate(27 157)">
+                <text
+                    id="Cover_Type:_Comprehensive_Insurance"
+                    data-name="Cover Type: Comprehensive Insurance"
+                    class="cls-17"
+                    transform="translate(27 157)"
+                >
                     <tspan x="0" y="0">
                         POLICY NO: {{ policy.policyNumber }}
                     </tspan>
                 </text>
 
-                <text id="From:_26_04_2020" data-name="From: 26/04/2020" class="cls-17" transform="translate(27 177)">
+                <text
+                    id="From:_26_04_2020"
+                    data-name="From: 26/04/2020"
+                    class="cls-17"
+                    transform="translate(27 177)"
+                >
                     <tspan x="0" y="0">
-                        NAMEOF INSURED:
+                        NAME OF INSURED:
                     </tspan>
                 </text>
-                <text id="To:_30_06_2020" data-name="To: 30/06/2020" class="cls-17" transform="translate(27 197)">
+                <text
+                    id="To:_30_06_2020"
+                    data-name="To: 30/06/2020"
+                    class="cls-17"
+                    transform="translate(27 197)"
+                >
                     <tspan x="0" y="0">
-                        {{policy.nameOfInsured }}
+                        {{ policy.nameOfInsured }}
                     </tspan>
                 </text>
-                <text id="To:_30_06_2020" data-name="To: 30/06/2020" class="cls-17" transform="translate(27 217)">
-                    <tspan x="0" y="0">
-                        EMAIL ID: {{ clientEmail }}
-                    </tspan>
+                <text
+                    id="To:_30_06_2020"
+                    data-name="To: 30/06/2020"
+                    class="cls-17"
+                    transform="translate(27 217)"
+                >
+                    <tspan x="0" y="0">EMAIL ID: {{ clientEmail }}</tspan>
                 </text>
 
-                <text id="To:_30_06_2020" data-name="To: 30/06/2020" class="cls-17" transform="translate(27 237)">
-                    <tspan x="0" y="0">
-                        TEL/CELL: {{ clientNumber }}
-                    </tspan>
+                <text
+                    id="To:_30_06_2020"
+                    data-name="To: 30/06/2020"
+                    class="cls-17"
+                    transform="translate(27 237)"
+                >
+                    <tspan x="0" y="0">TEL/CELL: {{ clientNumber }}</tspan>
                 </text>
 
-                <text id="To:_30_06_2020" data-name="To: 30/06/2020" class="cls-17" transform="translate(27 257)">
+                <text
+                    id="To:_30_06_2020"
+                    data-name="To: 30/06/2020"
+                    class="cls-17"
+                    transform="translate(27 257)"
+                >
                     <tspan x="0" y="0">
                         PARTICULARS OF COVER
                     </tspan>
                 </text>
-                <text id="To:_30_06_2020" data-name="To: 30/06/2020" class="cls-17" transform="translate(27 277)">
+                <text
+                    id="To:_30_06_2020"
+                    data-name="To: 30/06/2020"
+                    class="cls-17"
+                    transform="translate(27 277)"
+                >
                     <tspan x="0" y="0">
-                        Premium: ZMW{{ basicPremium | number: '1.2-2' }}
+                        Basic Premium: ZMW{{ basicPremium | number: '1.2-2' }}
                     </tspan>
                 </text>
-                <text id="To:_30_06_2020" data-name="To: 30/06/2020" class="cls-17" transform="translate(27 297)">
+                <text
+                    id="To:_30_06_2020"
+                    data-name="To: 30/06/2020"
+                    class="cls-17"
+                    transform="translate(27 297)"
+                >
                     <tspan x="0" y="0">
                         Levy: {{ premiumLevy | number: '1.2-2' }}
                     </tspan>
                 </text>
-                <text id="To:_30_06_2020" data-name="To: 30/06/2020" class="cls-17" transform="translate(27 317)">
+                <text
+                    id="To:_30_06_2020"
+                    data-name="To: 30/06/2020"
+                    class="cls-17"
+                    transform="translate(27 317)"
+                >
                     <tspan x="0" y="0">
-                        Total Premium: ZMW{{ policy.netPremium | number: '1.2-2' }}
+                        Total Premium: ZMW{{
+                            policy.netPremium | number: '1.2-2'
+                        }}
                     </tspan>
                 </text>
 
-                <text id="To:_30_06_2020" data-name="To: 30/06/2020" class="cls-17" transform="translate(27 337)">
+                <text
+                    id="To:_30_06_2020"
+                    data-name="To: 30/06/2020"
+                    class="cls-17"
+                    transform="translate(27 337)"
+                >
                     <tspan x="0" y="0">
                         EXCESS
                     </tspan>
@@ -365,87 +571,122 @@
                     </tspan>
                 </text>
 
-
-
-
-
-                <text id="Client_Name:_Isaac_Musonda" data-name="Client Name:  Isaac Musonda" class="cls-17"
-                    transform="translate(298 137)">
+                <text
+                    id="Client_Name:_Isaac_Musonda"
+                    data-name="Client Name:  Isaac Musonda"
+                    class="cls-17"
+                    transform="translate(298 137)"
+                >
                     <tspan x="0" y="0" xml:space="preserve">
-                        Make & Model: {{ policyRisk.vehicleMake }} {{ policyRisk.vehicleModel }}
+                        Make & Model: {{ policyRisk.vehicleMake }}
+                        {{ policyRisk.vehicleModel }}
                     </tspan>
                 </text>
 
-                <text id="Insured_Name:_Isaac_Musonda" data-name="Insured Name: Isaac Musonda" class="cls-17"
-                    transform="translate(302 157)">
+                <text
+                    id="Insured_Name:_Isaac_Musonda"
+                    data-name="Insured Name: Isaac Musonda"
+                    class="cls-17"
+                    transform="translate(302 157)"
+                >
                     <tspan x="0" y="0">
                         Color:{{ ' ' + policyRisk.color }}
                     </tspan>
                 </text>
 
-
-                <text id="Client_Email:_-" data-name="Client Email:  -" class="cls-17" transform="translate(298 177)">
+                <text
+                    id="Client_Email:_-"
+                    data-name="Client Email:  -"
+                    class="cls-17"
+                    transform="translate(298 177)"
+                >
                     <tspan x="0" y="0" xml:space="preserve">
-                        Year of Make: {{getYearOfManufacture(policyRisk)}}
-
+                        Year of Make: {{ getYearOfManufacture(policyRisk) }}
                     </tspan>
                 </text>
 
-                <text id="Client_Phone:_260976372832" data-name="Client Phone: 260976372832" class="cls-17"
-                    transform="translate(302 197)">
-                    <tspan x="0" y="0">Tonnag / CC: </tspan>
+                <text
+                    id="Client_Phone:_260976372832"
+                    data-name="Client Phone: 260976372832"
+                    class="cls-17"
+                    transform="translate(302 197)"
+                >
+                    <tspan x="0" y="0">Tonnag / CC:</tspan>
                 </text>
 
-                <text id="Sum_Insured:_ZMW_350_000" data-name="Sum Insured:  ZMW 350,000" class="cls-17"
-                    transform="translate(298 217)">
+                <text
+                    id="Sum_Insured:_ZMW_350_000"
+                    data-name="Sum Insured:  ZMW 350,000"
+                    class="cls-17"
+                    transform="translate(298 217)"
+                >
                     <tspan x="0" y="0" xml:space="preserve">
                         Chassis No: {{ ' ' + policyRisk.chassisNumber }}
                     </tspan>
                 </text>
 
-                <text id="Sum_Insured:_ZMW_350_000" data-name="Sum Insured:  ZMW 350,000" class="cls-17"
-                    transform="translate(298 237)">
+                <text
+                    id="Sum_Insured:_ZMW_350_000"
+                    data-name="Sum Insured:  ZMW 350,000"
+                    class="cls-17"
+                    transform="translate(298 237)"
+                >
                     <tspan x="0" y="0" xml:space="preserve">
                         Engine No: {{ policyRisk.engineNumber }}
                     </tspan>
                 </text>
 
-                <text id="Sum_Insured:_ZMW_350_000" data-name="Sum Insured:  ZMW 350,000" class="cls-17"
-                    transform="translate(298 257)">
+                <text
+                    id="Sum_Insured:_ZMW_350_000"
+                    data-name="Sum Insured:  ZMW 350,000"
+                    class="cls-17"
+                    transform="translate(298 257)"
+                >
                     <tspan x="0" y="0" xml:space="preserve">
-                        Seating Capacity:
+                        Seating Capacity: {{ policyRisk.seatingCapacity }}
                     </tspan>
                 </text>
 
-                <text id="Sum_Insured:_ZMW_350_000" data-name="Sum Insured:  ZMW 350,000" class="cls-17"
-                    transform="translate(298 277)">
+                <text
+                    id="Sum_Insured:_ZMW_350_000"
+                    data-name="Sum Insured:  ZMW 350,000"
+                    class="cls-17"
+                    transform="translate(298 277)"
+                >
                     <tspan x="0" y="0" xml:space="preserve">
                         Vehicle Registration No: {{ policyRisk.regNumber }}
                     </tspan>
                 </text>
 
-                <text id="Sum_Insured:_ZMW_350_000" data-name="Sum Insured:  ZMW 350,000" class="cls-17"
-                    transform="translate(298 297)">
-                    <tspan x="0" y="0" xml:space="preserve">
-
-                    </tspan>
+                <text
+                    id="Sum_Insured:_ZMW_350_000"
+                    data-name="Sum Insured:  ZMW 350,000"
+                    class="cls-17"
+                    transform="translate(298 297)"
+                >
+                    <tspan x="0" y="0" xml:space="preserve"></tspan>
                     <tspan x="0" y="10" xml:space="preserve">
-                        Cover Note Receipt No.
+                        Cover Note Receipt No.: {{ receipt.receiptNumber }}
                     </tspan>
                     <tspan x="0" y="25" xml:space="preserve">
-                        Amount Paid in ZMW:
+                        Amount Paid in {{ policy.currency }} :{{
+                            receipt.sumInDigits
+                        }}
                     </tspan>
                 </text>
 
-                <text id="Claims_Third_Party_Recovery" data-name="Claims Third Party Recovery" class="cls-17"
-                    transform="translate(30 501)">
+                <text
+                    id="Claims_Third_Party_Recovery"
+                    data-name="Claims Third Party Recovery"
+                    class="cls-17"
+                    transform="translate(30 501)"
+                >
                     <tspan x="0" y="0">AUTHORIZED DRIVER</tspan>
                 </text>
 
                 <!-- <text id="Policy_Excess" data-name="Policy Excess" class="cls-15" transform="translate(33 624)">
                     <tspan x="0" y="0"></tspan>
                 </text> -->
-
 
                 <!-- <text id="Notification_Clause" data-name="Notification Clause" class="cls-16"
                     transform="translate(33 706)">
@@ -473,47 +714,71 @@
                 </text> -->
 
                 <!-- <path id="Path_1" data-name="Path 1" class="cls-14" d="M0,0H542" transform="translate(26.5 299.5)" /> -->
-                <text id="Third_Party_Limits_of_Liability" data-name="Third Party Limits of Liability" class="cls-15"
-                    transform="translate(26 370)">
+                <text
+                    id="Third_Party_Limits_of_Liability"
+                    data-name="Third Party Limits of Liability"
+                    class="cls-15"
+                    transform="translate(26 370)"
+                >
                     <tspan x="0" y="0">Third Party Limits of Liability</tspan>
                 </text>
-                <text id="Third_Party_Property_Damage" data-name="Third Party Property Damage" class="cls-18"
-                    transform="translate(27 380)">
-                    <tspan x="0" y="0">(i) Third Party Limit for injury/ Death per person ZMW 30,100.OO</tspan>
+                <text
+                    id="Third_Party_Property_Damage"
+                    data-name="Third Party Property Damage"
+                    class="cls-18"
+                    transform="translate(27 380)"
+                >
+                    <tspan x="0" y="0">
+                        (i) Third Party Limit for injury/ Death per person ZMW
+                        30,100.OO
+                    </tspan>
                 </text>
-                <text id="Third_Party_Injury_and_Death" data-name="Third Party Injury and Death" class="cls-18"
-                    transform="translate(27 395)">
-                    <tspan x="0" y="0">(ii) Third party limit per Event ZMW 60, 100.00</tspan>
+                <text
+                    id="Third_Party_Injury_and_Death"
+                    data-name="Third Party Injury and Death"
+                    class="cls-18"
+                    transform="translate(27 395)"
+                >
+                    <tspan x="0" y="0">
+                        (ii) Third party limit per Event ZMW 60, 100.00
+                    </tspan>
                 </text>
-                <text id="Third_Party_Bodily_Injury_Death_per_Event"
-                    data-name="Third Party Bodily Injury / Death per Event" class="cls-18"
-                    transform="translate(27 410)">
+                <text
+                    id="Third_Party_Bodily_Injury_Death_per_Event"
+                    data-name="Third Party Bodily Injury / Death per Event"
+                    class="cls-18"
+                    transform="translate(27 410)"
+                >
                     <tspan x="0" y="0">
                         (iii)Third Party Property Damage ZMW 30,OOO.OO
                     </tspan>
                 </text>
 
-                <text id="Third_Party_Bodily_Injury_Death_per_Event"
-                    data-name="Third Party Bodily Injury / Death per Event" class="cls-18"
-                    transform="translate(27 441)">
+                <text
+                    id="Third_Party_Bodily_Injury_Death_per_Event"
+                    data-name="Third Party Bodily Injury / Death per Event"
+                    class="cls-18"
+                    transform="translate(27 441)"
+                >
                     <tspan x="0" y="0">
-                        Cover Operative for a period Of... .. Day(s)
+                        Cover Operative for a period Of
+                        {{ policyRisk.numberOfDays }} Day(s)
                     </tspan>
                     <tspan x="0" y="16">
-                        From: ..........................Hours
+                        From: {{ dateOfIssue | date: 'HH:MM:SS' }}Hours
                     </tspan>
                 </text>
-
-
-
 
                 <!-- <text id="As_per_schedule" data-name="As per schedule" class="cls-18" transform="translate(33 644)">
                     <tspan x="0" y="0">As per schedule</tspan>
                 </text> -->
 
-
-                <text id=" DURATION_OF_COVER" data-name=" DURATION OF COVER" class="cls-18"
-                    transform="translate(310 365)">
+                <text
+                    id=" DURATION_OF_COVER"
+                    data-name=" DURATION OF COVER"
+                    class="cls-18"
+                    transform="translate(310 365)"
+                >
                     <tspan x="0" y="0">
                         DURATION OF COVER
                     </tspan>
@@ -521,26 +786,26 @@
                         FROM: {{ ' ' + issueDate | date }}
                     </tspan>
                     <tspan x="0" y="30">
-                        TO: {{  policyRisk.riskEndDate | date }}
+                        TO: {{ policyRisk.riskEndDate | date }}
                     </tspan>
                 </text>
 
                 <text
                     id="On_happening_of_an_event_giving_rise_to_a_claim_notification_must_be_done_within_48_hours_for_accidental_damage_and_24_hours_for_theft_from_the_time_of_happening_of_an_event."
                     data-name="  We hereby certify that the policy to which this certificate is insured is in accordance with the provision of part IX of
-                    the Roads and Road Traffic Act of the REPUBLIC OF ZAMBIA" class="cls-19"
-                    transform="translate(33 725)">
+                    the Roads and Road Traffic Act of the REPUBLIC OF ZAMBIA"
+                    class="cls-19"
+                    transform="translate(33 725)"
+                >
                     <tspan x="0" y="0">
-                        We hereby certify that the policy to which this certificate is insured is in accordance with
-                        the
+                        We hereby certify that the policy to which this
+                        certificate is insured is in accordance with the
                         provision of part IX of the Roads and Road
                     </tspan>
                     <tspan x="0" y="14">
                         Traffic Act of the REPUBLIC OF ZAMBIA
                     </tspan>
-                    <tspan x="0" y="28">
-
-                    </tspan>
+                    <tspan x="0" y="28"></tspan>
                     <tspan x="0" y="42">
                         Agent:.................................................................................................................................................................................
                     </tspan>
@@ -551,20 +816,15 @@
                     <tspan x="0" y="70">
                         Date of
                         issue................................................................................................................................................................................
-
                     </tspan>
-                    <tspan x="0" y="84">
-
-                    </tspan>
+                    <tspan x="0" y="84"></tspan>
                     <tspan x="0" y="98">
                         For/Chief Executive Office
                     </tspan>
                     <tspan x="0" y="112">
                         A PLUS GENERAL
                         INSURANCE:....................................................................................................................................................
-
                     </tspan>
-
                 </text>
                 <!-- <text id="CERTIFICATE_OF_MOTOR_INSURANCE" data-name="CERTIFICATE OF MOTOR INSURANCE" class="cls-4"
                     transform="translate(0 850)">
@@ -582,54 +842,58 @@
                 <text
                     id="In_the_event_of_a_collision_when_the_driver_of_the_Third_Party_Vehicle_is_found_to_be_at_fault_the_insured_will_take_all_reasonable_steps_to_bind_the_Driver_of_the_Third_Party_vehicle_owner_and_its_Insurance_Company_to_meet_the_cost_of_repairs_and_other_"
                     data-name="The insured or any person on the insured's order or with the permission, provided that the person driving holds a license to drive a motor vehicle or has held and is not disqualified from holding or obtaining such license with the Roads and Roads Trafic Act as amended "
-                    class="cls-18" transform="translate(30 521)">
+                    class="cls-18"
+                    transform="translate(30 521)"
+                >
                     <tspan x="0" y="0">
                         The insured or any person on the insured's order or with
                     </tspan>
                     <tspan x="0" y="14">
-                        the permission, provided that the person driving vehicle holds
+                        the permission, provided that the person driving vehicle
+                        holds
                     </tspan>
                     <tspan x="0" y="28">
-                        a license to drive a motor vehicle or has held from holding
+                        a license to drive a motor vehicle or has held from
+                        holding
                     </tspan>
                     <tspan x="0" y="42">
-                        or obtaining such license with the from holding or obtaining
+                        or obtaining such license with the from holding or
+                        obtaining
                     </tspan>
                     <tspan x="0" y="56">
                         such license with the Roads and Roads -->
-
                     </tspan>
                     <tspan x="0" y="70">
                         Traffic Act as amended
                     </tspan>
 
-                    <tspan x="0" y="84">
-
-                    </tspan>
+                    <tspan x="0" y="84"></tspan>
 
                     <tspan x="0" y="98">
-                        In Consideration of the payment of the premium by or on behalf
+                        In Consideration of the payment of the premium by or on
+                        behalf
                     </tspan>
                     <tspan x="0" y="112">
-                        of the insured for the insurance described herein or proportionate
+                        of the insured for the insurance described herein or
+                        proportionate
                     </tspan>
                     <tspan x="0" y="126">
-                        part of the premium in the event of the insurance not being accepted
+                        part of the premium in the event of the insurance not
+                        being accepted
                     </tspan>
                     <tspan x="0" y="140">
-                        by the company, it is agreed that the risk is held covered for the period
-
+                        by the company, it is agreed that the risk is held
+                        covered for the period
                     </tspan>
                     <tspan x="0" y="154">
-                        stated above from the date and time specified above subject to the terms,
+                        stated above from the date and time specified above
+                        subject to the terms,
                     </tspan>
                     <tspan x="0" y="164">
-                        conditions and limitations of the Company's ordinary form of Motor
-                        Insurance Policy
+                        conditions and limitations of the Company's ordinary
+                        form of Motor Insurance Policy
                     </tspan>
                 </text>
-
-
 
                 <!-- <text id="ABV_8982" data-name="ABV 8982" class="cls-18" transform="translate(33 319)">
                     <tspan x="0" y="0">{{ policyRisk.regNumber }}</tspan>

@@ -223,19 +223,19 @@
                             <td>{{ risk.sumInsured | number: '1.2-2' }}</td>
                             <td>{{ risk.netPremium | number: '1.2-2' }}</td>
                             <td>
-                                <button
+                                <!-- <button
                                     nz-button
                                     nzType="default"
                                     (click)="isCertificateVisible(risk)"
                                 >
                                     Certificate
-                                </button>
+                                </button> -->
                                 <button
                                     nz-button
                                     nzType="default"
                                     (click)="isNewCertificateVisible(risk)"
                                 >
-                                    New Certificate
+                                    Certificate
                                 </button>
                                 <button></button>
                             </td>
@@ -455,6 +455,7 @@
             [policy]="policyData"
             [policyRisk]="selectedRisk"
             [cndAmount]="cndAmount"
+            [receipt]="receipt"
         >
             >
         </app-policy-comprehensive-certificate>
@@ -485,6 +486,7 @@
             [issueTime]="issueTime"
             [policy]="policyData"
             [policyRisk]="selectedRisk"
+            [receipt]="receipt"
         >
             >
         </app-policy-thirdparty-certificate>
@@ -524,14 +526,27 @@
     (nzOnOk)="isDebitNotePDFVisible = false"
 >
     <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Debit Document">
-
-        <app-policy-debit-note-document *ngIf="!risksLoading" [clientName]="clientName" [clientNumber]="clientNumber"
-            [clientEmail]="clientEmail" [agency]="agency" [policyNumber]="policyNumber"
-            [classOfBusiness]="classOfBusiness" [coverFrom]="coverForm" [coverTo]="coverTo"
-            [basicPremium]="basicPremium" [loadingAmount]="loadingAmount" [discountAmount]="discountAmount"
-            [premiumLevy]="premiumLevy" [totalAmount]="totalAmount" [risk]="policyRisk" [policy]="policyData"
-            [debitNote]="debitNotes" [client]="client" [policyDebitNote]="singleDebitNote">
-
+        <app-policy-debit-note-document
+            *ngIf="!risksLoading"
+            [clientName]="clientName"
+            [clientNumber]="clientNumber"
+            [clientEmail]="clientEmail"
+            [agency]="agency"
+            [policyNumber]="policyNumber"
+            [classOfBusiness]="classOfBusiness"
+            [coverFrom]="coverForm"
+            [coverTo]="coverTo"
+            [basicPremium]="basicPremium"
+            [loadingAmount]="loadingAmount"
+            [discountAmount]="discountAmount"
+            [premiumLevy]="premiumLevy"
+            [totalAmount]="totalAmount"
+            [risk]="policyRisk"
+            [policy]="policyData"
+            [debitNote]="debitNotes"
+            [client]="client"
+            [policyDebitNote]="singleDebitNote"
+        >
         </app-policy-debit-note-document>
     </nz-card>
 </nz-modal>
@@ -574,10 +589,11 @@
             [deathAndInjuryPerEvent]="deathAndInjuryPerEvent"
             [propertyDamage]="propertyDamage"
             [combinedLimits]="combinedLimits"
-            [collisionAndFire]="collisionAndFire"
-            [theftOfVehicleWithAntiTheftDevice]="theftOfVehicleWithAntiTheftDevice"
-            [theftOfVehicleWithoutAntiTheftDevice]="theftOfVehicleWithoutAntiTheftDevice"
-            [thirdPartyPropertyDamage]="thirdPartyPropertyDamage"
+            [below21Years]="below21Years"
+            [over70Years]="over70Years"
+            [noLicence]="noLicence"
+            [careLessDriving]="careLessDriving"
+            [otherEndorsement]="otherEndorsement"
         >
         </app-policy-schedule-document>
     </nz-card>

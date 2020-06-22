@@ -1,13 +1,21 @@
-<div style="
+<div
+    style="
         display: flex;
         margin-bottom: 15px;
         align-items: flex-end;
         width: 100%;
-    ">
+    "
+>
     <!-- <button nz-button nzType="primary" style="margin-right: 8px;" (click)="htmlToPdf()">
         Download
     </button> -->
-    <button nz-button nzType="primary" [useExistingCss]="true" [printSectionId]="'debitPrintSection'" ngxPrint>
+    <button
+        nz-button
+        nzType="primary"
+        [useExistingCss]="true"
+        [printSectionId]="'debitPrintSection'"
+        ngxPrint
+    >
         Print
     </button>
 </div>
@@ -20,13 +28,18 @@
                     <table>
                         <tr style="border: none;">
                             <td class="title" style="border: none;">
-                                <img src="/assets/images/apluslogo.png" style="width: 100%; max-width: 240px;" />
+                                <img
+                                    src="/assets/images/apluslogo.png"
+                                    style="width: 100%; max-width: 240px;"
+                                />
                             </td>
-                            <td style="
+                            <td
+                                style="
                                     font-size: 11px;
                                     float: right !important;
                                     border: none;
-                                ">
+                                "
+                            >
                                 A Plus General Insurance<br />
                                 Plot No. 402, Roma Park, Zambezi Road<br />
                                 P.O. Box 31700, Lusaka Zambia<br />
@@ -42,9 +55,11 @@
         <hr style="width: 100%; height: 2px; background-color: black;" />
 
         <!-- <h2 class="heading">A PLUS GENERAL INSURANCE LIMITED</h2> -->
-        <P class="centerheading">Schedule attaching to and forming part of
+        <P class="centerheading"
+            >Schedule attaching to and forming part of
             <strong>{{ policy.risks[0].productType }} Motor</strong> Car Policy
-            No. {{ policy.policyNumber }}</P>
+            No. {{ policy.policyNumber }}</P
+        >
 
         <p>
             To form part of a valid insurance contract this Schedule must bear
@@ -58,36 +73,46 @@
                 Name Of Insured:
                 <span style="font-weight: bold;">{{
                     policy.nameOfInsured
-                }}</span><span style="float: right;">Agency:
+                }}</span
+                ><span style="float: right;"
+                    >Agency:
                     {{
                         policy.sourceOfBusiness
                             ? policy.sourceOfBusiness == 'direct'
                                 ? 'Direct'
                                 : policy.intermediaryName
                             : '-'
-                    }}<span style="font-weight: bold;"></span></span>
+                    }}<span style="font-weight: bold;"></span
+                ></span>
             </p>
             <p>
                 Address: {{ client ? client.address : 'TBA'
-                }}<span style="float: right;">Email:
+                }}<span style="float: right;"
+                    >Email:
                     {{
                         policy.sourceOfBusiness
                             ? policy.sourceOfBusiness == 'direct'
                                 ? 'info@aplusgeneral.com'
                                 : policy.user
                             : '-'
-                    }}<span style="font-weight: bold;"></span></span>
+                    }}<span style="font-weight: bold;"></span
+                ></span>
             </p>
             <p>
                 Email: {{ client ? client.email : 'TBA'
-                }}<span style="float: right;"><span style="font-weight: bold;"></span></span>
+                }}<span style="float: right;"
+                    ><span style="font-weight: bold;"></span
+                ></span>
             </p>
             <p>
                 Business or Profession:
-                <span style="font-weight: bold;">TBA</span><span style="float: right;">Currency:
+                <span style="font-weight: bold;">TBA</span
+                ><span style="float: right;"
+                    >Currency:
                     <span style="font-weight: bold;">{{
                         policy.currency
-                    }}</span></span>
+                    }}</span></span
+                >
             </p>
 
             <p>
@@ -111,11 +136,11 @@
                 </li>
             </ol>
             <span style="float: right; text-align: left;">
-                Premium: {{ policy.currency == 'ZMW' ? 'K' : '$'
+                Premium: {{ policy.currency == 'ZMW' ? 'ZMW' : '$'
                 }}{{ basicPremium | number: '1.2-2' }}<br />
-                3% Levy: {{ policy.currency == 'ZMW' ? 'K' : '$'
+                3% Levy: {{ policy.currency == 'ZMW' ? 'ZMW' : '$'
                 }}{{ premiumLevy | number: '1.2-2' }}<br />
-                Total Premium: {{ policy.currency == 'ZMW' ? 'K' : '$'
+                Total Premium: {{ policy.currency == 'ZMW' ? 'ZMW' : '$'
                 }}{{ totalAmount | number: '1.2-2' }}<br />
             </span>
 
@@ -124,8 +149,12 @@
         <br />
         <br />
 
-        <table style="width: 100%;" #risksTable nzFrontPagination="false" nzShowPagination="false">
-
+        <table
+            style="width: 100%;"
+            #risksTable
+            nzFrontPagination="false"
+            nzShowPagination="false"
+        >
             <tr>
                 <th>Reg No.</th>
                 <th>Make/Model</th>
@@ -140,15 +169,24 @@
                 <th>Insurance Provided</th>
             </tr>
             <tr *ngFor="let risk of policy.risks">
-                <td>{{risk.regNumber}}</td>
-                <td>{{risk.vehicleMake}}/{{risk.vehicleModel}}</td>
-                <td>{{risk.engineNumber}}</td>
-                <td>{{risk.chassisNumber}}</td>
-                <td>{{risk.cubicCapacity}}</td>
-                <td>{{getYearOfManufacture(risk)}}</td>
-                <td>{{risk.seatingCapacity}}</td>
-                <td>{{risk.estimatedValue ? risk.estimatedValue : 'TBA'}}</td>
-                <td>{{risk.insuranceType == 'ThirdParty' ? 'Third Party' : (risk.insuranceType == 'ActOnly' ? 'Act Only' : (risk.insuranceType == 'ThirdPartyFireAndTheft' ? 'Fire and Theft' : 'Comprehensive'))}}
+                <td>{{ risk.regNumber }}</td>
+                <td>{{ risk.vehicleMake }}/{{ risk.vehicleModel }}</td>
+                <td>{{ risk.engineNumber }}</td>
+                <td>{{ risk.chassisNumber }}</td>
+                <td>{{ risk.cubicCapacity }}</td>
+                <td>{{ getYearOfManufacture(risk) }}</td>
+                <td>{{ risk.seatingCapacity }}</td>
+                <td>{{ risk.estimatedValue ? risk.estimatedValue : 'TBA' }}</td>
+                <td>
+                    {{
+                        risk.insuranceType == 'ThirdParty'
+                            ? 'Third Party'
+                            : risk.insuranceType == 'ActOnly'
+                            ? 'Act Only'
+                            : risk.insuranceType == 'ThirdPartyFireAndTheft'
+                            ? 'Fire and Theft'
+                            : 'Comprehensive'
+                    }}
                 </td>
             </tr>
         </table>
@@ -176,21 +214,35 @@
                 <p>Limit of the amount of the Company’s liability under</p>
                 <!-- <p><span style="font-weight: bold;">Section I</span> - 3 (Protection and Removal) – <span
                         style="font-weight: bold;">K{{0 | number: '1.2-2'}}</span></p> -->
-                <p><span style="font-weight: bold;">Section II</span> -1 (a) and 2 (a) (Liability to Third Parties –
-                    death bodily injury) in respect of any one
-                    claim or series
-                    Of claims arising out of one event: <span
-                        style="font-weight: bold;">K{{deathAndInjuryPerEvent | number: '1.2-2'}} per event /
-                        K{{deathAndInjuryPerPerson | number: '1.2-2'}} per
-                        person</span></p>
-                <p><span style="font-weight: bold;">Section II</span> - 1 (b) and 2 (b) (Liability to third Parties –
-                    Property Damage) in respect of any claim
-                    or series
-                    Of claims arising out of one event: <span
-                        style="font-weight: bold;">K{{propertyDamage | number: '1.2-2'}}</span>
-                    <span>- arising from loss of use of a motor vehicle which is limited to in respect of any one claim
-                        or series of claims arising out of one
-                        Event – <span style="font-weight: bold;">NIL</span> per event</span></p>
+                <p>
+                    <span style="font-weight: bold;">Section II</span> -1 (a)
+                    and 2 (a) (Liability to Third Parties – death bodily injury)
+                    in respect of any one claim or series Of claims arising out
+                    of one event:
+                    <span style="font-weight: bold;"
+                        >ZMW{{ deathAndInjuryPerEvent | number: '1.2-2' }} per
+                        event / ZMW{{
+                            deathAndInjuryPerPerson | number: '1.2-2'
+                        }}
+                        per person</span
+                    >
+                </p>
+                <p>
+                    <span style="font-weight: bold;">Section II</span> - 1 (b)
+                    and 2 (b) (Liability to third Parties – Property Damage) in
+                    respect of any claim or series Of claims arising out of one
+                    event:
+                    <span style="font-weight: bold;"
+                        >ZMW{{ propertyDamage | number: '1.2-2' }}</span
+                    >
+                    <span
+                        >- arising from loss of use of a motor vehicle which is
+                        limited to in respect of any one claim or series of
+                        claims arising out of one Event –
+                        <span style="font-weight: bold;">NIL</span> per
+                        event</span
+                    >
+                </p>
                 <!-- <p>Section I-10 (Medical Expenses) in respect of any one accident/any one person <span
                         style="font-weight: bold;">K{{0 | number: '1.2-2'}} /
                         K{{0 | number: '1.2-2'}}</span></p> -->
@@ -199,9 +251,18 @@
 
         <!-- <p><span style="font-weight: bold;">Unauthorized Repair Limit (Section 1 – 4 (a)):
                 K{{0 | number: '1.2-2'}}</span> any one event</p> -->
-        <p><span style="font-weight: bold;">Geographical Area</span>: Zambia and Congo DR Pedicle only</p>
-        <p><span style="font-weight: bold;">Legislation</span>: Road Traffic Act of 1997 Cap 464 of Zambia</p>
-        <p><span style="font-weight: bold;">Authorized Driver</span>: Any of the following:</p>
+        <p>
+            <span style="font-weight: bold;">Geographical Area</span>: Zambia
+            and Congo DR Pedicle only
+        </p>
+        <p>
+            <span style="font-weight: bold;">Legislation</span>: Road Traffic
+            Act of 1997 Cap 464 of Zambia
+        </p>
+        <p>
+            <span style="font-weight: bold;">Authorized Driver</span>: Any of
+            the following:
+        </p>
 
         <ol type="a">
             <li>The Insured</li>
@@ -216,7 +277,7 @@
                 Zambia
             </li>
         </ol>
-        <p>
+        <!-- <p>
             <span style="font-weight: bold;">COMPULSORY Excesses to apply on each and every claim as
                 follows:</span>
         </p>
@@ -230,7 +291,58 @@
             </li>
             <li>Third Party Property damage: 10% minimum: <span
                     style="font-weight: bold;">K{{thirdPartyPropertyDamage | number: '1.2-2'}}</span></li>
-        </ol>
+        </ol> -->
+
+        <p>
+            <span style="font-weight: bold;"><strong>Excess</strong></span>
+        </p>
+        <ul style="list-style-type: none;">
+            <li>
+                The insured shall be responsible for the first 10% of each and
+                every claim/loss subject to retained minimum liability of USD
+                <span style="font-weight: bold;">100</span>
+            </li>
+            <li>
+                Excess applicable on young/inexperienced drivers shall be as
+                hereunder:
+            </li>
+            <li>
+                (i) Any person below 21 years of age - 10% minimum of
+                <span style="font-weight: bold;"
+                    >USD{{ below21Years | number: '1.2-2' }}</span
+                >
+            </li>
+            <li>
+                (ii)Any person over 70 years of age 10% minimum of
+                <span style="font-weight: bold;"
+                    >USD{{ over70Years | number: '1.2-2' }}</span
+                >
+            </li>
+            <li>
+                (iii)Any Person who has not held a full drivers license for a
+                minimum period of 24 months 10% minimum of
+                <span style="font-weight: bold;"
+                    >USD{{ noLicence | number: '1.2-2' }}</span
+                >
+            </li>
+            <li>
+                (iv) Any person who has been convicted and has had a license
+                endorsed as a result of following during the previous three
+                years: >
+            </li>
+            <li>
+                (1)Careless or reckless driving - 10% minimum of
+                <span style="font-weight: bold;"
+                    >USD{{ careLessDriving | number: '1.2-2' }}</span
+                >
+            </li>
+            <li>
+                (2) Any other endorsement - 10% minimum of
+                <span style="font-weight: bold;"
+                    >USD{{ otherEndorsement | number: '1.2-2' }}</span
+                >
+            </li>
+        </ul>
         <p><span style="font-weight: bold;">Limitations as to Use</span>:</p>
         <p>
             Use only for social domestic and pleasure purposes and for the
@@ -244,24 +356,35 @@
                 <span style="font-weight: bold;">MEMO 1.RIOT AND STRIKE</span>
             </li>
             <li>
-                <span style="font-weight: bold;">MEMO 2. THIS COVER IS SUBJECT TO PAYMENT OF FULL ANNUAL
+                <span style="font-weight: bold;"
+                    >MEMO 2. THIS COVER IS SUBJECT TO PAYMENT OF FULL ANNUAL
                     PREMIUM IN THE EVENT OF A CLAIM IN ANYONE PERIOD OF
-                    INSURANCE</span>
+                    INSURANCE</span
+                >
             </li>
         </ul>
         <p>
-            <span style="font-weight: bold;">Date of Signature of Proposal and Declaration</span>: AS PER COVERNOTE
+            <span style="font-weight: bold;"
+                >Date of Signature of Proposal and Declaration</span
+            >: AS PER COVERNOTE
             <span style="font-weight: bold;">[Cover note number]</span> DATED
             {{ policy.dateOfIssue | date }}
         </p>
         <p>
-            SIGNED AT:.............................................<span style="text-align: center;">DATE:
-                {{ todayDate | date }}</span><span
-                style="float: right;">....................................................</span>
+            SIGNED AT:.............................................<span
+                style="text-align: center;"
+                >DATE: {{ todayDate | date }}</span
+            ><span style="float: right;"
+                >....................................................</span
+            >
         </p>
         <p>
-            <span style="float: center;"></span><span style="float: right;"><span style="font-weight: bold;">For Chief
-                    Executive Officer</span></span>
+            <span style="float: center;"></span
+            ><span style="float: right;"
+                ><span style="font-weight: bold;"
+                    >For /Chief Executive Officer</span
+                ></span
+            >
         </p>
     </div>
 </div>
