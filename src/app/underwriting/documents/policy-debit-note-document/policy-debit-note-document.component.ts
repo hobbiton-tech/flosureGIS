@@ -3,7 +3,7 @@ import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { RiskModel } from 'src/app/quotes/models/quote.model';
 import { Policy } from '../../models/policy.model';
-import { DebitNote } from '../models/documents.model';
+import { DebitNote, CoverNote } from '../models/documents.model';
 import {
     IIndividualClient,
     ICorporateClient
@@ -64,12 +64,16 @@ export class PolicyDebitNoteDocumentComponent implements OnInit {
     debitNote: DebitNote[];
 
     @Input()
+    coverNotes: CoverNote[];
+
+    @Input()
     policyDebitNote: DebitNote;
 
     @Input()
     client: IIndividualClient & ICorporateClient;
 
     subTotal: number;
+    coverN: CoverNote;
 
     constructor() {}
 
@@ -79,6 +83,11 @@ export class PolicyDebitNoteDocumentComponent implements OnInit {
         console.log('recieved debit note:');
         console.log(this.policyDebitNote);
         this.subTotal = this.sumArray(this.policy.risks, 'basicPremium');
+    }
+
+    coverNote(value) {
+        this.coverN = this.coverNotes.filter((x)=> x.policyId === value.id)[0]
+        return this.coverN.certificateNumber;
     }
 
     htmlToPdf(quality = 1) {

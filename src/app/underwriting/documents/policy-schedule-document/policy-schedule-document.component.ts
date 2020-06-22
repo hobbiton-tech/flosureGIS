@@ -8,6 +8,7 @@ import {
     IIndividualClient,
 } from 'src/app/clients/models/clients.model';
 import moment from 'moment';
+import { CoverNote } from '../models/documents.model';
 
 @Component({
     selector: 'app-policy-schedule-document',
@@ -23,6 +24,9 @@ export class PolicyScheduleDocumentComponent implements OnInit {
 
     @Input()
     clientNumber: string;
+
+    @Input()
+    coverNot: CoverNote;
 
     @Input()
     clientEmail: string;
