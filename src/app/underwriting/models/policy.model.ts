@@ -43,7 +43,10 @@ export interface ITimestamp {
 export type Currency = 'ZMW' | 'Dollar';
 export type ProductType = 'Private' | 'Commercial' | 'Bus/Taxi';
 export type PolicyStatus = 'Lapsed' | 'Active' | 'Cancelled' | 'Expired';
-export type InsuranceType = 'ThirdParty' | 'Comprehensive';
+export type InsuranceType = | 'ThirdParty'
+| 'Comprehensive'
+| 'ThirdPartyFireAndTheft'
+| 'ActOnly';
 export type ReceiptStatus = 'Unreceipted' | 'Receipted';
 export type PaymentPlan = 'Created' | 'NotCreated';
 export type SourceOfBusinessType =

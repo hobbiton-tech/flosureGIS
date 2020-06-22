@@ -1,5 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+    FormGroup,
+    FormBuilder,
+    Validators,
+    FormControl,
+} from '@angular/forms';
 import { PremiumService } from '../../services/premium.service';
 import { map, filter, tap } from 'rxjs/operators';
 import { from, Observable, Subject, of } from 'rxjs';
@@ -37,6 +42,14 @@ import _, { result } from 'lodash';
 import { CommisionSetupsService } from 'src/app/settings/components/agents/services/commision-setups.service';
 import { ICommissionSetup } from 'src/app/settings/components/agents/models/commission-setup.model';
 import { quotes } from 'html2canvas/dist/types/css/property-descriptors/quotes';
+import { Xmb } from '@angular/compiler';
+
+import { BehaviorSubject } from 'rxjs';
+
+import * as Excel from 'exceljs/dist/exceljs.min.js';
+import * as ExcelProper from 'exceljs';
+
+let workbook: ExcelProper.Workbook = new Excel.Workbook();
 
 interface FilterMotorQuotation extends MotorQuotationModel {
     client: string;
@@ -65,6 +78,7 @@ interface PremiumReport extends Policy {
     netPremium: number;
     levy: number;
     premiumDue: number;
+    commission?: number;
 }
 
 export type QuoteStatus = 'Draft' | 'Approved';
@@ -86,49 +100,40 @@ interface IFormattedAnalysisReport
 })
 export class UnderwritingComponent implements OnInit {
     isVisible = false;
-    visible = false;
+    // visible = false;
 
     //search string when filtering clients
     searchString: string;
 
-    isAnalysisReportVisible = false;
-    isReportVisible = false;
-
     //Qoutation Listing Report
-    displayQuotationReport: MotorQuotationModel[];
     motorList: MotorQuotationModel[];
     motor: Motor[];
     filterMotor: Motor[];
+    displayedMotor: Motor[];
+    displayedFilterMotor: Motor[];
 
     displayPolicyReport: Policy[] = [];
     policyList: Policy[] = [];
 
-    displayDebitNote: DebitNote[] = [];
-    // debitNoteList: DebitNote[] = [];
-    // filterNote: DebitNote[] = [];
-
-    commission: number;
-    intermediary: Array<IAgent & IBroker & ISalesRepresentative>;
-
-    // Quotation Analysis Report
-    intermediariesList: Array<IAgent & IBroker & ISalesRepresentative>;
-    formatIntermediaryReport: Array<IFormattedAnalysisReport>;
-    displayIntermediariesList: Array<IAgent & IBroker & ISalesRepresentative>;
+    // // Quotation Analysis Report
+    // intermediariesList: Array<IAgent & IBroker & ISalesRepresentative>;
+    // formatIntermediaryReport: Array<IFormattedAnalysisReport>;
+    // displayIntermediariesList: Array<IAgent & IBroker & ISalesRepresentative>;
 
     policiesList: Policy[];
     filteredPoliciesList: Policy[] = [];
     filterPremiumList: Array<PremiumReport>;
 
     quotesList: MotorQuotationModel[];
-    filteredQuotesList: any;
 
     // renewal report
     isRenewalReportVisible = false;
-
     isPremiumWorkingReportVisible = false;
     isDebitNoteReportVisible = false;
     isProductionReportVisible = false;
     isIntermediaryQuotationListingReport = false;
+    isAnalysisReportVisible = false;
+    isReportVisible = false;
 
     dateForm: FormGroup;
 
@@ -137,16 +142,19 @@ export class UnderwritingComponent implements OnInit {
 
     filterPremiumReport: any;
     displayPremiumReport: Policy[];
+    premiumReport: Policy[];
 
-    public noLength;
-    public try;
-    debitNumber: any;
+    filterForm = new FormGroup({
+        fromDate: new FormControl(),
+        toDate: new FormControl(),
+    });
 
-    inter: any;
-
-    public why: any;
-
-    displayCommission: ICommissionSetup[];
+    get fromDate() {
+        return this.filterForm.get('fromDate');
+    }
+    get toDate() {
+        return this.filterForm.get('toDate');
+    }
 
     constructor(
         private premiumService: PremiumService,
@@ -197,7 +205,6 @@ export class UnderwritingComponent implements OnInit {
     }
 
     ngOnInit(): void {
-
         let sourceOfBusiness = 'direct';
 
         this.quotationService.getMotorQuotations().subscribe((d) => {
@@ -207,17 +214,20 @@ export class UnderwritingComponent implements OnInit {
                 sumInsured: this.sumArray(m.risks, 'sumInsured'),
                 grossPremium: this.sumArray(m.risks, 'basicPremium'),
             }));
-            console.log('Motor--->', this.displayQuotationReport);
+
+            this.displayedMotor = this.motor;
+            console.log('Motor--->', this.displayedMotor);
 
             this.filterMotor = this.motor.filter(
                 (x) => x.sourceOfBusiness !== sourceOfBusiness
             );
+            this.displayedFilterMotor = this.filterMotor;
         });
 
         this.policiesService.getPolicies().subscribe((policy) => {
-            this.displayPremiumReport = policy;
+            this.premiumReport = policy;
 
-            this.filterPremiumList = this.displayPremiumReport.map((x) => ({
+            this.filterPremiumList = this.premiumReport.map((x) => ({
                 ...x,
                 policyNumber: x.policyNumber,
                 debitNoteNumber: x.debitNotes[0].debitNoteNumber,
@@ -232,7 +242,6 @@ export class UnderwritingComponent implements OnInit {
             this.displayPremiumReport = this.filterPremiumList;
             console.log('New Policy--->', this.filterPremiumList);
         });
-
 
         // this.agentsService
         //     .getAllIntermediaries()
@@ -266,7 +275,6 @@ export class UnderwritingComponent implements OnInit {
         // console.log('Intermediary Name', this.intermediary);
     }
 
-
     /// the function to get all quotation by per intermediary//
     // async getIntermediaryQuoteCount(intermediary: any) {
     //     let quote: any;
@@ -293,9 +301,6 @@ export class UnderwritingComponent implements OnInit {
     //     console.log('test two', this.quotesList);
     //     return quote;
     // }
-
-
-
 
     // getFullName(i: any): any {
     //     return `${
@@ -473,36 +478,36 @@ export class UnderwritingComponent implements OnInit {
             // doc.setFontSize(5);
         };
 
-        const head = [
-            [
-                'No',
-                'Branch',
-                'Client',
-                'Intermediary Name',
-                'Number of Quotation',
-                'Acquisition Ratio',
-            ],
-        ];
+        // const head = [
+        //     [
+        //         'No',
+        //         'Branch',
+        //         'Client',
+        //         'Intermediary Name',
+        //         'Number of Quotation',
+        //         'Acquisition Ratio',
+        //     ],
+        // ];
 
         const totalPagesExp = '{total_pages_count_string}';
 
-        const options = {
-            beforePageContent: header,
-            //   afterPageContent: footer,
-            margin: {
-                top: 100,
-            },
-            head: head,
-            styles: {
-                overflow: 'linebreak',
-                fontSize: 10,
-                tableWidth: 'auto',
-                columnWidth: 'auto',
-            },
-            columnStyles: {
-                1: { columnWidth: 'auto' },
-            },
-        };
+        // const options = {
+        //     beforePageContent: header,
+        //     //   afterPageContent: footer,
+        //     margin: {
+        //         top: 100,
+        //     },
+        //     head: head,
+        //     styles: {
+        //         overflow: 'linebreak',
+        //         fontSize: 10,
+        //         tableWidth: 'auto',
+        //         columnWidth: 'auto',
+        //     },
+        //     columnStyles: {
+        //         1: { columnWidth: 'auto' },
+        //     },
+        // };
 
         // const elem = document.getElementById('table');
         // const data = doc.autoTableHtmlToJson(elem);
@@ -523,28 +528,21 @@ export class UnderwritingComponent implements OnInit {
             didDrawPage: header,
         });
         // autoTable(doc, { html: '#Table' });
-        doc.save('quotatioListingReport.pdf');
+        doc.save('quotationListingReport.pdf');
     }
 
     // downloadQuotationReportListPdf() {
     //     console.log('Downloading Pdf....');
     //     let doc = new jsPDF('l', 'pt', 'a4');
 
-      
     //     var company_logo = new Image();
     //     company_logo.src = 'assets/images/apluslogo.png';
-
-
 
     //     // A Plus General Insurance
     //     // Plot No. 402, Roma Park, Zambezi Road
     //     // P.O. Box 31700, Lusaka Zambia
     //     // Tel: +260 211 239865/6 - Tele/Fax:+260 211 239867
     //     // E-mail: info@aplusgeneral.com
-
-      
-       
-
 
     //     const totalPagesExp = '{total_pages_count_string}';
 
@@ -581,7 +579,7 @@ export class UnderwritingComponent implements OnInit {
     //             10: { columnWidth: 'auto' },
     //             11: { columnWidth: 'auto' },
     //         },
-          
+
     //     };
     //     // const elem = document.getElementById('table');
     //     // const data = doc.autoTableHtmlToJson(elem);
@@ -599,6 +597,75 @@ export class UnderwritingComponent implements OnInit {
     //     });
     //     doc.save('quotationReport.pdf');
     // }
+
+    downloadPDF(tableId: string, title: string) {
+        console.log('downloading pdf...');
+        let doc = new jsPDF('l', 'pt', 'a4');
+        var img = new Image();
+        img.src = 'assets/images/apluslogo.png';
+
+        var header = function (headerData: any) {
+            var name = 'A Plus General Insurance',
+                xOffset =
+                    doc.internal.pageSize.width / 2 -
+                    (doc.getStringUnitWidth(name) *
+                        doc.internal.getFontSize()) /
+                        2;
+            var address1 = 'Plot No. 402, Roma Park, Zambezi Road';
+            var address2 = 'P.O. Box 31700, Lusaka Zambia';
+            var phone = 'Tel: +260 211 239865/6 - Tele/Fax:+260 211 239867';
+            var email = 'E-mail: info@aplusgeneral.com';
+            // var text = title,
+            //     xOffset =
+            //         doc.internal.pageSize.width / 2 -
+            //         (doc.getStringUnitWidth(text) *
+            //             doc.internal.getFontSize()) /
+            //             2;
+
+            doc.setTextColor(173, 216, 230);
+            // doc.text(name, xOffset, 40);
+            doc.text(name, xOffset, 60);
+            doc.setFontSize(25);
+            doc.setTextColor(40);
+            doc.setFontStyle('normal');
+            doc.addImage(
+                img,
+                'PNG',
+                headerData.settings.margin.left,
+                20,
+                150,
+                60
+            );
+        };
+
+        const options = {
+            beforePageContent: header,
+            //   afterPageContent: footer,
+            // margin: {
+            //     top: 100,
+            // },
+            styles: {
+                overflow: 'linebreak',
+                fontSize: 10,
+                tableWidth: 'auto',
+                columnWidth: 'auto',
+            },
+            columnStyles: {
+                1: { columnWidth: 'auto' },
+            },
+        };
+
+        doc.setFontSize(15);
+
+        //@ts-ignore
+        doc.autoTable({
+            html: tableId,
+            margin: { top: 80 },
+            didDrawPage: header,
+        });
+        // autoTable(doc, { html: '#Table' });
+        doc.save(title + '.pdf');
+    }
 
     downloadAnalysisListPdf() {
         console.log('Downloading Pdf....');
@@ -718,7 +785,7 @@ export class UnderwritingComponent implements OnInit {
         img.src = 'assets/images/apluslogo.png';
 
         var header = function (headerData: any) {
-            var text = 'Quotation Listing Report',
+            var text = 'Renewal Report',
                 xOffset =
                     doc.internal.pageSize.width / 2 -
                     (doc.getStringUnitWidth(text) *
@@ -798,7 +865,7 @@ export class UnderwritingComponent implements OnInit {
         img.src = 'assets/images/apluslogo.png';
 
         var header = function (headerData: any) {
-            var text = 'Quotation Listing Report',
+            var text = 'Debit Note Report',
                 xOffset =
                     doc.internal.pageSize.width / 2 -
                     (doc.getStringUnitWidth(text) *
@@ -828,17 +895,16 @@ export class UnderwritingComponent implements OnInit {
                 'Transaction Date',
                 'Underwriter',
                 'Policy Number',
-                'Intermediary Name',
+                'Intermediary',
                 'Branch',
-                'Class of Business',
+                'Class',
                 'Product',
-                'Risk ID',
                 'Sum Insured',
-                'Gross Premium',
-                'Insurance Levy',
-                'Commission amount',
+                'Premium',
+                'Levy',
+                'Commission',
                 'Currency',
-                'Endorsement type',
+                'Endor. Type',
             ],
         ];
 
@@ -874,7 +940,7 @@ export class UnderwritingComponent implements OnInit {
         doc.autoTable({
             html: 'Table',
             margin: { top: 80 },
-            didDrawPage: options,
+            didDrawPage: header,
         });
         // autoTable(doc, { html: '#Table' });
         doc.save('DebitNoteReport.pdf');
@@ -1055,48 +1121,98 @@ export class UnderwritingComponent implements OnInit {
     }
     // toPdf function to print the pdfBody which is an array of jsonobjects holding the table data into pdf.
 
-    _getFilterReportList() {
-        let toDate = new Date(this.dateForm.get('toDate').value);
-        let fromDate = new Date(this.dateForm.get('fromDate').value);
+    parseDate(input) {
+        var parts = input.match(/(\d+)/g);
+        // note parts[1]-1
+        return new Date(parts[2], parts[1] - 1, parts[0]).getTime();
+    }
 
-        let t = JSON.stringify(toDate);
-        t = t.slice(1, 11);
+    _getFilterReportList(value) {
+        let fromDate = value.fromDate;
+        let toDate = value.toDate;
 
-        let f = JSON.stringify(fromDate);
-        f = f.slice(1, 11);
+        // if (fromDate !== '' || toDate !== '') {
+        // this.displayedMotor = this.motor;
+        this.displayedMotor = this.motor.filter((date) => {
+            let newDate = moment(date.dateCreated).format('YYYY-MM-DD');
+            toDate = moment(toDate).format('YYYY-MM-DD');
+            fromDate = moment(fromDate).format('YYYY-MM-DD');
 
-        let ff: moment.Moment = moment(f);
-        let tt: moment.Moment = moment(t);
+            let tt = this.parseDate(toDate);
+            let ff = this.parseDate(fromDate);
 
-        console.log('this->day', ff, tt);
+            let nn = this.parseDate(newDate);
 
-        if (fromDate !== null || (!fromDate && toDate !== null) || !toDate) {
-            this.displayQuotationReport = this.filterPremiumReport;
-        }
+            console.log('New Date', nn);
+            console.log('date from form', ff, tt);
 
-        this.quotationService.getMotorQuotations().subscribe((d) => {
-            this.displayQuotationReport = d;
+            if (newDate >= fromDate && newDate <= toDate) {
+                return date;
+            }
 
-            this.filterPremiumReport = this.displayQuotationReport.filter(
-                (x) => {
-                    let myDate: moment.Moment = moment('2020-06-07');
-                    myDate >= ff && myDate <= tt;
-                }
-            );
-
-            console.log('hey am filter', this.filterPremiumReport);
+            console.log('hey am filter', this.displayedMotor);
         });
 
-        // this.filterPremiumReport = this.quotationService
-        //     .getMotorQuotations()
-        //     .subscribe((filter) =>
-        //         filter.filter((f) => {
-        //             let myDate: moment.Moment = moment('2020-06-09');
-        //             myDate >= ff && myDate <= tt;
-        //         })
-        //     );
+        this.displayedFilterMotor = this.filterMotor.filter((date) => {
+            let newDate = moment(date.dateCreated).format('YYYY-MM-DD');
+            toDate = moment(toDate).format('YYYY-MM-DD');
+            fromDate = moment(fromDate).format('YYYY-MM-DD');
 
-        // console.log('hey am filter', this.filterPremiumReport);
+            let tt = this.parseDate(toDate);
+            let ff = this.parseDate(fromDate);
+
+            let nn = this.parseDate(newDate);
+
+            console.log('New Date', nn);
+            console.log('date from form', ff, tt);
+
+            if (newDate >= fromDate && newDate <= toDate) {
+                return date;
+            }
+
+            console.log('hey am filter', this.displayedFilterMotor);
+        });
+
+        this.displayPremiumReport = this.filterPremiumList.filter((date) => {
+            let newDate = moment(date.startDate).format('YYYY-MM-DD');
+            toDate = moment(toDate).format('YYYY-MM-DD');
+            fromDate = moment(fromDate).format('YYYY-MM-DD');
+
+            let tt = this.parseDate(toDate);
+            let ff = this.parseDate(fromDate);
+
+            let nn = this.parseDate(newDate);
+
+            console.log('New Date', nn);
+            console.log('date from form', ff, tt);
+
+            if (newDate >= fromDate && newDate <= toDate) {
+                return date;
+            }
+
+            console.log('hey am filter', this.displayPremiumReport);
+        });
+
+        // }
+
+        //   this.quotationService.getMotorQuotations().subscribe((x) => {
+        //         x.filter((d) => {
+        //             d.dateCreated >= fromDate && d.dateCreated <= toDate;
+        //         });
+        //     });
+
+        //    this.displayedMotor = this.quotationService.getMotorQuotations().subscribe((d) => {
+        //         this.displayQuotationReport = d;
+
+        //         this.filterPremiumReport = this.displayQuotationReport.filter(
+        //             (x) => {
+        //                 let myDate: moment.Moment = moment('2020-06-07');
+        //                 myDate >= ff && myDate <= tt;
+        //             }
+        //         );
+
+        //         console.log('hey am filter', this.filterPremiumReport);
+        //     });
 
         // this.quotationService
         //     .getMotorQuotations()
@@ -1135,13 +1251,94 @@ export class UnderwritingComponent implements OnInit {
         XLSX.writeFile(wb, this.fileName);
     }
 
+    filterMotors(
+        filter: 'All' | 'Agents' | 'Broker' | 'Sales Representative'
+    ): void {
+        switch (filter) {
+            case 'All':
+                this.displayedMotor = this.motor;
+            case 'Agents':
+                this.displayedMotor = this.motor.filter(
+                    (x) => x.sourceOfBusiness == 'Agent'
+                );
+            case 'Broker':
+                this.displayedMotor = this.motor.filter(
+                    (x) => x.sourceOfBusiness == 'Broker'
+                );
+            case 'Sales Representative':
+                this.displayedMotor = this.motor.filter(
+                    (x) => x.sourceOfBusiness == 'Broker'
+                );
+        }
+    }
+
     search(value: string): void {
         if (value === '' || !value) {
-            this.displayQuotationReport = this.motorList;
+            this.displayedFilterMotor = this.filterMotor;
+            this.displayedMotor = this.motor;
+            this.displayPremiumReport = this.filterPremiumList;
         }
 
-        this.displayQuotationReport = this.motorList.filter((motor) => {
-            if (motor.sourceOfBusiness === 'agent') {
+        this.displayedMotor = this.motor.filter((motor) => {
+            if (motor.sourceOfBusiness === 'direct') {
+                return (
+                    motor.quoteNumber
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    motor.intermediaryName
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    motor.status.toLowerCase().includes(value.toLowerCase()) ||
+                    motor.branch.toLowerCase().includes(value.toLowerCase()) ||
+                    motor.client.toLowerCase().includes(value.toLowerCase()) ||
+                    motor.sourceOfBusiness
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    motor.grossPremium
+                        .toFixed()
+                        .includes(value.toLowerCase()) ||
+                    motor.sumInsured.toFixed().includes(value.toLowerCase()) ||
+                    motor.basicPremiumSubTotal
+                        .toString()
+                        .includes(value.toLowerCase())
+                );
+            } else if (motor.sourceOfBusiness === 'broker') {
+                return (
+                    motor.quoteNumber
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    motor.intermediaryName
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    motor.status.toLowerCase().includes(value.toLowerCase()) ||
+                    motor.branch.toLowerCase().includes(value.toLowerCase()) ||
+                    motor.client.toLowerCase().includes(value.toLowerCase()) ||
+                    motor.sourceOfBusiness
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    motor.basicPremiumSubTotal
+                        .toString()
+                        .includes(value.toLowerCase())
+                );
+            } else {
+                motor.quoteNumber.toLowerCase().includes(value.toLowerCase()) ||
+                    motor.intermediaryName
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    motor.status.toLowerCase().includes(value.toLowerCase()) ||
+                    motor.branch.toLowerCase().includes(value.toLowerCase()) ||
+                    motor.client.toLowerCase().includes(value.toLowerCase()) ||
+                    motor.sourceOfBusiness
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    motor.basicPremiumSubTotal
+                        .toString()
+                        .includes(value.toLowerCase());
+            }
+        });
+
+        this.displayedFilterMotor = this.filterMotor.filter((motor) => {
+            if (motor.sourceOfBusiness === 'Agent') {
                 return (
                     motor.quoteNumber
                         .toLowerCase()
@@ -1191,6 +1388,87 @@ export class UnderwritingComponent implements OnInit {
                     motor.basicPremiumSubTotal
                         .toString()
                         .includes(value.toLowerCase());
+            }
+        });
+
+        this.displayPremiumReport = this.filterPremiumList.filter((policy) => {
+            if (policy.sourceOfBusiness === 'direct') {
+                return (
+                    policy.policyNumber
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    policy.intermediaryName
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    policy.status.toLowerCase().includes(value.toLowerCase()) ||
+                    policy.branch.toLowerCase().includes(value.toLowerCase()) ||
+                    policy.client.toLowerCase().includes(value.toLowerCase()) ||
+                    policy.sourceOfBusiness
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    policy.risks[0].productType
+                        .toString()
+                        .includes(value.toLowerCase()) ||
+                    policy.sumInsured
+                        .toString()
+                        .includes(value.toLowerCase()) ||
+                    policy.netPremium
+                        .toString()
+                        .includes(value.toLowerCase()) ||
+                    policy.levy.toString().includes(value.toLowerCase()) ||
+                    policy.currency.toString().includes(value.toLowerCase())
+                );
+            } else if (policy.sourceOfBusiness === 'broker') {
+                return (
+                    policy.policyNumber
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    policy.intermediaryName
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    policy.status.toLowerCase().includes(value.toLowerCase()) ||
+                    policy.branch.toLowerCase().includes(value.toLowerCase()) ||
+                    policy.client.toLowerCase().includes(value.toLowerCase()) ||
+                    policy.sourceOfBusiness
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    policy.risks[0].productType
+                        .toString()
+                        .includes(value.toLowerCase()) ||
+                    policy.sumInsured
+                        .toString()
+                        .includes(value.toLowerCase()) ||
+                    policy.netPremium
+                        .toString()
+                        .includes(value.toLowerCase()) ||
+                    policy.levy.toString().includes(value.toLowerCase()) ||
+                    policy.currency.toString().includes(value.toLowerCase())
+                );
+            } else {
+                policy.policyNumber
+                    .toLowerCase()
+                    .includes(value.toLowerCase()) ||
+                    policy.intermediaryName
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    policy.status.toLowerCase().includes(value.toLowerCase()) ||
+                    policy.branch.toLowerCase().includes(value.toLowerCase()) ||
+                    policy.client.toLowerCase().includes(value.toLowerCase()) ||
+                    policy.sourceOfBusiness
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    policy.risks[0].productType
+                        .toString()
+                        .includes(value.toLowerCase()) ||
+                    policy.sumInsured
+                        .toString()
+                        .includes(value.toLowerCase()) ||
+                    policy.netPremium
+                        .toString()
+                        .includes(value.toLowerCase()) ||
+                    policy.levy.toString().includes(value.toLowerCase()) ||
+                    policy.currency.toString().includes(value.toLowerCase()) ||
+                    policy.commission.toString().includes(value.toLowerCase());
             }
         });
     }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import {
     FormGroup,
     FormBuilder,
@@ -6,7 +6,7 @@ import {
     FormControl
 } from '@angular/forms';
 import { UsersService } from './services/users.service';
-import { User } from './models/users.model';
+import { UserModel } from './models/users.model';
 import { NzMessageService } from 'ng-zorro-antd';
 import { Subject, BehaviorSubject } from 'rxjs';
 
@@ -16,8 +16,8 @@ import { Subject, BehaviorSubject } from 'rxjs';
     styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
-    usersList: User[] = [];
-    displayUsersList: User[] = [];
+    usersList: UserModel[] = [];
+    displayUsersList: UserModel[] = [];
 
     userUpdate = new BehaviorSubject<boolean>(false);
 
@@ -35,7 +35,7 @@ export class UsersComponent implements OnInit {
     constructor(
         private formBuilder: FormBuilder,
         private readonly usersService: UsersService,
-        private msg: NzMessageService
+        private msg: NzMessageService, private changeDetectorRefs: ChangeDetectorRef
     ) {
         this.userDetailsForm = this.formBuilder.group({
             firstName: ['', Validators.required],
@@ -56,65 +56,68 @@ export class UsersComponent implements OnInit {
             this.displayUsersList = this.usersList;
         });
 
-        this.userUpdate.subscribe(update =>
-            update === true
-                ? this.usersService.getUsers().subscribe(users => {
-                      this.usersList = users;
-                      this.displayUsersList = this.usersList;
-                  })
-                : ''
-        );
+        // this.userUpdate.subscribe(update =>
+        //     update === true
+        //         ? this.usersService.getUsers().subscribe(users => {
+        //               this.usersList = users;
+        //               this.displayUsersList = this.usersList;
+        //           })
+        //         : ''
+        // );
     }
 
     showModal(): void {
         this.isVisible = true;
     }
 
-    handleOk(): void {
-        console.log('Button ok clicked!');
-        this.isVisible = false;
-    }
+    
 
     handleCancel(): void {
         console.log('Button cancel clicked!');
         this.isVisible = false;
     }
 
-    async addUser(userDto: User) {
-        await this.usersService.addUser(userDto).subscribe(
-            res => {
-                this.isVisible = false;
-                this.msg.success('User successfully Added');
-            },
+    // async addUser(userDto: UserModel) {
+        
 
-            err => {
-                this.msg.success('Failed to add User');
-            },
-            () => {
-                this.userUpdate.next(true);
-            }
-        );
-    }
+    //     //     ,
+    //     //     () => {
+    //     //         this.userUpdate.next(true);
+    //     //     }
+    //     // );
+    // }
 
-    submitUser(): void {
-        for (const i in this.userDetailsForm.controls) {
-            this.userDetailsForm.controls[i].markAsDirty();
-            this.userDetailsForm.controls[i].updateValueAndValidity();
-        }
+   async submitUser() {
+        // for (const i in this.userDetailsForm.controls) {
+        //     this.userDetailsForm.controls[i].markAsDirty();
+        //     this.userDetailsForm.controls[i].updateValueAndValidity();
+        // }
 
         if (this.userDetailsForm.valid || !this.userDetailsForm.valid) {
-            this.addUser(this.userDetailsForm.value).then(res => {
-                this.userDetailsForm.reset();
-            });
+            // this.addUser(this.userDetailsForm.value).then(res => {
+            //     this.userDetailsForm.reset();
+            // });
+            const details:UserModel = {...this.userDetailsForm.value}
+            
+            
+            await this.usersService.SignUp(details)
+            .then(
+                (res) => {
+                     this.isVisible = false;
+                     this.refresh(details)
+                     this.msg.success('User successfully Added');
+                 }).catch((err) => {
+                     this.msg.success('Failed to add User');
+                 })
         }
     }
 
-    updateConfirmValidator(): void {
-        /** wait for refresh value */
-        Promise.resolve().then(() =>
-            this.userDetailsForm.controls.checkPassword.updateValueAndValidity()
-        );
-    }
+    // updateConfirmValidator(): void {
+    //     /** wait for refresh value */
+    //     Promise.resolve().then(() =>
+    //         this.userDetailsForm.controls.checkPassword.updateValueAndValidity()
+    //     );
+    // }
 
     confirmationValidator = (
         control: FormControl
@@ -129,5 +132,12 @@ export class UsersComponent implements OnInit {
         return {};
     };
 
-    onSubmit() {}
+    refresh(data: UserModel) {
+        
+            this.displayUsersList.push(data) 
+            const clone = this.displayUsersList.slice()
+            this.displayUsersList = clone;
+
+            console.log('DATATATA>>>>', this.displayUsersList);
+      }
 }

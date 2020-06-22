@@ -5,14 +5,14 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import {
     ICorporateClient,
-    IIndividualClient
+    IIndividualClient,
 } from 'src/app/clients/models/clients.model';
 import moment from 'moment';
 
 @Component({
     selector: 'app-policy-schedule-document',
     templateUrl: './policy-schedule-document.component.html',
-    styleUrls: ['./policy-schedule-document.component.scss']
+    styleUrls: ['./policy-schedule-document.component.scss'],
 })
 export class PolicyScheduleDocumentComponent implements OnInit {
     @Input()
@@ -66,6 +66,33 @@ export class PolicyScheduleDocumentComponent implements OnInit {
     @Input()
     client: IIndividualClient & ICorporateClient;
 
+    @Input()
+    deathAndInjuryPerPerson: number;
+
+    @Input()
+    deathAndInjuryPerEvent: number;
+
+    @Input()
+    propertyDamage: number;
+
+    @Input()
+    combinedLimits: number;
+
+    @Input()
+    below21Years: number;
+
+    @Input()
+    over70Years: number;
+
+    @Input()
+    noLicence: number;
+
+    @Input()
+    careLessDriving: number;
+
+    @Input()
+    otherEndorsement: number;
+
     todayDate: Date;
 
     yearOfManufacture: string;
@@ -79,9 +106,7 @@ export class PolicyScheduleDocumentComponent implements OnInit {
     }
 
     getYearOfManufacture(risk: RiskModel) {
-        let year: string = moment(risk.yearOfManufacture)
-            .year()
-            .toString();
+        let year: string = moment(risk.yearOfManufacture).year().toString();
         return year;
     }
 
@@ -91,13 +116,13 @@ export class PolicyScheduleDocumentComponent implements OnInit {
         const options = {
             background: 'white',
             height: div.clientHeight,
-            width: div.clientWidth
+            width: div.clientWidth,
         };
 
-        html2canvas(div, options).then(canvas => {
+        html2canvas(div, options).then((canvas) => {
             let doc = new jsPDF({
                 unit: 'mm',
-                format: 'a3'
+                format: 'a3',
             });
             let imgData = canvas.toDataURL('image/PNG');
             doc.addImage(imgData, 'PNG', 0, 0, 297, 420);

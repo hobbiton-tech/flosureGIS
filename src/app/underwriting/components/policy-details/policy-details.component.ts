@@ -11,7 +11,7 @@ import {
 import { v4 } from 'uuid';
 import { PaymentPlanService } from 'src/app/accounts/services/payment-plan.service';
 import { AccountService } from 'src/app/accounts/services/account.service';
-import { RiskModel } from 'src/app/quotes/models/quote.model';
+import { RiskModel, DiscountModel } from 'src/app/quotes/models/quote.model';
 import { IReceiptModel } from 'src/app/accounts/components/models/receipts.model';
 import { ClausesService } from 'src/app/settings/components/underwriting-setups/services/clauses.service';
 import {
@@ -19,12 +19,13 @@ import {
     IPolicyWording,
     IPolicyExtension,
 } from 'src/app/settings/models/underwriting/clause.model';
-import { DebitNote } from '../../documents/models/documents.model';
+import { DebitNote, CoverNote } from '../../documents/models/documents.model';
 import { ClientsService } from 'src/app/clients/services/clients.service';
 import {
     IIndividualClient,
     ICorporateClient,
 } from 'src/app/clients/models/clients.model';
+import { Http2ServerRequest } from 'http2';
 
 @Component({
     selector: 'app-policy-details',
@@ -76,10 +77,15 @@ export class PolicyDetailsComponent implements OnInit {
     isSchedulePDFVisible = false;
     isClausesPDFVisible = false;
 
+    isNewCertificatePdfVisible = false;
+    isThirdPartyCertificatePdfVisible = false;
+    isComprehensiveCertificatePdfVisible = false;
+
     // For Modal
-    clientName: string;
-    clientNumber: string;
-    clientEmail: string;
+    clientName = '';
+    clientNumber = '';
+    clientAddress = '';
+    clientEmail = '';
     policyRisk: RiskModel;
     issueDate: string;
     issueTime: string;
@@ -93,6 +99,19 @@ export class PolicyDetailsComponent implements OnInit {
     totalAmount: string;
     premiumLevy: string;
 
+    //documents limits of liability
+    deathAndInjuryPerPerson: number;
+    deathAndInjuryPerEvent: number;
+    propertyDamage: number;
+    combinedLimits: number;
+
+    //documents excesses
+    below21Years: number;
+    over70Years: number;
+    noLicence: number;
+    careLessDriving: number;
+    otherEndorsement: number;
+
     optionList = [
         { label: 'Full Payment', value: 'fully' },
         { label: 'Payment Plan', value: 'plan' },
@@ -103,7 +122,14 @@ export class PolicyDetailsComponent implements OnInit {
     // clientName: any;
     netPremium: any;
     formattedeDate: Date;
+    _;
     _id: string;
+    cnd: DiscountModel;
+    cndAmount = 0;
+    receipt: IReceiptModel;
+    coverNote: CoverNote;
+    coverNot: CoverNote;
+    coverNotes: CoverNote[] = [];
 
     constructor(
         private readonly router: Router,
@@ -131,6 +157,14 @@ export class PolicyDetailsComponent implements OnInit {
             this.policiesService.getPolicyById(id.id).subscribe((policy) => {
                 console.log('CHECKING ID GET', policy);
                 this.policyData = policy;
+
+                this.policiesService.getCoverNotes().subscribe((res) => {
+                    console.log('RESULT COVER>>>>', res);
+                    this.coverNotes = res;
+                    
+                })
+
+                
 
                 this.productClauseService
                     .getPolicyClauses()
@@ -168,6 +202,15 @@ export class PolicyDetailsComponent implements OnInit {
                         (x) => x.policy.id === this.policyData.id
                     )[0];
 
+                    this.receiptService.getReciepts().subscribe((receipts) => {
+                        this.receipt = receipts.filter(
+                            (x) =>
+                                x.invoiceNumber ===
+                                this.singleDebitNote.debitNoteNumber
+                        )[0];
+                        console.log('RECEIPTS>>>>>', this.receipt);
+                    });
+
                     console.log('Policy Debit Note:');
                     console.log(this.singleDebitNote);
                 });
@@ -180,20 +223,14 @@ export class PolicyDetailsComponent implements OnInit {
                     console.log('clients: ');
                     console.log(clients);
 
-                    this.client = this.clientsList.filter((x) =>
-                        x.companyName
-                            ? x.companyName === this.policyData.client
-                            : x.firstName + ' ' + x.lastName ===
-                              this.policyData.client
+                    this.client = this.clientsList.filter(
+                        (x) => x.id === this.policyData.clientCode
                     )[0] as IIndividualClient & ICorporateClient;
 
-                    console.log('HERE =>>>>>');
-                    console.log(
-                        this.clientsList.filter(
-                            (x) =>
-                                x.firstName + ' ' + x.lastName === 'Changa Lesa'
-                        )[0] as IIndividualClient & ICorporateClient
-                    );
+                    console.log('HERE =>>>>>', this.client);
+                    this.clientNumber = this.client.phone;
+                    this.clientEmail = this.client.email;
+                    this.clientAddress = this.client.address;
 
                     // console.log('policy data client:');
                     // console.log(this.policyData.client);
@@ -203,14 +240,55 @@ export class PolicyDetailsComponent implements OnInit {
                 });
 
                 this.risks = policy.risks;
+                // this.discounts = risk.discounts;
 
                 this.policyRisk = policy.risks[0];
+                // this.loading =
+
+                //limits Of Liability
+                this.deathAndInjuryPerPerson = policy.risks[0].limitsOfLiability.filter(
+                    (x) => x.liabilityType === 'deathAndInjuryPerPerson'
+                )[0].amount;
+                this.deathAndInjuryPerEvent = policy.risks[0].limitsOfLiability.filter(
+                    (x) => x.liabilityType === 'deathAndInjuryPerEvent'
+                )[0].amount;
+                this.propertyDamage = policy.risks[0].limitsOfLiability.filter(
+                    (x) => x.liabilityType === 'propertyDamage'
+                )[0].amount;
+                this.combinedLimits = policy.risks[0].limitsOfLiability.filter(
+                    (x) => x.liabilityType === 'combinedLimits'
+                )[0].amount;
+
+                //excesses
+                this.below21Years = policy.risks[0].excesses.filter(
+                    (x) => x.excessType === 'below21Years'
+                )[0].amount;
+                this.over70Years = policy.risks[0].excesses.filter(
+                    (x) => x.excessType === 'over70Years'
+                )[0].amount;
+                this.noLicence = policy.risks[0].excesses.filter(
+                    (x) => x.excessType === 'noLicence'
+                )[0].amount;
+                this.careLessDriving = policy.risks[0].excesses.filter(
+                    (x) => x.excessType === 'careLessDriving'
+                )[0].amount;
+
+                this.otherEndorsement = policy.risks[0].excesses.filter(
+                    (x) => x.excessType === 'otherEndorsement'
+                )[0].amount;
+
+                const doo = new Date(policy.endDate);
+                const nd = new Date(
+                    doo.getTime() - doo.getTimezoneOffset() * -60000
+                );
 
                 this.clientName = policy.client;
-                this.clientNumber = '+260976748392';
-                this.clientEmail = policy.client + '@gmail.com'; // TODO: Track client data
+                // if(this.client.phone === undefined) { this.clientNumber = ''; } else {}
+                // if(this.client.email === null || undefined) { this.clientEmail = ''; } else {}
+                // if(this.clientAddress === null || undefined) { this.clientAddress = ''; } else {}
+
                 this.agency = 'Direct'; // TODO: Track this guy too
-                this.coverForm = policy.startDate.toString();
+                this.coverForm = nd.toString();
                 this.coverTo = policy.endDate.toString();
                 // this.basicPremium = this.policy
                 this.loadingAmount = '-';
@@ -227,10 +305,10 @@ export class PolicyDetailsComponent implements OnInit {
                     'basicPremium'
                 ).toString();
 
-                const doo = new Date(this.policyData.endDate);
-                const nd = new Date(
-                    doo.getTime() - doo.getTimezoneOffset() * -60000
-                );
+                // const doo = new Date(this.policyData.endDate);
+                // const nd = new Date(
+                //     doo.getTime() - doo.getTimezoneOffset() * -60000
+                // );
                 // set values of fields
                 this.policyDetailsForm
                     .get('client')
@@ -527,7 +605,34 @@ export class PolicyDetailsComponent implements OnInit {
 
     isCertificateVisible(risk: RiskModel) {
         this.selectedRisk = risk;
+
         this.isCertificatePDFVisible = true;
+    }
+
+    isNewCertificateVisible(risk: RiskModel) {
+        this.selectedRisk = risk;
+        if (this.selectedRisk.insuranceType == 'Comprehensive') {
+            this.cnd = risk.discounts.filter(
+                (x) => x.discountType === 'No Claims Discount'
+            )[0];
+
+                this.coverNot = this.coverNotes.filter((x) => x.policyId === risk.id)[0];
+
+            if (this.cnd === undefined) {
+                this.cndAmount = 0;
+            } else {
+                this.cndAmount = Number(this.cnd.amount);
+            }
+
+            console.log('CND>>>>>', this.cndAmount);
+            this.isComprehensiveCertificatePdfVisible = true;
+            this.isThirdPartyCertificatePdfVisible = false;
+        } else {
+            this.isComprehensiveCertificatePdfVisible = false;
+            this.isThirdPartyCertificatePdfVisible = true;
+        }
+
+        // this.isNewCertificatePdfVisible = true;
     }
 
     sumArray(items, prop) {

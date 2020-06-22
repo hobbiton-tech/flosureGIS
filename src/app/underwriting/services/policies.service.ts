@@ -18,11 +18,9 @@ import {
     CoverNote,
 } from '../documents/models/documents.model';
 
-
 const BASE_URL = 'https://www.flosure-api.com';
 
 // const BASE_URL = 'https://www.flosure-api.com';
-
 
 interface IDebitNoteResult {
     invoiceNumber: string;
@@ -43,6 +41,7 @@ export class PoliciesService {
     private policiesCollection: AngularFirestoreCollection<Policy>;
     policies: Observable<Policy[]>;
     policy: any;
+    getDNote: any;
 
     constructor(
         private firebase: AngularFirestore,
@@ -231,9 +230,7 @@ export class PoliciesService {
     }
 
     getPolicies(): Observable<Policy[]> {
-
         return this.http.get<Policy[]>('https://www.flosure-api.com/policy');
-
         // return this.policies;
     }
 
@@ -400,8 +397,8 @@ export class PoliciesService {
         );
     }
 
-    getCoverNotes(): Observable<CoverNote> {
-        return this.http.get<CoverNote>(`${BASE_URL}/documents/cover-notes`);
+    getCoverNotes(): Observable<CoverNote[]> {
+        return this.http.get<CoverNote[]>(`${BASE_URL}/documents/cover-notes`);
     }
 
     getCoverNoteById(coverNoteId: string): Observable<CoverNote> {

@@ -1,3 +1,5 @@
+// import { InsuranceType } from 'src/app/quotes/models/quote.model';
+
 export interface IRate {
     id: string;
     insuranceProduct: InsuranceType;
@@ -15,4 +17,7 @@ export interface ITax {
     rate: number;
 }
 
-export type InsuranceType = 'ThirdParty' | 'Comprehensive';
+export type InsuranceType = | 'ThirdParty'
+| 'Comprehensive'
+| 'ThirdPartyFireAndTheft'
+| 'ActOnly';;

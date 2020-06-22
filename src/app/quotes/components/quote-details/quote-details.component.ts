@@ -5,6 +5,8 @@ import {
     LoadModel,
     DiscountType,
     DiscountModel,
+    LimitsOfLiability,
+    Excess,
 } from '../../models/quote.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Policy } from 'src/app/underwriting/models/policy.model';
@@ -32,13 +34,27 @@ import {
     ISalesRepresentative,
 } from 'src/app/settings/components/agents/models/agents.model';
 import { ImageElement } from 'canvg';
-import { DebitNote } from 'src/app/underwriting/documents/models/documents.model';
+import { DebitNote, CoverNote } from 'src/app/underwriting/documents/models/documents.model';
 import { ClausesService } from 'src/app/settings/components/underwriting-setups/services/clauses.service';
 import {
     IPolicyClauses,
     IPolicyWording,
     IPolicyExtension,
 } from 'src/app/settings/models/underwriting/clause.model';
+import {
+    VehicleBodyType,
+    MotorComprehensiveLoadingOptions,
+    MotorThirdPartyLoadingOptions,
+    DiscountOptions,
+    SourceOfBusinessOptions,
+    ProductTypeOptions,
+    InsuranceTypeOptions,
+    LimitsOfLiabilityOptions,
+} from '../../selection-options';
+import moment from 'moment';
+import { IReceiptModel } from 'src/app/accounts/components/models/receipts.model';
+import { v4 } from 'uuid';
+import { AccountService } from 'src/app/accounts/services/account.service';
 
 type AOA = any[][];
 
@@ -81,6 +97,15 @@ interface IRateRequest {
     styleUrls: ['./quote-details.component.scss'],
 })
 export class QuoteDetailsComponent implements OnInit {
+    vehicleBodyType = VehicleBodyType;
+    motorComprehensiveloadingOptions = MotorComprehensiveLoadingOptions;
+    motorThirdPartyloadingOptions = MotorThirdPartyLoadingOptions;
+    discountOptions = DiscountOptions;
+    sourceOfBusinessOptions = SourceOfBusinessOptions;
+    productTypeOptions = ProductTypeOptions;
+    insuranceTypeOptions = InsuranceTypeOptions;
+    limitsTypeOptions = LimitsOfLiabilityOptions;
+
     private header = new HttpHeaders({
         'content-type': 'application/json',
         Authorization: 'Douglas.Chilungu:aplusgeneral@2019',
@@ -92,6 +117,9 @@ export class QuoteDetailsComponent implements OnInit {
     quoteDetailsForm: FormGroup;
     riskThirdPartyForm: FormGroup;
     riskComprehensiveForm: FormGroup;
+    limitsOfLiabilityForm: FormGroup;
+    excessesForm: FormGroup;
+    combinedLimitsForm: FormGroup;
     clients: Array<IIndividualClient & ICorporateClient>;
 
     // intermediaries
@@ -195,6 +223,20 @@ export class QuoteDetailsComponent implements OnInit {
     lossOfUseDays: number;
     // lossOfUseAmount: number;
 
+    lossOfKeysAmount: number;
+    maliciousDamageAmount: number;
+    medicalExpensesAmount: number;
+    injuryAndDeathAmount: number;
+    propertyDamageAmount: number;
+    earthquakeAmount: number;
+    explosionsAmount: number;
+    financialLossAmount: number;
+    fireAndAlliedPerilsAmount: number;
+    legalExpensesAmount: number;
+    landslideAmount: number;
+    passengerLiabilityAmount: number;
+    permanentDisabilityAmount: number;
+
     // Discount
     premiumDiscountRate: number;
     premiumDiscountRateType: string;
@@ -212,6 +254,12 @@ export class QuoteDetailsComponent implements OnInit {
 
     // dicounts added
     discounts: DiscountModel[] = [];
+
+    // limits of liability
+    limitsOfLiability: LimitsOfLiability[] = [];
+
+    // excesses
+    excesses: Excess[] = [];
 
     // for quote document
     quoteBasicPremium: number;
@@ -291,55 +339,69 @@ export class QuoteDetailsComponent implements OnInit {
     // low term agreement discount amount
     lowTermAgreementDiscountAmount: number;
 
+    // standard limits
+    defaultDeathAndInjuryPerPersonMax = 30100;
+    defaultDeathAndInjuryPerEventMax = 60100;
+    defaultPropertyDamageMax = 30000;
+    defaultCombinedLimitsMax =
+        this.defaultDeathAndInjuryPerPersonMax +
+        this.defaultDeathAndInjuryPerEventMax +
+        this.defaultPropertyDamageMax;
+
+    // standard limits rates
+    defaultDeathAndInjuryPerPersonRate = 0;
+    defaultDeathAndInjuryPerEventRate = 0;
+    defaultPropertyDamageRate = 0;
+    defaultCombinedLimitsRate = 0;
+
+    // limits
+    deathAndInjuryPerPersonMax = this.defaultDeathAndInjuryPerPersonMax;
+    deathAndInjuryPerEventMax = this.defaultDeathAndInjuryPerEventMax;
+    propertyDamageMax = this.defaultPropertyDamageMax;
+    combinedLimitsMax =
+        this.deathAndInjuryPerPersonMax +
+        this.deathAndInjuryPerEventMax +
+        this.propertyDamageMax;
+
+    deathAndInjuryPerPerson = this.defaultDeathAndInjuryPerPersonMax;
+    deathAndInjuryPerEvent = this.defaultDeathAndInjuryPerEventMax;
+    propertyDamage = this.defaultPropertyDamageMax;
+    combinedLimits =
+        this.deathAndInjuryPerPerson +
+        this.deathAndInjuryPerEvent +
+        this.propertyDamage;
+
+    deathAndInjuryPerPersonPremium = 0;
+    deathAndInjuryPerEventPremium = 0;
+    propertyDamagePremium = 0;
+    combinedLimitsPremium = 0;
+    limitsTotalPremium =
+        this.deathAndInjuryPerPersonPremium +
+        this.deathAndInjuryPerEventPremium +
+        this.propertyDamagePremium +
+        this.combinedLimitsPremium;
+
+    deathAndInjuryPerPersonRate = this.defaultDeathAndInjuryPerPersonRate;
+    deathAndInjuryPerEventRate = this.defaultDeathAndInjuryPerEventRate;
+    propertyDamageRate = this.defaultPropertyDamageRate;
+    combinedLimitsRate = this.defaultCombinedLimitsRate;
+
     optionList = [
         { label: 'Motor Comprehensive', value: 'Comprehensive' },
         { label: 'Motor Third Party', value: 'ThirdParty' },
     ];
     selectedValue = { label: 'Motor Comprehensive', value: 'Comprehensive' };
 
-    motorComprehensiveloadingOptions = [
-        {
-            label: 'Increased Third Party Limit',
-            value: 'increasedThirdPartyLimits',
-        },
-        { label: 'Riot and strike', value: 'riotAndStrike' },
-        { label: 'Car Stereo', value: 'carStereo' },
-        { label: 'Territorial Extension', value: 'territorailExtension' },
-        { label: 'Loss Of Use', value: 'lossOfUse' },
-        { label: 'Inexperienced Driver', value: 'inexperiencedDriver' },
-        { label: 'Under Age Driver', value: 'underAgeDriver' },
-    ];
-
-    motorThirdPartyloadingOptions = [
-        {
-            label: 'Increased Third Party Limit',
-            value: 'increasedThirdPartyLimits',
-        },
-    ];
+    selectedLimits = { label: 'Standard', value: 'standardLimits' };
 
     selectedLoadingValue = {
         label: '',
         value: '',
     };
 
-    // discounts
-    discountOptions = [
-        { label: 'No claims dicount', value: 'noClaimsDiscount' },
-        { label: 'Loyalty Discount', value: 'loyaltyDiscount' },
-        { label: 'Valued Client Discount', value: 'valuedClientDiscount' },
-        { label: 'Low Term Agreement', value: 'lowTermAgreementDiscount' },
-    ];
-
     selectedDiscountValue = { label: '', value: '' };
 
     selectedSourceOfBusiness: string;
-
-    sourceOfBusinessOptions = [
-        { label: 'Direct', value: 'direct' },
-        { label: 'Broker', value: 'broker' },
-        { label: 'Agent', value: 'agent' },
-        { label: 'Sales Representative', value: 'salesRepresentative' },
-    ];
 
     quoteData: MotorQuotationModel = new MotorQuotationModel();
 
@@ -380,6 +442,38 @@ export class QuoteDetailsComponent implements OnInit {
 
     paymentPlan = 'NotCreated';
     policiesCount: number;
+    getInsuranceType = '';
+    selectedPlan = 'fully';
+    isPlanVisible = false;
+    isConfirmReceiptLoading = false;
+    isFullPayment = false;
+    receiptForm: FormGroup;
+    paymentPlanForm: FormGroup;
+    optionTypeOfReceiptList = [
+        { label: 'Premium Payment', value: 'Premium Payment' },
+        { label: 'Third Party Recovery', value: 'Third Party Recovery' },
+        {
+            label: 'Imprest Retirement Receipt',
+            value: 'Imprest Retirement Receipt',
+        },
+        { label: 'Third Party Recovery', value: 'Third Party Recovery' },
+        { label: 'General Receipt', value: 'General Receipt' },
+    ];
+
+    paymentMethodList = [
+        { label: 'Cash', value: 'cash' },
+        { label: 'EFT', value: 'eft' },
+        { label: 'Bank Transfer', value: 'bank transfer' },
+        { label: 'Cheque', value: 'cheque' },
+    ];
+    paymentMethod: any;
+    submitted = false;
+    _id = '';
+    receiptNum: string;
+    isOkLoading = false;
+    amount = '';
+    policyId: string;
+    newRisks: RiskModel[];
 
     constructor(
         private formBuilder: FormBuilder,
@@ -391,8 +485,25 @@ export class QuoteDetailsComponent implements OnInit {
         private msg: NzMessageService,
         private http: HttpClient,
         private readonly agentsService: AgentsService,
-        private productClauseService: ClausesService
-    ) {}
+        private productClauseService: ClausesService,
+        private receiptService: AccountService,
+        private message: NzMessageService
+    ) {
+        this.receiptForm = this.formBuilder.group({
+            receivedFrom: ['', Validators.required],
+            sumInDigits: [''],
+            paymentMethod: ['', Validators.required],
+            tpinNumber: ['4324324324324324'],
+            address: [''],
+            receiptType: ['', Validators.required],
+            narration: ['', Validators.required],
+            sumInWords: [''],
+            dateReceived: [''],
+            todayDate: [''],
+            remarks: [''],
+            cheqNumber: [''],
+        });
+    }
 
     ngOnInit(): void {
         this.route.params.subscribe((param) => {
@@ -408,6 +519,7 @@ export class QuoteDetailsComponent implements OnInit {
                 console.log('this.quote>>>>>', this.quoteData);
 
                 this.risks = this.quoteData.risks;
+
                 this.productClauseService
                     .getPolicyClauses()
                     .subscribe((res) => {
@@ -456,6 +568,23 @@ export class QuoteDetailsComponent implements OnInit {
                 this.isQuoteApproved = this.quote.status === 'Approved';
 
                 this.quotesLoading = false;
+                this.amount = this.sumArray(this.quoteData.risks, 'netPremium');
+
+                // this.receiptForm
+                // .get('sumInDigits')
+                // .setValue(this.sumArray(this.quoteData.risks, 'netPremium'));
+
+                // this.receiptForm
+                //     .get('currency')
+                //     .setValue(this.quoteData.currency);
+                // this.receiptForm
+                //     .get('sourceOfBusiness')
+                //     .setValue(this.quoteData.sourceOfBusiness, {
+                //         onlySelf: true,
+                //     });
+                // this.receiptForm
+                //     .get('intermediaryName')
+                //     .setValue(this.quoteData.intermediaryName);
 
                 // fill quotation details
                 this.quoteDetailsForm
@@ -503,110 +632,183 @@ export class QuoteDetailsComponent implements OnInit {
                 this.premiumLoadingTotal = 0;
             });
 
+            this.clientsService.getAllClients().subscribe((clients) => {
+                this.clients = [...clients[0], ...clients[1]] as Array<
+                    IIndividualClient & ICorporateClient
+                >;
+            });
+
+            this.agentsService.getAgents().subscribe((agents) => {
+                this.agents = agents;
+            });
+
+            this.agentsService.getBrokers().subscribe((brokers) => {
+                this.brokers = brokers;
+            });
+
+            this.agentsService
+                .getSalesRepresentatives()
+                .subscribe((salesRepresentatives) => {
+                    this.salesRepresentatives = salesRepresentatives;
+                });
+
+            this.agentsService
+                .getAllIntermediaries()
+                .subscribe((intermediaries) => {
+                    this.intermediaries = [
+                        ...intermediaries[0],
+                        ...intermediaries[1],
+                        ...intermediaries[2],
+                    ] as Array<IAgent & IBroker & ISalesRepresentative>;
+                });
+
+            // start of initialize computations
+            this.sumInsured = 0;
+            this.premiumRate = 0;
+
+            this.basicPremium = 0;
+            this.premiumLoadingTotal = 0;
+            this.premiumDiscount = 0;
+            this.premiumDiscountRate = 0;
+            this.basicPremiumLevy = 0;
+            this.netPremium = 0;
+
+            this.premiumDiscount = 0;
+            this.carStereoValue = 0;
+            this.carStereoRate = 0;
+            this.lossOfUseDays = 0;
+            this.lossOfUseDailyRate = 0;
+            this.increasedThirdPartyLimitValue = 0;
+            this.increasedThirdPartyLimitsRate = 0;
+            this.riotAndStrikeRate = 0;
+
+            // rate should be in percentage when page is loaded
+            this.premiumRateType = 'percentage';
+            this.increasedThirdPartyLimitsRateType = 'percentage';
+            this.riotAndStrikeRateType = 'percentage';
+            this.carStereoRateType = 'percentage';
+            this.lossOfUseDailyRateType = 'percentage';
+            this.premiumDiscountRateType = 'percentage';
+
+            this.quoteDetailsForm = this.formBuilder.group({
+                client: ['', Validators.required],
+                startDate: ['', Validators.required],
+                endDate: [''],
+                currency: [`${this.quote.currency}`, Validators.required],
+                branch: ['', Validators.required],
+                product: ['', Validators.required],
+                quarter: ['', Validators.required],
+                underwritingYear: ['', Validators.required],
+                sourceOfBusiness: ['', Validators.required],
+                intermediaryName: ['', Validators.required],
+            });
+
+            this.riskComprehensiveForm = this.formBuilder.group({
+                riskStartDate: ['', Validators.required],
+                riskQuarter: ['', Validators.required],
+                riskEndDate: ['', Validators.required],
+                regNumber: ['', Validators.required],
+                vehicleMake: ['', Validators.required],
+                vehicleModel: ['', Validators.required],
+                engineNumber: ['', Validators.required],
+                chassisNumber: ['', Validators.required],
+                yearOfManufacture: ['', Validators.required],
+                color: ['', Validators.required],
+                cubicCapacity: ['', Validators.required],
+                seatingCapacity: ['', Validators.required],
+                bodyType: ['', Validators.required],
+                productType: ['', Validators.required],
+                insuranceType: ['Comprehensive'],
+                numberOfDays: ['', Validators.required],
+                expiryQuarter: ['', Validators.required],
+            });
+
+            this.riskThirdPartyForm = this.formBuilder.group({
+                riskStartDate: ['', Validators.required],
+                riskQuarter: ['', Validators.required],
+                riskEndDate: ['', Validators.required],
+                regNumber: ['', [Validators.required]],
+                vehicleMake: ['', [Validators.required]],
+                vehicleModel: ['', [Validators.required]],
+                engineNumber: ['', [Validators.required]],
+                chassisNumber: ['', [Validators.required]],
+                yearOfManufacture: ['', Validators.required],
+                color: ['', [Validators.required]],
+                cubicCapacity: ['', Validators.required],
+                seatingCapacity: ['', Validators.required],
+                bodyType: ['', Validators.required],
+                productType: ['', [Validators.required]],
+                insuranceType: [this.selectedValue.value],
+                numberOfDays: ['', Validators.required],
+                expiryQuarter: ['', Validators.required],
+            });
+
+            this.limitsOfLiabilityForm = this.formBuilder.group({
+                deathAndInjuryPerPerson: ['', Validators.required],
+                deathAndInjuryPerEvent: ['', Validators.required],
+                propertyDamage: ['', Validators.required],
+                deathAndInjuryPerPersonPremium: ['', Validators.required],
+                deathAndInjuryPerEventPremium: ['', Validators.required],
+                propertyDamagePremium: ['', Validators.required],
+                deathAndInjuryPerPersonRate: ['', Validators.required],
+                deathAndInjuryPerEventRate: ['', Validators.required],
+                propertyDamageRate: ['', Validators.required],
+                // protectionAndRemoval: ['', Validators.required],
+                // deathBodilyInjuryPerEvent: ['', Validators.required],
+                // deathBodilyInjuryPerPerson: ['', Validators.required],
+                // propertyDamage: ['', Validators.required],
+                // medicalExpensesPerAccident: ['', Validators.required],
+                // medicalExpensesPerPerson: ['', Validators.required],
+                // unauthourizedRepair: ['', Validators.required]
+            });
+
+            this.excessesForm = this.formBuilder.group({
+                collisionAndFire: ['', Validators.required],
+                theftOfVehicleWithAntiTheftDevice: ['', Validators.required],
+                theftOfVehicleWithoutAntiTheftDevice: ['', Validators.required],
+                thirdPartyPropertyDamage: ['', Validators.required],
+            });
+
+            this.combinedLimitsForm = this.formBuilder.group({
+                combinedLimits: ['', Validators.required],
+                combinedLimitsPremium: ['', Validators.required],
+                combinedLimitsRate: ['', Validators.required],
+            });
+
+            // set values for limits of liability
+            this.limitsOfLiabilityForm
+                .get('protectionAndRemoval')
+                .setValue('500');
+            this.limitsOfLiabilityForm
+                .get('deathBodilyInjuryPerEvent')
+                .setValue('60100');
+            this.limitsOfLiabilityForm
+                .get('deathBodilyInjuryPerPerson')
+                .setValue('30100');
+            this.limitsOfLiabilityForm.get('propertyDamage').setValue('30000');
+            this.limitsOfLiabilityForm
+                .get('medicalExpensesPerAccident')
+                .setValue('100');
+            this.limitsOfLiabilityForm
+                .get('medicalExpensesPerPerson')
+                .setValue('50');
+            this.limitsOfLiabilityForm
+                .get('unauthourizedRepair')
+                .setValue('500');
+
+            // set values for excesses
+            this.excessesForm.get('collisionAndFire').setValue('500');
+            this.excessesForm
+                .get('theftOfVehicleWithAntiTheftDevice')
+                .setValue('500');
+            this.excessesForm
+                .get('theftOfVehicleWithoutAntiTheftDevice')
+                .setValue('500');
+            this.excessesForm.get('thirdPartyPropertyDamage').setValue('500');
+
             this.policiesService.getPolicies().subscribe((policies) => {
                 this.policiesCount = policies.length;
             });
-        });
-
-        this.clientsService.getAllClients().subscribe((clients) => {
-            this.clients = [...clients[0], ...clients[1]] as Array<
-                IIndividualClient & ICorporateClient
-            >;
-        });
-
-        this.agentsService.getAgents().subscribe((agents) => {
-            this.agents = agents;
-        });
-
-        this.agentsService.getBrokers().subscribe((brokers) => {
-            this.brokers = brokers;
-        });
-
-        this.agentsService
-            .getSalesRepresentatives()
-            .subscribe((salesRepresentatives) => {
-                this.salesRepresentatives = salesRepresentatives;
-            });
-
-        this.agentsService
-            .getAllIntermediaries()
-            .subscribe((intermediaries) => {
-                this.intermediaries = [
-                    ...intermediaries[0],
-                    ...intermediaries[1],
-                    ...intermediaries[2],
-                ] as Array<IAgent & IBroker & ISalesRepresentative>;
-            });
-
-        // start of initialize computations
-        this.sumInsured = 0;
-        this.premiumRate = 0;
-
-        this.basicPremium = 0;
-        this.premiumLoadingTotal = 0;
-        this.premiumDiscount = 0;
-        this.premiumDiscountRate = 0;
-        this.basicPremiumLevy = 0;
-        this.netPremium = 0;
-
-        this.premiumDiscount = 0;
-        this.carStereoValue = 0;
-        this.carStereoRate = 0;
-        this.lossOfUseDays = 0;
-        this.lossOfUseDailyRate = 0;
-        this.increasedThirdPartyLimitValue = 0;
-        this.increasedThirdPartyLimitsRate = 0;
-        this.riotAndStrikeRate = 0;
-
-        // rate should be in percentage when page is loaded
-        this.premiumRateType = 'percentage';
-        this.increasedThirdPartyLimitsRateType = 'percentage';
-        this.riotAndStrikeRateType = 'percentage';
-        this.carStereoRateType = 'percentage';
-        this.lossOfUseDailyRateType = 'percentage';
-        this.premiumDiscountRateType = 'percentage';
-
-        this.quoteDetailsForm = this.formBuilder.group({
-            client: ['', Validators.required],
-            startDate: ['', Validators.required],
-            endDate: [''],
-            currency: [`${this.quote.currency}`, Validators.required],
-            branch: ['', Validators.required],
-            product: ['', Validators.required],
-            quarter: ['', Validators.required],
-            underwritingYear: ['', Validators.required],
-            sourceOfBusiness: ['', Validators.required],
-            intermediaryName: ['', Validators.required],
-        });
-
-        this.riskComprehensiveForm = this.formBuilder.group({
-            riskStartDate: ['', Validators.required],
-            riskQuarter: ['', Validators.required],
-            riskEndDate: ['', Validators.required],
-            regNumber: ['', Validators.required],
-            vehicleMake: ['', Validators.required],
-            vehicleModel: ['', Validators.required],
-            engineNumber: ['', Validators.required],
-            chassisNumber: ['', Validators.required],
-            yearOfManufacture: ['', Validators.required],
-            color: ['', Validators.required],
-            productType: ['', Validators.required],
-            insuranceType: ['Comprehensive'],
-        });
-
-        this.riskThirdPartyForm = this.formBuilder.group({
-            riskStartDate: ['', Validators.required],
-            riskQuarter: ['', Validators.required],
-            riskEndDate: ['', Validators.required],
-            regNumber: ['', [Validators.required]],
-            vehicleMake: ['', [Validators.required]],
-            vehicleModel: ['', [Validators.required]],
-            engineNumber: ['', [Validators.required]],
-            chassisNumber: ['', [Validators.required]],
-            yearOfManufacture: ['', Validators.required],
-            color: ['', [Validators.required]],
-            productType: ['', [Validators.required]],
-            insuranceType: ['ThirdParty'],
         });
 
         // vehicle make loading
@@ -702,9 +904,31 @@ export class QuoteDetailsComponent implements OnInit {
                     request
                 )
                 .subscribe((data) => {
+                    const doo = new Date(data.endDate);
+                    const nd = new Date(
+                        doo.getTime() - doo.getTimezoneOffset() * -60000
+                    );
+
+                    const startDate = moment(
+                        this.riskComprehensiveForm.get('riskStartDate').value
+                    );
+                    const endDate = moment(nd);
+                    const numberOfDays = endDate.diff(startDate, 'days');
+                    const expiryQuarter = moment(endDate).quarter();
+                    const expiryYear = moment(endDate)
+                        .year()
+                        .toString()
+                        .slice(-2);
+
+                    this.riskComprehensiveForm.get('riskEndDate').setValue(nd);
+
                     this.riskComprehensiveForm
-                        .get('riskEndDate')
-                        .setValue(data.endDate);
+                        .get('numberOfDays')
+                        .setValue(numberOfDays);
+
+                    this.riskComprehensiveForm
+                        .get('expiryQuarter')
+                        .setValue(expiryQuarter + '/' + expiryYear);
                 });
         }
     }
@@ -741,10 +965,53 @@ export class QuoteDetailsComponent implements OnInit {
                     request
                 )
                 .subscribe((data) => {
-                    this.riskThirdPartyForm
-                        .get('riskEndDate')
-                        .setValue(data.endDate);
+                    const doo = new Date(data.endDate);
+                    const nd = new Date(
+                        doo.getTime() - doo.getTimezoneOffset() * -60000
+                    );
+
+                    this.riskThirdPartyForm.get('riskEndDate').setValue(nd);
                 });
+        }
+    }
+
+    handleDatesCalculation(): void {
+        if (this.selectedValue.value == 'Comprehensive') {
+            const startDate = moment(
+                this.riskComprehensiveForm.get('riskStartDate').value
+            );
+            const endDate = moment(
+                this.riskComprehensiveForm.get('riskEndDate').value
+            );
+
+            const numberOfDays = endDate.diff(startDate, 'days');
+            const expiryQuarter = moment(endDate).quarter();
+            const expiryYear = moment(endDate).year().toString().slice(-2);
+
+            this.riskComprehensiveForm
+                .get('numberOfDays')
+                .setValue(numberOfDays);
+
+            this.riskComprehensiveForm
+                .get('expiryQuarter')
+                .setValue(expiryQuarter + '/' + expiryYear);
+        } else {
+            const startDate = moment(
+                this.riskThirdPartyForm.get('riskStartDate').value
+            );
+            const endDate = moment(
+                this.riskThirdPartyForm.get('riskEndDate').value
+            );
+
+            const numberOfDays = endDate.diff(startDate, 'days');
+            const expiryQuarter = moment(endDate).quarter();
+            const expiryYear = moment(endDate).year().toString().slice(-2);
+
+            this.riskThirdPartyForm.get('numberOfDays').setValue(numberOfDays);
+
+            this.riskThirdPartyForm
+                .get('expiryQuarter')
+                .setValue(expiryQuarter + '/' + expiryYear);
         }
     }
 
@@ -818,6 +1085,9 @@ export class QuoteDetailsComponent implements OnInit {
     }
 
     addThirdPartyRisk(): void {
+        this.addLimitsOfLiability();
+        this.addExcesses();
+
         const some: RiskModel[] = [];
         some.push({
             ...this.riskThirdPartyForm.value,
@@ -825,6 +1095,9 @@ export class QuoteDetailsComponent implements OnInit {
             premiumRate: this.premiumRate,
             basicPremium: this.basicPremium,
             loads: this.loads,
+            discounts: this.discounts,
+            limitsOfLiability: this.limitsOfLiability,
+            excesses: this.excesses,
             loadingTotal: this.premiumLoadingTotal,
             discountTotal: this.premiumDiscount,
             discountRate: this.premiumDiscountRate,
@@ -862,6 +1135,9 @@ export class QuoteDetailsComponent implements OnInit {
     }
 
     addComprehensiveRisk(): void {
+        this.addLimitsOfLiability();
+        this.addExcesses();
+
         const some: RiskModel[] = [];
         some.push({
             ...this.riskComprehensiveForm.value,
@@ -870,6 +1146,8 @@ export class QuoteDetailsComponent implements OnInit {
             basicPremium: this.basicPremium,
             loads: this.loads,
             discounts: this.discounts,
+            limitsOfLiability: this.limitsOfLiability,
+            excesses: this.excesses,
             loadingTotal: this.premiumLoadingTotal,
             discountTotal: this.premiumDiscount,
             discountRate: this.premiumDiscountRate,
@@ -942,6 +1220,19 @@ export class QuoteDetailsComponent implements OnInit {
                 .get('riskEndDate')
                 .setValue(risk.riskEndDate);
             this.riskComprehensiveForm.get('color').setValue(risk.color);
+            this.riskComprehensiveForm
+                .get('cubicCapacity')
+                .setValue(risk.cubicCapacity);
+            this.riskComprehensiveForm
+                .get('seatingCapacity')
+                .setValue(risk.seatingCapacity);
+            this.riskComprehensiveForm.get('bodyType').setValue(risk.bodyType);
+            this.riskComprehensiveForm
+                .get('numberOfDays')
+                .setValue(risk.numberOfDays);
+            this.riskComprehensiveForm
+                .get('expiryQuarter')
+                .setValue(risk.expiryQuarter);
         } else {
             this.riskComprehensiveForm
                 .get('vehicleMake')
@@ -972,7 +1263,93 @@ export class QuoteDetailsComponent implements OnInit {
                 .get('riskEndDate')
                 .setValue(risk.riskEndDate);
             this.riskThirdPartyForm.get('color').setValue(risk.color);
+            this.riskThirdPartyForm
+                .get('cubicCapacity')
+                .setValue(risk.cubicCapacity);
+            this.riskThirdPartyForm
+                .get('seatingCapacity')
+                .setValue(risk.seatingCapacity);
+            this.riskThirdPartyForm.get('bodyType').setValue(risk.bodyType);
+            this.riskThirdPartyForm
+                .get('numberOfDays')
+                .setValue(risk.numberOfDays);
+            this.riskThirdPartyForm
+                .get('expiryQuarter')
+                .setValue(risk.expiryQuarter);
         }
+
+        this.deathAndInjuryPerPerson = risk.limitsOfLiability.filter(
+            (x) => x.liabilityType === 'deathAndInjuryPerPerson'
+        )[0].amount;
+        this.deathAndInjuryPerEvent = risk.limitsOfLiability.filter(
+            (x) => x.liabilityType === 'deathAndInjuryPerEvent'
+        )[0].amount;
+        this.propertyDamage = risk.limitsOfLiability.filter(
+            (x) => x.liabilityType === 'propertyDamage'
+        )[0].amount;
+        this.combinedLimits = risk.limitsOfLiability.filter(
+            (x) => x.liabilityType === 'combinedLimits'
+        )[0].amount;
+
+        this.deathAndInjuryPerPersonRate = risk.limitsOfLiability.filter(
+            (x) => x.liabilityType === 'deathAndInjuryPerPerson'
+        )[0].rate;
+        this.deathAndInjuryPerEventRate = risk.limitsOfLiability.filter(
+            (x) => x.liabilityType === 'deathAndInjuryPerEvent'
+        )[0].rate;
+        this.propertyDamageRate = risk.limitsOfLiability.filter(
+            (x) => x.liabilityType === 'propertyDamage'
+        )[0].rate;
+        this.combinedLimitsRate = risk.limitsOfLiability.filter(
+            (x) => x.liabilityType === 'combinedLimits'
+        )[0].rate;
+
+        this.deathAndInjuryPerPersonPremium = risk.limitsOfLiability.filter(
+            (x) => x.liabilityType === 'deathAndInjuryPerPerson'
+        )[0].premium;
+        this.deathAndInjuryPerEventPremium = risk.limitsOfLiability.filter(
+            (x) => x.liabilityType === 'deathAndInjuryPerEvent'
+        )[0].premium;
+        this.propertyDamagePremium = risk.limitsOfLiability.filter(
+            (x) => x.liabilityType === 'propertyDamage'
+        )[0].premium;
+        this.combinedLimitsPremium = risk.limitsOfLiability.filter(
+            (x) => x.liabilityType === 'combinedLimits'
+        )[0].premium;
+
+        this.excessesForm
+            .get('below21Years')
+            .setValue(
+                risk.excesses.filter((x) => x.excessType == 'below21Years')[0]
+                    .amount
+            );
+        this.excessesForm
+            .get('over70Years')
+            .setValue(
+                risk.excesses.filter((x) => x.excessType == 'over70Years')[0]
+                    .amount
+            );
+        this.excessesForm
+            .get('noLicence')
+            .setValue(
+                risk.excesses.filter((x) => x.excessType == 'noLicence')[0]
+                    .amount
+            );
+        this.excessesForm
+            .get('careLessDriving')
+            .setValue(
+                risk.excesses.filter(
+                    (x) => x.excessType == 'careLessDriving'
+                )[0].amount
+            );
+
+        this.excessesForm
+            .get('otherEndorsement')
+            .setValue(
+                risk.excesses.filter(
+                    (x) => x.excessType == 'otherEndorsement'
+                )[0].amount
+            );
 
         this.selectedVehicleMake = risk.vehicleMake;
         this.selectedVehicleModel = risk.vehicleModel;
@@ -1113,176 +1490,515 @@ export class QuoteDetailsComponent implements OnInit {
     handleCancel(): void {
         this.isVisible = false;
     }
+    handleReceiptCancel() {
+        this.isPlanVisible = false;
+    }
+
+    handleReceiptOk() {}
+    showPaymentModal() {
+        this.isPlanVisible = true;
+    }
     generateDocuments(): void {
-        console.log('here');
+        console.log('here>>>>>', this.quote.risks[0].insuranceType);
+        this.amount = this.sumArray(this.quoteData.risks, 'netPremium');
         this.approvingQuote = true;
 
-        // const debitNote: IDebitNoteDTO = {
-        //     companyTelephone: 'Joshua Silwembe',
-        //     companyEmail: 'joshua.silwembe@hobbiton.co.zm',
-        //     vat: '5%',
-        //     pin: '4849304930',
-        //     todayDate: new Date(),
-        //     agency: 'string',
-        //     nameOfInsured: 'Joshua Silwembe',
-        //     addressOfInsured: 'string',
-        //     ref: 'string',
-        //     policyNumber: 'string',
-        //     endorsementNumber: 'string',
-        //     regarding: 'string',
-        //     classOfBusiness: 'string',
-        //     brokerRef: 'string',
-        //     fromDate: new Date(),
-        //     toDate: new Date(),
-        //     currency: 'string',
-        //     basicPremium: 0,
-        //     insuredPremiumLevy: 0,
-        //     netPremium: 0,
-        //     processedBy: 'string'
-        // };
+        if (
+            this.quote.risks[0].insuranceType === 'ThirdPartyFireAndTheft' ||
+            'ThirdParty' ||
+            'ActOnly'
+        ) {
+            this.getInsuranceType = this.quote.risks[0].insuranceType;
 
-        // const certificate: ICertificateDTO = {
-        //     certificateNumber: 'string',
-        //     policyNumber: 'string',
-        //     clientName: 'string',
-        //     nameOfInsured: 'string',
-        //     address: 'string',
-        //     phone: 'string',
-        //     email: 'james@gmail.com',
-        //     coverType: 'string',
-        //     startDate: new Date(),
-        //     expiryDate: new Date(),
-        //     sumInsured: 0,
-        //     regMark: 'string',
-        //     makeAndType: 'string',
-        //     engine: 'string',
-        //     chassisNumber: 'string',
-        //     yearOfManufacture: 'string',
-        //     color: 'string',
-        //     branch: 'string',
-        //     timeOfIssue: new Date(),
-        //     dateOfIssue: new Date(),
-        //     thirdPartyPropertyDamage: 0,
-        //     thirdPartyInuryAndDeath: 0,
-        //     thirdPartyBoodilyInjury_DeathPerEvent: 0,
-        //     town: 'string'
-        // };
+            this.submitted = true;
+            // console.log('DEBIT NOTE NUMBER>>>>>', this.debitnote.debitNoteNumber);
+            if (this.receiptForm.valid) {
+                this.isOkLoading = true;
+                this._id = v4();
+                const receipt: IReceiptModel = {
+                    id: this._id,
+                    ...this.receiptForm.value,
+                    onBehalfOf: this.quoteData.client,
+                    capturedBy: localStorage.getItem('user'),
+                    sumInDigits: this.amount,
+                    // policyNumber: this.policyNumber,
+                    receiptStatus: 'Receipted',
+                    todayDate: new Date(),
+                    // invoiceNumber: this.debitnote.debitNoteNumber,
+                    sourceOfBusiness: this.quoteData.sourceOfBusiness,
+                    intermediaryName: this.quoteData.intermediaryName,
+                    currency: this.quoteData.currency,
+                };
 
-        // const debit$ = '';
-        // const cert$ = '';
+                this.receiptNum = this._id;
 
-        // combineLatest().subscribe(async ([debit, cert]) => {
-        this.quote.status = 'Approved';
-        this.quotesService
-            .updateMotorQuotation(this.quote, this.quote.id)
-            .subscribe((quotation) => (res) => console.log(res));
+                // combineLatest().subscribe(async ([debit, cert]) => {
+                this.quote.status = 'Approved';
+                this.quotesService
+                    .updateMotorQuotation(this.quote, this.quote.id)
+                    .subscribe((quotation) => (res) => console.log(res));
 
-        // convert to policy
-        const policy: Policy = {
-            ...this.quoteDetailsForm.value,
-            nameOfInsured: this.quoteData.client,
-            policyNumber: this.quoteNumber.replace('Q', 'P'),
-            dateOfIssue: new Date(),
-            expiryDate: this.quoteData.endDate,
-            timeOfIssue: new Date(),
-            // new Date().getHours() + ':' + new Date().getMinutes(),
-            status: 'Active',
-            receiptStatus: this.status,
-            risks: this.quoteData.risks,
-            sumInsured: this.sumArray(this.quoteData.risks, 'sumInsured'),
-            netPremium: this.sumArray(this.quoteData.risks, 'netPremium'),
-            paymentPlan: this.paymentPlan,
-            underwritingYear: new Date(),
-            user: localStorage.getItem('user'),
-            sourceOfBusiness: this.quoteData.sourceOfBusiness,
-            intermediaryName: this.quoteData.intermediaryName,
-        };
+                // convert to policy
+                const policy: Policy = {
+                    ...this.quoteDetailsForm.value,
+                    nameOfInsured: this.quoteData.client,
+                    clientCode: this.quoteData.clientCode,
+                    policyNumber: this.quoteNumber.replace('Q', 'P'),
+                    dateOfIssue: new Date(),
+                    expiryDate: this.quoteData.endDate,
+                    timeOfIssue: new Date(),
+                    // new Date().getHours() + ':' + new Date().getMinutes(),
+                    status: 'Active',
+                    receiptStatus: 'Receipted',
+                    risks: this.quoteData.risks,
+                    sumInsured: this.sumArray(
+                        this.quoteData.risks,
+                        'sumInsured'
+                    ),
+                    netPremium: this.sumArray(
+                        this.quoteData.risks,
+                        'netPremium'
+                    ),
+                    paymentPlan: 'Created',
+                    underwritingYear: new Date(),
+                    user: localStorage.getItem('user'),
+                    sourceOfBusiness: this.quoteData.sourceOfBusiness,
+                    intermediaryName: this.quoteData.intermediaryName,
+                };
 
-        const debitNote: DebitNote = {
-            remarks: '-',
-            dateCreated: new Date(),
-            dateUpdated: new Date(),
-        };
+                const debitNote: DebitNote = {
+                    remarks: '-',
+                    dateCreated: new Date(),
+                    dateUpdated: new Date(),
+                };
 
-        // const policy = this.quoteDetailsForm.value as Policy;
-        console.log(policy);
+                const coverNote: CoverNote = {
+                    dateCreated: new Date(),
+                    dateUpdated: new Date()
+                }
 
-        this.policiesService.createPolicy(policy).subscribe((res) => {
-            console.log('response:');
-            console.log(res);
+                // const policy = this.quoteDetailsForm.value as Policy;
+                console.log(policy);
 
-            this.policiesService.createDebitNote(
-                res.id,
-                debitNote,
-                res,
-                this.policiesCount
-            );
+                this.policiesService.createPolicy(policy).subscribe((res) => {
+                    console.log('response:', res);
 
-            for (const clause of this.clauses) {
-                clause.policyId = res.id;
-                this.productClauseService.updatePolicyClause(clause);
-            }
+                    this.policyId = res.id;
+                    this.newRisks = res.risks;
+                    console.log('Risks>>>>>>>>', this.newRisks);
+                    
 
-            for (const extenstion of this.extensions) {
-                extenstion.policyId = res.id;
-                this.productClauseService.updatePolicyExtension(extenstion);
-            }
+                    // this.policiesService.createDebitNote(
+                    //     res.id,
+                    //     debitNote,
+                    //     res,
+                    //     this.policiesCount
+                    // );
 
-            for (const wording of this.wordings) {
-                wording.policyId = res.id;
-                this.productClauseService.updatePolicyWording(wording);
-            }
+                    let insuranceType = '';
+                    const productType = this.getInsuranceType;
+                    if (productType == 'Comprehensive') {
+                        insuranceType = 'MCP';
+                    } else {
+                        insuranceType = 'THP';
+                    }
 
-            console.log(
-                'CLAUSE>>>>>>',
-                this.clauses,
-                this.extensions,
-                this.wordings
-            );
+                    for( const r of this.newRisks){
 
-            for (const risk of policy.risks) {
-                console.log('Risks>>>>', risk);
+                        let insuranceType = '';
+                        const productType = r.insuranceType;
+                        if (productType == 'Comprehensive') {
+                            insuranceType = 'MCP';
+                        } else {
+                            insuranceType = 'THP';
+                        }
 
-                if (risk.insuranceType === 'ThirdParty') {
-                    const params = {
-                        insuranceType: 1,
-                        status: 1,
-                        registrationMark: risk.regNumber.replace(/\s/g, ''),
-                        dateFrom: risk.riskStartDate,
-                        dateTo: risk.riskEndDate,
-                        insurancePolicyNo: policy.policyNumber,
-                        chassisNumber: risk.chassisNumber,
-                    };
+                        this.http
+                    .get<any>(
+                        `https://flosure-number-generation.herokuapp.com/aplus-certificate-number/1/0/${insuranceType}`
+                    )
+                    .subscribe(async (res) => {
+                        coverNote.certificateNumber = res.data.certificate_number;
+                        coverNote.policyId = r.id;
+                        console.log(
+                            'Cover Note>>>>',
+                            res.data.certificate_number
+                        );
 
-                    console.log('PARAMS>>>>>>', params);
+                        this.http
+                        .post<CoverNote>(
+                            `https://www.flosure-api.com/documents/cover-note`,
+                            coverNote
+                        )
+                        .subscribe(
+                            async (res) => {
+                                console.log(res);
+                            },
+                            async (err) => {
+                                console.log(err);
+                            }
+                        );
 
-                    this.quotesService.postRtsa(params);
-                } else if (risk.insuranceType === 'Comprehensive') {
-                    const params = {
-                        insuranceType: 2,
-                        status: 1,
-                        registrationMark: risk.regNumber.replace(/\s/g, ''),
-                        dateFrom: risk.riskStartDate,
-                        dateTo: risk.riskEndDate,
-                        insurancePolicyNo: policy.policyNumber,
-                        chassisNumber: risk.chassisNumber,
-                    };
-                    console.log('PARAMS>>>>>>', params);
+                    });
 
-                    this.quotesService.postRtsa(params);
+                    }
+                    
+
+                    this.http
+                        .get<any>(
+                            `https://flosure-number-generation.herokuapp.com/aplus-invoice-number/1/0/${insuranceType}`
+                        )
+                        .subscribe(async (res) => {
+                            debitNote.debitNoteNumber = res.data.invoice_number;
+
+                            console.log(
+                                'DEBITNOTE>>>>',
+                                res.data.invoice_number
+                            );
+
+                            this.http
+                                .post<DebitNote>(
+                                    `https://www.flosure-api.com/documents/debit-note/${this.policyId}`,
+                                    debitNote
+                                )
+                                .subscribe(
+                                    async (res) => {
+                                        console.log(res);
+                                    },
+                                    async (err) => {
+                                        console.log(err);
+                                    }
+                                );
+
+                            receipt.invoiceNumber = res.data.invoice_number;
+                            this.receiptService
+                                .addReceipt(
+                                    receipt,
+                                    this.quote.risks[0].insuranceType
+                                )
+                                .then((mess) => {
+                                    this.message.success(
+                                        'Receipt Successfully created'
+                                    );
+
+                                    console.log(mess);
+                                })
+                                .catch((err) => {
+                                    this.message.warning('Receipt Failed');
+                                    console.log(err);
+                                });
+                        });
+
+                    for (const clause of this.clauses) {
+                        clause.policyId = res.id;
+                        this.productClauseService.updatePolicyClause(clause);
+                    }
+
+                    for (const extenstion of this.extensions) {
+                        extenstion.policyId = res.id;
+                        this.productClauseService.updatePolicyExtension(
+                            extenstion
+                        );
+                    }
+
+                    for (const wording of this.wordings) {
+                        wording.policyId = res.id;
+                        this.productClauseService.updatePolicyWording(wording);
+                    }
 
                     console.log(
-                        'Risk Type>>>>',
-                        risk.insuranceType,
-                        policy.policyNumber
+                        'CLAUSE>>>>>>',
+                        this.clauses,
+                        this.extensions,
+                        this.wordings
                     );
-                }
-            }
-        });
 
-        this.isQuoteApproved = true;
-        this.approvingQuote = false;
-        // });
+                    for (const risk of policy.risks) {
+                        console.log('Risks>>>>', risk);
+
+                        if (
+                            risk.insuranceType === 'ThirdParty' ||
+                            'ActOnly' ||
+                            'ThirdPartyFireAndTheft'
+                        ) {
+                            const params = {
+                                insuranceType: 1,
+                                status: 1,
+                                registrationMark: risk.regNumber.replace(
+                                    /\s/g,
+                                    ''
+                                ),
+                                dateFrom: risk.riskStartDate,
+                                dateTo: risk.riskEndDate,
+                                insurancePolicyNo: policy.policyNumber,
+                                chassisNumber: risk.chassisNumber,
+                            };
+
+                            console.log('PARAMS>>>>>>', params);
+
+                            // this.quotesService.postRtsa(params);
+                        } else if (risk.insuranceType === 'Comprehensive') {
+                            const params = {
+                                insuranceType: 2,
+                                status: 1,
+                                registrationMark: risk.regNumber.replace(
+                                    /\s/g,
+                                    ''
+                                ),
+                                dateFrom: risk.riskStartDate,
+                                dateTo: risk.riskEndDate,
+                                insurancePolicyNo: policy.policyNumber,
+                                chassisNumber: risk.chassisNumber,
+                            };
+                            console.log('PARAMS>>>>>>', params);
+
+                            // this.quotesService.postRtsa(params);
+
+                            console.log(
+                                'Risk Type>>>>',
+                                risk.insuranceType,
+                                policy.policyNumber
+                            );
+                        }
+                    }
+                });
+
+                this.isQuoteApproved = true;
+                this.approvingQuote = false;
+                // });
+
+                this.receiptForm.reset();
+                setTimeout(() => {
+                    this.isVisible = false;
+                    this.isOkLoading = false;
+                }, 3000);
+
+                // this.generateID(this._id);
+            }
+            console.log('HOOOOORAY>>>>>>', this.getInsuranceType);
+        } else if (this.quote.risks[0].insuranceType === 'Comprehensive') {
+            this.getInsuranceType = this.quote.risks[0].insuranceType;
+
+            this.submitted = true;
+            // console.log('DEBIT NOTE NUMBER>>>>>', this.debitnote.debitNoteNumber);
+            if (this.receiptForm.valid) {
+                this.isOkLoading = true;
+                this._id = v4();
+                const receipt: IReceiptModel = {
+                    id: this._id,
+                    ...this.receiptForm.value,
+                    onBehalfOf: this.quoteData.client,
+                    capturedBy: localStorage.getItem('user'),
+                    // policyNumber: this.policyNumber,
+                    receiptStatus: 'Receipted',
+                    todayDate: new Date(),
+                    // invoiceNumber: this.debitnote.debitNoteNumber,
+                    sourceOfBusiness: this.quoteData.sourceOfBusiness,
+                    intermediaryName: this.quoteData.intermediaryName,
+                    currency: this.quoteData.currency,
+                };
+
+                this.receiptNum = this._id;
+                console.log('Receipt>>>>', receipt);
+
+                // combineLatest().subscribe(async ([debit, cert]) => {
+                this.quote.status = 'Approved';
+                this.quotesService
+                    .updateMotorQuotation(this.quote, this.quote.id)
+                    .subscribe((quotation) => (res) => console.log(res));
+
+                // convert to policy
+                const policy: Policy = {
+                    ...this.quoteDetailsForm.value,
+                    nameOfInsured: this.quoteData.client,
+                    policyNumber: this.quoteNumber.replace('Q', 'P'),
+                    dateOfIssue: new Date(),
+                    expiryDate: this.quoteData.endDate,
+                    timeOfIssue: new Date(),
+                    // new Date().getHours() + ':' + new Date().getMinutes(),
+                    status: 'Active',
+                    receiptStatus: 'Receipted',
+                    risks: this.quoteData.risks,
+                    sumInsured: this.sumArray(
+                        this.quoteData.risks,
+                        'sumInsured'
+                    ),
+                    netPremium: this.sumArray(
+                        this.quoteData.risks,
+                        'netPremium'
+                    ),
+                    paymentPlan: 'Created',
+                    underwritingYear: new Date(),
+                    user: localStorage.getItem('user'),
+                    sourceOfBusiness: this.quoteData.sourceOfBusiness,
+                    intermediaryName: this.quoteData.intermediaryName,
+                };
+
+                const debitNote: DebitNote = {
+                    remarks: '-',
+                    dateCreated: new Date(),
+                    dateUpdated: new Date(),
+                };
+
+                // const policy = this.quoteDetailsForm.value as Policy;
+                console.log(policy);
+
+                this.policiesService.createPolicy(policy).subscribe((res) => {
+                    console.log('response:', res);
+                    this.policyId = res.id;
+
+                    // this.policiesService.createDebitNote(
+                    //     res.id,
+                    //     debitNote,
+                    //     res,
+                    //     this.policiesCount
+                    // );
+                    let insuranceType = '';
+                    const productType = this.getInsuranceType;
+                    if (productType == 'Comprehensive') {
+                        insuranceType = 'MCP';
+                    } else {
+                        insuranceType = 'THP';
+                    }
+
+                    this.http
+                        .get<any>(
+                            `https://flosure-number-generation.herokuapp.com/aplus-invoice-number/1/0/${insuranceType}`
+                        )
+                        .subscribe(async (res) => {
+                            debitNote.debitNoteNumber = res.data.invoice_number;
+
+                            console.log(
+                                'DEBITNOTE>>>>',
+                                res.data.invoice_number
+                            );
+
+                            this.http
+                                .post<DebitNote>(
+                                    `https://www.flosure-api.com/documents/debit-note/${this.policyId}`,
+                                    debitNote
+                                )
+                                .subscribe(
+                                    async (res) => {
+                                        console.log(res);
+                                    },
+                                    async (err) => {
+                                        console.log(err);
+                                    }
+                                );
+
+                            receipt.invoiceNumber = res.data.invoice_number;
+                            this.receiptService
+                                .addReceipt(
+                                    receipt,
+                                    this.quote.risks[0].insuranceType
+                                )
+                                .then((mess) => {
+                                    console.log(
+                                        'DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD',
+                                        mess
+                                    );
+                                    this.message.success(
+                                        'Receipt Successfully created'
+                                    );
+
+                                    console.log(mess);
+                                })
+                                .catch((err) => {
+                                    this.message.warning('Receipt Failed');
+                                    console.log(err);
+                                });
+                        });
+
+                    for (const clause of this.clauses) {
+                        clause.policyId = res.id;
+                        this.productClauseService.updatePolicyClause(clause);
+                    }
+
+                    for (const extenstion of this.extensions) {
+                        extenstion.policyId = res.id;
+                        this.productClauseService.updatePolicyExtension(
+                            extenstion
+                        );
+                    }
+
+                    for (const wording of this.wordings) {
+                        wording.policyId = res.id;
+                        this.productClauseService.updatePolicyWording(wording);
+                    }
+
+                    console.log(
+                        'CLAUSE>>>>>>',
+                        this.clauses,
+                        this.extensions,
+                        this.wordings
+                    );
+
+                    for (const risk of policy.risks) {
+                        console.log('Risks>>>>', risk);
+
+                        if (
+                            risk.insuranceType === 'ThirdParty' ||
+                            'ActOnly' ||
+                            'ThirdPartyFireAndTheft'
+                        ) {
+                            const params = {
+                                insuranceType: 1,
+                                status: 1,
+                                registrationMark: risk.regNumber.replace(
+                                    /\s/g,
+                                    ''
+                                ),
+                                dateFrom: risk.riskStartDate,
+                                dateTo: risk.riskEndDate,
+                                insurancePolicyNo: policy.policyNumber,
+                                chassisNumber: risk.chassisNumber,
+                            };
+
+                            console.log('PARAMS>>>>>>', params);
+
+                            // this.quotesService.postRtsa(params);
+                        } else if (risk.insuranceType === 'Comprehensive') {
+                            const params = {
+                                insuranceType: 2,
+                                status: 1,
+                                registrationMark: risk.regNumber.replace(
+                                    /\s/g,
+                                    ''
+                                ),
+                                dateFrom: risk.riskStartDate,
+                                dateTo: risk.riskEndDate,
+                                insurancePolicyNo: policy.policyNumber,
+                                chassisNumber: risk.chassisNumber,
+                            };
+                            console.log('PARAMS>>>>>>', params);
+
+                            // this.quotesService.postRtsa(params);
+
+                            console.log(
+                                'Risk Type>>>>',
+                                risk.insuranceType,
+                                policy.policyNumber
+                            );
+                        }
+                    }
+                });
+
+                this.isQuoteApproved = true;
+                this.approvingQuote = false;
+                // });
+
+                this.receiptForm.reset();
+                setTimeout(() => {
+                    this.isVisible = false;
+                    this.isOkLoading = false;
+                }, 3000);
+
+                // this.generateID(this._id);
+            }
+
+            console.log('WHAAAAAAAT>>>>>>', this.getInsuranceType);
+        }
     }
 
     sumArray(items, prop) {
@@ -2073,6 +2789,125 @@ export class QuoteDetailsComponent implements OnInit {
         this.handleNetPremium();
     }
 
+    // /////////////////////
+    handleLossOfKeysAmount() {
+        this.loads.push({
+            loadType: 'Loss Of Keys',
+            amount: Number(this.lossOfKeysAmount),
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    handleMaliciousDamageAmount() {
+        this.loads.push({
+            loadType: 'Malicious Damage',
+            amount: Number(this.maliciousDamageAmount),
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    handleMedicalExpensesAmount() {
+        this.loads.push({
+            loadType: 'Medical Expenses',
+            amount: Number(this.medicalExpensesAmount),
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    handleInjuryAndDeathAmount() {
+        this.loads.push({
+            loadType: 'Injury/Death',
+            amount: Number(this.injuryAndDeathAmount),
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    handlePropertyDamageAmount() {
+        this.loads.push({
+            loadType: 'Property Damage',
+            amount: Number(this.propertyDamageAmount),
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    handleEarthquakeAmount() {
+        this.loads.push({
+            loadType: 'Earthquake',
+            amount: Number(this.earthquakeAmount),
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    handleExplosionsAmount() {
+        this.loads.push({
+            loadType: 'Explosions',
+            amount: Number(this.explosionsAmount),
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    handleFinancialLossAmount() {
+        this.loads.push({
+            loadType: 'Financial Loss',
+            amount: Number(this.financialLossAmount),
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    handleFireAndAlliedPerilsAmount() {
+        this.loads.push({
+            loadType: 'Fire And Allied Perils',
+            amount: Number(this.fireAndAlliedPerilsAmount),
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    handleLegalExpensesAmount() {
+        this.loads.push({
+            loadType: 'Legal Expenses',
+            amount: Number(this.legalExpensesAmount),
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    handleLandslideAmount() {
+        this.loads.push({
+            loadType: 'Landslide',
+            amount: Number(this.landslideAmount),
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    handlePassengerLiabilityAmount() {
+        this.loads.push({
+            loadType: 'Passenger Liability',
+            amount: Number(this.passengerLiabilityAmount),
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+
+    handlePermanentDisabilityAmount() {
+        this.loads.push({
+            loadType: 'Permanent Disability',
+            amount: Number(this.permanentDisabilityAmount),
+        });
+        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
+        this.handleNetPremium();
+    }
+    // /////////////////////
+
     // adds inputted discount to total discount amount
     handleNoClaimsDiscountAmount() {
         this.discounts.push({
@@ -2131,5 +2966,146 @@ export class QuoteDetailsComponent implements OnInit {
         }
 
         this.isViewDraftQuotePDFVisible = true;
+    }
+
+    addLimitsOfLiability(): void {
+        this.limitsOfLiability.push({
+            liabilityType: 'deathAndInjuryPerPerson',
+            amount: this.deathAndInjuryPerPerson,
+            rate: this.deathAndInjuryPerPersonRate,
+            premium: this.deathAndInjuryPerPersonPremium,
+        });
+
+        this.limitsOfLiability.push({
+            liabilityType: 'deathAndInjuryPerEvent',
+            amount: this.deathAndInjuryPerEvent,
+            rate: this.deathAndInjuryPerEventRate,
+            premium: this.deathAndInjuryPerEventPremium,
+        });
+
+        this.limitsOfLiability.push({
+            liabilityType: 'propertyDamage',
+            amount: this.propertyDamage,
+            rate: this.propertyDamageRate,
+            premium: this.propertyDamagePremium,
+        });
+
+        this.limitsOfLiability.push({
+            liabilityType: 'combinedLimits',
+            amount: this.combinedLimits,
+            rate: this.combinedLimitsRate,
+            premium: this.combinedLimitsPremium,
+        });
+    }
+
+    addExcesses(): void {
+        this.excesses.push({
+            excessType: 'below21Years',
+            amount: Number(this.excessesForm.get('below21Years').value),
+        });
+
+        this.excesses.push({
+            excessType: 'over70Years',
+            amount: Number(this.excessesForm.get('over70Years').value),
+        });
+
+        this.excesses.push({
+            excessType: 'noLicence',
+            amount: Number(this.excessesForm.get('noLicence').value),
+        });
+
+        this.excesses.push({
+            excessType: 'careLessDriving',
+            amount: Number(this.excessesForm.get('careLessDriving').value),
+        });
+
+        this.excesses.push({
+            excessType: 'otherEndorsement',
+            amount: Number(this.excessesForm.get('otherEndorsement').value),
+        });
+    }
+    get receiptFormControl() {
+        return this.receiptForm.controls;
+    }
+
+    paymentMethodChange(value) {
+        console.log('ON CHANGE>>>>', value);
+        this.paymentMethod = value;
+    }
+
+    generateID(id) {
+        console.log('++++++++++++ID++++++++++++');
+        this._id = id;
+        console.log(this._id);
+        this.router.navigateByUrl('/flosure/accounts/view-receipt/' + this._id);
+        // this.isConfirmLoading = true;
+        // this.generateDocuments();
+    }
+
+    handleDeathAndInjuryPerPersonPremium(): void {
+        this.deathAndInjuryPerPersonPremium =
+            (Number(this.deathAndInjuryPerPerson) -
+                this.deathAndInjuryPerPersonMax) *
+            (this.deathAndInjuryPerPersonRate / 100);
+        this.limitsTotalPremium =
+            this.deathAndInjuryPerPersonPremium +
+            this.deathAndInjuryPerEventPremium +
+            this.propertyDamagePremium +
+            this.combinedLimitsPremium;
+        this.handleNetPremium();
+    }
+
+    handleDeathAndInjuryPerEventPremium(): void {
+        this.deathAndInjuryPerEventPremium =
+            (Number(this.deathAndInjuryPerEvent) -
+                this.deathAndInjuryPerEventMax) *
+            (this.deathAndInjuryPerEventRate / 100);
+        this.limitsTotalPremium =
+            this.deathAndInjuryPerPersonPremium +
+            this.deathAndInjuryPerEventPremium +
+            this.propertyDamagePremium +
+            this.combinedLimitsPremium;
+        this.handleNetPremium();
+    }
+
+    handlePropertyDamagePremium(): void {
+        this.propertyDamagePremium =
+            (Number(this.propertyDamage) - this.propertyDamageMax) *
+            (this.propertyDamageRate / 100);
+        this.limitsTotalPremium =
+            this.deathAndInjuryPerPersonPremium +
+            this.deathAndInjuryPerEventPremium +
+            this.propertyDamagePremium +
+            this.combinedLimitsPremium;
+        this.handleNetPremium();
+    }
+
+    handleCombinedLimitsPremium(): void {
+        this.combinedLimitsPremium =
+            (Number(this.combinedLimits) - this.combinedLimitsMax) *
+            (this.combinedLimitsRate / 100);
+        this.limitsTotalPremium =
+            this.deathAndInjuryPerPersonPremium +
+            this.deathAndInjuryPerEventPremium +
+            this.propertyDamagePremium +
+            this.combinedLimitsPremium;
+        this.handleNetPremium();
+    }
+
+    resetLimits(): void {
+        this.deathAndInjuryPerPerson = this.defaultDeathAndInjuryPerPersonMax;
+        this.deathAndInjuryPerEvent = this.defaultDeathAndInjuryPerEventMax;
+        this.propertyDamage = this.defaultPropertyDamageMax;
+        this.combinedLimits = this.defaultCombinedLimitsMax;
+        this.deathAndInjuryPerPersonPremium = 0;
+        this.deathAndInjuryPerEventPremium = 0;
+        this.propertyDamagePremium = 0;
+        this.combinedLimitsPremium = 0;
+        this.limitsTotalPremium = 0;
+
+        this.deathAndInjuryPerPersonRate = 0;
+        this.deathAndInjuryPerEventRate = 0;
+        this.propertyDamageRate = 0;
+        this.combinedLimitsRate = 0;
     }
 }

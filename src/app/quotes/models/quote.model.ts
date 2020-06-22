@@ -37,6 +37,9 @@ export class RiskModel {
     yearOfManufacture: Date;
     engineNumber: string;
     chassisNumber: string;
+    cubicCapacity: string;
+    seatingCapacity: string;
+    bodyType: BodyType;
     color: string;
     estimatedValue?: number;
     productType: ProductType;
@@ -52,6 +55,10 @@ export class RiskModel {
     discountRate: number;
     premiumLevy: number;
     netPremium: number;
+    numberOfDays: number;
+    expiryQuarter: string;
+    limitsOfLiability: LimitsOfLiability[];
+    excesses: Excess[];
 }
 
 export class MessageModel {
@@ -81,6 +88,31 @@ export class DiscountModel {
     amount: number;
 }
 
+export class LimitsOfLiability {
+    liabilityType: LiabilityType;
+    amount: number;
+    rate: number;
+    premium;
+}
+
+export class Excess {
+    excessType: ExcessType;
+    amount: number;
+}
+
+export type LiabilityType =
+    | 'deathAndInjuryPerPerson'
+    | 'deathAndInjuryPerEvent'
+    | 'propertyDamage'
+    | 'combinedLimits';
+
+export type ExcessType =
+    | 'below21Years'
+    | 'over70Years'
+    | 'noLicence'
+    | 'careLessDriving'
+    | 'otherEndorsement';
+
 export type ReceiptStatus = 'Unreceipted' | 'Receipted';
 export type ProductType = 'Private' | 'Commercial' | 'Bus/Taxi';
 
@@ -93,7 +125,20 @@ export type LoadType =
     | 'Territorial Extension'
     | 'Loss Of Use'
     | 'Inexperienced Driver'
-    | 'Under Age Driver';
+    | 'Under Age Driver'
+    | 'Loss Of Keys'
+    | 'Malicious Damage'
+    | 'Medical Expenses'
+    | 'Injury/Death'
+    | 'Property Damage'
+    | 'Earthquake'
+    | 'Explosions'
+    | 'Financial Loss'
+    | 'Fire And Allied Perils'
+    | 'Legal Expenses'
+    | 'Landslide'
+    | 'Passenger Liability'
+    | 'Permanent Disability';
 
 export type DiscountType =
     | 'No Claims Discount'
@@ -107,4 +152,9 @@ export type SourceOfBusinessType =
     | 'Agent'
     | 'Sales Representative';
 
-export type InsuranceType = 'ThirdParty' | 'Comprehensive';
+export type InsuranceType =
+    | 'ThirdParty'
+    | 'Comprehensive'
+    | 'ActOnly'
+    | 'ThirdPartyFireAndTheft';
+export type BodyType = 'SEDAN' | 'VAN' | 'TRUCK' | 'SUV';

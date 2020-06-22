@@ -19,9 +19,7 @@ import {
 } from '../models/client.model';
 import { IAccount } from 'src/app/settings/models/organizational/account.model';
 
-
 const BASE_URL = 'https://www.flosure-api.com';
-
 
 @Injectable({
     providedIn: 'root',
@@ -36,6 +34,8 @@ export class ClientsService {
 
     individualClients: IIndividualClient[];
     corporateClients: ICorporateClient[];
+    post: void;
+    clientID = '';
 
     constructor(private http: HttpClient, private firebase: AngularFirestore) {
         this.getIndividualClients().subscribe((totalIndividaulClients) => {
@@ -174,25 +174,26 @@ export class ClientsService {
             .pipe(switchMap((x) => addCompanyDetails$(x.id)));
     }
 
-
     getClients(): Observable<IClientDTO[]> {
         return this.http.get<IClientDTO[]>(`${BASE_URL}/clients`);
     }
- 
 
     addCorporateClient(client: ICorporateClient): Observable<ICorporateClient> {
-        client.clientType = 'Corporate';
-        client.dateCreated = new Date();
-        client.dateUpdated = new Date();
-        client.status = 'Inactive';
-        client.clientID = this.generateClientID(
-            'Corporate',
-            'AP',
-            1
-        );
-        console.log(client);
+        // this.http
+        //     .get<any>(
+        //         `https://flosure-number-generation.herokuapp.com/aplus-client-number/COR`
+        //     )
+        //     .subscribe((res) => {
+        //         console.log('Client ID>>>>>>', res.data.client_number);
+        //         this.clientID = res.data.client_number;
+        //     });
+        // client.clientType = 'Corporate';
+        // client.dateCreated = new Date();
+        // client.dateUpdated = new Date();
+        // client.status = 'Inactive';
+        // client.clientID = this.clientID;
+        // console.log(client);
         return this.http.post<ICorporateClient>(
-
             'https://www.flosure-api.com/clients/corporate',
 
             client
@@ -201,17 +202,13 @@ export class ClientsService {
 
     getCorporateClients(): Observable<ICorporateClient[]> {
         return this.http.get<ICorporateClient[]>(
-
             'https://www.flosure-api.com/clients/corporate'
-
         );
     }
 
     getCorporateClient(id: string): Observable<ICorporateClient> {
         return this.http.get<ICorporateClient>(
-
             `https://www.flosure-api.com/clients/corporate/${id}`
-
         );
     }
 
@@ -220,7 +217,6 @@ export class ClientsService {
         id: string
     ): Observable<ICorporateClient> {
         return this.http.put<ICorporateClient>(
-
             `https://www.flosure-api.com/clients/corporate/${id}`,
 
             client
@@ -230,18 +226,16 @@ export class ClientsService {
     addIndividualClient(
         client: IIndividualClient
     ): Observable<IIndividualClient> {
-        client.clientType = 'Individual';
-        client.dateCreated = new Date();
-        client.dateUpdated = new Date();
-        client.status = 'Inactive';
-        client.clientID = this.generateClientID(
-            'Individual',
-            'AP',
-          2
-        );
-        console.log(client);
-        return this.http.post<IIndividualClient>(
+        // this.http
+        //     .get<any>(
+        //         `https://flosure-number-generation.herokuapp.com/aplus-client-number/IND`
+        //     )
+        //     .subscribe((res) => {
+        //         console.log('Client ID>>>>>>', res.data.client_number);
+        //         this.clientID = res.data.client_number;
+        //     });
 
+        return this.http.post<IIndividualClient>(
             'https://www.flosure-api.com/clients/individual',
 
             client
@@ -250,17 +244,13 @@ export class ClientsService {
 
     getIndividualClients(): Observable<IIndividualClient[]> {
         return this.http.get<IIndividualClient[]>(
-
             'https://www.flosure-api.com/clients/individual'
-
         );
     }
 
     getIndividualClient(id: string): Observable<IIndividualClient> {
         return this.http.get<IIndividualClient>(
-
             `https://www.flosure-api.com/clients/individual/${id}`
-
         );
     }
 

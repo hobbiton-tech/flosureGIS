@@ -136,11 +136,11 @@
                 </li>
             </ol>
             <span style="float: right; text-align: left;">
-                Premium: {{ policy.currency == 'ZMW' ? 'K' : '$'
+                Premium: {{ policy.currency == 'ZMW' ? 'ZMW' : '$'
                 }}{{ basicPremium | number: '1.2-2' }}<br />
-                3% Levy: {{ policy.currency == 'ZMW' ? 'K' : '$'
+                3% Levy: {{ policy.currency == 'ZMW' ? 'ZMW' : '$'
                 }}{{ premiumLevy | number: '1.2-2' }}<br />
-                Total Premium: {{ policy.currency == 'ZMW' ? 'K' : '$'
+                Total Premium: {{ policy.currency == 'ZMW' ? 'ZMW' : '$'
                 }}{{ totalAmount | number: '1.2-2' }}<br />
             </span>
 
@@ -149,10 +149,9 @@
         <br />
         <br />
 
-        <nz-table
+        <table
             style="width: 100%;"
             #risksTable
-            [nzData]="policy.risks"
             nzFrontPagination="false"
             nzShowPagination="false"
         >
@@ -169,30 +168,28 @@
                 </th>
                 <th>Insurance Provided</th>
             </tr>
-            <tr *ngFor="let risk of risksTable.data">
+            <tr *ngFor="let risk of policy.risks">
                 <td>{{ risk.regNumber }}</td>
                 <td>{{ risk.vehicleMake }}/{{ risk.vehicleModel }}</td>
                 <td>{{ risk.engineNumber }}</td>
                 <td>{{ risk.chassisNumber }}</td>
-                <td>TBA</td>
+                <td>{{ risk.cubicCapacity }}</td>
                 <td>{{ getYearOfManufacture(risk) }}</td>
-                <td>TBA</td>
-                <td>{{ risk.estimatedValue ? risk.estimatedValue : 'N/A' }}</td>
-                <span *ngIf="risk.insuranceType === 'ThirdParty'">
-                    <td>Third Party</td>
-                </span>
-                <span *ngIf="risk.insuranceType === 'ActOnly'">
-                    <td>Act Only Cover</td>
-                </span>
-                <span *ngIf="risk.insuranceType === 'Comprehensive'">
-                    <td>Comprehensive</td>
-                </span>
-                <span *ngIf="risk.insuranceType === 'FireAndTheft'">
-                    <td>Third Party Fire and Theft</td>
-                </span>
-                <!-- <td>{{risk.insuranceType == 'ThirdParty' ? 'Third Party' : 'Comprehensive'}}</td> -->
+                <td>{{ risk.seatingCapacity }}</td>
+                <td>{{ risk.estimatedValue ? risk.estimatedValue : 'TBA' }}</td>
+                <td>
+                    {{
+                        risk.insuranceType == 'ThirdParty'
+                            ? 'Third Party'
+                            : risk.insuranceType == 'ActOnly'
+                            ? 'Act Only'
+                            : risk.insuranceType == 'ThirdPartyFireAndTheft'
+                            ? 'Fire and Theft'
+                            : 'Comprehensive'
+                    }}
+                </td>
             </tr>
-        </nz-table>
+        </table>
         <br />
 
         <p style="font-weight: bold;">Insurance Provided.</p>
@@ -215,25 +212,29 @@
             <li>
                 <p style="font-weight: bold;">Limits of Liability</p>
                 <p>Limit of the amount of the Company’s liability under</p>
-                <p>
-                    <span style="font-weight: bold;">Section I</span> - 3
-                    (Protection and Removal) –
-                    <span style="font-weight: bold;">K500</span>
-                </p>
+                <!-- <p><span style="font-weight: bold;">Section I</span> - 3 (Protection and Removal) – <span
+                        style="font-weight: bold;">K{{0 | number: '1.2-2'}}</span></p> -->
                 <p>
                     <span style="font-weight: bold;">Section II</span> -1 (a)
                     and 2 (a) (Liability to Third Parties – death bodily injury)
                     in respect of any one claim or series Of claims arising out
                     of one event:
                     <span style="font-weight: bold;"
-                        >K60,100 per event / K30,100 per person</span
+                        >ZMW{{ deathAndInjuryPerEvent | number: '1.2-2' }} per
+                        event / ZMW{{
+                            deathAndInjuryPerPerson | number: '1.2-2'
+                        }}
+                        per person</span
                     >
                 </p>
                 <p>
                     <span style="font-weight: bold;">Section II</span> - 1 (b)
                     and 2 (b) (Liability to third Parties – Property Damage) in
                     respect of any claim or series Of claims arising out of one
-                    event: <span style="font-weight: bold;">K30,000</span>
+                    event:
+                    <span style="font-weight: bold;"
+                        >ZMW{{ propertyDamage | number: '1.2-2' }}</span
+                    >
                     <span
                         >- arising from loss of use of a motor vehicle which is
                         limited to in respect of any one claim or series of
@@ -242,20 +243,14 @@
                         event</span
                     >
                 </p>
-                <p>
-                    Section I-10 (Medical Expenses) in respect of any one
-                    accident/any one person
-                    <span style="font-weight: bold;">K100 / K50</span>
-                </p>
+                <!-- <p>Section I-10 (Medical Expenses) in respect of any one accident/any one person <span
+                        style="font-weight: bold;">K{{0 | number: '1.2-2'}} /
+                        K{{0 | number: '1.2-2'}}</span></p> -->
             </li>
         </ol>
 
-        <p>
-            <span style="font-weight: bold;"
-                >Unauthorized Repair Limit (Section 1 – 4 (a)): K500</span
-            >
-            any one event
-        </p>
+        <!-- <p><span style="font-weight: bold;">Unauthorized Repair Limit (Section 1 – 4 (a)):
+                K{{0 | number: '1.2-2'}}</span> any one event</p> -->
         <p>
             <span style="font-weight: bold;">Geographical Area</span>: Zambia
             and Congo DR Pedicle only
@@ -282,30 +277,72 @@
                 Zambia
             </li>
         </ol>
-        <p>
-            <span style="font-weight: bold;"
-                >COMPULSORY Excesses to apply on each and every claim as
-                follows:</span
-            >
+        <!-- <p>
+            <span style="font-weight: bold;">COMPULSORY Excesses to apply on each and every claim as
+                follows:</span>
         </p>
         <ol type="a">
+            <li>Collision &amp; Fire: 10% minimum: <span
+                    style="font-weight: bold;">K{{collisionAndFire | number: '1.2-2'}}</span></li>
+            <li>Theft of vehicle with anti theft device: 10% minimum: <span
+                    style="font-weight: bold;">K{{theftOfVehicleWithAntiTheftDevice | number: '1.2-2'}}</span></li>
+            <li>Theft of vehicle without anti theft device: 15% minimum: <span
+                    style="font-weight: bold;">K{{theftOfVehicleWithoutAntiTheftDevice | number: '1.2-2'}}</span>
+            </li>
+            <li>Third Party Property damage: 10% minimum: <span
+                    style="font-weight: bold;">K{{thirdPartyPropertyDamage | number: '1.2-2'}}</span></li>
+        </ol> -->
+
+        <p>
+            <span style="font-weight: bold;"><strong>Excess</strong></span>
+        </p>
+        <ul style="list-style-type: none;">
             <li>
-                Collision &amp; Fire: 10% minimum:
-                <span style="font-weight: bold;">K500</span>
+                The insured shall be responsible for the first 10% of each and
+                every claim/loss subject to retained minimum liability of USD
+                <span style="font-weight: bold;">100</span>
             </li>
             <li>
-                Theft of vehicle with anti theft device: 10% minimum:
-                <span style="font-weight: bold;">K500</span>
+                Excess applicable on young/inexperienced drivers shall be as
+                hereunder:
             </li>
             <li>
-                Theft of vehicle without anti theft device: 15% minimum:
-                <span style="font-weight: bold;">K500</span>
+                (i) Any person below 21 years of age - 10% minimum of
+                <span style="font-weight: bold;"
+                    >USD{{ below21Years | number: '1.2-2' }}</span
+                >
             </li>
             <li>
-                Third Party Property damage: 10% minimum:
-                <span style="font-weight: bold;">K500</span>
+                (ii)Any person over 70 years of age 10% minimum of
+                <span style="font-weight: bold;"
+                    >USD{{ over70Years | number: '1.2-2' }}</span
+                >
             </li>
-        </ol>
+            <li>
+                (iii)Any Person who has not held a full drivers license for a
+                minimum period of 24 months 10% minimum of
+                <span style="font-weight: bold;"
+                    >USD{{ noLicence | number: '1.2-2' }}</span
+                >
+            </li>
+            <li>
+                (iv) Any person who has been convicted and has had a license
+                endorsed as a result of following during the previous three
+                years: >
+            </li>
+            <li>
+                (1)Careless or reckless driving - 10% minimum of
+                <span style="font-weight: bold;"
+                    >USD{{ careLessDriving | number: '1.2-2' }}</span
+                >
+            </li>
+            <li>
+                (2) Any other endorsement - 10% minimum of
+                <span style="font-weight: bold;"
+                    >USD{{ otherEndorsement | number: '1.2-2' }}</span
+                >
+            </li>
+        </ul>
         <p><span style="font-weight: bold;">Limitations as to Use</span>:</p>
         <p>
             Use only for social domestic and pleasure purposes and for the
@@ -345,7 +382,7 @@
             <span style="float: center;"></span
             ><span style="float: right;"
                 ><span style="font-weight: bold;"
-                    >For Chief Executive Officer</span
+                    >For /Chief Executive Officer</span
                 ></span
             >
         </p>
