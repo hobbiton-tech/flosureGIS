@@ -25,7 +25,6 @@ import {
     IIndividualClient,
     ICorporateClient,
 } from 'src/app/clients/models/clients.model';
-import { Http2ServerRequest } from 'http2';
 
 @Component({
     selector: 'app-policy-details',
