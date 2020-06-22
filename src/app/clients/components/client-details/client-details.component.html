@@ -457,7 +457,7 @@
             ></nz-divider>
             <nz-table
                 #policiesTable
-                [nzData]="clientPolicies"
+                [nzData]="ploicyList"
                 [nzSize]="'small'"
                 [nzBordered]="true"
                 [nzPageSize]="3"
@@ -465,24 +465,20 @@
                 <thead>
                     <tr>
                         <th>Policy Number</th>
-                        <th>Product</th>
                         <th>Start Date</th>
                         <th>End Date</th>
-                        <th>Insurer</th>
                         <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr
                         *ngFor="let data of policiesTable.data"
-                        (click)="viewPolicyDetails()"
+                        (click)="viewPolicyDetails(data.id)"
                         style="cursor: pointer;"
                     >
                         <td>{{ data.policyNumber }}</td>
-                        <td>{{ data.product }}</td>
                         <td>{{ data.startDate | date }}</td>
                         <td>{{ data.endDate | date }}</td>
-                        <td>{{ data.insuranceCompany }}</td>
                         <td>{{ data.status }}</td>
                     </tr>
                 </tbody>
