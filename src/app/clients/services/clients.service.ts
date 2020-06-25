@@ -19,7 +19,7 @@ import {
 } from '../models/client.model';
 import { IAccount } from 'src/app/settings/models/organizational/account.model';
 
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'https://www.flosure-api.com';
 
 @Injectable({
     providedIn: 'root'
@@ -241,7 +241,7 @@ export class ClientsService {
         //         console.log('Client ID>>>>>>', res.data.client_number);
         //         this.clientID = res.data.client_number;
         //     });
-        
+
         return this.http.post<IIndividualClient>(
 
             'http://localhost:3000/clients/individual',

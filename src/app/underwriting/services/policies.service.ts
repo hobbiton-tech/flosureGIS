@@ -19,7 +19,7 @@ import {
 } from '../documents/models/documents.model';
 
 
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'https://www.flosure-api.com';
 
 // const BASE_URL = 'http://localhost:3000';
 

@@ -59,6 +59,7 @@ export class RiskModel {
     expiryQuarter: string;
     limitsOfLiability: LimitsOfLiability[];
     excesses: Excess[];
+  LiabilityType: string;
 }
 
 export class MessageModel {
@@ -105,7 +106,7 @@ export type LiabilityType =
     | 'deathAndInjuryPerEvent'
     | 'propertyDamage'
     | 'combinedLimits';
-    
+
 export type ExcessType =
     | 'collisionAndFire'
     | 'theftOfVehicleWithAntiTheftDevice'
