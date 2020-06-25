@@ -51,6 +51,7 @@ import {
     InsuranceTypeOptions,
     LimitsOfLiabilityOptions,
 } from '../../selection-options';
+import { PoliciesService } from 'src/app/underwriting/services/policies.service';
 
 type AOA = any[][];
 
@@ -145,7 +146,8 @@ export class CreateQuoteComponent implements OnInit {
         private msg: NzMessageService,
         private http: HttpClient,
         private readonly agentsService: AgentsService,
-        private productClauseService: ClausesService
+        private productClauseService: ClausesService,
+        private policyService: PoliciesService
     ) {
         this.clauseForm = formBuilder.group({
             heading: ['', Validators.required],
@@ -159,6 +161,8 @@ export class CreateQuoteComponent implements OnInit {
             heading: ['', Validators.required],
             description: ['', Validators.required],
         });
+
+        
     }
 
     // conditional render of agent field based on mode(agent or user)
@@ -451,6 +455,8 @@ export class CreateQuoteComponent implements OnInit {
     endOpen = false;
     clientCode: any;
     clientName: any;
+    concRisks: any[] =[];
+    conChasis: any[]=[];
 
     compareFn = (o1: any, o2: any) =>
         o1 && o2 ? o1.value === o2.value : o1 === o2;
@@ -484,6 +490,7 @@ export class CreateQuoteComponent implements OnInit {
             messageCode: ['ewrewre', Validators.required],
             currency: ['', Validators.required],
             startDate: ['', Validators.required],
+            policyNumberOfDays: [''],
             endDate: [''],
             quarter: ['', Validators.required],
             user: [user, Validators.required],
@@ -492,6 +499,14 @@ export class CreateQuoteComponent implements OnInit {
             sourceOfBusiness: ['', Validators.required],
             intermediaryName: [''],
         });
+
+        this.policyService.getPolicies().subscribe((res) => {
+            
+            for(const policy of res) {
+                this.concRisks = this.concRisks.concat(policy.risks)
+            }
+            console.log("RISKS<<<<<<", this.concRisks)
+        })
 
         this.quoteService.getMotorQuotations().subscribe((quotes) => {
             this.quotesList = quotes;
@@ -525,35 +540,35 @@ export class CreateQuoteComponent implements OnInit {
                 this.salesRepresentatives = salesRepresentatives;
             });
 
-        this.riskComprehensiveForm = this.formBuilder.group({
-            riskStartDate: ['', Validators.required],
-            riskQuarter: ['', Validators.required],
-            riskEndDate: ['', Validators.required],
-            regNumber: ['', Validators.required],
-            vehicleMake: ['', Validators.required],
-            vehicleModel: ['', Validators.required],
-            engineNumber: [''],
-            chassisNumber: ['', Validators.required],
-            yearOfManufacture: ['', Validators.required],
-            color: ['', [Validators.required]],
-            cubicCapacity: ['', Validators.required],
-            seatingCapacity: ['', Validators.required],
-            bodyType: ['', Validators.required],
-            productType: ['', Validators.required],
-            insuranceType: ['Comprehensive'],
-            numberOfDays: ['', Validators.required],
-            expiryQuarter: ['', Validators.required],
-        });
+            this.riskComprehensiveForm = this.formBuilder.group({
+                riskStartDate: ['', Validators.required],
+                riskQuarter: ['', Validators.required],
+                riskEndDate: ['', Validators.required],
+                regNumber: ['', Validators.required, [this.regIDAsyncValidator]],
+                vehicleMake: ['', Validators.required],
+                vehicleModel: ['', Validators.required],
+                engineNumber: ['',Validators.required, [this.engineIDAsyncValidator]],
+                chassisNumber: ['', Validators.required, [this.chassisIDAsyncValidator]],
+                yearOfManufacture: ['', Validators.required],
+                color: ['', [Validators.required]],
+                cubicCapacity: ['', Validators.required],
+                seatingCapacity: ['', Validators.required],
+                bodyType: ['', Validators.required],
+                productType: ['', Validators.required],
+                insuranceType: ['Comprehensive'],
+                numberOfDays: ['', Validators.required],
+                expiryQuarter: ['', Validators.required],
+            });
 
         this.riskThirdPartyForm = this.formBuilder.group({
             riskStartDate: ['', Validators.required],
             riskQuarter: ['', Validators.required],
             riskEndDate: ['', Validators.required],
-            regNumber: ['', [Validators.required]],
-            vehicleMake: ['', [Validators.required]],
-            vehicleModel: ['', [Validators.required]],
-            engineNumber: [''],
-            chassisNumber: ['', [Validators.required]],
+            regNumber: ['', Validators.required, [this.regTHPIDAsyncValidator]],
+                vehicleMake: ['', Validators.required],
+                vehicleModel: ['', Validators.required],
+                engineNumber: ['',Validators.required, [this.engineTHPIDAsyncValidator]],
+                chassisNumber: ['', Validators.required, [this.chassisTHPIDAsyncValidator]],
             yearOfManufacture: ['', Validators.required],
             color: ['', [Validators.required]],
             cubicCapacity: ['', Validators.required],
@@ -712,7 +727,7 @@ export class CreateQuoteComponent implements OnInit {
 
         // start of initialize computations
         this.sumInsured = 0;
-        this.premiumRate = 0;
+        this.premiumRate = 6;
 
         this.basicPremium = 0;
         this.premiumLoadingTotal = 0;
@@ -750,6 +765,226 @@ export class CreateQuoteComponent implements OnInit {
         });
         this.updateEditCache();
     }
+
+
+   
+    disabledSubmissionDate = (submissionValue) => {
+        if (!submissionValue) {
+            return false;
+        }
+        return (submissionValue.valueOf() < moment().add(-1, 'days'));
+    }
+    
+
+
+    // Validate registration Number
+    regIDAsyncValidator = (control: FormControl) =>
+    new Observable((observer: Observer<ValidationErrors | null>) => {
+      setTimeout(() => {
+        this.policyService.getPolicies().subscribe((res) => {
+            const activePolicy = res.filter((x)=> x.status === 'Active')
+            
+            for(const policy of activePolicy) {
+                this.concRisks = this.concRisks.concat(policy.risks)
+            }
+            console.log("RISKS Comprehensive <<<<<<", this.concRisks)
+
+            if(this.concRisks.length > 0){
+
+                for(const reg of this.concRisks) {
+                    if(control.value === reg.regNumber) {
+                        observer.next({ error: true, duplicated: true });
+                    break;
+                    }else {
+                        observer.next(null);
+                      }
+                }
+
+            } else {
+                observer.next(null);
+            }
+            observer.complete();
+        })
+
+         
+      }, 1000);
+    });
+
+
+           // Validate Chassis Number
+           chassisIDAsyncValidator = (control: FormControl) =>
+           new Observable((observer: Observer<ValidationErrors | null>) => {
+             setTimeout(() => {
+               this.policyService.getPolicies().subscribe((res) => {
+                   const activePolicy = res.filter((x)=> x.status === 'Active')
+                   
+                   for(const policy of activePolicy) {
+                       this.concRisks = this.concRisks.concat(policy.risks)
+                   }
+                   console.log("RISKS Comprehensive <<<<<<", this.concRisks)
+       
+                   if(this.concRisks.length > 0){
+       
+                       for(const reg of this.concRisks) {
+                           if(control.value === reg.chassisNumber) {
+                               observer.next({ error: true, duplicated: true });
+                           break;
+                           }else {
+                               observer.next(null);
+                             }
+                       }
+       
+                   } else {
+                       observer.next(null);
+                   }
+                   observer.complete();
+               })
+       
+             }, 1000);
+           });
+
+
+
+           // Validate Engine Number
+    engineIDAsyncValidator = (control: FormControl) =>
+    new Observable((observer: Observer<ValidationErrors | null>) => {
+      setTimeout(() => {
+        this.policyService.getPolicies().subscribe((res) => {
+            const activePolicy = res.filter((x)=> x.status === 'Active')
+            
+            for(const policy of activePolicy) {
+                this.concRisks = this.concRisks.concat(policy.risks)
+            }
+            console.log("RISKS Comprehensive <<<<<<", this.concRisks)
+
+            if(this.concRisks.length > 0){
+
+                for(const reg of this.concRisks) {
+                    if(control.value === reg.engineNumber) {
+                        observer.next({ error: true, duplicated: true });
+                    break;
+                    }else {
+                        observer.next(null);
+                      }
+                }
+
+            } else {
+                observer.next(null);
+            }
+            observer.complete();
+        })
+
+      }, 1000);
+    });
+
+
+
+
+
+
+
+      // Validate registration Number
+      regTHPIDAsyncValidator = (control: FormControl) =>
+      new Observable((observer: Observer<ValidationErrors | null>) => {
+        setTimeout(() => {
+          this.policyService.getPolicies().subscribe((res) => {
+              const activePolicy = res.filter((x)=> x.status === 'Active')
+              
+              for(const policy of activePolicy) {
+                  this.concRisks = this.concRisks.concat(policy.risks)
+              }
+              console.log("RISKS Comprehensive <<<<<<", this.concRisks)
+  
+              if(this.concRisks.length > 0){
+  
+                  for(const reg of this.concRisks) {
+                      if(control.value === reg.regNumber) {
+                          observer.next({ error: true, duplicated: true });
+                      break;
+                      }else {
+                          observer.next(null);
+                        }
+                  }
+  
+              } else {
+                  observer.next(null);
+              }
+              observer.complete();
+          })
+  
+           
+        }, 1000);
+      });
+  
+  
+             // Validate Chassis Number
+             chassisTHPIDAsyncValidator = (control: FormControl) =>
+             new Observable((observer: Observer<ValidationErrors | null>) => {
+               setTimeout(() => {
+                 this.policyService.getPolicies().subscribe((res) => {
+                     const activePolicy = res.filter((x)=> x.status === 'Active')
+                     
+                     for(const policy of activePolicy) {
+                         this.concRisks = this.concRisks.concat(policy.risks)
+                     }
+                     console.log("RISKS Comprehensive <<<<<<", this.concRisks)
+         
+                     if(this.concRisks.length > 0){
+         
+                         for(const reg of this.concRisks) {
+                             if(control.value === reg.chassisNumber) {
+                                 observer.next({ error: true, duplicated: true });
+                             break;
+                             }else {
+                                 observer.next(null);
+                               }
+                         }
+         
+                     } else {
+                         observer.next(null);
+                     }
+                     observer.complete();
+                 })
+         
+               }, 1000);
+             });
+  
+  
+  
+             // Validate Engine Number
+      engineTHPIDAsyncValidator = (control: FormControl) =>
+      new Observable((observer: Observer<ValidationErrors | null>) => {
+        setTimeout(() => {
+          this.policyService.getPolicies().subscribe((res) => {
+              const activePolicy = res.filter((x)=> x.status === 'Active')
+              
+              for(const policy of activePolicy) {
+                  this.concRisks = this.concRisks.concat(policy.risks)
+              }
+              console.log("RISKS Comprehensive <<<<<<", this.concRisks)
+  
+              if(this.concRisks.length > 0){
+  
+                  for(const reg of this.concRisks) {
+                      if(control.value === reg.engineNumber) {
+                          observer.next({ error: true, duplicated: true });
+                      break;
+                      }else {
+                          observer.next(null);
+                        }
+                  }
+  
+              } else {
+                  observer.next(null);
+              }
+              observer.complete();
+          })
+  
+        }, 1000);
+      });
+
+
+
 
  
     handleComprehensiveRiskEndDateCalculation(): void {
@@ -935,6 +1170,15 @@ export class CreateQuoteComponent implements OnInit {
                         doo.getTime() - doo.getTimezoneOffset() * -60000
                     );
                     this.quoteForm.get('endDate').setValue(nd);
+
+                    let startDate = moment(
+                        this.quoteForm.get('startDate').value
+                    );
+                    let endDate = moment(nd);
+                    let numberOfDays = endDate.diff(startDate, 'days');
+                    this.quoteForm
+                        .get('policyNumberOfDays')
+                        .setValue(numberOfDays);
                 });
         }
     }
