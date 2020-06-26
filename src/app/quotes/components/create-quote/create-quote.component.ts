@@ -38,6 +38,7 @@ import {
     IPolicyClauses,
     IPolicyWording,
     IPolicyExtension,
+    IExccess,
 } from 'src/app/settings/models/underwriting/clause.model';
 import { ClausesService } from 'src/app/settings/components/underwriting-setups/services/clauses.service';
 import * as moment from 'moment';
@@ -52,6 +53,8 @@ import {
     LimitsOfLiabilityOptions,
 } from '../../selection-options';
 import { PoliciesService } from 'src/app/underwriting/services/policies.service';
+import { IProduct } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
+import { ProductSetupsServiceService } from 'src/app/settings/components/product-setups/services/product-setups-service.service';
 
 type AOA = any[][];
 
@@ -107,6 +110,9 @@ export class CreateQuoteComponent implements OnInit {
     insuranceTypeOptions = InsuranceTypeOptions;
     limitsTypeOptions = LimitsOfLiabilityOptions;
 
+    //Excess Variable
+    excessList:IExccess[]=[];
+
     //loading feedback
     creatingQuote: boolean = false;
     quotesList: MotorQuotationModel[];
@@ -147,7 +153,8 @@ export class CreateQuoteComponent implements OnInit {
         private http: HttpClient,
         private readonly agentsService: AgentsService,
         private productClauseService: ClausesService,
-        private policyService: PoliciesService
+        private policyService: PoliciesService,
+        private productSevice: ProductSetupsServiceService
     ) {
         this.clauseForm = formBuilder.group({
             heading: ['', Validators.required],
@@ -466,7 +473,8 @@ export class CreateQuoteComponent implements OnInit {
             label: 'Increased Third Party Limit',
             value: 'increasedThirdPartyLimits',
         };
-        console.log(value);
+        console.log('WHAT IS HERE<<<<',value);
+
     }
 
     disabledStartDate = (startValue: Date): boolean => {
@@ -508,6 +516,10 @@ export class CreateQuoteComponent implements OnInit {
             console.log("RISKS<<<<<<", this.concRisks)
         })
 
+        // this.productSevice.getProducts('e745338b-e9d5-4e07-b5a5-ddb84e54c3a5').subscribe((res) => {
+        //     this.insuranceTypeOptions
+        // })
+
         this.quoteService.getMotorQuotations().subscribe((quotes) => {
             this.quotesList = quotes;
             this.quotesCount = quotes.length;
@@ -519,6 +531,11 @@ export class CreateQuoteComponent implements OnInit {
 
             this.lastItem = this.quotesList[this.quotesList.length - 1];
         });
+
+        this.productClauseService.getExccesses().subscribe((res) => {
+            this.excessList = res;
+        })
+        
 
         this.clientsService.getAllClients().subscribe((clients) => {
             this.clients = [...clients[0], ...clients[1]] as Array<
@@ -654,18 +671,19 @@ export class CreateQuoteComponent implements OnInit {
         // set default value for combined limits
         this.combinedLimitsForm
             .get('combinedLimits')
-            .setValue(
-                Number(
-                    this.limitsOfLiabilityForm.get('deathAndInjuryPerPerson')
-                        .value
-                ) +
-                    Number(
-                        this.limitsOfLiabilityForm.get('deathAndInjuryPerEvent')
-                            .value
-                    ) +
-                    Number(
-                        this.limitsOfLiabilityForm.get('propertyDamage').value
-                    )
+            .setValue( 93200
+                // Number(
+                //     this.limitsOfLiabilityForm.get('deathAndInjuryPerPerson')
+                //         .value
+                // ) +
+                //     Number(
+                //         this.limitsOfLiabilityForm.get('deathAndInjuryPerEvent')
+                //             .value
+                //     )
+                //      +
+                //     Number(
+                //         this.limitsOfLiabilityForm.get('propertyDamage').value
+                //     )
             );
         this.combinedLimitsForm.get('combinedLimitsPremium').setValue('0');
 
@@ -2984,7 +3002,8 @@ export class CreateQuoteComponent implements OnInit {
 
         this.limitsOfLiability.push({
             liabilityType: 'combinedLimits',
-            amount: this.combinedLimits,
+            amount: this.combinedLimitsForm.controls.combinedLimits.value,
+            // amount: this.combinedLimits,
             rate: this.combinedLimitsRate,
             premium: this.combinedLimitsPremium,
         });
@@ -3057,7 +3076,7 @@ export class CreateQuoteComponent implements OnInit {
 
     handleCombinedLimitsPremium(): void {
         this.combinedLimitsPremium =
-            (Number(this.combinedLimits) - this.combinedLimitsMax) *
+            (Number(this.combinedLimitsForm.controls.combinedLimits.value) - this.combinedLimitsMax) *
             (this.combinedLimitsRate / 100);
         this.limitsTotalPremium =
             this.deathAndInjuryPerPersonPremium +

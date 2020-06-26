@@ -3779,15 +3779,15 @@
                                                             </nz-form-control>
                                                         </nz-form-item>
 
-                                                        <nz-table>
-                                                            <thead>
+                                                       
+                                                            <!-- <thead>
                                                               <tr>
                                                                 <th>Limit</th>
                                                                 <th>Amount</th>
                                                                 <th>Rate</th>
                                                                 <th>Premium</th>
                                                               </tr>
-                                                            </thead>
+                                                            </thead> -->
                                                             <tbody>
                                                                 <div
                                                             *ngIf="
@@ -3801,22 +3801,24 @@
                                                                 "
                                                             >
                                                               <tr>
+                                                                <!-- <td>Combined
+                                                                    Limits</td> -->
+                                                                    <!-- [(ngModel)]="
+                                                                        combinedLimits
+                                                                    " -->
                                                                 <td>Combined
-                                                                    Limits</td>
-                                                                <td><input
+                                                                    Limits: <input
                                                                     nz-input
                                                                     name="combinedLimits"
                                                                     formControlName="combinedLimits"
-                                                                    [(ngModel)]="
-                                                                        combinedLimits
-                                                                    "
                                                                     type="number"
+                                                                    min="93200"
                                                                     id="combinedLimits"
                                                                     (ngModelChange)="
                                                                         handleCombinedLimitsPremium()
                                                                     "
                                                                 /></td>
-                                                                <td><input
+                                                                <td>Rate:<input
                                                                     nz-input
                                                                     name="combinedLimitsRate"
                                                                     formControlName="combinedLimitsRate"
@@ -3829,7 +3831,7 @@
                                                                         handleCombinedLimitsPremium()
                                                                     "
                                                                 /></td>
-                                                                <td> <input
+                                                                <td>Premium: <input
                                                                     nz-input
                                                                     name="combinedLimitsPremium"
                                                                     formControlName="combinedLimitsPremium"
@@ -3855,25 +3857,30 @@
                                                                 "
                                                             >
                                                             <tr>
+                                                                <!-- <td>Death
+                                                                    And
+                                                                    Injury
+                                                                    Per
+                                                                    Person</td> -->
                                                                 <td>Death
                                                                     And
                                                                     Injury
                                                                     Per
-                                                                    Person</td>
-                                                                <td> <input
+                                                                    Person: <input
                                                                     nz-input
                                                                     name="deathAndInjuryPerPerson"
                                                                     formControlName="deathAndInjuryPerPerson"
                                                                     [(ngModel)]="
                                                                         deathAndInjuryPerPerson
                                                                     "
+                                                                    min="30100"
                                                                     type="number"
                                                                     id="deathAndInjuryPerPerson"
                                                                     (ngModelChange)="
                                                                         handleDeathAndInjuryPerPersonPremium()
                                                                     "
                                                                 /></td>
-                                                                <td><input
+                                                                <td>Rate: <input
                                                                 nz-input
                                                                 name="deathAndInjuryPerPersonRate"
                                                                 formControlName="deathAndInjuryPerPersonRate"
@@ -3886,7 +3893,7 @@
                                                                     handleDeathAndInjuryPerPersonPremium()
                                                                 "
                                                             /></td>
-                                                                <td>  <input
+                                                                <td>Premium:  <input
                                                                     nz-input
                                                                     name="deathAndInjuryPerPersonPremium"
                                                                     formControlName="deathAndInjuryPerPersonPremium"
@@ -3899,25 +3906,30 @@
                                                                 /></td>
                                                               </tr>
                                                               <tr>
-                                                                <td> Death
+                                                                <!-- <td> Death
                                                                     And
                                                                     Injury
                                                                     Per
-                                                                    Event</td>
-                                                                <td><input
+                                                                    Event</td> -->
+                                                                <td>Death
+                                                                    And
+                                                                    Injury
+                                                                    Per
+                                                                    Event: <input
                                                                     nz-input
                                                                     name="deathAndInjuryPerEvent"
                                                                     formControlName="deathAndInjuryPerEvent"
                                                                     [(ngModel)]="
                                                                         deathAndInjuryPerEvent
                                                                     "
+                                                                    min="60100"
                                                                     type="number"
                                                                     id="deathAndInjuryPerEvent"
                                                                     (ngModelChange)="
                                                                         handleDeathAndInjuryPerEventPremium()
                                                                     "
                                                                 /></td>
-                                                                <td><input
+                                                                <td>Rate: <input
                                                                     nz-input
                                                                     name="deathAndInjuryPerEventRate"
                                                                     formControlName="deathAndInjuryPerEventRate"
@@ -3930,7 +3942,7 @@
                                                                         handleDeathAndInjuryPerEventPremium()
                                                                     "
                                                                 /></td>
-                                                                <td> <input
+                                                                <td>Premium: <input
                                                                     nz-input
                                                                     name="deathAndInjuryPerEventPremium"
                                                                     formControlName="deathAndInjuryPerEventPremium"
@@ -3943,9 +3955,24 @@
                                                                 /></td>
                                                               </tr>
                                                               <tr>
+                                                                <!-- <td>Property
+                                                                    Damage</td> -->
                                                                 <td>Property
-                                                                    Damage</td>
-                                                                <td><input
+                                                                    Damage: <input
+                                                                    nz-input
+                                                                    name="propertyDamage"
+                                                                    formControlName="propertyDamage"
+                                                                    [(ngModel)]="
+                                                                        propertyDamage
+                                                                    "
+                                                                    min="30000"
+                                                                    type="number"
+                                                                    id="propertyDamage"
+                                                                    (ngModelChange)="
+                                                                        handlePropertyDamagePremium()
+                                                                    "
+                                                                /></td>
+                                                                <td>Rate: <input
                                                                     nz-input
                                                                     name="propertyDamageRate"
                                                                     formControlName="propertyDamageRate"
@@ -3958,20 +3985,7 @@
                                                                         handlePropertyDamagePremium()
                                                                     "
                                                                 /></td>
-                                                                <td> <input
-                                                                    nz-input
-                                                                    name="propertyDamageRate"
-                                                                    formControlName="propertyDamageRate"
-                                                                    [(ngModel)]="
-                                                                        propertyDamageRate
-                                                                    "
-                                                                    type="number"
-                                                                    id="propertyDamageRate"
-                                                                    (ngModelChange)="
-                                                                        handlePropertyDamagePremium()
-                                                                    "
-                                                                /></td>
-                                                                <td> <input
+                                                                <td>Premium: <input
                                                                     nz-input
                                                                     name="propertyDamagePremium"
                                                                     formControlName="propertyDamagePremium"
@@ -3986,7 +4000,6 @@
                                                         </form>
                                                         </div>
                                                             </tbody>
-                                                          </nz-table>
                                                         
 
 
@@ -4486,12 +4499,40 @@
                                                             nzText="Excesses"
                                                             nzOrientation="left"
                                                         ></nz-divider>
-                                                        <form
+
+                                                        <!-- <form
                                                             [formGroup]="
                                                                 excessesForm
                                                             "
-                                                        >
-                                                            <nz-form-item>
+                                                        > -->
+                                                        <ul>
+                                                            <div *ngFor="let ex of excessList">
+                                                            <li>{{ex.description}}{{ex.amount}}</li>
+                                                        </div>
+                                                        </ul>
+                                                            <!-- <nz-form-item *ngFor="let ex of excessList">
+                                                                <nz-form-label
+                                                                    [nzSpan]="
+                                                                        16
+                                                                    "
+                                                                    nzFor="below21Years"
+                                                                    nzRequired
+                                                                >
+                                                                    {{ex.description}}
+                                                                </nz-form-label>
+                                                                <nz-form-control
+                                                                    nzSpan="8"
+                                                                >
+                                                                    <input
+                                                                        nz-input
+                                                                        name="below21Years"
+                                                                        [formControlName]="ex.amount"
+                                                                        type="number"
+                                                                    />
+                                                                </nz-form-control>
+                                                            </nz-form-item> -->
+                                                        
+                                                            <!-- <nz-form-item>
                                                                 <nz-form-label
                                                                     [nzSpan]="
                                                                         16
@@ -4609,8 +4650,8 @@
                                                                     />
                                                                 </nz-form-control>
                                                             </nz-form-item>
-                                                            <nz-form-item></nz-form-item>
-                                                        </form>
+                                                            <nz-form-item></nz-form-item> -->
+                                                        <!-- </form> -->
                                                     </nz-card>
                                                 </div>
                                             </div>

@@ -30,10 +30,10 @@ export interface IClass {
 export interface IProduct {
     id: string;
     productName: string;
-    productCode: number;
+    productCode?: number;
     productDescription: string;
-    productPolicyNumberPrefix: string;
-    productClaimNumberPrefix: string;
+    productPolicyNumberPrefix?: string;
+    productClaimNumberPrefix?: string;
 }
 
 export interface ICoverType {}
