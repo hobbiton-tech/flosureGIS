@@ -28,6 +28,8 @@ import { AddCoverTypeComponent } from './components/product-setups/components/ad
 import { AddPerilComponent } from './components/product-setups/components/add-peril/add-peril.component';
 import { AddProductCommissionComponent } from './components/agents/add-product-commission/add-product-commission.component';
 import { ClausesService } from './components/underwriting-setups/services/clauses.service';
+import { WarrantiesComponent } from './components/warranties/warranties.component';
+import { ExtensionsComponent } from './components/extensions/extensions.component';
 
 const routes: Routes = [
     {
@@ -66,6 +68,14 @@ const routes: Routes = [
         path: 'product-setups',
         component: ProductSetupsComponent,
     },
+    {
+        path: 'warranties',
+        component: WarrantiesComponent,
+    },
+    {
+        path: 'extensions',
+        component: ExtensionsComponent,
+    },
 ];
 
 @NgModule({
@@ -94,6 +104,8 @@ const routes: Routes = [
         AddCoverTypeComponent,
         AddPerilComponent,
         AddProductCommissionComponent,
+        WarrantiesComponent,
+        ExtensionsComponent,
     ],
     imports: [
         CommonModule,
