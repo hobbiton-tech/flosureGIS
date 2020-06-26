@@ -108,10 +108,11 @@ export type LiabilityType =
     | 'combinedLimits';
 
 export type ExcessType =
-    | 'collisionAndFire'
-    | 'theftOfVehicleWithAntiTheftDevice'
-    | 'theftOfVehicleWithoutAntiTheftDevice'
-    | 'thirdPartyPropertyDamage';
+    | 'below21Years'
+    | 'over70Years'
+    | 'noLicence'
+    | 'careLessDriving'
+    | 'otherEndorsement';
 
 export type ReceiptStatus = 'Unreceipted' | 'Receipted';
 export type ProductType = 'Private' | 'Commercial' | 'Bus/Taxi';

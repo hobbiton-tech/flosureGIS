@@ -4,6 +4,8 @@ import html2canvas from 'html2canvas';
 import { RiskModel, ITimestamp } from 'src/app/quotes/models/quote.model';
 import { Policy } from '../../models/policy.model';
 import moment from 'moment';
+import { IReceiptModel } from 'src/app/accounts/components/models/receipts.model';
+import { CoverNote } from '../models/documents.model';
 
 @Component({
     selector: 'app-policy-thirdparty-certificate',
@@ -18,7 +20,13 @@ export class PolicyThirdpartyCertificateComponent implements OnInit {
     insuredName: string;
 
     @Input()
+    receipt: IReceiptModel;
+
+    @Input()
     clientNumber: string;
+
+    @Input()
+    coverNot: CoverNote;
 
     @Input()
     clientEmail: string;
@@ -57,6 +65,7 @@ export class PolicyThirdpartyCertificateComponent implements OnInit {
 
     generatingPDF = false;
 
+    dateOfIssue = new Date();
     constructor() {}
 
     ngOnInit(): void {

@@ -5,14 +5,15 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import {
     ICorporateClient,
-    IIndividualClient
+    IIndividualClient,
 } from 'src/app/clients/models/clients.model';
 import moment from 'moment';
+import { CoverNote } from '../models/documents.model';
 
 @Component({
     selector: 'app-policy-schedule-document',
     templateUrl: './policy-schedule-document.component.html',
-    styleUrls: ['./policy-schedule-document.component.scss']
+    styleUrls: ['./policy-schedule-document.component.scss'],
 })
 export class PolicyScheduleDocumentComponent implements OnInit {
     @Input()
@@ -23,6 +24,9 @@ export class PolicyScheduleDocumentComponent implements OnInit {
 
     @Input()
     clientNumber: string;
+
+    @Input()
+    coverNot: CoverNote;
 
     @Input()
     clientEmail: string;
@@ -79,16 +83,19 @@ export class PolicyScheduleDocumentComponent implements OnInit {
     combinedLimits: number;
 
     @Input()
-    collisionAndFire: number;
+    below21Years: number;
 
     @Input()
-    theftOfVehicleWithAntiTheftDevice: number;
+    over70Years: number;
 
     @Input()
-    theftOfVehicleWithoutAntiTheftDevice: number;
+    noLicence: number;
 
     @Input()
-    thirdPartyPropertyDamage: number;
+    careLessDriving: number;
+
+    @Input()
+    otherEndorsement: number;
 
     todayDate: Date;
 
@@ -103,9 +110,7 @@ export class PolicyScheduleDocumentComponent implements OnInit {
     }
 
     getYearOfManufacture(risk: RiskModel) {
-        let year: string = moment(risk.yearOfManufacture)
-            .year()
-            .toString();
+        let year: string = moment(risk.yearOfManufacture).year().toString();
         return year;
     }
 
@@ -115,13 +120,13 @@ export class PolicyScheduleDocumentComponent implements OnInit {
         const options = {
             background: 'white',
             height: div.clientHeight,
-            width: div.clientWidth
+            width: div.clientWidth,
         };
 
-        html2canvas(div, options).then(canvas => {
+        html2canvas(div, options).then((canvas) => {
             let doc = new jsPDF({
                 unit: 'mm',
-                format: 'a3'
+                format: 'a3',
             });
             let imgData = canvas.toDataURL('image/PNG');
             doc.addImage(imgData, 'PNG', 0, 0, 297, 420);

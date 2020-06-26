@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {
     AngularFirestore,
     AngularFirestoreCollection,
-    DocumentReference
+    DocumentReference,
 } from '@angular/fire/firestore';
 import { Observable, combineLatest } from 'rxjs';
 import { IAgent, IBroker, ISalesRepresentative } from '../models/agents.model';
@@ -11,14 +11,14 @@ import { first, combineAll } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 const httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
 };
 
-// const BASE_URL = 'http://localhost:3000';
+// const BASE_URL = 'https://www.flosure-api.com';
 // const BASE_URL = 'https://flosure-postgres-api.herokuapp.com';
 const BASE_URL = 'https://flosure-api.com';
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class AgentsService {
     private agentsCollection: AngularFirestoreCollection<IAgent>;
@@ -43,17 +43,19 @@ export class AgentsService {
         // >('sales_representatives');
         // this.salesRepresentatives = this.salesRepresentativesCollection.valueChanges();
 
-        this.getAgents().subscribe(totalAgents => {
+        this.getAgents().subscribe((totalAgents) => {
             this.agents = totalAgents;
         });
 
-        this.getBrokers().subscribe(totalBrokers => {
+        this.getBrokers().subscribe((totalBrokers) => {
             this.brokers = totalBrokers;
         });
 
-        this.getSalesRepresentatives().subscribe(totalSalesRepresentatives => {
-            this.salesRepresentatives = totalSalesRepresentatives;
-        });
+        this.getSalesRepresentatives().subscribe(
+            (totalSalesRepresentatives) => {
+                this.salesRepresentatives = totalSalesRepresentatives;
+            }
+        );
     }
 
     // async addAgent(agent: IAgent): Promise<void> {
@@ -162,7 +164,7 @@ export class AgentsService {
             this.salesRepresentatives.length
         );
         return this.http.post<ISalesRepresentative>(
-            'http://localhost:3000/intermediary/sales-representative',
+            'https://www.flosure-api.com/intermediary/sales-representative',
             salesRepresentatives
         );
     }
@@ -221,7 +223,7 @@ export class AgentsService {
 
     // getBrokers(): Observable<IBroker[]> {
     //     return this.http.get<IBroker[]>(
-    //         'http://localhost:3000/intermediary/broker'
+    //         'https://www.flosure-api.com/intermediary/broker'
 
     //     );
     // }
@@ -239,14 +241,14 @@ export class AgentsService {
 
     // getAgent(id: string): Observable<IAgent> {
     //     return this.http.get<IAgent>(
-    //         `http://localhost:3000/intermediary/agent/${id}`
+    //         `https://www.flosure-api.com/intermediary/agent/${id}`
 
     //     );
     // }
 
     // getAgents(): Observable<IAgent[]> {
     //     return this.http.get<IAgent[]>(
-    //         'http://localhost:3000/intermediary/agent'
+    //         'https://www.flosure-api.com/intermediary/agent'
 
     //     );
     // }

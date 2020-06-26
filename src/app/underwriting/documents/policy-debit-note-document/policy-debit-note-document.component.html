@@ -71,7 +71,7 @@
                     </p>
                     <span style="font-weight: bold;">TPIN:</span
                     ><span style="font-weight: bold; color: red;"
-                        >1002167568</span
+                        ></span
                     >
                 </td>
             </tr>
@@ -145,7 +145,7 @@
             <tr *ngFor="let risk of policy.risks" class="details">
                 <td style="border: 1px solid black; border-collapse: collapse;"></td>
 
-                <td class="td2" style="border: 1px solid black; border-collapse: collapse;"></td>
+                <td class="td2" style="border: 1px solid black; border-collapse: collapse;">{{coverNote(risk)}}</td>
                 <td style="border: 1px solid black;">
                     {{ risk.regNumber }}, {{ risk.vehicleMake }}
                     {{ risk.vehicleModel }} -

@@ -1,9 +1,15 @@
 import { Component, OnInit, Input } from '@angular/core';
 import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import { RiskModel, ITimestamp, DiscountModel } from 'src/app/quotes/models/quote.model';
+import {
+    RiskModel,
+    ITimestamp,
+    DiscountModel,
+} from 'src/app/quotes/models/quote.model';
 import { Policy } from '../../models/policy.model';
 import moment from 'moment';
+import { IReceiptModel } from 'src/app/accounts/components/models/receipts.model';
+import { CoverNote } from '../models/documents.model';
 
 @Component({
     selector: 'app-policy-comprehensive-certificate',
@@ -25,11 +31,15 @@ export class PolicyComprehensiveCertificateComponent implements OnInit {
 
     @Input()
     clientAddress: string;
+
     @Input()
-    cndAmount: number;
+    cndAmount = 0;
 
     @Input()
     basicPremium: string;
+
+    @Input()
+    receipt: IReceiptModel;
 
     @Input()
     loadingAmount: string;
@@ -57,11 +67,13 @@ export class PolicyComprehensiveCertificateComponent implements OnInit {
 
     @Input()
     policy: Policy;
+    @Input()
+    coverNot: CoverNote;
 
     subTotal: number;
 
     generatingPDF = false;
-    dateOfIssue = new Date ;
+    dateOfIssue = new Date();
 
     constructor() {}
 

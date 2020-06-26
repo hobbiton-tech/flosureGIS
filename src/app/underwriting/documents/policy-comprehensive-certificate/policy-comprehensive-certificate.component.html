@@ -364,7 +364,9 @@
                 >
                     <tspan x="0" y="0">Time of Issue:</tspan>
                     <!-- TODO: Add time to model -->
-                    <tspan class="cls-11" y="0">{{ ' ' + issueDate | date: 'HH:MM:SS'}}</tspan>
+                    <tspan class="cls-11" y="0">
+                        {{ ' ' + issueDate | date: 'HH:MM:SS' }}
+                    </tspan>
                 </text>
                 <text
                     id="Expiry_Date:_30_06_20"
@@ -462,7 +464,7 @@
                     transform="translate(27 137)"
                 >
                     <tspan x="0" y="0">
-                        CERTIFICATE NO:
+                        CERTIFICATE NO: {{coverNot.certificateNumber}}
                     </tspan>
                 </text>
                 <text
@@ -493,7 +495,7 @@
                     transform="translate(27 197)"
                 >
                     <tspan x="0" y="0">
-                        {{ policy.nameOfInsured }} {{clientAddress}}
+                        {{ policy.nameOfInsured }} {{ clientAddress }}
                     </tspan>
                 </text>
                 <text
@@ -551,9 +553,8 @@
                     transform="translate(27 317)"
                 >
                     <tspan x="0" y="0">
-                        Sum Insured: {{policy.currency}}{{
-                            policy.sumInsured | number: '1.2-2'
-                        }}
+                        Sum Insured: {{ policy.currency
+                        }}{{ policy.sumInsured | number: '1.2-2' }}
                     </tspan>
                 </text>
                 <text
@@ -563,7 +564,8 @@
                     transform="translate(27 337)"
                 >
                     <tspan x="0" y="0">
-                        Premium: {{policy.currency}}{{ policy.netPremium | number: '1.2-2' }}
+                        Premium: {{ policy.currency
+                        }}{{ policy.netPremium | number: '1.2-2' }}
                     </tspan>
                 </text>
                 <text
@@ -573,7 +575,8 @@
                     transform="translate(27 357)"
                 >
                     <tspan x="0" y="0">
-                        NCD: {{policy.currency}}{{ cndAmount | number: '1.2-2' }} 
+                        NCD: {{ policy.currency
+                        }}{{ cndAmount | number: '1.2-2' }}
                     </tspan>
                     <tspan x="0" y="13">
                         (i) Own Damage Excess 10% minimum
@@ -582,7 +585,7 @@
                         (ii) TPPD Excess 10% minimum
                     </tspan>
                     <tspan x="0" y="33">
-                        (iii) Theft Excess 15% minimum............
+                        (iii) Theft Excess 15% minimum
                     </tspan>
                 </text>
 
@@ -672,7 +675,7 @@
                     transform="translate(298 257)"
                 >
                     <tspan x="0" y="0" xml:space="preserve">
-                        Seating Capacity: {{policyRisk.seatingCapacity}}
+                        Seating Capacity: {{ policyRisk.seatingCapacity }}
                     </tspan>
                 </text>
 
@@ -695,10 +698,12 @@
                 >
                     <tspan x="0" y="0" xml:space="preserve"></tspan>
                     <tspan x="0" y="10" xml:space="preserve">
-                        Cover Note Receipt No.
+                        Cover Note Receipt No.:{{ receipt.receiptNumber }}
                     </tspan>
                     <tspan x="0" y="25" xml:space="preserve">
-                        Amount Paid in ZMW:
+                        Amount Paid in {{ policy.currency }} :{{
+                            receipt.sumInDigits
+                        }}
                     </tspan>
                 </text>
 
@@ -816,10 +821,11 @@
                     transform="translate(27 460)"
                 >
                     <tspan x="0" y="0">
-                        Cover Operative for a period Of {{policyRisk.numberOfDays}}.Day(s)
+                        Cover Operative for a period Of
+                        {{ policyRisk.numberOfDays }}.Day(s)
                     </tspan>
                     <tspan x="0" y="16">
-                        From:  {{dateOfIssue | date:'HH:MM:SS'}} Hours
+                        From: {{ dateOfIssue | date: 'HH:MM:SS' }} Hours
                     </tspan>
                 </text>
 
