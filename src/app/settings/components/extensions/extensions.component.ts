@@ -118,8 +118,11 @@ export class ExtensionsComponent implements OnInit {
         };
         this.productClausesService.addExtension(extension);
         this.isExtensionsVisible = false;
+        this.extensionForm.reset();
     }
-    resetExtensionForm(value) {}
+    resetExtensionForm() {
+        this.extensionForm.reset();
+    }
 
     submitLimitForm() {
         const limit: ILimit = {
@@ -129,9 +132,12 @@ export class ExtensionsComponent implements OnInit {
         };
         this.productClausesService.addLimit(limit);
         this.isLimitVisible = false;
+        this.limitForm.reset();
     }
 
-    resetLimitForm(value) {}
+    resetLimitForm() {
+        this.limitForm.reset();
+    }
 
     submitExccessForm() {
         const exccess: IExccess = {
@@ -141,7 +147,10 @@ export class ExtensionsComponent implements OnInit {
         };
         this.productClausesService.addExccess(exccess);
         this.isExccessVisible = false;
+        this.exccessForm.reset();
     }
 
-    resetExccessForm(value) {}
+    resetExccessForm() {
+        this.exccessForm.reset();
+    }
 }

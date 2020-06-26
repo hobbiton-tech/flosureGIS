@@ -95,9 +95,12 @@ export class WarrantiesComponent implements OnInit {
         };
         this.productClausesService.addWarranty(warranty);
         this.isWarrantyVisible = false;
+        this.warrantyForm.reset();
     }
 
-    resetWarrantyForm(value) {}
+    resetWarrantyForm() {
+        this.warrantyForm.reset();
+    }
 
     submitExclusionForm() {
         const exclusion: IExclusion = {
@@ -107,7 +110,10 @@ export class WarrantiesComponent implements OnInit {
         };
         this.productClausesService.addExclusion(exclusion);
         this.isExclusionVisible = false;
+        this.exclusionForm.reset();
     }
 
-    resetExclusionForm(value) {}
+    resetExclusionForm() {
+        this.exclusionForm.reset();
+    }
 }
