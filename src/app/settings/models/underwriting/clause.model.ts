@@ -71,6 +71,7 @@ export interface IExccess {
     productId: string;
     description: string;
     amount: string;
+    vehicleType: string;
 }
 
 // const createClause = () => {

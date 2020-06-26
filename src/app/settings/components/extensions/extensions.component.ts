@@ -36,6 +36,7 @@ export class ExtensionsComponent implements OnInit {
     isExccessVisible: boolean = false;
 
     selectedProductId: any;
+    vehicleType: any;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -80,6 +81,10 @@ export class ExtensionsComponent implements OnInit {
         this.productsService.getProducts(value.id).subscribe((res) => {
             this.productsList = res;
         });
+    }
+
+    vtypeChanged(value) {
+        this.vehicleType = value;
     }
 
     onSelectProduct(product) {
@@ -144,6 +149,7 @@ export class ExtensionsComponent implements OnInit {
             ...this.exccessForm.value,
             id: v4(),
             productId: this.selectedProductId,
+            vehicleType: this.vehicleType,
         };
         this.productClausesService.addExccess(exccess);
         this.isExccessVisible = false;
