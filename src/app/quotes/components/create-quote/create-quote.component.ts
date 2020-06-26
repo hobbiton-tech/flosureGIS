@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
 import { QuotesService } from '../../services/quotes.service';
 import { ClientsService } from 'src/app/clients/services/clients.service';
@@ -20,7 +20,7 @@ import {
 import { map, debounceTime, switchMap } from 'rxjs/operators';
 import { NzMessageService, UploadChangeParam } from 'ng-zorro-antd';
 import * as XLSX from 'xlsx';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Observer } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { IQuoteDTO } from '../../models/quote.dto';
 import { v4 } from 'uuid';
@@ -38,6 +38,7 @@ import {
     IPolicyClauses,
     IPolicyWording,
     IPolicyExtension,
+    IExccess,
 } from 'src/app/settings/models/underwriting/clause.model';
 import { ClausesService } from 'src/app/settings/components/underwriting-setups/services/clauses.service';
 import * as moment from 'moment';
@@ -51,6 +52,9 @@ import {
     InsuranceTypeOptions,
     LimitsOfLiabilityOptions,
 } from '../../selection-options';
+import { PoliciesService } from 'src/app/underwriting/services/policies.service';
+import { IProduct } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
+import { ProductSetupsServiceService } from 'src/app/settings/components/product-setups/services/product-setups-service.service';
 
 type AOA = any[][];
 
@@ -106,6 +110,9 @@ export class CreateQuoteComponent implements OnInit {
     insuranceTypeOptions = InsuranceTypeOptions;
     limitsTypeOptions = LimitsOfLiabilityOptions;
 
+    //Excess Variable
+    excessList:IExccess[]=[];
+
     //loading feedback
     creatingQuote: boolean = false;
     quotesList: MotorQuotationModel[];
@@ -145,7 +152,9 @@ export class CreateQuoteComponent implements OnInit {
         private msg: NzMessageService,
         private http: HttpClient,
         private readonly agentsService: AgentsService,
-        private productClauseService: ClausesService
+        private productClauseService: ClausesService,
+        private policyService: PoliciesService,
+        private productSevice: ProductSetupsServiceService
     ) {
         this.clauseForm = formBuilder.group({
             heading: ['', Validators.required],
@@ -159,6 +168,8 @@ export class CreateQuoteComponent implements OnInit {
             heading: ['', Validators.required],
             description: ['', Validators.required],
         });
+
+        
     }
 
     // conditional render of agent field based on mode(agent or user)
@@ -451,6 +462,8 @@ export class CreateQuoteComponent implements OnInit {
     endOpen = false;
     clientCode: any;
     clientName: any;
+    concRisks: any[] =[];
+    conChasis: any[]=[];
 
     compareFn = (o1: any, o2: any) =>
         o1 && o2 ? o1.value === o2.value : o1 === o2;
@@ -460,7 +473,8 @@ export class CreateQuoteComponent implements OnInit {
             label: 'Increased Third Party Limit',
             value: 'increasedThirdPartyLimits',
         };
-        console.log(value);
+        console.log('WHAT IS HERE<<<<',value);
+
     }
 
     disabledStartDate = (startValue: Date): boolean => {
@@ -484,6 +498,7 @@ export class CreateQuoteComponent implements OnInit {
             messageCode: ['ewrewre', Validators.required],
             currency: ['', Validators.required],
             startDate: ['', Validators.required],
+            policyNumberOfDays: [''],
             endDate: [''],
             quarter: ['', Validators.required],
             user: [user, Validators.required],
@@ -492,6 +507,18 @@ export class CreateQuoteComponent implements OnInit {
             sourceOfBusiness: ['', Validators.required],
             intermediaryName: [''],
         });
+
+        this.policyService.getPolicies().subscribe((res) => {
+            
+            for(const policy of res) {
+                this.concRisks = this.concRisks.concat(policy.risks)
+            }
+            console.log("RISKS<<<<<<", this.concRisks)
+        })
+
+        // this.productSevice.getProducts('e745338b-e9d5-4e07-b5a5-ddb84e54c3a5').subscribe((res) => {
+        //     this.insuranceTypeOptions
+        // })
 
         this.quoteService.getMotorQuotations().subscribe((quotes) => {
             this.quotesList = quotes;
@@ -504,6 +531,11 @@ export class CreateQuoteComponent implements OnInit {
 
             this.lastItem = this.quotesList[this.quotesList.length - 1];
         });
+
+        this.productClauseService.getExccesses().subscribe((res) => {
+            this.excessList = res;
+        })
+        
 
         this.clientsService.getAllClients().subscribe((clients) => {
             this.clients = [...clients[0], ...clients[1]] as Array<
@@ -525,35 +557,35 @@ export class CreateQuoteComponent implements OnInit {
                 this.salesRepresentatives = salesRepresentatives;
             });
 
-        this.riskComprehensiveForm = this.formBuilder.group({
-            riskStartDate: ['', Validators.required],
-            riskQuarter: ['', Validators.required],
-            riskEndDate: ['', Validators.required],
-            regNumber: ['', Validators.required],
-            vehicleMake: ['', Validators.required],
-            vehicleModel: ['', Validators.required],
-            engineNumber: [''],
-            chassisNumber: ['', Validators.required],
-            yearOfManufacture: ['', Validators.required],
-            color: ['', [Validators.required]],
-            cubicCapacity: ['', Validators.required],
-            seatingCapacity: ['', Validators.required],
-            bodyType: ['', Validators.required],
-            productType: ['', Validators.required],
-            insuranceType: ['Comprehensive'],
-            numberOfDays: ['', Validators.required],
-            expiryQuarter: ['', Validators.required],
-        });
+            this.riskComprehensiveForm = this.formBuilder.group({
+                riskStartDate: ['', Validators.required],
+                riskQuarter: ['', Validators.required],
+                riskEndDate: ['', Validators.required],
+                regNumber: ['', Validators.required, [this.regIDAsyncValidator]],
+                vehicleMake: ['', Validators.required],
+                vehicleModel: ['', Validators.required],
+                engineNumber: ['',Validators.required, [this.engineIDAsyncValidator]],
+                chassisNumber: ['', Validators.required, [this.chassisIDAsyncValidator]],
+                yearOfManufacture: ['', Validators.required],
+                color: ['', [Validators.required]],
+                cubicCapacity: ['', Validators.required],
+                seatingCapacity: ['', Validators.required],
+                bodyType: ['', Validators.required],
+                productType: ['', Validators.required],
+                insuranceType: ['Comprehensive'],
+                numberOfDays: ['', Validators.required],
+                expiryQuarter: ['', Validators.required],
+            });
 
         this.riskThirdPartyForm = this.formBuilder.group({
             riskStartDate: ['', Validators.required],
             riskQuarter: ['', Validators.required],
             riskEndDate: ['', Validators.required],
-            regNumber: ['', [Validators.required]],
-            vehicleMake: ['', [Validators.required]],
-            vehicleModel: ['', [Validators.required]],
-            engineNumber: [''],
-            chassisNumber: ['', [Validators.required]],
+            regNumber: ['', Validators.required, [this.regTHPIDAsyncValidator]],
+                vehicleMake: ['', Validators.required],
+                vehicleModel: ['', Validators.required],
+                engineNumber: ['',Validators.required, [this.engineTHPIDAsyncValidator]],
+                chassisNumber: ['', Validators.required, [this.chassisTHPIDAsyncValidator]],
             yearOfManufacture: ['', Validators.required],
             color: ['', [Validators.required]],
             cubicCapacity: ['', Validators.required],
@@ -639,18 +671,19 @@ export class CreateQuoteComponent implements OnInit {
         // set default value for combined limits
         this.combinedLimitsForm
             .get('combinedLimits')
-            .setValue(
-                Number(
-                    this.limitsOfLiabilityForm.get('deathAndInjuryPerPerson')
-                        .value
-                ) +
-                    Number(
-                        this.limitsOfLiabilityForm.get('deathAndInjuryPerEvent')
-                            .value
-                    ) +
-                    Number(
-                        this.limitsOfLiabilityForm.get('propertyDamage').value
-                    )
+            .setValue( 93200
+                // Number(
+                //     this.limitsOfLiabilityForm.get('deathAndInjuryPerPerson')
+                //         .value
+                // ) +
+                //     Number(
+                //         this.limitsOfLiabilityForm.get('deathAndInjuryPerEvent')
+                //             .value
+                //     )
+                //      +
+                //     Number(
+                //         this.limitsOfLiabilityForm.get('propertyDamage').value
+                //     )
             );
         this.combinedLimitsForm.get('combinedLimitsPremium').setValue('0');
 
@@ -712,7 +745,7 @@ export class CreateQuoteComponent implements OnInit {
 
         // start of initialize computations
         this.sumInsured = 0;
-        this.premiumRate = 0;
+        this.premiumRate = 6;
 
         this.basicPremium = 0;
         this.premiumLoadingTotal = 0;
@@ -751,6 +784,227 @@ export class CreateQuoteComponent implements OnInit {
         this.updateEditCache();
     }
 
+
+   
+    disabledSubmissionDate = (submissionValue) => {
+        if (!submissionValue) {
+            return false;
+        }
+        return (submissionValue.valueOf() < moment().add(-1, 'days'));
+    }
+    
+
+
+    // Validate registration Number
+    regIDAsyncValidator = (control: FormControl) =>
+    new Observable((observer: Observer<ValidationErrors | null>) => {
+      setTimeout(() => {
+        this.policyService.getPolicies().subscribe((res) => {
+            const activePolicy = res.filter((x)=> x.status === 'Active')
+            
+            for(const policy of activePolicy) {
+                this.concRisks = this.concRisks.concat(policy.risks)
+            }
+            console.log("RISKS Comprehensive <<<<<<", this.concRisks)
+
+            if(this.concRisks.length > 0){
+
+                for(const reg of this.concRisks) {
+                    if(control.value === reg.regNumber) {
+                        observer.next({ error: true, duplicated: true });
+                    break;
+                    }else {
+                        observer.next(null);
+                      }
+                }
+
+            } else {
+                observer.next(null);
+            }
+            observer.complete();
+        })
+
+         
+      }, 1000);
+    });
+
+
+           // Validate Chassis Number
+           chassisIDAsyncValidator = (control: FormControl) =>
+           new Observable((observer: Observer<ValidationErrors | null>) => {
+             setTimeout(() => {
+               this.policyService.getPolicies().subscribe((res) => {
+                   const activePolicy = res.filter((x)=> x.status === 'Active')
+                   
+                   for(const policy of activePolicy) {
+                       this.concRisks = this.concRisks.concat(policy.risks)
+                   }
+                   console.log("RISKS Comprehensive <<<<<<", this.concRisks)
+       
+                   if(this.concRisks.length > 0){
+       
+                       for(const reg of this.concRisks) {
+                           if(control.value === reg.chassisNumber) {
+                               observer.next({ error: true, duplicated: true });
+                           break;
+                           }else {
+                               observer.next(null);
+                             }
+                       }
+       
+                   } else {
+                       observer.next(null);
+                   }
+                   observer.complete();
+               })
+       
+             }, 1000);
+           });
+
+
+
+           // Validate Engine Number
+    engineIDAsyncValidator = (control: FormControl) =>
+    new Observable((observer: Observer<ValidationErrors | null>) => {
+      setTimeout(() => {
+        this.policyService.getPolicies().subscribe((res) => {
+            const activePolicy = res.filter((x)=> x.status === 'Active')
+            
+            for(const policy of activePolicy) {
+                this.concRisks = this.concRisks.concat(policy.risks)
+            }
+            console.log("RISKS Comprehensive <<<<<<", this.concRisks)
+
+            if(this.concRisks.length > 0){
+
+                for(const reg of this.concRisks) {
+                    if(control.value === reg.engineNumber) {
+                        observer.next({ error: true, duplicated: true });
+                    break;
+                    }else {
+                        observer.next(null);
+                      }
+                }
+
+            } else {
+                observer.next(null);
+            }
+            observer.complete();
+        })
+
+      }, 1000);
+    });
+
+
+
+
+
+
+
+      // Validate registration Number
+      regTHPIDAsyncValidator = (control: FormControl) =>
+      new Observable((observer: Observer<ValidationErrors | null>) => {
+        setTimeout(() => {
+          this.policyService.getPolicies().subscribe((res) => {
+              const activePolicy = res.filter((x)=> x.status === 'Active')
+              
+              for(const policy of activePolicy) {
+                  this.concRisks = this.concRisks.concat(policy.risks)
+              }
+              console.log("RISKS Comprehensive <<<<<<", this.concRisks)
+  
+              if(this.concRisks.length > 0){
+  
+                  for(const reg of this.concRisks) {
+                      if(control.value === reg.regNumber) {
+                          observer.next({ error: true, duplicated: true });
+                      break;
+                      }else {
+                          observer.next(null);
+                        }
+                  }
+  
+              } else {
+                  observer.next(null);
+              }
+              observer.complete();
+          })
+  
+           
+        }, 1000);
+      });
+  
+  
+             // Validate Chassis Number
+             chassisTHPIDAsyncValidator = (control: FormControl) =>
+             new Observable((observer: Observer<ValidationErrors | null>) => {
+               setTimeout(() => {
+                 this.policyService.getPolicies().subscribe((res) => {
+                     const activePolicy = res.filter((x)=> x.status === 'Active')
+                     
+                     for(const policy of activePolicy) {
+                         this.concRisks = this.concRisks.concat(policy.risks)
+                     }
+                     console.log("RISKS Comprehensive <<<<<<", this.concRisks)
+         
+                     if(this.concRisks.length > 0){
+         
+                         for(const reg of this.concRisks) {
+                             if(control.value === reg.chassisNumber) {
+                                 observer.next({ error: true, duplicated: true });
+                             break;
+                             }else {
+                                 observer.next(null);
+                               }
+                         }
+         
+                     } else {
+                         observer.next(null);
+                     }
+                     observer.complete();
+                 })
+         
+               }, 1000);
+             });
+  
+  
+  
+             // Validate Engine Number
+      engineTHPIDAsyncValidator = (control: FormControl) =>
+      new Observable((observer: Observer<ValidationErrors | null>) => {
+        setTimeout(() => {
+          this.policyService.getPolicies().subscribe((res) => {
+              const activePolicy = res.filter((x)=> x.status === 'Active')
+              
+              for(const policy of activePolicy) {
+                  this.concRisks = this.concRisks.concat(policy.risks)
+              }
+              console.log("RISKS Comprehensive <<<<<<", this.concRisks)
+  
+              if(this.concRisks.length > 0){
+  
+                  for(const reg of this.concRisks) {
+                      if(control.value === reg.engineNumber) {
+                          observer.next({ error: true, duplicated: true });
+                      break;
+                      }else {
+                          observer.next(null);
+                        }
+                  }
+  
+              } else {
+                  observer.next(null);
+              }
+              observer.complete();
+          })
+  
+        }, 1000);
+      });
+
+
+
+
+ 
     handleComprehensiveRiskEndDateCalculation(): void {
         if (
             this.riskComprehensiveForm.get('riskStartDate').value != '' &&
@@ -934,6 +1188,15 @@ export class CreateQuoteComponent implements OnInit {
                         doo.getTime() - doo.getTimezoneOffset() * -60000
                     );
                     this.quoteForm.get('endDate').setValue(nd);
+
+                    let startDate = moment(
+                        this.quoteForm.get('startDate').value
+                    );
+                    let endDate = moment(nd);
+                    let numberOfDays = endDate.diff(startDate, 'days');
+                    this.quoteForm
+                        .get('policyNumberOfDays')
+                        .setValue(numberOfDays);
                 });
         }
     }
@@ -2739,7 +3002,8 @@ export class CreateQuoteComponent implements OnInit {
 
         this.limitsOfLiability.push({
             liabilityType: 'combinedLimits',
-            amount: this.combinedLimits,
+            amount: this.combinedLimitsForm.controls.combinedLimits.value,
+            // amount: this.combinedLimits,
             rate: this.combinedLimitsRate,
             premium: this.combinedLimitsPremium,
         });
@@ -2812,7 +3076,7 @@ export class CreateQuoteComponent implements OnInit {
 
     handleCombinedLimitsPremium(): void {
         this.combinedLimitsPremium =
-            (Number(this.combinedLimits) - this.combinedLimitsMax) *
+            (Number(this.combinedLimitsForm.controls.combinedLimits.value) - this.combinedLimitsMax) *
             (this.combinedLimitsRate / 100);
         this.limitsTotalPremium =
             this.deathAndInjuryPerPersonPremium +

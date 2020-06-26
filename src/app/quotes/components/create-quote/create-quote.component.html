@@ -199,7 +199,8 @@
                             <nz-form-control nzSpan="17">
                                 <nz-date-picker
                                     formControlName="startDate"
-                                    [nzDisabledDate]="disabledStartDate"
+                                    [nzDisabledDate]="disabledSubmissionDate"
+                                    min=""
                                     nzFormat="dd-MM-yyyy"
                                     (ngModelChange)="
                                         handlePolicyEndDateCalculation()
@@ -252,6 +253,14 @@
                                     nzFormat="dd-MM-yyyy"
                                 >
                                 </nz-date-picker>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label nzRequired nzSpan="7"
+                                >Number of Days</nz-form-label
+                            >
+                            <nz-form-control nzSpan="17">
+                                <input style="width: 100px;" nz-input formControlName="policyNumberOfDays" [disabled]="true" readonly/>
                             </nz-form-control>
                         </nz-form-item>
                     </div>
@@ -460,8 +469,8 @@
                                                             nzRequired
                                                             >Reg Number
                                                         </nz-form-label>
-                                                        <nz-form-control
-                                                            nzSpan="10"
+                                                        <nz-form-control 
+                                                            nzSpan="10" nzHasFeedback  [nzErrorTip]="compRegNumberErrorTp"
                                                         >
                                                             <input
                                                                 nz-input
@@ -470,6 +479,14 @@
                                                                 type="text"
                                                                 id="regNumber"
                                                             />
+                                                            <ng-template #compRegNumberErrorTp let-control>
+                                                                <ng-container *ngIf="control.hasError('required')">
+                                                                  Please input your Registration Number!
+                                                                </ng-container>
+                                                                <ng-container *ngIf="control.hasError('duplicated')">
+                                                                  The Registration Number already exists on an active policy!
+                                                                </ng-container>
+                                                              </ng-template>
                                                         </nz-form-control>
                                                     </nz-form-item>
                                                 </div>
@@ -481,7 +498,7 @@
                                                             >Engine Number
                                                         </nz-form-label>
                                                         <nz-form-control
-                                                            nzSpan="10"
+                                                            nzSpan="10" nzHasFeedback  [nzErrorTip]="compEngineNumberErrorTp"
                                                         >
                                                             <input
                                                                 nz-input
@@ -490,6 +507,14 @@
                                                                 type="text"
                                                                 id="engineNumber"
                                                             />
+                                                            <ng-template #compEngineNumberErrorTp let-control>
+                                                                <ng-container *ngIf="control.hasError('required')">
+                                                                  Please input  Engine Number!
+                                                                </ng-container>
+                                                                <ng-container *ngIf="control.hasError('duplicated')">
+                                                                  The Engine Number already exists on an active policy!
+                                                                </ng-container>
+                                                              </ng-template>
                                                         </nz-form-control>
                                                     </nz-form-item>
                                                     <nz-form-item>
@@ -501,7 +526,7 @@
                                                             Chassis Number
                                                         </nz-form-label>
                                                         <nz-form-control
-                                                            nzSpan="10"
+                                                            nzSpan="10"  nzHasFeedback  [nzErrorTip]="compChassisNumberErrorTp"
                                                         >
                                                             <input
                                                                 nz-input
@@ -510,6 +535,14 @@
                                                                 type="text"
                                                                 id="chassisNumber"
                                                             />
+                                                            <ng-template #compChassisNumberErrorTp let-control>
+                                                                <ng-container *ngIf="control.hasError('required')">
+                                                                  Please input  Chassis Number!
+                                                                </ng-container>
+                                                                <ng-container *ngIf="control.hasError('duplicated')">
+                                                                  The Chassis Number already exists on an active policy!
+                                                                </ng-container>
+                                                              </ng-template>
                                                         </nz-form-control>
                                                     </nz-form-item>
                                                     <nz-form-item>
@@ -714,9 +747,7 @@
                                                             >
                                                                 <nz-date-picker
                                                                     formControlName="riskStartDate"
-                                                                    [nzDisabledDate]="
-                                                                        disabledStartDate
-                                                                    "
+                                                                    [nzDisabledDate]="disabledSubmissionDate"
                                                                     nzFormat="dd-MM-yyyy"
                                                                     nzPlaceHolder="Start"
                                                                     (ngModelChange)="
@@ -998,7 +1029,7 @@
                                                                             (ngModelChange)="
                                                                                 handleBasicPremiumCalculation()
                                                                             "
-                                                                            type="number"
+                                                                            readonly
                                                                         />
                                                                     </nz-input-group>
                                                                 </nz-form-control>
@@ -1018,7 +1049,7 @@
                                                                         10
                                                                     "
                                                                     nzFor="load"
-                                                                    >Add Loading
+                                                                    >Add Extension
                                                                 </nz-form-label>
                                                                 <nz-form-control
                                                                     nzSpan="10"
@@ -1071,7 +1102,7 @@
                                                                         10
                                                                     "
                                                                     nzFor="load"
-                                                                    >Add Loading
+                                                                    >Add Extension(s)
                                                                 </nz-form-label>
                                                                 <nz-form-control
                                                                     nzSpan="10"
@@ -1274,7 +1305,7 @@
                                                                         "
                                                                     >
                                                                         Add
-                                                                        Loading
+                                                                        Extensions
                                                                     </button>
                                                                 </nz-form-control>
                                                             </nz-form-item>
@@ -3748,7 +3779,236 @@
                                                             </nz-form-control>
                                                         </nz-form-item>
 
-                                                        <div
+                                                       
+                                                            <!-- <thead>
+                                                              <tr>
+                                                                <th>Limit</th>
+                                                                <th>Amount</th>
+                                                                <th>Rate</th>
+                                                                <th>Premium</th>
+                                                              </tr>
+                                                            </thead> -->
+                                                            <tbody>
+                                                                <div
+                                                            *ngIf="
+                                                                selectedLimits.value ==
+                                                                'combinedLimits'
+                                                            "
+                                                        >
+                                                        <form
+                                                                [formGroup]="
+                                                                    combinedLimitsForm
+                                                                "
+                                                            >
+                                                              <tr>
+                                                                <!-- <td>Combined
+                                                                    Limits</td> -->
+                                                                    <!-- [(ngModel)]="
+                                                                        combinedLimits
+                                                                    " -->
+                                                                <td>Combined
+                                                                    Limits: <input
+                                                                    nz-input
+                                                                    name="combinedLimits"
+                                                                    formControlName="combinedLimits"
+                                                                    type="number"
+                                                                    min="93200"
+                                                                    id="combinedLimits"
+                                                                    (ngModelChange)="
+                                                                        handleCombinedLimitsPremium()
+                                                                    "
+                                                                /></td>
+                                                                <td>Rate:<input
+                                                                    nz-input
+                                                                    name="combinedLimitsRate"
+                                                                    formControlName="combinedLimitsRate"
+                                                                    [(ngModel)]="
+                                                                        combinedLimitsRate
+                                                                    "
+                                                                    type="number"
+                                                                    id="combinedLimitsRate"
+                                                                    (ngModelChange)="
+                                                                        handleCombinedLimitsPremium()
+                                                                    "
+                                                                /></td>
+                                                                <td>Premium: <input
+                                                                    nz-input
+                                                                    name="combinedLimitsPremium"
+                                                                    formControlName="combinedLimitsPremium"
+                                                                    [(ngModel)]="
+                                                                        combinedLimitsPremium
+                                                                    "
+                                                                    type="number"
+                                                                    id="combinedLimitsPremium"
+                                                                    disabled="true"
+                                                                /></td>
+                                                              </tr>
+                                                            </form>
+                                                                </div>
+                                                            <div
+                                                            *ngIf="
+                                                                selectedLimits.value ==
+                                                                'standardLimits'
+                                                            "
+                                                        >
+                                                            <form
+                                                                [formGroup]="
+                                                                    limitsOfLiabilityForm
+                                                                "
+                                                            >
+                                                            <tr>
+                                                                <!-- <td>Death
+                                                                    And
+                                                                    Injury
+                                                                    Per
+                                                                    Person</td> -->
+                                                                <td>Death
+                                                                    And
+                                                                    Injury
+                                                                    Per
+                                                                    Person: <input
+                                                                    nz-input
+                                                                    name="deathAndInjuryPerPerson"
+                                                                    formControlName="deathAndInjuryPerPerson"
+                                                                    [(ngModel)]="
+                                                                        deathAndInjuryPerPerson
+                                                                    "
+                                                                    min="30100"
+                                                                    type="number"
+                                                                    id="deathAndInjuryPerPerson"
+                                                                    (ngModelChange)="
+                                                                        handleDeathAndInjuryPerPersonPremium()
+                                                                    "
+                                                                /></td>
+                                                                <td>Rate: <input
+                                                                nz-input
+                                                                name="deathAndInjuryPerPersonRate"
+                                                                formControlName="deathAndInjuryPerPersonRate"
+                                                                [(ngModel)]="
+                                                                    deathAndInjuryPerPersonRate
+                                                                "
+                                                                type="number"
+                                                                id="deathAndInjuryPerPersonRate"
+                                                                (ngModelChange)="
+                                                                    handleDeathAndInjuryPerPersonPremium()
+                                                                "
+                                                            /></td>
+                                                                <td>Premium:  <input
+                                                                    nz-input
+                                                                    name="deathAndInjuryPerPersonPremium"
+                                                                    formControlName="deathAndInjuryPerPersonPremium"
+                                                                    [(ngModel)]="
+                                                                        deathAndInjuryPerPersonPremium
+                                                                    "
+                                                                    type="number"
+                                                                    id="deathAndInjuryPerPersonPremium"
+                                                                    disabled="true"
+                                                                /></td>
+                                                              </tr>
+                                                              <tr>
+                                                                <!-- <td> Death
+                                                                    And
+                                                                    Injury
+                                                                    Per
+                                                                    Event</td> -->
+                                                                <td>Death
+                                                                    And
+                                                                    Injury
+                                                                    Per
+                                                                    Event: <input
+                                                                    nz-input
+                                                                    name="deathAndInjuryPerEvent"
+                                                                    formControlName="deathAndInjuryPerEvent"
+                                                                    [(ngModel)]="
+                                                                        deathAndInjuryPerEvent
+                                                                    "
+                                                                    min="60100"
+                                                                    type="number"
+                                                                    id="deathAndInjuryPerEvent"
+                                                                    (ngModelChange)="
+                                                                        handleDeathAndInjuryPerEventPremium()
+                                                                    "
+                                                                /></td>
+                                                                <td>Rate: <input
+                                                                    nz-input
+                                                                    name="deathAndInjuryPerEventRate"
+                                                                    formControlName="deathAndInjuryPerEventRate"
+                                                                    [(ngModel)]="
+                                                                        deathAndInjuryPerEventRate
+                                                                    "
+                                                                    type="number"
+                                                                    id="deathAndInjuryPerEventRate"
+                                                                    (ngModelChange)="
+                                                                        handleDeathAndInjuryPerEventPremium()
+                                                                    "
+                                                                /></td>
+                                                                <td>Premium: <input
+                                                                    nz-input
+                                                                    name="deathAndInjuryPerEventPremium"
+                                                                    formControlName="deathAndInjuryPerEventPremium"
+                                                                    [(ngModel)]="
+                                                                        deathAndInjuryPerEventPremium
+                                                                    "
+                                                                    type="number"
+                                                                    id="deathAndInjuryPerEventPremium"
+                                                                    disabled="true"
+                                                                /></td>
+                                                              </tr>
+                                                              <tr>
+                                                                <!-- <td>Property
+                                                                    Damage</td> -->
+                                                                <td>Property
+                                                                    Damage: <input
+                                                                    nz-input
+                                                                    name="propertyDamage"
+                                                                    formControlName="propertyDamage"
+                                                                    [(ngModel)]="
+                                                                        propertyDamage
+                                                                    "
+                                                                    min="30000"
+                                                                    type="number"
+                                                                    id="propertyDamage"
+                                                                    (ngModelChange)="
+                                                                        handlePropertyDamagePremium()
+                                                                    "
+                                                                /></td>
+                                                                <td>Rate: <input
+                                                                    nz-input
+                                                                    name="propertyDamageRate"
+                                                                    formControlName="propertyDamageRate"
+                                                                    [(ngModel)]="
+                                                                        propertyDamageRate
+                                                                    "
+                                                                    type="number"
+                                                                    id="propertyDamageRate"
+                                                                    (ngModelChange)="
+                                                                        handlePropertyDamagePremium()
+                                                                    "
+                                                                /></td>
+                                                                <td>Premium: <input
+                                                                    nz-input
+                                                                    name="propertyDamagePremium"
+                                                                    formControlName="propertyDamagePremium"
+                                                                    [(ngModel)]="
+                                                                        propertyDamagePremium
+                                                                    "
+                                                                    type="number"
+                                                                    id="propertyDamagePremium"
+                                                                    disabled="true"
+                                                                /></td>
+                                                              </tr>
+                                                        </form>
+                                                        </div>
+                                                            </tbody>
+                                                        
+
+
+
+
+
+                                                        
+
+                                                        <!-- <div
                                                             *ngIf="
                                                                 selectedLimits.value ==
                                                                 'combinedLimits'
@@ -3861,9 +4121,9 @@
                                                                     </div>
                                                                 </div>
                                                             </form>
-                                                        </div>
+                                                        </div> -->
 
-                                                        <div
+                                                        <!-- <div
                                                             *ngIf="
                                                                 selectedLimits.value ==
                                                                 'standardLimits'
@@ -3974,7 +4234,7 @@
                                                                                     "
                                                                                 />
                                                                             </nz-form-control>
-                                                                        </nz-form-item>
+                                                                        </nz-form-item> -->
                                                                         <!-- <nz-form-item>
                                                                                             <nz-form-label [nzSpan]="10"
                                                                                                 nzFor="protectionAndRemoval" nzRequired>
@@ -4060,7 +4320,7 @@
                                                                                                     type="text" id="unauthourizedRepair" />
                                                                                             </nz-form-control>
                                                                                         </nz-form-item> -->
-                                                                    </div>
+                                                                    <!-- </div>
                                                                     <div
                                                                         nz-col
                                                                         nzSpan="5"
@@ -4228,8 +4488,8 @@
                                                                         </nz-form-item>
                                                                     </div>
                                                                 </div>
-                                                            </form>
-                                                        </div>
+                                                            </form> -->
+                                                        <!-- </div> -->
                                                     </nz-card>
                                                 </div>
 
@@ -4239,12 +4499,40 @@
                                                             nzText="Excesses"
                                                             nzOrientation="left"
                                                         ></nz-divider>
-                                                        <form
+
+                                                        <!-- <form
                                                             [formGroup]="
                                                                 excessesForm
                                                             "
-                                                        >
-                                                            <nz-form-item>
+                                                        > -->
+                                                        <ul>
+                                                            <div *ngFor="let ex of excessList">
+                                                            <li>{{ex.description}}{{ex.amount}}</li>
+                                                        </div>
+                                                        </ul>
+                                                            <!-- <nz-form-item *ngFor="let ex of excessList">
+                                                                <nz-form-label
+                                                                    [nzSpan]="
+                                                                        16
+                                                                    "
+                                                                    nzFor="below21Years"
+                                                                    nzRequired
+                                                                >
+                                                                    {{ex.description}}
+                                                                </nz-form-label>
+                                                                <nz-form-control
+                                                                    nzSpan="8"
+                                                                >
+                                                                    <input
+                                                                        nz-input
+                                                                        name="below21Years"
+                                                                        [formControlName]="ex.amount"
+                                                                        type="number"
+                                                                    />
+                                                                </nz-form-control>
+                                                            </nz-form-item> -->
+                                                        
+                                                            <!-- <nz-form-item>
                                                                 <nz-form-label
                                                                     [nzSpan]="
                                                                         16
@@ -4362,8 +4650,8 @@
                                                                     />
                                                                 </nz-form-control>
                                                             </nz-form-item>
-                                                            <nz-form-item></nz-form-item>
-                                                        </form>
+                                                            <nz-form-item></nz-form-item> -->
+                                                        <!-- </form> -->
                                                     </nz-card>
                                                 </div>
                                             </div>
@@ -4565,7 +4853,7 @@
                                                             >Reg Number
                                                         </nz-form-label>
                                                         <nz-form-control
-                                                            nzSpan="10"
+                                                            nzSpan="10" nzHasFeedback  [nzErrorTip]="regNumberErrorTpl2"
                                                         >
                                                             <input
                                                                 nz-input
@@ -4574,6 +4862,14 @@
                                                                 type="text"
                                                                 id="regNumber"
                                                             />
+                                                            <ng-template #regNumberErrorTpl2 let-control>
+                                                                <ng-container *ngIf="control.hasError('required')">
+                                                                  Please input Registration Number!
+                                                                </ng-container>
+                                                                <ng-container *ngIf="control.hasError('duplicated')">
+                                                                    The Registration Number already exists on an active policy!
+                                                                </ng-container>
+                                                              </ng-template>
                                                         </nz-form-control>
                                                     </nz-form-item>
                                                 </div>
@@ -4585,7 +4881,7 @@
                                                             >Engine Number
                                                         </nz-form-label>
                                                         <nz-form-control
-                                                            nzSpan="10"
+                                                            nzSpan="10"  nzHasFeedback  [nzErrorTip]="engineNumberErrorTpl2"
                                                         >
                                                             <input
                                                                 nz-input
@@ -4594,6 +4890,14 @@
                                                                 type="text"
                                                                 id="engineNumber"
                                                             />
+                                                            <ng-template #engineNumberErrorTpl2 let-control>
+                                                                <ng-container *ngIf="control.hasError('required')">
+                                                                  Please input Engine Number!
+                                                                </ng-container>
+                                                                <ng-container *ngIf="control.hasError('duplicated')">
+                                                                    The Engine Number already exists on an active policy!
+                                                                </ng-container>
+                                                              </ng-template>
                                                         </nz-form-control>
                                                     </nz-form-item>
                                                     <nz-form-item>
@@ -4605,7 +4909,7 @@
                                                             Chassis Number
                                                         </nz-form-label>
                                                         <nz-form-control
-                                                            nzSpan="10"
+                                                            nzSpan="10" nzHasFeedback  [nzErrorTip]="chassisNumberErrorTpl2"
                                                         >
                                                             <input
                                                                 nz-input
@@ -4614,6 +4918,14 @@
                                                                 type="text"
                                                                 id="chassisNumber"
                                                             />
+                                                            <ng-template #chassisNumberErrorTpl2 let-control>
+                                                                <ng-container *ngIf="control.hasError('required')">
+                                                                  Please input Chassis Number!
+                                                                </ng-container>
+                                                                <ng-container *ngIf="control.hasError('duplicated')">
+                                                                    The Chassis Number already exists on an active policy!
+                                                                </ng-container>
+                                                              </ng-template>
                                                         </nz-form-control>
                                                     </nz-form-item>
                                                     <nz-form-item>
@@ -4824,9 +5136,7 @@
                                                             >
                                                                 <nz-date-picker
                                                                     formControlName="riskStartDate"
-                                                                    [nzDisabledDate]="
-                                                                        disabledStartDate
-                                                                    "
+                                                                    [nzDisabledDate]="disabledSubmissionDate"
                                                                     nzFormat="dd-MM-yyyy"
                                                                     nzPlaceHolder="Start"
                                                                     (ngModelChange)="
@@ -7298,7 +7608,24 @@
                 </nz-table>
             </div>
             <!--  Risks Table Search bar and Table details ends here -->
+            <nz-divider></nz-divider>
 
+            <!-- Clauses Start here-->
+            <div style="margin-top: 10px;">
+            <app-clauses></app-clauses>
+        </div>
+
+        <nz-divider></nz-divider>
+            <!-- Warranties start here--->
+            <div style="margin-top: 10px;">
+            <app-warranties></app-warranties>
+        </div>
+
+        <nz-divider></nz-divider>
+        <!-- Warranties start here--->
+        <div style="margin-top: 10px;">
+        <app-perils></app-perils>
+    </div>
             <!-- Add quote and reset quote form buttons starts here -->
             <div
                 style="
@@ -7533,7 +7860,7 @@
                                         nzRequired
                                         >Reg Number
                                     </nz-form-label>
-                                    <nz-form-control nzSpan="10">
+                                    <nz-form-control nzSpan="10" nzHasFeedback  [nzErrorTip]="regNumberErrorTpl3">
                                         <input
                                             nz-input
                                             name="regNumber"
@@ -7542,6 +7869,14 @@
                                             id="regNumber"
                                             [disabled]="!isRiskDetailsEditmode"
                                         />
+                                        <ng-template #regNumberErrorTpl3 let-control>
+                                            <ng-container *ngIf="control.hasError('required')">
+                                              Please input your Registration Number!
+                                            </ng-container>
+                                            <ng-container *ngIf="control.hasError('duplicated')">
+                                              The Registration Number is already taken!
+                                            </ng-container>
+                                          </ng-template>
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
@@ -7753,9 +8088,7 @@
                                         <nz-form-control nzSpan="10">
                                             <nz-date-picker
                                                 formControlName="riskStartDate"
-                                                [nzDisabledDate]="
-                                                    disabledStartDate
-                                                "
+                                                [nzDisabledDate]="disabledSubmissionDate"
                                                 nzFormat="dd-MM-yyyy"
                                                 nzPlaceHolder="Start"
                                                 (ngModelChange)="
@@ -8007,14 +8340,15 @@
                                                         [ngModelOptions]="{
                                                             standalone: true
                                                         }"
-                                                        [disabled]="
-                                                            !isRiskDetailsEditmode
-                                                        "
+                                                        
                                                         (ngModelChange)="
                                                             handleBasicPremiumCalculation()
                                                         "
-                                                        type="number"
+                                                        disabled="true"
                                                     />
+                                                    <!-- [disabled]="
+                                                            !isRiskDetailsEditmode
+                                                        " -->
                                                 </nz-input-group>
                                             </nz-form-control>
                                         </nz-form-item>
@@ -11568,7 +11902,7 @@
                                         nzRequired
                                         >Reg Number
                                     </nz-form-label>
-                                    <nz-form-control nzSpan="10">
+                                    <nz-form-control nzSpan="10" nzHasFeedback  [nzErrorTip]="regNumberErrorTpl4">
                                         <input
                                             nz-input
                                             name="regNumber"
@@ -11577,6 +11911,14 @@
                                             id="regNumber"
                                             [disabled]="!isRiskDetailsEditmode"
                                         />
+                                        <ng-template #regNumberErrorTpl4 let-control>
+                                            <ng-container *ngIf="control.hasError('required')">
+                                              Please input your Registration Number!
+                                            </ng-container>
+                                            <ng-container *ngIf="control.hasError('duplicated')">
+                                              The Registration Number is already taken!
+                                            </ng-container>
+                                          </ng-template>
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
@@ -11680,7 +12022,7 @@
                                     <nz-form-control nzSpan="10">
                                         <nz-date-picker
                                             formControlName="riskStartDate"
-                                            [nzDisabledDate]="disabledStartDate"
+                                            [nzDisabledDate]="disabledSubmissionDate"
                                             nzFormat="dd-MM-yyyy"
                                             nzPlaceHolder="Start"
                                             (ngModelChange)="
