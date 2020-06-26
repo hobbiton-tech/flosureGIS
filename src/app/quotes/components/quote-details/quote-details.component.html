@@ -2467,7 +2467,12 @@
                                             <div nz-col nzSpan="12">
                                                 <nz-card>
                                                     <nz-divider nzText="Excesses" nzOrientation="left"></nz-divider>
-                                                    <form [formGroup]="excessesForm">
+                                                    <ul>
+                                                        <div *ngFor="let ex of excessList">
+                                                        <li>{{ex.description}}{{ex.amount}}</li>
+                                                    </div>
+                                                    </ul>
+                                                    <!-- <form [formGroup]="excessesForm">
                                                         <nz-form-item>
                                                             <nz-form-label [nzSpan]="10" nzFor="collisionAndFire"
                                                                 nzRequired>
@@ -2516,7 +2521,7 @@
                                                             </nz-form-control>
                                                         </nz-form-item>
                                                         <nz-form-item></nz-form-item>
-                                                    </form>
+                                                    </form> -->
                                                 </nz-card>
                                             </div>
                                         </div>
@@ -3855,7 +3860,12 @@
                                             <div nz-col nzSpan="12">
                                                 <nz-card>
                                                     <nz-divider nzText="Excesses" nzOrientation="left"></nz-divider>
-                                                    <form [formGroup]="excessesForm">
+                                                    <ul>
+                                                        <div *ngFor="let ex of excessTHP">
+                                                        <li>{{ex.description}}{{ex.amount}}</li>
+                                                    </div>
+                                                    </ul>
+                                                    <!-- <form [formGroup]="excessesForm">
                                                         <nz-form-item>
                                                             <nz-form-label [nzSpan]="10" nzFor="collisionAndFire"
                                                                 nzRequired>
@@ -3904,7 +3914,7 @@
                                                             </nz-form-control>
                                                         </nz-form-item>
                                                         <nz-form-item></nz-form-item>
-                                                    </form>
+                                                    </form> -->
                                                 </nz-card>
                                             </div>
                                         </div>

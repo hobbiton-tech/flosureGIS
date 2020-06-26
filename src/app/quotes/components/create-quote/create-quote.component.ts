@@ -113,6 +113,10 @@ export class CreateQuoteComponent implements OnInit {
     //Excess Variable
     excessList:IExccess[]=[];
 
+    excessTHP:IExccess[]=[];
+    excessAct:IExccess[]=[];
+    excessFT:IExccess[]=[];
+
     //loading feedback
     creatingQuote: boolean = false;
     quotesList: MotorQuotationModel[];
@@ -534,6 +538,10 @@ export class CreateQuoteComponent implements OnInit {
 
         this.productClauseService.getExccesses().subscribe((res) => {
             this.excessList = res;
+            this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+            this.excessAct = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+            this.excessFT = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+
         })
         
 
@@ -3010,30 +3018,46 @@ export class CreateQuoteComponent implements OnInit {
     }
 
     addExcesses(): void {
-        this.excesses.push({
-            excessType: 'below21Years',
-            amount: Number(this.excessesForm.get('below21Years').value),
-        });
+        if(this.selectedValue.value === "Comprehensive") {
+            for(const ex of this.excessList) {
+                this.excesses.push({
+                    excessType: ex.description,
+                    amount: Number(ex.amount),
+                });
+            }
+        }else if(this.selectedValue.value === "ThirdParty") {
+            for(const exTHP of this.excessTHP) {
+                this.excesses.push({
+                    excessType: exTHP.description,
+                    amount: Number(exTHP.amount),
+                });
+            }
+        }
+        
+        // this.excesses.push({
+        //     excessType: 'below21Years',
+        //     amount: Number(this.excessesForm.get('below21Years').value),
+        // });
 
-        this.excesses.push({
-            excessType: 'over70Years',
-            amount: Number(this.excessesForm.get('over70Years').value),
-        });
+        // this.excesses.push({
+        //     excessType: 'over70Years',
+        //     amount: Number(this.excessesForm.get('over70Years').value),
+        // });
 
-        this.excesses.push({
-            excessType: 'noLicence',
-            amount: Number(this.excessesForm.get('noLicence').value),
-        });
+        // this.excesses.push({
+        //     excessType: 'noLicence',
+        //     amount: Number(this.excessesForm.get('noLicence').value),
+        // });
 
-        this.excesses.push({
-            excessType: 'careLessDriving',
-            amount: Number(this.excessesForm.get('careLessDriving').value),
-        });
+        // this.excesses.push({
+        //     excessType: 'careLessDriving',
+        //     amount: Number(this.excessesForm.get('careLessDriving').value),
+        // });
 
-        this.excesses.push({
-            excessType: 'otherEndorsement',
-            amount: Number(this.excessesForm.get('otherEndorsement').value),
-        });
+        // this.excesses.push({
+        //     excessType: 'otherEndorsement',
+        //     amount: Number(this.excessesForm.get('otherEndorsement').value),
+        // });
     }
 
     handleDeathAndInjuryPerPersonPremium(): void {

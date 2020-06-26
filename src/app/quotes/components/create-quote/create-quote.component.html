@@ -6541,488 +6541,219 @@
                                                             </nz-form-control>
                                                         </nz-form-item>
 
-                                                        <div
-                                                            *ngIf="
-                                                                selectedLimits.value ==
-                                                                'combinedLimits'
+                                                        <tbody>
+                                                            <div
+                                                        *ngIf="
+                                                            selectedLimits.value ==
+                                                            'combinedLimits'
+                                                        "
+                                                    >
+                                                    <form
+                                                            [formGroup]="
+                                                                combinedLimitsForm
                                                             "
                                                         >
-                                                            <form
-                                                                [formGroup]="
-                                                                    combinedLimitsForm
+                                                          <tr>
+                                                            <!-- <td>Combined
+                                                                Limits</td> -->
+                                                                <!-- [(ngModel)]="
+                                                                    combinedLimits
+                                                                " -->
+                                                            <td>Combined
+                                                                Limits: <input
+                                                                nz-input
+                                                                name="combinedLimits"
+                                                                formControlName="combinedLimits"
+                                                                type="number"
+                                                                min="93200"
+                                                                id="combinedLimits"
+                                                                (ngModelChange)="
+                                                                    handleCombinedLimitsPremium()
                                                                 "
-                                                            >
-                                                                <div
-                                                                    nz-row
-                                                                    nzGutter="0"
-                                                                >
-                                                                    <div
-                                                                        nz-col
-                                                                        nzSpan="12"
-                                                                    >
-                                                                        <nz-form-item>
-                                                                            <nz-form-label
-                                                                                [nzSpan]="
-                                                                                    10
-                                                                                "
-                                                                                nzFor="combinedLimits"
-                                                                                nzRequired
-                                                                            >
-                                                                                Combined
-                                                                                Limits
-                                                                            </nz-form-label>
-                                                                            <nz-form-control
-                                                                                nzSpan="10"
-                                                                            >
-                                                                                <input
-                                                                                    nz-input
-                                                                                    name="combinedLimits"
-                                                                                    formControlName="combinedLimits"
-                                                                                    [(ngModel)]="
-                                                                                        combinedLimits
-                                                                                    "
-                                                                                    type="number"
-                                                                                    id="combinedLimits"
-                                                                                    (ngModelChange)="
-                                                                                        handleCombinedLimitsPremium()
-                                                                                    "
-                                                                                />
-                                                                            </nz-form-control>
-                                                                        </nz-form-item>
-                                                                    </div>
-                                                                    <div
-                                                                        nz-col
-                                                                        nzSpan="5"
-                                                                    >
-                                                                        <nz-form-item>
-                                                                            <nz-form-label
-                                                                                [nzSpan]="
-                                                                                    10
-                                                                                "
-                                                                                nzFor="combinedLimitsRate"
-                                                                            >
-                                                                                Rate
-                                                                            </nz-form-label>
-                                                                            <nz-form-control
-                                                                                nzSpan="9"
-                                                                            >
-                                                                                <input
-                                                                                    nz-input
-                                                                                    name="combinedLimitsRate"
-                                                                                    formControlName="combinedLimitsRate"
-                                                                                    [(ngModel)]="
-                                                                                        combinedLimitsRate
-                                                                                    "
-                                                                                    type="number"
-                                                                                    id="combinedLimitsRate"
-                                                                                    (ngModelChange)="
-                                                                                        handleCombinedLimitsPremium()
-                                                                                    "
-                                                                                />
-                                                                            </nz-form-control>
-                                                                        </nz-form-item>
-                                                                    </div>
-                                                                    <div
-                                                                        nz-col
-                                                                        nzSpan="7"
-                                                                    >
-                                                                        <nz-form-item>
-                                                                            <nz-form-label
-                                                                                [nzSpan]="
-                                                                                    10
-                                                                                "
-                                                                                nzFor="combinedLimitsPremium"
-                                                                            >
-                                                                                Premium
-                                                                            </nz-form-label>
-                                                                            <nz-form-control
-                                                                                nzSpan="7"
-                                                                            >
-                                                                                <input
-                                                                                    nz-input
-                                                                                    name="combinedLimitsPremium"
-                                                                                    formControlName="combinedLimitsPremium"
-                                                                                    [(ngModel)]="
-                                                                                        combinedLimitsPremium
-                                                                                    "
-                                                                                    type="number"
-                                                                                    id="combinedLimitsPremium"
-                                                                                    disabled="true"
-                                                                                />
-                                                                            </nz-form-control>
-                                                                        </nz-form-item>
-                                                                    </div>
-                                                                </div>
-                                                            </form>
-                                                        </div>
+                                                            /></td>
+                                                            <td>Rate:<input
+                                                                nz-input
+                                                                name="combinedLimitsRate"
+                                                                formControlName="combinedLimitsRate"
+                                                                [(ngModel)]="
+                                                                    combinedLimitsRate
+                                                                "
+                                                                type="number"
+                                                                id="combinedLimitsRate"
+                                                                (ngModelChange)="
+                                                                    handleCombinedLimitsPremium()
+                                                                "
+                                                            /></td>
+                                                            <td>Premium: <input
+                                                                nz-input
+                                                                name="combinedLimitsPremium"
+                                                                formControlName="combinedLimitsPremium"
+                                                                [(ngModel)]="
+                                                                    combinedLimitsPremium
+                                                                "
+                                                                type="number"
+                                                                id="combinedLimitsPremium"
+                                                                disabled="true"
+                                                            /></td>
+                                                          </tr>
+                                                        </form>
+                                                            </div>
+                                                        <div
+                                                        *ngIf="
+                                                            selectedLimits.value ==
+                                                            'standardLimits'
+                                                        "
+                                                    >
+                                                        <form
+                                                            [formGroup]="
+                                                                limitsOfLiabilityForm
+                                                            "
+                                                        >
+                                                        <tr>
+                                                            <!-- <td>Death
+                                                                And
+                                                                Injury
+                                                                Per
+                                                                Person</td> -->
+                                                            <td>Death
+                                                                And
+                                                                Injury
+                                                                Per
+                                                                Person: <input
+                                                                nz-input
+                                                                name="deathAndInjuryPerPerson"
+                                                                formControlName="deathAndInjuryPerPerson"
+                                                                [(ngModel)]="
+                                                                    deathAndInjuryPerPerson
+                                                                "
+                                                                min="30100"
+                                                                type="number"
+                                                                id="deathAndInjuryPerPerson"
+                                                                (ngModelChange)="
+                                                                    handleDeathAndInjuryPerPersonPremium()
+                                                                "
+                                                            /></td>
+                                                            <td>Rate: <input
+                                                            nz-input
+                                                            name="deathAndInjuryPerPersonRate"
+                                                            formControlName="deathAndInjuryPerPersonRate"
+                                                            [(ngModel)]="
+                                                                deathAndInjuryPerPersonRate
+                                                            "
+                                                            type="number"
+                                                            id="deathAndInjuryPerPersonRate"
+                                                            (ngModelChange)="
+                                                                handleDeathAndInjuryPerPersonPremium()
+                                                            "
+                                                        /></td>
+                                                            <td>Premium:  <input
+                                                                nz-input
+                                                                name="deathAndInjuryPerPersonPremium"
+                                                                formControlName="deathAndInjuryPerPersonPremium"
+                                                                [(ngModel)]="
+                                                                    deathAndInjuryPerPersonPremium
+                                                                "
+                                                                type="number"
+                                                                id="deathAndInjuryPerPersonPremium"
+                                                                disabled="true"
+                                                            /></td>
+                                                          </tr>
+                                                          <tr>
+                                                            <!-- <td> Death
+                                                                And
+                                                                Injury
+                                                                Per
+                                                                Event</td> -->
+                                                            <td>Death
+                                                                And
+                                                                Injury
+                                                                Per
+                                                                Event: <input
+                                                                nz-input
+                                                                name="deathAndInjuryPerEvent"
+                                                                formControlName="deathAndInjuryPerEvent"
+                                                                [(ngModel)]="
+                                                                    deathAndInjuryPerEvent
+                                                                "
+                                                                min="60100"
+                                                                type="number"
+                                                                id="deathAndInjuryPerEvent"
+                                                                (ngModelChange)="
+                                                                    handleDeathAndInjuryPerEventPremium()
+                                                                "
+                                                            /></td>
+                                                            <td>Rate: <input
+                                                                nz-input
+                                                                name="deathAndInjuryPerEventRate"
+                                                                formControlName="deathAndInjuryPerEventRate"
+                                                                [(ngModel)]="
+                                                                    deathAndInjuryPerEventRate
+                                                                "
+                                                                type="number"
+                                                                id="deathAndInjuryPerEventRate"
+                                                                (ngModelChange)="
+                                                                    handleDeathAndInjuryPerEventPremium()
+                                                                "
+                                                            /></td>
+                                                            <td>Premium: <input
+                                                                nz-input
+                                                                name="deathAndInjuryPerEventPremium"
+                                                                formControlName="deathAndInjuryPerEventPremium"
+                                                                [(ngModel)]="
+                                                                    deathAndInjuryPerEventPremium
+                                                                "
+                                                                type="number"
+                                                                id="deathAndInjuryPerEventPremium"
+                                                                disabled="true"
+                                                            /></td>
+                                                          </tr>
+                                                          <tr>
+                                                            <!-- <td>Property
+                                                                Damage</td> -->
+                                                            <td>Property
+                                                                Damage: <input
+                                                                nz-input
+                                                                name="propertyDamage"
+                                                                formControlName="propertyDamage"
+                                                                [(ngModel)]="
+                                                                    propertyDamage
+                                                                "
+                                                                min="30000"
+                                                                type="number"
+                                                                id="propertyDamage"
+                                                                (ngModelChange)="
+                                                                    handlePropertyDamagePremium()
+                                                                "
+                                                            /></td>
+                                                            <td>Rate: <input
+                                                                nz-input
+                                                                name="propertyDamageRate"
+                                                                formControlName="propertyDamageRate"
+                                                                [(ngModel)]="
+                                                                    propertyDamageRate
+                                                                "
+                                                                type="number"
+                                                                id="propertyDamageRate"
+                                                                (ngModelChange)="
+                                                                    handlePropertyDamagePremium()
+                                                                "
+                                                            /></td>
+                                                            <td>Premium: <input
+                                                                nz-input
+                                                                name="propertyDamagePremium"
+                                                                formControlName="propertyDamagePremium"
+                                                                [(ngModel)]="
+                                                                    propertyDamagePremium
+                                                                "
+                                                                type="number"
+                                                                id="propertyDamagePremium"
+                                                                disabled="true"
+                                                            /></td>
+                                                          </tr>
+                                                    </form>
+                                                    </div>
+                                                        </tbody>
 
-                                                        <div
-                                                            *ngIf="
-                                                                selectedLimits.value ==
-                                                                'standardLimits'
-                                                            "
-                                                        >
-                                                            <form
-                                                                [formGroup]="
-                                                                    limitsOfLiabilityForm
-                                                                "
-                                                            >
-                                                                <div
-                                                                    nz-row
-                                                                    nzGutter="0"
-                                                                >
-                                                                    <div
-                                                                        nz-col
-                                                                        nzSpan="12"
-                                                                    >
-                                                                        <nz-form-item>
-                                                                            <nz-form-label
-                                                                                [nzSpan]="
-                                                                                    15
-                                                                                "
-                                                                                nzFor="deathAndInjuryPerPerson"
-                                                                                nzRequired
-                                                                            >
-                                                                                Death
-                                                                                And
-                                                                                Injury
-                                                                                Per
-                                                                                Person
-                                                                            </nz-form-label>
-                                                                            <nz-form-control
-                                                                                nzSpan="7"
-                                                                            >
-                                                                                <input
-                                                                                    nz-input
-                                                                                    name="deathAndInjuryPerPerson"
-                                                                                    formControlName="deathAndInjuryPerPerson"
-                                                                                    [(ngModel)]="
-                                                                                        deathAndInjuryPerPerson
-                                                                                    "
-                                                                                    type="number"
-                                                                                    id="deathAndInjuryPerPerson"
-                                                                                    (ngModelChange)="
-                                                                                        handleDeathAndInjuryPerPersonPremium()
-                                                                                    "
-                                                                                />
-                                                                            </nz-form-control>
-                                                                        </nz-form-item>
-                                                                        <nz-form-item>
-                                                                            <nz-form-label
-                                                                                [nzSpan]="
-                                                                                    15
-                                                                                "
-                                                                                nzFor="deathAndInjuryPerEvent"
-                                                                                nzRequired
-                                                                            >
-                                                                                Death
-                                                                                And
-                                                                                Injury
-                                                                                Per
-                                                                                Event
-                                                                            </nz-form-label>
-                                                                            <nz-form-control
-                                                                                nzSpan="7"
-                                                                            >
-                                                                                <input
-                                                                                    nz-input
-                                                                                    name="deathAndInjuryPerEvent"
-                                                                                    formControlName="deathAndInjuryPerEvent"
-                                                                                    [(ngModel)]="
-                                                                                        deathAndInjuryPerEvent
-                                                                                    "
-                                                                                    type="number"
-                                                                                    id="deathAndInjuryPerEvent"
-                                                                                    (ngModelChange)="
-                                                                                        handleDeathAndInjuryPerEventPremium()
-                                                                                    "
-                                                                                />
-                                                                            </nz-form-control>
-                                                                        </nz-form-item>
-                                                                        <nz-form-item>
-                                                                            <nz-form-label
-                                                                                [nzSpan]="
-                                                                                    15
-                                                                                "
-                                                                                nzFor="propertyDamage"
-                                                                                nzRequired
-                                                                            >
-                                                                                Property
-                                                                                Damage
-                                                                            </nz-form-label>
-                                                                            <nz-form-control
-                                                                                nzSpan="7"
-                                                                            >
-                                                                                <input
-                                                                                    nz-input
-                                                                                    name="propertyDamage"
-                                                                                    formControlName="propertyDamage"
-                                                                                    [(ngModel)]="
-                                                                                        propertyDamage
-                                                                                    "
-                                                                                    type="number"
-                                                                                    id="propertyDamage"
-                                                                                    (ngModelChange)="
-                                                                                        handlePropertyDamagePremium()
-                                                                                    "
-                                                                                />
-                                                                            </nz-form-control>
-                                                                        </nz-form-item>
-                                                                        <!-- <nz-form-item>
-                                                                                                <nz-form-label [nzSpan]="10"
-                                                                                                    nzFor="protectionAndRemoval" nzRequired>
-                                                                                                    Protection and Removal
-                                                                                                </nz-form-label>
-                                                                                                <nz-form-control nzSpan="5">
-                                                                                                    <input nz-input name="protectionAndRemoval"
-                                                                                                        formControlName="protectionAndRemoval"
-                                                                                                        type="text" id="protectionAndRemoval" />
-                                                                                                </nz-form-control>
-                                                                                            </nz-form-item>
-                                                                                            <nz-form-item>
-                                                                                                <nz-form-label [nzSpan]="10"
-                                                                                                    nzFor="deathBodilyInjury" nzRequired>
-                                                                                                    Death Bodily Injury (Per Event/Per Person)
-                                                                                                </nz-form-label>
-                                                                                                <nz-form-control nzSpan="5">
-                                                                                                    <div style="display: flex; flex-direction:row;">
-                                                                                                        <div
-                                                                                                            style="display: flex; flex-direction:column;">
-                                                                                                            <input nz-input
-                                                                                                                name="deathBodilyInjuryPerEvent"
-                                                                                                                formControlName="deathBodilyInjuryPerEvent"
-                                                                                                                type="text"
-                                                                                                                id="deathBodilyInjuryPerEvent" />
-                                                                                                        </div>
-                                                                                                        <div
-                                                                                                            style="display: flex; flex-direction:column; margin-left: 3px">
-                                                                                                            <input nz-input
-                                                                                                                name="deathBodilyInjuryPerPerson"
-                                                                                                                formControlName="deathBodilyInjuryPerPerson"
-                                                                                                                type="text"
-                                                                                                                id="deathBodilyInjuryPerPerson" />
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </nz-form-control>
-                                                                                            </nz-form-item>
-                                                                                            <nz-form-item>
-                                                                                                <nz-form-label [nzSpan]="10" nzFor="propertyDamage"
-                                                                                                    nzRequired>
-                                                                                                    Property Damage (Per Event)
-                                                                                                </nz-form-label>
-                                                                                                <nz-form-control nzSpan="5">
-                                                                                                    <input nz-input name="propertyDamage"
-                                                                                                        formControlName="propertyDamage" type="text"
-                                                                                                        id="propertyDamage" />
-                                                                                                </nz-form-control>
-                                                                                            </nz-form-item>
-                                                                                            <nz-form-item>
-                                                                                                <nz-form-label [nzSpan]="10" nzFor="medicalExpenses"
-                                                                                                    nzRequired>
-                                                                                                    Medical Expenses (Per Accident/Per Person)
-                                                                                                </nz-form-label>
-                                                                                                <nz-form-control nzSpan="5">
-                                                                                                    <div style="display: flex; flex-direction:row;">
-                                                                                                        <div
-                                                                                                            style="display: flex; flex-direction:column;">
-                                                                                                            <input nz-input
-                                                                                                                name="medicalExpensesPerAccident"
-                                                                                                                formControlName="medicalExpensesPerAccident"
-                                                                                                                type="text"
-                                                                                                                id="medicalExpensesPerAccident" />
-                                                                                                        </div>
-                                                                                                        <div
-                                                                                                            style="display: flex; flex-direction:column; margin-left: 3px">
-                                                                                                            <input nz-input
-                                                                                                                name="medicalExpensesPerPerson"
-                                                                                                                formControlName="medicalExpensesPerPerson"
-                                                                                                                type="text"
-                                                                                                                id="medicalExpensesPerPerson" />
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </nz-form-control>
-                                                                                            </nz-form-item>
-                                                                                            <nz-form-item>
-                                                                                                <nz-form-label [nzSpan]="10"
-                                                                                                    nzFor="unauthourizedRepair" nzRequired>
-                                                                                                    Unauthorized Repair (Per Event)
-                                                                                                </nz-form-label>
-                                                                                                <nz-form-control nzSpan="5">
-                                                                                                    <input nz-input name="unauthourizedRepair"
-                                                                                                        formControlName="unauthourizedRepair"
-                                                                                                        type="text" id="unauthourizedRepair" />
-                                                                                                </nz-form-control>
-                                                                                            </nz-form-item> -->
-                                                                    </div>
-                                                                    <div
-                                                                        nz-col
-                                                                        nzSpan="5"
-                                                                    >
-                                                                        <nz-form-item>
-                                                                            <nz-form-label
-                                                                                [nzSpan]="
-                                                                                    10
-                                                                                "
-                                                                                nzFor="deathAndInjuryPerPersonRate"
-                                                                            >
-                                                                                Rate
-                                                                            </nz-form-label>
-                                                                            <nz-form-control
-                                                                                nzSpan="9"
-                                                                            >
-                                                                                <input
-                                                                                    nz-input
-                                                                                    name="deathAndInjuryPerPersonRate"
-                                                                                    formControlName="deathAndInjuryPerPersonRate"
-                                                                                    [(ngModel)]="
-                                                                                        deathAndInjuryPerPersonRate
-                                                                                    "
-                                                                                    type="number"
-                                                                                    id="deathAndInjuryPerPersonRate"
-                                                                                    (ngModelChange)="
-                                                                                        handleDeathAndInjuryPerPersonPremium()
-                                                                                    "
-                                                                                />
-                                                                            </nz-form-control>
-                                                                        </nz-form-item>
-                                                                        <nz-form-item>
-                                                                            <nz-form-label
-                                                                                [nzSpan]="
-                                                                                    10
-                                                                                "
-                                                                                nzFor="deathAndInjuryPerEventRate"
-                                                                            >
-                                                                                Rate
-                                                                            </nz-form-label>
-                                                                            <nz-form-control
-                                                                                nzSpan="9"
-                                                                            >
-                                                                                <input
-                                                                                    nz-input
-                                                                                    name="deathAndInjuryPerEventRate"
-                                                                                    formControlName="deathAndInjuryPerEventRate"
-                                                                                    [(ngModel)]="
-                                                                                        deathAndInjuryPerEventRate
-                                                                                    "
-                                                                                    type="number"
-                                                                                    id="deathAndInjuryPerEventRate"
-                                                                                    (ngModelChange)="
-                                                                                        handleDeathAndInjuryPerEventPremium()
-                                                                                    "
-                                                                                />
-                                                                            </nz-form-control>
-                                                                        </nz-form-item>
-                                                                        <nz-form-item>
-                                                                            <nz-form-label
-                                                                                [nzSpan]="
-                                                                                    10
-                                                                                "
-                                                                                nzFor="propertyDamageRate"
-                                                                            >
-                                                                                Rate
-                                                                            </nz-form-label>
-                                                                            <nz-form-control
-                                                                                nzSpan="9"
-                                                                            >
-                                                                                <input
-                                                                                    nz-input
-                                                                                    name="propertyDamageRate"
-                                                                                    formControlName="propertyDamageRate"
-                                                                                    [(ngModel)]="
-                                                                                        propertyDamageRate
-                                                                                    "
-                                                                                    type="number"
-                                                                                    id="propertyDamageRate"
-                                                                                    (ngModelChange)="
-                                                                                        handlePropertyDamagePremium()
-                                                                                    "
-                                                                                />
-                                                                            </nz-form-control>
-                                                                        </nz-form-item>
-                                                                    </div>
-                                                                    <div
-                                                                        nz-col
-                                                                        nzSpan="7"
-                                                                    >
-                                                                        <nz-form-item>
-                                                                            <nz-form-label
-                                                                                [nzSpan]="
-                                                                                    10
-                                                                                "
-                                                                                nzFor="deathAndInjuryPerPerson"
-                                                                            >
-                                                                                Premium
-                                                                            </nz-form-label>
-                                                                            <nz-form-control
-                                                                                nzSpan="12"
-                                                                            >
-                                                                                <input
-                                                                                    nz-input
-                                                                                    name="deathAndInjuryPerPersonPremium"
-                                                                                    formControlName="deathAndInjuryPerPersonPremium"
-                                                                                    [(ngModel)]="
-                                                                                        deathAndInjuryPerPersonPremium
-                                                                                    "
-                                                                                    type="number"
-                                                                                    id="deathAndInjuryPerPersonPremium"
-                                                                                    disabled="true"
-                                                                                />
-                                                                            </nz-form-control>
-                                                                        </nz-form-item>
-                                                                        <nz-form-item>
-                                                                            <nz-form-label
-                                                                                [nzSpan]="
-                                                                                    10
-                                                                                "
-                                                                                nzFor="deathAndInjuryPerEvent"
-                                                                            >
-                                                                                Premium
-                                                                            </nz-form-label>
-                                                                            <nz-form-control
-                                                                                nzSpan="12"
-                                                                            >
-                                                                                <input
-                                                                                    nz-input
-                                                                                    name="deathAndInjuryPerEventPremium"
-                                                                                    formControlName="deathAndInjuryPerEventPremium"
-                                                                                    [(ngModel)]="
-                                                                                        deathAndInjuryPerEventPremium
-                                                                                    "
-                                                                                    type="number"
-                                                                                    id="deathAndInjuryPerEventPremium"
-                                                                                    disabled="true"
-                                                                                />
-                                                                            </nz-form-control>
-                                                                        </nz-form-item>
-                                                                        <nz-form-item>
-                                                                            <nz-form-label
-                                                                                [nzSpan]="
-                                                                                    10
-                                                                                "
-                                                                                nzFor="propertyDamage"
-                                                                            >
-                                                                                Premium
-                                                                            </nz-form-label>
-                                                                            <nz-form-control
-                                                                                nzSpan="12"
-                                                                            >
-                                                                                <input
-                                                                                    nz-input
-                                                                                    name="propertyDamagePremium"
-                                                                                    formControlName="propertyDamagePremium"
-                                                                                    [(ngModel)]="
-                                                                                        propertyDamagePremium
-                                                                                    "
-                                                                                    type="number"
-                                                                                    id="propertyDamagePremium"
-                                                                                    disabled="true"
-                                                                                />
-                                                                            </nz-form-control>
-                                                                        </nz-form-item>
-                                                                    </div>
-                                                                </div>
-                                                            </form>
-                                                        </div>
                                                     </nz-card>
                                                 </div>
 
@@ -7032,7 +6763,7 @@
                                                             nzText="Excesses"
                                                             nzOrientation="left"
                                                         ></nz-divider>
-                                                        <form
+                                                        <!-- <form
                                                             [formGroup]="
                                                                 excessesForm
                                                             "
@@ -7156,7 +6887,13 @@
                                                                 </nz-form-control>
                                                             </nz-form-item>
                                                             <nz-form-item></nz-form-item>
-                                                        </form>
+                                                        </form> -->
+
+                                                        <ul *ngIf="selectedValue.value==='ThirdParty'">
+                                                            <div *ngFor="let ex of excessTHP">
+                                                            <li>{{ex.description}}{{ex.amount}}</li>
+                                                        </div>
+                                                        </ul>
                                                     </nz-card>
                                                 </div>
                                             </div>

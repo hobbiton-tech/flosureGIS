@@ -96,7 +96,7 @@ export class LimitsOfLiability {
 }
 
 export class Excess {
-    excessType: ExcessType;
+    excessType: string;
     amount: number;
 }
 
@@ -106,12 +106,12 @@ export type LiabilityType =
     | 'propertyDamage'
     | 'combinedLimits';
 
-export type ExcessType =
-    | 'below21Years'
-    | 'over70Years'
-    | 'noLicence'
-    | 'careLessDriving'
-    | 'otherEndorsement';
+// export type ExcessType =
+//     | 'below21Years'
+//     | 'over70Years'
+//     | 'noLicence'
+//     | 'careLessDriving'
+//     | 'otherEndorsement';
 
 export type ReceiptStatus = 'Unreceipted' | 'Receipted';
 export type ProductType = 'Private' | 'Commercial' | 'Bus/Taxi';
