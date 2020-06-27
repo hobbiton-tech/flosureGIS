@@ -31,40 +31,40 @@ export class ViewReceiptsComponent implements OnInit {
     printSrc: SafeUrl;
     newDate = new Date();
 
-    th = ['', 'thousand', 'million', 'billion', 'trillion'];
+    th = ['', 'Thousand', 'Million', 'Billion', 'Trillion'];
     dg = [
-        'zero',
-        'one',
-        'two',
-        'three',
-        'four',
-        'five',
-        'six',
-        'seven',
-        'eight',
-        'nine',
+        'Zero',
+        'One',
+        'Two',
+        'Three',
+        'Four',
+        'Five',
+        'Six',
+        'Seven',
+        'Eight',
+        'Nine',
     ];
     tn = [
-        'ten',
-        'eleven',
-        'twelve',
-        'thirteen',
-        'fourteen',
-        'fifteen',
-        'sixteen',
-        'seventeen',
-        'eighteen',
-        'nineteen',
+        'Ten',
+        'Eleven',
+        'Twelve',
+        'Thirteen',
+        'Fourteen',
+        'Fifteen',
+        'Sixteen',
+        'Seventeen',
+        'Eighteen',
+        'Nineteen',
     ];
     tw = [
-        'twenty',
-        'thirty',
-        'forty',
-        'fifty',
-        'sixty',
-        'seventy',
-        'eighty',
-        'ninety',
+        'Twenty',
+        'Thirty',
+        'Forty',
+        'Fifty',
+        'Sixty',
+        'Seventy',
+        'Eighty',
+        'Ninety',
     ];
 
     constructor(
@@ -190,7 +190,7 @@ export class ViewReceiptsComponent implements OnInit {
             } else if (n[i] != 0) {
                 str += this.dg[n[i]] + ' ';
                 if ((x - i) % 3 == 0) {
-                    str += 'hundred ';
+                    str += 'Hundred ';
                 }
                 sk = 1;
             }

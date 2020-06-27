@@ -166,7 +166,7 @@
                 <td>{{ risk.cubicCapacity }}</td>
                 <td>{{ getYearOfManufacture(risk) }}</td>
                 <td>{{ risk.seatingCapacity }}</td>
-                <td>{{ risk.estimatedValue | number: '1.2-2' }}</td>
+                <td>{{ policyRisk.sumInsured | number: '1.2-2' }}</td>
                 <td>
                     {{
                         risk.insuranceType == 'ThirdParty'
@@ -202,7 +202,7 @@
 
             <ng-container
                 *ngIf="
-                    policy.risks[0].limitsOfLiability[0].liabilityType ===
+                    policy.risks[0].limitsOfLiability[0].liabilityType !==
                         'combinedLimits';
                     else standardLimit
                 "

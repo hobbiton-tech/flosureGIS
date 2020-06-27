@@ -1,3 +1,5 @@
+import { Risks } from './../../../reports/model/quotation.model';
+import { LimitsOfLiability, LiabilityType } from './../../../quotes/models/quote.model';
 import { Component, OnInit, Input } from '@angular/core';
 import { RiskModel } from 'src/app/quotes/models/quote.model';
 import { Policy } from '../../models/policy.model';
@@ -14,6 +16,7 @@ import { CoverNote } from '../models/documents.model';
     selector: 'app-policy-schedule-document',
     templateUrl: './policy-schedule-document.component.html',
     styleUrls: ['./policy-schedule-document.component.scss'],
+
 })
 export class PolicyScheduleDocumentComponent implements OnInit {
     @Input()
@@ -110,7 +113,7 @@ export class PolicyScheduleDocumentComponent implements OnInit {
     }
 
     getYearOfManufacture(risk: RiskModel) {
-        let year: string = moment(risk.yearOfManufacture).year().toString();
+        const year: string = moment(risk.yearOfManufacture).year().toString();
         return year;
     }
 
@@ -124,16 +127,16 @@ export class PolicyScheduleDocumentComponent implements OnInit {
         };
 
         html2canvas(div, options).then((canvas) => {
-            let doc = new jsPDF({
+            const doc = new jsPDF({
                 unit: 'mm',
                 format: 'a3',
             });
-            let imgData = canvas.toDataURL('image/PNG');
+            const imgData = canvas.toDataURL('image/PNG');
             doc.addImage(imgData, 'PNG', 0, 0, 297, 420);
 
-            let pdfOutput = doc.output();
-            let buffer = new ArrayBuffer(pdfOutput.length);
-            let array = new Uint8Array(buffer);
+            const pdfOutput = doc.output();
+            const buffer = new ArrayBuffer(pdfOutput.length);
+            const array = new Uint8Array(buffer);
             for (let i = 0; i < pdfOutput.length; i++) {
                 array[i] = pdfOutput.charCodeAt(i);
             }
