@@ -127,12 +127,8 @@ export class PolicyDetailsComponent implements OnInit {
     // clientName: any;
     netPremium: any;
     formattedeDate: Date;
-<<<<<<< HEAD
     excesses: any;
-=======
-    _;
-    // tslint:disable-next-line: variable-name
->>>>>>> 8e403e810ff815b0782dcea4080d66094b66fe16
+
     _id: string;
     cnd: DiscountModel;
     cndAmount = 0;
@@ -288,22 +284,6 @@ export class PolicyDetailsComponent implements OnInit {
 
                 
 
-<<<<<<< HEAD
-=======
-                // excesses
-                this.below21Years = policy.risks[0].excesses.filter(
-                    (x) => x.excessType === 'below21Years'
-                )[0].amount;
-                this.over70Years = policy.risks[0].excesses.filter(
-                    (x) => x.excessType === 'over70Years'
-                )[0].amount;
-                this.noLicence = policy.risks[0].excesses.filter(
-                    (x) => x.excessType === 'noLicence'
-                )[0].amount;
-                this.careLessDriving = policy.risks[0].excesses.filter(
-                    (x) => x.excessType === 'careLessDriving'
-                )[0].amount;
->>>>>>> 8e403e810ff815b0782dcea4080d66094b66fe16
 
 
                 //excesses
