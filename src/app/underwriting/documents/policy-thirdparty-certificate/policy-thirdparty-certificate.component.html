@@ -557,17 +557,34 @@
                     </tspan>
                 </text>
 
-                <text
+                <text *ngIf="policy.risks[0].insuranceType === 'ThirdParty'"
                     id="To:_30_06_2020"
                     data-name="To: 30/06/2020"
                     class="cls-17"
                     transform="translate(27 337)"
                 >
-                    <tspan x="0" y="0">
+                    <tspan x="0" y="0" >
                         EXCESS
                     </tspan>
+
                     <tspan x="0" y="10">
-                        (ii) TPPD Excess 10% mimimum ZMW500
+                        (ii) TPPD Excess 10% mimimum ZMW 500
+                    </tspan>
+                </text>
+
+                <text *ngIf="policy.risks[0].insuranceType !== 'ThirdParty'"
+                    id="To:_30_06_2020"
+                    data-name="To: 30/06/2020"
+                    class="cls-17"
+                    transform="translate(27 337)"
+                >
+                    <tspan x="0" y="0" >
+
+                    </tspan>
+
+                    <tspan x="0" y="10">
+
+
                     </tspan>
                 </text>
 
@@ -593,7 +610,7 @@
                         Color:{{ ' ' + policyRisk.color }}
                     </tspan>
                 </text>
-
+ rec
                 <text
                     id="Client_Email:_-"
                     data-name="Client Email:  -"

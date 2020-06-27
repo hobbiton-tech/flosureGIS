@@ -1,3 +1,5 @@
+
+import { Risks } from './../../../reports/model/quotation.model';
 import { Component, OnInit, Input } from '@angular/core';
 import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -59,6 +61,9 @@ export class PolicyThirdpartyCertificateComponent implements OnInit {
     policyNumber: string;
 
     @Input()
+    Risks: string;
+
+    @Input()
     policy: Policy;
 
     subTotal: number;
@@ -73,7 +78,7 @@ export class PolicyThirdpartyCertificateComponent implements OnInit {
     }
 
     getYearOfManufacture(risk: RiskModel) {
-        let year: string = moment(risk.yearOfManufacture).year().toString();
+        const year: string = moment(risk.yearOfManufacture).year().toString();
         return year;
     }
     htmlToPdf() {
@@ -98,25 +103,25 @@ export class PolicyThirdpartyCertificateComponent implements OnInit {
         };
 
         html2canvas(div, options).then((canvas) => {
-            //Initialize JSPDF
-            let doc = new jsPDF({
+            // Initialize JSPDF
+            const doc = new jsPDF({
                 unit: 'px',
                 format: 'a4',
             });
-            //Converting canvas to Image
-            let imgData = canvas.toDataURL('image/PNG');
-            //Add image Canvas to PDF
+            // Converting canvas to Image
+            const imgData = canvas.toDataURL('image/PNG');
+            // Add image Canvas to PDF
             doc.addImage(imgData, 'PNG', 0, 0);
 
-            let pdfOutput = doc.output();
+            const pdfOutput = doc.output();
             // using ArrayBuffer will allow you to put image inside PDF
-            let buffer = new ArrayBuffer(pdfOutput.length);
-            let array = new Uint8Array(buffer);
+            const buffer = new ArrayBuffer(pdfOutput.length);
+            const array = new Uint8Array(buffer);
             for (let i = 0; i < pdfOutput.length; i++) {
                 array[i] = pdfOutput.charCodeAt(i);
             }
 
-            //Name of pdf
+            // Name of pdf
             const fileName = 'policy-certificate.pdf';
 
             // Make file
@@ -130,7 +135,8 @@ export class PolicyThirdpartyCertificateComponent implements OnInit {
     }
 
     sumArray(items, prop) {
-        return items.reduce(function (a, b) {
+        // tslint:disable-next-line: only-arrow-functions
+        return items.reduce(function(a, b) {
             return a + b[prop];
         }, 0);
     }

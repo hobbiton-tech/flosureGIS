@@ -1,3 +1,4 @@
+import { PolicyScheduleCombinedDocumentComponent } from './documents/policy-schedule-combined-document/policy-schedule-combined-document.component';
 import { NgModule, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PoliciesComponent } from './components/policies/policies.component';
@@ -26,20 +27,26 @@ import { EndorsementService } from './services/endorsements.service';
 import { EditPolicyComponent } from './components/endorsements/components/edit-policy/edit-policy.component';
 import { EditExtensionComponent } from './components/endorsements/components/edit-extension/edit-extension.component';
 import { EditCancellationComponent } from './components/endorsements/components/edit-cancellation/edit-cancellation.component';
+// tslint:disable-next-line: max-line-length
 import { PolicyCancellationDetailsComponent } from './components/endorsements/policy-cancellation-details/policy-cancellation-details.component';
 import { PolicyExtensionDetailsComponent } from './components/endorsements/policy-extension-details/policy-extension-details.component';
 import { PolicyRevisionDetailsComponent } from './components/endorsements/policy-revision-details/policy-revision-details.component';
 import { ViewRiskComponent } from './components/endorsements/policy-revision-details/view-risk/view-risk.component';
 import { AddRiskComponent } from './components/endorsements/policy-revision-details/add-risk/add-risk.component';
+// tslint:disable-next-line: max-line-length
 import { ViewExtensionRiskComponent } from './components/endorsements/policy-extension-details/view-extension-risk/view-extension-risk.component';
+// tslint:disable-next-line: max-line-length
 import { ViewCancellationRiskComponent } from './components/endorsements/policy-cancellation-details/view-cancellation-risk/view-cancellation-risk.component';
 import { BackupPolicyDetailsComponent } from './components/endorsements/backup-policy-details/backup-policy-details.component';
+// tslint:disable-next-line: max-line-length
 import { ViewBackupPolicyRisksComponent } from './components/endorsements/backup-policy-details/view-backup-policy-risks/view-backup-policy-risks.component';
 import { PolicyCreditNoteDocumentComponent } from './documents/policy-credit-note-document/policy-credit-note-document.component';
 import { IntermediaryDetailsComponent } from './components/endorsements/intermediary-details/intermediary-details.component';
 import { PolicyWordingComponent } from './documents/policy-wording/policy-wording.component';
 import { PolicyComprehensiveCertificateComponent } from './documents/policy-comprehensive-certificate/policy-comprehensive-certificate';
 import { PolicyThirdpartyCertificateComponent } from './documents/policy-thirdparty-certificate/policy-thirdparty-certificate.component';
+// tslint:disable-next-line: max-line-length
+
 
 const routes: Routes = [
     {
@@ -152,7 +159,9 @@ const routes: Routes = [
         IntermediaryDetailsComponent,
         PolicyWordingComponent,
         PolicyComprehensiveCertificateComponent,
-        PolicyThirdpartyCertificateComponent
+        PolicyThirdpartyCertificateComponent,
+        PolicyScheduleCombinedDocumentComponent
+
     ],
     imports: [
         CommonModule,
