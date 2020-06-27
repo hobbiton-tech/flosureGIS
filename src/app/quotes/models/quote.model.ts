@@ -22,7 +22,7 @@ export class MotorQuotationModel {
 }
 
 export class LoadModel {
-    loadType: LoadType;
+    loadType: string;
     amount: number;
 }
 
@@ -118,27 +118,27 @@ export type ProductType = 'Private' | 'Commercial' | 'Bus/Taxi';
 
 export type QuoteStatus = 'Draft' | 'Approved';
 
-export type LoadType =
-    | 'Increased Third Party Limit'
-    | 'Riot And Strike'
-    | 'Car Stereo'
-    | 'Territorial Extension'
-    | 'Loss Of Use'
-    | 'Inexperienced Driver'
-    | 'Under Age Driver'
-    | 'Loss Of Keys'
-    | 'Malicious Damage'
-    | 'Medical Expenses'
-    | 'Injury/Death'
-    | 'Property Damage'
-    | 'Earthquake'
-    | 'Explosions'
-    | 'Financial Loss'
-    | 'Fire And Allied Perils'
-    | 'Legal Expenses'
-    | 'Landslide'
-    | 'Passenger Liability'
-    | 'Permanent Disability';
+// export type LoadType =
+//     | 'Increased Third Party Limit'
+//     | 'Riot And Strike'
+//     | 'Car Stereo'
+//     | 'Territorial Extension'
+//     | 'Loss Of Use'
+//     | 'Inexperienced Driver'
+//     | 'Under Age Driver'
+//     | 'Loss Of Keys'
+//     | 'Malicious Damage'
+//     | 'Medical Expenses'
+//     | 'Injury/Death'
+//     | 'Property Damage'
+//     | 'Earthquake'
+//     | 'Explosions'
+//     | 'Financial Loss'
+//     | 'Fire And Allied Perils'
+//     | 'Legal Expenses'
+//     | 'Landslide'
+//     | 'Passenger Liability'
+//     | 'Permanent Disability';
 
 export type DiscountType =
     | 'No Claims Discount'

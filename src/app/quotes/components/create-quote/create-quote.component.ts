@@ -2318,47 +2318,7 @@ export class CreateQuoteComponent implements OnInit {
     }
 
     // Loading computation
-    computeRiotAndStrike() {
-        this.computeRiotAndStrikeIsLoading = true;
-
-        const request: IRateRequest = {
-            sumInsured: Number(this.sumInsured),
-            premiumRate: Number(this.premiumRate) / 100,
-            startDate: this.riskComprehensiveForm.get('riskStartDate').value,
-            quarter: Number(
-                this.riskComprehensiveForm.get('riskQuarter').value
-            ),
-            appliedDiscount: this.premiumDiscount,
-            discount: Number(this.premiumDiscountRate) / 100,
-            carStereo: Number(this.carStereoValue),
-            carStereoRate: Number(this.carStereoRate) / 100,
-            lossOfUseDays: Number(this.lossOfUseDays),
-            lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
-            territorialExtensionWeeks: Number(this.territorialExtensionWeeks),
-            territorialExtensionCountries: Number(
-                this.territorialExtensionCountries
-            ),
-            thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
-            thirdPartyLimitRate:
-                Number(this.increasedThirdPartyLimitsRate) / 100,
-            riotAndStrike: Number(this.riotAndStrikeRate) / 100,
-            levy: 0.03,
-        };
-        this.http
-            .post<IRateResult>(
-                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
-                request
-            )
-            .subscribe((data) => {
-                this.loads.push({
-                    loadType: 'Riot And Strike',
-                    amount: Number(data.riotAndStrikePremium),
-                });
-                this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-                this.handleNetPremium();
-                this.computeRiotAndStrikeIsLoading = false;
-            });
-    }
+   
 
     computeIncreasedThirdPartyLimit() {
         this.computeIncreasedThirdPartyLimitIsLoading = true;
@@ -2393,7 +2353,7 @@ export class CreateQuoteComponent implements OnInit {
             )
             .subscribe((data) => {
                 this.loads.push({
-                    loadType: 'Increased Third Party Limit',
+                    loadType: this.selectedLoadingValue.label,
                     amount: Number(data.thirdPartyLoadingPremium),
                 });
                 this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
@@ -2442,132 +2402,7 @@ export class CreateQuoteComponent implements OnInit {
             });
     }
 
-    computeCarStereo() {
-        this.computeCarStereoIsLoading = true;
-
-        const request: IRateRequest = {
-            sumInsured: Number(this.sumInsured),
-            premiumRate: Number(this.premiumRate) / 100,
-            startDate: this.riskComprehensiveForm.get('riskStartDate').value,
-            quarter: Number(
-                this.riskComprehensiveForm.get('riskQuarter').value
-            ),
-            discount: Number(this.premiumDiscountRate) / 100,
-            appliedDiscount: this.premiumDiscount,
-            carStereo: Number(this.carStereoValue),
-            carStereoRate: Number(this.carStereoRate) / 100,
-            lossOfUseDays: Number(this.lossOfUseDays),
-            lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
-            territorialExtensionWeeks: Number(this.territorialExtensionWeeks),
-            territorialExtensionCountries: Number(
-                this.territorialExtensionCountries
-            ),
-            thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
-            thirdPartyLimitRate:
-                Number(this.increasedThirdPartyLimitsRate) / 100,
-            riotAndStrike: Number(this.riotAndStrikeRate) / 100,
-            levy: 0.03,
-        };
-        this.http
-            .post<IRateResult>(
-                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
-                request
-            )
-            .subscribe((data) => {
-                this.loads.push({
-                    loadType: 'Car Stereo',
-                    amount: Number(data.carStereoPremium),
-                });
-                this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-                this.handleNetPremium();
-                this.computeCarStereoIsLoading = false;
-            });
-    }
-
-    computeTerritorialExtension() {
-        this.computeTerritorialExtensionIsLoading = true;
-
-        const request: IRateRequest = {
-            sumInsured: Number(this.sumInsured),
-            premiumRate: Number(this.premiumRate) / 100,
-            startDate: this.riskComprehensiveForm.get('riskStartDate').value,
-            quarter: Number(
-                this.riskComprehensiveForm.get('riskQuarter').value
-            ),
-            discount: Number(this.premiumDiscountRate) / 100,
-            appliedDiscount: Number(this.premiumDiscount),
-            carStereo: Number(this.carStereoValue),
-            carStereoRate: Number(this.carStereoRate) / 100,
-            lossOfUseDays: Number(this.lossOfUseDays),
-            lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
-            territorialExtensionWeeks: Number(this.territorialExtensionWeeks),
-            territorialExtensionCountries: Number(
-                this.territorialExtensionCountries
-            ),
-            thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
-            thirdPartyLimitRate:
-                Number(this.increasedThirdPartyLimitsRate) / 100,
-            riotAndStrike: Number(this.riotAndStrikeRate) / 100,
-            levy: 0.03,
-        };
-        this.http
-            .post<IRateResult>(
-                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
-                request
-            )
-            .subscribe((data) => {
-                this.loads.push({
-                    loadType: 'Territorial Extension',
-                    amount: Number(data.territorialExtensionPremium),
-                });
-                this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-                this.handleNetPremium();
-                this.computeTerritorialExtensionIsLoading = false;
-            });
-    }
-
-    computeLossOfUse() {
-        this.computeLossOfUseIsLoading = true;
-
-        const request: IRateRequest = {
-            sumInsured: Number(this.sumInsured),
-            premiumRate: Number(this.premiumRate) / 100,
-            startDate: this.riskComprehensiveForm.get('riskStartDate').value,
-            quarter: Number(
-                this.riskComprehensiveForm.get('riskQuarter').value
-            ),
-            discount: Number(this.premiumDiscountRate) / 100,
-            appliedDiscount: this.premiumDiscount,
-            carStereo: Number(this.carStereoValue),
-            carStereoRate: Number(this.carStereoRate) / 100,
-            lossOfUseDays: Number(this.lossOfUseDays),
-            lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
-            territorialExtensionWeeks: Number(this.territorialExtensionWeeks),
-            territorialExtensionCountries: Number(
-                this.territorialExtensionCountries
-            ),
-            thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
-            thirdPartyLimitRate:
-                Number(this.increasedThirdPartyLimitsRate) / 100,
-            riotAndStrike: Number(this.riotAndStrikeRate) / 100,
-            levy: 0.03,
-        };
-        this.http
-            .post<IRateResult>(
-                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
-                request
-            )
-            .subscribe((data) => {
-                this.loads.push({
-                    loadType: 'Loss Of Use',
-                    amount: Number(data.lossOfUsePremium),
-                });
-                this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-                this.handleNetPremium();
-                this.computeLossOfUseIsLoading = false;
-            });
-    }
-
+   
     removeLoad(i: LoadModel, e: MouseEvent): void {
         e.preventDefault();
         if (this.loads.length > 0) {
@@ -2643,191 +2478,14 @@ export class CreateQuoteComponent implements OnInit {
     // changes the quote increase third party limit to inputed amount
     handleIncreasedThirdPartyLimitAmount() {
         this.loads.push({
-            loadType: 'Increased Third Party Limit',
+            loadType: this.selectedLoadingValue.label,
             amount: Number(this.increasedThirdPartyLimitAmount),
         });
         this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
         this.handleNetPremium();
     }
 
-    // changes the quote riot and strike to inputed amount
-    handleRiotAndStrikeAmount() {
-        this.loads.push({
-            loadType: 'Riot And Strike',
-            amount: Number(this.riotAndStrikeAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    // changes the quote car stereo to inputed amount
-    handleCarStereoAmount() {
-        this.loads.push({
-            loadType: 'Car Stereo',
-            amount: Number(this.carStereoAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    // changes the quote loss of use loading to inputed amount
-    handleLossOfUseAmount() {
-        this.loads.push({
-            loadType: 'Loss Of Use',
-            amount: Number(this.lossOfUseAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    // changes the quote loss of use loading to inputed amount
-    handleTerritorialExtensionAmount() {
-        this.loads.push({
-            loadType: 'Territorial Extension',
-            amount: Number(this.territorialExtensionAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    // changes the quote loss of use loading to inputed amount
-    handleInexperiencedDriverAmount() {
-        this.loads.push({
-            loadType: 'Inexperienced Driver',
-            amount: Number(this.inexperiencedDriverAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    // changes the quote loss of use loading to inputed amount
-    handleUnderAgeDriverAmount() {
-        this.loads.push({
-            loadType: 'Under Age Driver',
-            amount: Number(this.underAgeDriverAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    // /////////////////////
-    handleLossOfKeysAmount() {
-        this.loads.push({
-            loadType: 'Loss Of Keys',
-            amount: Number(this.lossOfKeysAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    handleMaliciousDamageAmount() {
-        this.loads.push({
-            loadType: 'Malicious Damage',
-            amount: Number(this.maliciousDamageAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    handleMedicalExpensesAmount() {
-        this.loads.push({
-            loadType: 'Medical Expenses',
-            amount: Number(this.medicalExpensesAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    handleInjuryAndDeathAmount() {
-        this.loads.push({
-            loadType: 'Injury/Death',
-            amount: Number(this.injuryAndDeathAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    handlePropertyDamageAmount() {
-        this.loads.push({
-            loadType: 'Property Damage',
-            amount: Number(this.propertyDamageAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    handleEarthquakeAmount() {
-        this.loads.push({
-            loadType: 'Earthquake',
-            amount: Number(this.earthquakeAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    handleExplosionsAmount() {
-        this.loads.push({
-            loadType: 'Explosions',
-            amount: Number(this.explosionsAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    handleFinancialLossAmount() {
-        this.loads.push({
-            loadType: 'Financial Loss',
-            amount: Number(this.financialLossAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    handleFireAndAlliedPerilsAmount() {
-        this.loads.push({
-            loadType: 'Fire And Allied Perils',
-            amount: Number(this.fireAndAlliedPerilsAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    handleLegalExpensesAmount() {
-        this.loads.push({
-            loadType: 'Legal Expenses',
-            amount: Number(this.legalExpensesAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    handleLandslideAmount() {
-        this.loads.push({
-            loadType: 'Landslide',
-            amount: Number(this.landslideAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    handlePassengerLiabilityAmount() {
-        this.loads.push({
-            loadType: 'Passenger Liability',
-            amount: Number(this.passengerLiabilityAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    handlePermanentDisabilityAmount() {
-        this.loads.push({
-            loadType: 'Permanent Disability',
-            amount: Number(this.permanentDisabilityAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-    // /////////////////////
+   
 
     // adds inputted discount to total discount amount
     handleNoClaimsDiscountAmount() {

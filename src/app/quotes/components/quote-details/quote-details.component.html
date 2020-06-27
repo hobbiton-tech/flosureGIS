@@ -576,10 +576,9 @@
                                                             <nz-form-control nzSpan="10">
                                                                 <nz-select name="load" nzPlaceHolder="Select Load"
                                                                     [(ngModel)]="
-                                                                        selectedLoadingValue
-                                                                    " [compareWith]="
-                                                                        compareFn
-                                                                    " nzAllowClear style="
+                                                                        selectedLoadingValue"
+                                                                     nzAllowClear
+                                                                      style="
                                                                         width: 100%;
                                                                     " [ngModelOptions]="{
                                                                         standalone: true
@@ -624,10 +623,10 @@
                                                             </nz-form-control>
                                                         </nz-form-item>
                                                     </div>
-                                                    <div *ngIf="
+                                                    <!-- <div *ngIf="
                                                             selectedLoadingValue.value ===
                                                             'increasedThirdPartyLimits'
-                                                        ">
+                                                        "> -->
                                                         <nz-form-item>
                                                             <nz-form-label nzSpan="10">Loading Input
                                                                 Type
@@ -725,8 +724,9 @@
                                                                 </button>
                                                             </nz-form-control>
                                                         </nz-form-item>
-                                                    </div>
-                                                    <div *ngIf="
+                                                    <!-- </div> -->
+                                                    <!--COMMENT>>>-->
+                                                    <!-- <div *ngIf="
                                                             selectedLoadingValue.value ===
                                                             'riotAndStrike'
                                                         ">
@@ -1619,7 +1619,7 @@
                                                                 </button>
                                                             </nz-form-control>
                                                         </nz-form-item>
-                                                    </div>
+                                                    </div> -->
                                                     <!-- Loading Ends here -->
 
                                                     <!-- Discount Starts here -->

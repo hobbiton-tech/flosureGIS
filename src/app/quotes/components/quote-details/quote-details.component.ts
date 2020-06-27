@@ -2297,7 +2297,7 @@ export class QuoteDetailsComponent implements OnInit {
             )
             .subscribe((data) => {
                 this.loads.push({
-                    loadType: 'Increased Third Party Limit',
+                    loadType: this.selectedLoadingValue.value,
                     amount: Number(data.thirdPartyLoadingPremium),
                 });
                 this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
