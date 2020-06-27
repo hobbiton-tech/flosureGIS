@@ -51,6 +51,10 @@ import {
     InsuranceTypeOptions,
     LimitsOfLiabilityOptions,
 } from '../../selection-options';
+import { IVehicleType, IVehicleMake, IVehicleModel } from 'src/app/settings/components/vehicle/models/vehicle.model';
+import { VehicleService } from 'src/app/settings/components/vehicle/services/vehicle.service';
+import { VehicleMakeService } from 'src/app/settings/components/vehicle/services/vehicle-make.service';
+import { VehicleModelService } from 'src/app/settings/components/vehicle/services/vehicle-model.service';
 
 type AOA = any[][];
 
@@ -145,7 +149,10 @@ export class CreateQuoteComponent implements OnInit {
         private msg: NzMessageService,
         private http: HttpClient,
         private readonly agentsService: AgentsService,
-        private productClauseService: ClausesService
+        private productClauseService: ClausesService,
+        private readonly vehicleType: VehicleService,
+        private readonly vehicleMakeService: VehicleMakeService,
+        private readonly vehicleModelService: VehicleModelService
     ) {
         this.clauseForm = formBuilder.group({
             heading: ['', Validators.required],
@@ -214,6 +221,11 @@ export class CreateQuoteComponent implements OnInit {
     excessesForm: FormGroup;
     clients: Array<IIndividualClient & ICorporateClient>;
     premiumLoadingForm: FormGroup;
+
+    //vehicle
+    bodyTypes: IVehicleType[];
+    bodyMakes: IVehicleMake[];
+    bodyModels: IVehicleModel[];
 
     // intermediaries
     brokers: IBroker[];
@@ -504,6 +516,18 @@ export class CreateQuoteComponent implements OnInit {
 
             this.lastItem = this.quotesList[this.quotesList.length - 1];
         });
+
+        this.vehicleType.getVehicleType().subscribe((bodyType) => {
+            this.bodyTypes = bodyType;
+        })
+
+        this.vehicleMakeService.getVehicleMake().subscribe((bodyMake) => {
+          this.bodyMakes = bodyMake;
+      })
+
+      this.vehicleModelService.getVehicleModel().subscribe((bodyModel) => {
+        this.bodyModels = bodyModel;
+    })
 
         this.clientsService.getAllClients().subscribe((clients) => {
             this.clients = [...clients[0], ...clients[1]] as Array<
