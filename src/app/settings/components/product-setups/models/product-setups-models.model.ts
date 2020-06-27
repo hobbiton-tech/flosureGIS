@@ -38,4 +38,10 @@ export interface IProduct {
 
 export interface ICoverType {}
 
-export interface IPeril {}
+export interface IPeril {
+    id: string;
+    productId: string;
+    name: string;
+    description: string;
+    type: string;
+}

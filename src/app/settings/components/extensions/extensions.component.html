@@ -152,6 +152,7 @@
                             <th>Heading</th>
                             <th>Description</th>
                             <th>Amount</th>
+                            <th>Vehicle Type</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -159,6 +160,7 @@
                             <td>{{ exccess.heading }}</td>
                             <td>{{ exccess.description }}</td>
                             <td>{{ exccess.amount }}</td>
+                            <td>{{ exccess.vehicleType }}</td>
                         </tr>
                     </tbody>
                 </nz-table>
@@ -206,7 +208,7 @@
                 <button nz-button nzType="primary" [disabled]="!extensionForm.valid">
                     Submit
                 </button>
-                <button nz-button (click)="resetExtensionForm($event)">
+                <button nz-button (click)="resetExtensionForm()">
                     Reset
                 </button>
             </nz-form-control>
@@ -256,9 +258,6 @@
                     <ng-container *ngIf="control.hasError('required')">
                         Please input your amount!
                     </ng-container>
-                    <ng-container *ngIf="control.hasError('duplicated')">
-                        The name is redundant!
-                    </ng-container>
                 </ng-template>
             </nz-form-control>
         </nz-form-item>
@@ -268,7 +267,7 @@
                 <button nz-button nzType="primary" [disabled]="!limitForm.valid">
                     Submit
                 </button>
-                <button nz-button (click)="resetLimitForm($event)">
+                <button nz-button (click)="resetLimitForm()">
                     Reset
                 </button>
             </nz-form-control>
@@ -318,8 +317,22 @@
                     <ng-container *ngIf="control.hasError('required')">
                         Please input your amount!
                     </ng-container>
-                    <ng-container *ngIf="control.hasError('duplicated')">
-                        The amount is redundant!
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Vehicle Type</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..."
+                [nzErrorTip]="exccessVTypeErrorTpl">
+                <nz-select [(ngModel)]="productClass" nzPlaceHolder="Select Type" (ngModelChange)="vtypeChanged($event)"
+                    [ngModelOptions]="{standalone: true}">
+                    <nz-option nzValue="private" nzLabel="Private"></nz-option>
+                    <nz-option nzValue="commercial" nzLabel="Commercial"></nz-option>
+                    <nz-option nzValue="bus-taxi" nzLabel="Bus/Taxi"></nz-option>
+                </nz-select>
+                <ng-template #exccessVTypeErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please select your vehicle type!
                     </ng-container>
                 </ng-template>
             </nz-form-control>
@@ -330,7 +343,7 @@
                 <button nz-button nzType="primary" [disabled]="!exccessForm.valid">
                     Submit
                 </button>
-                <button nz-button (click)="resetExccessForm($event)">
+                <button nz-button (click)="resetExccessForm()">
                     Reset
                 </button>
             </nz-form-control>

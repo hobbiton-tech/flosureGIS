@@ -36,6 +36,7 @@ export class ExtensionsComponent implements OnInit {
     isExccessVisible: boolean = false;
 
     selectedProductId: any;
+    vehicleType: any;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -82,6 +83,10 @@ export class ExtensionsComponent implements OnInit {
         });
     }
 
+    vtypeChanged(value) {
+        this.vehicleType = value;
+    }
+
     onSelectProduct(product) {
         this.selectedProductId = product.id;
     }
@@ -118,8 +123,11 @@ export class ExtensionsComponent implements OnInit {
         };
         this.productClausesService.addExtension(extension);
         this.isExtensionsVisible = false;
+        this.extensionForm.reset();
     }
-    resetExtensionForm(value) {}
+    resetExtensionForm() {
+        this.extensionForm.reset();
+    }
 
     submitLimitForm() {
         const limit: ILimit = {
@@ -129,19 +137,26 @@ export class ExtensionsComponent implements OnInit {
         };
         this.productClausesService.addLimit(limit);
         this.isLimitVisible = false;
+        this.limitForm.reset();
     }
 
-    resetLimitForm(value) {}
+    resetLimitForm() {
+        this.limitForm.reset();
+    }
 
     submitExccessForm() {
         const exccess: IExccess = {
             ...this.exccessForm.value,
             id: v4(),
             productId: this.selectedProductId,
+            vehicleType: this.vehicleType,
         };
         this.productClausesService.addExccess(exccess);
         this.isExccessVisible = false;
+        this.exccessForm.reset();
     }
 
-    resetExccessForm(value) {}
+    resetExccessForm() {
+        this.exccessForm.reset();
+    }
 }
