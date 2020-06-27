@@ -1060,9 +1060,7 @@
                                                                         [(ngModel)]="
                                                                             selectedLoadingValue
                                                                         "
-                                                                        [compareWith]="
-                                                                            compareFn
-                                                                        "
+                                                                       
                                                                         nzAllowClear
                                                                         style="
                                                                             width: 100%;
@@ -1071,17 +1069,19 @@
                                                                             standalone: true
                                                                         }"
                                                                     >
-                                                                        <nz-option
-                                                                            *ngFor="
-                                                                                let option of motorComprehensiveloadingOptions
-                                                                            "
-                                                                            [nzValue]="
-                                                                                option
-                                                                            "
-                                                                            [nzLabel]="
-                                                                                option.label
-                                                                            "
-                                                                        ></nz-option>
+                                                                    <div *ngFor="
+                                                                    let option of motorComprehensiveloadingOptions
+                                                                ">
+                                                                <nz-option
+                                                                            
+                                                                [nzValue]="
+                                                                    option
+                                                                "
+                                                                [nzLabel]="
+                                                                    option.description
+                                                                "
+                                                            ></nz-option></div>
+                                                                       
                                                                     </nz-select>
                                                                 </nz-form-control>
                                                             </nz-form-item>
@@ -1113,28 +1113,27 @@
                                                                         [(ngModel)]="
                                                                             selectedLoadingValue
                                                                         "
-                                                                        [compareWith]="
-                                                                            compareFn
-                                                                        "
-                                                                        style="
-                                                                            width: 100%;
-                                                                        "
                                                                         [ngModelOptions]="{
                                                                             standalone: true
                                                                         }"
-                                                                        nzLabel="select load"
+                                                                        style="
+                                                                            width: 100%;
+                                                                        "
+                                                                        
                                                                     >
-                                                                        <nz-option
-                                                                            *ngFor="
-                                                                                let option of motorThirdPartyloadingOptions
-                                                                            "
-                                                                            [nzValue]="
-                                                                                option
-                                                                            "
-                                                                            [nzLabel]="
-                                                                                option.label
-                                                                            "
-                                                                        ></nz-option>
+                                                                    <div *ngFor="
+                                                                    let option of motorThirdPartyloadingOptions
+                                                                ">
+                                                                <nz-option
+                                                                            
+                                                                [nzValue]="
+                                                                    option
+                                                                "
+                                                                [nzLabel]="
+                                                                    option.description
+                                                                "
+                                                            ></nz-option></div>
+                                                                        
                                                                     </nz-select>
                                                                 </nz-form-control>
                                                             </nz-form-item>
@@ -3822,30 +3821,27 @@
                                                                         [(ngModel)]="
                                                                             selectedLoadingValue
                                                                         "
-                                                                        [compareWith]="
-                                                                            compareFn
-                                                                        "
-                                                                        nzAllowClear
-                                                                        style="
-                                                                            width: 100%;
-                                                                        "
                                                                         [ngModelOptions]="{
                                                                             standalone: true
                                                                         }"
                                                                         nzAllowClear
-                                                                        nzLabel="select load"
+                                                                        style="
+                                                                            width: 100%;
+                                                                        "
+                                                                       
                                                                     >
-                                                                        <nz-option
-                                                                            *ngFor="
-                                                                                let option of motorComprehensiveloadingOptions
-                                                                            "
-                                                                            [nzValue]="
-                                                                                option
-                                                                            "
-                                                                            [nzLabel]="
-                                                                                option.label
-                                                                            "
-                                                                        ></nz-option>
+                                                                    <div *ngFor="
+                                                                    let option of motorComprehensiveloadingOptions
+                                                                ">
+                                                                <nz-option
+                                                                            
+                                                                [nzValue]="
+                                                                    option
+                                                                "
+                                                                [nzLabel]="
+                                                                    option.description
+                                                                "
+                                                            ></nz-option></div>
                                                                     </nz-select>
                                                                 </nz-form-control>
                                                             </nz-form-item>
@@ -3876,40 +3872,38 @@
                                                                         [(ngModel)]="
                                                                             selectedLoadingValue
                                                                         "
-                                                                        [compareWith]="
-                                                                            compareFn
-                                                                        "
-                                                                        nzAllowClear
-                                                                        style="
-                                                                            width: 100%;
-                                                                        "
                                                                         [ngModelOptions]="{
                                                                             standalone: true
                                                                         }"
                                                                         nzAllowClear
-                                                                        nzLabel="select load"
+                                                                        style="
+                                                                            width: 100%;
+                                                                        "
+                                                                        
                                                                     >
-                                                                        <nz-option
-                                                                            *ngFor="
-                                                                                let option of motorThirdPartyloadingOptions
-                                                                            "
-                                                                            [nzValue]="
-                                                                                option
-                                                                            "
-                                                                            [nzLabel]="
-                                                                                option.label
-                                                                            "
-                                                                        ></nz-option>
+                                                                    <div *ngFor="
+                                                                    let option of motorThirdPartyloadingOptions
+                                                                ">
+                                                                <nz-option
+                                                                            
+                                                                [nzValue]="
+                                                                    option
+                                                                "
+                                                                [nzLabel]="
+                                                                    option.description
+                                                                "
+                                                            ></nz-option></div>
+                                                                        
                                                                     </nz-select>
                                                                 </nz-form-control>
                                                             </nz-form-item>
                                                         </div>
-                                                        <div
+                                                        <!-- <div
                                                             *ngIf="
-                                                                selectedLoadingValue.value ===
+                                                                selectedLoadingValue.description ===
                                                                 'increasedThirdPartyLimits'
                                                             "
-                                                        >
+                                                        > -->
                                                             <nz-form-item>
                                                                 <nz-form-label
                                                                     nzSpan="10"
@@ -4073,7 +4067,7 @@
                                                                     </button>
                                                                 </nz-form-control>
                                                             </nz-form-item>
-                                                        </div>
+                                                        <!-- </div> -->
                                                         <!-- Loading Ends here -->
 
                                                         <!-- Discount Starts here -->
@@ -6591,31 +6585,30 @@
                                                             [(ngModel)]="
                                                                 selectedLoadingValue
                                                             "
-                                                            [compareWith]="
-                                                                compareFn
-                                                            "
                                                             nzAllowClear
                                                             style="width: 100%;"
                                                             [ngModelOptions]="{
                                                                 standalone: true
                                                             }"
-                                                            nzAllowClear
-                                                            nzLabel="select load"
+                                                            
                                                             [nzDisabled]="
                                                                 !isRiskDetailsEditmode
                                                             "
                                                         >
-                                                            <nz-option
-                                                                *ngFor="
+                                                        <div *ngFor="
                                                                     let option of motorComprehensiveloadingOptions
-                                                                "
+                                                                ">
+                                                                <nz-option
+                                                                            
                                                                 [nzValue]="
                                                                     option
                                                                 "
                                                                 [nzLabel]="
-                                                                    option.label
+                                                                    option.description
                                                                 "
-                                                            ></nz-option>
+                                                            ></nz-option></div>
+                                                        
+                                                            
                                                         </nz-select>
                                                     </nz-form-control>
                                                 </nz-form-item>
@@ -6643,31 +6636,32 @@
                                                             [(ngModel)]="
                                                                 selectedLoadingValue
                                                             "
-                                                            [compareWith]="
-                                                                compareFn
-                                                            "
+                                                            [ngModelOptions]="{
+                                                                standalone: true
+                                                            }"
                                                             nzAllowClear
                                                             style="width: 100%;"
                                                             [ngModelOptions]="{
                                                                 standalone: true
                                                             }"
-                                                            nzAllowClear
-                                                            nzLabel="select load"
+                                                            
                                                             [nzDisabled]="
                                                                 !isRiskDetailsEditmode
                                                             "
                                                         >
-                                                            <nz-option
-                                                                *ngFor="
+
+                                                        <div *ngFor="
                                                                     let option of motorThirdPartyloadingOptions
-                                                                "
+                                                                ">
+                                                                <nz-option
+                                                                            
                                                                 [nzValue]="
                                                                     option
                                                                 "
                                                                 [nzLabel]="
-                                                                    option.label
+                                                                    option.description
                                                                 "
-                                                            ></nz-option>
+                                                            ></nz-option></div>
                                                         </nz-select>
                                                     </nz-form-control>
                                                 </nz-form-item>
@@ -8898,9 +8892,6 @@
                                                             [(ngModel)]="
                                                                 selectedLoadingValue
                                                             "
-                                                            [compareWith]="
-                                                                compareFn
-                                                            "
                                                             nzAllowClear
                                                             style="width: 100%;"
                                                             [ngModelOptions]="{
@@ -8912,17 +8903,20 @@
                                                                 !isRiskDetailsEditmode
                                                             "
                                                         >
-                                                            <nz-option
-                                                                *ngFor="
+
+                                                        <div *ngFor="
                                                                     let option of motorComprehensiveloadingOptions
-                                                                "
+                                                                ">
+                                                                <nz-option
+                                                                            
                                                                 [nzValue]="
                                                                     option
                                                                 "
                                                                 [nzLabel]="
-                                                                    option.label
+                                                                    option.description
                                                                 "
-                                                            ></nz-option>
+                                                            ></nz-option></div>
+                                                           
                                                         </nz-select>
                                                     </nz-form-control>
                                                 </nz-form-item>
@@ -8953,38 +8947,35 @@
                                                             [(ngModel)]="
                                                                 selectedLoadingValue
                                                             "
-                                                            [compareWith]="
-                                                                compareFn
-                                                            "
-                                                            nzAllowClear
-                                                            style="width: 100%;"
                                                             [ngModelOptions]="{
                                                                 standalone: true
                                                             }"
                                                             nzAllowClear
-                                                            nzLabel="select load"
+                                                            style="width: 100%;"
+                                                            
                                                             [nzDisabled]="
                                                                 !isRiskDetailsEditmode
                                                             "
                                                         >
-                                                            <nz-option
-                                                                *ngFor="
+                                                        <div *ngFor="
                                                                     let option of motorThirdPartyloadingOptions
-                                                                "
+                                                                ">
+                                                                <nz-option
+                                                                            
                                                                 [nzValue]="
                                                                     option
                                                                 "
                                                                 [nzLabel]="
-                                                                    option.label
+                                                                    option.description
                                                                 "
-                                                            ></nz-option>
+                                                            ></nz-option></div>
                                                         </nz-select>
                                                     </nz-form-control>
                                                 </nz-form-item>
                                             </div>
                                             <div
                                                 *ngIf="
-                                                    selectedLoadingValue.value ===
+                                                    selectedLoadingValue.description ===
                                                     'increasedThirdPartyLimits'
                                                 "
                                             >

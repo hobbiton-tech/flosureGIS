@@ -27,9 +27,9 @@ export interface IExclusion {
 }
 
 export interface IExtension {
-    id: string;
+    id?: string;
     heading: string;
-    productId: string;
+    productId?: string;
     description: string;
 }
 

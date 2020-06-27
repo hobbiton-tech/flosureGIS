@@ -102,8 +102,10 @@ interface IQuoteNumberResult {
 })
 export class CreateQuoteComponent implements OnInit {
     vehicleBodyType = VehicleBodyType;
-    motorComprehensiveloadingOptions = MotorComprehensiveLoadingOptions;
-    motorThirdPartyloadingOptions = MotorThirdPartyLoadingOptions;
+    // motorComprehensiveloadingOptions = MotorComprehensiveLoadingOptions;
+    motorComprehensiveloadingOptions = [];
+    // motorThirdPartyloadingOptions = MotorThirdPartyLoadingOptions;
+    motorThirdPartyloadingOptions = [];
     discountOptions = DiscountOptions;
     sourceOfBusinessOptions = SourceOfBusinessOptions;
     productTypeOptions = ProductTypeOptions;
@@ -445,10 +447,7 @@ export class CreateQuoteComponent implements OnInit {
 
     selectedLimits = { label: 'Standard', value: 'standardLimits' };
 
-    selectedLoadingValue = {
-        label: '',
-        value: '',
-    };
+    selectedLoadingValue: IExtension;
 
     // motor third party rates
     motorThirdPartyRates = {
@@ -474,8 +473,8 @@ export class CreateQuoteComponent implements OnInit {
 
     log(value: { label: string; value: string }): void {
         this.selectedLoadingValue = {
-            label: 'Increased Third Party Limit',
-            value: 'increasedThirdPartyLimits',
+            description: 'Increased Third Party Limit',
+            heading: 'increasedThirdPartyLimits',
         };
         console.log('WHAT IS HERE<<<<',value);
 
@@ -785,6 +784,9 @@ export class CreateQuoteComponent implements OnInit {
         });
         this.productClauseService.getExtensions().subscribe((res) => {
             this.extensionList = res;
+            this.motorComprehensiveloadingOptions = res;
+            this.motorThirdPartyloadingOptions = res.filter((x) => x.heading === 'increasedThirdPartyLimits');
+            console.log("EXTENSIONS CHECK>>>>>>>",this.motorComprehensiveloadingOptions, this.motorThirdPartyloadingOptions )
         });
         this.productClauseService.getWordings().subscribe((res) => {
             this.wordingList = res;
@@ -2353,7 +2355,7 @@ export class CreateQuoteComponent implements OnInit {
             )
             .subscribe((data) => {
                 this.loads.push({
-                    loadType: this.selectedLoadingValue.label,
+                    loadType: this.selectedLoadingValue.description,
                     amount: Number(data.thirdPartyLoadingPremium),
                 });
                 this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
@@ -2478,7 +2480,7 @@ export class CreateQuoteComponent implements OnInit {
     // changes the quote increase third party limit to inputed amount
     handleIncreasedThirdPartyLimitAmount() {
         this.loads.push({
-            loadType: this.selectedLoadingValue.label,
+            loadType: this.selectedLoadingValue.description,
             amount: Number(this.increasedThirdPartyLimitAmount),
         });
         this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
