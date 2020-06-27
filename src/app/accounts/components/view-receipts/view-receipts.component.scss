@@ -4,9 +4,9 @@
     padding: 30px;
     border: 1px solid #eee;
     // box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
-    font-size: 13px;
+    font-size: 14px;
     line-height: 24px;
-    font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+    font-family: 'Lato', sans-serif;
     color: black;
 }
 .invoice-box table {
@@ -73,8 +73,7 @@
 /** RTL **/
 .rtl {
     direction: rtl;
-    font-family: Tahoma, 'Helvetica Neue', 'Helvetica', Helvetica, Arial,
-        sans-serif;
+    font-family:'Lato', sans-serif;
 }
 .rtl table {
     text-align: right;

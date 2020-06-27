@@ -1,3 +1,5 @@
+import { LiabilityType } from './../../../quotes/models/quote.model';
+import { RiskDetailsComponent } from './../../../quotes/components/risk-details/risk-details.component';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -25,6 +27,7 @@ import {
     IIndividualClient,
     ICorporateClient,
 } from 'src/app/clients/models/clients.model';
+import { Risks } from 'src/app/reports/model/quotation.model';
 
 @Component({
     selector: 'app-policy-details',
@@ -45,7 +48,7 @@ export class PolicyDetailsComponent implements OnInit {
     singleDebitNote: DebitNote;
     latestDebitNote: DebitNote;
 
-    //client details
+    // client details
     client: IIndividualClient & ICorporateClient;
     clientsList: Array<IIndividualClient & ICorporateClient>;
 
@@ -69,6 +72,7 @@ export class PolicyDetailsComponent implements OnInit {
     isEditmode = false;
 
     selectedRisk: RiskModel = new RiskModel();
+    selectedRisks: RiskModel[] = [];
 
     // PDFS
     isCertificatePDFVisible = false;
@@ -79,6 +83,8 @@ export class PolicyDetailsComponent implements OnInit {
     isNewCertificatePdfVisible = false;
     isThirdPartyCertificatePdfVisible = false;
     isComprehensiveCertificatePdfVisible = false;
+
+    isScheduleCombinedPDFVisible = false;
 
     // For Modal
     clientName = '';
@@ -98,13 +104,13 @@ export class PolicyDetailsComponent implements OnInit {
     totalAmount: string;
     premiumLevy: string;
 
-    //documents limits of liability
+    // documents limits of liability
     deathAndInjuryPerPerson: number;
     deathAndInjuryPerEvent: number;
     propertyDamage: number;
     combinedLimits: number;
 
-    //documents excesses
+    // documents excesses
     below21Years: number;
     over70Years: number;
     noLicence: number;
@@ -122,6 +128,7 @@ export class PolicyDetailsComponent implements OnInit {
     netPremium: any;
     formattedeDate: Date;
     _;
+    // tslint:disable-next-line: variable-name
     _id: string;
     cnd: DiscountModel;
     cndAmount = 0;
@@ -129,7 +136,9 @@ export class PolicyDetailsComponent implements OnInit {
     coverNote: CoverNote;
     coverNot: CoverNote;
     coverNotes: CoverNote[] = [];
+    // tslint:disable-next-line: whitespace
     coverNotesRisks: any[] =[];
+  selectedsRisks: RiskModel[];
 
     constructor(
         private readonly router: Router,
@@ -161,10 +170,11 @@ export class PolicyDetailsComponent implements OnInit {
                 this.policiesService.getCoverNotes().subscribe((res) => {
                     console.log('RESULT COVER>>>>', res);
                     this.coverNotes = res;
-                    
+
+                // tslint:disable-next-line: semicolon
                 })
 
-                
+
 
                 this.productClauseService
                     .getPolicyClauses()
@@ -242,18 +252,22 @@ export class PolicyDetailsComponent implements OnInit {
                 this.risks = policy.risks;
                 // this.discounts = risk.discounts;
                 this.policiesService.getCoverNotes().subscribe((res) => {
-                   this.coverNotesRisks =  this.coverNotesRisks.concat(...res, ...this.risks)
-                   console.log('COMBINE>>>>',this.coverNotesRisks);
-                   
-                    for(const r of this.risks )
+                   this.coverNotesRisks =  this.coverNotesRisks.concat(...res, ...this.risks);
+                   console.log('COMBINE>>>>', this.coverNotesRisks);
+
+                    // tslint:disable-next-line: whitespace
+                    // tslint:disable-next-line: curly
+                    // tslint:disable-next-line: ali
+                   for (const r of this.risks ) {
                     this.coverNot = res.filter((x) => x.policyId === r.id)[0];
-                })
-                
+                    }
+                });
+
 
                 this.policyRisk = policy.risks[0];
                 // this.loading =
 
-                //limits Of Liability
+                // limits Of Liability
                 this.deathAndInjuryPerPerson = policy.risks[0].limitsOfLiability.filter(
                     (x) => x.liabilityType === 'deathAndInjuryPerPerson'
                 )[0].amount;
@@ -269,7 +283,7 @@ export class PolicyDetailsComponent implements OnInit {
 
 
 
-                //excesses
+                // excesses
                 this.below21Years = policy.risks[0].excesses.filter(
                     (x) => x.excessType === 'below21Years'
                 )[0].amount;
@@ -621,13 +635,14 @@ export class PolicyDetailsComponent implements OnInit {
 
     isNewCertificateVisible(risk: RiskModel) {
         this.selectedRisk = risk;
+        // tslint:disable-next-line: triple-equals
         if (this.selectedRisk.insuranceType == 'Comprehensive') {
             this.cnd = risk.discounts.filter(
                 (x) => x.discountType === 'No Claims Discount'
             )[0];
-            console.log('RISK ID', risk.id)
+            console.log('RISK ID', risk.id);
 
-                this.coverNot = this.coverNotes.filter((x) => x.policyId === this.selectedRisk.id)[0];
+            this.coverNot = this.coverNotes.filter((x) => x.policyId === this.selectedRisk.id)[0];
 
             if (this.cnd === undefined) {
                 this.cndAmount = 0;
@@ -647,8 +662,22 @@ export class PolicyDetailsComponent implements OnInit {
         // this.isNewCertificatePdfVisible = true;
     }
 
+    isSchedule() {
+      this.isSchedulePDFVisible = true;
+        // this.selectedsRisks = risk;
+        // // this.selectedRisk = this.policyRisk[0].limitsOfLiability;
+        // if (this.selectedRisks[0].LiabilityType === 'combinedLimits') {
+        //     this.isScheduleCombinedPDFVisible = true;
+        //     this.isSchedulePDFVisible = false;
+        // } else {
+        //     this.isScheduleCombinedPDFVisible = true;
+        //     this.isSchedulePDFVisible = false;
+        // }
+    }
+
     sumArray(items, prop) {
-        return items.reduce(function (a, b) {
+        // tslint:disable-next-line: only-arrow-functions
+        return items.reduce(function(a, b) {
             return a + b[prop];
         }, 0);
     }

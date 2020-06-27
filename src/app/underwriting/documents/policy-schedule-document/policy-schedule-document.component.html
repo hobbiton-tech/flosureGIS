@@ -56,9 +56,9 @@
 
         <!-- <h2 class="heading">A PLUS GENERAL INSURANCE LIMITED</h2> -->
         <P class="centerheading"
-            >Schedule attaching to and forming part of
-            <strong>{{ policy.risks[0].productType }} Motor</strong> Car Policy
-            No. {{ policy.policyNumber }}</P
+            >SCHEDULE ATTACHING TO AND FORMING PART OF
+            <strong>{{ policy.risks[0].productType }} MOTOR</strong> CAR POLICY
+            NO. {{ policy.policyNumber }}</P
         >
 
         <p>
@@ -88,7 +88,7 @@
             <p>
                 Address: {{ client ? client.address : 'TBA'
                 }}<span style="float: right;"
-                    >Email:
+                    >Captured by:
                     {{
                         policy.sourceOfBusiness
                             ? policy.sourceOfBusiness == 'direct'
@@ -103,16 +103,6 @@
                 }}<span style="float: right;"
                     ><span style="font-weight: bold;"></span
                 ></span>
-            </p>
-            <p>
-                Business or Profession:
-                <span style="font-weight: bold;">TBA</span
-                ><span style="float: right;"
-                    >Currency:
-                    <span style="font-weight: bold;">{{
-                        policy.currency
-                    }}</span></span
-                >
             </p>
 
             <p>
@@ -176,7 +166,7 @@
                 <td>{{ risk.cubicCapacity }}</td>
                 <td>{{ getYearOfManufacture(risk) }}</td>
                 <td>{{ risk.seatingCapacity }}</td>
-                <td>{{ risk.estimatedValue ? risk.estimatedValue : 'TBA' }}</td>
+                <td>{{ policyRisk.sumInsured | number: '1.2-2' }}</td>
                 <td>
                     {{
                         risk.insuranceType == 'ThirdParty'
@@ -209,11 +199,38 @@
                 Where the insurance Provided is “Third Party” Sections I of this
                 Policy is cancelled
             </li>
-            <li>
+
+            <ng-container
+                *ngIf="
+                    policy.risks[0].limitsOfLiability[0].liabilityType !==
+                        'combinedLimits';
+                    else standardLimit
+                "
+            >
+                <li>
+                    <p style="font-weight: bold;">Limits of Liability</p>
+                    <p>Limits of the amount of the company's liability under</p>
+                    <p>
+                        <span style="font-weight: bold;">Combined</span> Limit :
+                        <span style="font-weight: bold;"
+                            >K{{ combinedLimits }}</span
+                        >
+                    </p>
+                </li>
+            </ng-container>
+
+            <ng-template #standardLimit>
                 <p style="font-weight: bold;">Limits of Liability</p>
                 <p>Limit of the amount of the Company’s liability under</p>
-                <!-- <p><span style="font-weight: bold;">Section I</span> - 3 (Protection and Removal) – <span
-                        style="font-weight: bold;">K{{0 | number: '1.2-2'}}</span></p> -->
+
+                <p>
+                    <span style="font-weight: bold;">Section I</span> - 3
+                    (Protection and Removal) –
+                    <span style="font-weight: bold;"
+                        >K{{ 0 | number: '1.2-2' }}</span
+                    >
+                </p>
+
                 <p>
                     <span style="font-weight: bold;">Section II</span> -1 (a)
                     and 2 (a) (Liability to Third Parties – death bodily injury)
@@ -243,10 +260,12 @@
                         event</span
                     >
                 </p>
-                <!-- <p>Section I-10 (Medical Expenses) in respect of any one accident/any one person <span
+            </ng-template>
+
+            <!-- <p>Section I-10 (Medical Expenses) in respect of any one accident/any one person <span
                         style="font-weight: bold;">K{{0 | number: '1.2-2'}} /
                         K{{0 | number: '1.2-2'}}</span></p> -->
-            </li>
+            <!-- </li> -->
         </ol>
 
         <!-- <p><span style="font-weight: bold;">Unauthorized Repair Limit (Section 1 – 4 (a)):
@@ -367,7 +386,10 @@
             <span style="font-weight: bold;"
                 >Date of Signature of Proposal and Declaration</span
             >: AS PER COVERNOTE
-            <span style="font-weight: bold;">{{coverNot.certificateNumber}}</span> DATED
+            <span style="font-weight: bold;">{{
+                coverNot.certificateNumber
+            }}</span>
+            DATED
             {{ policy.dateOfIssue | date }}
         </p>
         <p>

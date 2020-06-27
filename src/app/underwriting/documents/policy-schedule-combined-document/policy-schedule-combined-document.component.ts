@@ -1,5 +1,3 @@
-import { Risks } from './../../../reports/model/quotation.model';
-import { LimitsOfLiability, LiabilityType } from './../../../quotes/models/quote.model';
 import { Component, OnInit, Input } from '@angular/core';
 import { RiskModel } from 'src/app/quotes/models/quote.model';
 import { Policy } from '../../models/policy.model';
@@ -7,18 +5,16 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import {
     ICorporateClient,
-    IIndividualClient,
+    IIndividualClient
 } from 'src/app/clients/models/clients.model';
 import moment from 'moment';
-import { CoverNote } from '../models/documents.model';
 
 @Component({
-    selector: 'app-policy-schedule-document',
-    templateUrl: './policy-schedule-document.component.html',
-    styleUrls: ['./policy-schedule-document.component.scss'],
-
+    selector: 'app-policy-schedule-combined-document',
+    templateUrl: './policy-schedule-combined-document.component.html',
+    styleUrls: ['./policy-schedule-combined-document.component.scss']
 })
-export class PolicyScheduleDocumentComponent implements OnInit {
+export class PolicyScheduleCombinedDocumentComponent implements OnInit {
     @Input()
     clientName: string;
 
@@ -27,9 +23,6 @@ export class PolicyScheduleDocumentComponent implements OnInit {
 
     @Input()
     clientNumber: string;
-
-    @Input()
-    coverNot: CoverNote;
 
     @Input()
     clientEmail: string;
@@ -86,19 +79,16 @@ export class PolicyScheduleDocumentComponent implements OnInit {
     combinedLimits: number;
 
     @Input()
-    below21Years: number;
+    collisionAndFire: number;
 
     @Input()
-    over70Years: number;
+    theftOfVehicleWithAntiTheftDevice: number;
 
     @Input()
-    noLicence: number;
+    theftOfVehicleWithoutAntiTheftDevice: number;
 
     @Input()
-    careLessDriving: number;
-
-    @Input()
-    otherEndorsement: number;
+    thirdPartyPropertyDamage: number;
 
     todayDate: Date;
 
@@ -113,7 +103,9 @@ export class PolicyScheduleDocumentComponent implements OnInit {
     }
 
     getYearOfManufacture(risk: RiskModel) {
-        const year: string = moment(risk.yearOfManufacture).year().toString();
+        let year: string = moment(risk.yearOfManufacture)
+            .year()
+            .toString();
         return year;
     }
 
@@ -123,20 +115,20 @@ export class PolicyScheduleDocumentComponent implements OnInit {
         const options = {
             background: 'white',
             height: div.clientHeight,
-            width: div.clientWidth,
+            width: div.clientWidth
         };
 
-        html2canvas(div, options).then((canvas) => {
-            const doc = new jsPDF({
+        html2canvas(div, options).then(canvas => {
+            let doc = new jsPDF({
                 unit: 'mm',
-                format: 'a3',
+                format: 'a3'
             });
-            const imgData = canvas.toDataURL('image/PNG');
+            let imgData = canvas.toDataURL('image/PNG');
             doc.addImage(imgData, 'PNG', 0, 0, 297, 420);
 
-            const pdfOutput = doc.output();
-            const buffer = new ArrayBuffer(pdfOutput.length);
-            const array = new Uint8Array(buffer);
+            let pdfOutput = doc.output();
+            let buffer = new ArrayBuffer(pdfOutput.length);
+            let array = new Uint8Array(buffer);
             for (let i = 0; i < pdfOutput.length; i++) {
                 array[i] = pdfOutput.charCodeAt(i);
             }

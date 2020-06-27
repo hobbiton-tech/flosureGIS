@@ -1601,7 +1601,7 @@ export class QuoteDetailsComponent implements OnInit {
                     this.policyId = res.id;
                     this.newRisks = res.risks;
                     console.log('Risks>>>>>>>>', this.newRisks);
-                    
+
 
                     // this.policiesService.createDebitNote(
                     //     res.id,
@@ -1657,7 +1657,7 @@ export class QuoteDetailsComponent implements OnInit {
                     });
 
                     }
-                    
+
 
                     this.http
                         .get<any>(
@@ -2985,6 +2985,7 @@ export class QuoteDetailsComponent implements OnInit {
 
     addLimitsOfLiability(): void {
         this.limitsOfLiability.push({
+
             liabilityType: 'deathAndInjuryPerPerson',
             amount: this.deathAndInjuryPerPerson,
             rate: this.deathAndInjuryPerPersonRate,
@@ -2992,6 +2993,7 @@ export class QuoteDetailsComponent implements OnInit {
         });
 
         this.limitsOfLiability.push({
+
             liabilityType: 'deathAndInjuryPerEvent',
             amount: this.deathAndInjuryPerEvent,
             rate: this.deathAndInjuryPerEventRate,
@@ -2999,6 +3001,7 @@ export class QuoteDetailsComponent implements OnInit {
         });
 
         this.limitsOfLiability.push({
+
             liabilityType: 'propertyDamage',
             amount: this.propertyDamage,
             rate: this.propertyDamageRate,
@@ -3006,6 +3009,7 @@ export class QuoteDetailsComponent implements OnInit {
         });
 
         this.limitsOfLiability.push({
+
             liabilityType: 'combinedLimits',
             amount: this.combinedLimits,
             rate: this.combinedLimitsRate,

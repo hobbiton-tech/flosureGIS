@@ -59,6 +59,7 @@ export class RiskModel {
     expiryQuarter: string;
     limitsOfLiability: LimitsOfLiability[];
     excesses: Excess[];
+  LiabilityType: string;
 }
 
 export class MessageModel {
