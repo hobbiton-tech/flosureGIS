@@ -88,7 +88,7 @@ export class ClientsService {
     //     });
     // }
 
-    //New flosure api
+    // New flosure api
 
     createIndividualClient(client: IClientDTO) {
         const clnt: IClient = {
@@ -265,6 +265,7 @@ export class ClientsService {
     }
 
     getAllClients(): Observable<[IIndividualClient[], ICorporateClient[]]> {
+        // tslint:disable-next-line: deprecation
         return combineLatest(
             this.getIndividualClients(),
             this.getCorporateClients()

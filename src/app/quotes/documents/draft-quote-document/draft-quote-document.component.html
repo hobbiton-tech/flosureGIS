@@ -174,8 +174,7 @@
                 <tr>
                     <td><strong>Rate</strong></td>
                     <td><strong>:</strong></td>
-                    <td><span>{{quoteData.risks[0].insuranceType == 'Comprehensive' ? '5% on Total Sum Insured' : '-'}}</span>
-                    </td>
+                    <td><span>{{quoteData.risks[0].premiumRate}}</span></td>
                 </tr>
 
                 <tr>
@@ -202,14 +201,13 @@
                 <tr>
                     <td><strong>Basic Excess</strong></td>
                     <td><strong>:</strong></td>
-                    <td><span>10% minimum K1,000.00 each claim – all other losses (Own damage and TPPD)</span></td>
+                    <!-- <td><span>10% minimum K1,000.00 each claim – all other losses (Own damage and TPPD)</span></td> -->
                 </tr>
 
-                <tr>
+                <tr *ngFor="let exc of excessList">
                     <td></td>
                     <td><strong>:</strong></td>
-                    <td><span>15% minimum K1,000.00 each claim – theft of vehicle without anti-theft device
-                            Fitted.</span>
+                    <td><span>{{exc.excessType}} {{exc.amount}}</span>
                     </td>
                 </tr>
 
