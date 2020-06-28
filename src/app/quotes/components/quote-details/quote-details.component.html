@@ -2469,7 +2469,7 @@
                                                     <nz-divider nzText="Excesses" nzOrientation="left"></nz-divider>
                                                     <ul>
                                                         <div *ngFor="let ex of excessList">
-                                                        <li>{{ex.description}}{{ex.amount}}</li>
+                                                        <li>{{ex.excessType}}{{ex.amount}}</li>
                                                     </div>
                                                     </ul>
                                                     <!-- <form [formGroup]="excessesForm">
@@ -7456,7 +7456,7 @@
                     [loadingAmount]="premiumLoadingTotal" [discountAmount]="quoteDiscountTotal"
                     [totalAmount]="quoteNetPremium" [premiumLevy]="quoteLevy" [numberOfRisks]="numberOfRisks"
                     [risks]="quoteData.risks" [quoteData]="quoteData" [totalSumInsured]="quoteSumInsured"
-                    [totalBasicPremium]="quoteBasicPremium" [totalLevy]="quoteLevy" [totalNetPremium]="quoteNetPremium">
+                    [totalBasicPremium]="quoteBasicPremium" [totalLevy]="quoteLevy" [totalNetPremium]="quoteNetPremium" [excessList]="excessList">
                 </app-draft-quote-document>
             </nz-card>
             <ng-template #pdfQuoteActions>

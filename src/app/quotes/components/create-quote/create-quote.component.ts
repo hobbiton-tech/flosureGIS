@@ -536,8 +536,9 @@ export class CreateQuoteComponent implements OnInit {
         });
 
         this.productClauseService.getExccesses().subscribe((res) => {
-            this.excessList = res;
-            this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+            this.excessList = res.filter((x) => x.productId === '5bf2a73c-709a-4f38-9846-c260e8fffefc');
+            // this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+            this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d' && x.vehicleType === 'private');
             this.excessAct = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
             this.excessFT = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
 
@@ -792,6 +793,30 @@ export class CreateQuoteComponent implements OnInit {
             this.wordingList = res;
         });
         this.updateEditCache();
+    }
+
+
+    productChanged(value) {
+        console.log("PRODUCT TYPE<<<<<", value);
+        if( value === 'Private') {
+            this.productClauseService.getExccesses().subscribe((res) => {
+                this.excessList = res.filter((x) => x.productId === '5bf2a73c-709a-4f38-9846-c260e8fffefc' && x.vehicleType === 'private');
+                // this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                // this.excessAct = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                // this.excessFT = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+    
+            })
+
+        } else {
+            this.productClauseService.getExccesses().subscribe((res) => {
+                this.excessList = res.filter((x) => x.productId === '5bf2a73c-709a-4f38-9846-c260e8fffefc' && x.vehicleType === 'commercial');
+                // this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                // this.excessAct = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                // this.excessFT = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+    
+            })
+        }
+        
     }
 
 
@@ -1272,6 +1297,14 @@ export class CreateQuoteComponent implements OnInit {
                 if (this.riskThirdPartyForm.get('riskQuarter').value == 4) {
                     this.basicPremium = 464;
                 }
+
+                this.productClauseService.getExccesses().subscribe((res) => {
+                    this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d' && x.vehicleType === 'private');
+                    // this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                    // this.excessAct = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                    // this.excessFT = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+        
+                })
             }
             if (
                 this.riskThirdPartyForm.get('productType').value == 'Commercial'
@@ -1288,6 +1321,14 @@ export class CreateQuoteComponent implements OnInit {
                 if (this.riskThirdPartyForm.get('riskQuarter').value == 4) {
                     this.basicPremium = 566;
                 }
+
+                this.productClauseService.getExccesses().subscribe((res) => {
+                    this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d' && x.vehicleType === 'commercial');
+                    // this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                    // this.excessAct = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                    // this.excessFT = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+        
+                })
             }
             if (
                 this.riskThirdPartyForm.get('productType').value == 'Bus/Taxi'
@@ -1304,6 +1345,14 @@ export class CreateQuoteComponent implements OnInit {
                 if (this.riskThirdPartyForm.get('riskQuarter').value == 4) {
                     this.basicPremium = 772;
                 }
+
+                this.productClauseService.getExccesses().subscribe((res) => {
+                    this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d' && x.vehicleType === 'commercial');
+                    // this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                    // this.excessAct = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                    // this.excessFT = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+        
+                })
             }
         }
 
@@ -1396,6 +1445,8 @@ export class CreateQuoteComponent implements OnInit {
                 ) {
                     this.basicPremium = 464;
                 }
+                    
+        
             }
             if (
                 this.riskThirdPartyFireAndTheftForm.get('productType').value ==
@@ -1425,6 +1476,7 @@ export class CreateQuoteComponent implements OnInit {
                 ) {
                     this.basicPremium = 566;
                 }
+
             }
             if (
                 this.riskThirdPartyFireAndTheftForm.get('productType').value ==
@@ -1454,6 +1506,14 @@ export class CreateQuoteComponent implements OnInit {
                 ) {
                     this.basicPremium = 772;
                 }
+
+                this.productClauseService.getExccesses().subscribe((res) => {
+                    this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d' && x.vehicleType === 'commercial');
+                    // this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                    // this.excessAct = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                    // this.excessFT = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+        
+                })
             }
         }
 

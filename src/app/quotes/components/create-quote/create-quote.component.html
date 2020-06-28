@@ -713,6 +713,7 @@
                                                                         nzAllowClear
                                                                         formControlName="productType"
                                                                         nzPlaceHolder="Select a product type"
+                                                                        (ngModelChange)="productChanged($event)"
                                                                         name="productType"
                                                                         id="productType"
                                                                     >
@@ -6266,6 +6267,7 @@
                                                     nzAllowClear
                                                     formControlName="productType"
                                                     nzPlaceHolder="Select a product type"
+                                                    (ngModelChange)="productChanged($event)"
                                                     name="productType"
                                                     id="productType"
                                                 >

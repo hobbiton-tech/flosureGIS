@@ -476,7 +476,7 @@ export class QuoteDetailsComponent implements OnInit {
     policyId: string;
     newRisks: RiskModel[];
      //Excess Variable
-     excessList:IExccess[]=[];
+     excessList:Excess[]=[];
 
      excessTHP:IExccess[]=[];
      excessAct:IExccess[]=[];
@@ -527,13 +527,16 @@ export class QuoteDetailsComponent implements OnInit {
 
                 this.risks = this.quoteData.risks;
 
-                this.productClauseService.getExccesses().subscribe((res) => {
-                    this.excessList = res;
-                    this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
-                    this.excessAct = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
-                    this.excessFT = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                this.excessList = this.risks[0].excesses
+                console.log('RISKS<<<<<<', this.excessList)
+
+                // this.productClauseService.getExccesses().subscribe((res) => {
+                //     this.excessList = res;
+                //     this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                //     this.excessAct = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                //     this.excessFT = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
         
-                })
+                // })
 
                 this.productClauseService
                     .getPolicyClauses()
@@ -3021,7 +3024,7 @@ export class QuoteDetailsComponent implements OnInit {
         if(this.selectedValue.value === "Comprehensive") {
             for(const ex of this.excessList) {
                 this.excesses.push({
-                    excessType: ex.description,
+                    excessType: ex.excessType,
                     amount: Number(ex.amount),
                 });
             }
