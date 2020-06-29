@@ -127,8 +127,8 @@ export class PolicyDetailsComponent implements OnInit {
     // clientName: any;
     netPremium: any;
     formattedeDate: Date;
-    _;
-    // tslint:disable-next-line: variable-name
+    excesses: any;
+
     _id: string;
     cnd: DiscountModel;
     cndAmount = 0;
@@ -282,24 +282,27 @@ export class PolicyDetailsComponent implements OnInit {
                 )[0].amount;
 
 
+                
 
-                // excesses
-                this.below21Years = policy.risks[0].excesses.filter(
-                    (x) => x.excessType === 'below21Years'
-                )[0].amount;
-                this.over70Years = policy.risks[0].excesses.filter(
-                    (x) => x.excessType === 'over70Years'
-                )[0].amount;
-                this.noLicence = policy.risks[0].excesses.filter(
-                    (x) => x.excessType === 'noLicence'
-                )[0].amount;
-                this.careLessDriving = policy.risks[0].excesses.filter(
-                    (x) => x.excessType === 'careLessDriving'
-                )[0].amount;
 
-                this.otherEndorsement = policy.risks[0].excesses.filter(
-                    (x) => x.excessType === 'otherEndorsement'
-                )[0].amount;
+
+                //excesses
+                // this.below21Years = policy.risks[0].excesses.filter(
+                //     (x) => x.excessType === 'below21Years'
+                // )[0].amount;
+                // this.over70Years = policy.risks[0].excesses.filter(
+                //     (x) => x.excessType === 'over70Years'
+                // )[0].amount;
+                // this.noLicence = policy.risks[0].excesses.filter(
+                //     (x) => x.excessType === 'noLicence'
+                // )[0].amount;
+                // this.careLessDriving = policy.risks[0].excesses.filter(
+                //     (x) => x.excessType === 'careLessDriving'
+                // )[0].amount;
+
+                // this.otherEndorsement = policy.risks[0].excesses.filter(
+                //     (x) => x.excessType === 'otherEndorsement'
+                // )[0].amount;
 
                 const doo = new Date(policy.endDate);
                 const nd = new Date(
