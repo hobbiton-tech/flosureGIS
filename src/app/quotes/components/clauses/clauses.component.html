@@ -1,66 +1,40 @@
 <nz-collapse>
-    <nz-collapse-panel nzHeader="Clauses and Wordings" >
+    <nz-collapse-panel nzHeader="Clauses and Wordings">
         <div nz-row [nzGutter]="8">
             <div nz-col [nzSpan]="12">
                 <nz-card nzTitle="Policy Wordings">
                     <div style="margin-bottom: 10px;">
                         <div nz-row [nzGutter]="24">
                             <div nz-col nzSpan="12">
-                                <div
-                                    style="width: 75%;"
-                                >
-                                    <nz-input-group
-                                        [nzSuffix]="
+                                <div style="width: 75%;">
+                                    <nz-input-group [nzSuffix]="
                                             suffixIconSearch
-                                        "
-                                    >
-                                        <input
-                                            type="text"
-                                            nz-input
-                                            placeholder="Search by Wording ID, clause type"
-                                        />
+                                        ">
+                                        <input type="text" nz-input placeholder="Search by Wording ID, clause type" />
                                     </nz-input-group>
-                                    <ng-template
-                                        #suffixIconSearch
-                                    >
-                                        <i
-                                            nz-icon
-                                            nzType="search"
-                                        ></i>
+                                    <ng-template #suffixIconSearch>
+                                        <i nz-icon nzType="search"></i>
                                     </ng-template>
                                 </div>
                             </div>
 
                             <diV nz-col nzSpan="12">
-                                <nz-select
-                                    style="
+                                <nz-select style="
                                         width: 200px;
-                                    "
-                                    nzShowSearch
-                                    nzAllowClear
-                                    nzPlaceHolder="Select a Wording"
-                                    nzMode="multiple"
+                                    " nzShowSearch nzAllowClear nzPlaceHolder="Select a Wording" nzMode="multiple"
                                     [(ngModel)]="
                                         selectedWordingValue
-                                    "
-                                >
-                                    <nz-option
-                                        *ngFor="
+                                    " (ngModelChange)="selectWording()">
+                                    <nz-option *ngFor="
                                             let o of wordingList
-                                        "
-                                        [nzLabel]="
+                                        " [nzLabel]="
                                             o.heading
-                                        "
-                                        [nzValue]="o"
-                                    ></nz-option>
+                                        " [nzValue]="o"></nz-option>
                                 </nz-select>
                             </diV>
                         </div>
                     </div>
-                    <nz-table
-                        #wordingTable
-                        [nzData]="selectedWordingValue"
-                    >
+                    <nz-table #wordingTable [nzData]="selectedWordingValue">
                         <thead>
                             <tr>
                                 <th>Heading</th>
@@ -69,11 +43,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr
-                                *ngFor="
+                            <tr *ngFor="
                                     let wording of wordingTable.data
-                                "
-                            >
+                                ">
                                 <td>
                                     {{
                                         wording.heading
@@ -96,15 +68,11 @@
                                 >
                                     Select
                                 </button> -->
-                                    <button
-                                        nz-button
-                                        nzType="default"
-                                        (click)="
+                                    <button nz-button nzType="default" (click)="
                                             onEditWording(
                                                 wording
                                             )
-                                        "
-                                    >
+                                        ">
                                         Edit
                                     </button>
                                 </td>
@@ -118,62 +86,36 @@
                     <div style="margin-bottom: 10px;">
                         <div nz-row [nzGutter]="24">
                             <div nz-col nzSpan="12">
-                                <div
-                                    style="width: 75%;"
-                                >
-                                    <nz-input-group
-                                        [nzSuffix]="
+                                <div style="width: 75%;">
+                                    <nz-input-group [nzSuffix]="
                                             suffixIconSearch
-                                        "
-                                    >
-                                        <input
-                                            type="text"
-                                            nz-input
-                                            placeholder="Search by clause ID, clause type"
-                                        />
+                                        ">
+                                        <input type="text" nz-input placeholder="Search by clause ID, clause type" />
                                     </nz-input-group>
-                                    <ng-template
-                                        #suffixIconSearch
-                                    >
-                                        <i
-                                            nz-icon
-                                            nzType="search"
-                                        ></i>
+                                    <ng-template #suffixIconSearch>
+                                        <i nz-icon nzType="search"></i>
                                     </ng-template>
                                 </div>
                             </div>
                             <diV nz-col nzSpan="12">
-                                <nz-select
-                                    style="
+                                <nz-select style="
                                         width: 200px;
-                                    "
-                                    nzShowSearch
-                                    nzAllowClear
-                                    nzPlaceHolder="Select a Clause"
-                                    nzMode="multiple"
+                                    " nzShowSearch nzAllowClear nzPlaceHolder="Select a Clause" nzMode="multiple"
                                     [(ngModel)]="
                                         selectedClauseValue
-                                    "
-                                >
-                                    <nz-option
-                                        *ngFor="
+                                    " (ngModelChange)="selectClause()">
+                                    <nz-option *ngFor="
                                             let o of clauseList
-                                        "
-                                        [nzLabel]="
+                                        " [nzLabel]="
                                             o.heading
-                                        "
-                                        [nzValue]="o"
-                                    ></nz-option>
+                                        " [nzValue]="o"></nz-option>
                                 </nz-select>
                             </diV>
                         </div>
                     </div>
-                    <nz-table
-                        #clauseTable
-                        [nzData]="
+                    <nz-table #clauseTable [nzData]="
                         selectedClauseValue
-                        "
-                    >
+                        ">
                         <thead>
                             <tr>
                                 <th>Heading</th>
@@ -182,11 +124,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr
-                                *ngFor="
+                            <tr *ngFor="
                                     let clause of clauseTable.data
-                                "
-                            >
+                                ">
                                 <td>
                                     {{
                                         clause.heading
@@ -194,7 +134,7 @@
                                 </td>
                                 <td>
                                     {{
-                                        clause.wording
+                                        clause.clauseDetails
                                     }}
                                 </td>
                                 <td>
@@ -209,15 +149,11 @@
                                 >
                                     Select
                                 </button> -->
-                                    <button
-                                        nz-button
-                                        nzType="default"
-                                        (click)="
+                                    <button nz-button nzType="default" (click)="
                                             onEditClause(
                                                 clause
                                             )
-                                        "
-                                    >
+                                        ">
                                         Edit
                                     </button>
                                 </td>
@@ -228,4 +164,76 @@
             </div>
         </div>
     </nz-collapse-panel>
-  </nz-collapse>
+</nz-collapse>
+
+<nz-modal [(nzVisible)]="isWordingEditVisible" nzTitle="Edit Wording" (nzOnCancel)="handleEditWordingCancel()"
+    (nzOnOk)="handleEditWordingOk()">
+    <form nz-form [formGroup]="wordingForm">
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Heading</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="wordingErrorTpl">
+                <input nz-input formControlName="heading" />
+                <ng-template #wordingErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please input your wording heading!
+                    </ng-container>
+                    <ng-container *ngIf="control.hasError('duplicated')">
+                        The heading is redundant!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..."
+                [nzErrorTip]="wordingDescriptionErrorTpl">
+                <textarea formControlName="description" nz-input rows="5"></textarea>
+
+                <ng-template #wordingDescriptionErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please input your description!
+                    </ng-container>
+                    <ng-container *ngIf="control.hasError('duplicated')">
+                        The description is redundant!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</nz-modal>
+
+<nz-modal [(nzVisible)]="isClauseEditVisible" nzTitle="Edit Clause" (nzOnCancel)="handleEditClauseCancel()"
+    (nzOnOk)="handleEditClauseOk()">
+    <form nz-form [formGroup]="clauseForm">
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Heading</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="clauseErrorTpl">
+                <input nz-input formControlName="heading" />
+                <ng-template #clauseErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please input your clause heading!
+                    </ng-container>
+                    <ng-container *ngIf="control.hasError('duplicated')">
+                        The heading is redundant!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..."
+                [nzErrorTip]="clauseDeailsErrorTpl">
+                <textarea formControlName="clauseDetails" nz-input rows="5"></textarea>
+
+                <ng-template #clauseDeailsErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please input your clause details!
+                    </ng-container>
+                    <ng-container *ngIf="control.hasError('duplicated')">
+                        The details are redundant!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</nz-modal>
