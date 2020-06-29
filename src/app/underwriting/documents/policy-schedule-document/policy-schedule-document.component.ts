@@ -1,5 +1,5 @@
 import { Risks } from './../../../reports/model/quotation.model';
-import { LimitsOfLiability, LiabilityType } from './../../../quotes/models/quote.model';
+import { LimitsOfLiability, LiabilityType, Excess } from './../../../quotes/models/quote.model';
 import { Component, OnInit, Input } from '@angular/core';
 import { RiskModel } from 'src/app/quotes/models/quote.model';
 import { Policy } from '../../models/policy.model';
@@ -36,6 +36,9 @@ export class PolicyScheduleDocumentComponent implements OnInit {
 
     @Input()
     policyRisk: RiskModel;
+
+    @Input()
+    limitsOfLiablity: LimitsOfLiability[];
 
     @Input()
     issueDate: string;
@@ -94,6 +97,10 @@ export class PolicyScheduleDocumentComponent implements OnInit {
     @Input()
     noLicence: number;
 
+
+    @Input()
+    excessList: Excess[];
+
     @Input()
     careLessDriving: number;
 
@@ -108,8 +115,40 @@ export class PolicyScheduleDocumentComponent implements OnInit {
 
     generatingPDF = false;
 
+    comb:LimitsOfLiability;
+    limits:LimitsOfLiability;
+
+    deathPE: LimitsOfLiability;
+
+    deathPP: LimitsOfLiability;
+    propertyD: LimitsOfLiability;
+
+
+
     ngOnInit(): void {
         this.todayDate = new Date();
+        this.getLimit()
+    }
+
+    getLimit() {
+        for(const lim of this.limitsOfLiablity) {
+            this.limits = lim
+            if( lim.liabilityType === 'combinedLimits') {
+                this.comb = lim
+            }
+
+            if( lim.liabilityType === 'deathAndInjuryPerEvent') {
+                this.deathPE = lim
+            }
+
+            if( lim.liabilityType === 'deathAndInjuryPerPerson') {
+                this.deathPP = lim
+            }
+
+            if( lim.liabilityType === 'propertyDamage') {
+                this.propertyD = lim
+            }
+        }
     }
 
     getYearOfManufacture(risk: RiskModel) {

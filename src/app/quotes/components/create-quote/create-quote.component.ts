@@ -2707,34 +2707,37 @@ export class CreateQuoteComponent implements OnInit {
     }
 
     addLimitsOfLiability(): void {
-        this.limitsOfLiability.push({
-            liabilityType: 'deathAndInjuryPerPerson',
-            amount: this.deathAndInjuryPerPerson,
-            rate: this.deathAndInjuryPerPersonRate,
-            premium: this.deathAndInjuryPerPersonPremium,
-        });
-
-        this.limitsOfLiability.push({
-            liabilityType: 'deathAndInjuryPerEvent',
-            amount: this.deathAndInjuryPerEvent,
-            rate: this.deathAndInjuryPerEventRate,
-            premium: this.deathAndInjuryPerEventPremium,
-        });
-
-        this.limitsOfLiability.push({
-            liabilityType: 'propertyDamage',
-            amount: this.propertyDamage,
-            rate: this.propertyDamageRate,
-            premium: this.propertyDamagePremium,
-        });
-
-        this.limitsOfLiability.push({
+        if(this.selectedLimits.value === 'standardLimits') {
+            this.limitsOfLiability.push({
+                liabilityType: 'deathAndInjuryPerPerson',
+                amount: this.deathAndInjuryPerPerson,
+                rate: this.deathAndInjuryPerPersonRate,
+                premium: this.deathAndInjuryPerPersonPremium,
+            });
+    
+            this.limitsOfLiability.push({
+                liabilityType: 'deathAndInjuryPerEvent',
+                amount: this.deathAndInjuryPerEvent,
+                rate: this.deathAndInjuryPerEventRate,
+                premium: this.deathAndInjuryPerEventPremium,
+            });
+    
+            this.limitsOfLiability.push({
+                liabilityType: 'propertyDamage',
+                amount: this.propertyDamage,
+                rate: this.propertyDamageRate,
+                premium: this.propertyDamagePremium,
+            });
+    
+        } else {this.limitsOfLiability.push({
             liabilityType: 'combinedLimits',
             amount: this.combinedLimitsForm.controls.combinedLimits.value,
             // amount: this.combinedLimits,
             rate: this.combinedLimitsRate,
             premium: this.combinedLimitsPremium,
-        });
+        });}
+       
+        
     }
 
     addExcesses(): void {

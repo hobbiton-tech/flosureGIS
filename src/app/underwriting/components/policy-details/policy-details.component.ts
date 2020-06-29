@@ -1,4 +1,4 @@
-import { LiabilityType } from './../../../quotes/models/quote.model';
+import { LiabilityType, LimitsOfLiability, Excess } from './../../../quotes/models/quote.model';
 import { RiskDetailsComponent } from './../../../quotes/components/risk-details/risk-details.component';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -139,6 +139,9 @@ export class PolicyDetailsComponent implements OnInit {
     // tslint:disable-next-line: whitespace
     coverNotesRisks: any[] =[];
   selectedsRisks: RiskModel[];
+  limitsOfLiablity: LimitsOfLiability[] = [];
+
+  excessList: Excess[] = [];
 
     constructor(
         private readonly router: Router,
@@ -250,6 +253,8 @@ export class PolicyDetailsComponent implements OnInit {
                 });
 
                 this.risks = policy.risks;
+                this.limitsOfLiablity = this.risks[0].limitsOfLiability
+                this.excessList = this.risks[0].excesses
                 // this.discounts = risk.discounts;
                 this.policiesService.getCoverNotes().subscribe((res) => {
                    this.coverNotesRisks =  this.coverNotesRisks.concat(...res, ...this.risks);
@@ -268,18 +273,18 @@ export class PolicyDetailsComponent implements OnInit {
                 // this.loading =
 
                 // limits Of Liability
-                this.deathAndInjuryPerPerson = policy.risks[0].limitsOfLiability.filter(
-                    (x) => x.liabilityType === 'deathAndInjuryPerPerson'
-                )[0].amount;
-                this.deathAndInjuryPerEvent = policy.risks[0].limitsOfLiability.filter(
-                    (x) => x.liabilityType === 'deathAndInjuryPerEvent'
-                )[0].amount;
-                this.propertyDamage = policy.risks[0].limitsOfLiability.filter(
-                    (x) => x.liabilityType === 'propertyDamage'
-                )[0].amount;
-                this.combinedLimits = policy.risks[0].limitsOfLiability.filter(
-                    (x) => x.liabilityType === 'combinedLimits'
-                )[0].amount;
+                // this.deathAndInjuryPerPerson = policy.risks[0].limitsOfLiability.filter(
+                //     (x) => x.liabilityType === 'deathAndInjuryPerPerson'
+                // )[0].amount;
+                // this.deathAndInjuryPerEvent = policy.risks[0].limitsOfLiability.filter(
+                //     (x) => x.liabilityType === 'deathAndInjuryPerEvent'
+                // )[0].amount;
+                // this.propertyDamage = policy.risks[0].limitsOfLiability.filter(
+                //     (x) => x.liabilityType === 'propertyDamage'
+                // )[0].amount;
+                // this.combinedLimits = policy.risks[0].limitsOfLiability.filter(
+                //     (x) => x.liabilityType === 'combinedLimits'
+                // )[0].amount;
 
 
                 

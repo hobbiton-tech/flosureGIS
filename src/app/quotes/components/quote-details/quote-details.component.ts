@@ -481,6 +481,7 @@ export class QuoteDetailsComponent implements OnInit {
      excessTHP:IExccess[]=[];
      excessAct:IExccess[]=[];
      excessFT:IExccess[]=[];
+     limitsOfLiabilities: LimitsOfLiability[] = [];
 
     constructor(
         private formBuilder: FormBuilder,
@@ -528,6 +529,8 @@ export class QuoteDetailsComponent implements OnInit {
                 this.risks = this.quoteData.risks;
 
                 this.excessList = this.risks[0].excesses
+
+                this.limitsOfLiabilities = this.risks[0].limitsOfLiability
                 console.log('RISKS<<<<<<', this.excessList)
 
                 // this.productClauseService.getExccesses().subscribe((res) => {
