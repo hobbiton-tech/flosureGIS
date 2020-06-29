@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { ClausesService } from 'src/app/settings/components/underwriting-setups/services/clauses.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {
     IWording,
     IClause,
 } from 'src/app/settings/models/underwriting/clause.model';
+import { EventEmitter } from '@angular/core';
 
 @Component({
     selector: 'app-clauses',
@@ -29,6 +30,9 @@ export class ClausesComponent implements OnInit {
 
     wordingForm: FormGroup;
     clauseForm: FormGroup;
+
+    @Output() onClauseSelected: EventEmitter<any> = new EventEmitter();
+    @Output() onWordingSelected: EventEmitter<any> = new EventEmitter();
 
     constructor(
         private formBuilder: FormBuilder,
@@ -100,6 +104,8 @@ export class ClausesComponent implements OnInit {
         this.editClause.clauseDetails = this.clauseForm.controls.clauseDetails.value;
 
         const index = this.selectedClauseValue.indexOf(this.editClause);
+        console.log('index>>>>', index);
+
         this.selectedClauseValue[index] = this.editClause;
 
         const clause: IClause = {
@@ -115,5 +121,13 @@ export class ClausesComponent implements OnInit {
 
     handleEditClauseCancel() {
         this.isClauseEditVisible = false;
+    }
+
+    selectClause() {
+        this.onClauseSelected.emit(this.selectedClauseValue);
+    }
+
+    selectWording() {
+        this.onWordingSelected.emit(this.selectedWordingValue);
     }
 }

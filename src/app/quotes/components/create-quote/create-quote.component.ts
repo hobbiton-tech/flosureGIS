@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import {
     FormGroup,
     FormBuilder,
@@ -2881,5 +2881,15 @@ export class CreateQuoteComponent implements OnInit {
         this.deathAndInjuryPerEventRate = 0;
         this.propertyDamageRate = 0;
         this.combinedLimitsRate = 0;
+    }
+
+    clauseSelected($event) {
+        this.selectedClauseValue = $event;
+        console.log('selectedClauseValue>> ', this.selectedClauseValue);
+    }
+
+    wordingSelected($event) {
+        this.selectedWordingValue = $event;
+        console.log('selectedWordingValue>>', this.selectedWordingValue);
     }
 }

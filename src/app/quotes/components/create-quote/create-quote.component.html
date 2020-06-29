@@ -3951,7 +3951,8 @@
 
             <!-- Clauses Start here-->
             <div style="margin-top: 10px;">
-                <app-clauses></app-clauses>
+                <app-clauses (onClauseSelected)="clauseSelected($event)" (onWordingSelected)="wordingSelected($event)">
+                </app-clauses>
             </div>
 
             <nz-divider></nz-divider>

@@ -24,7 +24,7 @@
                                     " nzShowSearch nzAllowClear nzPlaceHolder="Select a Wording" nzMode="multiple"
                                     [(ngModel)]="
                                         selectedWordingValue
-                                    ">
+                                    " (ngModelChange)="selectWording()">
                                     <nz-option *ngFor="
                                             let o of wordingList
                                         " [nzLabel]="
@@ -103,7 +103,7 @@
                                     " nzShowSearch nzAllowClear nzPlaceHolder="Select a Clause" nzMode="multiple"
                                     [(ngModel)]="
                                         selectedClauseValue
-                                    ">
+                                    " (ngModelChange)="selectClause()">
                                     <nz-option *ngFor="
                                             let o of clauseList
                                         " [nzLabel]="
