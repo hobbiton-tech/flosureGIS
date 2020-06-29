@@ -38,6 +38,7 @@ import {
     IPolicyClauses,
     IPolicyWording,
     IPolicyExtension,
+    IExccess,
 } from 'src/app/settings/models/underwriting/clause.model';
 import { ClausesService } from 'src/app/settings/components/underwriting-setups/services/clauses.service';
 import * as moment from 'moment';
@@ -51,6 +52,9 @@ import {
     InsuranceTypeOptions,
     LimitsOfLiabilityOptions,
 } from '../../selection-options';
+import { PoliciesService } from 'src/app/underwriting/services/policies.service';
+import { IProduct } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
+import { ProductSetupsServiceService } from 'src/app/settings/components/product-setups/services/product-setups-service.service';
 
 type AOA = any[][];
 
@@ -98,13 +102,22 @@ interface IQuoteNumberResult {
 })
 export class CreateQuoteComponent implements OnInit {
     vehicleBodyType = VehicleBodyType;
-    motorComprehensiveloadingOptions = MotorComprehensiveLoadingOptions;
-    motorThirdPartyloadingOptions = MotorThirdPartyLoadingOptions;
+    // motorComprehensiveloadingOptions = MotorComprehensiveLoadingOptions;
+    motorComprehensiveloadingOptions = [];
+    // motorThirdPartyloadingOptions = MotorThirdPartyLoadingOptions;
+    motorThirdPartyloadingOptions = [];
     discountOptions = DiscountOptions;
     sourceOfBusinessOptions = SourceOfBusinessOptions;
     productTypeOptions = ProductTypeOptions;
     insuranceTypeOptions = InsuranceTypeOptions;
     limitsTypeOptions = LimitsOfLiabilityOptions;
+
+    //Excess Variable
+    excessList:IExccess[]=[];
+
+    excessTHP:IExccess[]=[];
+    excessAct:IExccess[]=[];
+    excessFT:IExccess[]=[];
 
     //loading feedback
     creatingQuote: boolean = false;
@@ -145,7 +158,9 @@ export class CreateQuoteComponent implements OnInit {
         private msg: NzMessageService,
         private http: HttpClient,
         private readonly agentsService: AgentsService,
-        private productClauseService: ClausesService
+        private productClauseService: ClausesService,
+        private policyService: PoliciesService,
+        private productSevice: ProductSetupsServiceService
     ) {
         this.clauseForm = formBuilder.group({
             heading: ['', Validators.required],
@@ -159,6 +174,8 @@ export class CreateQuoteComponent implements OnInit {
             heading: ['', Validators.required],
             description: ['', Validators.required],
         });
+
+        
     }
 
     // conditional render of agent field based on mode(agent or user)
@@ -430,10 +447,7 @@ export class CreateQuoteComponent implements OnInit {
 
     selectedLimits = { label: 'Standard', value: 'standardLimits' };
 
-    selectedLoadingValue = {
-        label: '',
-        value: '',
-    };
+    selectedLoadingValue: IExtension;
 
     // motor third party rates
     motorThirdPartyRates = {
@@ -451,16 +465,19 @@ export class CreateQuoteComponent implements OnInit {
     endOpen = false;
     clientCode: any;
     clientName: any;
+    concRisks: any[] =[];
+    conChasis: any[]=[];
 
     compareFn = (o1: any, o2: any) =>
         o1 && o2 ? o1.value === o2.value : o1 === o2;
 
     log(value: { label: string; value: string }): void {
         this.selectedLoadingValue = {
-            label: 'Increased Third Party Limit',
-            value: 'increasedThirdPartyLimits',
+            description: 'Increased Third Party Limit',
+            heading: 'increasedThirdPartyLimits',
         };
-        console.log(value);
+        console.log('WHAT IS HERE<<<<',value);
+
     }
 
     disabledStartDate = (startValue: Date): boolean => {
@@ -484,6 +501,7 @@ export class CreateQuoteComponent implements OnInit {
             messageCode: ['ewrewre', Validators.required],
             currency: ['', Validators.required],
             startDate: ['', Validators.required],
+            policyNumberOfDays: [''],
             endDate: [''],
             quarter: ['', Validators.required],
             user: [user, Validators.required],
@@ -492,6 +510,18 @@ export class CreateQuoteComponent implements OnInit {
             sourceOfBusiness: ['', Validators.required],
             intermediaryName: [''],
         });
+
+        this.policyService.getPolicies().subscribe((res) => {
+            
+            for(const policy of res) {
+                this.concRisks = this.concRisks.concat(policy.risks)
+            }
+            console.log("RISKS<<<<<<", this.concRisks)
+        })
+
+        // this.productSevice.getProducts('e745338b-e9d5-4e07-b5a5-ddb84e54c3a5').subscribe((res) => {
+        //     this.insuranceTypeOptions
+        // })
 
         this.quoteService.getMotorQuotations().subscribe((quotes) => {
             this.quotesList = quotes;
@@ -504,6 +534,16 @@ export class CreateQuoteComponent implements OnInit {
 
             this.lastItem = this.quotesList[this.quotesList.length - 1];
         });
+
+        this.productClauseService.getExccesses().subscribe((res) => {
+            this.excessList = res.filter((x) => x.productId === '5bf2a73c-709a-4f38-9846-c260e8fffefc');
+            // this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+            this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d' && x.vehicleType === 'private');
+            this.excessAct = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+            this.excessFT = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+
+        })
+        
 
         this.clientsService.getAllClients().subscribe((clients) => {
             this.clients = [...clients[0], ...clients[1]] as Array<
@@ -525,35 +565,35 @@ export class CreateQuoteComponent implements OnInit {
                 this.salesRepresentatives = salesRepresentatives;
             });
 
-        this.riskComprehensiveForm = this.formBuilder.group({
-            riskStartDate: ['', Validators.required],
-            riskQuarter: ['', Validators.required],
-            riskEndDate: ['', Validators.required],
-            regNumber: ['', Validators.required],
-            vehicleMake: ['', Validators.required],
-            vehicleModel: ['', Validators.required],
-            engineNumber: [''],
-            chassisNumber: ['', Validators.required],
-            yearOfManufacture: ['', Validators.required],
-            color: ['', [Validators.required]],
-            cubicCapacity: ['', Validators.required],
-            seatingCapacity: ['', Validators.required],
-            bodyType: ['', Validators.required],
-            productType: ['', Validators.required],
-            insuranceType: ['Comprehensive'],
-            numberOfDays: ['', Validators.required],
-            expiryQuarter: ['', Validators.required],
-        });
+            this.riskComprehensiveForm = this.formBuilder.group({
+                riskStartDate: ['', Validators.required],
+                riskQuarter: ['', Validators.required],
+                riskEndDate: ['', Validators.required],
+                regNumber: ['', Validators.required, [this.regIDAsyncValidator]],
+                vehicleMake: ['', Validators.required],
+                vehicleModel: ['', Validators.required],
+                engineNumber: ['',Validators.required, [this.engineIDAsyncValidator]],
+                chassisNumber: ['', Validators.required, [this.chassisIDAsyncValidator]],
+                yearOfManufacture: ['', Validators.required],
+                color: ['', [Validators.required]],
+                cubicCapacity: ['', Validators.required],
+                seatingCapacity: ['', Validators.required],
+                bodyType: ['', Validators.required],
+                productType: ['', Validators.required],
+                insuranceType: ['Comprehensive'],
+                numberOfDays: ['', Validators.required],
+                expiryQuarter: ['', Validators.required],
+            });
 
         this.riskThirdPartyForm = this.formBuilder.group({
             riskStartDate: ['', Validators.required],
             riskQuarter: ['', Validators.required],
             riskEndDate: ['', Validators.required],
-            regNumber: ['', [Validators.required]],
-            vehicleMake: ['', [Validators.required]],
-            vehicleModel: ['', [Validators.required]],
-            engineNumber: [''],
-            chassisNumber: ['', [Validators.required]],
+            regNumber: ['', Validators.required, [this.regTHPIDAsyncValidator]],
+                vehicleMake: ['', Validators.required],
+                vehicleModel: ['', Validators.required],
+                engineNumber: ['',Validators.required, [this.engineTHPIDAsyncValidator]],
+                chassisNumber: ['', Validators.required, [this.chassisTHPIDAsyncValidator]],
             yearOfManufacture: ['', Validators.required],
             color: ['', [Validators.required]],
             cubicCapacity: ['', Validators.required],
@@ -639,18 +679,19 @@ export class CreateQuoteComponent implements OnInit {
         // set default value for combined limits
         this.combinedLimitsForm
             .get('combinedLimits')
-            .setValue(
-                Number(
-                    this.limitsOfLiabilityForm.get('deathAndInjuryPerPerson')
-                        .value
-                ) +
-                    Number(
-                        this.limitsOfLiabilityForm.get('deathAndInjuryPerEvent')
-                            .value
-                    ) +
-                    Number(
-                        this.limitsOfLiabilityForm.get('propertyDamage').value
-                    )
+            .setValue( 93200
+                // Number(
+                //     this.limitsOfLiabilityForm.get('deathAndInjuryPerPerson')
+                //         .value
+                // ) +
+                //     Number(
+                //         this.limitsOfLiabilityForm.get('deathAndInjuryPerEvent')
+                //             .value
+                //     )
+                //      +
+                //     Number(
+                //         this.limitsOfLiabilityForm.get('propertyDamage').value
+                //     )
             );
         this.combinedLimitsForm.get('combinedLimitsPremium').setValue('0');
 
@@ -712,7 +753,7 @@ export class CreateQuoteComponent implements OnInit {
 
         // start of initialize computations
         this.sumInsured = 0;
-        this.premiumRate = 0;
+        this.premiumRate = 6;
 
         this.basicPremium = 0;
         this.premiumLoadingTotal = 0;
@@ -744,12 +785,259 @@ export class CreateQuoteComponent implements OnInit {
         });
         this.productClauseService.getExtensions().subscribe((res) => {
             this.extensionList = res;
+            this.motorComprehensiveloadingOptions = res;
+            this.motorThirdPartyloadingOptions = res.filter((x) => x.heading === 'increasedThirdPartyLimits');
+            console.log("EXTENSIONS CHECK>>>>>>>",this.motorComprehensiveloadingOptions, this.motorThirdPartyloadingOptions )
         });
         this.productClauseService.getWordings().subscribe((res) => {
             this.wordingList = res;
         });
         this.updateEditCache();
     }
+
+
+    productChanged(value) {
+        console.log("PRODUCT TYPE<<<<<", value);
+        if( value === 'Private') {
+            this.productClauseService.getExccesses().subscribe((res) => {
+                this.excessList = res.filter((x) => x.productId === '5bf2a73c-709a-4f38-9846-c260e8fffefc' && x.vehicleType === 'private');
+                // this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                // this.excessAct = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                // this.excessFT = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+    
+            })
+
+        } else {
+            this.productClauseService.getExccesses().subscribe((res) => {
+                this.excessList = res.filter((x) => x.productId === '5bf2a73c-709a-4f38-9846-c260e8fffefc' && x.vehicleType === 'commercial');
+                // this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                // this.excessAct = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                // this.excessFT = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+    
+            })
+        }
+        
+    }
+
+
+   
+    disabledSubmissionDate = (submissionValue) => {
+        if (!submissionValue) {
+            return false;
+        }
+        return (submissionValue.valueOf() < moment().add(-1, 'days'));
+    }
+    
+
+
+    // Validate registration Number
+    regIDAsyncValidator = (control: FormControl) =>
+    new Observable((observer: Observer<ValidationErrors | null>) => {
+      setTimeout(() => {
+        this.policyService.getPolicies().subscribe((res) => {
+            const activePolicy = res.filter((x)=> x.status === 'Active')
+            
+            for(const policy of activePolicy) {
+                this.concRisks = this.concRisks.concat(policy.risks)
+            }
+            console.log("RISKS Comprehensive <<<<<<", this.concRisks)
+
+            if(this.concRisks.length > 0){
+
+                for(const reg of this.concRisks) {
+                    if(control.value === reg.regNumber) {
+                        observer.next({ error: true, duplicated: true });
+                    break;
+                    }else {
+                        observer.next(null);
+                      }
+                }
+
+            } else {
+                observer.next(null);
+            }
+            observer.complete();
+        })
+
+         
+      }, 1000);
+    });
+
+
+           // Validate Chassis Number
+           chassisIDAsyncValidator = (control: FormControl) =>
+           new Observable((observer: Observer<ValidationErrors | null>) => {
+             setTimeout(() => {
+               this.policyService.getPolicies().subscribe((res) => {
+                   const activePolicy = res.filter((x)=> x.status === 'Active')
+                   
+                   for(const policy of activePolicy) {
+                       this.concRisks = this.concRisks.concat(policy.risks)
+                   }
+                   console.log("RISKS Comprehensive <<<<<<", this.concRisks)
+       
+                   if(this.concRisks.length > 0){
+       
+                       for(const reg of this.concRisks) {
+                           if(control.value === reg.chassisNumber) {
+                               observer.next({ error: true, duplicated: true });
+                           break;
+                           }else {
+                               observer.next(null);
+                             }
+                       }
+       
+                   } else {
+                       observer.next(null);
+                   }
+                   observer.complete();
+               })
+       
+             }, 1000);
+           });
+
+
+
+           // Validate Engine Number
+    engineIDAsyncValidator = (control: FormControl) =>
+    new Observable((observer: Observer<ValidationErrors | null>) => {
+      setTimeout(() => {
+        this.policyService.getPolicies().subscribe((res) => {
+            const activePolicy = res.filter((x)=> x.status === 'Active')
+            
+            for(const policy of activePolicy) {
+                this.concRisks = this.concRisks.concat(policy.risks)
+            }
+            console.log("RISKS Comprehensive <<<<<<", this.concRisks)
+
+            if(this.concRisks.length > 0){
+
+                for(const reg of this.concRisks) {
+                    if(control.value === reg.engineNumber) {
+                        observer.next({ error: true, duplicated: true });
+                    break;
+                    }else {
+                        observer.next(null);
+                      }
+                }
+
+            } else {
+                observer.next(null);
+            }
+            observer.complete();
+        })
+
+      }, 1000);
+    });
+
+
+
+
+
+
+
+      // Validate registration Number
+      regTHPIDAsyncValidator = (control: FormControl) =>
+      new Observable((observer: Observer<ValidationErrors | null>) => {
+        setTimeout(() => {
+          this.policyService.getPolicies().subscribe((res) => {
+              const activePolicy = res.filter((x)=> x.status === 'Active')
+              
+              for(const policy of activePolicy) {
+                  this.concRisks = this.concRisks.concat(policy.risks)
+              }
+              console.log("RISKS Comprehensive <<<<<<", this.concRisks)
+  
+              if(this.concRisks.length > 0){
+  
+                  for(const reg of this.concRisks) {
+                      if(control.value === reg.regNumber) {
+                          observer.next({ error: true, duplicated: true });
+                      break;
+                      }else {
+                          observer.next(null);
+                        }
+                  }
+  
+              } else {
+                  observer.next(null);
+              }
+              observer.complete();
+          })
+  
+           
+        }, 1000);
+      });
+  
+  
+             // Validate Chassis Number
+             chassisTHPIDAsyncValidator = (control: FormControl) =>
+             new Observable((observer: Observer<ValidationErrors | null>) => {
+               setTimeout(() => {
+                 this.policyService.getPolicies().subscribe((res) => {
+                     const activePolicy = res.filter((x)=> x.status === 'Active')
+                     
+                     for(const policy of activePolicy) {
+                         this.concRisks = this.concRisks.concat(policy.risks)
+                     }
+                     console.log("RISKS Comprehensive <<<<<<", this.concRisks)
+         
+                     if(this.concRisks.length > 0){
+         
+                         for(const reg of this.concRisks) {
+                             if(control.value === reg.chassisNumber) {
+                                 observer.next({ error: true, duplicated: true });
+                             break;
+                             }else {
+                                 observer.next(null);
+                               }
+                         }
+         
+                     } else {
+                         observer.next(null);
+                     }
+                     observer.complete();
+                 })
+         
+               }, 1000);
+             });
+  
+  
+  
+             // Validate Engine Number
+      engineTHPIDAsyncValidator = (control: FormControl) =>
+      new Observable((observer: Observer<ValidationErrors | null>) => {
+        setTimeout(() => {
+          this.policyService.getPolicies().subscribe((res) => {
+              const activePolicy = res.filter((x)=> x.status === 'Active')
+              
+              for(const policy of activePolicy) {
+                  this.concRisks = this.concRisks.concat(policy.risks)
+              }
+              console.log("RISKS Comprehensive <<<<<<", this.concRisks)
+  
+              if(this.concRisks.length > 0){
+  
+                  for(const reg of this.concRisks) {
+                      if(control.value === reg.engineNumber) {
+                          observer.next({ error: true, duplicated: true });
+                      break;
+                      }else {
+                          observer.next(null);
+                        }
+                  }
+  
+              } else {
+                  observer.next(null);
+              }
+              observer.complete();
+          })
+  
+        }, 1000);
+      });
+
+
+
 
  
     handleComprehensiveRiskEndDateCalculation(): void {
@@ -935,6 +1223,15 @@ export class CreateQuoteComponent implements OnInit {
                         doo.getTime() - doo.getTimezoneOffset() * -60000
                     );
                     this.quoteForm.get('endDate').setValue(nd);
+
+                    let startDate = moment(
+                        this.quoteForm.get('startDate').value
+                    );
+                    let endDate = moment(nd);
+                    let numberOfDays = endDate.diff(startDate, 'days');
+                    this.quoteForm
+                        .get('policyNumberOfDays')
+                        .setValue(numberOfDays);
                 });
         }
     }
@@ -1000,6 +1297,14 @@ export class CreateQuoteComponent implements OnInit {
                 if (this.riskThirdPartyForm.get('riskQuarter').value == 4) {
                     this.basicPremium = 464;
                 }
+
+                this.productClauseService.getExccesses().subscribe((res) => {
+                    this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d' && x.vehicleType === 'private');
+                    // this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                    // this.excessAct = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                    // this.excessFT = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+        
+                })
             }
             if (
                 this.riskThirdPartyForm.get('productType').value == 'Commercial'
@@ -1016,6 +1321,14 @@ export class CreateQuoteComponent implements OnInit {
                 if (this.riskThirdPartyForm.get('riskQuarter').value == 4) {
                     this.basicPremium = 566;
                 }
+
+                this.productClauseService.getExccesses().subscribe((res) => {
+                    this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d' && x.vehicleType === 'commercial');
+                    // this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                    // this.excessAct = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                    // this.excessFT = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+        
+                })
             }
             if (
                 this.riskThirdPartyForm.get('productType').value == 'Bus/Taxi'
@@ -1032,6 +1345,14 @@ export class CreateQuoteComponent implements OnInit {
                 if (this.riskThirdPartyForm.get('riskQuarter').value == 4) {
                     this.basicPremium = 772;
                 }
+
+                this.productClauseService.getExccesses().subscribe((res) => {
+                    this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d' && x.vehicleType === 'commercial');
+                    // this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                    // this.excessAct = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                    // this.excessFT = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+        
+                })
             }
         }
 
@@ -1124,6 +1445,8 @@ export class CreateQuoteComponent implements OnInit {
                 ) {
                     this.basicPremium = 464;
                 }
+                    
+        
             }
             if (
                 this.riskThirdPartyFireAndTheftForm.get('productType').value ==
@@ -1153,6 +1476,7 @@ export class CreateQuoteComponent implements OnInit {
                 ) {
                     this.basicPremium = 566;
                 }
+
             }
             if (
                 this.riskThirdPartyFireAndTheftForm.get('productType').value ==
@@ -1182,6 +1506,14 @@ export class CreateQuoteComponent implements OnInit {
                 ) {
                     this.basicPremium = 772;
                 }
+
+                this.productClauseService.getExccesses().subscribe((res) => {
+                    this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d' && x.vehicleType === 'commercial');
+                    // this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                    // this.excessAct = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                    // this.excessFT = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+        
+                })
             }
         }
 
@@ -2048,47 +2380,7 @@ export class CreateQuoteComponent implements OnInit {
     }
 
     // Loading computation
-    computeRiotAndStrike() {
-        this.computeRiotAndStrikeIsLoading = true;
-
-        const request: IRateRequest = {
-            sumInsured: Number(this.sumInsured),
-            premiumRate: Number(this.premiumRate) / 100,
-            startDate: this.riskComprehensiveForm.get('riskStartDate').value,
-            quarter: Number(
-                this.riskComprehensiveForm.get('riskQuarter').value
-            ),
-            appliedDiscount: this.premiumDiscount,
-            discount: Number(this.premiumDiscountRate) / 100,
-            carStereo: Number(this.carStereoValue),
-            carStereoRate: Number(this.carStereoRate) / 100,
-            lossOfUseDays: Number(this.lossOfUseDays),
-            lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
-            territorialExtensionWeeks: Number(this.territorialExtensionWeeks),
-            territorialExtensionCountries: Number(
-                this.territorialExtensionCountries
-            ),
-            thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
-            thirdPartyLimitRate:
-                Number(this.increasedThirdPartyLimitsRate) / 100,
-            riotAndStrike: Number(this.riotAndStrikeRate) / 100,
-            levy: 0.03,
-        };
-        this.http
-            .post<IRateResult>(
-                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
-                request
-            )
-            .subscribe((data) => {
-                this.loads.push({
-                    loadType: 'Riot And Strike',
-                    amount: Number(data.riotAndStrikePremium),
-                });
-                this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-                this.handleNetPremium();
-                this.computeRiotAndStrikeIsLoading = false;
-            });
-    }
+   
 
     computeIncreasedThirdPartyLimit() {
         this.computeIncreasedThirdPartyLimitIsLoading = true;
@@ -2123,7 +2415,7 @@ export class CreateQuoteComponent implements OnInit {
             )
             .subscribe((data) => {
                 this.loads.push({
-                    loadType: 'Increased Third Party Limit',
+                    loadType: this.selectedLoadingValue.description,
                     amount: Number(data.thirdPartyLoadingPremium),
                 });
                 this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
@@ -2172,132 +2464,7 @@ export class CreateQuoteComponent implements OnInit {
             });
     }
 
-    computeCarStereo() {
-        this.computeCarStereoIsLoading = true;
-
-        const request: IRateRequest = {
-            sumInsured: Number(this.sumInsured),
-            premiumRate: Number(this.premiumRate) / 100,
-            startDate: this.riskComprehensiveForm.get('riskStartDate').value,
-            quarter: Number(
-                this.riskComprehensiveForm.get('riskQuarter').value
-            ),
-            discount: Number(this.premiumDiscountRate) / 100,
-            appliedDiscount: this.premiumDiscount,
-            carStereo: Number(this.carStereoValue),
-            carStereoRate: Number(this.carStereoRate) / 100,
-            lossOfUseDays: Number(this.lossOfUseDays),
-            lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
-            territorialExtensionWeeks: Number(this.territorialExtensionWeeks),
-            territorialExtensionCountries: Number(
-                this.territorialExtensionCountries
-            ),
-            thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
-            thirdPartyLimitRate:
-                Number(this.increasedThirdPartyLimitsRate) / 100,
-            riotAndStrike: Number(this.riotAndStrikeRate) / 100,
-            levy: 0.03,
-        };
-        this.http
-            .post<IRateResult>(
-                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
-                request
-            )
-            .subscribe((data) => {
-                this.loads.push({
-                    loadType: 'Car Stereo',
-                    amount: Number(data.carStereoPremium),
-                });
-                this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-                this.handleNetPremium();
-                this.computeCarStereoIsLoading = false;
-            });
-    }
-
-    computeTerritorialExtension() {
-        this.computeTerritorialExtensionIsLoading = true;
-
-        const request: IRateRequest = {
-            sumInsured: Number(this.sumInsured),
-            premiumRate: Number(this.premiumRate) / 100,
-            startDate: this.riskComprehensiveForm.get('riskStartDate').value,
-            quarter: Number(
-                this.riskComprehensiveForm.get('riskQuarter').value
-            ),
-            discount: Number(this.premiumDiscountRate) / 100,
-            appliedDiscount: Number(this.premiumDiscount),
-            carStereo: Number(this.carStereoValue),
-            carStereoRate: Number(this.carStereoRate) / 100,
-            lossOfUseDays: Number(this.lossOfUseDays),
-            lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
-            territorialExtensionWeeks: Number(this.territorialExtensionWeeks),
-            territorialExtensionCountries: Number(
-                this.territorialExtensionCountries
-            ),
-            thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
-            thirdPartyLimitRate:
-                Number(this.increasedThirdPartyLimitsRate) / 100,
-            riotAndStrike: Number(this.riotAndStrikeRate) / 100,
-            levy: 0.03,
-        };
-        this.http
-            .post<IRateResult>(
-                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
-                request
-            )
-            .subscribe((data) => {
-                this.loads.push({
-                    loadType: 'Territorial Extension',
-                    amount: Number(data.territorialExtensionPremium),
-                });
-                this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-                this.handleNetPremium();
-                this.computeTerritorialExtensionIsLoading = false;
-            });
-    }
-
-    computeLossOfUse() {
-        this.computeLossOfUseIsLoading = true;
-
-        const request: IRateRequest = {
-            sumInsured: Number(this.sumInsured),
-            premiumRate: Number(this.premiumRate) / 100,
-            startDate: this.riskComprehensiveForm.get('riskStartDate').value,
-            quarter: Number(
-                this.riskComprehensiveForm.get('riskQuarter').value
-            ),
-            discount: Number(this.premiumDiscountRate) / 100,
-            appliedDiscount: this.premiumDiscount,
-            carStereo: Number(this.carStereoValue),
-            carStereoRate: Number(this.carStereoRate) / 100,
-            lossOfUseDays: Number(this.lossOfUseDays),
-            lossOfUseRate: Number(this.lossOfUseDailyRate) / 100,
-            territorialExtensionWeeks: Number(this.territorialExtensionWeeks),
-            territorialExtensionCountries: Number(
-                this.territorialExtensionCountries
-            ),
-            thirdPartyLimit: Number(this.increasedThirdPartyLimitValue),
-            thirdPartyLimitRate:
-                Number(this.increasedThirdPartyLimitsRate) / 100,
-            riotAndStrike: Number(this.riotAndStrikeRate) / 100,
-            levy: 0.03,
-        };
-        this.http
-            .post<IRateResult>(
-                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
-                request
-            )
-            .subscribe((data) => {
-                this.loads.push({
-                    loadType: 'Loss Of Use',
-                    amount: Number(data.lossOfUsePremium),
-                });
-                this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-                this.handleNetPremium();
-                this.computeLossOfUseIsLoading = false;
-            });
-    }
-
+   
     removeLoad(i: LoadModel, e: MouseEvent): void {
         e.preventDefault();
         if (this.loads.length > 0) {
@@ -2373,191 +2540,14 @@ export class CreateQuoteComponent implements OnInit {
     // changes the quote increase third party limit to inputed amount
     handleIncreasedThirdPartyLimitAmount() {
         this.loads.push({
-            loadType: 'Increased Third Party Limit',
+            loadType: this.selectedLoadingValue.description,
             amount: Number(this.increasedThirdPartyLimitAmount),
         });
         this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
         this.handleNetPremium();
     }
 
-    // changes the quote riot and strike to inputed amount
-    handleRiotAndStrikeAmount() {
-        this.loads.push({
-            loadType: 'Riot And Strike',
-            amount: Number(this.riotAndStrikeAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    // changes the quote car stereo to inputed amount
-    handleCarStereoAmount() {
-        this.loads.push({
-            loadType: 'Car Stereo',
-            amount: Number(this.carStereoAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    // changes the quote loss of use loading to inputed amount
-    handleLossOfUseAmount() {
-        this.loads.push({
-            loadType: 'Loss Of Use',
-            amount: Number(this.lossOfUseAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    // changes the quote loss of use loading to inputed amount
-    handleTerritorialExtensionAmount() {
-        this.loads.push({
-            loadType: 'Territorial Extension',
-            amount: Number(this.territorialExtensionAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    // changes the quote loss of use loading to inputed amount
-    handleInexperiencedDriverAmount() {
-        this.loads.push({
-            loadType: 'Inexperienced Driver',
-            amount: Number(this.inexperiencedDriverAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    // changes the quote loss of use loading to inputed amount
-    handleUnderAgeDriverAmount() {
-        this.loads.push({
-            loadType: 'Under Age Driver',
-            amount: Number(this.underAgeDriverAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    // /////////////////////
-    handleLossOfKeysAmount() {
-        this.loads.push({
-            loadType: 'Loss Of Keys',
-            amount: Number(this.lossOfKeysAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    handleMaliciousDamageAmount() {
-        this.loads.push({
-            loadType: 'Malicious Damage',
-            amount: Number(this.maliciousDamageAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    handleMedicalExpensesAmount() {
-        this.loads.push({
-            loadType: 'Medical Expenses',
-            amount: Number(this.medicalExpensesAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    handleInjuryAndDeathAmount() {
-        this.loads.push({
-            loadType: 'Injury/Death',
-            amount: Number(this.injuryAndDeathAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    handlePropertyDamageAmount() {
-        this.loads.push({
-            loadType: 'Property Damage',
-            amount: Number(this.propertyDamageAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    handleEarthquakeAmount() {
-        this.loads.push({
-            loadType: 'Earthquake',
-            amount: Number(this.earthquakeAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    handleExplosionsAmount() {
-        this.loads.push({
-            loadType: 'Explosions',
-            amount: Number(this.explosionsAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    handleFinancialLossAmount() {
-        this.loads.push({
-            loadType: 'Financial Loss',
-            amount: Number(this.financialLossAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    handleFireAndAlliedPerilsAmount() {
-        this.loads.push({
-            loadType: 'Fire And Allied Perils',
-            amount: Number(this.fireAndAlliedPerilsAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    handleLegalExpensesAmount() {
-        this.loads.push({
-            loadType: 'Legal Expenses',
-            amount: Number(this.legalExpensesAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    handleLandslideAmount() {
-        this.loads.push({
-            loadType: 'Landslide',
-            amount: Number(this.landslideAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    handlePassengerLiabilityAmount() {
-        this.loads.push({
-            loadType: 'Passenger Liability',
-            amount: Number(this.passengerLiabilityAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-
-    handlePermanentDisabilityAmount() {
-        this.loads.push({
-            loadType: 'Permanent Disability',
-            amount: Number(this.permanentDisabilityAmount),
-        });
-        this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
-        this.handleNetPremium();
-    }
-    // /////////////////////
+   
 
     // adds inputted discount to total discount amount
     handleNoClaimsDiscountAmount() {
@@ -2740,37 +2730,54 @@ export class CreateQuoteComponent implements OnInit {
 
         this.limitsOfLiability.push({
             liabilityType: 'combinedLimits',
-            amount: this.combinedLimits,
+            amount: this.combinedLimitsForm.controls.combinedLimits.value,
+            // amount: this.combinedLimits,
             rate: this.combinedLimitsRate,
             premium: this.combinedLimitsPremium,
         });
     }
 
     addExcesses(): void {
-        this.excesses.push({
-            excessType: 'below21Years',
-            amount: Number(this.excessesForm.get('below21Years').value),
-        });
+        if(this.selectedValue.value === "Comprehensive") {
+            for(const ex of this.excessList) {
+                this.excesses.push({
+                    excessType: ex.description,
+                    amount: Number(ex.amount),
+                });
+            }
+        }else if(this.selectedValue.value === "ThirdParty") {
+            for(const exTHP of this.excessTHP) {
+                this.excesses.push({
+                    excessType: exTHP.description,
+                    amount: Number(exTHP.amount),
+                });
+            }
+        }
+        
+        // this.excesses.push({
+        //     excessType: 'below21Years',
+        //     amount: Number(this.excessesForm.get('below21Years').value),
+        // });
 
-        this.excesses.push({
-            excessType: 'over70Years',
-            amount: Number(this.excessesForm.get('over70Years').value),
-        });
+        // this.excesses.push({
+        //     excessType: 'over70Years',
+        //     amount: Number(this.excessesForm.get('over70Years').value),
+        // });
 
-        this.excesses.push({
-            excessType: 'noLicence',
-            amount: Number(this.excessesForm.get('noLicence').value),
-        });
+        // this.excesses.push({
+        //     excessType: 'noLicence',
+        //     amount: Number(this.excessesForm.get('noLicence').value),
+        // });
 
-        this.excesses.push({
-            excessType: 'careLessDriving',
-            amount: Number(this.excessesForm.get('careLessDriving').value),
-        });
+        // this.excesses.push({
+        //     excessType: 'careLessDriving',
+        //     amount: Number(this.excessesForm.get('careLessDriving').value),
+        // });
 
-        this.excesses.push({
-            excessType: 'otherEndorsement',
-            amount: Number(this.excessesForm.get('otherEndorsement').value),
-        });
+        // this.excesses.push({
+        //     excessType: 'otherEndorsement',
+        //     amount: Number(this.excessesForm.get('otherEndorsement').value),
+        // });
     }
 
     handleDeathAndInjuryPerPersonPremium(): void {
@@ -2813,7 +2820,7 @@ export class CreateQuoteComponent implements OnInit {
 
     handleCombinedLimitsPremium(): void {
         this.combinedLimitsPremium =
-            (Number(this.combinedLimits) - this.combinedLimitsMax) *
+            (Number(this.combinedLimitsForm.controls.combinedLimits.value) - this.combinedLimitsMax) *
             (this.combinedLimitsRate / 100);
         this.limitsTotalPremium =
             this.deathAndInjuryPerPersonPremium +
