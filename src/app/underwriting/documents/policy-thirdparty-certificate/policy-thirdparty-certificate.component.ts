@@ -3,7 +3,7 @@ import { Risks } from './../../../reports/model/quotation.model';
 import { Component, OnInit, Input } from '@angular/core';
 import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import { RiskModel, ITimestamp } from 'src/app/quotes/models/quote.model';
+import { RiskModel, ITimestamp, Excess, LimitsOfLiability } from 'src/app/quotes/models/quote.model';
 import { Policy } from '../../models/policy.model';
 import moment from 'moment';
 import { IReceiptModel } from 'src/app/accounts/components/models/receipts.model';
@@ -17,6 +17,13 @@ import { CoverNote } from '../models/documents.model';
 export class PolicyThirdpartyCertificateComponent implements OnInit {
     @Input()
     clientName: string;
+
+
+    @Input()
+    excessListCert: Excess[];
+
+    @Input()
+    limitsOfLiablityCert: LimitsOfLiability[];
 
     @Input()
     insuredName: string;
@@ -66,16 +73,118 @@ export class PolicyThirdpartyCertificateComponent implements OnInit {
     @Input()
     policy: Policy;
 
+    @Input()
+    combInfo:string;
+    @Input()
+    combAmount:number;
+    @Input()
+    proDInfo:string;
+    @Input()
+    propDAmount:number;
+    @Input()
+    deathPEInfo:string;
+    @Input()
+    deathPEAmount:number;
+    @Input()
+    deathPPInfo:string;
+    @Input()
+    deathPPAmount:number;
+
+    @Input()
+    fExcexxType:string;
+    @Input()
+    fExcessAmount = 0;
+    @Input()
+    sExcessType:string;
+    @Input()
+    sExcessAmount = 0;
+    @Input()
+    tExcessType:string;
+    @Input()
+    tExcessAmount = 0;
+
     subTotal: number;
 
     generatingPDF = false;
 
     dateOfIssue = new Date();
+    limits: LimitsOfLiability;
+    firstExcess: Excess;
+    secondExcess: Excess;
+    thirdExcess: Excess;
+    co: boolean;
+    pd: boolean;
+    pe: boolean;
+    pp: boolean;
+    comb: LimitsOfLiability;
+    deathPE: LimitsOfLiability;
+    deathPP: LimitsOfLiability;
+    propertyD: LimitsOfLiability;
     constructor() {}
 
     ngOnInit(): void {
         this.subTotal = this.sumArray(this.policy.risks, 'basicPremium');
+        this.getLimit()
+        this.getExcessess()
     }
+
+    getExcessess() {
+        for( const ex of this.excessListCert) {
+            
+            if (ex.excessType ==='Third Party Property Damage (TPPD ) 10% Minimum') {
+                this.firstExcess = ex;
+                console.log("TTTTTTT<<<", this.firstExcess);
+                
+            }
+            // if (ex.excessType ==='Own Damage 10% Minimum') {
+            //     this.secondExcess = ex;
+            //     console.log("TTTTTTT<<<", this.secondExcess);
+            // }
+            // if (ex.excessType ==='Theft Excess [15%] Minimum') {
+            //     this.thirdExcess = ex;
+            //     console.log("TTTTTTT<<<", this.thirdExcess);
+            // }
+        }
+    }
+
+    getLimit() {
+        for(const lim of this.limitsOfLiablityCert) {
+            
+            this.limits = lim
+            if( lim.liabilityType === 'combinedLimits') {
+                this.co = false;
+                this.pd = true;
+                this.pe = true;
+                this.pp = true;
+                this.comb = lim
+            }
+
+            if( lim.liabilityType === 'deathAndInjuryPerEvent') {
+                this.deathPE = lim
+                this.co = true;
+                this.pd = false;
+                this.pe = false;
+                this.pp = false;
+            }
+
+            if( lim.liabilityType === 'deathAndInjuryPerPerson') {
+                this.deathPP = lim
+                this.co = true;
+                this.pd = false;
+                this.pe = false;
+                this.pp = false;
+            }
+
+            if( lim.liabilityType === 'propertyDamage') {
+                this.propertyD = lim
+                this.co = true;
+                this.pd = false;
+                this.pe = false;
+                this.pp = false;
+            }
+        }
+    }
+
 
     getYearOfManufacture(risk: RiskModel) {
         const year: string = moment(risk.yearOfManufacture).year().toString();

@@ -5,6 +5,8 @@ import {
     RiskModel,
     ITimestamp,
     DiscountModel,
+    Excess,
+    LimitsOfLiability,
 } from 'src/app/quotes/models/quote.model';
 import { Policy } from '../../models/policy.model';
 import moment from 'moment';
@@ -31,6 +33,12 @@ export class PolicyComprehensiveCertificateComponent implements OnInit {
 
     @Input()
     clientAddress: string;
+
+    @Input()
+    excessListCert: Excess[]=[];
+
+    @Input()
+    limitsOfLiablityCert: LimitsOfLiability[]=[];
 
     @Input()
     cndAmount = 0;
@@ -63,6 +71,36 @@ export class PolicyComprehensiveCertificateComponent implements OnInit {
     issueTime: string;
 
     @Input()
+    combInfo:string;
+    @Input()
+    combAmount:number;
+    @Input()
+    proDInfo:string;
+    @Input()
+    propDAmount:number;
+    @Input()
+    deathPEInfo:string;
+    @Input()
+    deathPEAmount:number;
+    @Input()
+    deathPPInfo:string;
+    @Input()
+    deathPPAmount:number;
+
+    @Input()
+    fExcexxType:string;
+    @Input()
+    fExcessAmount:number;
+    @Input()
+    sExcessType:string;
+    @Input()
+    sExcessAmount:number;
+    @Input()
+    tExcessType:string;
+    @Input()
+    tExcessAmount:number;
+
+    @Input()
     policyNumber: string;
 
     @Input()
@@ -74,10 +112,88 @@ export class PolicyComprehensiveCertificateComponent implements OnInit {
 
     generatingPDF = false;
     dateOfIssue = new Date();
+    limits: LimitsOfLiability;
+    comb: LimitsOfLiability;
+    deathPE: LimitsOfLiability;
+    deathPP: LimitsOfLiability;
+    propertyD: LimitsOfLiability;
+    firstExcess: Excess;
+    secondExcess: Excess;
+    thirdExcess: Excess;
+    co = false;
+    pe = false;
+    pp = false;
+    pd = false;
+    tppd: boolean;
+
 
     constructor() {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.getLimit()
+        this.getExcessess()
+    }
+
+    getExcessess() {
+
+        this.tppd = true;
+
+        for( const ex of this.excessListCert) {
+            
+            if (ex.excessType ==='Third Party Property Damage (TPPD ) 10% Minimum') {
+
+                this.firstExcess = ex;
+                console.log("TTTTTTT<<<", this.firstExcess);
+                
+            }
+            if (ex.excessType ==='Own Damage 10% Minimum') {
+                this.secondExcess = ex;
+                console.log("TTTTTTT<<<", this.secondExcess);
+            }
+            if (ex.excessType ==='Theft Excess [15%] Minimum') {
+                this.thirdExcess = ex;
+                console.log("TTTTTTT<<<", this.thirdExcess);
+            }
+        }
+    }
+
+    getLimit() {
+        for(const lim of this.limitsOfLiablityCert) {
+            
+            this.limits = lim
+            if( lim.liabilityType === 'combinedLimits') {
+                this.co = true;
+                // this.pd = true;
+                // this.pe = true;
+                // this.pp = true;
+                this.comb = lim
+            }
+
+            if( lim.liabilityType === 'deathAndInjuryPerEvent') {
+                this.deathPE = lim
+                this.co = true;
+                this.pd = false;
+                this.pe = false;
+                this.pp = false;
+            }
+
+            if( lim.liabilityType === 'deathAndInjuryPerPerson') {
+                this.deathPP = lim
+                this.co = true;
+                this.pd = false;
+                this.pe = false;
+                this.pp = false;
+            }
+
+            if( lim.liabilityType === 'propertyDamage') {
+                this.propertyD = lim
+                this.co = true;
+                this.pd = false;
+                this.pe = false;
+                this.pp = false;
+            }
+        }
+    }
 
     getYearOfManufacture(risk: RiskModel) {
         let year: string = moment(risk.yearOfManufacture).year().toString();

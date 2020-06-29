@@ -140,8 +140,25 @@ export class PolicyDetailsComponent implements OnInit {
     coverNotesRisks: any[] =[];
   selectedsRisks: RiskModel[];
   limitsOfLiablity: LimitsOfLiability[] = [];
+  limitsOfLiablityCert: LimitsOfLiability[] = [];
+  combAmount = 0;
+  combInfo = '';
+  proDInfo='';
+  propDAmount=0;
+  deathPEInfo='';
+  deathPEAmount=0;
+  deathPPInfo='';
+  deathPPAmount=0;
+
+  fExcexxType='';
+  fExcessAmount=0;
+  sExcessType='';
+  sExcessAmount=0;
+  tExcessType='';
+  tExcessAmount=0;
 
   excessList: Excess[] = [];
+  excessListCert: Excess[] = [];
 
     constructor(
         private readonly router: Router,
@@ -253,18 +270,84 @@ export class PolicyDetailsComponent implements OnInit {
                 });
 
                 this.risks = policy.risks;
+                console.log('GET RISKS >>>>', this.risks);
+
+
+                for(const ri of this.risks ) {
+                    if(ri.limitsOfLiability !== []) {
+                        for(const lim of ri.limitsOfLiability) {
+                            console.log("LIABILITIES<<<<", lim)
+                            if (lim.liabilityType === 'combinedLimits'){
+                                this.combAmount = lim.amount;
+                                this.combInfo = 'Combined Limits';
+  
+                            }else if (lim.liabilityType === 'propertyDamage'){
+                                this.combAmount = 0;
+                                this.combInfo = '';
+                                this.proDInfo='(i) Third Party Limit for injury/ Death per person ZMW';
+  this.propDAmount=lim.amount;
+
+                      console.log("LIABILITIES<<<<", this.proDInfo, this.propDAmount)          
+
+                            }else if (lim.liabilityType === 'deathAndInjuryPerEvent'){
+                                this.combAmount = 0;
+                                this.combInfo = '';
+                                this.deathPEInfo='(ii) Third party limit per Event';
+  this.deathPEAmount=lim.amount;
+  
+  console.log("LIABILITIES<<<<", lim)
+                            }else if (lim.liabilityType === 'deathAndInjuryPerPerson'){
+                                this.combAmount = 0;
+                                this.combInfo = '';
+                                this.deathPPInfo='(iii)Third Party Property Damage';
+  this.deathPPAmount=lim.amount;
+  console.log("LIABILITIES<<<<", lim)
+                            }
+                        }
+
+                    }
+
+ 
+
+  if(ri.excesses !== []) {
+      for(const ex of ri.excesses) {
+        if (ex.excessType === 'Third Party Property Damage (TPPD ) 10% Minimum'){
+            this.fExcessAmount = ex.amount;
+            this.fExcexxType = 'Third Party Property Damage (TPPD ) 10% Minimum';
+
+        } else if(ex.excessType === 'Own Damage 10% Minimum') {
+            this.sExcessAmount = ex.amount;
+            this.sExcessType = 'Own Damage 10% Minimum';
+
+        } else if(ex.excessType === 'Theft Excess [15%] Minimum') {
+            this.tExcessAmount = ex.amount;
+            this.tExcessType = 'Theft Excess [15%] Minimum';
+
+        } 
+      }
+  }
+
+                }
+
+
                 this.limitsOfLiablity = this.risks[0].limitsOfLiability
+                this.limitsOfLiablityCert = this.risks[0].limitsOfLiability
                 this.excessList = this.risks[0].excesses
+                this.excessListCert = this.risks[0].excesses
+                
                 // this.discounts = risk.discounts;
                 this.policiesService.getCoverNotes().subscribe((res) => {
                    this.coverNotesRisks =  this.coverNotesRisks.concat(...res, ...this.risks);
                    console.log('COMBINE>>>>', this.coverNotesRisks);
 
-                    // tslint:disable-next-line: whitespace
-                    // tslint:disable-next-line: curly
-                    // tslint:disable-next-line: ali
+                    
                    for (const r of this.risks ) {
                     this.coverNot = res.filter((x) => x.policyId === r.id)[0];
+
+                    // this.excessListCert = r.excesses
+                    // console.log('Excess>>>>', this.excessListCert);
+                    // this.limitsOfLiablityCert = r.limitsOfLiability
+
                     }
                 });
 
@@ -657,6 +740,7 @@ export class PolicyDetailsComponent implements OnInit {
             } else {
                 this.cndAmount = Number(this.cnd.amount);
             }
+            
 
             console.log('CND>>>>>', this.cndAmount);
             this.isComprehensiveCertificatePdfVisible = true;

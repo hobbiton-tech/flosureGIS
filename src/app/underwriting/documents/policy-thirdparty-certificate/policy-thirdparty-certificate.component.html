@@ -567,9 +567,19 @@
                         EXCESS
                     </tspan>
 
-                    <tspan x="0" y="10">
-                        (ii) TPPD Excess 10% mimimum ZMW 500
+                    <tspan x="0" y="13">
+                        (i) {{fExcexxType}} {{policy.currency}}{{fExcessAmount}}
                     </tspan>
+                    <!-- <tspan x="0" y="23">
+                        (ii) {{sExcessType}} {{policy.currency}}{{sExcessAmount}}
+                    </tspan>
+                    <tspan x="0" y="33">
+                        (iii) {{tExcessType}} {{policy.currency}}{{tExcessAmount}}
+                    </tspan> -->
+
+                    <!-- <tspan x="0" y="10">
+                        (ii) TPPD Excess 10% mimimum ZMW 500
+                    </tspan> -->
                 </text>
 
                 <text *ngIf="policy.risks[0].insuranceType !== 'ThirdParty'"
@@ -701,75 +711,55 @@
                     <tspan x="0" y="0">AUTHORIZED DRIVER</tspan>
                 </text>
 
-                <!-- <text id="Policy_Excess" data-name="Policy Excess" class="cls-15" transform="translate(33 624)">
-                    <tspan x="0" y="0"></tspan>
-                </text> -->
-
-                <!-- <text id="Notification_Clause" data-name="Notification Clause" class="cls-16"
-                    transform="translate(33 706)">
-                    <tspan x="0" y="0"></tspan>
-                </text> -->
-
-                <!-- <text id="Registration_Mark" data-name="Registration Mark" class="cls-17" transform="translate(33 291)">
-                    <tspan x="0" y="0">Registration Mark</tspan>
-                </text>
-                <text id="Make_and_Type" data-name="Make and Type" class="cls-17" transform="translate(132 291)">
-                    <tspan x="0" y="0">Make and Type</tspan>
-                </text>
-                <text id="Engine" class="cls-17" transform="translate(215 291)">
-                    <tspan x="0" y="0">Engine</tspan>
-                </text>
-                <text id="Chassis_Number" data-name="Chassis Number" class="cls-17" transform="translate(290 291)">
-                    <tspan x="0" y="0">Chassis Number</tspan>
-                </text>
-                <text id="Year_of_Manufacture" data-name="Year of Manufacture" class="cls-17"
-                    transform="translate(395 291)">
-                    <tspan x="0" y="0">Year of Manufacture</tspan>
-                </text>
-                <text id="Color" class="cls-17" transform="translate(508 291)">
-                    <tspan x="0" y="0">Color</tspan>
-                </text> -->
-
-                <!-- <path id="Path_1" data-name="Path 1" class="cls-14" d="M0,0H542" transform="translate(26.5 299.5)" /> -->
-                <text
+                    <text ng-hide="co"
                     id="Third_Party_Limits_of_Liability"
                     data-name="Third Party Limits of Liability"
                     class="cls-15"
-                    transform="translate(26 370)"
+                    transform="translate(298 350)"
                 >
-                    <tspan x="0" y="0">Third Party Limits of Liability</tspan>
+                    <tspan x="0" y="0">{{combInfo}} {{policy.currency}}{{combAmount}}</tspan>
                 </text>
+       
+                
+
+                <text #standardLimits>
+               
                 <text
                     id="Third_Party_Property_Damage"
                     data-name="Third Party Property Damage"
                     class="cls-18"
-                    transform="translate(27 380)"
+                    transform="translate(298 360)"
                 >
-                    <tspan x="0" y="0">
+                    <tspan  x="0" y="0">
                         (i) Third Party Limit for injury/ Death per person ZMW
-                        30,100.OO
+                        {{policy.currency}}
+                    {{deathPPAmount}}
                     </tspan>
                 </text>
                 <text
                     id="Third_Party_Injury_and_Death"
                     data-name="Third Party Injury and Death"
                     class="cls-18"
-                    transform="translate(27 395)"
+                    transform="translate(298 375)"
                 >
                     <tspan x="0" y="0">
-                        (ii) Third party limit per Event ZMW 60, 100.00
+                        (ii) Third party limit per Event {{policy.currency}}
+                        {{deathPEAmount}}
                     </tspan>
                 </text>
                 <text
                     id="Third_Party_Bodily_Injury_Death_per_Event"
                     data-name="Third Party Bodily Injury / Death per Event"
                     class="cls-18"
-                    transform="translate(27 410)"
+                    transform="translate(298 390)"
                 >
                     <tspan x="0" y="0">
-                        (iii)Third Party Property Damage ZMW 30,OOO.OO
+                        (iii)Third Party Property Damage {{policy.currency}}
+                        {{propDAmount}}
                     </tspan>
                 </text>
+           </text>
+               
 
                 <text
                     id="Third_Party_Bodily_Injury_Death_per_Event"
@@ -786,10 +776,7 @@
                     </tspan>
                 </text>
 
-                <!-- <text id="As_per_schedule" data-name="As per schedule" class="cls-18" transform="translate(33 644)">
-                    <tspan x="0" y="0">As per schedule</tspan>
-                </text> -->
-
+              
                 <text
                     id=" DURATION_OF_COVER"
                     data-name=" DURATION OF COVER"
