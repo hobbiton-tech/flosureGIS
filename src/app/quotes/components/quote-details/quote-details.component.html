@@ -7512,7 +7512,7 @@
                             <nz-form-label [nzSpan]="8" nzFor="receivedFrom">Received From</nz-form-label>
                             <nz-form-control [nzSpan]="16" nzErrorTip="Please enter Depositor's name!">
                                 <input nz-input formControlName="receivedFrom" name="receivedFrom" type="text"
-                                    id="receivedFrom" nzRequired placeholder="Received From" />
+                                    id="receivedFrom" nzRequired placeholder={{quote.client}} />
                                 <span class="text-danger" *ngIf="
                                         (receiptFormControl.receivedFrom
                                             .touched ||
