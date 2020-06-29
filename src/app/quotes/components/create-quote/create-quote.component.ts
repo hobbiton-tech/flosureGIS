@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl, ValidationErrors } from '@angular/forms';
+import {
+    FormGroup,
+    FormBuilder,
+    Validators,
+    FormControl,
+    ValidationErrors,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { QuotesService } from '../../services/quotes.service';
 import { ClientsService } from 'src/app/clients/services/clients.service';
@@ -113,11 +119,11 @@ export class CreateQuoteComponent implements OnInit {
     limitsTypeOptions = LimitsOfLiabilityOptions;
 
     //Excess Variable
-    excessList:IExccess[]=[];
+    excessList: IExccess[] = [];
 
-    excessTHP:IExccess[]=[];
-    excessAct:IExccess[]=[];
-    excessFT:IExccess[]=[];
+    excessTHP: IExccess[] = [];
+    excessAct: IExccess[] = [];
+    excessFT: IExccess[] = [];
 
     //loading feedback
     creatingQuote: boolean = false;
@@ -133,23 +139,23 @@ export class CreateQuoteComponent implements OnInit {
     PolicyWording: any[] = [];
     PolicyExtension: any[] = [];
     selectedClauseValue: any[] = [];
-    isClauseEditVisible = false;
+    // isClauseEditVisible = false;
     selectedExtensionValue: any[] = [];
     isExtensionEditVisible = false;
     selectedWordingValue: any[] = [];
-    isWordingEditVisible = false;
-    editClause: any;
+    // isWordingEditVisible = false;
+    // editClause: any;
     editExtension: any;
-    editWording: any;
+    // editWording: any;
     editCache: { [key: string]: { edit: boolean; data: IWording } } = {};
 
     newClauseWording: IPolicyClauses;
     newWordingWording: IPolicyWording;
     newExtensionWording: IPolicyExtension;
 
-    clauseForm: FormGroup;
+    // clauseForm: FormGroup;
     extensionForm: FormGroup;
-    wordingForm: FormGroup;
+    // wordingForm: FormGroup;
     constructor(
         private formBuilder: FormBuilder,
         private readonly router: Router,
@@ -162,20 +168,18 @@ export class CreateQuoteComponent implements OnInit {
         private policyService: PoliciesService,
         private productSevice: ProductSetupsServiceService
     ) {
-        this.clauseForm = formBuilder.group({
-            heading: ['', Validators.required],
-            clauseDetails: ['', Validators.required],
-        });
+        // this.clauseForm = formBuilder.group({
+        //     heading: ['', Validators.required],
+        //     clauseDetails: ['', Validators.required],
+        // });
         this.extensionForm = formBuilder.group({
             heading: ['', Validators.required],
             description: ['', Validators.required],
         });
-        this.wordingForm = formBuilder.group({
-            heading: ['', Validators.required],
-            description: ['', Validators.required],
-        });
-
-        
+        // this.wordingForm = formBuilder.group({
+        //     heading: ['', Validators.required],
+        //     description: ['', Validators.required],
+        // });
     }
 
     // conditional render of agent field based on mode(agent or user)
@@ -465,8 +469,8 @@ export class CreateQuoteComponent implements OnInit {
     endOpen = false;
     clientCode: any;
     clientName: any;
-    concRisks: any[] =[];
-    conChasis: any[]=[];
+    concRisks: any[] = [];
+    conChasis: any[] = [];
 
     compareFn = (o1: any, o2: any) =>
         o1 && o2 ? o1.value === o2.value : o1 === o2;
@@ -476,8 +480,7 @@ export class CreateQuoteComponent implements OnInit {
             description: 'Increased Third Party Limit',
             heading: 'increasedThirdPartyLimits',
         };
-        console.log('WHAT IS HERE<<<<',value);
-
+        console.log('WHAT IS HERE<<<<', value);
     }
 
     disabledStartDate = (startValue: Date): boolean => {
@@ -512,12 +515,11 @@ export class CreateQuoteComponent implements OnInit {
         });
 
         this.policyService.getPolicies().subscribe((res) => {
-            
-            for(const policy of res) {
-                this.concRisks = this.concRisks.concat(policy.risks)
+            for (const policy of res) {
+                this.concRisks = this.concRisks.concat(policy.risks);
             }
-            console.log("RISKS<<<<<<", this.concRisks)
-        })
+            console.log('RISKS<<<<<<', this.concRisks);
+        });
 
         // this.productSevice.getProducts('e745338b-e9d5-4e07-b5a5-ddb84e54c3a5').subscribe((res) => {
         //     this.insuranceTypeOptions
@@ -536,14 +538,22 @@ export class CreateQuoteComponent implements OnInit {
         });
 
         this.productClauseService.getExccesses().subscribe((res) => {
-            this.excessList = res.filter((x) => x.productId === '5bf2a73c-709a-4f38-9846-c260e8fffefc');
+            this.excessList = res.filter(
+                (x) => x.productId === '5bf2a73c-709a-4f38-9846-c260e8fffefc'
+            );
             // this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
-            this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d' && x.vehicleType === 'private');
-            this.excessAct = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
-            this.excessFT = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
-
-        })
-        
+            this.excessTHP = res.filter(
+                (x) =>
+                    x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d' &&
+                    x.vehicleType === 'private'
+            );
+            this.excessAct = res.filter(
+                (x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d'
+            );
+            this.excessFT = res.filter(
+                (x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d'
+            );
+        });
 
         this.clientsService.getAllClients().subscribe((clients) => {
             this.clients = [...clients[0], ...clients[1]] as Array<
@@ -565,35 +575,51 @@ export class CreateQuoteComponent implements OnInit {
                 this.salesRepresentatives = salesRepresentatives;
             });
 
-            this.riskComprehensiveForm = this.formBuilder.group({
-                riskStartDate: ['', Validators.required],
-                riskQuarter: ['', Validators.required],
-                riskEndDate: ['', Validators.required],
-                regNumber: ['', Validators.required, [this.regIDAsyncValidator]],
-                vehicleMake: ['', Validators.required],
-                vehicleModel: ['', Validators.required],
-                engineNumber: ['',Validators.required, [this.engineIDAsyncValidator]],
-                chassisNumber: ['', Validators.required, [this.chassisIDAsyncValidator]],
-                yearOfManufacture: ['', Validators.required],
-                color: ['', [Validators.required]],
-                cubicCapacity: ['', Validators.required],
-                seatingCapacity: ['', Validators.required],
-                bodyType: ['', Validators.required],
-                productType: ['', Validators.required],
-                insuranceType: ['Comprehensive'],
-                numberOfDays: ['', Validators.required],
-                expiryQuarter: ['', Validators.required],
-            });
+        this.riskComprehensiveForm = this.formBuilder.group({
+            riskStartDate: ['', Validators.required],
+            riskQuarter: ['', Validators.required],
+            riskEndDate: ['', Validators.required],
+            regNumber: ['', Validators.required, [this.regIDAsyncValidator]],
+            vehicleMake: ['', Validators.required],
+            vehicleModel: ['', Validators.required],
+            engineNumber: [
+                '',
+                Validators.required,
+                [this.engineIDAsyncValidator],
+            ],
+            chassisNumber: [
+                '',
+                Validators.required,
+                [this.chassisIDAsyncValidator],
+            ],
+            yearOfManufacture: ['', Validators.required],
+            color: ['', [Validators.required]],
+            cubicCapacity: ['', Validators.required],
+            seatingCapacity: ['', Validators.required],
+            bodyType: ['', Validators.required],
+            productType: ['', Validators.required],
+            insuranceType: ['Comprehensive'],
+            numberOfDays: ['', Validators.required],
+            expiryQuarter: ['', Validators.required],
+        });
 
         this.riskThirdPartyForm = this.formBuilder.group({
             riskStartDate: ['', Validators.required],
             riskQuarter: ['', Validators.required],
             riskEndDate: ['', Validators.required],
             regNumber: ['', Validators.required, [this.regTHPIDAsyncValidator]],
-                vehicleMake: ['', Validators.required],
-                vehicleModel: ['', Validators.required],
-                engineNumber: ['',Validators.required, [this.engineTHPIDAsyncValidator]],
-                chassisNumber: ['', Validators.required, [this.chassisTHPIDAsyncValidator]],
+            vehicleMake: ['', Validators.required],
+            vehicleModel: ['', Validators.required],
+            engineNumber: [
+                '',
+                Validators.required,
+                [this.engineTHPIDAsyncValidator],
+            ],
+            chassisNumber: [
+                '',
+                Validators.required,
+                [this.chassisTHPIDAsyncValidator],
+            ],
             yearOfManufacture: ['', Validators.required],
             color: ['', [Validators.required]],
             cubicCapacity: ['', Validators.required],
@@ -677,22 +703,21 @@ export class CreateQuoteComponent implements OnInit {
         this.excessesForm.get('otherEndorsement').setValue('100');
 
         // set default value for combined limits
-        this.combinedLimitsForm
-            .get('combinedLimits')
-            .setValue( 93200
-                // Number(
-                //     this.limitsOfLiabilityForm.get('deathAndInjuryPerPerson')
-                //         .value
-                // ) +
-                //     Number(
-                //         this.limitsOfLiabilityForm.get('deathAndInjuryPerEvent')
-                //             .value
-                //     )
-                //      +
-                //     Number(
-                //         this.limitsOfLiabilityForm.get('propertyDamage').value
-                //     )
-            );
+        this.combinedLimitsForm.get('combinedLimits').setValue(
+            93200
+            // Number(
+            //     this.limitsOfLiabilityForm.get('deathAndInjuryPerPerson')
+            //         .value
+            // ) +
+            //     Number(
+            //         this.limitsOfLiabilityForm.get('deathAndInjuryPerEvent')
+            //             .value
+            //     )
+            //      +
+            //     Number(
+            //         this.limitsOfLiabilityForm.get('propertyDamage').value
+            //     )
+        );
         this.combinedLimitsForm.get('combinedLimitsPremium').setValue('0');
 
         // vehicle make loading
@@ -786,8 +811,14 @@ export class CreateQuoteComponent implements OnInit {
         this.productClauseService.getExtensions().subscribe((res) => {
             this.extensionList = res;
             this.motorComprehensiveloadingOptions = res;
-            this.motorThirdPartyloadingOptions = res.filter((x) => x.heading === 'increasedThirdPartyLimits');
-            console.log("EXTENSIONS CHECK>>>>>>>",this.motorComprehensiveloadingOptions, this.motorThirdPartyloadingOptions )
+            this.motorThirdPartyloadingOptions = res.filter(
+                (x) => x.heading === 'increasedThirdPartyLimits'
+            );
+            console.log(
+                'EXTENSIONS CHECK>>>>>>>',
+                this.motorComprehensiveloadingOptions,
+                this.motorThirdPartyloadingOptions
+            );
         });
         this.productClauseService.getWordings().subscribe((res) => {
             this.wordingList = res;
@@ -795,251 +826,246 @@ export class CreateQuoteComponent implements OnInit {
         this.updateEditCache();
     }
 
-
     productChanged(value) {
-        console.log("PRODUCT TYPE<<<<<", value);
-        if( value === 'Private') {
+        console.log('PRODUCT TYPE<<<<<', value);
+        if (value === 'Private') {
             this.productClauseService.getExccesses().subscribe((res) => {
-                this.excessList = res.filter((x) => x.productId === '5bf2a73c-709a-4f38-9846-c260e8fffefc' && x.vehicleType === 'private');
+                this.excessList = res.filter(
+                    (x) =>
+                        x.productId ===
+                            '5bf2a73c-709a-4f38-9846-c260e8fffefc' &&
+                        x.vehicleType === 'private'
+                );
                 // this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
                 // this.excessAct = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
                 // this.excessFT = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
-    
-            })
-
+            });
         } else {
             this.productClauseService.getExccesses().subscribe((res) => {
-                this.excessList = res.filter((x) => x.productId === '5bf2a73c-709a-4f38-9846-c260e8fffefc' && x.vehicleType === 'commercial');
+                this.excessList = res.filter(
+                    (x) =>
+                        x.productId ===
+                            '5bf2a73c-709a-4f38-9846-c260e8fffefc' &&
+                        x.vehicleType === 'commercial'
+                );
                 // this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
                 // this.excessAct = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
                 // this.excessFT = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
-    
-            })
+            });
         }
-        
     }
 
-
-   
     disabledSubmissionDate = (submissionValue) => {
         if (!submissionValue) {
             return false;
         }
-        return (submissionValue.valueOf() < moment().add(-1, 'days'));
-    }
-    
-
+        return submissionValue.valueOf() < moment().add(-1, 'days');
+    };
 
     // Validate registration Number
     regIDAsyncValidator = (control: FormControl) =>
-    new Observable((observer: Observer<ValidationErrors | null>) => {
-      setTimeout(() => {
-        this.policyService.getPolicies().subscribe((res) => {
-            const activePolicy = res.filter((x)=> x.status === 'Active')
-            
-            for(const policy of activePolicy) {
-                this.concRisks = this.concRisks.concat(policy.risks)
-            }
-            console.log("RISKS Comprehensive <<<<<<", this.concRisks)
+        new Observable((observer: Observer<ValidationErrors | null>) => {
+            setTimeout(() => {
+                this.policyService.getPolicies().subscribe((res) => {
+                    const activePolicy = res.filter(
+                        (x) => x.status === 'Active'
+                    );
 
-            if(this.concRisks.length > 0){
+                    for (const policy of activePolicy) {
+                        this.concRisks = this.concRisks.concat(policy.risks);
+                    }
+                    console.log('RISKS Comprehensive <<<<<<', this.concRisks);
 
-                for(const reg of this.concRisks) {
-                    if(control.value === reg.regNumber) {
-                        observer.next({ error: true, duplicated: true });
-                    break;
-                    }else {
+                    if (this.concRisks.length > 0) {
+                        for (const reg of this.concRisks) {
+                            if (control.value === reg.regNumber) {
+                                observer.next({
+                                    error: true,
+                                    duplicated: true,
+                                });
+                                break;
+                            } else {
+                                observer.next(null);
+                            }
+                        }
+                    } else {
                         observer.next(null);
-                      }
-                }
+                    }
+                    observer.complete();
+                });
+            }, 1000);
+        });
 
-            } else {
-                observer.next(null);
-            }
-            observer.complete();
-        })
+    // Validate Chassis Number
+    chassisIDAsyncValidator = (control: FormControl) =>
+        new Observable((observer: Observer<ValidationErrors | null>) => {
+            setTimeout(() => {
+                this.policyService.getPolicies().subscribe((res) => {
+                    const activePolicy = res.filter(
+                        (x) => x.status === 'Active'
+                    );
 
-         
-      }, 1000);
-    });
+                    for (const policy of activePolicy) {
+                        this.concRisks = this.concRisks.concat(policy.risks);
+                    }
+                    console.log('RISKS Comprehensive <<<<<<', this.concRisks);
 
+                    if (this.concRisks.length > 0) {
+                        for (const reg of this.concRisks) {
+                            if (control.value === reg.chassisNumber) {
+                                observer.next({
+                                    error: true,
+                                    duplicated: true,
+                                });
+                                break;
+                            } else {
+                                observer.next(null);
+                            }
+                        }
+                    } else {
+                        observer.next(null);
+                    }
+                    observer.complete();
+                });
+            }, 1000);
+        });
 
-           // Validate Chassis Number
-           chassisIDAsyncValidator = (control: FormControl) =>
-           new Observable((observer: Observer<ValidationErrors | null>) => {
-             setTimeout(() => {
-               this.policyService.getPolicies().subscribe((res) => {
-                   const activePolicy = res.filter((x)=> x.status === 'Active')
-                   
-                   for(const policy of activePolicy) {
-                       this.concRisks = this.concRisks.concat(policy.risks)
-                   }
-                   console.log("RISKS Comprehensive <<<<<<", this.concRisks)
-       
-                   if(this.concRisks.length > 0){
-       
-                       for(const reg of this.concRisks) {
-                           if(control.value === reg.chassisNumber) {
-                               observer.next({ error: true, duplicated: true });
-                           break;
-                           }else {
-                               observer.next(null);
-                             }
-                       }
-       
-                   } else {
-                       observer.next(null);
-                   }
-                   observer.complete();
-               })
-       
-             }, 1000);
-           });
-
-
-
-           // Validate Engine Number
+    // Validate Engine Number
     engineIDAsyncValidator = (control: FormControl) =>
-    new Observable((observer: Observer<ValidationErrors | null>) => {
-      setTimeout(() => {
-        this.policyService.getPolicies().subscribe((res) => {
-            const activePolicy = res.filter((x)=> x.status === 'Active')
-            
-            for(const policy of activePolicy) {
-                this.concRisks = this.concRisks.concat(policy.risks)
-            }
-            console.log("RISKS Comprehensive <<<<<<", this.concRisks)
+        new Observable((observer: Observer<ValidationErrors | null>) => {
+            setTimeout(() => {
+                this.policyService.getPolicies().subscribe((res) => {
+                    const activePolicy = res.filter(
+                        (x) => x.status === 'Active'
+                    );
 
-            if(this.concRisks.length > 0){
+                    for (const policy of activePolicy) {
+                        this.concRisks = this.concRisks.concat(policy.risks);
+                    }
+                    console.log('RISKS Comprehensive <<<<<<', this.concRisks);
 
-                for(const reg of this.concRisks) {
-                    if(control.value === reg.engineNumber) {
-                        observer.next({ error: true, duplicated: true });
-                    break;
-                    }else {
+                    if (this.concRisks.length > 0) {
+                        for (const reg of this.concRisks) {
+                            if (control.value === reg.engineNumber) {
+                                observer.next({
+                                    error: true,
+                                    duplicated: true,
+                                });
+                                break;
+                            } else {
+                                observer.next(null);
+                            }
+                        }
+                    } else {
                         observer.next(null);
-                      }
-                }
+                    }
+                    observer.complete();
+                });
+            }, 1000);
+        });
 
-            } else {
-                observer.next(null);
-            }
-            observer.complete();
-        })
+    // Validate registration Number
+    regTHPIDAsyncValidator = (control: FormControl) =>
+        new Observable((observer: Observer<ValidationErrors | null>) => {
+            setTimeout(() => {
+                this.policyService.getPolicies().subscribe((res) => {
+                    const activePolicy = res.filter(
+                        (x) => x.status === 'Active'
+                    );
 
-      }, 1000);
-    });
+                    for (const policy of activePolicy) {
+                        this.concRisks = this.concRisks.concat(policy.risks);
+                    }
+                    console.log('RISKS Comprehensive <<<<<<', this.concRisks);
 
-
-
-
-
-
-
-      // Validate registration Number
-      regTHPIDAsyncValidator = (control: FormControl) =>
-      new Observable((observer: Observer<ValidationErrors | null>) => {
-        setTimeout(() => {
-          this.policyService.getPolicies().subscribe((res) => {
-              const activePolicy = res.filter((x)=> x.status === 'Active')
-              
-              for(const policy of activePolicy) {
-                  this.concRisks = this.concRisks.concat(policy.risks)
-              }
-              console.log("RISKS Comprehensive <<<<<<", this.concRisks)
-  
-              if(this.concRisks.length > 0){
-  
-                  for(const reg of this.concRisks) {
-                      if(control.value === reg.regNumber) {
-                          observer.next({ error: true, duplicated: true });
-                      break;
-                      }else {
-                          observer.next(null);
+                    if (this.concRisks.length > 0) {
+                        for (const reg of this.concRisks) {
+                            if (control.value === reg.regNumber) {
+                                observer.next({
+                                    error: true,
+                                    duplicated: true,
+                                });
+                                break;
+                            } else {
+                                observer.next(null);
+                            }
                         }
-                  }
-  
-              } else {
-                  observer.next(null);
-              }
-              observer.complete();
-          })
-  
-           
-        }, 1000);
-      });
-  
-  
-             // Validate Chassis Number
-             chassisTHPIDAsyncValidator = (control: FormControl) =>
-             new Observable((observer: Observer<ValidationErrors | null>) => {
-               setTimeout(() => {
-                 this.policyService.getPolicies().subscribe((res) => {
-                     const activePolicy = res.filter((x)=> x.status === 'Active')
-                     
-                     for(const policy of activePolicy) {
-                         this.concRisks = this.concRisks.concat(policy.risks)
-                     }
-                     console.log("RISKS Comprehensive <<<<<<", this.concRisks)
-         
-                     if(this.concRisks.length > 0){
-         
-                         for(const reg of this.concRisks) {
-                             if(control.value === reg.chassisNumber) {
-                                 observer.next({ error: true, duplicated: true });
-                             break;
-                             }else {
-                                 observer.next(null);
-                               }
-                         }
-         
-                     } else {
-                         observer.next(null);
-                     }
-                     observer.complete();
-                 })
-         
-               }, 1000);
-             });
-  
-  
-  
-             // Validate Engine Number
-      engineTHPIDAsyncValidator = (control: FormControl) =>
-      new Observable((observer: Observer<ValidationErrors | null>) => {
-        setTimeout(() => {
-          this.policyService.getPolicies().subscribe((res) => {
-              const activePolicy = res.filter((x)=> x.status === 'Active')
-              
-              for(const policy of activePolicy) {
-                  this.concRisks = this.concRisks.concat(policy.risks)
-              }
-              console.log("RISKS Comprehensive <<<<<<", this.concRisks)
-  
-              if(this.concRisks.length > 0){
-  
-                  for(const reg of this.concRisks) {
-                      if(control.value === reg.engineNumber) {
-                          observer.next({ error: true, duplicated: true });
-                      break;
-                      }else {
-                          observer.next(null);
+                    } else {
+                        observer.next(null);
+                    }
+                    observer.complete();
+                });
+            }, 1000);
+        });
+
+    // Validate Chassis Number
+    chassisTHPIDAsyncValidator = (control: FormControl) =>
+        new Observable((observer: Observer<ValidationErrors | null>) => {
+            setTimeout(() => {
+                this.policyService.getPolicies().subscribe((res) => {
+                    const activePolicy = res.filter(
+                        (x) => x.status === 'Active'
+                    );
+
+                    for (const policy of activePolicy) {
+                        this.concRisks = this.concRisks.concat(policy.risks);
+                    }
+                    console.log('RISKS Comprehensive <<<<<<', this.concRisks);
+
+                    if (this.concRisks.length > 0) {
+                        for (const reg of this.concRisks) {
+                            if (control.value === reg.chassisNumber) {
+                                observer.next({
+                                    error: true,
+                                    duplicated: true,
+                                });
+                                break;
+                            } else {
+                                observer.next(null);
+                            }
                         }
-                  }
-  
-              } else {
-                  observer.next(null);
-              }
-              observer.complete();
-          })
-  
-        }, 1000);
-      });
+                    } else {
+                        observer.next(null);
+                    }
+                    observer.complete();
+                });
+            }, 1000);
+        });
 
+    // Validate Engine Number
+    engineTHPIDAsyncValidator = (control: FormControl) =>
+        new Observable((observer: Observer<ValidationErrors | null>) => {
+            setTimeout(() => {
+                this.policyService.getPolicies().subscribe((res) => {
+                    const activePolicy = res.filter(
+                        (x) => x.status === 'Active'
+                    );
 
+                    for (const policy of activePolicy) {
+                        this.concRisks = this.concRisks.concat(policy.risks);
+                    }
+                    console.log('RISKS Comprehensive <<<<<<', this.concRisks);
 
+                    if (this.concRisks.length > 0) {
+                        for (const reg of this.concRisks) {
+                            if (control.value === reg.engineNumber) {
+                                observer.next({
+                                    error: true,
+                                    duplicated: true,
+                                });
+                                break;
+                            } else {
+                                observer.next(null);
+                            }
+                        }
+                    } else {
+                        observer.next(null);
+                    }
+                    observer.complete();
+                });
+            }, 1000);
+        });
 
- 
     handleComprehensiveRiskEndDateCalculation(): void {
         if (
             this.riskComprehensiveForm.get('riskStartDate').value != '' &&
@@ -1299,12 +1325,16 @@ export class CreateQuoteComponent implements OnInit {
                 }
 
                 this.productClauseService.getExccesses().subscribe((res) => {
-                    this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d' && x.vehicleType === 'private');
+                    this.excessTHP = res.filter(
+                        (x) =>
+                            x.productId ===
+                                'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d' &&
+                            x.vehicleType === 'private'
+                    );
                     // this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
                     // this.excessAct = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
                     // this.excessFT = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
-        
-                })
+                });
             }
             if (
                 this.riskThirdPartyForm.get('productType').value == 'Commercial'
@@ -1323,12 +1353,16 @@ export class CreateQuoteComponent implements OnInit {
                 }
 
                 this.productClauseService.getExccesses().subscribe((res) => {
-                    this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d' && x.vehicleType === 'commercial');
+                    this.excessTHP = res.filter(
+                        (x) =>
+                            x.productId ===
+                                'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d' &&
+                            x.vehicleType === 'commercial'
+                    );
                     // this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
                     // this.excessAct = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
                     // this.excessFT = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
-        
-                })
+                });
             }
             if (
                 this.riskThirdPartyForm.get('productType').value == 'Bus/Taxi'
@@ -1347,12 +1381,16 @@ export class CreateQuoteComponent implements OnInit {
                 }
 
                 this.productClauseService.getExccesses().subscribe((res) => {
-                    this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d' && x.vehicleType === 'commercial');
+                    this.excessTHP = res.filter(
+                        (x) =>
+                            x.productId ===
+                                'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d' &&
+                            x.vehicleType === 'commercial'
+                    );
                     // this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
                     // this.excessAct = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
                     // this.excessFT = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
-        
-                })
+                });
             }
         }
 
@@ -1445,8 +1483,6 @@ export class CreateQuoteComponent implements OnInit {
                 ) {
                     this.basicPremium = 464;
                 }
-                    
-        
             }
             if (
                 this.riskThirdPartyFireAndTheftForm.get('productType').value ==
@@ -1476,7 +1512,6 @@ export class CreateQuoteComponent implements OnInit {
                 ) {
                     this.basicPremium = 566;
                 }
-
             }
             if (
                 this.riskThirdPartyFireAndTheftForm.get('productType').value ==
@@ -1508,12 +1543,16 @@ export class CreateQuoteComponent implements OnInit {
                 }
 
                 this.productClauseService.getExccesses().subscribe((res) => {
-                    this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d' && x.vehicleType === 'commercial');
+                    this.excessTHP = res.filter(
+                        (x) =>
+                            x.productId ===
+                                'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d' &&
+                            x.vehicleType === 'commercial'
+                    );
                     // this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
                     // this.excessAct = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
                     // this.excessFT = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
-        
-                })
+                });
             }
         }
 
@@ -2380,7 +2419,6 @@ export class CreateQuoteComponent implements OnInit {
     }
 
     // Loading computation
-   
 
     computeIncreasedThirdPartyLimit() {
         this.computeIncreasedThirdPartyLimitIsLoading = true;
@@ -2464,7 +2502,6 @@ export class CreateQuoteComponent implements OnInit {
             });
     }
 
-   
     removeLoad(i: LoadModel, e: MouseEvent): void {
         e.preventDefault();
         if (this.loads.length > 0) {
@@ -2547,8 +2584,6 @@ export class CreateQuoteComponent implements OnInit {
         this.handleNetPremium();
     }
 
-   
-
     // adds inputted discount to total discount amount
     handleNoClaimsDiscountAmount() {
         this.discounts.push({
@@ -2589,16 +2624,16 @@ export class CreateQuoteComponent implements OnInit {
         this.handleNetPremium();
     }
 
-    onEditWording(value) {
-        console.log('Checke>>>>>>>>>>>', value);
-        this.editWording = value;
+    // onEditWording(value) {
+    //     console.log('Checke>>>>>>>>>>>', value);
+    //     this.editWording = value;
 
-        this.wordingForm.get('heading').setValue(this.editWording.heading);
-        this.wordingForm
-            .get('description')
-            .setValue(this.editWording.description);
-        this.isWordingEditVisible = true;
-    }
+    //     this.wordingForm.get('heading').setValue(this.editWording.heading);
+    //     this.wordingForm
+    //         .get('description')
+    //         .setValue(this.editWording.description);
+    //     this.isWordingEditVisible = true;
+    // }
     onEditExtension(value) {
         console.log('Checke>>>>>>>>>>>', value);
         this.editExtension = value;
@@ -2609,30 +2644,30 @@ export class CreateQuoteComponent implements OnInit {
             .setValue(this.editExtension.description);
         this.isExtensionEditVisible = true;
     }
-    onEditClauses(value) {
-        console.log('Checke>>>>>>>>>>>', value);
-        this.editClause = value;
+    // onEditClauses(value) {
+    //     console.log('Checke>>>>>>>>>>>', value);
+    //     this.editClause = value;
 
-        this.clauseForm.get('heading').setValue(this.editClause.heading);
-        this.clauseForm
-            .get('clauseDetails')
-            .setValue(this.editClause.clauseDetails);
-        this.isClauseEditVisible = true;
-    }
+    //     this.clauseForm.get('heading').setValue(this.editClause.heading);
+    //     this.clauseForm
+    //         .get('clauseDetails')
+    //         .setValue(this.editClause.clauseDetails);
+    //     this.isClauseEditVisible = true;
+    // }
 
-    handleEditClauseOk() {
-        this.editClause.heading = this.clauseForm.controls.heading.value;
-        this.editClause.clauseDetails = this.clauseForm.controls.clauseDetails.value;
+    // handleEditClauseOk() {
+    //     this.editClause.heading = this.clauseForm.controls.heading.value;
+    //     this.editClause.clauseDetails = this.clauseForm.controls.clauseDetails.value;
 
-        const index = this.selectedClauseValue.indexOf(this.editClause);
-        this.selectedClauseValue[index] = this.editClause;
+    //     const index = this.selectedClauseValue.indexOf(this.editClause);
+    //     this.selectedClauseValue[index] = this.editClause;
 
-        console.log('Clause>>>>>>', this.editClause, this.selectedClauseValue);
-        this.isClauseEditVisible = false;
-    }
-    handleEditClauseCancel() {
-        this.isClauseEditVisible = false;
-    }
+    //     console.log('Clause>>>>>>', this.editClause, this.selectedClauseValue);
+    //     this.isClauseEditVisible = false;
+    // }
+    // handleEditClauseCancel() {
+    //     this.isClauseEditVisible = false;
+    // }
 
     handleEditExtensionOk() {
         this.editExtension.heading = this.extensionForm.controls.heading.value;
@@ -2652,23 +2687,23 @@ export class CreateQuoteComponent implements OnInit {
         this.isExtensionEditVisible = false;
     }
 
-    handleEditWordingOk() {
-        this.editWording.heading = this.wordingForm.controls.heading.value;
-        this.editWording.description = this.wordingForm.controls.description.value;
+    // handleEditWordingOk() {
+    //     this.editWording.heading = this.wordingForm.controls.heading.value;
+    //     this.editWording.description = this.wordingForm.controls.description.value;
 
-        const index = this.selectedWordingValue.indexOf(this.editWording);
-        this.selectedWordingValue[index] = this.editWording;
+    //     const index = this.selectedWordingValue.indexOf(this.editWording);
+    //     this.selectedWordingValue[index] = this.editWording;
 
-        console.log(
-            'Clause>>>>>>',
-            this.editWording,
-            this.selectedWordingValue
-        );
-        this.isWordingEditVisible = false;
-    }
-    handleEditWordingCancel() {
-        this.isWordingEditVisible = false;
-    }
+    //     console.log(
+    //         'Clause>>>>>>',
+    //         this.editWording,
+    //         this.selectedWordingValue
+    //     );
+    //     this.isWordingEditVisible = false;
+    // }
+    // handleEditWordingCancel() {
+    //     this.isWordingEditVisible = false;
+    // }
 
     startEdit(id: string): void {
         this.editCache[id].edit = true;
@@ -2738,22 +2773,22 @@ export class CreateQuoteComponent implements OnInit {
     }
 
     addExcesses(): void {
-        if(this.selectedValue.value === "Comprehensive") {
-            for(const ex of this.excessList) {
+        if (this.selectedValue.value === 'Comprehensive') {
+            for (const ex of this.excessList) {
                 this.excesses.push({
                     excessType: ex.description,
                     amount: Number(ex.amount),
                 });
             }
-        }else if(this.selectedValue.value === "ThirdParty") {
-            for(const exTHP of this.excessTHP) {
+        } else if (this.selectedValue.value === 'ThirdParty') {
+            for (const exTHP of this.excessTHP) {
                 this.excesses.push({
                     excessType: exTHP.description,
                     amount: Number(exTHP.amount),
                 });
             }
         }
-        
+
         // this.excesses.push({
         //     excessType: 'below21Years',
         //     amount: Number(this.excessesForm.get('below21Years').value),
@@ -2820,7 +2855,8 @@ export class CreateQuoteComponent implements OnInit {
 
     handleCombinedLimitsPremium(): void {
         this.combinedLimitsPremium =
-            (Number(this.combinedLimitsForm.controls.combinedLimits.value) - this.combinedLimitsMax) *
+            (Number(this.combinedLimitsForm.controls.combinedLimits.value) -
+                this.combinedLimitsMax) *
             (this.combinedLimitsRate / 100);
         this.limitsTotalPremium =
             this.deathAndInjuryPerPersonPremium +
