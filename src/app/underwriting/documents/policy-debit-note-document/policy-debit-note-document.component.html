@@ -1,21 +1,13 @@
-<div
-    style="
+<div style="
         display: flex;
         margin-bottom: 15px;
         align-items: flex-end;
         width: 100%;
-    "
->
+    ">
     <!-- <button nz-button nzType="primary" style="margin-right: 8px;" (click)="htmlToPdf()">
         Download
     </button> -->
-    <button
-        nz-button
-        nzType="primary"
-        [useExistingCss]="true"
-        [printSectionId]="'debitPrintSection'"
-        ngxPrint
-    >
+    <button nz-button nzType="primary" [useExistingCss]="true" [printSectionId]="'debitPrintSection'" ngxPrint>
         Print
     </button>
 </div>
@@ -27,23 +19,24 @@
                     <table>
                         <tr>
                             <td class="title">
+                                <img src="/assets/images/golden-logo.png"
+                                    style="widows: 70px;; height:70px; float: left;" />
+                                <!-- 
                                 <img
                                     src="/assets/images/apluslogo.png"
                                     style="width: 100%; max-width: 240px;"
-                                />
+                                /> -->
                             </td>
-                            <td
-                                style="
+                            <td style="
                                     font-size: 11px;
                                     float: right !important;
-                                "
-                            >
-                                A Plus General Insurance<br />
-                                Plot No. 402, Roma Park, Zambezi Road<br />
-                                P.O. Box 31700, Lusaka Zambia<br />
-                                Tel: +260 211 239865/6 - Tele/Fax:+260 211
-                                239867<br />
-                                E-mail: info@aplusgeneral.com<br />
+                                ">
+                                Golden Lotus Insurance Co. Ltd<br />
+                                Plot 9711, Chudleigh,<br />
+                                Lusaka, Zambia.<br />
+                                Email: goldenlutosinsurance@gmail.com<br />
+                                Tel/Fax:(+260) 211 290001 973 876928, 977 793598
+
                             </td>
                         </tr>
                     </table>
@@ -69,10 +62,7 @@
                                 : '-'
                         }}
                     </p>
-                    <span style="font-weight: bold;">TPIN:</span
-                    ><span style="font-weight: bold; color: red;"
-                        ></span
-                    >
+                    <span style="font-weight: bold;">TPIN:</span><span style="font-weight: bold; color: red;"></span>
                 </td>
             </tr>
         </table>
@@ -81,43 +71,33 @@
         <table>
             <tr>
                 <td>
-                    <span style="font-weight: bold;"
-                        >Insured: {{ policy.nameOfInsured }}</span
-                    >
+                    <span style="font-weight: bold;">Insured: {{ policy.nameOfInsured }}</span>
                 </td>
                 <td style="float: right !important;">
-                    <span style="font-weight: bold;"
-                        >Date:
+                    <span style="font-weight: bold;">Date:
                         {{
                             policyDebitNote
                                 ? (policyDebitNote.dateCreated | date)
                                 : '-'
-                        }}</span
-                    >
+                        }}</span>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <span style="font-weight: bold;"
-                        >Address: {{ client ? client.address : '-' }}</span
-                    >
+                    <span style="font-weight: bold;">Address: {{ client ? client.address : '-' }}</span>
                 </td>
                 <td style="float: right !important;">
-                    <span style="font-weight: bold;"
-                        >Agent:
+                    <span style="font-weight: bold;">Agent:
                         {{
                             policy.sourceOfBusiness == 'direct'
                                 ? 'Direct'
                                 : policy.intermediaryName
-                        }}</span
-                    >
+                        }}</span>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <span style="font-weight: bold;"
-                        >Telephone: {{ client ? client.phone : '-' }}</span
-                    >
+                    <span style="font-weight: bold;">Telephone: {{ client ? client.phone : '-' }}</span>
                 </td>
                 <!-- <td style="float: right !important"><span style="font-weight: bold;">Terms: </span></td> -->
             </tr>
@@ -155,9 +135,7 @@
                     <ng-container *ngIf="risk.insuranceType === 'ActOnly'">
                         Act Only Cover
                     </ng-container>
-                    <ng-container
-                        *ngIf="risk.insuranceType === 'Comprehensive'"
-                    >
+                    <ng-container *ngIf="risk.insuranceType === 'Comprehensive'">
                         Comprehensive
                     </ng-container>
                     <ng-container *ngIf="risk.insuranceType === 'FireAndTheft'">
@@ -206,21 +184,15 @@
         </p> -->
         <br />
         <p style="font-weight: bold; text-align: left;">
-            Prepared By: ................................................<span
-                style="float: right;"
-            >
-                Sign:...............................................</span
-            >
+            Prepared By: ................................................<span style="float: right;">
+                Sign:...............................................</span>
         </p>
 
         <br />
 
         <p style="font-weight: bold; text-align: left;">
-            Approved By: ................................................<span
-                style="float: right;"
-            >
-                Sign:...............................................</span
-            >
+            Approved By: ................................................<span style="float: right;">
+                Sign:...............................................</span>
         </p>
     </div>
 </div>

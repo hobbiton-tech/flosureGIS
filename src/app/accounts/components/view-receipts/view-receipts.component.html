@@ -1,8 +1,4 @@
-<nz-spin
-    [nzSize]="'large'"
-    [nzSpinning]="loadingReceipt"
-    [nzTip]="'Loading PDF'"
->
+<nz-spin [nzSize]="'large'" [nzSpinning]="loadingReceipt" [nzTip]="'Loading PDF'">
     <div style="margin: 15px;">
         <nz-breadcrumb>
             <nz-breadcrumb-item>
@@ -34,65 +30,33 @@
             </nz-page-header-extra>
         </nz-page-header>
         <nz-card>
-            <nz-divider
-                nzText="Receipt Details"
-                nzOrientation="left"
-            ></nz-divider>
+            <nz-divider nzText="Receipt Details" nzOrientation="left"></nz-divider>
             <nz-spin [nzSpinning]="generatingPDF">
                 <div class="invoice-box" id="printSection">
-                    <TABLE
-                        WIDTH="100%"
-                        CELLPADDING="7"
-                        CELLSPACING="0"
-                        STYLE="page-break-before: always"
-                    >
+                    <TABLE WIDTH="100%" CELLPADDING="7" CELLSPACING="0" STYLE="page-break-before: always">
                         <COL WIDTH="126*" />
                         <COL WIDTH="62*" />
                         <COL WIDTH="69*" />
                         <TR>
-                            <TD
-                                WIDTH="49%"
-                                HEIGHT="33"
-                                BGCOLOR="#ffffff"
-                                STYLE="border: none; padding: 0in"
-                            >
-                                <P
-                                    ><A NAME="_GoBack"></A
-                                    ><img
-                                        src="assets/images/apluslogo.png"
-                                        style="width: 100%; max-width: 300px;"
-                                /></P>
+                            <TD WIDTH="49%" HEIGHT="33" BGCOLOR="#ffffff" STYLE="border: none; padding: 0in">
+                                <P><A NAME="_GoBack"></A><img src="assets/images/golden-logo.png"
+                                        style="width: 100%; max-width: 300px;" /></P>
                             </TD>
-                            <TD
-                                WIDTH="24%"
-                                VALIGN="BOTTOM"
-                                BGCOLOR="#ffffff"
-                                STYLE="border: none; padding: 0in"
-                            >
+                            <TD WIDTH="24%" VALIGN="BOTTOM" BGCOLOR="#ffffff" STYLE="border: none; padding: 0in">
                                 <P><BR /> </P>
                             </TD>
-                            <TD
-                                WIDTH="27%"
-                                BGCOLOR="#ffffff"
-                                STYLE="border: none; padding: 0in"
-                            >
+                            <TD WIDTH="27%" BGCOLOR="#ffffff" STYLE="border: none; padding: 0in">
                                 <P ALIGN="RIGHT">
-                                    A Plus General Insurance<br />
-                                    Plot No. 402, Roma Park, Zambezi Road<br />
-                                    P.O. Box 31700, Lusaka Zambia<br />
-                                    Tel: +260 211 239865/6 - Tele/Fax:+260 211
-                                    239867<br />
-                                    E-mail: info@aplusgeneral.com<br />
+                                    Golden Lotus Insurance Co. Ltd<br />
+                                    Plot 9711, Chudleigh,<br />
+                                    Lusaka, Zambia.<br />
+                                    Email: goldenlutosinsurance@gmail.com<br />
+                                    Tel/Fax: (+260) 211 290001, 973 876928, 977 793598
                                 </P>
                             </TD>
                         </TR>
                         <TR>
-                            <TD
-                                WIDTH="49%"
-                                HEIGHT="5"
-                                BGCOLOR="#ffffff"
-                                STYLE="border: none; padding: 0in"
-                            >
+                            <TD WIDTH="49%" HEIGHT="5" BGCOLOR="#ffffff" STYLE="border: none; padding: 0in">
                                 <!-- <P
                                     ><FONT FACE="Arial, serif"
                                         ><FONT SIZE="2"
@@ -102,29 +66,15 @@
                                     </P
                                 >-->
                             </TD>
-                            <TD
-                                WIDTH="24%"
-                                BGCOLOR="#ffffff"
-                                STYLE="border: none; padding: 0in"
-                            >
+                            <TD WIDTH="24%" BGCOLOR="#ffffff" STYLE="border: none; padding: 0in">
                                 <P><BR /> </P>
                             </TD>
-                            <TD
-                                WIDTH="27%"
-                                VALIGN="BOTTOM"
-                                BGCOLOR="#ffffff"
-                                STYLE="border: none; padding: 0in"
-                            >
+                            <TD WIDTH="27%" VALIGN="BOTTOM" BGCOLOR="#ffffff" STYLE="border: none; padding: 0in">
                                 <P><BR /> </P>
                             </TD>
                         </TR>
                         <TR>
-                            <TD
-                                WIDTH="49%"
-                                HEIGHT="5"
-                                BGCOLOR="#ffffff"
-                                STYLE="border: none; padding: 0in"
-                            >
+                            <TD WIDTH="49%" HEIGHT="5" BGCOLOR="#ffffff" STYLE="border: none; padding: 0in">
                                 <!-- <P
                                     ><FONT FACE="Arial, serif"
                                         ><FONT SIZE="2"
@@ -133,127 +83,74 @@
                                     ></P
                                 > -->
                             </TD>
-                            <TD
-                                WIDTH="24%"
-                                BGCOLOR="#d2d9eb"
-                                STYLE="border-top: 1px solid #808080; border-bottom: 1px solid #808080; border-left: 1px solid #808080; border-right: none; padding-top: 0in; padding-bottom: 0in; padding-left: 0.08in; padding-right: 0in"
-                            >
-                                <P ALIGN="LEFT"
-                                    ><FONT FACE="Arial, serif"
-                                        ><FONT SIZE="2" STYLE="font-size: 9pt"
-                                            ><B>Receipt #</B></FONT
-                                        ></FONT
-                                    ></P
-                                >
+                            <TD WIDTH="24%" BGCOLOR="#d2d9eb"
+                                STYLE="border-top: 1px solid #808080; border-bottom: 1px solid #808080; border-left: 1px solid #808080; border-right: none; padding-top: 0in; padding-bottom: 0in; padding-left: 0.08in; padding-right: 0in">
+                                <P ALIGN="LEFT">
+                                    <FONT FACE="Arial, serif">
+                                        <FONT SIZE="2" STYLE="font-size: 9pt"><B>Receipt #</B></FONT>
+                                    </FONT>
+                                </P>
                             </TD>
-                            <TD
-                                WIDTH="27%"
-                                BGCOLOR="#d2d9eb"
-                                STYLE="border: 1px solid #808080; padding: 0in 0.08in"
-                            >
-                                <P ALIGN="LEFT"
-                                    ><FONT FACE="Arial, serif"
-                                        ><FONT SIZE="2" STYLE="font-size: 9pt"
-                                            ><B>Invoice #</B></FONT
-                                        ></FONT
-                                    ></P
-                                >
+                            <TD WIDTH="27%" BGCOLOR="#d2d9eb" STYLE="border: 1px solid #808080; padding: 0in 0.08in">
+                                <P ALIGN="LEFT">
+                                    <FONT FACE="Arial, serif">
+                                        <FONT SIZE="2" STYLE="font-size: 9pt"><B>Invoice #</B></FONT>
+                                    </FONT>
+                                </P>
                             </TD>
                         </TR>
                         <TR>
-                            <TD
-                                WIDTH="49%"
-                                HEIGHT="5"
-                                BGCOLOR="#ffffff"
-                                STYLE="border: none; padding: 0in"
-                            >
-                                <P
-                                    ><FONT FACE="Arial, serif"
-                                        ><FONT SIZE="2"
-                                            >Tpin:
-                                            <span style="color: red;"
-                                                >{{
+                            <TD WIDTH="49%" HEIGHT="5" BGCOLOR="#ffffff" STYLE="border: none; padding: 0in">
+                                <P>
+                                    <FONT FACE="Arial, serif">
+                                        <FONT SIZE="2">Tpin:
+                                            <span style="color: red;">{{
                                                   receipt.tpinNumber
-                                                }}</span
-                                            ></FONT
-                                        ></FONT
-                                    ></P
-                                >
+                                                }}</span></FONT>
+                                    </FONT>
+                                </P>
                             </TD>
-                            <TD
-                                WIDTH="24%"
-                                BGCOLOR="#ffffff"
-                                STYLE="border-top: 1px solid #808080; border-bottom: 1px solid #808080; border-left: 1px solid #808080; border-right: none; padding-top: 0in; padding-bottom: 0in; padding-left: 0.08in; padding-right: 0in"
-                            >
-                                <P ALIGN="LEFT"
-                                    ><FONT FACE="Arial, serif"
-                                        ><FONT SIZE="2">{{
+                            <TD WIDTH="24%" BGCOLOR="#ffffff"
+                                STYLE="border-top: 1px solid #808080; border-bottom: 1px solid #808080; border-left: 1px solid #808080; border-right: none; padding-top: 0in; padding-bottom: 0in; padding-left: 0.08in; padding-right: 0in">
+                                <P ALIGN="LEFT">
+                                    <FONT FACE="Arial, serif">
+                                        <FONT SIZE="2">{{
                                             receipt.receiptNumber
-                                        }}</FONT></FONT
-                                    ></P
-                                >
+                                        }}</FONT>
+                                    </FONT>
+                                </P>
                             </TD>
-                            <TD
-                                WIDTH="27%"
-                                BGCOLOR="#ffffff"
-                                STYLE="border: 1px solid #808080; padding: 0in 0.08in"
-                            >
-                                <P ALIGN="LEFT"
-                                    ><FONT FACE="Arial, serif"
-                                        ><FONT SIZE="2">{{
+                            <TD WIDTH="27%" BGCOLOR="#ffffff" STYLE="border: 1px solid #808080; padding: 0in 0.08in">
+                                <P ALIGN="LEFT">
+                                    <FONT FACE="Arial, serif">
+                                        <FONT SIZE="2">{{
                                             receipt.invoiceNumber
-                                        }}</FONT></FONT
-                                    ></P
-                                >
+                                        }}</FONT>
+                                    </FONT>
+                                </P>
                             </TD>
                         </TR>
                         <TR>
-                            <TD
-                                WIDTH="49%"
-                                HEIGHT="5"
-                                BGCOLOR="#ffffff"
-                                STYLE="border: none; padding: 0in"
-                            >
+                            <TD WIDTH="49%" HEIGHT="5" BGCOLOR="#ffffff" STYLE="border: none; padding: 0in">
                                 <P><BR /> </P>
                             </TD>
-                            <TD
-                                WIDTH="24%"
-                                BGCOLOR="#ffffff"
-                                STYLE="border-top: 1px solid #808080; border-bottom: none; border-left: none; border-right: none; padding: 0in"
-                            >
+                            <TD WIDTH="24%" BGCOLOR="#ffffff"
+                                STYLE="border-top: 1px solid #808080; border-bottom: none; border-left: none; border-right: none; padding: 0in">
                                 <P><BR /> </P>
                             </TD>
-                            <TD
-                                WIDTH="27%"
-                                VALIGN="BOTTOM"
-                                BGCOLOR="#ffffff"
-                                STYLE="border-top: 1px solid #808080; border-bottom: none; border-left: none; border-right: none; padding: 0in"
-                            >
+                            <TD WIDTH="27%" VALIGN="BOTTOM" BGCOLOR="#ffffff"
+                                STYLE="border-top: 1px solid #808080; border-bottom: none; border-left: none; border-right: none; padding: 0in">
                                 <P><BR /> </P>
                             </TD>
                         </TR>
                         <TR>
-                            <TD
-                                WIDTH="49%"
-                                HEIGHT="5"
-                                BGCOLOR="#ffffff"
-                                STYLE="border: none; padding: 0in"
-                            >
+                            <TD WIDTH="49%" HEIGHT="5" BGCOLOR="#ffffff" STYLE="border: none; padding: 0in">
                                 <P><BR /> </P>
                             </TD>
-                            <TD
-                                WIDTH="24%"
-                                BGCOLOR="#ffffff"
-                                STYLE="border: none; padding: 0in"
-                            >
+                            <TD WIDTH="24%" BGCOLOR="#ffffff" STYLE="border: none; padding: 0in">
                                 <P><BR /> </P>
                             </TD>
-                            <TD
-                                WIDTH="27%"
-                                VALIGN="BOTTOM"
-                                BGCOLOR="#ffffff"
-                                STYLE="border: none; padding: 0in"
-                            >
+                            <TD WIDTH="27%" VALIGN="BOTTOM" BGCOLOR="#ffffff" STYLE="border: none; padding: 0in">
                                 <P><BR /> </P>
                             </TD>
                         </TR>
@@ -263,177 +160,103 @@
                         <COL WIDTH="191" />
                         <TBODY>
                             <TR>
-                                <TD
-                                    WIDTH="191"
-                                    HEIGHT="4"
-                                    BGCOLOR="#d2d9eb"
-                                    STYLE="border: 1px solid #808080; padding: 0in 0.08in"
-                                >
-                                    <P ALIGN="LEFT"
-                                        ><FONT FACE="Arial, serif"
-                                            ><FONT
-                                                SIZE="2"
-                                                STYLE="font-size: 9pt"
-                                                ><B>CLIENT INFORMATION</B></FONT
-                                            ></FONT
-                                        ></P
-                                    >
+                                <TD WIDTH="191" HEIGHT="4" BGCOLOR="#d2d9eb"
+                                    STYLE="border: 1px solid #808080; padding: 0in 0.08in">
+                                    <P ALIGN="LEFT">
+                                        <FONT FACE="Arial, serif">
+                                            <FONT SIZE="2" STYLE="font-size: 9pt"><B>CLIENT INFORMATION</B></FONT>
+                                        </FONT>
+                                    </P>
                                 </TD>
-                                <TD
-                                    WIDTH="191"
-                                    HEIGHT="4"
-                                    BGCOLOR="#d2d9eb"
-                                    STYLE="border: 1px solid #808080; padding: 0in 0.08in"
-                                >
-                                    <P ALIGN="LEFT"
-                                        ><FONT FACE="Arial, serif"
-                                            ><FONT
-                                                SIZE="2"
-                                                STYLE="font-size: 9pt"
-                                                ><B>AGENT INFORMATION</B></FONT
-                                            ></FONT
-                                        ></P
-                                    >
+                                <TD WIDTH="191" HEIGHT="4" BGCOLOR="#d2d9eb"
+                                    STYLE="border: 1px solid #808080; padding: 0in 0.08in">
+                                    <P ALIGN="LEFT">
+                                        <FONT FACE="Arial, serif">
+                                            <FONT SIZE="2" STYLE="font-size: 9pt"><B>AGENT INFORMATION</B></FONT>
+                                        </FONT>
+                                    </P>
                                 </TD>
                             </TR>
                         </TBODY>
                         <TBODY>
                             <TR>
-                                <TD
-                                    WIDTH="191"
-                                    HEIGHT="5"
-                                    BGCOLOR="#ffffff"
-                                    STYLE="border: none; padding: 0in"
-                                >
-                                    <P ALIGN="LEFT"
-                                        ><FONT FACE="Arial, serif"
-                                            ><FONT SIZE="2"
-                                                >Recieved From:
-                                                {{ receipt.receivedFrom }}</FONT
-                                            ></FONT
-                                        ></P
-                                    >
+                                <TD WIDTH="191" HEIGHT="5" BGCOLOR="#ffffff" STYLE="border: none; padding: 0in">
+                                    <P ALIGN="LEFT">
+                                        <FONT FACE="Arial, serif">
+                                            <FONT SIZE="2">Recieved From:
+                                                {{ receipt.receivedFrom }}</FONT>
+                                        </FONT>
+                                    </P>
                                 </TD>
-                                <TD
-                                    WIDTH="191"
-                                    HEIGHT="5"
-                                    BGCOLOR="#ffffff"
-                                    STYLE="border: none; padding: 0in"
-                                >
-                                    <P ALIGN="LEFT"
-                                        ><FONT FACE="Arial, serif"
-                                            ><FONT SIZE="2"
-                                                >Captured By:
-                                                {{ receipt.capturedBy }}</FONT
-                                            ></FONT
-                                        ></P
-                                    >
+                                <TD WIDTH="191" HEIGHT="5" BGCOLOR="#ffffff" STYLE="border: none; padding: 0in">
+                                    <P ALIGN="LEFT">
+                                        <FONT FACE="Arial, serif">
+                                            <FONT SIZE="2">Captured By:
+                                                {{ receipt.capturedBy }}</FONT>
+                                        </FONT>
+                                    </P>
                                 </TD>
                             </TR>
                             <TR>
-                                <TD
-                                    WIDTH="191"
-                                    HEIGHT="5"
-                                    BGCOLOR="#ffffff"
-                                    STYLE="border: none; padding: 0in"
-                                >
-                                    <P ALIGN="LEFT"
-                                        ><FONT FACE="Arial, serif"
-                                            ><FONT SIZE="2"
-                                                >On Behalf Of:
-                                                {{ receipt.onBehalfOf }}</FONT
-                                            ></FONT
-                                        ></P
-                                    >
+                                <TD WIDTH="191" HEIGHT="5" BGCOLOR="#ffffff" STYLE="border: none; padding: 0in">
+                                    <P ALIGN="LEFT">
+                                        <FONT FACE="Arial, serif">
+                                            <FONT SIZE="2">On Behalf Of:
+                                                {{ receipt.onBehalfOf }}</FONT>
+                                        </FONT>
+                                    </P>
                                 </TD>
-                                <TD
-                                    WIDTH="191"
-                                    HEIGHT="5"
-                                    BGCOLOR="#ffffff"
-                                    STYLE="border: none; padding: 0in"
-                                >
-                                    <P ALIGN="LEFT"
-                                        ><FONT FACE="Arial, serif"
-                                            ><FONT SIZE="2"
-                                                >Date Generated:
-                                                {{ newDate | date }}</FONT
-                                            ></FONT
-                                        ></P
-                                    >
+                                <TD WIDTH="191" HEIGHT="5" BGCOLOR="#ffffff" STYLE="border: none; padding: 0in">
+                                    <P ALIGN="LEFT">
+                                        <FONT FACE="Arial, serif">
+                                            <FONT SIZE="2">Date Generated:
+                                                {{ newDate | date }}</FONT>
+                                        </FONT>
+                                    </P>
                                 </TD>
                             </TR>
                             <TR>
-                                <TD
-                                    WIDTH="191"
-                                    HEIGHT="5"
-                                    BGCOLOR="#ffffff"
-                                    STYLE="border: none; padding: 0in"
-                                >
-                                    <P ALIGN="LEFT"
-                                        ><FONT FACE="Arial, serif"
-                                            ><FONT SIZE="2"
-                                                >Date Issued:
+                                <TD WIDTH="191" HEIGHT="5" BGCOLOR="#ffffff" STYLE="border: none; padding: 0in">
+                                    <P ALIGN="LEFT">
+                                        <FONT FACE="Arial, serif">
+                                            <FONT SIZE="2">Date Issued:
                                                 {{
                                                     receipt.todayDate | date
-                                                }}</FONT
-                                            ></FONT
-                                        ></P
-                                    >
+                                                }}</FONT>
+                                        </FONT>
+                                    </P>
                                 </TD>
-                                <TD
-                                    WIDTH="191"
-                                    HEIGHT="5"
-                                    BGCOLOR="#ffffff"
-                                    STYLE="border: none; padding: 0in"
-                                >
-                                    <P ALIGN="LEFT"
-                                        ><FONT FACE="Arial, serif"
-                                            ><FONT SIZE="2"
-                                                >Source of Business:
+                                <TD WIDTH="191" HEIGHT="5" BGCOLOR="#ffffff" STYLE="border: none; padding: 0in">
+                                    <P ALIGN="LEFT">
+                                        <FONT FACE="Arial, serif">
+                                            <FONT SIZE="2">Source of Business:
                                                 {{
                                                     receipt.sourceOfBusiness
-                                                }}</FONT
-                                            ></FONT
-                                        ></P
-                                    >
+                                                }}</FONT>
+                                        </FONT>
+                                    </P>
                                 </TD>
                             </TR>
                             <TR>
-                                <TD
-                                    WIDTH="191"
-                                    HEIGHT="5"
-                                    BGCOLOR="#ffffff"
-                                    STYLE="border: none; padding: 0in"
-                                >
-                                    <P ALIGN="LEFT"
-                                        ><FONT FACE="Arial, serif"
-                                            ><FONT SIZE="2"
-                                                ></FONT
-                                            ></FONT
-                                        ></P
-                                    >
+                                <TD WIDTH="191" HEIGHT="5" BGCOLOR="#ffffff" STYLE="border: none; padding: 0in">
+                                    <P ALIGN="LEFT">
+                                        <FONT FACE="Arial, serif">
+                                            <FONT SIZE="2"></FONT>
+                                        </FONT>
+                                    </P>
                                 </TD>
-                                <ng-container
-                                    *ngIf="
+                                <ng-container *ngIf="
                                         receipt.sourceOfBusiness !== 'Direct'
-                                    "
-                                >
-                                    <TD
-                                        WIDTH="191"
-                                        HEIGHT="5"
-                                        BGCOLOR="#ffffff"
-                                        STYLE="border: none; padding: 0in"
-                                    >
-                                        <P ALIGN="LEFT"
-                                            ><FONT FACE="Arial, serif"
-                                                ><FONT SIZE="2"
-                                                    >Intemediary Name:
+                                    ">
+                                    <TD WIDTH="191" HEIGHT="5" BGCOLOR="#ffffff" STYLE="border: none; padding: 0in">
+                                        <P ALIGN="LEFT">
+                                            <FONT FACE="Arial, serif">
+                                                <FONT SIZE="2">Intemediary Name:
                                                     {{
                                                         receipt.intermediaryName
-                                                    }}</FONT
-                                                ></FONT
-                                            ></P
-                                        >
+                                                    }}</FONT>
+                                            </FONT>
+                                        </P>
                                     </TD>
                                 </ng-container>
                             </TR>
@@ -454,82 +277,52 @@
                                 </TD>
                             </TR> -->
                             <TR>
-                                <TD
-                                    WIDTH="191"
-                                    HEIGHT="5"
-                                    BGCOLOR="#ffffff"
-                                    STYLE="border: none; padding: 0in"
-                                >
-                                    <P ALIGN="LEFT"
-                                        ><FONT FACE="Arial, serif"
-                                            ><FONT SIZE="2"
-                                                >Payment Method:
+                                <TD WIDTH="191" HEIGHT="5" BGCOLOR="#ffffff" STYLE="border: none; padding: 0in">
+                                    <P ALIGN="LEFT">
+                                        <FONT FACE="Arial, serif">
+                                            <FONT SIZE="2">Payment Method:
                                                 {{
                                                     receipt.paymentMethod
-                                                }}</FONT
-                                            ></FONT
-                                        ></P
-                                    >
+                                                }}</FONT>
+                                        </FONT>
+                                    </P>
                                 </TD>
-                                <ng-container
-                                    *ngIf="receipt.paymentMethod === 'cheque'"
-                                >
-                                    <TD
-                                        WIDTH="191"
-                                        HEIGHT="5"
-                                        BGCOLOR="#ffffff"
-                                        STYLE="border: none; padding: 0in"
-                                    >
-                                        <P ALIGN="LEFT"
-                                            ><FONT FACE="Arial, serif"
-                                                ><FONT SIZE="2"
-                                                    >Cheque Number:
+                                <ng-container *ngIf="receipt.paymentMethod === 'cheque'">
+                                    <TD WIDTH="191" HEIGHT="5" BGCOLOR="#ffffff" STYLE="border: none; padding: 0in">
+                                        <P ALIGN="LEFT">
+                                            <FONT FACE="Arial, serif">
+                                                <FONT SIZE="2">Cheque Number:
                                                     {{
                                                         receipt.cheqNumber
-                                                    }}</FONT
-                                                ></FONT
-                                            ></P
-                                        >
+                                                    }}</FONT>
+                                            </FONT>
+                                        </P>
                                     </TD>
-                                    <TD
-                                    WIDTH="191"
-                                    HEIGHT="5"
-                                    BGCOLOR="#ffffff"
-                                    STYLE="border: none; padding: 0in"
-                                >
-                                    <P ALIGN="LEFT"
-                                        ><FONT FACE="Arial, serif"
-                                            ><FONT SIZE="2"
-                                                ></FONT
-                                            ></FONT
-                                        ></P
-                                    >
-                                </TD>
+                                    <TD WIDTH="191" HEIGHT="5" BGCOLOR="#ffffff" STYLE="border: none; padding: 0in">
+                                        <P ALIGN="LEFT">
+                                            <FONT FACE="Arial, serif">
+                                                <FONT SIZE="2"></FONT>
+                                            </FONT>
+                                        </P>
+                                    </TD>
 
                                 </ng-container>
                             </TR>
                             <TR>
 
-                              <TD
-                              WIDTH="191"
-                              HEIGHT="5"
-                              BGCOLOR="#ffffff"
-                              STYLE="border: none; padding: 0in"
-                          >
-                              <P ALIGN="LEFT"
-                                  ><FONT FACE="Arial, serif"
-                                      ><FONT SIZE="2"
-                                          >Amount in Words:
-                                          {{
+                                <TD WIDTH="191" HEIGHT="5" BGCOLOR="#ffffff" STYLE="border: none; padding: 0in">
+                                    <P ALIGN="LEFT">
+                                        <FONT FACE="Arial, serif">
+                                            <FONT SIZE="2">Amount in Words:
+                                                {{
                                               toWords(
                                                   receipt.sumInDigits
                                                       | number: '1.2-2'
                                               )
-                                          }}</FONT
-                                      ></FONT
-                                  ></P
-                              >
-                          </TD>
+                                          }}</FONT>
+                                        </FONT>
+                                    </P>
+                                </TD>
                             </TR>
                         </TBODY>
                     </TABLE>
@@ -540,155 +333,93 @@
                         <COL WIDTH="54*" />
                         <TBODY>
                             <TR>
-                                <TD
-                                    WIDTH="63%"
-                                    HEIGHT="13"
-                                    BGCOLOR="#d2d9eb"
-                                    STYLE="border-top: 1px solid #808080; border-bottom: 1px solid #808080; border-left: 1px solid #808080; border-right: none; padding-top: 0in; padding-bottom: 0in; padding-left: 0.08in; padding-right: 0in"
-                                >
-                                    <P STYLE="text-indent: 0.13in" ALIGN="LEFT"
-                                        ><FONT FACE="Arial, serif"
-                                            ><FONT
-                                                SIZE="2"
-                                                STYLE="font-size: 9pt"
-                                                ><B>RECEIPT TYPE</B></FONT
-                                            ></FONT
-                                        ></P
-                                    >
+                                <TD WIDTH="63%" HEIGHT="13" BGCOLOR="#d2d9eb"
+                                    STYLE="border-top: 1px solid #808080; border-bottom: 1px solid #808080; border-left: 1px solid #808080; border-right: none; padding-top: 0in; padding-bottom: 0in; padding-left: 0.08in; padding-right: 0in">
+                                    <P STYLE="text-indent: 0.13in" ALIGN="LEFT">
+                                        <FONT FACE="Arial, serif">
+                                            <FONT SIZE="2" STYLE="font-size: 9pt"><B>RECEIPT TYPE</B></FONT>
+                                        </FONT>
+                                    </P>
                                 </TD>
-                                <TD
-                                    WIDTH="15%"
-                                    BGCOLOR="#d2d9eb"
-                                    STYLE="border-top: 1px solid #808080; border-bottom: 1px solid #808080; border-left: none; border-right: none; padding: 0in"
-                                >
+                                <TD WIDTH="15%" BGCOLOR="#d2d9eb"
+                                    STYLE="border-top: 1px solid #808080; border-bottom: 1px solid #808080; border-left: none; border-right: none; padding: 0in">
                                     <P>&nbsp;</P>
                                 </TD>
-                                <TD
-                                    WIDTH="21%"
-                                    BGCOLOR="#d2d9eb"
-                                    STYLE="border: 1px solid #808080; padding: 0in 0.08in"
-                                >
-                                    <P ALIGN="LEFT"
-                                        ><FONT FACE="Arial, serif"
-                                            ><FONT
-                                                SIZE="2"
-                                                STYLE="font-size: 9pt"
-                                                ><B
-                                                    >AMOUNT({{
+                                <TD WIDTH="21%" BGCOLOR="#d2d9eb"
+                                    STYLE="border: 1px solid #808080; padding: 0in 0.08in">
+                                    <P ALIGN="LEFT">
+                                        <FONT FACE="Arial, serif">
+                                            <FONT SIZE="2" STYLE="font-size: 9pt"><B>AMOUNT({{
                                                         receipt.currency
-                                                    }})</B
-                                                ></FONT
-                                            ></FONT
-                                        ></P
-                                    >
-                                </TD>
-                            </TR>
-                        </TBODY>
-                        <TBODY>
-                            <TR>
-                                <TD
-                                    WIDTH="63%"
-                                    HEIGHT="5"
-                                    BGCOLOR="#ffffff"
-                                    STYLE="border-top: none; border-bottom: none; border-left: 1px solid #808080; border-right: none; padding-top: 0in; padding-bottom: 0in; padding-left: 0.08in; padding-right: 0in"
-                                >
-                                    <P STYLE="text-indent: 0.14in">&nbsp;</P>
-                                </TD>
-                                <TD
-                                    WIDTH="15%"
-                                    BGCOLOR="#ffffff"
-                                    STYLE="border: none; padding: 0in"
-                                >
-                                    <P STYLE="text-indent: 0.14in"><BR /> </P>
-                                </TD>
-                                <TD
-                                    WIDTH="21%"
-                                    BGCOLOR="#ffffff"
-                                    STYLE="border-top: none; border-bottom: none; border-left: 1px solid #808080; border-right: 1px solid #808080; padding: 0in 0.08in"
-                                >
-                                    <P ALIGN="RIGHT">&nbsp;</P>
-                                </TD>
-                            </TR>
-                            <TR>
-                                <TD
-                                    WIDTH="63%"
-                                    HEIGHT="5"
-                                    BGCOLOR="#ffffff"
-                                    STYLE="border-top: none; border-bottom: none; border-left: 1px solid #808080; border-right: none; padding-top: 0in; padding-bottom: 0in; padding-left: 0.08in; padding-right: 0in"
-                                >
-                                    <P STYLE="text-indent: 0.14in" ALIGN="LEFT"
-                                        ><FONT FACE="Arial, serif"
-                                            ><FONT SIZE="2">{{
-                                                receipt.receiptType
-                                            }}</FONT></FONT
-                                        ></P
-                                    >
-                                </TD>
-                                <TD
-                                    WIDTH="15%"
-                                    BGCOLOR="#ffffff"
-                                    STYLE="border: none; padding: 0in"
-                                >
-                                    <P STYLE="text-indent: 0.14in"><BR /> </P>
-                                </TD>
-                                <TD
-                                    WIDTH="21%"
-                                    BGCOLOR="#ffffff"
-                                    STYLE="border-top: none; border-bottom: none; border-left: 1px solid #808080; border-right: 1px solid #808080; padding: 0in 0.08in"
-                                >
-                                    <P ALIGN="LEFT"
-                                        ><FONT FACE="Arial, serif"
-                                            ><FONT SIZE="2"
-                                                >{{ receipt.sumInDigits |number : '1.2-2'}}
-                                            </FONT></FONT
-                                        >
+                                                    }})</B></FONT>
+                                        </FONT>
                                     </P>
                                 </TD>
                             </TR>
                         </TBODY>
                         <TBODY>
                             <TR>
-                                <TD
-                                    WIDTH="63%"
-                                    HEIGHT="22"
-                                    BGCOLOR="#ffffff"
-                                    STYLE="border-top: 1px solid #808080; border-bottom: 1px solid #808080; border-left: 1px solid #808080; border-right: none; padding-top: 0in; padding-bottom: 0in; padding-left: 0.08in; padding-right: 0in"
-                                >
-                                    <P ALIGN="LEFT"
-                                        ><FONT FACE="Arial, serif"
-                                            ><I
-                                                >Thank you for your business!</I
-                                            ></FONT
-                                        ></P
-                                    >
+                                <TD WIDTH="63%" HEIGHT="5" BGCOLOR="#ffffff"
+                                    STYLE="border-top: none; border-bottom: none; border-left: 1px solid #808080; border-right: none; padding-top: 0in; padding-bottom: 0in; padding-left: 0.08in; padding-right: 0in">
+                                    <P STYLE="text-indent: 0.14in">&nbsp;</P>
                                 </TD>
-                                <TD
-                                    WIDTH="15%"
-                                    BGCOLOR="#ffffff"
-                                    STYLE="border-top: 1px solid #808080; border-bottom: 1px solid #808080; border-left: 1px solid #808080; border-right: none; padding-top: 0in; padding-bottom: 0in; padding-left: 0.08in; padding-right: 0in"
-                                >
-                                    <P STYLE="text-indent: 0.2in" ALIGN="LEFT"
-                                        ><FONT FACE="Arial, serif"
-                                            ><FONT SIZE="4"
-                                                ><B>TOTAL</B></FONT
-                                            ></FONT
-                                        ></P
-                                    >
+                                <TD WIDTH="15%" BGCOLOR="#ffffff" STYLE="border: none; padding: 0in">
+                                    <P STYLE="text-indent: 0.14in"><BR /> </P>
                                 </TD>
-                                <TD
-                                    WIDTH="21%"
-                                    BGCOLOR="#ffffff"
-                                    STYLE="border-top: 1px solid #808080; border-bottom: 1px solid #808080; border-left: none; border-right: 1px solid #808080; padding-top: 0in; padding-bottom: 0in; padding-left: 0in; padding-right: 0.08in"
-                                >
+                                <TD WIDTH="21%" BGCOLOR="#ffffff"
+                                    STYLE="border-top: none; border-bottom: none; border-left: 1px solid #808080; border-right: 1px solid #808080; padding: 0in 0.08in">
+                                    <P ALIGN="RIGHT">&nbsp;</P>
+                                </TD>
+                            </TR>
+                            <TR>
+                                <TD WIDTH="63%" HEIGHT="5" BGCOLOR="#ffffff"
+                                    STYLE="border-top: none; border-bottom: none; border-left: 1px solid #808080; border-right: none; padding-top: 0in; padding-bottom: 0in; padding-left: 0.08in; padding-right: 0in">
+                                    <P STYLE="text-indent: 0.14in" ALIGN="LEFT">
+                                        <FONT FACE="Arial, serif">
+                                            <FONT SIZE="2">{{
+                                                receipt.receiptType
+                                            }}</FONT>
+                                        </FONT>
+                                    </P>
+                                </TD>
+                                <TD WIDTH="15%" BGCOLOR="#ffffff" STYLE="border: none; padding: 0in">
+                                    <P STYLE="text-indent: 0.14in"><BR /> </P>
+                                </TD>
+                                <TD WIDTH="21%" BGCOLOR="#ffffff"
+                                    STYLE="border-top: none; border-bottom: none; border-left: 1px solid #808080; border-right: 1px solid #808080; padding: 0in 0.08in">
                                     <P ALIGN="LEFT">
-                                        <FONT FACE="Arial, serif"
-                                            ><FONT SIZE="3"
-                                                ><B
-                                                    >{{ receipt.currency }}
+                                        <FONT FACE="Arial, serif">
+                                            <FONT SIZE="2">{{ receipt.sumInDigits |number : '1.2-2'}}
+                                            </FONT>
+                                        </FONT>
+                                    </P>
+                                </TD>
+                            </TR>
+                        </TBODY>
+                        <TBODY>
+                            <TR>
+                                <TD WIDTH="63%" HEIGHT="22" BGCOLOR="#ffffff"
+                                    STYLE="border-top: 1px solid #808080; border-bottom: 1px solid #808080; border-left: 1px solid #808080; border-right: none; padding-top: 0in; padding-bottom: 0in; padding-left: 0.08in; padding-right: 0in">
+                                    <P ALIGN="LEFT">
+                                        <FONT FACE="Arial, serif"><I>Thank you for your business!</I></FONT>
+                                    </P>
+                                </TD>
+                                <TD WIDTH="15%" BGCOLOR="#ffffff"
+                                    STYLE="border-top: 1px solid #808080; border-bottom: 1px solid #808080; border-left: 1px solid #808080; border-right: none; padding-top: 0in; padding-bottom: 0in; padding-left: 0.08in; padding-right: 0in">
+                                    <P STYLE="text-indent: 0.2in" ALIGN="LEFT">
+                                        <FONT FACE="Arial, serif">
+                                            <FONT SIZE="4"><B>TOTAL</B></FONT>
+                                        </FONT>
+                                    </P>
+                                </TD>
+                                <TD WIDTH="21%" BGCOLOR="#ffffff"
+                                    STYLE="border-top: 1px solid #808080; border-bottom: 1px solid #808080; border-left: none; border-right: 1px solid #808080; padding-top: 0in; padding-bottom: 0in; padding-left: 0in; padding-right: 0.08in">
+                                    <P ALIGN="LEFT">
+                                        <FONT FACE="Arial, serif">
+                                            <FONT SIZE="3"><B>{{ receipt.currency }}
                                                     {{ receipt.sumInDigits |number : '1.2-2' }}
-                                                </B></FONT
-                                            ></FONT
-                                        >
+                                                </B></FONT>
+                                        </FONT>
                                     </P>
                                 </TD>
                             </TR>
@@ -696,40 +427,33 @@
                     </TABLE>
                     <table>
                         <tr>
-                            <TD
-                                ><P ALIGN="LEFT">
-                                    <FONT FACE="Arial, serif"
-                                        ><FONT SIZE="3"
-                                            >Narration:
-                                            {{ receipt.narration }}</FONT
-                                        ></FONT
-                                    >
-                                </P></TD
-                            >
+                            <TD>
+                                <P ALIGN="LEFT">
+                                    <FONT FACE="Arial, serif">
+                                        <FONT SIZE="3">Narration:
+                                            {{ receipt.narration }}</FONT>
+                                    </FONT>
+                                </P>
+                            </TD>
                         </tr>
                         <tr>
-                            <TD
-                                ><P ALIGN="LEFT">
-                                    <FONT FACE="Arial, serif"
-                                        ><FONT SIZE="3"
-                                            >Remarks:
-                                            {{ receipt.remarks }}</FONT
-                                        ></FONT
-                                    >
-                                </P></TD
-                            >
+                            <TD>
+                                <P ALIGN="LEFT">
+                                    <FONT FACE="Arial, serif">
+                                        <FONT SIZE="3">Remarks:
+                                            {{ receipt.remarks }}</FONT>
+                                    </FONT>
+                                </P>
+                            </TD>
                         </tr>
                     </table>
                     <!-- <P STYLE="margin-bottom: 0.11in"><BR /><BR /> </P>
                     <P STYLE="margin-bottom: 0.11in"><BR /><BR /> </P> -->
-                    <P ALIGN="CENTER" STYLE="margin-bottom: 0in"
-                        >If you have any questions about this receipt, please
-                        contact</P
-                    >
-                    <P ALIGN="CENTER" STYLE="margin-bottom: 0.11in"
-                        >phone: +260 211 239865/6, email:
-                        info@aplusgeneral.com</P
-                    >
+                    <P ALIGN="CENTER" STYLE="margin-bottom: 0in">If you have any questions about this receipt, please
+                        contact</P>
+                    <P ALIGN="CENTER" STYLE="margin-bottom: 0.11in">phone: (+260) 211 290001,973 876928, 977 793598
+                        email:
+                        goldenlutosinsurance@gmail.com</P>
                 </div>
             </nz-spin>
             <!-- <pdf-viewer #page [src]="receiptURl" [original-size]="false"></pdf-viewer> -->
