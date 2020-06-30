@@ -40,6 +40,7 @@ import { IntermediaryDetailsComponent } from './components/endorsements/intermed
 import { PolicyWordingComponent } from './documents/policy-wording/policy-wording.component';
 import { PolicyComprehensiveCertificateComponent } from './documents/policy-comprehensive-certificate/policy-comprehensive-certificate';
 import { PolicyThirdpartyCertificateComponent } from './documents/policy-thirdparty-certificate/policy-thirdparty-certificate.component';
+import { PolicyWordingsDocumentComponent } from './documents/policy-wordings-document/policy-wordings-document.component';
 
 const routes: Routes = [
     {
@@ -152,7 +153,8 @@ const routes: Routes = [
         IntermediaryDetailsComponent,
         PolicyWordingComponent,
         PolicyComprehensiveCertificateComponent,
-        PolicyThirdpartyCertificateComponent
+        PolicyThirdpartyCertificateComponent,
+        PolicyWordingsDocumentComponent
     ],
     imports: [
         CommonModule,
