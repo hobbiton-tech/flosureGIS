@@ -141,14 +141,14 @@ export class PolicyDetailsComponent implements OnInit {
   selectedsRisks: RiskModel[];
   limitsOfLiablity: LimitsOfLiability[] = [];
   limitsOfLiablityCert: LimitsOfLiability[] = [];
-  combAmount = 0;
-  combInfo = '';
-  proDInfo='';
-  propDAmount=0;
-  deathPEInfo='';
-  deathPEAmount=0;
-  deathPPInfo='';
-  deathPPAmount=0;
+  combAmount:number;
+  combInfo: string;
+  proDInfo: string;
+  propDAmounts:number;
+  deathPEInfo: string;
+  deathPEAmount:number;
+  deathPPInfo: string;
+  deathPPAmount:number;
 
   fExcexxType='';
   fExcessAmount=0;
@@ -281,27 +281,30 @@ export class PolicyDetailsComponent implements OnInit {
                                 this.combAmount = lim.amount;
                                 this.combInfo = 'Combined Limits';
   
-                            }else if (lim.liabilityType === 'propertyDamage'){
+                            }
+                            if (lim.liabilityType === 'propertyDamage'){
                                 this.combAmount = 0;
                                 this.combInfo = '';
                                 this.proDInfo='(i) Third Party Limit for injury/ Death per person ZMW';
-  this.propDAmount=lim.amount;
+  this.propDAmounts=lim.amount;
 
-                      console.log("LIABILITIES<<<<", this.proDInfo, this.propDAmount)          
+                      console.log("LIABILITIES<<<<", this.proDInfo, this.propDAmounts)          
 
-                            }else if (lim.liabilityType === 'deathAndInjuryPerEvent'){
+                            }
+                            if (lim.liabilityType === 'deathAndInjuryPerEvent'){
                                 this.combAmount = 0;
                                 this.combInfo = '';
                                 this.deathPEInfo='(ii) Third party limit per Event';
   this.deathPEAmount=lim.amount;
   
-  console.log("LIABILITIES<<<<", lim)
-                            }else if (lim.liabilityType === 'deathAndInjuryPerPerson'){
+  console.log("LIABILITIES<<<<", this.deathPEInfo)
+                            }
+                             if (lim.liabilityType === 'deathAndInjuryPerPerson'){
                                 this.combAmount = 0;
                                 this.combInfo = '';
                                 this.deathPPInfo='(iii)Third Party Property Damage';
   this.deathPPAmount=lim.amount;
-  console.log("LIABILITIES<<<<", lim)
+  console.log("LIABILITIES<<<<", this.deathPPInfo)
                             }
                         }
 
@@ -315,11 +318,13 @@ export class PolicyDetailsComponent implements OnInit {
             this.fExcessAmount = ex.amount;
             this.fExcexxType = 'Third Party Property Damage (TPPD ) 10% Minimum';
 
-        } else if(ex.excessType === 'Own Damage 10% Minimum') {
+        } 
+         if(ex.excessType === 'Own Damage 10% Minimum') {
             this.sExcessAmount = ex.amount;
             this.sExcessType = 'Own Damage 10% Minimum';
 
-        } else if(ex.excessType === 'Theft Excess [15%] Minimum') {
+        } 
+         if(ex.excessType === 'Theft Excess [15%] Minimum') {
             this.tExcessAmount = ex.amount;
             this.tExcessType = 'Theft Excess [15%] Minimum';
 
@@ -403,8 +408,8 @@ export class PolicyDetailsComponent implements OnInit {
                 // if(this.clientAddress === null || undefined) { this.clientAddress = ''; } else {}
 
                 this.agency = 'Direct'; // TODO: Track this guy too
-                this.coverForm = nd.toString();
-                this.coverTo = policy.endDate.toString();
+                this.coverForm = policy.startDate.toString();
+                this.coverTo = nd.toString();
                 // this.basicPremium = this.policy
                 this.loadingAmount = '-';
                 this.discountAmount = '-';

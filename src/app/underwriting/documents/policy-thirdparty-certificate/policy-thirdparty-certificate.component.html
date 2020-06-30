@@ -567,9 +567,10 @@
                         EXCESS
                     </tspan>
 
-                    <tspan x="0" y="13">
-                        (i) {{fExcexxType}} {{policy.currency}}{{fExcessAmount}}
+                    <tspan *ngFor="let exc of excessList" x="0" y="13">
+                       {{exc.excessType}} {{exc.amount}}
                     </tspan>
+                    <!-- (i) {{fExcexxType}} {{policy.currency}}{{fExcessAmount}} -->
                     <!-- <tspan x="0" y="23">
                         (ii) {{sExcessType}} {{policy.currency}}{{sExcessAmount}}
                     </tspan>
@@ -701,98 +702,99 @@
                         }}
                     </tspan>
                 </text>
-
                 <text
-                    id="Claims_Third_Party_Recovery"
-                    data-name="Claims Third Party Recovery"
-                    class="cls-17"
-                    transform="translate(30 501)"
-                >
-                    <tspan x="0" y="0">AUTHORIZED DRIVER</tspan>
-                </text>
+                id="Claims_Third_Party_Recovery"
+                data-name="Claims Third Party Recovery"
+                class="cls-17"
+                transform="translate(30 501)"
+            >
+                <tspan x="0" y="0">AUTHORIZED DRIVER</tspan>
+            </text>
 
-                    <text ng-hide="co"
-                    id="Third_Party_Limits_of_Liability"
-                    data-name="Third Party Limits of Liability"
-                    class="cls-15"
-                    transform="translate(298 350)"
-                >
-                    <tspan x="0" y="0">{{combInfo}} {{policy.currency}}{{combAmount}}</tspan>
-                </text>
-       
-                
 
-                <text #standardLimits>
+
+            <text
+            id="Third_Party_Limits_of_Liability"
+            data-name="Third Party Limits of Liability"
+            class="cls-15"
+            transform="translate(298 350)"
+        >
+            <tspan x="0" y="0">Third Party Limits of Liability</tspan>
+        </text>
+        <text *ngIf="limitsOfLiablity[0].liabilityType ==='combinedLimits'"
+            id="Third_Party_Property_Damage"
+            data-name="Third Party Property Damage"
+            class="cls-18"
+            transform="translate(298 360)"
+        >
+            <tspan x="0" y="0">
+
+                Combined Limit {{policy.currency}} {{limitsOfLiablity[0].amount}}
+            </tspan>
+        </text>
+        <text *ngIf="limitsOfLiablity[0].liabilityType !=='combinedLimits'"
+            id="Third_Party_Property_Damage"
+            data-name="Third Party Property Damage"
+            class="cls-18"
+            transform="translate(298 360)"
+        >
+            <tspan x="0" y="0">
+                (i) Third Party Limit for injury/ Death per person {{policy.currency}} {{limitsOfLiablity[0].amount}}
+            </tspan>
+        </text>
+        <text *ngIf="limitsOfLiablity[0].liabilityType !=='combinedLimits'"
+            id="Third_Party_Injury_and_Death"
+            data-name="Third Party Injury and Death"
+            class="cls-18"
+            transform="translate(298 375)"
+        >
+            <tspan x="0" y="0">
+                (ii) Third party limit per Event {{policy.currency}} {{limitsOfLiablity[1].amount}}
+            </tspan>
+        </text>
+        <text *ngIf="limitsOfLiablity[0].liabilityType !=='combinedLimits'"
+            id="Third_Party_Bodily_Injury_Death_per_Event"
+            data-name="Third Party Bodily Injury / Death per Event"
+            class="cls-18"
+            transform="translate(298 390)"
+        >
+            <tspan x="0" y="0">
+                (iii)Third Party Property Damage {{policy.currency}} {{limitsOfLiablity[2].amount}}
+            </tspan>
+        </text>
+
                
-                <text
-                    id="Third_Party_Property_Damage"
-                    data-name="Third Party Property Damage"
-                    class="cls-18"
-                    transform="translate(298 360)"
-                >
-                    <tspan  x="0" y="0">
-                        (i) Third Party Limit for injury/ Death per person ZMW
-                        {{policy.currency}}
-                    {{deathPPAmount}}
-                    </tspan>
-                </text>
-                <text
-                    id="Third_Party_Injury_and_Death"
-                    data-name="Third Party Injury and Death"
-                    class="cls-18"
-                    transform="translate(298 375)"
-                >
-                    <tspan x="0" y="0">
-                        (ii) Third party limit per Event {{policy.currency}}
-                        {{deathPEAmount}}
-                    </tspan>
-                </text>
-                <text
-                    id="Third_Party_Bodily_Injury_Death_per_Event"
-                    data-name="Third Party Bodily Injury / Death per Event"
-                    class="cls-18"
-                    transform="translate(298 390)"
-                >
-                    <tspan x="0" y="0">
-                        (iii)Third Party Property Damage {{policy.currency}}
-                        {{propDAmount}}
-                    </tspan>
-                </text>
-           </text>
-               
+        <text
+        id=" DURATION_OF_COVER"
+        data-name=" DURATION OF COVER"
+        class="cls-18"
+        transform="translate(27 410)"
+    >
+        <tspan x="0" y="0">
+            DURATION OF COVER
+        </tspan>
+        <tspan x="0" y="16">
+            FROM: {{ ' ' + issueDate | date }}
+        </tspan>
+        <tspan x="0" y="30">
+            TO: {{ policyRisk.riskEndDate | date }}
+        </tspan>
+    </text>
 
-                <text
-                    id="Third_Party_Bodily_Injury_Death_per_Event"
-                    data-name="Third Party Bodily Injury / Death per Event"
-                    class="cls-18"
-                    transform="translate(27 441)"
-                >
-                    <tspan x="0" y="0">
-                        Cover Operative for a period Of
-                        {{ policyRisk.numberOfDays }} Day(s)
-                    </tspan>
-                    <tspan x="0" y="16">
-                        From: {{ dateOfIssue | date: 'HH:MM:SS' }}Hours
-                    </tspan>
-                </text>
-
-              
-                <text
-                    id=" DURATION_OF_COVER"
-                    data-name=" DURATION OF COVER"
-                    class="cls-18"
-                    transform="translate(310 365)"
-                >
-                    <tspan x="0" y="0">
-                        DURATION OF COVER
-                    </tspan>
-                    <tspan x="0" y="16">
-                        FROM: {{ ' ' + issueDate | date }}
-                    </tspan>
-                    <tspan x="0" y="30">
-                        TO: {{ policyRisk.riskEndDate | date }}
-                    </tspan>
-                </text>
+    <text
+        id="Third_Party_Bodily_Injury_Death_per_Event"
+        data-name="Third Party Bodily Injury / Death per Event"
+        class="cls-18"
+        transform="translate(27 460)"
+    >
+        <tspan x="0" y="0">
+            Cover Operative for a period Of
+            {{ policyRisk.numberOfDays }}.Day(s)
+        </tspan>
+        <tspan x="0" y="16">
+            From: {{ dateOfIssue | date: 'HH:MM:SS' }} Hours
+        </tspan>
+    </text>
 
                 <text
                     id="On_happening_of_an_event_giving_rise_to_a_claim_notification_must_be_done_within_48_hours_for_accidental_damage_and_24_hours_for_theft_from_the_time_of_happening_of_an_event."

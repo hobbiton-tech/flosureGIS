@@ -23,7 +23,13 @@ export class PolicyThirdpartyCertificateComponent implements OnInit {
     excessListCert: Excess[];
 
     @Input()
+    excessList: Excess[]; 
+
+    @Input()
     limitsOfLiablityCert: LimitsOfLiability[];
+    
+    @Input()
+    limitsOfLiablity: LimitsOfLiability[];
 
     @Input()
     insuredName: string;
@@ -93,15 +99,15 @@ export class PolicyThirdpartyCertificateComponent implements OnInit {
     @Input()
     fExcexxType:string;
     @Input()
-    fExcessAmount = 0;
+    fExcessAmount:number;
     @Input()
     sExcessType:string;
     @Input()
-    sExcessAmount = 0;
+    sExcessAmount:number;
     @Input()
     tExcessType:string;
     @Input()
-    tExcessAmount = 0;
+    tExcessAmount:number;
 
     subTotal: number;
 
@@ -112,10 +118,10 @@ export class PolicyThirdpartyCertificateComponent implements OnInit {
     firstExcess: Excess;
     secondExcess: Excess;
     thirdExcess: Excess;
-    co: boolean;
-    pd: boolean;
-    pe: boolean;
-    pp: boolean;
+    // co: boolean;
+    // pd: boolean;
+    // pe: boolean;
+    // pp: boolean;
     comb: LimitsOfLiability;
     deathPE: LimitsOfLiability;
     deathPP: LimitsOfLiability;
@@ -124,66 +130,66 @@ export class PolicyThirdpartyCertificateComponent implements OnInit {
 
     ngOnInit(): void {
         this.subTotal = this.sumArray(this.policy.risks, 'basicPremium');
-        this.getLimit()
-        this.getExcessess()
+        // this.getLimit()
+        // this.getExcessess()
     }
 
     getExcessess() {
-        for( const ex of this.excessListCert) {
+        // for( const ex of this.excessListCert) {
             
-            if (ex.excessType ==='Third Party Property Damage (TPPD ) 10% Minimum') {
-                this.firstExcess = ex;
-                console.log("TTTTTTT<<<", this.firstExcess);
+        //     if (ex.excessType ==='Third Party Property Damage (TPPD ) 10% Minimum') {
+        //         this.firstExcess = ex;
+        //         console.log("TTTTTTT<<<", this.firstExcess);
                 
-            }
-            // if (ex.excessType ==='Own Damage 10% Minimum') {
-            //     this.secondExcess = ex;
-            //     console.log("TTTTTTT<<<", this.secondExcess);
-            // }
-            // if (ex.excessType ==='Theft Excess [15%] Minimum') {
-            //     this.thirdExcess = ex;
-            //     console.log("TTTTTTT<<<", this.thirdExcess);
-            // }
-        }
+        //     }
+        //     // if (ex.excessType ==='Own Damage 10% Minimum') {
+        //     //     this.secondExcess = ex;
+        //     //     console.log("TTTTTTT<<<", this.secondExcess);
+        //     // }
+        //     // if (ex.excessType ==='Theft Excess [15%] Minimum') {
+        //     //     this.thirdExcess = ex;
+        //     //     console.log("TTTTTTT<<<", this.thirdExcess);
+        //     // }
+        // }
     }
 
-    getLimit() {
-        for(const lim of this.limitsOfLiablityCert) {
+    // getLimit() {
+    //     for(const lim of this.limitsOfLiablityCert) {
             
-            this.limits = lim
-            if( lim.liabilityType === 'combinedLimits') {
-                this.co = false;
-                this.pd = true;
-                this.pe = true;
-                this.pp = true;
-                this.comb = lim
-            }
+    //         this.limits = lim
+    //         if( lim.liabilityType === 'combinedLimits') {
+    //             this.co = false;
+    //             this.pd = true;
+    //             this.pe = true;
+    //             this.pp = true;
+    //             this.comb = lim
+    //         }
 
-            if( lim.liabilityType === 'deathAndInjuryPerEvent') {
-                this.deathPE = lim
-                this.co = true;
-                this.pd = false;
-                this.pe = false;
-                this.pp = false;
-            }
+    //         if( lim.liabilityType === 'deathAndInjuryPerEvent') {
+    //             this.deathPE = lim
+    //             this.co = true;
+    //             this.pd = false;
+    //             this.pe = false;
+    //             this.pp = false;
+    //         }
 
-            if( lim.liabilityType === 'deathAndInjuryPerPerson') {
-                this.deathPP = lim
-                this.co = true;
-                this.pd = false;
-                this.pe = false;
-                this.pp = false;
-            }
+    //         if( lim.liabilityType === 'deathAndInjuryPerPerson') {
+    //             this.deathPP = lim
+    //             this.co = true;
+    //             this.pd = false;
+    //             this.pe = false;
+    //             this.pp = false;
+    //         }
 
-            if( lim.liabilityType === 'propertyDamage') {
-                this.propertyD = lim
-                this.co = true;
-                this.pd = false;
-                this.pe = false;
-                this.pp = false;
-            }
-        }
-    }
+    //         if( lim.liabilityType === 'propertyDamage') {
+    //             this.propertyD = lim
+    //             this.co = true;
+    //             this.pd = false;
+    //             this.pe = false;
+    //             this.pp = false;
+    //         }
+    //     }
+    // }
 
 
     getYearOfManufacture(risk: RiskModel) {

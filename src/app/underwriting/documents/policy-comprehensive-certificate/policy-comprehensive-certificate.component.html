@@ -568,6 +568,7 @@
                         }}{{ policy.netPremium | number: '1.2-2' }}
                     </tspan>
                 </text>
+
                 <text
                     id="To:_30_06_2020"
                     data-name="To: 30/06/2020"
@@ -579,54 +580,16 @@
                         }}{{ cndAmount | number: '1.2-2' }}
                     </tspan>
                     <tspan x="0" y="13">
-                        (i) {{fExcexxType}} {{policy.currency}}{{fExcessAmount}}
+                        {{excT1}} {{excA1}}
                     </tspan>
                     <tspan x="0" y="23">
-                        (ii) {{sExcessType}} {{policy.currency}}{{sExcessAmount}}
+                        {{excT2}} {{excA2}}
                     </tspan>
                     <tspan x="0" y="33">
-                        (iii) {{tExcessType}} {{policy.currency}}{{tExcessAmount}}
+                        {{excT3}} {{excA3}}
                     </tspan>
                 </text>
-                <!-- <text
-                    id="To:_30_06_2020"
-                    data-name="To: 30/06/2020"
-                    class="cls-17"
-                    transform="translate(27 357)"
-                >
-                    <tspan x="0" y="0">
-                        NCD: {{ policy.currency
-                        }}{{ cndAmount | number: '1.2-2' }}
-                    </tspan>
-                    <tspan x="0" y="13">
-                        {
-                    </tspan>
-                    <tspan x="0" y="13">
-                        
-                    </tspan>
-                    <tspan x="0" y="13">
-                        
-                    </tspan>
 
-                  
-                   
-                </text> -->
-
-                
-               
-                <!-- <text
-                    id="To:_30_06_2020"
-                    data-name="To: 30/06/2020"
-                    class="cls-17"
-                    transform="translate(27 337)"
-                >
-                    <tspan x="0" y="0">
-                        EXCESS
-                    </tspan>
-                    <tspan x="0" y="10">
-                        (ii) TPPD Excess 10% mimimum ZMW500
-                    </tspan>
-                </text> -->
 
                 <text
                     id="Client_Name:_Isaac_Musonda"
@@ -741,57 +704,60 @@
                     <tspan x="0" y="0">AUTHORIZED DRIVER</tspan>
                 </text>
 
-                
-                
-                    <!-- <text> -->
-                        <text ng-hide="co"
-                    id="Third_Party_Limits_of_Liability"
-                    data-name="Third Party Limits of Liability"
-                    class="cls-15"
-                    transform="translate(298 350)"
-                >
-                    <tspan x="0" y="0">{{combInfo}} {{policy.currency}}{{combAmount}}</tspan>
-                </text>
-           
-                
 
-                <text #standardLimits>
-               
-                <text ng-hide="pp"
-                    id="Third_Party_Property_Damage"
-                    data-name="Third Party Property Damage"
-                    class="cls-18"
-                    transform="translate(298 360)"
-                >
-                    <tspan  x="0" y="0">
-                        (i) Third Party Limit for injury/ Death per person ZMW
-                        {{policy.currency}}
-                    {{deathPPAmount}}
-                    </tspan>
-                </text>
-                <text ng-hide="pe"
-                    id="Third_Party_Injury_and_Death"
-                    data-name="Third Party Injury and Death"
-                    class="cls-18"
-                    transform="translate(298 375)"
-                >
-                    <tspan x="0" y="0">
-                        (ii) Third party limit per Event {{policy.currency}}
-                        {{deathPEAmount}}
-                    </tspan>
-                </text>
-                <text ng-hide="pd"
-                    id="Third_Party_Bodily_Injury_Death_per_Event"
-                    data-name="Third Party Bodily Injury / Death per Event"
-                    class="cls-18"
-                    transform="translate(298 390)"
-                >
-                    <tspan x="0" y="0">
-                        (iii)Third Party Property Damage {{policy.currency}}
-                        {{propDAmount}}
-                    </tspan>
-                </text>
-           </text>
+
+                <text
+                id="Third_Party_Limits_of_Liability"
+                data-name="Third Party Limits of Liability"
+                class="cls-15"
+                transform="translate(298 350)"
+            >
+                <tspan x="0" y="0">Third Party Limits of Liability</tspan>
+            </text>
+            <text *ngIf="limitsOfLiablity[0].liabilityType ==='combinedLimits'"
+                id="Third_Party_Property_Damage"
+                data-name="Third Party Property Damage"
+                class="cls-18"
+                transform="translate(298 360)"
+            >
+                <tspan x="0" y="0">
+
+                    Combined Limit {{policy.currency}} {{limitsOfLiablity[0].amount}}
+                </tspan>
+            </text>
+            <text *ngIf="limitsOfLiablity[0].liabilityType !=='combinedLimits'"
+                id="Third_Party_Property_Damage"
+                data-name="Third Party Property Damage"
+                class="cls-18"
+                transform="translate(298 360)"
+            >
+                <tspan x="0" y="0">
+                    (i) Third Party Limit for injury/ Death per person {{policy.currency}} {{limitsOfLiablity[0].amount}}
+                </tspan>
+            </text>
+            <text *ngIf="limitsOfLiablity[0].liabilityType !=='combinedLimits'"
+                id="Third_Party_Injury_and_Death"
+                data-name="Third Party Injury and Death"
+                class="cls-18"
+                transform="translate(298 375)"
+            >
+                <tspan x="0" y="0">
+                    (ii) Third party limit per Event {{policy.currency}} {{limitsOfLiablity[1].amount}}
+                </tspan>
+            </text>
+            <text *ngIf="limitsOfLiablity[0].liabilityType !=='combinedLimits'"
+                id="Third_Party_Bodily_Injury_Death_per_Event"
+                data-name="Third Party Bodily Injury / Death per Event"
+                class="cls-18"
+                transform="translate(298 390)"
+            >
+                <tspan x="0" y="0">
+                    (iii)Third Party Property Damage {{policy.currency}} {{limitsOfLiablity[2].amount}}
+                </tspan>
+            </text>
+
+
+
 
                 <text
                     id=" DURATION_OF_COVER"
