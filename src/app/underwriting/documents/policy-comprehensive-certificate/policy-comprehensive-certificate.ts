@@ -65,6 +65,12 @@ export class PolicyComprehensiveCertificateComponent implements OnInit {
     policyRisk: RiskModel;
 
     @Input()
+    excessList: Excess[];
+
+    @Input()
+    limitsOfLiablity: LimitsOfLiability[]=[];
+
+    @Input()
     issueDate: string;
 
     @Input()
@@ -125,75 +131,29 @@ export class PolicyComprehensiveCertificateComponent implements OnInit {
     pp = false;
     pd = false;
     tppd: boolean;
+    excT1 = '';
+    excA1 = 0;
+    excT2 = '';
+    excA2 = 0;
+    excT3 = '';
+    excA3 = 0;
 
 
     constructor() {}
 
     ngOnInit(): void {
-        this.getLimit()
-        this.getExcessess()
+        this.excT1 = this.excessList[0].excessType; 
+        this.excT2 = this.excessList[1].excessType;
+        this.excT3 = this.excessList[2].excessType;
+
+        this.excA1 = this.excessList[0].amount;
+        this.excA2 = this.excessList[1].amount;
+        this.excA3 = this.excessList[2].amount;
+     
     }
 
-    getExcessess() {
 
-        this.tppd = true;
-
-        for( const ex of this.excessListCert) {
-            
-            if (ex.excessType ==='Third Party Property Damage (TPPD ) 10% Minimum') {
-
-                this.firstExcess = ex;
-                console.log("TTTTTTT<<<", this.firstExcess);
-                
-            }
-            if (ex.excessType ==='Own Damage 10% Minimum') {
-                this.secondExcess = ex;
-                console.log("TTTTTTT<<<", this.secondExcess);
-            }
-            if (ex.excessType ==='Theft Excess [15%] Minimum') {
-                this.thirdExcess = ex;
-                console.log("TTTTTTT<<<", this.thirdExcess);
-            }
-        }
-    }
-
-    getLimit() {
-        for(const lim of this.limitsOfLiablityCert) {
-            
-            this.limits = lim
-            if( lim.liabilityType === 'combinedLimits') {
-                this.co = true;
-                // this.pd = true;
-                // this.pe = true;
-                // this.pp = true;
-                this.comb = lim
-            }
-
-            if( lim.liabilityType === 'deathAndInjuryPerEvent') {
-                this.deathPE = lim
-                this.co = true;
-                this.pd = false;
-                this.pe = false;
-                this.pp = false;
-            }
-
-            if( lim.liabilityType === 'deathAndInjuryPerPerson') {
-                this.deathPP = lim
-                this.co = true;
-                this.pd = false;
-                this.pe = false;
-                this.pp = false;
-            }
-
-            if( lim.liabilityType === 'propertyDamage') {
-                this.propertyD = lim
-                this.co = true;
-                this.pd = false;
-                this.pe = false;
-                this.pp = false;
-            }
-        }
-    }
+    
 
     getYearOfManufacture(risk: RiskModel) {
         let year: string = moment(risk.yearOfManufacture).year().toString();
