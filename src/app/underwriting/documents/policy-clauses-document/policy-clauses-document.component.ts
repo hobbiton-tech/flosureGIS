@@ -1,6 +1,13 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import {
+    IPolicyClauses,
+    IPolicyWording,
+    IPolicyExtension,
+} from 'src/app/settings/models/underwriting/clause.model';
+import { Policy } from '../../models/policy.model';
+import { RiskModel } from 'src/app/quotes/models/quote.model';
 
 @Component({
     selector: 'app-policy-clauses-document',
@@ -8,9 +15,61 @@ import html2canvas from 'html2canvas';
     styleUrls: ['./policy-clauses-document.component.scss'],
 })
 export class PolicyClausesDocumentComponent implements OnInit {
-    @Output()
-    generatePDF = new EventEmitter();
+    @Input()
+    clientName: string;
 
+    @Input()
+    clientNumber: string;
+
+    @Input()
+    clientEmail: string;
+
+    @Input()
+    agency: string;
+
+    @Input()
+    policyNumber: string;
+
+    @Input()
+    classOfBusiness: string;
+
+    @Input()
+    coverFrom: string;
+
+    @Input()
+    coverTo: string;
+
+    @Input()
+    basicPremium: string;
+
+    @Input()
+    loadingAmount: string;
+
+    @Input()
+    discountAmount: string;
+
+    @Input()
+    totalAmount: string;
+
+    @Input()
+    premiumLevy: string;
+
+    @Input()
+    policyRisk: RiskModel;
+
+    @Input()
+    policy: Policy;
+
+    @Input()
+    policyClauses: IPolicyClauses;
+
+    @Input()
+    policyWording: IPolicyWording;
+
+    @Input()
+    policyExtension: IPolicyExtension;
+
+    subTotal: number;
     generatingPDF = false;
 
     constructor() {}
@@ -27,27 +86,28 @@ export class PolicyClausesDocumentComponent implements OnInit {
         };
 
         html2canvas(div, options).then((canvas) => {
-            //Initialize JSPDF
-            let doc = new jsPDF('p', 'mm', 'a4');
-            //Converting canvas to Image
-            let imgData = canvas.toDataURL('image/PNG');
-            //Add image Canvas to PDF
-            doc.addImage(imgData, 'PNG', 0, 0);
+            const doc = new jsPDF({
+                unit: 'mm',
+                format: 'a4',
+            });
+            const imgData = canvas.toDataURL('image/PNG');
+            doc.addImage(imgData, 'PNG', 0, 0, 211, 298);
 
-            let pdfOutput = doc.output();
-            // using ArrayBuffer will allow you to put image inside PDF
-            let buffer = new ArrayBuffer(pdfOutput.length);
-            let array = new Uint8Array(buffer);
+            const pdfOutput = doc.output();
+            const buffer = new ArrayBuffer(pdfOutput.length);
+            const array = new Uint8Array(buffer);
             for (let i = 0; i < pdfOutput.length; i++) {
                 array[i] = pdfOutput.charCodeAt(i);
             }
-
-            //Name of pdf
-            const fileName = 'policy-clauses.pdf';
-
-            // Make file
+            const fileName = `${this.policy.policyNumber}-clausesNote.pdf`;
             doc.save(fileName);
             this.generatingPDF = false;
         });
+    }
+
+    sumArray(items, prop) {
+        return items.reduce(function (a, b) {
+            return a + b[prop];
+        }, 0);
     }
 }

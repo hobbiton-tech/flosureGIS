@@ -75,6 +75,7 @@ export class PolicyDetailsComponent implements OnInit {
     isDebitNotePDFVisible = false;
     isSchedulePDFVisible = false;
     isClausesPDFVisible = false;
+    isWordingsPDFVisible = false;
 
     isNewCertificatePdfVisible = false;
     isThirdPartyCertificatePdfVisible = false;
@@ -129,7 +130,7 @@ export class PolicyDetailsComponent implements OnInit {
     coverNote: CoverNote;
     coverNot: CoverNote;
     coverNotes: CoverNote[] = [];
-    coverNotesRisks: any[] =[];
+    coverNotesRisks: any[] = [];
 
     constructor(
         private readonly router: Router,
@@ -161,10 +162,7 @@ export class PolicyDetailsComponent implements OnInit {
                 this.policiesService.getCoverNotes().subscribe((res) => {
                     console.log('RESULT COVER>>>>', res);
                     this.coverNotes = res;
-                    
-                })
-
-                
+                });
 
                 this.productClauseService
                     .getPolicyClauses()
@@ -242,13 +240,17 @@ export class PolicyDetailsComponent implements OnInit {
                 this.risks = policy.risks;
                 // this.discounts = risk.discounts;
                 this.policiesService.getCoverNotes().subscribe((res) => {
-                   this.coverNotesRisks =  this.coverNotesRisks.concat(...res, ...this.risks)
-                   console.log('COMBINE>>>>',this.coverNotesRisks);
-                   
-                    for(const r of this.risks )
-                    this.coverNot = res.filter((x) => x.policyId === r.id)[0];
-                })
-                
+                    this.coverNotesRisks = this.coverNotesRisks.concat(
+                        ...res,
+                        ...this.risks
+                    );
+                    console.log('COMBINE>>>>', this.coverNotesRisks);
+
+                    for (const r of this.risks)
+                        this.coverNot = res.filter(
+                            (x) => x.policyId === r.id
+                        )[0];
+                });
 
                 this.policyRisk = policy.risks[0];
                 // this.loading =
@@ -266,8 +268,6 @@ export class PolicyDetailsComponent implements OnInit {
                 this.combinedLimits = policy.risks[0].limitsOfLiability.filter(
                     (x) => x.liabilityType === 'combinedLimits'
                 )[0].amount;
-
-
 
                 //excesses
                 this.below21Years = policy.risks[0].excesses.filter(
@@ -625,9 +625,11 @@ export class PolicyDetailsComponent implements OnInit {
             this.cnd = risk.discounts.filter(
                 (x) => x.discountType === 'No Claims Discount'
             )[0];
-            console.log('RISK ID', risk.id)
+            console.log('RISK ID', risk.id);
 
-                this.coverNot = this.coverNotes.filter((x) => x.policyId === this.selectedRisk.id)[0];
+            this.coverNot = this.coverNotes.filter(
+                (x) => x.policyId === this.selectedRisk.id
+            )[0];
 
             if (this.cnd === undefined) {
                 this.cndAmount = 0;
@@ -639,7 +641,9 @@ export class PolicyDetailsComponent implements OnInit {
             this.isComprehensiveCertificatePdfVisible = true;
             this.isThirdPartyCertificatePdfVisible = false;
         } else {
-            this.coverNot = this.coverNotes.filter((x) => x.policyId === risk.id)[0];
+            this.coverNot = this.coverNotes.filter(
+                (x) => x.policyId === risk.id
+            )[0];
             this.isComprehensiveCertificatePdfVisible = false;
             this.isThirdPartyCertificatePdfVisible = true;
         }
