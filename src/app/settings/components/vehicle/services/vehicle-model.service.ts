@@ -14,9 +14,10 @@ export class VehicleModelService {
 
     constructor(private http: HttpClient) {}
 
-    addVehicleModel(vehicleModel: IVehicleModel): Observable<IVehicleModel> {
+    addVehicleModel(vehicleModel: IVehicleModel, id: string): Observable<IVehicleModel> {
+      console.log()
         return this.http.post<IVehicleModel>(
-            `${BASE_URL}/vehicle-model`,
+            `${BASE_URL}/vehicle-model/${id}`,
             vehicleModel
         );
     }

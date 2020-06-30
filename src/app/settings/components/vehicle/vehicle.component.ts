@@ -46,6 +46,9 @@ export class VehicleComponent implements OnInit {
 
     isOkLoading = false;
 
+    selectedVehicleMake: IVehicleMake;
+    selectedVehicleModel: IVehicleModel;
+
     constructor(
         private readonly router: Router,
         private formBuilder: FormBuilder,
@@ -100,12 +103,18 @@ export class VehicleComponent implements OnInit {
 
         this.vehicleModelUpdate.subscribe((update) =>
             update === true
-                ? this.vehicleModelService.getVehicleModel().subscribe((model) => {
+                ? this.vehicleModelService
+                      .getVehicleModel()
+                      .subscribe((model) => {
                           this.vehicleModel = model;
                           this.displayedVehicleModel = this.vehicleModel;
                       })
                 : ''
         );
+    }
+
+    vehicleMakeChange(value: string): void {
+        this.selectedVehicleModel = this.displayedVehicleModel[value][0];
     }
 
     openAddVehicleTypeFormDrawer() {
@@ -123,6 +132,19 @@ export class VehicleComponent implements OnInit {
     recieveUpdate($event) {
         this.vehicleMakeUpdate.next($event);
         this.vehicleTypeUpdate.next($event);
-        this.vehicleModelUpdate.next($event)
+        this.vehicleModelUpdate.next($event);
+    }
+
+    changeSelectedVehicleMake(make: IVehicleMake) {
+        this.selectedVehicleMake = make;
+        this.filterModelList(this.selectedVehicleMake.vehicleMake);
+    }
+
+    filterModelList(vehicleMake: string) {
+        this.vehicleModelService.getVehicleModel().subscribe((make) => {
+            this.displayedVehicleModel == make.filter(
+                (x) => x.vehicleMakeName == this.selectedVehicleMake.vehicleMake
+            );
+        });
     }
 }

@@ -15,95 +15,115 @@
 
         <div style="margin: 20px;">
             <nz-row nzGutter="24">
-                <nz-col nzSpan="8">
-                    <nz-card
-                        [nzBordered]="false"
-                        nzTitle="Vehicle Type"
-                        [nzExtra]="addVehicleTypeButton"
-                    >
-                        <ng-template #addVehicleTypeButton>
-                            <button
-                                nz-button
-                                nzType="primary"
-                                style="float: right;"
-                                (click)="openAddVehicleTypeFormDrawer()"
-                            >
-                                Add Vehicle Type
-                            </button>
-                        </ng-template>
-                        <div style="margin-bottom: 10px;">
-                            <div nz-row>
-                                <div nz-col>
-                                    <div style="width: 100%;">
-                                        <nz-input-group
-                                            [nzSuffix]="suffixIconSearch"
-                                        >
-                                            <input
-                                                type="text"
-                                                nz-input
-                                                placeholder="Search by name, type"
-                                            />
-                                        </nz-input-group>
-                                        <ng-template #suffixIconSearch>
-                                            <i nz-icon nzType="search"></i>
-                                        </ng-template>
-                                    </div>
+
+
+              <nz-col nzSpan="8">
+                <nz-card
+                    [nzBordered]="false"
+                    nzTitle="Vehicle Make"
+                    [nzExtra]="addVehicleMakeButton"
+                >
+                    <ng-template #addVehicleMakeButton>
+                        <button
+                            nz-button
+                            nzType="primary"
+                            style="float: right;"
+                            (click)="openAddVehicleMakeFormDrawer()"
+                        >
+                            Add Vehicle Make
+                        </button>
+                    </ng-template>
+                    <div style="margin-bottom: 10px;">
+                        <div nz-row>
+                            <div nz-col>
+                                <div style="width: 100%;">
+                                    <nz-input-group
+                                        [nzSuffix]="suffixIconSearch"
+                                    >
+                                        <input
+                                            type="text"
+                                            nz-input
+                                            placeholder="Search by name, type"
+                                        />
+                                    </nz-input-group>
+                                    <ng-template #suffixIconSearch>
+                                        <i nz-icon nzType="search"></i>
+                                    </ng-template>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <nz-table
-                            #vehicleTypeTable
-                            [nzData]="displayedVehicleType"
-                            [nzSize]="'small'"
-                            [nzBordered]="true"
-                            style="background-color: white;"
-                        >
-                            <thead>
-                                <tr>
-                                    <th>Vehicle Type</th>
-                                    <th>Description</th>
+                    <nz-table
+                        #vehicleMakeTable
+                        [(ngModel)]="selectedVehicleMake"
+                        (ngModelChange)="vehicleMakeChange($event)"
+                        [nzData]="displayedVehicleMake"
+                        [nzSize]="'small'"
+                        [nzBordered]="true"
+                        style="background-color: white;"
+                    >
+                        <thead>
+                            <tr>
+                                <th>Vehicle Make</th>
+                                <th>Action</th>
+                                <!-- <th>Action</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="
+                                    let vehicle of vehicleMakeTable.data
+                                "
+                            >
+                                <td>
+                                    {{ vehicle.vehicleMake }}
+                                </td>
 
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr
-                                    *ngFor="
-                                        let vehicle of vehicleTypeTable.data
-                                    "
-                                >
 
-                                    <td>
-                                        {{ vehicle.vehicleType }}
-                                    </td>
-                                    <td>
-                                        {{ vehicle.description }}
-                                    </td>
-                                    <!-- <td style="text-align: center;">
-                                        <button
-                                            nz-button
-                                            nzType="primary"
-                                            (click)="
-                                                editViewIntermediary(vehicle.id)
-                                            "
-                                            nz-tooltip
-                                            nzTooltipTitle="intermediary details"
-                                        >
-                                            <i
-                                                nz-icon
-                                                nzType="delete"
-                                                nzTheme="outline"
-                                            ></i>
-                                        </button>
-                                        <nz-divider
-                                            nzType="vertical"
-                                        ></nz-divider>
-                                    </td> -->
-                                </tr>
-                            </tbody>
-                        </nz-table>
-                    </nz-card>
-                </nz-col>
+                                  <td style="text-align: center;">
+
+                                    <button
+                                        nz-button
+                                        nzType="default"
+                                        (click)="
+                                        changeSelectedVehicleMake(
+                                                vehicle
+                                            )
+                                        "
+                                        nz-tooltip nzTooltipTitle="intermediary commission structure"
+                                    >
+                                    <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
+                                    </button>
+                                </td>
+
+
+                                <!-- <td style="text-align: center;">
+                                    <button
+                                        nz-button
+                                        nzType="primary"
+                                        (click)="
+                                            editViewIntermediary(vehicle)
+                                        "
+                                        nz-tooltip
+                                        nzTooltipTitle="intermediary details"
+                                    >
+                                        <i
+                                            nz-icon
+                                            nzType="delete"
+                                            nzTheme="outline"
+                                        ></i>
+                                    </button>
+                                    <nz-divider
+                                        nzType="vertical"
+                                    ></nz-divider>
+                                </td> -->
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-card>
+            </nz-col>
+
 
                 <nz-col nzSpan="8">
                     <nz-card
@@ -195,94 +215,100 @@
                     </nz-card>
                 </nz-col>
 
-                <nz-col nzSpan="8">
-                    <nz-card
-                        [nzBordered]="false"
-                        nzTitle="Vehicle Make"
-                        [nzExtra]="addVehicleMakeButton"
-                    >
-                        <ng-template #addVehicleMakeButton>
-                            <button
-                                nz-button
-                                nzType="primary"
-                                style="float: right;"
-                                (click)="openAddVehicleMakeFormDrawer()"
-                            >
-                                Add Vehicle Make
-                            </button>
-                        </ng-template>
-                        <div style="margin-bottom: 10px;">
-                            <div nz-row>
-                                <div nz-col>
-                                    <div style="width: 100%;">
-                                        <nz-input-group
-                                            [nzSuffix]="suffixIconSearch"
-                                        >
-                                            <input
-                                                type="text"
-                                                nz-input
-                                                placeholder="Search by name, type"
-                                            />
-                                        </nz-input-group>
-                                        <ng-template #suffixIconSearch>
-                                            <i nz-icon nzType="search"></i>
-                                        </ng-template>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
-                        <nz-table
-                            #vehicleMakeTable
-                            [nzData]="displayedVehicleMake"
-                            [nzSize]="'small'"
-                            [nzBordered]="true"
-                            style="background-color: white;"
-                        >
-                            <thead>
-                                <tr>
-                                    <th>Vehicle Make</th>
-                                    <th>Description</th>
-                                    <!-- <th>Action</th> -->
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr
-                                    *ngFor="
-                                        let vehicle of vehicleMakeTable.data
-                                    "
-                                >
-                                    <td>
-                                        {{ vehicle.vehicleMake }}
-                                    </td>
-                                    <td>
-                                        {{ vehicle.description }}
-                                    </td>
-                                    <!-- <td style="text-align: center;">
-                                        <button
-                                            nz-button
-                                            nzType="primary"
-                                            (click)="
-                                                editViewIntermediary(vehicle)
-                                            "
-                                            nz-tooltip
-                                            nzTooltipTitle="intermediary details"
-                                        >
-                                            <i
-                                                nz-icon
-                                                nzType="delete"
-                                                nzTheme="outline"
-                                            ></i>
-                                        </button>
-                                        <nz-divider
-                                            nzType="vertical"
-                                        ></nz-divider>
-                                    </td> -->
-                                </tr>
-                            </tbody>
-                        </nz-table>
-                    </nz-card>
-                </nz-col>
+
+
+                <nz-col nzSpan="8">
+                  <nz-card
+                      [nzBordered]="false"
+                      nzTitle="Vehicle Type"
+                      [nzExtra]="addVehicleTypeButton"
+                  >
+                      <ng-template #addVehicleTypeButton>
+                          <button
+                              nz-button
+                              nzType="primary"
+                              style="float: right;"
+                              (click)="openAddVehicleTypeFormDrawer()"
+                          >
+                              Add Vehicle Type
+                          </button>
+                      </ng-template>
+                      <div style="margin-bottom: 10px;">
+                          <div nz-row>
+                              <div nz-col>
+                                  <div style="width: 100%;">
+                                      <nz-input-group
+                                          [nzSuffix]="suffixIconSearch"
+                                      >
+                                          <input
+                                              type="text"
+                                              nz-input
+                                              placeholder="Search by name, type"
+                                          />
+                                      </nz-input-group>
+                                      <ng-template #suffixIconSearch>
+                                          <i nz-icon nzType="search"></i>
+                                      </ng-template>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
+                      <nz-table
+                          #vehicleTypeTable
+                          [nzData]="displayedVehicleType"
+                          [nzSize]="'small'"
+                          [nzBordered]="true"
+                          style="background-color: white;"
+                      >
+                          <thead>
+                              <tr>
+                                  <th>Vehicle Type</th>
+                                  <th>Description</th>
+
+                              </tr>
+                          </thead>
+                          <tbody>
+                              <tr
+                                  *ngFor="
+                                      let vehicle of vehicleTypeTable.data
+                                  "
+                              >
+
+                                  <td>
+                                      {{ vehicle.vehicleType }}
+                                  </td>
+
+                                    <td style="text-align: center;">
+
+                              </td>
+
+                                  <!-- <td style="text-align: center;">
+                                      <button
+                                          nz-button
+                                          nzType="primary"
+                                          (click)="
+                                              editViewIntermediary(vehicle.id)
+                                          "
+                                          nz-tooltip
+                                          nzTooltipTitle="intermediary details"
+                                      >
+                                          <i
+                                              nz-icon
+                                              nzType="delete"
+                                              nzTheme="outline"
+                                          ></i>
+                                      </button>
+                                      <nz-divider
+                                          nzType="vertical"
+                                      ></nz-divider>
+                                  </td> -->
+                              </tr>
+                          </tbody>
+                      </nz-table>
+                  </nz-card>
+              </nz-col>
             </nz-row>
         </div>
     </div>
@@ -302,7 +328,7 @@
     (closeAddVehicleMakesFormDrawerVisible)="
         addVehicleMakesFormDrawerVisible = false
     "
-    (closeAddVehicleMakessFormDrawerVisible)="recieveUpdate($event)"
+    (closeAddVehicleMakesFormDrawerVisible)="recieveUpdate($event)"
 ></app-vehicle-make>
 
 <app-vehicle-model

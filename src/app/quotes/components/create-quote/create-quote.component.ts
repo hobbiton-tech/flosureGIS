@@ -176,14 +176,14 @@ export class CreateQuoteComponent implements OnInit {
     vehicleMakeUrl = 'https://api.randomuser.me/?results=5';
     searchChange$ = new BehaviorSubject('');
     vehicleMakeOptionList: string[] = [];
-    selectedVehicleMake: string;
+    // selectedVehicleMake: string;
     isVehicleMakeLoading = false;
 
     // vehicle model drop down
     vehicleModelUrl = 'https://api.randomuser.me/?results=5';
     // searchChange$ = new BehaviorSubject('');
     vehicleModelOptionList: string[] = [];
-    selectedVehicleModel: string;
+    // selectedVehicleModel: string;
     isVehicleModelLoading = false;
 
     // loading feedback
@@ -226,6 +226,10 @@ export class CreateQuoteComponent implements OnInit {
     bodyTypes: IVehicleType[];
     bodyMakes: IVehicleMake[];
     bodyModels: IVehicleModel[];
+
+
+    selectedVehicleMake: string;
+    selectedVehicleModel: string;
 
     // intermediaries
     brokers: IBroker[];
@@ -2861,5 +2865,9 @@ export class CreateQuoteComponent implements OnInit {
         this.deathAndInjuryPerEventRate = 0;
         this.propertyDamageRate = 0;
         this.combinedLimitsRate = 0;
+    }
+
+    vehicleMakeChange(value: string): void{
+      this.selectedVehicleModel = this.bodyModels[value][0];
     }
 }

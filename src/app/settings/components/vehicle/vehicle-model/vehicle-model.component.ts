@@ -2,7 +2,9 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { VehicleModelService } from '../services/vehicle-model.service';
 import { NzMessageService } from 'ng-zorro-antd';
-import { IVehicleModel } from '../models/vehicle.model';
+import { IVehicleModel, IVehicleMake } from '../models/vehicle.model';
+import { VehicleMakeService } from '../services/vehicle-make.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-vehicle-model',
@@ -25,18 +27,37 @@ export class VehicleModelComponent implements OnInit {
 
     vehicleModelForm: FormGroup;
 
+    bodyMakes: IVehicleMake[];
+
+    vehicleMakeId: string;
+
+    vehicleModelId: string;
+
+    selectedVehicleMake: IVehicleMake;
+
     constructor(
         private formBuilder: FormBuilder,
         private vehicleModelService: VehicleModelService,
-        private msg: NzMessageService
+        private vehicleMakeService: VehicleMakeService,
+        private msg: NzMessageService,
+        private route: ActivatedRoute
     ) {
         this.vehicleModelForm = this.formBuilder.group({
+            vehicleMakeName: ['', Validators.required],
             vehicleModel: ['', Validators.required],
             description: ['', Validators.required],
         });
     }
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.route.params.subscribe((param) => {
+            this.vehicleMakeId = param.vehicleMakeId;
+        });
+
+        this.vehicleMakeService.getVehicleMake().subscribe((bodyMake) => {
+            this.bodyMakes = bodyMake;
+        });
+    }
 
     resetForm(e: MouseEvent): void {
         e.preventDefault();
@@ -49,17 +70,19 @@ export class VehicleModelComponent implements OnInit {
 
     async addVehicleModel(vehicleModel: IVehicleModel) {
         this.addingVehicleModel = true;
-        await this.vehicleModelService.addVehicleModel(vehicleModel).subscribe(
-            (res) => {
-                this.msg.success('Vehicle Type added successfully');
-                this.addingVehicleModel = false;
-                this.closeDrawer();
-            },
-            (err) => {
-                this.msg.error('Failed to add Vehicle Type');
-                this.addingVehicleModel = false;
-            }
-        );
+        await this.vehicleModelService
+            .addVehicleModel(vehicleModel, this.selectedVehicleMake.id)
+            .subscribe(
+                (res) => {
+                    this.msg.success('Vehicle Type added successfully');
+                    this.addingVehicleModel = false;
+                    this.closeDrawer();
+                },
+                (err) => {
+                    this.msg.error('Failed to add Vehicle Type');
+                    this.addingVehicleModel = false;
+                }
+            );
     }
 
     submitVehicleModel() {
@@ -74,5 +97,11 @@ export class VehicleModelComponent implements OnInit {
                 this.vehicleModelForm.reset();
             });
         }
+    }
+
+    reloadVehicleMake(){
+      this.vehicleMakeService.getVehicleMake().subscribe(makes => {
+        this.bodyMakes = makes
+      })
     }
 }

@@ -23,6 +23,34 @@
                         <nz-form-item>
                             <nz-form-label
                                 [nzSpan]="4"
+                                nzFor="sourceOfBusiness"
+                                nzRequired
+                                >Vehicle Make
+                            </nz-form-label>
+                            <nz-form-control nzSpan="12">
+                                <nz-select
+
+                                    nzAllowClear
+                                    nzPlaceHolder="Select Vehicle Make"
+                                    [(ngModel)] ="selectedVehicleMake"
+                                    (nzOpenChange)="reloadVehicleMake()"
+                                >
+                                    <nz-option
+                                        *ngFor="let bodyMake of bodyMakes"
+                                        [nzValue]="bodyMake"
+                                        [nzLabel]="bodyMake.vehicleMake"
+                                    ></nz-option>
+                                </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+
+                <div nz-row>
+                    <div nz-col [nzSpan]="24">
+                        <nz-form-item>
+                            <nz-form-label
+                                [nzSpan]="4"
                                 nzFor="vehicleModel"
                                 nzRequired
                                 >Vehicle Model</nz-form-label
