@@ -3958,7 +3958,8 @@
             <nz-divider></nz-divider>
             <!-- Warranties start here--->
             <div style="margin-top: 10px;">
-                <app-warranties></app-warranties>
+                <app-warranties (onWarrantySelected)="warrantySelected($event)"
+                    (onExclusionSelected)="exclusionSelected($event)"></app-warranties>
             </div>
 
             <nz-divider></nz-divider>
