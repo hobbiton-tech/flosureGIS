@@ -126,11 +126,11 @@
                 </li>
             </ol>
             <span style="float: right; text-align: left;">
-                Premium: {{ policy.currency == 'ZMW' ? 'ZMW' : '$'
+                Premium: {{ policy.currency
                 }}{{ basicPremium | number: '1.2-2' }}<br />
-                3% Levy: {{ policy.currency == 'ZMW' ? 'ZMW' : '$'
+                3% Levy: {{ policy.currency
                 }}{{ premiumLevy | number: '1.2-2' }}<br />
-                Total Premium: {{ policy.currency == 'ZMW' ? 'ZMW' : '$'
+                Total Premium: {{ policy.currency
                 }}{{ totalAmount | number: '1.2-2' }}<br />
             </span>
 
@@ -200,34 +200,33 @@
                 Policy is cancelled
             </li>
 
-            <ng-container
+            <!-- <ng-container
                 *ngIf="
                     policy.risks[0].limitsOfLiability[0].liabilityType !==
                         'combinedLimits';
                     else standardLimit
                 "
-            >
+            > -->
                 <li>
                     <p style="font-weight: bold;">Limits of Liability</p>
                     <p>Limits of the amount of the company's liability under</p>
                     <p>
-                        <span style="font-weight: bold;">Combined</span> Limit :
-                        <span style="font-weight: bold;"
+                        <span *ngIf="limits.liabilityType === 'combinedLimits'; else standardLimit" style="font-weight: bold;">Combined Limits {{policy.currency}}{{comb.amount}}</span>
+                        
+                        <!-- <span style="font-weight: bold;"
                             >K{{ combinedLimits }}</span
-                        >
-                    </p>
-                </li>
-            </ng-container>
+                        > -->
 
-            <ng-template #standardLimit>
-                <p style="font-weight: bold;">Limits of Liability</p>
-                <p>Limit of the amount of the Company’s liability under</p>
+
+                        <ng-template #standardLimit>
+                <!-- <p style="font-weight: bold;">Limits of Liability</p>
+                <p>Limit of the amount of the Company’s liability under</p> -->
 
                 <p>
                     <span style="font-weight: bold;">Section I</span> - 3
                     (Protection and Removal) –
                     <span style="font-weight: bold;"
-                        >K{{ 0 | number: '1.2-2' }}</span
+                        >{{policy.currency}}{{ 0 | number: '1.2-2' }}</span
                     >
                 </p>
 
@@ -237,11 +236,12 @@
                     in respect of any one claim or series Of claims arising out
                     of one event:
                     <span style="font-weight: bold;"
-                        >ZMW{{ deathAndInjuryPerEvent | number: '1.2-2' }} per
-                        event / ZMW{{
-                            deathAndInjuryPerPerson | number: '1.2-2'
+                        >{{policy.currency}}{{ deathPE.amount | number: '1.2-2' }} per
+                        event / {{policy.currency}}{{
+                            deathPP.amount | number: '1.2-2'
                         }}
                         per person</span
+                    >
                     >
                 </p>
                 <p>
@@ -250,7 +250,7 @@
                     respect of any claim or series Of claims arising out of one
                     event:
                     <span style="font-weight: bold;"
-                        >ZMW{{ propertyDamage | number: '1.2-2' }}</span
+                        >{{policy.currency}}{{ propertyD.amount | number: '1.2-2' }}</span
                     >
                     <span
                         >- arising from loss of use of a motor vehicle which is
@@ -261,6 +261,11 @@
                     >
                 </p>
             </ng-template>
+                    </p>
+                </li>
+            <!-- </ng-container> -->
+
+            
 
             <!-- <p>Section I-10 (Medical Expenses) in respect of any one accident/any one person <span
                         style="font-weight: bold;">K{{0 | number: '1.2-2'}} /
@@ -316,7 +321,12 @@
             <span style="font-weight: bold;"><strong>Excess</strong></span>
         </p>
         <ul style="list-style-type: none;">
-            <li>
+
+            <li *ngFor="let ex of excessList">
+                {{ex.excessType}}
+                <span style="font-weight: bold;">{{policy.currency}}{{ex.amount}}</span>
+            </li>
+            <!-- <li>
                 The insured shall be responsible for the first 10% of each and
                 every claim/loss subject to retained minimum liability of USD
                 <span style="font-weight: bold;">100</span>
@@ -360,7 +370,7 @@
                 <span style="font-weight: bold;"
                     >USD{{ otherEndorsement | number: '1.2-2' }}</span
                 >
-            </li>
+            </li> -->
         </ul>
         <p><span style="font-weight: bold;">Limitations as to Use</span>:</p>
         <p>
