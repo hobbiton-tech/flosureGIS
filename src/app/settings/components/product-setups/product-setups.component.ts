@@ -29,6 +29,9 @@ export class ProductSetupsComponent implements OnInit {
     // Selected product Id
     clickedProductId: any;
 
+    // Product Na,e
+    selectedProductName: any;
+
     //single class
     singleClass: IClass;
 
@@ -87,6 +90,7 @@ export class ProductSetupsComponent implements OnInit {
 
     onSelectProduct(product) {
         this.clickedProductId = product.id;
+        this.selectedProductName = product.productName;
     }
 
     openAddClassFormDrawer() {
