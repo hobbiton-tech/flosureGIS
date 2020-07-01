@@ -1794,7 +1794,7 @@ export class QuoteDetailsComponent implements OnInit {
                     this.isOkLoading = false;
                 }, 3000);
 
-                // this.generateID(this._id);
+                this.generateID(this._id);
             }
             console.log('HOOOOORAY>>>>>>', this.getInsuranceType);
         } else if (this.quote.risks[0].insuranceType === 'Comprehensive') {
