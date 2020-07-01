@@ -51,7 +51,11 @@ import {
     InsuranceTypeOptions,
     LimitsOfLiabilityOptions,
 } from '../../selection-options';
-import { IVehicleType, IVehicleMake, IVehicleModel } from 'src/app/settings/components/vehicle/models/vehicle.model';
+import {
+    IVehicleType,
+    IVehicleMake,
+    IVehicleModel,
+} from 'src/app/settings/components/vehicle/models/vehicle.model';
 import { VehicleService } from 'src/app/settings/components/vehicle/services/vehicle.service';
 import { VehicleMakeService } from 'src/app/settings/components/vehicle/services/vehicle-make.service';
 import { VehicleModelService } from 'src/app/settings/components/vehicle/services/vehicle-model.service';
@@ -176,14 +180,14 @@ export class CreateQuoteComponent implements OnInit {
     vehicleMakeUrl = 'https://api.randomuser.me/?results=5';
     searchChange$ = new BehaviorSubject('');
     vehicleMakeOptionList: string[] = [];
-    // selectedVehicleMake: string;
+    selectedVehicleMake: string;
     isVehicleMakeLoading = false;
 
     // vehicle model drop down
     vehicleModelUrl = 'https://api.randomuser.me/?results=5';
     // searchChange$ = new BehaviorSubject('');
     vehicleModelOptionList: string[] = [];
-    // selectedVehicleModel: string;
+    selectedVehicleModel: string;
     isVehicleModelLoading = false;
 
     // loading feedback
@@ -227,9 +231,8 @@ export class CreateQuoteComponent implements OnInit {
     bodyMakes: IVehicleMake[];
     bodyModels: IVehicleModel[];
 
-
-    selectedVehicleMake: string;
-    selectedVehicleModel: string;
+    selectedMake: IVehicleMake;
+    selectedModel: IVehicleModel;
 
     // intermediaries
     brokers: IBroker[];
@@ -523,15 +526,17 @@ export class CreateQuoteComponent implements OnInit {
 
         this.vehicleType.getVehicleType().subscribe((bodyType) => {
             this.bodyTypes = bodyType;
-        })
+        });
 
         this.vehicleMakeService.getVehicleMake().subscribe((bodyMake) => {
-          this.bodyMakes = bodyMake;
-      })
+            this.bodyMakes = bodyMake;
 
-      this.vehicleModelService.getVehicleModel().subscribe((bodyModel) => {
-        this.bodyModels = bodyModel;
-    })
+
+        });
+
+        this.vehicleModelService.getVehicleModel().subscribe((bodyModel) => {
+            this.bodyModels = bodyModel;
+        });
 
         this.clientsService.getAllClients().subscribe((clients) => {
             this.clients = [...clients[0], ...clients[1]] as Array<
@@ -2867,7 +2872,7 @@ export class CreateQuoteComponent implements OnInit {
         this.combinedLimitsRate = 0;
     }
 
-    vehicleMakeChange(value: string): void{
-      this.selectedVehicleModel = this.bodyModels[value][0];
+    vehicleMakeChange(value: string): void {
+        this.selectedVehicleModel = this.bodyModels[value][0];
     }
 }

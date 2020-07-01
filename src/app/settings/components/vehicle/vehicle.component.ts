@@ -7,7 +7,7 @@ import {
 } from '../agents/models/agents.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ICommissionSetup } from '../agents/models/commission-setup.model';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ProductSetupsServiceService } from '../product-setups/services/product-setups-service.service';
 import { CommisionSetupsService } from '../agents/services/commision-setups.service';
 import { AgentsService } from '../agents/services/agents.service';
@@ -49,6 +49,8 @@ export class VehicleComponent implements OnInit {
     selectedVehicleMake: IVehicleMake;
     selectedVehicleModel: IVehicleModel;
 
+    vehicleMakeId: string;
+
     constructor(
         private readonly router: Router,
         private formBuilder: FormBuilder,
@@ -57,6 +59,7 @@ export class VehicleComponent implements OnInit {
         private commissionSetupsService: CommisionSetupsService,
         private agentService: AgentsService,
         private msg: NzMessageService,
+        private route: ActivatedRoute,
         private vehicleService: VehicleService,
         private vehicleMakeService: VehicleMakeService,
         private vehicleModelService: VehicleModelService
@@ -68,9 +71,15 @@ export class VehicleComponent implements OnInit {
             this.isOkLoading = false;
         }, 3000);
 
+             this.route.params.subscribe(param => {
+            this.vehicleMakeId = param.vehicleMakeId;
+        });
+
+
         this.vehicleService.getVehicleType().subscribe((type) => {
             this.vehicleType = type;
             this.displayedVehicleType = this.vehicleType;
+            console.log('vehicleType',  this.displayedVehicleType )
         });
 
         this.vehicleMakeService.getVehicleMake().subscribe((make) => {

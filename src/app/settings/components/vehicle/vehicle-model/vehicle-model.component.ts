@@ -35,6 +35,12 @@ export class VehicleModelComponent implements OnInit {
 
     selectedVehicleMake: IVehicleMake;
 
+    // get vehicleId(){
+    //   return this.vehicleModelForm.get('vehicleMakeId').value
+    // }
+
+    // id = this.vehicleModelForm.controls['vehicleMake'].value;
+
     constructor(
         private formBuilder: FormBuilder,
         private vehicleModelService: VehicleModelService,
@@ -43,7 +49,7 @@ export class VehicleModelComponent implements OnInit {
         private route: ActivatedRoute
     ) {
         this.vehicleModelForm = this.formBuilder.group({
-            vehicleMakeName: ['', Validators.required],
+            vehicleMake: ['', Validators.required],
             vehicleModel: ['', Validators.required],
             description: ['', Validators.required],
         });
@@ -70,8 +76,9 @@ export class VehicleModelComponent implements OnInit {
 
     async addVehicleModel(vehicleModel: IVehicleModel) {
         this.addingVehicleModel = true;
+        console.log(';jsjsjsjs', this.vehicleModelForm.controls['vehicleMake'].value)
         await this.vehicleModelService
-            .addVehicleModel(vehicleModel, this.selectedVehicleMake.id)
+            .addVehicleModel(vehicleModel, this.vehicleModelForm.controls['vehicleMake'].value)
             .subscribe(
                 (res) => {
                     this.msg.success('Vehicle Type added successfully');

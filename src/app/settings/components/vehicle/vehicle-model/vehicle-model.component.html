@@ -23,7 +23,7 @@
                         <nz-form-item>
                             <nz-form-label
                                 [nzSpan]="4"
-                                nzFor="sourceOfBusiness"
+                                nzFor="bodyMake"
                                 nzRequired
                                 >Vehicle Make
                             </nz-form-label>
@@ -31,13 +31,16 @@
                                 <nz-select
 
                                     nzAllowClear
+                                    id="vehicleMakeId"
+                                    formControlName="vehicleMake"
+                                    name="vehicleMake"
                                     nzPlaceHolder="Select Vehicle Make"
-                                    [(ngModel)] ="selectedVehicleMake"
+
                                     (nzOpenChange)="reloadVehicleMake()"
                                 >
                                     <nz-option
                                         *ngFor="let bodyMake of bodyMakes"
-                                        [nzValue]="bodyMake"
+                                        [nzValue]="bodyMake.id"
                                         [nzLabel]="bodyMake.vehicleMake"
                                     ></nz-option>
                                 </nz-select>

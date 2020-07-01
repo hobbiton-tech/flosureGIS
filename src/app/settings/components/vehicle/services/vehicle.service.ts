@@ -4,8 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { VehicleDTO } from 'src/app/quotes/services/quotes.service';
 
-// const BASE_URL = 'https://flosure-api.com';
-const BASE_URL = 'http://localhost:3000'
+const BASE_URL = 'https://www.flosure-api.com';
+// const BASE_URL = 'http://localhost:3000'
 
 @Injectable({
     providedIn: 'root',

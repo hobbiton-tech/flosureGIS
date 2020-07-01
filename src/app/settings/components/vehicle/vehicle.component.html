@@ -67,7 +67,6 @@
                             <tr>
                                 <th>Vehicle Make</th>
                                 <th>Action</th>
-                                <!-- <th>Action</th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -98,26 +97,7 @@
                                 </td>
 
 
-                                <!-- <td style="text-align: center;">
-                                    <button
-                                        nz-button
-                                        nzType="primary"
-                                        (click)="
-                                            editViewIntermediary(vehicle)
-                                        "
-                                        nz-tooltip
-                                        nzTooltipTitle="intermediary details"
-                                    >
-                                        <i
-                                            nz-icon
-                                            nzType="delete"
-                                            nzTheme="outline"
-                                        ></i>
-                                    </button>
-                                    <nz-divider
-                                        nzType="vertical"
-                                    ></nz-divider>
-                                </td> -->
+
                             </tr>
                         </tbody>
                     </nz-table>
@@ -189,26 +169,7 @@
                                     <td>
                                         {{ vehicle.description }}
                                     </td>
-                                    <!-- <td style="text-align: center;">
-                                        <button
-                                            nz-button
-                                            nzType="primary"
-                                            (click)="
-                                                editViewIntermediary(vehicle)
-                                            "
-                                            nz-tooltip
-                                            nzTooltipTitle="intermediary details"
-                                        >
-                                            <i
-                                                nz-icon
-                                                nzType="delete"
-                                                nzTheme="outline"
-                                            ></i>
-                                        </button>
-                                        <nz-divider
-                                            nzType="vertical"
-                                        ></nz-divider>
-                                    </td> -->
+
                                 </tr>
                             </tbody>
                         </nz-table>
@@ -221,7 +182,7 @@
                 <nz-col nzSpan="8">
                   <nz-card
                       [nzBordered]="false"
-                      nzTitle="Vehicle Type"
+                      nzTitle="Vehicle Body Type"
                       [nzExtra]="addVehicleTypeButton"
                   >
                       <ng-template #addVehicleTypeButton>
@@ -231,7 +192,7 @@
                               style="float: right;"
                               (click)="openAddVehicleTypeFormDrawer()"
                           >
-                              Add Vehicle Type
+                              Add Vehicle Body Type
                           </button>
                       </ng-template>
                       <div style="margin-bottom: 10px;">
@@ -264,7 +225,7 @@
                       >
                           <thead>
                               <tr>
-                                  <th>Vehicle Type</th>
+                                  <th>Vehicle BodyType</th>
                                   <th>Description</th>
 
                               </tr>
@@ -281,29 +242,8 @@
                                   </td>
 
                                     <td style="text-align: center;">
-
+                                      {{ vehicle.description }}
                               </td>
-
-                                  <!-- <td style="text-align: center;">
-                                      <button
-                                          nz-button
-                                          nzType="primary"
-                                          (click)="
-                                              editViewIntermediary(vehicle.id)
-                                          "
-                                          nz-tooltip
-                                          nzTooltipTitle="intermediary details"
-                                      >
-                                          <i
-                                              nz-icon
-                                              nzType="delete"
-                                              nzTheme="outline"
-                                          ></i>
-                                      </button>
-                                      <nz-divider
-                                          nzType="vertical"
-                                      ></nz-divider>
-                                  </td> -->
                               </tr>
                           </tbody>
                       </nz-table>

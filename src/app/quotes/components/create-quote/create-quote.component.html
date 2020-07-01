@@ -324,25 +324,21 @@
                                                             nzSpan="10"
                                                         >
                                                             <nz-select
-                                                            [(ngModel)] ="selectedVehicleMake"
+                                                            [(ngModel)] ="selectedMake"
                                                             (ngModelChange)="vehicleMakeChange($event)"
                                                                 nzPlaceHolder="Select vehicle make"
                                                                 formControlName="vehicleMake"
                                                             >
-                                                                <div
-                                                                    *ngFor="
-                                                                        let bodyMake of bodyMakes
-                                                                    "
-                                                                >
+
                                                                     <nz-option
+                                                                    *ngFor="let bodyMake of bodyMakes "
+
                                                                         [nzValue]="
-                                                                            bodyMake.vehicleMake
-                                                                        "
+                                                                            bodyMake.vehicleMake"
                                                                         [nzLabel]="
-                                                                            bodyMake.vehicleMake
-                                                                        "
+                                                                            bodyMake.vehicleMake"
                                                                     ></nz-option>
-                                                                </div>
+
                                                             </nz-select>
                                                         </nz-form-control>
                                                     </nz-form-item>
@@ -360,22 +356,23 @@
                                                             <nz-select
                                                                 nzPlaceHolder="Select vehicle model"
                                                                 formControlName="vehicleModel"
-                                                                [(ngModel)]="selectedVehicleModel"
+                                                                [(ngModel)]="selectedModel"
                                                             >
-                                                                <div
-                                                                    *ngFor="
-                                                                        let  vehicleModel of bodyModels[selectedVehicleMake]
-                                                                    "
+
+
                                                                 >
                                                                     <nz-option
+                                                                    *ngFor="
+                                                                    let  vehicleModel of bodyModels"
                                                                         [nzValue]="
                                                                         vehicleModel.vehicleModel
                                                                         "
                                                                         [nzLabel]="
                                                                         vehicleModel.vehicleModel
+
                                                                         "
                                                                     ></nz-option>
-                                                                </div>
+
                                                             </nz-select>
                                                         </nz-form-control>
                                                     </nz-form-item>
