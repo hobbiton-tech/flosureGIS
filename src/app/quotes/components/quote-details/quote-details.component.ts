@@ -1643,7 +1643,7 @@ export class QuoteDetailsComponent implements OnInit {
                         coverNote.policyId = r.id;
                         console.log(
                             'Cover Note>>>>',
-                            res.data.certificate_number
+                            res.data.certificate_number, coverNote
                         );
 
                         this.http
@@ -1653,10 +1653,10 @@ export class QuoteDetailsComponent implements OnInit {
                         )
                         .subscribe(
                             async (res) => {
-                                console.log(res);
+                                console.log("CHECK for RESULTS<<<<<<<",res);
                             },
                             async (err) => {
-                                console.log(err);
+                                console.log("CHECK for ERRORS<<<<<<<",err);
                             }
                         );
 
@@ -1794,7 +1794,7 @@ export class QuoteDetailsComponent implements OnInit {
                     this.isOkLoading = false;
                 }, 3000);
 
-                this.generateID(this._id);
+                // this.generateID(this._id);
             }
             console.log('HOOOOORAY>>>>>>', this.getInsuranceType);
         } else if (this.quote.risks[0].insuranceType === 'Comprehensive') {
