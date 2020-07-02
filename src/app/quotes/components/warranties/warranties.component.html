@@ -1,66 +1,41 @@
 <nz-collapse>
-    <nz-collapse-panel nzHeader="Warranties and Exclusions" >
+    <nz-collapse-panel nzHeader="Warranties and Exclusions">
         <div nz-row [nzGutter]="8">
             <div nz-col [nzSpan]="12">
                 <nz-card nzTitle="Warranties">
                     <div style="margin-bottom: 10px;">
                         <div nz-row [nzGutter]="24">
                             <div nz-col nzSpan="12">
-                                <div
-                                    style="width: 75%;"
-                                >
-                                    <nz-input-group
-                                        [nzSuffix]="
+                                <div style="width: 75%;">
+                                    <nz-input-group [nzSuffix]="
                                             suffixIconSearch
-                                        "
-                                    >
-                                        <input
-                                            type="text"
-                                            nz-input
-                                            placeholder="Search by Warranty ID, Warranty type"
-                                        />
+                                        ">
+                                        <input type="text" nz-input
+                                            placeholder="Search by Warranty ID, Warranty type" />
                                     </nz-input-group>
-                                    <ng-template
-                                        #suffixIconSearch
-                                    >
-                                        <i
-                                            nz-icon
-                                            nzType="search"
-                                        ></i>
+                                    <ng-template #suffixIconSearch>
+                                        <i nz-icon nzType="search"></i>
                                     </ng-template>
                                 </div>
                             </div>
 
                             <diV nz-col nzSpan="12">
-                                <nz-select
-                                    style="
+                                <nz-select style="
                                         width: 200px;
-                                    "
-                                    nzShowSearch
-                                    nzAllowClear
-                                    nzPlaceHolder="Select a Warranty"
-                                    nzMode="multiple"
+                                    " nzShowSearch nzAllowClear nzPlaceHolder="Select a Warranty" nzMode="multiple"
                                     [(ngModel)]="
                                         selectedWarrantyValue
-                                    "
-                                >
-                                    <nz-option
-                                        *ngFor="
+                                    " (ngModelChange)="selectWarranty()">
+                                    <nz-option *ngFor="
                                             let o of warrantyList
-                                        "
-                                        [nzLabel]="
+                                        " [nzLabel]="
                                             o.heading
-                                        "
-                                        [nzValue]="o"
-                                    ></nz-option>
+                                        " [nzValue]="o"></nz-option>
                                 </nz-select>
                             </diV>
                         </div>
                     </div>
-                    <nz-table
-                        #warrantyTable
-                        [nzData]="selectedWarrantyValue"
-                    >
+                    <nz-table #warrantyTable [nzData]="selectedWarrantyValue">
                         <thead>
                             <tr>
                                 <th>Heading</th>
@@ -69,11 +44,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr
-                                *ngFor="
+                            <tr *ngFor="
                                     let warranty of warrantyTable.data
-                                "
-                            >
+                                ">
                                 <td>
                                     {{
                                         warranty.heading
@@ -89,22 +62,18 @@
                                     nz-button
                                     nzType="primary"
                                     (click)="
-                                        onSelectWording(
+                                        onSelectExclusion(
                                             wording
                                         )
                                     "
                                 >
                                     Select
                                 </button> -->
-                                    <button
-                                        nz-button
-                                        nzType="default"
-                                        (click)="
+                                    <button nz-button nzType="default" (click)="
                                             onEditWarranty(
                                                 warranty
                                             )
-                                        "
-                                    >
+                                        ">
                                         Edit
                                     </button>
                                 </td>
@@ -118,62 +87,37 @@
                     <div style="margin-bottom: 10px;">
                         <div nz-row [nzGutter]="24">
                             <div nz-col nzSpan="12">
-                                <div
-                                    style="width: 75%;"
-                                >
-                                    <nz-input-group
-                                        [nzSuffix]="
+                                <div style="width: 75%;">
+                                    <nz-input-group [nzSuffix]="
                                             suffixIconSearch
-                                        "
-                                    >
-                                        <input
-                                            type="text"
-                                            nz-input
-                                            placeholder="Search by exclusion ID, exclusion type"
-                                        />
+                                        ">
+                                        <input type="text" nz-input
+                                            placeholder="Search by exclusion ID, exclusion type" />
                                     </nz-input-group>
-                                    <ng-template
-                                        #suffixIconSearch
-                                    >
-                                        <i
-                                            nz-icon
-                                            nzType="search"
-                                        ></i>
+                                    <ng-template #suffixIconSearch>
+                                        <i nz-icon nzType="search"></i>
                                     </ng-template>
                                 </div>
                             </div>
                             <diV nz-col nzSpan="12">
-                                <nz-select
-                                    style="
+                                <nz-select style="
                                         width: 200px;
-                                    "
-                                    nzShowSearch
-                                    nzAllowClear
-                                    nzPlaceHolder="Select a Exclusion"
-                                    nzMode="multiple"
+                                    " nzShowSearch nzAllowClear nzPlaceHolder="Select a Exclusion" nzMode="multiple"
                                     [(ngModel)]="
                                         selectedExclusionValue
-                                    "
-                                >
-                                    <nz-option
-                                        *ngFor="
+                                    " (ngModelChange)="selectExclusion()">
+                                    <nz-option *ngFor="
                                             let o of exclusionList
-                                        "
-                                        [nzLabel]="
+                                        " [nzLabel]="
                                             o.heading
-                                        "
-                                        [nzValue]="o"
-                                    ></nz-option>
+                                        " [nzValue]="o"></nz-option>
                                 </nz-select>
                             </diV>
                         </div>
                     </div>
-                    <nz-table
-                        #exclusionTable
-                        [nzData]="
+                    <nz-table #exclusionTable [nzData]="
                         selectedExclusionValue
-                        "
-                    >
+                        ">
                         <thead>
                             <tr>
                                 <th>Heading</th>
@@ -182,11 +126,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr
-                                *ngFor="
+                            <tr *ngFor="
                                     let exclusion of exclusionTable.data
-                                "
-                            >
+                                ">
                                 <td>
                                     {{
                                         exclusion.heading
@@ -209,15 +151,11 @@
                                 >
                                     Select
                                 </button> -->
-                                    <button
-                                        nz-button
-                                        nzType="default"
-                                        (click)="
+                                    <button nz-button nzType="default" (click)="
                                             onEditExclusion(
                                                 exclusion
                                             )
-                                        "
-                                    >
+                                        ">
                                         Edit
                                     </button>
                                 </td>
@@ -228,4 +166,78 @@
             </div>
         </div>
     </nz-collapse-panel>
-  </nz-collapse>
+</nz-collapse>
+
+<nz-modal [(nzVisible)]="isWarrantyEditVisible" nzTitle="Edit Warranty" (nzOnCancel)="handleEditWarrantyCancel()"
+    (nzOnOk)="handleEditWarrantyOk()">
+    <form nz-form [formGroup]="warrantyForm">
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Heading</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..."
+                [nzErrorTip]="warrantyErrorTpl">
+                <input nz-input formControlName="heading" />
+                <ng-template #warrantyErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please input your warranty heading!
+                    </ng-container>
+                    <ng-container *ngIf="control.hasError('duplicated')">
+                        The heading is redundant!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..."
+                [nzErrorTip]="warrantyDeailsErrorTpl">
+                <textarea formControlName="description" nz-input rows="5"></textarea>
+
+                <ng-template #warrantyDeailsErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please input your warranty details!
+                    </ng-container>
+                    <ng-container *ngIf="control.hasError('duplicated')">
+                        The details are redundant!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</nz-modal>
+
+<nz-modal [(nzVisible)]="isExclusionEditVisible" nzTitle="Edit Exclusion" (nzOnCancel)="handleEditExclusionCancel()"
+    (nzOnOk)="handleEditExclusionOk()">
+    <form nz-form [formGroup]="exclusionForm">
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Heading</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..."
+                [nzErrorTip]="exclusionErrorTpl">
+                <input nz-input formControlName="heading" />
+                <ng-template #exclusionErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please input your exclusion heading!
+                    </ng-container>
+                    <ng-container *ngIf="control.hasError('duplicated')">
+                        The heading is redundant!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..."
+                [nzErrorTip]="exclusionDescriptionErrorTpl">
+                <textarea formControlName="description" nz-input rows="5"></textarea>
+
+                <ng-template #exclusionDescriptionErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please input your description!
+                    </ng-container>
+                    <ng-container *ngIf="control.hasError('duplicated')">
+                        The description is redundant!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</nz-modal>

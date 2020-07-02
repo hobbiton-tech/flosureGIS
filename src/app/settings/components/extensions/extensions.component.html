@@ -86,7 +86,7 @@
                 </nz-table>
             </nz-collapse-panel>
 
-            <nz-collapse-panel nzHeader="Limits & Liabilities">
+            <nz-collapse-panel nzHeader="Limit of Liability">
                 <div style="margin-bottom: 10px;">
                     <div nz-row [nzGutter]="24">
                         <div nz-col [nzSpan]="12">
@@ -125,7 +125,7 @@
                 </nz-table>
             </nz-collapse-panel>
 
-            <nz-collapse-panel nzHeader="Exccesses">
+            <nz-collapse-panel nzHeader="Excess">
                 <div style="margin-bottom: 10px;">
                     <div nz-row [nzGutter]="24">
                         <div nz-col [nzSpan]="12">
@@ -216,7 +216,7 @@
     </form>
 </nz-drawer>
 
-<nz-drawer [nzClosable]="false" [nzVisible]="isLimitVisible" nzPlacement="left" nzTitle="Create Limits & Liabilities"
+<nz-drawer [nzClosable]="false" [nzVisible]="isLimitVisible" nzPlacement="left" nzTitle="Create Limit of Liability"
     (nzOnClose)="closeLimit()" [nzWidth]="600">
     <form nz-form [formGroup]="limitForm" (ngSubmit)="submitLimitForm()">
         <nz-form-item>
@@ -275,7 +275,7 @@
     </form>
 </nz-drawer>
 
-<nz-drawer [nzClosable]="false" [nzVisible]="isExccessVisible" nzPlacement="left" nzTitle="Create Exccesses"
+<nz-drawer [nzClosable]="false" [nzVisible]="isExccessVisible" nzPlacement="left" nzTitle="Create Excess"
     (nzOnClose)="closeExccess()" [nzWidth]="600">
     <form nz-form [formGroup]="exccessForm" (ngSubmit)="submitExccessForm()">
         <nz-form-item>

@@ -44,6 +44,7 @@ export class UnderwritingSetupsComponent implements OnInit {
     isExtensionsVisible = false;
     isWordingsVisible = false;
     selectedProductId: any;
+    productName: any;
 
     constructor(
         private productsService: ProductSetupsServiceService,
@@ -98,6 +99,7 @@ export class UnderwritingSetupsComponent implements OnInit {
     onSelectProduct(product) {
         console.log('PEEEEEEEE>>>>', product);
         this.selectedProductId = product.id;
+        this.productName = product.productName;
     }
 
     openClauses(): void {

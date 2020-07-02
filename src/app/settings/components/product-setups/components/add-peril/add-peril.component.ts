@@ -16,6 +16,8 @@ export class AddPerilComponent implements OnInit {
     @Input()
     selectedProductId: any;
 
+    @Input() productName: any;
+
     @Output()
     closeAddPerilFormDrawerVisible: EventEmitter<any> = new EventEmitter();
 

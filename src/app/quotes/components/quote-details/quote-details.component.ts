@@ -481,6 +481,7 @@ export class QuoteDetailsComponent implements OnInit {
      excessTHP:IExccess[]=[];
      excessAct:IExccess[]=[];
      excessFT:IExccess[]=[];
+     limitsOfLiabilities: LimitsOfLiability[] = [];
 
     constructor(
         private formBuilder: FormBuilder,
@@ -528,6 +529,8 @@ export class QuoteDetailsComponent implements OnInit {
                 this.risks = this.quoteData.risks;
 
                 this.excessList = this.risks[0].excesses
+
+                this.limitsOfLiabilities = this.risks[0].limitsOfLiability
                 console.log('RISKS<<<<<<', this.excessList)
 
                 // this.productClauseService.getExccesses().subscribe((res) => {
@@ -1640,7 +1643,7 @@ export class QuoteDetailsComponent implements OnInit {
                         coverNote.policyId = r.id;
                         console.log(
                             'Cover Note>>>>',
-                            res.data.certificate_number
+                            res.data.certificate_number, coverNote
                         );
 
                         this.http
@@ -1650,10 +1653,10 @@ export class QuoteDetailsComponent implements OnInit {
                         )
                         .subscribe(
                             async (res) => {
-                                console.log(res);
+                                console.log("CHECK for RESULTS<<<<<<<",res);
                             },
                             async (err) => {
-                                console.log(err);
+                                console.log("CHECK for ERRORS<<<<<<<",err);
                             }
                         );
 

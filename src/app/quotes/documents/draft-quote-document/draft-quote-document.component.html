@@ -140,11 +140,11 @@
                 <th style="border: 1px solid black;">MAKE</th>
                 <th style="border: 1px solid black;">MODEL</th>
                 <th style="border: 1px solid black;">REG NO.</th>
-                <th style="border: 1px solid black;">SUM INSURED({{quoteData.currency == 'ZMW' ? 'K' : '$'}}) </th>
+                <th style="border: 1px solid black;">SUM INSURED({{quoteData.currency}}) </th>
                 <th style="border: 1px solid black;">RATE(%)</th>
-                <th style="border: 1px solid black;">PREMIUM({{quoteData.currency == 'ZMW' ? 'K' : '$'}}) </th>
-                <th style="border: 1px solid black;">LEVY @3%({{quoteData.currency == 'ZMW' ? 'K' : '$'}}) </th>
-                <th style="border: 1px solid black;">TOTAL({{quoteData.currency == 'ZMW' ? 'K' : '$'}}) </th>
+                <th style="border: 1px solid black;">PREMIUM({{quoteData.currency}}) </th>
+                <th style="border: 1px solid black;">LEVY @3%({{quoteData.currency}}) </th>
+                <th style="border: 1px solid black;">TOTAL({{quoteData.currency}}) </th>
             </tr>
             <tr *ngFor="let risk of risksTable.data">
                 <td style="border: 1px solid black;">{{risk.vehicleMake}}</td>
@@ -167,7 +167,7 @@
                 <tr>
                     <td><strong>Total Sum Insured</strong></td>
                     <td><strong>:</strong></td>
-                    <td><span> {{quoteData.currency == 'ZMW' ? 'K' : '$'}} {{totalSumInsured | number: '1.2-2'}}</span>
+                    <td><span> {{quoteData.currency}} {{totalSumInsured | number: '1.2-2'}}</span>
                     </td>
                 </tr>
 
@@ -180,7 +180,7 @@
                 <tr>
                     <td><strong>Basic Premium</strong></td>
                     <td><strong>:</strong></td>
-                    <td><span> {{quoteData.currency == 'ZMW' ? 'K' : '$'}}
+                    <td><span> {{quoteData.currency}}
                             {{totalBasicPremium | number: '1.2-2'}}</span>
                     </td>
                 </tr>
@@ -188,13 +188,13 @@
                 <tr>
                     <td><strong>Levy @ 3%</strong></td>
                     <td><strong>:</strong></td>
-                    <td><span> {{quoteData.currency == 'ZMW' ? 'K' : '$'}} {{totalLevy | number: '1.2-2'}}</span></td>
+                    <td><span> {{quoteData.currency}} {{totalLevy | number: '1.2-2'}}</span></td>
                 </tr>
 
                 <tr>
                     <td><strong>Total Premium</strong></td>
                     <td><strong>:</strong></td>
-                    <td><span> {{quoteData.currency == 'ZMW' ? 'K' : '$'}} {{totalNetPremium | number: '1.2-2'}}</span>
+                    <td><span> {{quoteData.currency}} {{totalNetPremium | number: '1.2-2'}}</span>
                     </td>
                 </tr>
 
@@ -218,12 +218,12 @@
                 </tr>
 
                 <tr>
-                    <td><strong>Third Party Limits of Liability</strong></td>
+                    <td><strong>Limits of Liability</strong></td>
                     <td><strong>:</strong></td>
                     <td><span>
-                            Death/Bodily Injury per person K30,100.00<br />
-                            Death/Bodily Injury per event K60,100.00<br />
-                            Property Damage any one event K30,000.00
+                            <div *ngFor="let lol of limitsOfLiabilities">
+                                {{lol.liabilityType}} {{quoteData.currency}}{{lol.amount}}<br/>
+                                </div>
                         </span></td>
                 </tr>
 
@@ -257,7 +257,7 @@
                     <td><span>As follows</span></td>
                 </tr>
 
-                <tr>
+                <!-- <tr>
                     <td>
                         <span>
                             <ul>
@@ -271,7 +271,7 @@
                             </ul>
                         </span>
                     </td>
-                </tr>
+                </tr> -->
             </table>
 
             <tr class="information">
