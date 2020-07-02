@@ -4,13 +4,19 @@ import {
     AfterViewInit,
     ChangeDetectorRef,
     Output,
-    EventEmitter
+    EventEmitter,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormGroup, FormBuilder, Validators, FormControl, ValidationErrors } from '@angular/forms';
+import {
+    FormGroup,
+    FormBuilder,
+    Validators,
+    FormControl,
+    ValidationErrors,
+} from '@angular/forms';
 import {
     IIndividualClient,
-    ICorporateClient
+    ICorporateClient,
 } from '../../models/clients.model';
 import { ClientsService } from '../../services/clients.service';
 import { NzMessageService } from 'ng-zorro-antd';
@@ -20,7 +26,7 @@ import { HttpClient } from '@angular/common/http';
 @Component({
     selector: 'app-create-client',
     templateUrl: './create-client.component.html',
-    styleUrls: ['./create-client.component.scss']
+    styleUrls: ['./create-client.component.scss'],
 })
 export class CreateClientComponent implements OnInit, AfterViewInit {
     //feedback loading
@@ -45,7 +51,8 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
         private formBuilder: FormBuilder,
         private clientsService: ClientsService,
         private msg: NzMessageService,
-        private cdr: ChangeDetectorRef, private http: HttpClient
+        private cdr: ChangeDetectorRef,
+        private http: HttpClient
     ) {
         this.individualClientForm = this.formBuilder.group({
             title: [''],
@@ -68,13 +75,17 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
             accountNumber: [''],
             accountType: [''],
             bank: [''],
-            branch: ['']
+            branch: [''],
         });
 
         this.corporateClientForm = this.formBuilder.group({
             companyName: ['', Validators.required],
             taxPin: [''],
-            registrationNumber: ['', Validators.required, [this.companyRegAsyncValidator]],
+            registrationNumber: [
+                '',
+                Validators.required,
+                [this.companyRegAsyncValidator],
+            ],
             email: [''],
             phone: [''],
             address: [''],
@@ -89,7 +100,7 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
             accountNumber: [''],
             accountType: [''],
             bank: [''],
-            branch: ['']
+            branch: [''],
         });
     }
 
@@ -97,77 +108,82 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
         this.selectedClientType = 'Corporate';
         this.clientsService.getIndividualClients().subscribe((res) => {
             this.individualClients = res;
-        })
+        });
         this.clientsService.getCorporateClients().subscribe((res) => {
             this.corporateClients = res;
-        })
+        });
         this.cdr.detectChanges();
     }
 
-
     clientIDAsyncValidator = (control: FormControl) =>
-    new Observable((observer: Observer<ValidationErrors | null>) => {
-      setTimeout(() => {
-        this.clientsService.getIndividualClients().subscribe((res) => {
-            this.individualClients = res;
-            if(this.individualClients.length > 0) {
-                console.log("ARRAY>>", this.individualClients);
-                
-              for (const ind of this.individualClients) {
-                  console.log("ERROR>>>",control.value, ind.idNumber);
-                if (control.value === ind.idNumber) {
-                    // you have to return `{error: true}` to mark it as an error event
-                    observer.next({ error: true, duplicated: true });
-                    break;
-                  } else {
-                    observer.next(null);
-                  }
-              }
-            } else {
-              observer.next(null);
-            }
-            observer.complete();
-        })
-         
-      }, 1000);
-    });
+        new Observable((observer: Observer<ValidationErrors | null>) => {
+            setTimeout(() => {
+                this.clientsService.getIndividualClients().subscribe((res) => {
+                    this.individualClients = res;
+                    if (this.individualClients.length > 0) {
+                        console.log('ARRAY>>', this.individualClients);
+
+                        for (const ind of this.individualClients) {
+                            console.log(
+                                'ERROR>>>',
+                                control.value,
+                                ind.idNumber
+                            );
+                            if (control.value === ind.idNumber) {
+                                // you have to return `{error: true}` to mark it as an error event
+                                observer.next({
+                                    error: true,
+                                    duplicated: true,
+                                });
+                                break;
+                            } else {
+                                observer.next(null);
+                            }
+                        }
+                    } else {
+                        observer.next(null);
+                    }
+                    observer.complete();
+                });
+            }, 1000);
+        });
 
     companyRegAsyncValidator = (control: FormControl) =>
-    new Observable((observer: Observer<ValidationErrors | null>) => {
-      setTimeout(() => {
-        this.clientsService.getCorporateClients().subscribe((res) => {
-            this.corporateClients = res;
-            if(this.corporateClients.length > 0) {
-                for (const cor of this.corporateClients) {
-                    console.log("ERROR>>>", cor.registrationNumber);
-                    
-                  if (control.value === cor.registrationNumber) {
-                      // you have to return `{error: true}` to mark it as an error event
-                      observer.next({ error: true, duplicated: true });
-                      break;
+        new Observable((observer: Observer<ValidationErrors | null>) => {
+            setTimeout(() => {
+                this.clientsService.getCorporateClients().subscribe((res) => {
+                    this.corporateClients = res;
+                    if (this.corporateClients.length > 0) {
+                        for (const cor of this.corporateClients) {
+                            console.log('ERROR>>>', cor.registrationNumber);
+
+                            if (control.value === cor.registrationNumber) {
+                                // you have to return `{error: true}` to mark it as an error event
+                                observer.next({
+                                    error: true,
+                                    duplicated: true,
+                                });
+                                break;
+                            } else {
+                                observer.next(null);
+                            }
+                        }
                     } else {
-                      observer.next(null);
+                        observer.next(null);
                     }
-                }
-              } else {
-                  observer.next(null);
-              }
-              observer.complete();
-        })
-       
-      }, 1000);
-    });
-
-
+                    observer.complete();
+                });
+            }, 1000);
+        });
 
     ngAfterViewInit(): void {
         this.selectedClientType = 'Corporate';
         this.clientsService.getIndividualClients().subscribe((res) => {
             this.individualClients = res;
-        })
+        });
         this.clientsService.getCorporateClients().subscribe((res) => {
             this.corporateClients = res;
-        })
+        });
         this.cdr.detectChanges();
     }
 
@@ -178,74 +194,73 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
     async addIndividualClient(client: IIndividualClient): Promise<void> {
         this.creatingClient = true;
         this.http
-        .get<any>(
-            `https://flosure-number-generation.herokuapp.com/aplus-client-number/IND`
-        )
-        .subscribe(async (res) => {
-            console.log('Client ID>>>>>>', res.data.client_number);
-            this.clientID = res.data.client_number;
-            console.log('Client ID>>>>>>', this.clientID);
-        client.clientType = 'Individual';
-        client.dateCreated = new Date();
-        client.dateUpdated = new Date();
-        client.status = 'Inactive';
-        client.clientID = this.clientID;
+            .get<any>(
+                `https://flosure-number-generation.herokuapp.com/savenda-client-number/IND`
+            )
+            .subscribe(async (res) => {
+                console.log('Client ID>>>>>>', res.data.client_number);
+                this.clientID = res.data.client_number;
+                console.log('Client ID>>>>>>', this.clientID);
+                client.clientType = 'Individual';
+                client.dateCreated = new Date();
+                client.dateUpdated = new Date();
+                client.status = 'Inactive';
+                client.clientID = this.clientID;
 
-        console.log(client);
-            await this.clientsService.addIndividualClient(client).subscribe(
-                async res => {
-                    this.creatingClient = false;
-                    this.msg.success('Client Created successfully');
-                    this.router.navigateByUrl('/flosure/clients/clients-list');
-                },
-                async err => {
-                    this.creatingClient = false;
-                    this.msg.error('Client Creation failed');
-                },
-                async () => {
-                    this.closeDrawer();
-                }
-            );
-        });
-        
+                console.log(client);
+                await this.clientsService.addIndividualClient(client).subscribe(
+                    async (res) => {
+                        this.creatingClient = false;
+                        this.msg.success('Client Created successfully');
+                        this.router.navigateByUrl(
+                            '/flosure/clients/clients-list'
+                        );
+                    },
+                    async (err) => {
+                        this.creatingClient = false;
+                        this.msg.error('Client Creation failed');
+                    },
+                    async () => {
+                        this.closeDrawer();
+                    }
+                );
+            });
     }
 
     async addCorporateClient(client: ICorporateClient): Promise<void> {
         this.creatingClient = true;
         this.http
             .get<any>(
-                `https://flosure-number-generation.herokuapp.com/aplus-client-number/COR`
+                `https://flosure-number-generation.herokuapp.com/savenda-client-number/COR`
             )
             .subscribe(async (res) => {
                 console.log('Client ID>>>>>>', res.data.client_number);
                 this.clientID = res.data.client_number;
                 client.clientType = 'Corporate';
-        client.dateCreated = new Date();
-        client.dateUpdated = new Date();
-        client.status = 'Inactive';
-        client.clientID = this.clientID;
-        console.log(client);
-        await this.clientsService.addCorporateClient(client).subscribe(
-            async res => {
-                this.creatingClient = true;
-                this.msg.success('Client Created successfully');
-                this.router.navigateByUrl('/flosure/clients/clients-list');
-            },
-            async err => {
-                this.msg.error('Client Creation failed');
-                this.creatingClient = false;
-            },
+                client.dateCreated = new Date();
+                client.dateUpdated = new Date();
+                client.status = 'Inactive';
+                client.clientID = this.clientID;
+                console.log(client);
+                await this.clientsService.addCorporateClient(client).subscribe(
+                    async (res) => {
+                        this.creatingClient = true;
+                        this.msg.success('Client Created successfully');
+                        this.router.navigateByUrl(
+                            '/flosure/clients/clients-list'
+                        );
+                    },
+                    async (err) => {
+                        this.msg.error('Client Creation failed');
+                        this.creatingClient = false;
+                    },
 
-            async () => {
-                this.creatingClient = false;
-                this.closeDrawer();
-            }
-            
-        );
+                    async () => {
+                        this.creatingClient = false;
+                        this.closeDrawer();
+                    }
+                );
             });
-        
-        
-        
     }
 
     submitIndividualClient(): void {
@@ -261,7 +276,7 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
             !this.individualClientForm.valid
         ) {
             this.addIndividualClient(this.individualClientForm.value).then(
-                res => {
+                (res) => {
                     console.log('Added Individaul');
                     this.individualClientForm.reset();
                 }
@@ -270,7 +285,7 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
     }
 
     submitCorporateClient(): void {
-        this.addCorporateClient(this.corporateClientForm.value).then(res => {
+        this.addCorporateClient(this.corporateClientForm.value).then((res) => {
             console.log('Added Corporate.');
             this.corporateClientForm.reset();
         });

@@ -59,7 +59,7 @@
                                 <P
                                     ><A NAME="_GoBack"></A
                                     ><img
-                                        src="assets/images/apluslogo.png"
+                                        src="assets/images/Savenda-Logo-Final.png"
                                         style="width: 100%; max-width: 300px;"
                                 /></P>
                             </TD>
@@ -77,12 +77,10 @@
                                 STYLE="border: none; padding: 0in"
                             >
                                 <P ALIGN="RIGHT">
-                                    A Plus General Insurance<br />
-                                    Plot No. 402, Roma Park, Zambezi Road<br />
-                                    P.O. Box 31700, Lusaka Zambia<br />
-                                    Tel: +260 211 239865/6 - Tele/Fax:+260 211
-                                    239867<br />
-                                    E-mail: info@aplusgeneral.com<br />
+                                    Savenda General Insurance LTD<br />
+                                    Plot 20849 PSC Corporate Park, <br />
+                                    P.O Box 30363, Lusaka Zambia<br />
+                                    Tel: :+260 977 893 878, +260 960 344 478<br />
                                 </P>
                             </TD>
                         </TR>
@@ -171,11 +169,9 @@
                                     ><FONT FACE="Arial, serif"
                                         ><FONT SIZE="2"
                                             >Tpin:
-                                            <span style="color: red;"
-                                                >{{
-                                                  receipt.tpinNumber
-                                                }}</span
-                                            ></FONT
+                                            <span style="color: red;">{{
+                                                receipt.tpinNumber
+                                            }}</span></FONT
                                         ></FONT
                                     ></P
                                 >
@@ -407,11 +403,8 @@
                                 >
                                     <P ALIGN="LEFT"
                                         ><FONT FACE="Arial, serif"
-                                            ><FONT SIZE="2"
-                                                ></FONT
-                                            ></FONT
-                                        ></P
-                                    >
+                                            ><FONT SIZE="2"></FONT></FONT
+                                    ></P>
                                 </TD>
                                 <ng-container
                                     *ngIf="
@@ -492,6 +485,20 @@
                                         >
                                     </TD>
                                     <TD
+                                        WIDTH="191"
+                                        HEIGHT="5"
+                                        BGCOLOR="#ffffff"
+                                        STYLE="border: none; padding: 0in"
+                                    >
+                                        <P ALIGN="LEFT"
+                                            ><FONT FACE="Arial, serif"
+                                                ><FONT SIZE="2"></FONT></FONT
+                                        ></P>
+                                    </TD>
+                                </ng-container>
+                            </TR>
+                            <TR>
+                                <TD
                                     WIDTH="191"
                                     HEIGHT="5"
                                     BGCOLOR="#ffffff"
@@ -500,36 +507,17 @@
                                     <P ALIGN="LEFT"
                                         ><FONT FACE="Arial, serif"
                                             ><FONT SIZE="2"
-                                                ></FONT
+                                                >Amount in Words:
+                                                {{
+                                                    toWords(
+                                                        receipt.sumInDigits
+                                                            | number: '1.2-2'
+                                                    )
+                                                }}</FONT
                                             ></FONT
                                         ></P
                                     >
                                 </TD>
-
-                                </ng-container>
-                            </TR>
-                            <TR>
-
-                              <TD
-                              WIDTH="191"
-                              HEIGHT="5"
-                              BGCOLOR="#ffffff"
-                              STYLE="border: none; padding: 0in"
-                          >
-                              <P ALIGN="LEFT"
-                                  ><FONT FACE="Arial, serif"
-                                      ><FONT SIZE="2"
-                                          >Amount in Words:
-                                          {{
-                                              toWords(
-                                                  receipt.sumInDigits
-                                                      | number: '1.2-2'
-                                              )
-                                          }}</FONT
-                                      ></FONT
-                                  ></P
-                              >
-                          </TD>
                             </TR>
                         </TBODY>
                     </TABLE>
@@ -639,7 +627,10 @@
                                     <P ALIGN="LEFT"
                                         ><FONT FACE="Arial, serif"
                                             ><FONT SIZE="2"
-                                                >{{ receipt.sumInDigits |number : '1.2-2'}}
+                                                >{{
+                                                    receipt.sumInDigits
+                                                        | number: '1.2-2'
+                                                }}
                                             </FONT></FONT
                                         >
                                     </P>
@@ -685,7 +676,10 @@
                                             ><FONT SIZE="3"
                                                 ><B
                                                     >{{ receipt.currency }}
-                                                    {{ receipt.sumInDigits |number : '1.2-2' }}
+                                                    {{
+                                                        receipt.sumInDigits
+                                                            | number: '1.2-2'
+                                                    }}
                                                 </B></FONT
                                             ></FONT
                                         >
@@ -726,9 +720,9 @@
                         >If you have any questions about this receipt, please
                         contact</P
                     >
+
                     <P ALIGN="CENTER" STYLE="margin-bottom: 0.11in"
-                        >phone: +260 211 239865/6, email:
-                        info@aplusgeneral.com</P
+                        >phone: +260 977 893 878, +260 960 344 478</P
                     >
                 </div>
             </nz-spin>

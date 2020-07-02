@@ -26,24 +26,18 @@
                 <td colspan="6">
                     <table>
                         <tr>
-                            <td class="title">
-                                <img
-                                    src="/assets/images/apluslogo.png"
-                                    style="width: 100%; max-width: 240px;"
-                                />
-                            </td>
+                            <td class="title"></td>
+
                             <td
                                 style="
                                     font-size: 11px;
                                     float: right !important;
                                 "
                             >
-                                A Plus General Insurance<br />
-                                Plot No. 402, Roma Park, Zambezi Road<br />
-                                P.O. Box 31700, Lusaka Zambia<br />
-                                Tel: +260 211 239865/6 - Tele/Fax:+260 211
-                                239867<br />
-                                E-mail: info@aplusgeneral.com<br />
+                                Savenda General Insurance LTD<br />
+                                Plot 20849 PSC Corporate Park, <br />
+                                P.O Box 30363, Lusaka Zambia<br />
+                                Tel: :+260 977 893 878, +260 960 344 478<br />
                             </td>
                         </tr>
                     </table>
@@ -70,9 +64,7 @@
                         }}
                     </p>
                     <span style="font-weight: bold;">TPIN:</span
-                    ><span style="font-weight: bold; color: red;"
-                        ></span
-                    >
+                    ><span style="font-weight: bold; color: red;"></span>
                 </td>
             </tr>
         </table>
@@ -124,14 +116,20 @@
         </table>
         <br />
 
-
-        <table style="width: 100%; font-size: 12px;" #risksTable nzFrontPagination="false" nzShowPagination="false">
-
+        <table
+            style="width: 100%; font-size: 12px;"
+            #risksTable
+            nzFrontPagination="false"
+            nzShowPagination="false"
+        >
             <tr class="heading">
                 <th style="border: 1px solid black; border-collapse: collapse;">
                     Binder No.
                 </th>
-                <th class="td2" style="border: 1px solid black; border-collapse: collapse;">
+                <th
+                    class="td2"
+                    style="border: 1px solid black; border-collapse: collapse;"
+                >
                     Cover No.
                 </th>
                 <th style="border: 1px solid black; border-collapse: collapse;">
@@ -143,9 +141,16 @@
             </tr>
 
             <tr *ngFor="let risk of policy.risks" class="details">
-                <td style="border: 1px solid black; border-collapse: collapse;"></td>
+                <td
+                    style="border: 1px solid black; border-collapse: collapse;"
+                ></td>
 
-                <td class="td2" style="border: 1px solid black; border-collapse: collapse;">{{coverNote(risk)}}</td>
+                <td
+                    class="td2"
+                    style="border: 1px solid black; border-collapse: collapse;"
+                >
+                    {{ coverNote(risk) }}
+                </td>
                 <td style="border: 1px solid black;">
                     {{ risk.regNumber }}, {{ risk.vehicleMake }}
                     {{ risk.vehicleModel }} -
@@ -165,30 +170,42 @@
                     </ng-container>
                     <!-- {{ risk.insuranceType == 'ThirdParty' ? 'Third Party' : 'Comprehensive' }} -->
                 </td>
-                <td id="td3" style="border: 1px solid black; border-collapse: collapse;">
+                <td
+                    id="td3"
+                    style="border: 1px solid black; border-collapse: collapse;"
+                >
                     {{ risk.basicPremium | number: '1.2-2' }}
                 </td>
             </tr>
             <tr>
                 <td></td>
                 <td></td>
-                <td style="float: right !important; font-weight: bold">Sub Total:</td>
+                <td style="float: right !important; font-weight: bold;">
+                    Sub Total:
+                </td>
                 <td style="border: 1px solid black; border-collapse: collapse;">
-                    <span>{{ subTotal | number: '1.2-2' }}</span></td>
+                    <span>{{ subTotal | number: '1.2-2' }}</span>
+                </td>
             </tr>
             <tr>
                 <td></td>
                 <td></td>
-                <td style="float: right !important; font-weight: bold">Insurance Levy 3%:</td>
+                <td style="float: right !important; font-weight: bold;">
+                    Insurance Levy 3%:
+                </td>
                 <td style="border: 1px solid black; border-collapse: collapse;">
-                    <span>{{ premiumLevy | number: '1.2-2' }}</span></td>
+                    <span>{{ premiumLevy | number: '1.2-2' }}</span>
+                </td>
             </tr>
             <tr>
                 <td></td>
                 <td></td>
-                <td style="float: right !important; font-weight: bold">Total:</td>
+                <td style="float: right !important; font-weight: bold;">
+                    Total:
+                </td>
                 <td style="border: 1px solid black; border-collapse: collapse;">
-                    <span>{{ policy.netPremium | number: '1.2-2' }}</span></td>
+                    <span>{{ policy.netPremium | number: '1.2-2' }}</span>
+                </td>
             </tr>
         </table>
 

@@ -53,7 +53,7 @@ export class AccountService {
     // add receipt
     async addReceipt(
         receipt: IReceiptModel,
-        insuranceType: InsuranceType,
+        insuranceType: InsuranceType
     ): Promise<void> {
         this.receipts.pipe(first()).subscribe(async (receipts) => {
             // receipt.id = v4();
@@ -68,24 +68,22 @@ export class AccountService {
 
             this.http
                 .get<any>(
-                    `https://flosure-number-generation.herokuapp.com/aplus-receipt-number/1`
+                    `https://flosure-number-generation.herokuapp.com/savenda-receipt-number/1`
                 )
                 .subscribe(async (res) => {
                     receipt.receiptNumber = res.data.receipt_number;
                     console.log(res.data.receipt_number);
 
-                    await this.receiptCollection
-                        .doc(receipt.id)
-                        .set(receipt)
-                        // .then((mess) => {
-                        //     this.message.success(
-                        //         'Receipt Successfully created'
-                        //     );
-                        // })
-                        // .catch((err) => {
-                        //     this.message.warning('Receipt Failed');
-                        //     console.log(err);
-                        // });
+                    await this.receiptCollection.doc(receipt.id).set(receipt);
+                    // .then((mess) => {
+                    //     this.message.success(
+                    //         'Receipt Successfully created'
+                    //     );
+                    // })
+                    // .catch((err) => {
+                    //     this.message.warning('Receipt Failed');
+                    //     console.log(err);
+                    // });
                 });
         });
     }
