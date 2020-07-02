@@ -58,12 +58,12 @@ export class AccountService {
         this.receipts.pipe(first()).subscribe(async (receipts) => {
             // receipt.id = v4();
 
-            let insuranceTyp = '';
+            let insuranceType = '';
             const productType = insuranceType;
             if (productType == 'Comprehensive') {
-                insuranceTyp = 'MCP';
+                insuranceType = '07001';
             } else {
-                insuranceTyp = 'THP';
+                insuranceType = '07002';
             }
 
             this.http

@@ -1630,14 +1630,13 @@ export class QuoteDetailsComponent implements OnInit {
                         let insuranceType = '';
                         const productType = r.insuranceType;
                         if (productType == 'Comprehensive') {
-                            insuranceType = 'MCP';
+                            insuranceType = '07001';
                         } else {
-                            insuranceType = 'THP';
+                            insuranceType = '07002';
                         }
-
                         this.http
                             .get<any>(
-                                `https://flosure-number-generation.herokuapp.com/savenda-certificate-number/1/0/${insuranceType}`
+                                `https://flosure-number-generation.herokuapp.com/savenda-certificate-number`
                             )
                             .subscribe(async (res) => {
                                 coverNote.certificateNumber =
@@ -1650,7 +1649,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                                 this.http
                                     .post<CoverNote>(
-                                        `https://www.flosure-api.com/documents/cover-note`,
+                                        `https://savenda.flosure-api.com/documents/cover-note`,
                                         coverNote
                                     )
                                     .subscribe(
@@ -1666,7 +1665,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                     this.http
                         .get<any>(
-                            `https://flosure-number-generation.herokuapp.com/savenda-invoice-number/1/0/${insuranceType}`
+                            `https://flosure-number-generation.herokuapp.com/savenda-invoice-number/1/${insuranceType}`
                         )
                         .subscribe(async (res) => {
                             debitNote.debitNoteNumber = res.data.invoice_number;
@@ -1678,7 +1677,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                             this.http
                                 .post<DebitNote>(
-                                    `https://www.flosure-api.com/documents/debit-note/${this.policyId}`,
+                                    `https://savenda.flosure-api.com/documents/debit-note/${this.policyId}`,
                                     debitNote
                                 )
                                 .subscribe(
@@ -1876,14 +1875,14 @@ export class QuoteDetailsComponent implements OnInit {
                     let insuranceType = '';
                     const productType = this.getInsuranceType;
                     if (productType == 'Comprehensive') {
-                        insuranceType = 'MCP';
+                        insuranceType = '07001';
                     } else {
-                        insuranceType = 'THP';
+                        insuranceType = '07002';
                     }
 
                     this.http
                         .get<any>(
-                            `https://flosure-number-generation.herokuapp.com/savenda-invoice-number/1/0/${insuranceType}`
+                            `https://flosure-number-generation.herokuapp.com/savenda-invoice-number/1/${insuranceType}`
                         )
                         .subscribe(async (res) => {
                             debitNote.debitNoteNumber = res.data.invoice_number;
@@ -1895,7 +1894,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                             this.http
                                 .post<DebitNote>(
-                                    `https://www.flosure-api.com/documents/debit-note/${this.policyId}`,
+                                    `https://savenda.flosure-api.com/documents/debit-note/${this.policyId}`,
                                     debitNote
                                 )
                                 .subscribe(

@@ -41,7 +41,7 @@ export class UsersService {
         // this.SendVerificationMail();
         // this.addUser(this.userDetails);
         this.http.post<UserModel>(
-            ' https://www.flosure-api.com/users',
+            ' https://savenda.flosure-api.com/users',
     
             this.userDetails
         ).subscribe();
@@ -69,18 +69,18 @@ export class UsersService {
     addUser(dto: UserModel): Observable<UserModel> {
         console.log(dto)
         return this.http.post<UserModel>(
-            ' https://www.flosure-api.com/users',
+            ' https://savenda.flosure-api.com/users',
 
             dto
         );
     }
 
     getUsers(): Observable<UserModel[]> {
-        return this.http.get<UserModel[]>(' https://www.flosure-api.com/users');
+        return this.http.get<UserModel[]>(' https://savenda.flosure-api.com/users');
     }
 
     getSingleUser(userId: string): Observable<UserModel> {
-        return this.http.get<UserModel>(` https://www.flosure-api.com/${userId}`);
+        return this.http.get<UserModel>(` https://savenda.flosure-api.com/${userId}`);
 
     }
 }

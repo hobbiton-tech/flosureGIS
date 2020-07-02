@@ -131,23 +131,23 @@ export class QuotesService {
         let insuranceType = '';
         const productType = motorQuotation.risks[0].insuranceType;
         if (productType == 'Comprehensive') {
-            insuranceType = 'MCP';
+            insuranceType = '07001';
         } else {
-            insuranceType = 'THP';
+            insuranceType = '07002';
         }
         const quotationNumberRequest: IQuoteNumberRequest = {
             branch: motorQuotation.branch, //get from db
         };
         this.http
             .get<any>(
-                `https://flosure-number-generation.herokuapp.com/savenda-quote-number/1/0/${insuranceType}`
+                `https://flosure-number-generation.herokuapp.com/savenda-quote-number/1/${insuranceType}`
             )
             .subscribe(async (res) => {
                 motorQuotation.quoteNumber = res.data.quotation_number;
                 console.log('WHAT THE >>>>', motorQuotation);
                 this.http
                     .post<MotorQuotationModel>(
-                        'https://www.flosure-api.com/quotation',
+                        'https://savenda.flosure-api.com/quotation',
                         motorQuotation
                     )
                     .subscribe(
@@ -167,7 +167,7 @@ export class QuotesService {
     postRtsa(params) {
         console.log('PARAMS>>>>>>>', params);
         this.http
-            .post<any>(`https://rtsa-api.herokuapp.com/rtsa`, params)
+            .post<any>(`https://rtsa-api.herokuapp.com/rtsa-savenda`, params)
             .subscribe(
                 async (res) => {
                     console.log(res);
@@ -179,14 +179,14 @@ export class QuotesService {
     }
     getMotorQuotations(): Observable<MotorQuotationModel[]> {
         return this.http.get<MotorQuotationModel[]>(
-            'https://www.flosure-api.com/quotation'
+            'https://savenda.flosure-api.com/quotation'
         );
     }
     getMotorQuotationById(
         quotationId: string
     ): Observable<MotorQuotationModel> {
         return this.http.get<MotorQuotationModel>(
-            `https://www.flosure-api.com/quotation/${quotationId}`
+            `https://savenda.flosure-api.com/quotation/${quotationId}`
         );
     }
     updateMotorQuotation(
@@ -194,7 +194,7 @@ export class QuotesService {
         quotationId: string
     ): Observable<MotorQuotationModel> {
         return this.http.put<MotorQuotationModel>(
-            `https://www.flosure-api.com/quotation/${quotationId}`,
+            `https://savenda.flosure-api.com/quotation/${quotationId}`,
             motorQuotation
         );
     }

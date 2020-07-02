@@ -18,9 +18,9 @@ import {
     CoverNote,
 } from '../documents/models/documents.model';
 
-const BASE_URL = 'https://www.flosure-api.com';
+const BASE_URL = 'https://savenda.flosure-api.com';
 
-// const BASE_URL = 'https://www.flosure-api.com';
+// const BASE_URL = 'https://savenda.flosure-api.com';
 
 interface IDebitNoteResult {
     invoiceNumber: string;
@@ -65,18 +65,18 @@ export class PoliciesService {
         }
 
         return this.http.post<Policy>(
-            'https://www.flosure-api.com/policy',
+            'https://savenda.flosure-api.com/policy',
             policy
         );
     }
 
     // getPolicies(): Observable<Policy[]> {
-    //     return this.http.get<Policy[]>('https://www.flosure-api.com/policy');
+    //     return this.http.get<Policy[]>('https://savenda.flosure-api.com/policy');
     // }
 
     // getPolicyById(policyId: string): Observable<Policy> {
     //     return this.http.get<Policy>(
-    //         `https://www.flosure-api.com/policy/${policyId}`
+    //         `https://savenda.flosure-api.com/policy/${policyId}`
     //     );
     //     return this.policiesCollection.doc<Policy>(policyId).valueChanges();
     // }
@@ -84,7 +84,7 @@ export class PoliciesService {
     updatePolicy(policy: Policy): Observable<Policy> {
         console.log('POLICY NUMBER>>>>', policy);
         return this.http.put<Policy>(
-            `https://www.flosure-api.com/policy/${policy.id}`,
+            `https://savenda.flosure-api.com/policy/${policy.id}`,
             policy
         );
     }
@@ -92,18 +92,18 @@ export class PoliciesService {
     // backup policies
     createBackupPolicy(policy: Policy): Observable<Policy> {
         return this.http.post<Policy>(
-            'https://www.flosure-api.com/policy',
+            'https://savenda.flosure-api.com/policy',
             policy
         );
     }
 
     getBackupPolicies(): Observable<Policy[]> {
-        return this.http.get<Policy[]>('https://www.flosure-api.com/policy');
+        return this.http.get<Policy[]>('https://savenda.flosure-api.com/policy');
     }
 
     getBackupPolicyById(policyId: string): Observable<Policy> {
         return this.http.get<Policy>(
-            `https://www.flosure-api.com/policy/${policyId}`
+            `https://savenda.flosure-api.com/policy/${policyId}`
         );
         // return this.policiesCollection.doc<Policy>(policyId).valueChanges();
     }
@@ -112,7 +112,7 @@ export class PoliciesService {
         console.log('policy details:');
         console.log(policy);
         return this.http.put<Policy>(
-            `https://www.flosure-api.com/policy/${policyId}`,
+            `https://savenda.flosure-api.com/policy/${policyId}`,
             policy
         );
     }
@@ -171,7 +171,7 @@ export class PoliciesService {
             console.log(policy);
             this.http
                 .put<Policy>(
-                    `https://www.flosure-api.com/policy/${policy.id}`,
+                    `https://savenda.flosure-api.com/policy/${policy.id}`,
                     policy
                 )
                 .subscribe(
@@ -220,7 +220,7 @@ export class PoliciesService {
 
     getPolicyById(policyId: string): Observable<Policy> {
         return this.http.get<Policy>(
-            `https://www.flosure-api.com/policy/${policyId}`
+            `https://savenda.flosure-api.com/policy/${policyId}`
         );
 
         // return this.policiesCollection.doc<Policy>(policyId).valueChanges();
@@ -231,7 +231,7 @@ export class PoliciesService {
     }
 
     getPolicies(): Observable<Policy[]> {
-        return this.http.get<Policy[]>('https://www.flosure-api.com/policy');
+        return this.http.get<Policy[]>('https://savenda.flosure-api.com/policy');
         // return this.policies;
     }
 

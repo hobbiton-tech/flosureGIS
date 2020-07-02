@@ -66,10 +66,10 @@ export const ProductTypeOptions = [
 
 //INSURANCE TYPE OPTIONS
 export const InsuranceTypeOptions = [
-    { id: '5bf2a73c-709a-4f38-9846-c260e8fffefc', label: 'Motor Comprehensive', value: 'Comprehensive' },
-    {id: 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d', label: 'Full Third Party', value: 'ThirdParty' },
-    {id: '6294cca8-8794-4751-9b82-53566eacb4b4', label: 'Act Only Cover', value: 'ActOnly' },
-    {id: '12cbe264-88b8-42e8-97e3-977bb35b6802', label: 'Third Party Fire And Theft', value: 'ThirdPartyFireAndTheft' }
+    { id: 'f5e755a0-338e-4db8-a47c-5513d858bcc3', label: 'Motor Comprehensive', value: 'Comprehensive' },
+    {id: 'bacb211d-cf2c-4a5b-8631-eca6f285261e', label: 'Full Third Party', value: 'ThirdParty' },
+    {id: '4e9aadeb-3d60-4dd5-8e75-4e646a38b7d3', label: 'Act Only Cover', value: 'ActOnly' },
+    {id: 'f47c8df6-5a21-43bb-8917-5dcabec15658', label: 'Third Party Fire And Theft', value: 'ThirdPartyFireAndTheft' }
     
 ];
 
