@@ -337,6 +337,7 @@
                                                                             bodyMake.vehicleMake"
                                                                         [nzLabel]="
                                                                             bodyMake.vehicleMake"
+                                                                            (click)="onSelectVehicleMake(bodyMake)"
                                                                     ></nz-option>
 
                                                             </nz-select>
@@ -363,14 +364,15 @@
                                                                 >
                                                                     <nz-option
                                                                     *ngFor="
-                                                                    let  vehicleModel of bodyModels"
+                                                                    let  vehicleModel of displayBodyModels"
                                                                         [nzValue]="
-                                                                        vehicleModel.vehicleModel
+                                                                        vehicleModel.vehicleModels[0].vehicleModel
                                                                         "
                                                                         [nzLabel]="
-                                                                        vehicleModel.vehicleModel
+                                                                        vehicleModel.vehicleModels[0].vehicleModel
 
                                                                         "
+
                                                                     ></nz-option>
 
                                                             </nz-select>

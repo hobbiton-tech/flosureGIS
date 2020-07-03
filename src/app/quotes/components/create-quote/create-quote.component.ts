@@ -230,8 +230,10 @@ export class CreateQuoteComponent implements OnInit {
     bodyTypes: IVehicleType[];
     bodyMakes: IVehicleMake[];
     bodyModels: IVehicleModel[];
+    displayBodyModels: IVehicleMake[];
 
-    selectedMake: IVehicleMake;
+    selectedMake: any;
+    clickedMakeId: any;
     selectedModel: IVehicleModel;
 
     // intermediaries
@@ -531,7 +533,9 @@ export class CreateQuoteComponent implements OnInit {
         this.vehicleMakeService.getVehicleMake().subscribe((bodyMake) => {
             this.bodyMakes = bodyMake;
 
-
+            this.displayBodyModels = this.bodyMakes.filter((x) => {
+                x.id = this.clickedMakeId;
+            });
         });
 
         this.vehicleModelService.getVehicleModel().subscribe((bodyModel) => {
@@ -2874,5 +2878,10 @@ export class CreateQuoteComponent implements OnInit {
 
     vehicleMakeChange(value: string): void {
         this.selectedVehicleModel = this.bodyModels[value][0];
+    }
+
+    onSelectVehicleMake(vehicleMake) {
+        this.clickedMakeId = vehicleMake.id;
+        this.selectedMake = vehicleMake.productName;
     }
 }
