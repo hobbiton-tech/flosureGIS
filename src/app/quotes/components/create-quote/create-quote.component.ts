@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { QuotesService } from '../../services/quotes.service';
@@ -105,6 +105,9 @@ interface IQuoteNumberResult {
     styleUrls: ['./create-quote.component.scss'],
 })
 export class CreateQuoteComponent implements OnInit {
+
+@Input() makeObj: any;
+
     vehicleBodyType = VehicleBodyType;
     motorComprehensiveloadingOptions = MotorComprehensiveLoadingOptions;
     motorThirdPartyloadingOptions = MotorThirdPartyLoadingOptions;
@@ -230,7 +233,7 @@ export class CreateQuoteComponent implements OnInit {
     bodyTypes: IVehicleType[];
     bodyMakes: IVehicleMake[];
     bodyModels: IVehicleModel[];
-    displayBodyModels: IVehicleMake[];
+    displayBodyModels: IVehicleMake[] = [];
 
     selectedMake: any;
     clickedMakeId: any;
@@ -533,14 +536,15 @@ export class CreateQuoteComponent implements OnInit {
         this.vehicleMakeService.getVehicleMake().subscribe((bodyMake) => {
             this.bodyMakes = bodyMake;
 
-            this.displayBodyModels = this.bodyMakes.filter((x) => {
-                x.id = this.clickedMakeId;
-            });
+            // this.displayBodyModels = this.bodyMakes.filter((x) => {
+            //   console.log('clickedId', this.makeObj)
+            //     x.id === this.clickedMakeId;
+            // });
         });
 
-        this.vehicleModelService.getVehicleModel().subscribe((bodyModel) => {
-            this.bodyModels = bodyModel;
-        });
+        // this.vehicleModelService.getVehicleModel().subscribe((bodyModel) => {
+        //     this.bodyModels = bodyModel;
+        // });
 
         this.clientsService.getAllClients().subscribe((clients) => {
             this.clients = [...clients[0], ...clients[1]] as Array<
@@ -2877,11 +2881,26 @@ export class CreateQuoteComponent implements OnInit {
     }
 
     vehicleMakeChange(value: string): void {
-        this.selectedVehicleModel = this.bodyModels[value][0];
+        this.selectedVehicleModel = this.bodyModels[this.makeObj][0];
     }
 
     onSelectVehicleMake(vehicleMake) {
+
         this.clickedMakeId = vehicleMake.id;
         this.selectedMake = vehicleMake.productName;
+        console.log('dada' ,this.clickedMakeId);
+    }
+
+    onChange(value) {
+        console.log('WWWWWWWWWWW>>>>>>>>', value.id);
+        this.vehicleMakeService.getVehicleMake().subscribe((res) => {
+            console.log('YEEEEEEEE>>>>', res);
+
+            this.displayBodyModels = res.filter((x) =>
+              x.id === value.id
+            )
+
+            console.log('am done', this.displayBodyModels)
+        });
     }
 }

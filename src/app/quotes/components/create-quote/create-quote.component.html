@@ -324,20 +324,25 @@
                                                             nzSpan="10"
                                                         >
                                                             <nz-select
-                                                            [(ngModel)] ="selectedMake"
-                                                            (ngModelChange)="vehicleMakeChange($event)"
+
+                                                            nzShowSearch
+                                                            nzAllowClear
                                                                 nzPlaceHolder="Select vehicle make"
                                                                 formControlName="vehicleMake"
-                                                            >
 
-                                                                    <nz-option
-                                                                    *ngFor="let bodyMake of bodyMakes "
+                                                                (ngModelChange)="onChange($event)"
+                                                                                                                         >
+
+
+
+                                                           <nz-option *ngFor="let bodyMake of bodyMakes "
+
 
                                                                         [nzValue]="
-                                                                            bodyMake.vehicleMake"
+                                                                            bodyMake"
                                                                         [nzLabel]="
                                                                             bodyMake.vehicleMake"
-                                                                            (click)="onSelectVehicleMake(bodyMake)"
+
                                                                     ></nz-option>
 
                                                             </nz-select>
@@ -355,6 +360,8 @@
                                                             nzSpan="10"
                                                         >
                                                             <nz-select
+                                                            nzShowSearch
+                                                            nzAllowClear
                                                                 nzPlaceHolder="Select vehicle model"
                                                                 formControlName="vehicleModel"
                                                                 [(ngModel)]="selectedModel"
@@ -362,9 +369,9 @@
 
 
                                                                 >
+                                                                <div *ngFor="let  vehicleModel of displayBodyModels">
                                                                     <nz-option
-                                                                    *ngFor="
-                                                                    let  vehicleModel of displayBodyModels"
+
                                                                         [nzValue]="
                                                                         vehicleModel.vehicleModels[0].vehicleModel
                                                                         "
@@ -374,6 +381,7 @@
                                                                         "
 
                                                                     ></nz-option>
+                                                                    </div>
 
                                                             </nz-select>
                                                         </nz-form-control>
@@ -528,6 +536,9 @@
                                                             nzSpan="10"
                                                         >
                                                             <nz-select
+
+                                                            nzShowSearch
+                                                            nzAllowClear
                                                                 formControlName="bodyType"
                                                                 nzPlaceHolder="Select or create bodyType"
                                                             >

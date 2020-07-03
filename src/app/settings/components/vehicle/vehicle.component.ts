@@ -87,10 +87,10 @@ export class VehicleComponent implements OnInit {
             this.displayedVehicleMake = this.vehicleMake;
         });
 
-        this.vehicleModelService.getVehicleModel().subscribe((model) => {
-            this.vehicleModel = model;
-            this.displayedVehicleModel = this.vehicleModel;
-        });
+        // this.vehicleModelService.getVehicleModel().subscribe((model) => {
+        //     this.vehicleModel = model;
+        //     this.displayedVehicleModel = this.vehicleModel;
+        // });
 
         this.vehicleTypeUpdate.subscribe((update) =>
             update === true
@@ -144,16 +144,16 @@ export class VehicleComponent implements OnInit {
         this.vehicleModelUpdate.next($event);
     }
 
-    changeSelectedVehicleMake(make: IVehicleMake) {
-        this.selectedVehicleMake = make;
-        this.filterModelList(this.selectedVehicleMake.vehicleMake);
-    }
+    // changeSelectedVehicleMake(make: IVehicleMake) {
+    //     this.selectedVehicleMake = make;
+    //     this.filterModelList(this.selectedVehicleMake.vehicleMake);
+    // }
 
-    filterModelList(vehicleMake: string) {
-        this.vehicleModelService.getVehicleModel().subscribe((make) => {
-            this.displayedVehicleModel == make.filter(
-                (x) => x.vehicleMakeName == this.selectedVehicleMake.vehicleMake
-            );
-        });
-    }
+    // filterModelList(vehicleMake: string) {
+    //     this.vehicleModelService.getVehicleModel(vehicleMake.id).subscribe((make) => {
+    //         this.displayedVehicleModel == make.filter(
+    //             (x) => x.vehicleMakeName == this.selectedVehicleMake.vehicleMake
+    //         );
+    //     });
+    // }
 }

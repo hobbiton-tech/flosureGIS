@@ -7,7 +7,7 @@ export interface IVehicleMake {
     id: string;
     vehicleMake: string;
     description: string;
-    vehicleModels: IVehicleModel
+    vehicleModels: IVehicleModel[];
 }
 
 export interface IVehicleModel {
