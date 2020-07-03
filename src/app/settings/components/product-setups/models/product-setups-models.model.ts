@@ -36,7 +36,12 @@ export interface IProduct {
     productClaimNumberPrefix?: string;
 }
 
-export interface ICoverType {}
+export interface ICoverType {
+    id: string;
+    coverTypeName: string;
+    isDefault: boolean;
+    minPremium: number;
+}
 
 export interface IPeril {
     id: string;

@@ -22,6 +22,7 @@ import { environment } from '../environments/environment';
 import 'firebase/storage';
 
 import { SlackService } from './slack.service';
+import { FinanceSetupsComponent } from './settings/components/finance-setups/finance-setups.component';
 
 registerLocaleData(en);
 
@@ -59,7 +60,7 @@ const firebaseConfig = {
 };
 
 @NgModule({
-    declarations: [AppComponent, NavigationComponent, LoginComponent],
+    declarations: [AppComponent, NavigationComponent, LoginComponent, FinanceSetupsComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,

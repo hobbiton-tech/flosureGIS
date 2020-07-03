@@ -96,7 +96,7 @@
                 </div>
 
                 <div style="margin-top: 10px;">
-                    <nz-table #coverTypesTable [nzData]="" [nzSize]="'small'" [nzBordered]="true"
+                    <nz-table #coverTypesTable [nzData]="coverTypeList" [nzSize]="'small'" [nzBordered]="true"
                         style="background-color: white;">
                         <thead>
                             <tr>
@@ -105,7 +105,7 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let coverType of coverTypesTable.data">
-                                <td>{{ coverType.coverTypeName }}</td>
+                                <td>{{ coverType.name }}</td>
                             </tr>
                         </tbody>
                     </nz-table>
@@ -167,10 +167,9 @@
     (closeAddProductFormDrawerVisible)="recieveUpdate($event)">
 </app-add-product>
 
-<app-add-cover-type [isAddCoverTypeFormDrawerVisible]="addCoverTypeFormDrawerVisible"
+<app-add-cover-type [isAddCoverTypeFormDrawerVisible]="addCoverTypeFormDrawerVisible"  [selectedProductId]="clickedProductId"
     (closeAddCoverTypeFormDrawerVisible)="addCoverTypeFormDrawerVisible = false">
 </app-add-cover-type>
 
 <app-add-peril [isAddPerilFormDrawerVisible]="addPerilFormDrawerVisible" [selectedProductId]="clickedProductId"
-    [productName]="selectedProductName" (closeAddPerilFormDrawerVisible)="addPerilFormDrawerVisible = false">
-</app-add-peril>
+    (closeAddPerilFormDrawerVisible)="addPerilFormDrawerVisible = false"></app-add-peril>

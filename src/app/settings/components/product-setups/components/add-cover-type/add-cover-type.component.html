@@ -1,4 +1,55 @@
 <nz-drawer [nzClosable]="false" [nzVisible]="isAddCoverTypeFormDrawerVisible" nzPlacement="left"
     nzTitle="Add Cover Type" (nzOnClose)="closeAddCoverTypeFormDrawer()" [nzWidth]="600">
 
-</nz-drawer>
+<form nz-form [formGroup]="coverTypeForm" (ngSubmit)="submitCoverTypeForm()">
+    <div>
+        <div *ngIf="!productName">
+            <nz-alert nzType="warning" nzMessage="Please Click a Product" nzShowIcon></nz-alert>
+        </div>​
+        <div *ngIf="productName">
+            <nz-alert nzType="success" nzMessage="{{productName}} is Selected" nzShowIcon></nz-alert>
+        </div>​
+    </div>
+    <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>Type</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..."
+            [nzErrorTip]="coverTypeNameErrorTpl">
+            <input nz-input formControlName="name" placeholder="Enter type" />
+            <ng-template #coverTypeNameErrorTpl let-control>
+                <ng-container *ngIf="control.hasError('required')">
+                    Please input your wording type!
+                </ng-container>
+                <ng-container *ngIf="control.hasError('duplicated')">
+                    The type is redundant!
+                </ng-container>
+            </ng-template>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..."
+            [nzErrorTip]="coverTypeDescErrorTpl">
+            <textarea formControlName="description" nz-input rows="5" placeholder="Enter Description"></textarea>
+            <ng-template #coverTypeDescErrorTpl let-control>
+                <ng-container *ngIf="control.hasError('required')">
+                    Please input your details!
+                </ng-container>
+                <ng-container *ngIf="control.hasError('duplicated')">
+                    The details are redundant!
+                </ng-container>
+            </ng-template>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-control [nzOffset]="7" [nzSpan]="12">
+            <button nz-button nzType="primary" [disabled]="!coverTypeForm.valid">
+                Submit
+            </button>
+            <button nz-button (click)="resetCoverTypeForm()">
+                Reset
+            </button>
+        </nz-form-control>
+    </nz-form-item>
+</form> 
+</nz-drawer> 

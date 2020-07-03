@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { IClass, IProduct, IPeril } from './models/product-setups-models.model';
+import { IClass, IProduct, IPeril, ICoverType } from './models/product-setups-models.model';
 import { ProductSetupsServiceService } from './services/product-setups-service.service';
 import { ActivatedRoute } from '@angular/router';
 import { ProductTrackerService } from './services/producti-tracker.service';
 import { BehaviorSubject } from 'rxjs';
 import { AddPerilService } from './components/add-peril/services/add-peril.service';
+import { AddCoverTypeService } from './components/add-cover-type/services/add-cover-type.service';
 
 @Component({
     selector: 'app-product-setups',
@@ -14,6 +15,7 @@ import { AddPerilService } from './components/add-peril/services/add-peril.servi
 export class ProductSetupsComponent implements OnInit {
     classesList: IClass[] = [];
     productsList: IProduct[] = [];
+    
 
     classUpdate = new BehaviorSubject<boolean>(false);
 
@@ -38,6 +40,9 @@ export class ProductSetupsComponent implements OnInit {
     //products
     products: IProduct[];
 
+    // cover types
+    coverTypeList: ICoverType [] = [];
+
     // perils
     perilList: IPeril[] = [];
 
@@ -50,6 +55,7 @@ export class ProductSetupsComponent implements OnInit {
     constructor(
         private productSetupsService: ProductSetupsServiceService,
         private productTrackerService: ProductTrackerService,
+        private coverTypesService: AddCoverTypeService,
         private perilsService: AddPerilService,
         private route: ActivatedRoute
     ) {}
@@ -85,6 +91,9 @@ export class ProductSetupsComponent implements OnInit {
 
         this.perilsService.getPerils().subscribe((res) => {
             this.perilList = res;
+        });
+        this.coverTypesService.getCoverTypes().subscribe((res) => {
+            this.coverTypeList = res;
         });
     }
 

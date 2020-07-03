@@ -1,0 +1,52 @@
+<!-- <div style="margin: 20px;">
+    <nz-row nzGutter="24">
+        <!-- classes card starts here --
+        <nz-col nzSpan="6">
+            <nz-card nzTitle="bank" [nzExtra]="addBankButton">
+                <ng-template #addBanksButton>
+                    <button nz-button nzType="primary" style="float: right;" (click)="openAddBankFormDrawer()">
+                        Add bank
+                    </button>
+                </ng-template>
+                <div>
+                    <nz-input-group [nzSuffix]="suffixIconSearch">
+                        <input type="text" nz-input placeholder="Search banks.." />
+                    </nz-input-group>
+                    <ng-template #suffixIconSearch>
+                        <i nz-icon nzType="search"></i>
+                    </ng-template>
+                </div>
+
+                <div style="margin-top: 10px;">
+                    <nz-table #bankTable [nzData]="bankList" [nzSize]="'small'" [nzBordered]="true"
+                        style="background-color: white;">
+                        <thead>
+                            <tr>
+                                <th>Banks Name</th>
+                                        <th>Branch Name</th>
+                                        <th>Branch Code</th>
+                                        <th>Swift Code</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let bank of bankTable.data" style="cursor: pointer;"
+                                (click)="changeSelectedbank(bank)">
+                                <td>{{ bank.bank_name }}</td>
+                                <td>{{ bank.branch_name }}</td>
+                                <td>{{ bank.branch_code }}</td>
+                                <td>{{ bank.swift_code }}</td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+
+            </nz-card>
+        </nz-col>
+        <!-- classes card ends here --
+
+
+ <!-- Drawers --
+ <app-add-bank [isBankFormDrawerVisible]="bankFormDrawerVisible"
+ (closeBankFormDrawerVisible)="bankFormDrawerVisible = false"
+ (closeBankFormDrawerVisible)="recieveUpdate($event)">
+ </app-add-bank> -->

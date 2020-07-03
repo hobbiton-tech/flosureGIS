@@ -3,7 +3,6 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ProductSetupsServiceService } from '../../services/product-setups-service.service';
 import { IProduct, IClass } from '../../models/product-setups-models.model';
 import { ActivatedRoute } from '@angular/router';
-import { Class } from 'estree';
 import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({

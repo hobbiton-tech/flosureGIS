@@ -30,6 +30,7 @@ import { AddProductCommissionComponent } from './components/agents/add-product-c
 import { ClausesService } from './components/underwriting-setups/services/clauses.service';
 import { WarrantiesComponent } from './components/warranties/warranties.component';
 import { ExtensionsComponent } from './components/extensions/extensions.component';
+import { BankSetupsComponent } from './components/finance-setups/components/bank-setups/bank-setups.component';
 
 const routes: Routes = [
     {
@@ -106,6 +107,7 @@ const routes: Routes = [
         AddProductCommissionComponent,
         WarrantiesComponent,
         ExtensionsComponent,
+        BankSetupsComponent,
     ],
     imports: [
         CommonModule,
