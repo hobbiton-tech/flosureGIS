@@ -1,6 +1,165 @@
+<div style="margin: 20px;">
+    <nz-card> 
+        <h4 nz-typography>Finance</h4>
+        <div style="margin-bottom: 10px;">
+            <div nz-row [nzGutter]="24">
+                <div nz-col nzSpan="12">
+                    <div style="width: 75%;">
+                       
+                    </div>
+                </div>
+               
+            </div>
+        </div>
+        
+        <nz-divider nzType="horizontal"></nz-divider>
+        <h4 nz-typography>Banks</h4>
+
+        <div style="margin-bottom: 10px;">
+            <div nz-row [nzGutter]="24">
+                <div nz-col nzSpan="12">
+                    <button nz-button nzType="primary" style="float: right;" (click)="openBanks()">
+                        Add Bank
+                    </button>
+                </div>
+            </div>
+        </div>
+        <nz-table #bankTable [nzData]="bankList">
+            <thead>
+                <tr>
+                    <th>Bank Name</th>
+                    <th>Branch Name</th>
+                    <th>Branch Code</th>
+                    <th>Swift Code</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let bank of bankTable.data" (click)="onSelectBank(bank)"
+                    style="cursor: pointer;">
+                    <td>{{bank.bank_name }}</td>
+                    <td>{{bank.branch_name}}</td>
+                    <td>{{bank.branch_code}}</td>
+                    <td>{{bank.swift_code}}</td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </nz-card>
+</div>
+
+
+<nz-drawer [nzClosable]="false" [nzVisible]="isBankVisible" nzPlacement="left" nzTitle="Create Banks"
+    (nzOnClose)="closeBanks()" [nzWidth]="600">
+    <form nz-form [formGroup]="bankForm" (ngSubmit)="submitBankForm()">
+        <div>
+            <div *ngIf="!bank_name">
+                <nz-alert nzType="warning" nzMessage="Please Click a Product" nzShowIcon></nz-alert>
+            </div>​
+            <div *ngIf="bank_name">
+                <nz-alert nzType="success" nzMessage="{{bank_name}} is Selected" nzShowIcon></nz-alert>
+            </div>​
+        </div>
+
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Name</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="bankErrorTpl">
+                <input nz-input formControlName="bank_name" placeholder="Enter Name" />
+                <ng-template #bankErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please input your Bank Name!
+                    </ng-container>
+                    <ng-container *ngIf="control.hasError('duplicated')">
+                        The Name is redundant!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Branch</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="bankErrorTpl">
+                <input nz-input formControlName="branch_name" placeholder="Enter Branch Name" />
+                <ng-template #bankErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please input your Branch Name!
+                    </ng-container>
+                    <ng-container *ngIf="control.hasError('duplicated')">
+                        The Name is redundant!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Branch Code</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="bankErrorTpl">
+                <input nz-input formControlName="branch_code" placeholder="Enter code" />
+                <ng-template #bankErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please input your Branch Code!
+                    </ng-container>
+                    <ng-container *ngIf="control.hasError('duplicated')">
+                        The code is redundant!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Swift Code</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="bankErrorTpl">
+                <input nz-input formControlName="swift_code" placeholder="Enter code" />
+                <ng-template #bankErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please input your Swift Code!
+                    </ng-container>
+                    <ng-container *ngIf="control.hasError('duplicated')">
+                        The Code is redundant!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-control [nzOffset]="7" [nzSpan]="12">
+                <button nz-button nzType="primary" [disabled]="!bankForm.valid">
+                    Submit
+                </button>
+                <button nz-button (click)="resetBankForm($event)">
+                    Reset
+                </button>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</nz-drawer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!-- <div style="margin: 20px;">
     <nz-row nzGutter="24">
-        <!-- classes card starts here --
+         classes card starts here --
         <nz-col nzSpan="6">
             <nz-card nzTitle="bank" [nzExtra]="addBankButton">
                 <ng-template #addBanksButton>
@@ -47,6 +206,5 @@
 
  <!-- Drawers --
  <app-add-bank [isBankFormDrawerVisible]="bankFormDrawerVisible"
- (closeBankFormDrawerVisible)="bankFormDrawerVisible = false"
- (closeBankFormDrawerVisible)="recieveUpdate($event)">
+ (closeBankFormDrawerVisible)="bankFormDrawerVisible = false">
  </app-add-bank> -->
