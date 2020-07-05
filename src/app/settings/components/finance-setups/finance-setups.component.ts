@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IBank} from '../../models/finance/bank.model';
+import { IPaymentMethod} from '../../models/finance/payment-methodes.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {BankService} from '../../components/finance-setups/components/bank-setups/services/bank.service';
 import { v4 } from 'uuid';
@@ -12,11 +13,18 @@ import { v4 } from 'uuid';
 export class FinanceSetupsComponent implements OnInit {
 
   bankList: IBank[] = [];
+  paymentMethodList: IPaymentMethod[] = [];
 
+  
   bankForm: FormGroup;
+  paymentMethodForm: FormGroup;
 
   isBankVisible = false;
-  
+  isPaymentMethodVisible = false;
+
+  Method_name: any;
+  description: any; 
+
   bank_name: any;
   branch_name: any;
   branch_code: any;

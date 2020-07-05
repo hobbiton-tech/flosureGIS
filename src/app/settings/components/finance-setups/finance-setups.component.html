@@ -29,7 +29,6 @@
                 <tr>
                     <th>Bank Name</th>
                     <th>Branch Name</th>
-                    <th>Branch Code</th>
                     <th>Swift Code</th>
                 </tr>
             </thead>
@@ -38,7 +37,6 @@
                     style="cursor: pointer;">
                     <td>{{bank.bank_name }}</td>
                     <td>{{bank.branch_name}}</td>
-                    <td>{{bank.branch_code}}</td>
                     <td>{{bank.swift_code}}</td>
                 </tr>
             </tbody>
@@ -87,7 +85,7 @@
                 </ng-template>
             </nz-form-control>
         </nz-form-item>
-        <nz-form-item>
+        <!--nz-form-item>
             <nz-form-label [nzSpan]="7" nzRequired>Branch Code</nz-form-label>
             <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="bankErrorTpl">
                 <input nz-input formControlName="branch_code" placeholder="Enter code" />
@@ -100,11 +98,11 @@
                     </ng-container>
                 </ng-template>
             </nz-form-control>
-        </nz-form-item>
+        </nz-form-item-->
         <nz-form-item>
             <nz-form-label [nzSpan]="7" nzRequired>Swift Code</nz-form-label>
             <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="bankErrorTpl">
-                <input nz-input formControlName="swift_code" placeholder="Enter code" />
+                <input nz-input nz-type="text" formControlName="swift_code"  [ngModel]="'BAZAZMLU'" />
                 <ng-template #bankErrorTpl let-control>
                     <ng-container *ngIf="control.hasError('required')">
                         Please input your Swift Code!
