@@ -1,0 +1,239 @@
+<div style="margin-bottom: 10px;">
+    <div nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="12">
+            <div style="width: 75%;">
+                <nz-input-group [nzSuffix]="suffixIconSearch">
+                    <input type="text" nz-input placeholder="Search by clause Product Code" />
+                </nz-input-group>
+                <ng-template #suffixIconSearch>
+                    <i nz-icon nzType="search"></i>
+                </ng-template>
+            </div>
+        </div>
+        <div nz-col nzSpan="12">
+            <button nz-button nzType="primary" style="float: right;" (click)="openAddServiceProvider()">
+                Add Service Provider
+            </button>
+        </div>
+    </div>
+</div>
+
+<nz-table #serviceProviderTable [nzScroll]="{ x: '1500px' }" [nzData]="serviceProvidersList">
+    <thead>
+        <tr>
+            <th nzLeft>Name of Company</th>
+            <th>Service Provider Type</th>
+            <th>TPIN</th>
+            <th>Physical Address</th>
+            <th>Postal</th>
+            <th>Phone Number</th>
+            <th>Email Address</th>
+            <th>Representative Name</th>
+            <th>Representative Phone Number</th>
+            <th nzRight>Representative Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let sp of serviceProviderTable.data">
+            <td nzLeft>{{sp.companyName}}</td>
+            <td>{{sp.serviceProviderType}}</td>
+            <td>{{sp.tpin}}</td>
+            <td>{{sp.physicalAddress}}</td>
+            <td>{{sp.postal}}</td>
+            <td>{{sp.phoneNumber}}</td>
+            <td>{{sp.email}}</td>
+            <td>{{sp.repName}}</td>
+            <td>{{sp.repNumber}}</td>
+            <td nzRight>{{sp.repEmail}}</td>
+        </tr>
+    </tbody>
+</nz-table>
+
+<nz-drawer [nzBodyStyle]="{
+        height: 'calc(100% - 55px)',
+        overflow: 'auto',
+        'padding-bottom': '53px'
+    }" [nzPlacement]="'left'" [nzMaskClosable]="false" [nzWidth]="900" [nzVisible]="isAddServiceProviderOpen"
+    nzTitle="Create Service Provider" (nzOnClose)="isAddServiceProviderOpen = false">
+    <form nz-form [formGroup]="serviceProviderForm">
+        <div nz-row>
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzFor="companyName" nzRequired>Company Name</nz-form-label>
+                    <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating..."
+                        [nzErrorTip]="companyNameErrorTpl">
+                        <input nz-input formControlName="companyName" name="companyName" type="text"
+                            placeholder="Company Name" />
+                        <ng-template #companyNameErrorTpl let-control>
+                            <ng-container *ngIf="control.hasError('required')">
+                                Please input your Company Name!
+                            </ng-container>
+                            <ng-container *ngIf="control.hasError('duplicated')">
+                                The Company Name is redundant!
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzFor="serviceProviderType">Service Provider Type</nz-form-label>
+                    <nz-form-control [nzSpan]="14">
+                        <nz-select [(ngModel)]="typeClass" formControlName="serviceProviderType" nzShowSearch
+                            nzAllowClear placeholder="Select a Type" (ngModelChange)="onChange($event)">
+                            <nz-option nzLabel="Garage" nzValue="garage"></nz-option>
+                            <nz-option nzLabel="Repairers" nzValue="repairers"></nz-option>
+                            <nz-option nzLabel="Panel Beaters" nzValue="panel beaters"></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <div nz-row>
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzRequired nzFor="tpin">TPIN</nz-form-label>
+                    <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating..."
+                        [nzErrorTip]="tpinErrorTpl">
+                        <input nz-input formControlName="tpin" name="tpin" type="number" placeholder="TPIN" />
+                        <ng-template #tpinErrorTpl let-control>
+                            <ng-container *ngIf="control.hasError('required')">
+                                Please input your TPIN!
+                            </ng-container>
+                            <ng-container *ngIf="control.hasError('duplicated')">
+                                The TPIN is redundant!
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzRequired nzFor="physicalAddress">Physical Address</nz-form-label>
+                    <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating"
+                        [nzErrorTip]="addressDeailsErrorTpl">
+                        <textarea formControlName="physicalAddress" nz-input rows="5"
+                            placeholder="Enter Physical Address"></textarea>
+                        <ng-template #addressDeailsErrorTpl let-control>
+                            <ng-container *ngIf="control.hasError('required')">
+                                Please input your address!
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <div nz-row>
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzRequired nzFor="postal">Postal</nz-form-label>
+                    <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating..."
+                        [nzErrorTip]="postalErrorTpl">
+                        <input nz-input formControlName="postal" name="postal" type="text" placeholder="Postal" />
+                        <ng-template #postalErrorTpl let-control>
+                            <ng-container *ngIf="control.hasError('required')">
+                                Please input your Postal!
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzRequired nzFor="phoneNumber">Phone Number</nz-form-label>
+                    <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating..."
+                        [nzErrorTip]="phoneNumberErrorTpl">
+                        <input nz-input formControlName="phoneNumber" name="phoneNumber" type="text"
+                            placeholder="Phone Number" />
+                        <ng-template #phoneNumberErrorTpl let-control>
+                            <ng-container *ngIf="control.hasError('required')">
+                                Please input your Phone Number!
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <div nz-row>
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzRequired nzFor="email">Email</nz-form-label>
+                    <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating..."
+                        [nzErrorTip]="emailErrorTpl">
+                        <input nz-input formControlName="email" name="email" type="email" placeholder="Email" />
+                        <ng-template #emailErrorTpl let-control>
+                            <ng-container *ngIf="control.hasError('required')">
+                                Please input your Email!
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzRequired nzFor="repName">Representative Name</nz-form-label>
+                    <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating..."
+                        [nzErrorTip]="repNameErrorTpl">
+                        <input nz-input formControlName="repName" name="repName" type="text"
+                            placeholder="Representative Name" />
+                        <ng-template #repNameErrorTpl let-control>
+                            <ng-container *ngIf="control.hasError('required')">
+                                Please input your Representative Name!
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <div nz-row>
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzRequired nzFor="repNumber">Representative Number</nz-form-label>
+                    <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating..."
+                        [nzErrorTip]="repNumberErrorTpl">
+                        <input nz-input formControlName="repNumber" name="repNumber" type="text"
+                            placeholder="Representative Number" />
+                        <ng-template #repNumberErrorTpl let-control>
+                            <ng-container *ngIf="control.hasError('required')">
+                                Please input your Representative Number!
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzRequired nzFor="repEmail">Representative Email</nz-form-label>
+                    <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating..."
+                        [nzErrorTip]="repEmailErrorTpl">
+                        <input nz-input formControlName="repEmail" name="repEmail" type="email"
+                            placeholder="Representative Email" />
+                        <ng-template #repEmailErrorTpl let-control>
+                            <ng-container *ngIf="control.hasError('required')">
+                                Please input your Representative Email!
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <nz-form-item>
+            <nz-form-control>
+                <div style="text-align: center; margin-top: 10px;">
+                    <button nz-button nzType="primary" style="margin-right: 8px;"
+                        [disabled]="!serviceProviderForm.valid" (click)="submitForm()">
+                        Add Service Provider
+                    </button>
+                    <button nz-button (click)="resetSPForm()">
+                        Reset Form
+                    </button>
+                </div>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</nz-drawer>
