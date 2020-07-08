@@ -1,5 +1,6 @@
 
 export interface IDiscountType {
+    id: string;
     type: DiscountType;
     description: string;
 }
