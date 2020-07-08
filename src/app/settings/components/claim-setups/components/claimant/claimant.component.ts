@@ -13,6 +13,7 @@ export class ClaimantComponent implements OnInit {
     claimantsList: IClaimant[] = [];
     typeClass: any;
     genderClass;
+    selectedClaimantType: any;
     claimantForm: FormGroup;
     isAddClaimantOpen: boolean = false;
     idType: any;
@@ -32,6 +33,7 @@ export class ClaimantComponent implements OnInit {
             email: ['', Validators.required],
             gender: ['', Validators.required],
             idType: ['', Validators.required],
+            claimantType: ['', Validators.required],
         });
     }
 

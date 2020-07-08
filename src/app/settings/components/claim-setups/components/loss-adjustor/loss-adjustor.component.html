@@ -258,7 +258,7 @@
             </div>
             <div nz-col [nzSpan]="12">
                 <nz-form-item>
-                    <nz-form-label [nzSpan]="8" nzFor="gender">Gender</nz-form-label>
+                    <nz-form-label [nzSpan]="8" nzFor="gender" nzRequired>Gender</nz-form-label>
                     <nz-form-control [nzSpan]="14">
                         <nz-select [(ngModel)]="genderClass" formControlName="gender" nzShowSearch
                             placeholder="Select a Type">
@@ -274,7 +274,7 @@
         <div nz-row>
             <div nz-col [nzSpan]="12">
                 <nz-form-item>
-                    <nz-form-label [nzSpan]="8" nzFor="idType">ID Type</nz-form-label>
+                    <nz-form-label [nzSpan]="8" nzFor="idType" nzRequired>ID Type</nz-form-label>
                     <nz-form-control [nzSpan]="14">
                         <nz-select formControlName="idType" [(ngModel)]="typeClass" nzShowSearch
                             placeholder="Select a Type">

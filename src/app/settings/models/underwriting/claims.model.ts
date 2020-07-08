@@ -53,6 +53,7 @@ export interface IClaimant {
     postal: string;
     phoneNumber: string;
     email: string;
+    claimantType: string;
 }
 
 export interface ISalvageBuyer {

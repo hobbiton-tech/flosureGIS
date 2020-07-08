@@ -77,7 +77,8 @@
             </div>
             <div nz-col [nzSpan]="12">
                 <nz-form-item>
-                    <nz-form-label [nzSpan]="8" nzFor="serviceProviderType">Service Provider Type</nz-form-label>
+                    <nz-form-label [nzSpan]="8" nzFor="serviceProviderType" nzRequired>Service Provider Type
+                    </nz-form-label>
                     <nz-form-control [nzSpan]="14">
                         <nz-select [(ngModel)]="typeClass" formControlName="serviceProviderType" nzShowSearch
                             nzAllowClear placeholder="Select a Type" (ngModelChange)="onChange($event)">

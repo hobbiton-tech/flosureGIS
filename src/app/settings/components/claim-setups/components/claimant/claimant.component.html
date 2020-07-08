@@ -21,6 +21,7 @@
 <nz-table #claimantTable [nzScroll]="{ x: '1500px' }" [nzData]="claimantsList">
     <thead>
         <tr>
+            <th>Claimant Type</th>
             <th>Name</th>
             <th>ID Type</th>
             <th>ID Number</th>
@@ -33,6 +34,7 @@
     </thead>
     <tbody>
         <tr *ngFor="let claimant of claimantTable.data">
+            <td>{{claimant.claimantType}}</td>
             <td>{{claimant.firstName}} {{claimant.middleName}} {{claimant.surname}}</td>
             <td>{{claimant.idType}}</td>
             <td>{{claimant.idNumber}}</td>
@@ -52,6 +54,21 @@
     }" [nzPlacement]="'left'" [nzMaskClosable]="false" [nzWidth]="900" [nzVisible]="isAddClaimantOpen"
     nzTitle="Create Claimant" (nzOnClose)="isAddClaimantOpen = false">
     <form nz-form [formGroup]="claimantForm">
+        <div nz-row>
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzFor="claimantType" nzRequired>Claimant Type</nz-form-label>
+                    <nz-form-control [nzSpan]="14">
+                        <nz-select [(ngModel)]="selectedClaimantType" formControlName="claimantType" nzShowSearch
+                            placeholder="Select a Type">
+                            <nz-option nzLabel="Insured" nzValue="insured"></nz-option>
+                            <nz-option nzLabel="Third Party" nzValue="third party"></nz-option>
+                            <nz-option nzLabel="Other" nzValue="other"></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
         <div nz-row>
             <div nz-col [nzSpan]="12">
                 <nz-form-item>
@@ -96,7 +113,7 @@
             </div>
             <div nz-col [nzSpan]="12">
                 <nz-form-item>
-                    <nz-form-label [nzSpan]="8" nzFor="gender">Gender</nz-form-label>
+                    <nz-form-label [nzSpan]="8" nzFor="gender" nzRequired>Gender</nz-form-label>
                     <nz-form-control [nzSpan]="14">
                         <nz-select [(ngModel)]="genderClass" formControlName="gender" nzShowSearch
                             placeholder="Select a Type">
@@ -112,7 +129,7 @@
         <div nz-row>
             <div nz-col [nzSpan]="12">
                 <nz-form-item>
-                    <nz-form-label [nzSpan]="8" nzFor="idType">ID Type</nz-form-label>
+                    <nz-form-label [nzSpan]="8" nzFor="idType" nzRequired>ID Type</nz-form-label>
                     <nz-form-control [nzSpan]="14">
                         <nz-select formControlName="idType" [(ngModel)]="typeClass" nzShowSearch
                             placeholder="Select a Type">
