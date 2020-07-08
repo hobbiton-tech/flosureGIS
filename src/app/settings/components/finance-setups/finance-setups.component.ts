@@ -2,13 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { IBank} from '../../models/finance/bank.model';
 import { IPaymentMethod} from '../../models/finance/payment-methodes.model';
 import { IReceiptTypes } from '../../models/finance/receipt-types.model';
+import { IDiscountType} from '../../models/finance/discount-type.model'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {PaymentMethodService} from 'src/app/settings/components/finance-setups/services/payment-method.service'
 import {BankService} from '../../components/finance-setups/components/bank-setups/services/bank.service';
 import { ReceiptTypesService } from 'src/app/settings/components/finance-setups/services/receipt-types.service';
+import { DiscountTypesService } from 'src/app/settings/components/finance-setups/services/discount-types.service';
+
 import { v4 } from 'uuid';
-
-
+import { from } from 'rxjs';
+ 
 
 @Component({
   selector: 'app-finance-setups',
@@ -21,17 +24,22 @@ export class FinanceSetupsComponent implements OnInit {
   bankList: IBank[] = [];
   paymentMethodList: IPaymentMethod[] = [];
   receiptTypeList: IReceiptTypes[] = [];
+  discountTypeList: IDiscountType[] = [];
 
 
   bankForm: FormGroup;
   paymentMethodForm: FormGroup;
   receiptTypeForm: FormGroup;
-
+  discountTypeForm: FormGroup;
 
  
   isBankVisible = false;
   isPaymentMethodVisible = false;
-  isReceiptTypeVisible= false;
+  isReceiptTypeVisible = false;
+  isDiscountTypeVisible = false;
+
+  dtype: any;
+  ddescription;
 
   Type_name: any;
   Description: any;
@@ -49,6 +57,7 @@ export class FinanceSetupsComponent implements OnInit {
     private BankService: BankService,
     private PaymentMethodService: PaymentMethodService,
     private ReceiptTypeService: ReceiptTypesService,
+    private DiscountTypesService: DiscountTypesService,
     private formBuider: FormBuilder,
   ) {
     this.bankForm = formBuider.group({
@@ -67,6 +76,11 @@ export class FinanceSetupsComponent implements OnInit {
     this.receiptTypeForm = formBuider.group({
       Type_name: ['', Validators.required],
       Description: ['', Validators.required],
+    });
+
+    this.discountTypeForm = formBuider.group({
+      dtype: ['', Validators.required],
+      ddescription: ['', Validators.required],
     });
    }
 
@@ -90,6 +104,13 @@ export class FinanceSetupsComponent implements OnInit {
       this.ReceiptTypeService.getReceiptTypes().subscribe((res) => {
         this.receiptTypeList = res;
       });
+      //////////////////////////////////
+      /////////// Discount ///////////////
+      ////////////////////////////////
+
+            this.DiscountTypesService.getDiscountType().subscribe((res) => {
+              this.discountTypeList = res;
+            });
           }
 
   onChange(value) {
@@ -111,6 +132,11 @@ export class FinanceSetupsComponent implements OnInit {
     console.log('WWWWWWWWWWW>>>>>>>>', value);
     this.ReceiptTypeService.getReceiptTypes().subscribe((res) =>{
       this.receiptTypeList = res;
+    });
+
+    console.log('WWWWWWWWWWW>>>>>>>>', value);
+    this.DiscountTypesService.getDiscountType().subscribe((res) =>{
+      this.discountTypeList = res;
     });
   }
 
@@ -134,6 +160,12 @@ export class FinanceSetupsComponent implements OnInit {
     this.Description = receiptType.Description;
   }
 
+ onSelectDiscountType(discountType) {
+    console.log('PEEEEEEEE>>>>', discountType);
+    this.dtype = discountType.dtype;
+    this.ddescription = discountType.ddescription;
+  }
+
   openBanks(): void {
     this.isBankVisible = true;
   }
@@ -144,6 +176,11 @@ export class FinanceSetupsComponent implements OnInit {
 
   openReceiptTypes(): void {
     this.isReceiptTypeVisible = true;
+  }
+
+  
+  openDiscountTypes(): void {
+    this.isDiscountTypeVisible = true;
   }
 
   closeBanks(): void {
@@ -158,6 +195,11 @@ export class FinanceSetupsComponent implements OnInit {
   
   closeReceiptTypes(): void {
     this.isReceiptTypeVisible = false;
+  }
+
+  
+  closeDiscountTypes(): void {
+    this.isDiscountTypeVisible = false;
   }
 
   submitBankForm() {
@@ -193,6 +235,17 @@ export class FinanceSetupsComponent implements OnInit {
   }
 
 
+  submitDiscountTypeForm() {
+    const discountType: IDiscountType = {
+      ...this.discountTypeForm.value,
+      id: v4()
+    };
+    this.DiscountTypesService.addDiscountType(discountType);
+    console.log('DDDDDDDDDD>>>>>>>', discountType);
+    this.isDiscountTypeVisible = false;
+  }
+
+
   resetBankForm(value){}
 
 
@@ -200,5 +253,8 @@ export class FinanceSetupsComponent implements OnInit {
 
   
   resetReceiptType(value){}
+
+  
+  resetDiscountType(value){}
 
 }
