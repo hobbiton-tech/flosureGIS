@@ -33,7 +33,6 @@ import { ExtensionsComponent } from './components/extensions/extensions.componen
 import { ClaimSetupsComponent } from './components/claim-setups/claim-setups.component';
 import { ServiceProviderComponent } from './components/claim-setups/components/service-provider/service-provider.component';
 import { LossAdjustorComponent } from './components/claim-setups/components/loss-adjustor/loss-adjustor.component';
-import { IndividualComponent } from './components/claim-setups/components/individual/individual.component';
 import { ClaimantComponent } from './components/claim-setups/components/claimant/claimant.component';
 import { SalvageBuyerComponent } from './components/claim-setups/components/salvage-buyer/salvage-buyer.component';
 
@@ -119,7 +118,6 @@ const routes: Routes = [
         ClaimSetupsComponent,
         ServiceProviderComponent,
         LossAdjustorComponent,
-        IndividualComponent,
         ClaimantComponent,
         SalvageBuyerComponent,
     ],

@@ -10,14 +10,14 @@ import {
     IClaimant,
     ISalvageBuyer,
 } from 'src/app/settings/models/underwriting/claims.model';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd';
 
 const BASE_URL = 'https://flosure-api.azurewebsites.net';
 @Injectable({
     providedIn: 'root',
 })
-export class ClaimsService {
+export class ClaimSetupsService {
     private serviceProviderCollection: AngularFirestoreCollection<
         IServiceProvider
     >;
@@ -127,6 +127,11 @@ export class ClaimsService {
 
     getLossAdjustors(): Observable<ILossAdjustor[]> {
         return this.lossAdjustors;
+    }
+
+    getAllLossAdjustors(): Observable<[IIndividual[], ILossAdjustor[]]> {
+        // tslint:disable-next-line: deprecation
+        return combineLatest(this.getIndividuals(), this.getLossAdjustors());
     }
 
     // Individuals Methods

@@ -5,27 +5,33 @@ import {
     FormControl,
     FormBuilder,
     ReactiveFormsModule,
-    Validators
+    Validators,
 } from '@angular/forms';
 import { Claim } from '../../models/claim.model';
 import { ICorporateClient } from 'src/app/clients/models/clients.model';
+import { Router } from '@angular/router';
+import { ClaimSetupsService } from 'src/app/settings/components/claim-setups/services/claim-setups.service';
 
 @Component({
     selector: 'app-intimate-claim',
     templateUrl: './intimate-claim.component.html',
-    styleUrls: ['./intimate-claim.component.scss']
+    styleUrls: ['./intimate-claim.component.scss'],
 })
 export class IntimateClaimComponent implements OnInit {
     intimateClaimForm: FormGroup;
 
     perilsList: any[] = [];
+    serviceProvidersList: any[] = [];
+
+    serviceProviderClass: any;
+    selectedType: any;
 
     constructor(
+        private readonly route: Router,
         private readonly claimService: ClaimsService,
+        private claimSetupsService: ClaimSetupsService,
         private formBuilder: FormBuilder
-    ) {}
-
-    ngOnInit(): void {
+    ) {
         this.intimateClaimForm = this.formBuilder.group({
             bookedBy: ['', Validators.required],
             policyNumber: ['', Validators.required],
@@ -37,7 +43,13 @@ export class IntimateClaimComponent implements OnInit {
             activity: ['', Validators.required],
             lossDate: ['', Validators.required],
             notificationDate: ['', Validators.required],
-            status: 'pending'
+            status: 'pending',
+        });
+    }
+
+    ngOnInit(): void {
+        this.claimSetupsService.getServiceProviders().subscribe((res) => {
+            this.serviceProvidersList = res;
         });
     }
 
@@ -52,5 +64,17 @@ export class IntimateClaimComponent implements OnInit {
     resetForm(e: MouseEvent): void {
         e.preventDefault();
         this.intimateClaimForm.reset();
+    }
+
+    backToTransactions() {
+        this.route.navigateByUrl('/flosure/claims/claim-transactions');
+    }
+
+    onChangeProvider(value) {
+        console.log('type>>', value);
+
+        if (typeof value !== 'undefined') {
+            this.selectedType = value.serviceProviderType;
+        }
     }
 }

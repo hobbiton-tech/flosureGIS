@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ISalvageBuyer } from 'src/app/settings/models/underwriting/claims.model';
 import { v4 } from 'uuid';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ClaimsService } from '../../services/claims.service';
+import { ClaimSetupsService } from '../../services/claim-setups.service';
 
 @Component({
     selector: 'app-salvage-buyer',
@@ -19,7 +19,7 @@ export class SalvageBuyerComponent implements OnInit {
 
     constructor(
         private formBuilder: FormBuilder,
-        private claimsService: ClaimsService
+        private claimsService: ClaimSetupsService
     ) {
         this.salvageBuyerForm = formBuilder.group({
             firstName: ['', Validators.required],

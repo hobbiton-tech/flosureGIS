@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { IServiceProvider } from 'src/app/settings/models/underwriting/claims.model';
-import { ClaimsService } from '../../services/claims.service';
+import { ClaimSetupsService } from '../../services/claim-setups.service';
 import { v4 } from 'uuid';
 
 @Component({
@@ -18,7 +18,7 @@ export class ServiceProviderComponent implements OnInit {
 
     constructor(
         private formBuilder: FormBuilder,
-        private claimsService: ClaimsService
+        private claimsService: ClaimSetupsService
     ) {
         this.serviceProviderForm = formBuilder.group({
             companyName: ['', Validators.required],

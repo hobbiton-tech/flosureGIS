@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ClaimsService } from '../../services/claims.service';
-import { ILossAdjustor } from 'src/app/settings/models/underwriting/claims.model';
+import { ClaimSetupsService } from '../../services/claim-setups.service';
+import {
+    ILossAdjustor,
+    IIndividual,
+} from 'src/app/settings/models/underwriting/claims.model';
 import { v4 } from 'uuid';
 
 @Component({
@@ -10,19 +13,23 @@ import { v4 } from 'uuid';
     styleUrls: ['./loss-adjustor.component.scss'],
 })
 export class LossAdjustorComponent implements OnInit {
-    lossAdjustorsList: ILossAdjustor[] = [];
-    providerType: any;
-    typeClass: any;
-    lossAdjustorForm: FormGroup;
+    lossAdjustorsList: Array<IIndividual & ILossAdjustor>;
+
+    selectedType: string;
+    corporateForm: FormGroup;
     isAddLossAdjustorOpen: boolean = false;
+
+    typeClass: any;
+    genderClass: any;
+    individualForm: FormGroup;
+    idType: any;
 
     constructor(
         private formBuilder: FormBuilder,
-        private claimsService: ClaimsService
+        private claimsService: ClaimSetupsService
     ) {
-        this.lossAdjustorForm = formBuilder.group({
-            companyName: ['', Validators.required],
-            lossAdjustorType: [null, Validators.required],
+        this.corporateForm = formBuilder.group({
+            name: ['', Validators.required],
             physicalAddress: ['', Validators.required],
             postal: ['', Validators.required],
             phoneNumber: ['', Validators.required],
@@ -31,11 +38,29 @@ export class LossAdjustorComponent implements OnInit {
             repNumber: ['', Validators.required],
             repEmail: ['', Validators.required],
         });
+
+        this.individualForm = formBuilder.group({
+            firstName: ['', Validators.required],
+            middleName: [''],
+            surname: ['', Validators.required],
+            idNumber: ['', Validators.required],
+            physicalAddress: ['', Validators.required],
+            postal: ['', Validators.required],
+            phoneNumber: ['', Validators.required],
+            email: ['', Validators.required],
+            qualifications: ['', Validators.required],
+            yearsExperience: ['', Validators.required],
+            gender: ['', Validators.required],
+            idType: ['', Validators.required],
+        });
     }
 
     ngOnInit(): void {
-        this.claimsService.getLossAdjustors().subscribe((res) => {
-            this.lossAdjustorsList = res;
+        this.claimsService.getAllLossAdjustors().subscribe((lossAdjustors) => {
+            this.lossAdjustorsList = [
+                ...lossAdjustors[0],
+                ...lossAdjustors[1],
+            ] as Array<IIndividual & ILossAdjustor>;
         });
     }
 
@@ -43,22 +68,34 @@ export class LossAdjustorComponent implements OnInit {
         this.isAddLossAdjustorOpen = true;
     }
 
-    submitForm() {
-        const serviceProvider: ILossAdjustor = {
-            ...this.lossAdjustorForm.value,
+    submitCorporateForm() {
+        const companyLossAdjustor: ILossAdjustor = {
+            ...this.corporateForm.value,
             id: v4(),
-            serviceProviderType: this.providerType,
+            lossAdjustorType: this.selectedType,
         };
-        this.claimsService.addLossAdjustor(serviceProvider);
+        this.claimsService.addLossAdjustor(companyLossAdjustor);
         this.isAddLossAdjustorOpen = false;
-        this.lossAdjustorForm.reset();
+        this.corporateForm.reset();
     }
 
-    resetForm() {
-        this.lossAdjustorForm.reset();
+    submitIndividualForm() {
+        const individual: IIndividual = {
+            ...this.individualForm.value,
+            id: v4(),
+            lossAdjustorType: this.selectedType,
+            name: `${this.individualForm.value.firstName} ${this.individualForm.value.surname}`,
+        };
+        this.claimsService.addIndividual(individual);
+        this.isAddLossAdjustorOpen = false;
+        this.individualForm.reset();
     }
 
-    onChange(value) {
-        this.providerType = value;
+    resetCorporateForm() {
+        this.corporateForm.reset();
+    }
+
+    resetIndividualForm() {
+        this.individualForm.reset();
     }
 }

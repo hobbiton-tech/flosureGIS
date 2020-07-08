@@ -1,16 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ClaimsService } from './claims.service';
+import { ClaimSetupsService } from './claim-setups.service';
 
 describe('ClaimsService', () => {
-  let service: ClaimsService;
+    let service: ClaimSetupsService;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(ClaimsService);
-  });
+    beforeEach(() => {
+        TestBed.configureTestingModule({});
+        service = TestBed.inject(ClaimSetupsService);
+    });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
+    it('should be created', () => {
+        expect(service).toBeTruthy();
+    });
 });
