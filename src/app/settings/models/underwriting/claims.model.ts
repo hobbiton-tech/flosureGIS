@@ -14,8 +14,7 @@ export interface IServiceProvider {
 
 export interface ILossAdjustor {
     id: string;
-    companyName: string;
-    serviceProvider: string;
+    name: string;
     physicalAddress: string;
     postal: string;
     phoneNumber: string;
@@ -23,6 +22,7 @@ export interface ILossAdjustor {
     repName: string;
     repNumber: string;
     repEmail: string;
+    lossAdjustorType: string;
 }
 
 export interface IIndividual {
@@ -39,6 +39,7 @@ export interface IIndividual {
     email: string;
     qualifications: string;
     yearsExperience: number;
+    lossAdjustorType: string;
 }
 
 export interface IClaimant {

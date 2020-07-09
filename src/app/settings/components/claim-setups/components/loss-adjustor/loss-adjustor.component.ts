@@ -6,6 +6,7 @@ import {
     IIndividual,
 } from 'src/app/settings/models/underwriting/claims.model';
 import { v4 } from 'uuid';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-loss-adjustor',
@@ -25,6 +26,7 @@ export class LossAdjustorComponent implements OnInit {
     idType: any;
 
     constructor(
+        private router: Router,
         private formBuilder: FormBuilder,
         private claimsService: ClaimSetupsService
     ) {
@@ -97,5 +99,13 @@ export class LossAdjustorComponent implements OnInit {
 
     resetIndividualForm() {
         this.individualForm.reset();
+    }
+
+    viewDetails(lossAdjustor: IIndividual | ILossAdjustor) {
+        console.log('Loss A>>>', lossAdjustor);
+
+        this.router.navigateByUrl(
+            '/flosure/settings/loss-adjustor-details/' + lossAdjustor.id
+        );
     }
 }

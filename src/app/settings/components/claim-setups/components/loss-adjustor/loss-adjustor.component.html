@@ -30,7 +30,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let la of lossAdjustorTable.data">
+        <tr *ngFor="let la of lossAdjustorTable.data" (click)="viewDetails(la)" style="cursor: pointer;">
             <td>{{la.name}}</td>
             <td>{{la.physicalAddress}}</td>
             <td>{{la.postal}}</td>

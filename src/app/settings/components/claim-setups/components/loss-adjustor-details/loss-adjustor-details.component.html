@@ -1,0 +1,368 @@
+<div style="margin: 15px;">
+    <nz-breadcrumb>
+        <nz-breadcrumb-item (click)="goToLossAdjustorList()" style="cursor: pointer;">
+            Claims
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item (click)="goToLossAdjustorList()" style="cursor: pointer;">
+            Loss Adjustors
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            Loss Adjustor Details
+        </nz-breadcrumb-item>
+        <nz-page-header (nzBack)="goToLossAdjustorList()" nzBackIcon nzTitle="Loss Adjustor: {{name}}">
+            <nz-page-header-extra>
+                <button *ngIf="isEditmode" nz-button nzType="primary" (click)="isEditmode = false">
+                    Save Changes
+                </button>
+                <button *ngIf="!isEditmode" nz-button nzType="primary" (click)="isEditmode = true">
+                    Edit Loss Adjustor
+                </button>
+            </nz-page-header-extra>
+        </nz-page-header>
+    </nz-breadcrumb>
+    <div style="margin-top: 20px;">
+        <nz-card *ngIf="laType == 'individual'">
+            <form nz-form [formGroup]="individualForm">
+                <nz-divider nzText="Personal Details" nzOrientation="left"></nz-divider>
+                <div nz-row>
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="8" nzRequired>First Name</nz-form-label>
+                            <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating..."
+                                [nzErrorTip]="firstNameErrorTpl">
+                                <input nz-input formControlName="firstName" name="firstName" type="text"
+                                    [(placeholder)]="lossAdjustor.firstName" [disabled]="!isEditmode" />
+                                <ng-template #firstNameErrorTpl let-control>
+                                    <ng-container *ngIf="control.hasError('required')">
+                                        Please input your First Name!
+                                    </ng-container>
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="8">Middle Name</nz-form-label>
+                            <nz-form-control [nzSpan]="14">
+                                <input nz-input formControlName="middleName" name="middleName" type="text"
+                                    [(placeholder)]="lossAdjustor.middleName" [disabled]="!isEditmode" />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+
+                <div nz-row>
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="8" nzRequired>Last Name</nz-form-label>
+                            <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating..."
+                                [nzErrorTip]="lastNameErrorTpl">
+                                <input nz-input formControlName="surname" name="surname" type="text"
+                                    [(placeholder)]="lossAdjustor.surname" [disabled]="!isEditmode" />
+                                <ng-template #lastNameErrorTpl let-control>
+                                    <ng-container *ngIf="control.hasError('required')">
+                                        Please input your Last Name!
+                                    </ng-container>
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="8" nzFor="gender" nzRequired>Gender</nz-form-label>
+                            <nz-form-control [nzSpan]="14">
+                                <nz-select [(ngModel)]="genderClass" formControlName="gender" nzShowSearch
+                                    [disabled]="!isEditmode">
+                                    <nz-option nzLabel="Male" nzValue="male"></nz-option>
+                                    <nz-option nzLabel="Female" nzValue="female"></nz-option>
+                                    <nz-option nzLabel="Other" nzValue="other"></nz-option>
+                                </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+
+                <div nz-row>
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="8" nzFor="idType" nzRequired>ID Type</nz-form-label>
+                            <nz-form-control [nzSpan]="14">
+                                <nz-select formControlName="idType" [(ngModel)]="typeClass" nzShowSearch
+                                    [disabled]="!isEditmode">
+                                    <nz-option nzLabel="NRC" nzValue="nrc"></nz-option>
+                                    <nz-option nzLabel="Passport" nzValue="passport"></nz-option>
+                                </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="8" nzRequired nzFor="idNumber">ID Number</nz-form-label>
+                            <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating..."
+                                [nzErrorTip]="idNumberErrorTpl">
+                                <input nz-input formControlName="idNumber" name="idNumber" type="text"
+                                    [(placeholder)]="lossAdjustor.idNumber" [disabled]="!isEditmode" />
+                                <ng-template #idNumberErrorTpl let-control>
+                                    <ng-container *ngIf="control.hasError('required')">
+                                        Please input your ID Number!
+                                    </ng-container>
+                                    <ng-container *ngIf="control.hasError('duplicated')">
+                                        The ID Number is redundant!
+                                    </ng-container>
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+
+                <div nz-row>
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="8" nzRequired nzFor="postal">Postal</nz-form-label>
+                            <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating..."
+                                [nzErrorTip]="postalErrorTpl">
+                                <input nz-input formControlName="postal" name="postal" type="text"
+                                    [(placeholder)]="lossAdjustor.postal" [disabled]="!isEditmode" />
+                                <ng-template #postalErrorTpl let-control>
+                                    <ng-container *ngIf="control.hasError('required')">
+                                        Please input your Postal!
+                                    </ng-container>
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="8" nzRequired nzFor="physicalAddress">Physical Address
+                            </nz-form-label>
+                            <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating"
+                                [nzErrorTip]="addressDeailsErrorTpl">
+                                <textarea formControlName="physicalAddress" nz-input rows="5"
+                                    [(placeholder)]="lossAdjustor.physicalAddress" [disabled]="!isEditmode"></textarea>
+                                <ng-template #addressDeailsErrorTpl let-control>
+                                    <ng-container *ngIf="control.hasError('required')">
+                                        Please input your address!
+                                    </ng-container>
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+
+                <div nz-row>
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="8" nzRequired nzFor="phoneNumber">Phone Number</nz-form-label>
+                            <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating..."
+                                [nzErrorTip]="phoneNumberErrorTpl">
+                                <input nz-input formControlName="phoneNumber" name="phoneNumber" type="text"
+                                    [(placeholder)]="lossAdjustor.phoneNumber" [disabled]="!isEditmode" />
+                                <ng-template #phoneNumberErrorTpl let-control>
+                                    <ng-container *ngIf="control.hasError('required')">
+                                        Please input your Phone Number!
+                                    </ng-container>
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="8" nzRequired nzFor="email">Email</nz-form-label>
+                            <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating..."
+                                [nzErrorTip]="emailErrorTpl">
+                                <input nz-input formControlName="email" name="email" type="email"
+                                    [(placeholder)]="lossAdjustor.email" [disabled]="!isEditmode" />
+                                <ng-template #emailErrorTpl let-control>
+                                    <ng-container *ngIf="control.hasError('required')">
+                                        Please input your Email!
+                                    </ng-container>
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+                <nz-divider nzText="Qualifications" nzOrientation="left"></nz-divider>
+                <div nz-row>
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="8" nzRequired nzFor="yearsExperience">Years of Experience
+                            </nz-form-label>
+                            <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating..."
+                                [nzErrorTip]="yearsExperienceErrorTpl">
+                                <input nz-input formControlName="yearsExperience" name="yearsExperience"
+                                    type="yearsExperience" [(placeholder)]="lossAdjustor.yearsExperience"
+                                    [disabled]="!isEditmode" />
+                                <ng-template #yearsExperienceErrorTpl let-control>
+                                    <ng-container *ngIf="control.hasError('required')">
+                                        Please input your Years of Experience!
+                                    </ng-container>
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="8" nzRequired nzFor="qualifications">Qualifications</nz-form-label>
+                            <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating"
+                                [nzErrorTip]="qualificationsDeailsErrorTpl">
+                                <textarea formControlName="qualifications" nz-input rows="5"
+                                    [(placeholder)]="lossAdjustor.qualifications" [disabled]="!isEditmode"></textarea>
+                                <ng-template #qualificationsDeailsErrorTpl let-control>
+                                    <ng-container *ngIf="control.hasError('required')">
+                                        Please input your qualifications!
+                                    </ng-container>
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+            </form>
+        </nz-card>
+        <nz-card *ngIf="laType == 'corporate'">
+            <!-- Corporate Form -->
+            <form nz-form [formGroup]="corporateForm">
+                <nz-divider nzText="Company Details" nzOrientation="left"></nz-divider>
+                <div nz-row>
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="8" nzFor="name" nzRequired>Company Name</nz-form-label>
+                            <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating..."
+                                [nzErrorTip]="companyNameErrorTpl">
+                                <input nz-input formControlName="name" name="name" type="text"
+                                    [(placeholder)]="lossAdjustor.name" [disabled]="!isEditmode" />
+                                <ng-template #companyNameErrorTpl let-control>
+                                    <ng-container *ngIf="control.hasError('required')">
+                                        Please input your Company Name!
+                                    </ng-container>
+                                    <ng-container *ngIf="control.hasError('duplicated')">
+                                        The Company Name is redundant!
+                                    </ng-container>
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="8" nzRequired nzFor="physicalAddress">Physical Address
+                            </nz-form-label>
+                            <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating"
+                                [nzErrorTip]="addressDeailsErrorTpl">
+                                <textarea formControlName="physicalAddress" nz-input rows="5"
+                                    [(placeholder)]="lossAdjustor.physicalAddress" [disabled]="!isEditmode"></textarea>
+                                <ng-template #addressDeailsErrorTpl let-control>
+                                    <ng-container *ngIf="control.hasError('required')">
+                                        Please input your address!
+                                    </ng-container>
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+
+                <div nz-row>
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="8" nzRequired nzFor="postal">Postal</nz-form-label>
+                            <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating..."
+                                [nzErrorTip]="postalErrorTpl">
+                                <input nz-input formControlName="postal" name="postal" type="text"
+                                    [(placeholder)]="lossAdjustor.postal" [disabled]="!isEditmode" />
+                                <ng-template #postalErrorTpl let-control>
+                                    <ng-container *ngIf="control.hasError('required')">
+                                        Please input your Postal!
+                                    </ng-container>
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="8" nzRequired nzFor="phoneNumber">Phone Number</nz-form-label>
+                            <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating..."
+                                [nzErrorTip]="phoneNumberErrorTpl">
+                                <input nz-input formControlName="phoneNumber" name="phoneNumber" type="text"
+                                    [(placeholder)]="lossAdjustor.phoneNumber" [disabled]="!isEditmode" />
+                                <ng-template #phoneNumberErrorTpl let-control>
+                                    <ng-container *ngIf="control.hasError('required')">
+                                        Please input your Phone Number!
+                                    </ng-container>
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+
+                <div nz-row>
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="8" nzRequired nzFor="email">Email</nz-form-label>
+                            <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating..."
+                                [nzErrorTip]="emailErrorTpl">
+                                <input nz-input formControlName="email" name="email" type="email"
+                                    [(placeholder)]="lossAdjustor.email" [disabled]="!isEditmode" />
+                                <ng-template #emailErrorTpl let-control>
+                                    <ng-container *ngIf="control.hasError('required')">
+                                        Please input your Email!
+                                    </ng-container>
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+
+                <nz-divider nzText="Representative Details" nzOrientation="left"></nz-divider>
+                <div nz-row>
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="8" nzRequired nzFor="repName">Representative Name</nz-form-label>
+                            <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating..."
+                                [nzErrorTip]="repNameErrorTpl">
+                                <input nz-input formControlName="repName" name="repName" type="text"
+                                    [(placeholder)]="lossAdjustor.repName" [disabled]="!isEditmode" />
+                                <ng-template #repNameErrorTpl let-control>
+                                    <ng-container *ngIf="control.hasError('required')">
+                                        Please input your Representative Name!
+                                    </ng-container>
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="8" nzRequired nzFor="repNumber">Representative Number
+                            </nz-form-label>
+                            <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating..."
+                                [nzErrorTip]="repNumberErrorTpl">
+                                <input nz-input formControlName="repNumber" name="repNumber" type="text"
+                                    [(placeholder)]="lossAdjustor.repNumber" [disabled]="!isEditmode" />
+                                <ng-template #repNumberErrorTpl let-control>
+                                    <ng-container *ngIf="control.hasError('required')">
+                                        Please input your Representative Number!
+                                    </ng-container>
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+
+                <div nz-row>
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="8" nzRequired nzFor="repEmail">Representative Email</nz-form-label>
+                            <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating..."
+                                [nzErrorTip]="repEmailErrorTpl">
+                                <input nz-input formControlName="repEmail" name="repEmail" type="email"
+                                    [(placeholder)]="lossAdjustor.repEmail" [disabled]="!isEditmode" />
+                                <ng-template #repEmailErrorTpl let-control>
+                                    <ng-container *ngIf="control.hasError('required')">
+                                        Please input your Representative Email!
+                                    </ng-container>
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+            </form>
+        </nz-card>
+    </div>
+</div>
