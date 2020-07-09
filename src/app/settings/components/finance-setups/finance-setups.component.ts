@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { IBank} from '../../models/finance/bank.model';
+import { IBranch} from '../../models/finance/branch.model';
 import { IPaymentMethod} from '../../models/finance/payment-methodes.model';
 import { IReceiptTypes } from '../../models/finance/receipt-types.model';
 import { IDiscountType} from '../../models/finance/discount-type.model'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {PaymentMethodService} from 'src/app/settings/components/finance-setups/services/payment-method.service'
 import {BankService} from '../../components/finance-setups/components/bank-setups/services/bank.service';
+import {BranchService} from '../../components/finance-setups/services/branch.service';
 import { ReceiptTypesService } from 'src/app/settings/components/finance-setups/services/receipt-types.service';
 import { DiscountTypesService } from 'src/app/settings/components/finance-setups/services/discount-types.service';
-
 import { v4 } from 'uuid';
 import { from } from 'rxjs';
  
@@ -22,21 +23,28 @@ import { from } from 'rxjs';
 export class FinanceSetupsComponent implements OnInit {
 
   bankList: IBank[] = [];
+  branchList: IBranch[] = [];
   paymentMethodList: IPaymentMethod[] = [];
   receiptTypeList: IReceiptTypes[] = [];
   discountTypeList: IDiscountType[] = [];
 
 
+
   bankForm: FormGroup;
+  branchForm: FormGroup;
   paymentMethodForm: FormGroup;
   receiptTypeForm: FormGroup;
   discountTypeForm: FormGroup;
 
  
   isBankVisible = false;
+  isBranchVisible = false;
   isPaymentMethodVisible = false;
   isReceiptTypeVisible = false;
   isDiscountTypeVisible = false;
+
+  branch_Code: any;
+
 
   dtype: any;
   ddescription;
@@ -58,13 +66,19 @@ export class FinanceSetupsComponent implements OnInit {
     private PaymentMethodService: PaymentMethodService,
     private ReceiptTypeService: ReceiptTypesService,
     private DiscountTypesService: DiscountTypesService,
+    private BranchService: BranchService,
     private formBuider: FormBuilder,
   ) {
     this.bankForm = formBuider.group({
       bank_name: ['', Validators.required],
+      swift_code: ['', Validators.required],
+      description: ['',Validators.required],
+    });
+
+    this.branchForm = formBuider.group({
       branch_name: ['', Validators.required],
       branch_code: ['', Validators.required],
-      swift_code: ['', Validators.required],
+      description: ['', Validators.required],
     });
 
     
@@ -85,13 +99,14 @@ export class FinanceSetupsComponent implements OnInit {
    }
 
   ngOnInit(): void {
-
+ 
 ///////////////////////////////
     /// BANK SERVICE //////
 //////////////////////////////
     this.BankService.getBanks().subscribe((res) =>{
       this.bankList = res;
     });
+
 ///////////////////////////////////
 ///////// PAYMENT ////////////////////
 /////////////////////////////////////////
@@ -111,6 +126,14 @@ export class FinanceSetupsComponent implements OnInit {
             this.DiscountTypesService.getDiscountType().subscribe((res) => {
               this.discountTypeList = res;
             });
+
+             //////////////////////////////////
+      /////////// Discount ///////////////
+      ////////////////////////////////
+
+      this.BranchService.getBranch().subscribe((res) => {
+        this.branchList= res;
+      });
           }
 
   onChange(value) {
@@ -138,14 +161,19 @@ export class FinanceSetupsComponent implements OnInit {
     this.DiscountTypesService.getDiscountType().subscribe((res) =>{
       this.discountTypeList = res;
     });
+
+    console.log('WWWWWWWWWWW>>>>>>>>', value);
+    this.BranchService.getBranch().subscribe((res) =>{
+      this.branchList = res;
+    });
+    
   }
 
   onSelectBank(bank) {
     console.log('PEEEEEEEE>>>>', bank);
     this.bank_name = bank.bank_name;
-    this.branch_name = bank.branch_name;
-    this.branch_code = bank.branch_code;
     this.swift_code = bank.swift_code;
+    this.description = bank.description;
   }
 
   onSelectPaymentMethod(paymentMethod) {
@@ -166,9 +194,20 @@ export class FinanceSetupsComponent implements OnInit {
     this.ddescription = discountType.ddescription;
   }
 
+  
+ onSelectBranch(branch) {
+  console.log('PEEEEEEEE>>>>', branch);
+  this.branch_name = branch.branch_name;
+  this.branch_code = branch.branch_code;
+  this.description= branch.description;
+}
+
+ 
+
   openBanks(): void {
     this.isBankVisible = true;
   }
+  
 
   openPaymentMethods(): void {
     this.isPaymentMethodVisible = true;
@@ -181,6 +220,11 @@ export class FinanceSetupsComponent implements OnInit {
   
   openDiscountTypes(): void {
     this.isDiscountTypeVisible = true;
+  }
+
+  
+  openBranches(): void {
+    this.isBranchVisible = true;
   }
 
   closeBanks(): void {
@@ -200,6 +244,11 @@ export class FinanceSetupsComponent implements OnInit {
   
   closeDiscountTypes(): void {
     this.isDiscountTypeVisible = false;
+  }
+
+   
+  closeBranches(): void {
+    this.isBranchVisible = false;
   }
 
   submitBankForm() {
@@ -245,16 +294,31 @@ export class FinanceSetupsComponent implements OnInit {
     this.isDiscountTypeVisible = false;
   }
 
+  
+  submitBranchForm() {
+    const branch: IBranch = {
+      ...this.branchForm.value,
+      id: v4()
+    };
+    this.BranchService.addBranch(branch);
+    console.log('DDDDDDDDDD>>>>>>>', branch);
+    this.isBranchVisible = false;
+  }
 
   resetBankForm(value){}
+  
+
+  resetBranchForm(value){}
 
 
-  resetPaymentMethod(value){}
+  resetPaymentMethodForm(value){}
 
   
-  resetReceiptType(value){}
+  resetReceiptTypeForm(value){}
 
   
-  resetDiscountType(value){}
+  resetDiscountTypeForm(value){}
+
+  
 
 }

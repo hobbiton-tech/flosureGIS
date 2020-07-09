@@ -15,6 +15,7 @@ const BASE_URL = 'https://flosure-api.azurewebsites.net';
   providedIn: 'root'
 })
 export class BankService {
+  [x: string]: any;
   private bankCollection: AngularFirestoreCollection<IBank>;
     banks: Observable<IBank[]>;
 

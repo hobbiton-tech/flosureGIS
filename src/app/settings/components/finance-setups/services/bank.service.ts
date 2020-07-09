@@ -10,7 +10,6 @@ import 'firebase/firestore';
 import { NzMessageService } from 'ng-zorro-antd';
 import { promise } from 'protractor';
 
-const BASE_URL = 'https://flosure-api.azurewebsites.net';
 @Injectable({
   providedIn: 'root'
 })
@@ -27,9 +26,9 @@ export class BankService {
     this.banks = this.bankCollection.valueChanges();
   }
 
-  getBanks(): Observable<IBank[]> {
-    return this.http.get<IBank[]>(`${BASE_URL}/banks`)
-  }
+  // getBanks(): Observable<IBank[]> {
+  //   return this.http.get<IBank[]>(`${BASE_URL}/banks`)
+  // }
 
 
   // Bank Methods
@@ -59,8 +58,9 @@ export class BankService {
         });
 }
 
+
 getBank(): Observable<IBank[]> {
-    return this.banks;
-}
+    return this.banks;}
+
 
 }

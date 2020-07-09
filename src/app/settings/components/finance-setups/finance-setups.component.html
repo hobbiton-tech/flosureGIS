@@ -34,28 +34,59 @@
                         <thead>
                             <tr>
                                 <th>Bank Name</th>
-                                <th>Branch Name</th>
                                 <th>Swift Code</th>
+                                <td>Description</td>
                             </tr>
                         </thead>
                             <tbody>
                                 <tr *ngFor="let bank of bankTable.data"  (click)="onSelectBank(bank)"
                                     style="cursor: pointer;">
                                     <td>{{bank.bank_name }}</td>
-                                    <td>{{bank.branch_name}}</td>
                                     <td>{{bank.swift_code}}</td>
+                                    <td>{{bank.description}}</td>
                                 </tr>
                             </tbody>
                 </nz-table>
             </nz-tab>
 
+<!-- ///////////////////////////////////////////
+///////////////branches//////////////////// -->
+            <nz-tab nzTitle="Branch Setups">
+                    
+                <div style="margin-bottom: 10px;">
+                    <div nz-row [nzGutter]="24">
+                        <div nz-col nzSpan="12">
+                            <button nz-button nzType="primary" style="position: right;" (click)="openBranches()">
+                                Add Branch
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <nz-table #branchTable [nzData]="branchList">
+                    <thead>
+                        <tr>
+                            <th>Branch Name</th>
+                            <th>Branch Code</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                        <tbody>
+                            <tr *ngFor="let branch of branchTable.data"  (click)="onSelectBranch(branch)"
+                                style="cursor: pointer;">
+                                <td>{{branch.branch_name}}</td>
+                                <td>{{branch.branch_code}}</td>
+                                <td>{{branch.description}}</td>
+                            </tr>
+                        </tbody>
+            </nz-table>
+                </nz-tab>
 
                     <!--
                         ///////////////////////////////////////////////////////////////////////
                         /////////// PAYMENTS/////////////////////////////////////////
                         /////////////////////////////////////////////////
                     -->
-                    <nz-tab nzTitle="Payments Setups">
+                    <nz-tab nzTitle="Payment Methods Setups">
                         <div nz-row [nzGutter]="24">
                             <div nz-col nzSpan="12">
                                 <button nz-button nzType="primary" style="position: right;" (click)="openPaymentMethods()">
@@ -82,7 +113,7 @@
                         
                     </nz-tab>
 
-                    <nz-tab nzTitle="Receipt Setups">
+                    <nz-tab nzTitle="Receipt Types Setups">
                     <!--
                         ///////////////////////////////////////////////////////////////////////
                         /////////// RECEIPTS TYPES/////////////////////////////////////////
@@ -178,7 +209,7 @@
                 </ng-template>
             </nz-form-control>
         </nz-form-item>
-        <nz-form-item>
+        <!-- <nz-form-item>
             <nz-form-label [nzSpan]="7" nzRequired>Branch</nz-form-label>
             <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="bankErrorTpl">
                 <input nz-input formControlName="branch_name" placeholder="Enter Branch Name" />
@@ -191,21 +222,8 @@
                     </ng-container>
                 </ng-template>
             </nz-form-control>
-        </nz-form-item>
-        <!--nz-form-item>
-            <nz-form-label [nzSpan]="7" nzRequired>Branch Code</nz-form-label>
-            <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="bankErrorTpl">
-                <input nz-input formControlName="branch_code" placeholder="Enter code" />
-                <ng-template #bankErrorTpl let-control>
-                    <ng-container *ngIf="control.hasError('required')">
-                        Please input your Branch Code!
-                    </ng-container>
-                    <ng-container *ngIf="control.hasError('duplicated')">
-                        The code is redundant!
-                    </ng-container>
-                </ng-template>
-            </nz-form-control>
-        </nz-form-item-->
+        </nz-form-item> -->
+       
         <nz-form-item>
             <nz-form-label [nzSpan]="7" nzRequired>Swift Code</nz-form-label>
             <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="bankErrorTpl">
@@ -220,6 +238,19 @@
                 </ng-template>
             </nz-form-control>
         </nz-form-item>
+        
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedBack nxValidatingTip="Validating" [nzErrorTip]="descriptionErrorTp1!">
+              <textarea formControlName="description" nz-input rows="3" placeholder="Type Description"></textarea>
+              <ng-template #descriptionErrorTp1 let-control>
+                <ng-container *ngIf="control.hasError('required')">
+                    Please input Description!
+                </ng-container>
+                </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+
 
         <nz-form-item>
             <nz-form-control [nzOffset]="7" [nzSpan]="12">
@@ -231,10 +262,56 @@
                 </button>
             </nz-form-control>
         </nz-form-item>
+ <!--
+                    ///////////////////////////////////////////////////////////////////////
+                    /////////// Branch INPUTS/////////////////////////////////////////
+                    /////////////////////////////////////////////////
+                -->
 
 
-
-<!--
+                <nz-drawer [nzClosable]="false" [nzVisible]="isBranchVisible" nzPlacement="left" nzTitle="Create Banks"
+                (nzOnClose)="closeBranches()" [nzWidth]="600">
+                <form nz-form [formGroup]="branchForm" (ngSubmit)="submitBranchForm()">
+                   
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired>Branch Name</nz-form-label>
+                        <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="bankErrorTpl">
+                            <input nz-input formControlName="branch_name" placeholder="Enter Branch Name" />
+                            <ng-template #bankErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Please input your Branch Name!
+                                </ng-container>
+                                <ng-container *ngIf="control.hasError('duplicated')">
+                                    The Name is redundant!
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired>Branch Code</nz-form-label>
+                        <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="bankErrorTpl">
+                            <input nz-input formControlName="branch_code" placeholder="Enter code" />
+                            <ng-template #bankErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Please input your Branch Code!
+                                </ng-container>
+                                <ng-container *ngIf="control.hasError('duplicated')">
+                                    The code is redundant!
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-control [nzOffset]="7" [nzSpan]="12">
+                            <button nz-button nzType="primary" [disabled]="!branchForm.valid">
+                                Submit
+                            </button>
+                            <button nz-button (click)="resetBranchForm($event)">
+                                Reset
+                            </button>
+                        </nz-form-control>
+                    </nz-form-item>
+            <!--
                     ///////////////////////////////////////////////////////////////////////
                     /////////// PAYMENTS INPUTS/////////////////////////////////////////
                     /////////////////////////////////////////////////
@@ -335,15 +412,15 @@
                 <form nz-form [formGroup]="discountTypeForm" (ngSubmit)="submitDiscountTypeForm()">
                     <nz-form-item>
                         <nz-form-label [nzSpan]="7" nzRequired> Name</nz-form-label>
-                        <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="dtypeErrorTp1">
+                        <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="DescriptionErrorTp1">
                             <input nz-input formControlName="dtype" placeholder="Enter Type">
                         </nz-form-control>
                     </nz-form-item>
         
                     <nz-form-item>
                         <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
-                        <nz-form-control [nzSpan]="12" nzHasFeedBack nzValidatingTip="Validating" [nzErrorTip]="ddescriptionErrorTp1!">
-                          <textarea formControlName="ddescription" nz-input rows="3" placeholder="write any description"></textarea>
+                        <nz-form-control [nzSpan]="12" nzHasFeedBack nzValidatingTip="Validating" [nzErrorTip]="bankErrorTp1!">
+                          <textarea formControlName="dtype" nz-input rows="3" placeholder="write any description"></textarea>
                           <ng-template #dtypenErrorTp1 let-control>
                             <ng-container *ngIf="control.hasError('required')">
                                 Please Add Input  !
