@@ -9,17 +9,17 @@
         <nz-breadcrumb-item>
             Loss Adjustor Details
         </nz-breadcrumb-item>
-        <nz-page-header (nzBack)="goToLossAdjustorList()" nzBackIcon nzTitle="Loss Adjustor: {{name}}">
-            <nz-page-header-extra>
-                <button *ngIf="isEditmode" nz-button nzType="primary" (click)="isEditmode = false">
-                    Save Changes
-                </button>
-                <button *ngIf="!isEditmode" nz-button nzType="primary" (click)="isEditmode = true">
-                    Edit Loss Adjustor
-                </button>
-            </nz-page-header-extra>
-        </nz-page-header>
     </nz-breadcrumb>
+    <nz-page-header (nzBack)="goToLossAdjustorList()" nzBackIcon nzTitle="Loss Adjustor: {{name}}">
+        <nz-page-header-extra>
+            <button *ngIf="isEditmode" nz-button nzType="primary" (click)="isEditmode = false">
+                Save Changes
+            </button>
+            <button *ngIf="!isEditmode" nz-button nzType="primary" (click)="isEditmode = true">
+                Edit Loss Adjustor
+            </button>
+        </nz-page-header-extra>
+    </nz-page-header>
     <div style="margin-top: 20px;">
         <nz-card *ngIf="laType == 'individual'">
             <form nz-form [formGroup]="individualForm">

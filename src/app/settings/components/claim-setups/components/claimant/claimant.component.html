@@ -23,9 +23,6 @@
         <tr>
             <th>Claimant Type</th>
             <th>Name</th>
-            <th>ID Type</th>
-            <th>ID Number</th>
-            <th>Gender</th>
             <th>Physical Address</th>
             <th>Postal Address</th>
             <th>Phone Number</th>
@@ -33,12 +30,9 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let claimant of claimantTable.data">
+        <tr *ngFor="let claimant of claimantTable.data" (click)="viewDetails(claimant)" style="cursor: pointer;">
             <td>{{claimant.claimantType}}</td>
             <td>{{claimant.firstName}} {{claimant.middleName}} {{claimant.surname}}</td>
-            <td>{{claimant.idType}}</td>
-            <td>{{claimant.idNumber}}</td>
-            <td>{{claimant.gender}}</td>
             <td>{{claimant.physicalAddress}}</td>
             <td>{{claimant.postal}}</td>
             <td>{{claimant.phoneNumber}}</td>

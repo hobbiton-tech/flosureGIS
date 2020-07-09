@@ -3,6 +3,7 @@ import { IClaimant } from 'src/app/settings/models/underwriting/claims.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ClaimSetupsService } from '../../services/claim-setups.service';
 import { v4 } from 'uuid';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-claimant',
@@ -19,6 +20,7 @@ export class ClaimantComponent implements OnInit {
     idType: any;
 
     constructor(
+        private router: Router,
         private formBuilder: FormBuilder,
         private claimsService: ClaimSetupsService
     ) {
@@ -58,5 +60,11 @@ export class ClaimantComponent implements OnInit {
 
     resetClaimantForm() {
         this.claimantForm.reset();
+    }
+
+    viewDetails(claimant: IClaimant) {
+        this.router.navigateByUrl(
+            '/flosure/settings/claimant-details/' + claimant.id
+        );
     }
 }
