@@ -18,33 +18,25 @@
     </div>
 </div>
 
-<nz-table #serviceProviderTable [nzScroll]="{ x: '1500px' }" [nzData]="serviceProvidersList">
+<nz-table #serviceProviderTable [nzData]="serviceProvidersList">
     <thead>
         <tr>
-            <th nzLeft>Name of Company</th>
+            <th>Name of Company</th>
             <th>Service Provider Type</th>
-            <th>TPIN</th>
             <th>Physical Address</th>
             <th>Postal</th>
             <th>Phone Number</th>
             <th>Email Address</th>
-            <th>Representative Name</th>
-            <th>Representative Phone Number</th>
-            <th nzRight>Representative Email</th>
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let sp of serviceProviderTable.data">
-            <td nzLeft>{{sp.companyName}}</td>
+        <tr *ngFor="let sp of serviceProviderTable.data" (click)="viewDetails(sp)" style="cursor: pointer;">
+            <td>{{sp.companyName}}</td>
             <td>{{sp.serviceProviderType}}</td>
-            <td>{{sp.tpin}}</td>
             <td>{{sp.physicalAddress}}</td>
             <td>{{sp.postal}}</td>
             <td>{{sp.phoneNumber}}</td>
             <td>{{sp.email}}</td>
-            <td>{{sp.repName}}</td>
-            <td>{{sp.repNumber}}</td>
-            <td nzRight>{{sp.repEmail}}</td>
         </tr>
     </tbody>
 </nz-table>

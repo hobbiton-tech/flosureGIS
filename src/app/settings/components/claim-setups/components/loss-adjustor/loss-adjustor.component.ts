@@ -102,8 +102,6 @@ export class LossAdjustorComponent implements OnInit {
     }
 
     viewDetails(lossAdjustor: IIndividual | ILossAdjustor) {
-        console.log('Loss A>>>', lossAdjustor);
-
         this.router.navigateByUrl(
             '/flosure/settings/loss-adjustor-details/' + lossAdjustor.id
         );

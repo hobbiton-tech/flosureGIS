@@ -36,6 +36,7 @@ import { LossAdjustorComponent } from './components/claim-setups/components/loss
 import { ClaimantComponent } from './components/claim-setups/components/claimant/claimant.component';
 import { SalvageBuyerComponent } from './components/claim-setups/components/salvage-buyer/salvage-buyer.component';
 import { LossAdjustorDetailsComponent } from './components/claim-setups/components/loss-adjustor-details/loss-adjustor-details.component';
+import { ServiceProviderDetailsComponent } from './components/claim-setups/components/service-provider-details/service-provider-details.component';
 
 const routes: Routes = [
     {
@@ -90,6 +91,10 @@ const routes: Routes = [
         path: 'loss-adjustor-details/:id',
         component: LossAdjustorDetailsComponent,
     },
+    {
+        path: 'service-provider-details/:id',
+        component: ServiceProviderDetailsComponent,
+    },
 ];
 
 @NgModule({
@@ -126,6 +131,7 @@ const routes: Routes = [
         ClaimantComponent,
         SalvageBuyerComponent,
         LossAdjustorDetailsComponent,
+        ServiceProviderDetailsComponent,
     ],
     imports: [
         CommonModule,

@@ -1,7 +1,7 @@
 export interface IServiceProvider {
     id: string;
     companyName: string;
-    serviceProvider: string;
+    serviceProviderType: string;
     tpin: number;
     physicalAddress: string;
     postal: string;

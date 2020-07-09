@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { IServiceProvider } from 'src/app/settings/models/underwriting/claims.model';
 import { ClaimSetupsService } from '../../services/claim-setups.service';
 import { v4 } from 'uuid';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-service-provider',
@@ -17,6 +18,7 @@ export class ServiceProviderComponent implements OnInit {
     providerType: any;
 
     constructor(
+        private router: Router,
         private formBuilder: FormBuilder,
         private claimsService: ClaimSetupsService
     ) {
@@ -61,5 +63,11 @@ export class ServiceProviderComponent implements OnInit {
 
     onChange(value) {
         this.providerType = value;
+    }
+
+    viewDetails(serviceProvider: IServiceProvider) {
+        this.router.navigateByUrl(
+            '/flosure/settings/service-provider-details/' + serviceProvider.id
+        );
     }
 }
