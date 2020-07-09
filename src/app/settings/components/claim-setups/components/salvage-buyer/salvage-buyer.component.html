@@ -18,13 +18,10 @@
     </div>
 </div>
 
-<nz-table #salvageBuyerTable [nzScroll]="{ x: '1500px' }" [nzData]="salvageBuyersList">
+<nz-table #salvageBuyerTable [nzData]="salvageBuyersList">
     <thead>
         <tr>
             <th>Name</th>
-            <th>ID Type</th>
-            <th>ID Number</th>
-            <th>Gender</th>
             <th>Physical Address</th>
             <th>Postal Address</th>
             <th>Phone Number</th>
@@ -32,11 +29,9 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let salvageBuyer of salvageBuyerTable.data">
+        <tr *ngFor="let salvageBuyer of salvageBuyerTable.data" (click)="viewDetails(salvageBuyer)"
+            style="cursor: pointer;">
             <td>{{salvageBuyer.firstName}} {{salvageBuyer.middleName}} {{salvageBuyer.surname}}</td>
-            <td>{{salvageBuyer.idType}}</td>
-            <td>{{salvageBuyer.idNumber}}</td>
-            <td>{{salvageBuyer.gender}}</td>
             <td>{{salvageBuyer.physicalAddress}}</td>
             <td>{{salvageBuyer.postal}}</td>
             <td>{{salvageBuyer.phoneNumber}}</td>
