@@ -12,7 +12,8 @@
     </nz-breadcrumb>
     <nz-page-header (nzBack)="goBack()" nzBackIcon nzTitle="Service Provider: {{name}}">
         <nz-page-header-extra>
-            <button *ngIf="isEditMode" nz-button nzType="primary" (click)="isEditMode = false">
+            <button *ngIf="isEditMode" nz-button nzType="primary" [disabled]="!serviceProviderForm.valid"
+                (click)="updateDetails()">
                 Save Changes
             </button>
             <button *ngIf="!isEditMode" nz-button nzType="primary" (click)="isEditMode = true">

@@ -12,7 +12,7 @@
     </nz-breadcrumb>
     <nz-page-header (nzBack)="goToLossAdjustorList()" nzBackIcon nzTitle="Loss Adjustor: {{name}}">
         <nz-page-header-extra>
-            <button *ngIf="isEditmode" nz-button nzType="primary" (click)="isEditmode = false">
+            <button *ngIf="isEditmode" nz-button nzType="primary" (click)="updateDetails()">
                 Save Changes
             </button>
             <button *ngIf="!isEditmode" nz-button nzType="primary" (click)="isEditmode = true">

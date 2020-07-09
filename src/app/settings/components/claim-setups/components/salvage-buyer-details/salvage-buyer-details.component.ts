@@ -82,4 +82,13 @@ export class SalvageBuyerDetailsComponent implements OnInit {
     goBack() {
         this.route.navigateByUrl('/flosure/settings/claims');
     }
+
+    updateDetails() {
+        const newSB: ISalvageBuyer = {
+            ...this.salvageBuyerForm.value,
+            id: this.salvageBuyer.id,
+        };
+        this.claimsService.updateSalvageBuyer(newSB);
+        this.isEditMode = false;
+    }
 }

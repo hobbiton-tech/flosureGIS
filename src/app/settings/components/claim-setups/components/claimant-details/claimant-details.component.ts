@@ -81,4 +81,13 @@ export class ClaimantDetailsComponent implements OnInit {
     goBack() {
         this.route.navigateByUrl('/flosure/settings/claims');
     }
+
+    updateDetails() {
+        const newClaimant: IClaimant = {
+            ...this.claimantForm.value,
+            id: this.claimant.id,
+        };
+        this.claimsService.updateClaimant(newClaimant);
+        this.isEditMode = false;
+    }
 }

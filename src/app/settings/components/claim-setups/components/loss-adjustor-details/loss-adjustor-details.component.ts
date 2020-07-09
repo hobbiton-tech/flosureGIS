@@ -142,4 +142,23 @@ export class LossAdjustorDetailsComponent implements OnInit {
     goToLossAdjustorList() {
         this.route.navigateByUrl('/flosure/settings/claims');
     }
+
+    updateDetails() {
+        if (this.lossAdjustor.lossAdjustorType == 'individual') {
+            const newIndividual: IIndividual = {
+                ...this.individualForm.value,
+                id: this.lossAdjustor.id,
+            };
+            this.claimsService.updateIndividual(newIndividual);
+            this.isEditmode = false;
+        }
+        if (this.lossAdjustor.lossAdjustorType == 'corporate') {
+            const newCompany: ILossAdjustor = {
+                ...this.corporateForm.value,
+                id: this.lossAdjustor.id,
+            };
+            this.claimsService.updateLossAdjustor(newCompany);
+            this.isEditmode = false;
+        }
+    }
 }

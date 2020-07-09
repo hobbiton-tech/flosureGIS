@@ -86,4 +86,13 @@ export class ServiceProviderDetailsComponent implements OnInit {
     goBack() {
         this.route.navigateByUrl('/flosure/settings/claims');
     }
+
+    updateDetails() {
+        const newSP: IServiceProvider = {
+            ...this.serviceProviderForm.value,
+            id: this.serviceProvider.id,
+        };
+        this.claimsService.updateServiceProvider(newSP);
+        this.isEditMode = false;
+    }
 }

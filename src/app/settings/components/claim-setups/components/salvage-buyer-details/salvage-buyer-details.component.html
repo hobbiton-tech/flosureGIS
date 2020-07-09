@@ -12,7 +12,8 @@
     </nz-breadcrumb>
     <nz-page-header (nzBack)="goBack()" nzBackIcon nzTitle="Salvage Buyer: {{name}}">
         <nz-page-header-extra>
-            <button *ngIf="isEditMode" nz-button nzType="primary" (click)="isEditMode = false">
+            <button *ngIf="isEditMode" nz-button nzType="primary" [disabled]="!salvageBuyerForm.valid"
+                (click)="updateDetails()">
                 Save Changes
             </button>
             <button *ngIf="!isEditMode" nz-button nzType="primary" (click)="isEditMode = true">
