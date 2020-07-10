@@ -58,9 +58,20 @@ import {
     InsuranceTypeOptions,
     LimitsOfLiabilityOptions,
 } from '../../selection-options';
+
+import {
+    IVehicleType,
+    IVehicleMake,
+    IVehicleModel,
+} from 'src/app/settings/components/vehicle/models/vehicle.model';
+import { VehicleService } from 'src/app/settings/components/vehicle/services/vehicle.service';
+import { VehicleMakeService } from 'src/app/settings/components/vehicle/services/vehicle-make.service';
+import { VehicleModelService } from 'src/app/settings/components/vehicle/services/vehicle-model.service';
+
 import { PoliciesService } from 'src/app/underwriting/services/policies.service';
 import { IProduct } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
 import { ProductSetupsServiceService } from 'src/app/settings/components/product-setups/services/product-setups-service.service';
+
 
 type AOA = any[][];
 
@@ -107,6 +118,9 @@ interface IQuoteNumberResult {
     styleUrls: ['./create-quote.component.scss'],
 })
 export class CreateQuoteComponent implements OnInit {
+
+@Input() makeObj: any;
+
     vehicleBodyType = VehicleBodyType;
     // motorComprehensiveloadingOptions = MotorComprehensiveLoadingOptions;
     motorComprehensiveloadingOptions = [];
@@ -167,8 +181,13 @@ export class CreateQuoteComponent implements OnInit {
         private http: HttpClient,
         private readonly agentsService: AgentsService,
         private productClauseService: ClausesService,
+
+        private readonly vehicleType: VehicleService,
+        private readonly vehicleMakeService: VehicleMakeService,
+        private readonly vehicleModelService: VehicleModelService,
         private policyService: PoliciesService,
         private productSevice: ProductSetupsServiceService
+
     ) {
         // this.clauseForm = formBuilder.group({
         //     heading: ['', Validators.required],
@@ -237,6 +256,16 @@ export class CreateQuoteComponent implements OnInit {
     excessesForm: FormGroup;
     clients: Array<IIndividualClient & ICorporateClient>;
     premiumLoadingForm: FormGroup;
+
+    //vehicle
+    bodyTypes: IVehicleType[];
+    bodyMakes: IVehicleMake[];
+    bodyModels: IVehicleModel[];
+    displayBodyModels: IVehicleMake[] = [];
+
+    selectedMake: any;
+    clickedMakeId: any;
+    selectedModel: IVehicleModel;
 
     // intermediaries
     brokers: IBroker[];
@@ -539,6 +568,23 @@ export class CreateQuoteComponent implements OnInit {
             this.lastItem = this.quotesList[this.quotesList.length - 1];
         });
 
+        this.vehicleType.getVehicleType().subscribe((bodyType) => {
+            this.bodyTypes = bodyType;
+        });
+
+        this.vehicleMakeService.getVehicleMake().subscribe((bodyMake) => {
+            this.bodyMakes = bodyMake;
+
+            // this.displayBodyModels = this.bodyMakes.filter((x) => {
+            //   console.log('clickedId', this.makeObj)
+            //     x.id === this.clickedMakeId;
+            // });
+        });
+
+        // this.vehicleModelService.getVehicleModel().subscribe((bodyModel) => {
+        //     this.bodyModels = bodyModel;
+        // });
+
         this.productClauseService.getExccesses().subscribe((res) => {
             this.excessList = res.filter(
                 (x) => x.productId === '5bf2a73c-709a-4f38-9846-c260e8fffefc'
@@ -556,6 +602,7 @@ export class CreateQuoteComponent implements OnInit {
                 (x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d'
             );
         });
+
 
         this.clientsService.getAllClients().subscribe((clients) => {
             this.clients = [...clients[0], ...clients[1]] as Array<
@@ -2887,6 +2934,28 @@ export class CreateQuoteComponent implements OnInit {
         this.combinedLimitsRate = 0;
     }
 
+    vehicleMakeChange(value: string): void {
+        this.selectedVehicleModel = this.bodyModels[this.makeObj][0];
+    }
+
+    onSelectVehicleMake(vehicleMake) {
+
+        this.clickedMakeId = vehicleMake.id;
+        this.selectedMake = vehicleMake.productName;
+        console.log('dada' ,this.clickedMakeId);
+    }
+
+    onChange(value) {
+        console.log('WWWWWWWWWWW>>>>>>>>', value.id);
+        this.vehicleMakeService.getVehicleMake().subscribe((res) => {
+            console.log('YEEEEEEEE>>>>', res);
+
+            this.displayBodyModels = res.filter((x) =>
+              x.id === value.id
+            )
+
+            console.log('am done', this.displayBodyModels)
+        });
     clauseSelected($event) {
         this.selectedClauseValue = $event;
         console.log('selectedClauseValue>> ', this.selectedClauseValue);
@@ -2905,5 +2974,6 @@ export class CreateQuoteComponent implements OnInit {
     exclusionSelected($event) {
         this.selectedExclusionValue = $event;
         console.log('selectedExclusionValue>>', this.selectedExclusionValue);
+
     }
 }

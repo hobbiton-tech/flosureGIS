@@ -62,6 +62,7 @@ export class ProductSetupsComponent implements OnInit {
             this.classId = param.classId;
         });
 
+
         this.productSetupsService.getClasses().subscribe((classes) => {
             this.classesList = classes;
 

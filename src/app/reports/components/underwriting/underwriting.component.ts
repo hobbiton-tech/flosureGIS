@@ -49,6 +49,9 @@ import { BehaviorSubject } from 'rxjs';
 import * as Excel from 'exceljs/dist/exceljs.min.js';
 import * as ExcelProper from 'exceljs';
 
+import { UsersService } from 'src/app/users/services/users.service';
+import { UserModel } from 'src/app/users/models/users.model';
+
 let workbook: ExcelProper.Workbook = new Excel.Workbook();
 
 interface FilterMotorQuotation extends MotorQuotationModel {
@@ -67,6 +70,8 @@ interface FilterMotorQuotation extends MotorQuotationModel {
 interface Motor extends MotorQuotationModel {
     sumInsured: number;
     grossPremium: number;
+    getUser: string;
+    getBranch: string;
 }
 
 interface PremiumReport extends Policy {
@@ -78,7 +83,9 @@ interface PremiumReport extends Policy {
     netPremium: number;
     levy: number;
     premiumDue: number;
-    commission?: number;
+    commission: number;
+    getBranch: string;
+    getUser: string;
 }
 
 export type QuoteStatus = 'Draft' | 'Approved';
@@ -100,33 +107,6 @@ interface IFormattedAnalysisReport
 })
 export class UnderwritingComponent implements OnInit {
     isVisible = false;
-    // visible = false;
-
-    //search string when filtering clients
-    searchString: string;
-
-    //Qoutation Listing Report
-    motorList: MotorQuotationModel[];
-    motor: Motor[];
-    filterMotor: Motor[];
-    displayedMotor: Motor[];
-    displayedFilterMotor: Motor[];
-
-    displayPolicyReport: Policy[] = [];
-    policyList: Policy[] = [];
-
-    // // Quotation Analysis Report
-    // intermediariesList: Array<IAgent & IBroker & ISalesRepresentative>;
-    // formatIntermediaryReport: Array<IFormattedAnalysisReport>;
-    // displayIntermediariesList: Array<IAgent & IBroker & ISalesRepresentative>;
-
-    policiesList: Policy[];
-    filteredPoliciesList: Policy[] = [];
-    filterPremiumList: Array<PremiumReport>;
-
-    quotesList: MotorQuotationModel[];
-
-    // renewal report
     isRenewalReportVisible = false;
     isPremiumWorkingReportVisible = false;
     isDebitNoteReportVisible = false;
@@ -135,14 +115,36 @@ export class UnderwritingComponent implements OnInit {
     isAnalysisReportVisible = false;
     isReportVisible = false;
 
+    //search string when filtering clients
+    searchString: string;
+
+    motorList: MotorQuotationModel[] = [];
+    motor: Motor[] = [];
+    filterMotor: Motor[] = [];
+    displayedMotor: Motor[] = [];
+    displayedFilterMotor: Motor[] = [];
+
+    policiesList: Policy[] = [];
+    premiumReport: Policy[] = [];
+    filteredPoliciesList: Policy[] = [];
+    displayPremiumReport: Policy[] = [];
+    filterPremiumList: Array<PremiumReport>;
+    productionReport: Array<PremiumReport>;
+
+    filterList: Array<IFormattedAnalysisReport>;
+
     dateForm: FormGroup;
+
+    usersList: UserModel[];
+    singleUser: UserModel[];
+
+    commissionList: ICommissionSetup[] = [];
+
+    isLoading = false;
+    isOkLoading = false;
 
     timeDay = new Date();
     fileName = 'PremiumReportTable' + this.timeDay + '.xlsx';
-
-    filterPremiumReport: any;
-    displayPremiumReport: Policy[];
-    premiumReport: Policy[];
 
     filterForm = new FormGroup({
         fromDate: new FormControl(),
@@ -159,16 +161,12 @@ export class UnderwritingComponent implements OnInit {
     constructor(
         private premiumService: PremiumService,
         private agentsService: AgentsService,
+        private userService: UsersService,
         private commissionService: CommisionSetupsService,
         private quotationService: QuotesService,
         private policiesService: PoliciesService,
         private formBuilder: FormBuilder
-    ) {
-        this.dateForm = this.formBuilder.group({
-            fromDate: ['', Validators.required],
-            toDate: ['', Validators.required],
-        });
-    }
+    ) {}
 
     showModal(): void {
         this.isVisible = true;
@@ -205,6 +203,11 @@ export class UnderwritingComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.isOkLoading = true;
+        setTimeout(() => {
+            this.isOkLoading = false;
+        }, 3000);
+
         let sourceOfBusiness = 'direct';
 
         this.quotationService.getMotorQuotations().subscribe((d) => {
@@ -212,7 +215,9 @@ export class UnderwritingComponent implements OnInit {
             this.motor = this.motorList.map((m) => ({
                 ...m,
                 sumInsured: this.sumArray(m.risks, 'sumInsured'),
-                grossPremium: this.sumArray(m.risks, 'basicPremium'),
+                grossPremium: this.sumArray(m.risks, 'netPremium'),
+                getBranch: this.getBranch(m.user),
+                getUser: this.getUser(m.user),
             }));
 
             this.displayedMotor = this.motor;
@@ -237,10 +242,30 @@ export class UnderwritingComponent implements OnInit {
                 netPremium: this.sumArray(x.risks, 'netPremium'),
                 levy: this.sumArray(x.risks, 'premiumLevy'),
                 premiumDue: x.sumInsured,
+                commission: this.getCommission(x.intermediaryName),
+                getBranch: this.getBranch(x.user),
+                getUser: this.getUser(x.user),
             }));
 
             this.displayPremiumReport = this.filterPremiumList;
             console.log('New Policy--->', this.filterPremiumList);
+
+            this.productionReport = this.filterPremiumList.filter((x) =>
+                x.sourceOfBusiness !== sourceOfBusiness
+            );
+            console.log('filter', this.productionReport);
+        });
+
+        this.userService.getUsers().subscribe((users) => {
+            this.usersList = users;
+            console.log('users');
+
+            console.log('user:', this.usersList);
+        });
+
+        this.commissionService.getCommissionSetups().subscribe((commission) => {
+            this.commissionList = commission;
+            console.log('COMMISSION', this.commissionList);
         });
 
         // this.agentsService
@@ -275,55 +300,121 @@ export class UnderwritingComponent implements OnInit {
         // console.log('Intermediary Name', this.intermediary);
     }
 
-    /// the function to get all quotation by per intermediary//
-    // async getIntermediaryQuoteCount(intermediary: any) {
-    //     let quote: any;
+    capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
 
-    //     await this.quotationService
-    //         .getMotorQuotations()
-    //         .toPromise()
-    //         .then((quotes: MotorQuotationModel[]) => {
-    //             this.quotesList = quotes;
+    capitalize(s) {
+        return s.toLowerCase().replace(/\b./g, function (a) {
+            return a.toUpperCase();
+        });
+    }
 
-    //             this.filteredQuotesList = this.quotesList.filter((item) =>
-    //                 item.intermediaryName === intermediary.companyName
-    //                     ? intermediary.companyName
-    //                     : intermediary.contactFirstName +
-    //                       ' ' +
-    //                       intermediary.contactLastName
-    //             );
-    //             // .map((x) => x.id);
+    getEmailName(email: string) {
+        return email.replace(/@.*/, ' ');
+    }
 
-    //             quote = this.filteredQuotesList.length;
-    //             console.log('test one', quote);
-    //         });
-
-    //     console.log('test two', this.quotesList);
-    //     return quote;
+    // add(data) {
+    //     this.value = data;
+    //     for (let j = 0; j < data.length; j++) {
+    //         this.sum += this.value[j].sumInsured;
+    //     }
     // }
 
-    // getFullName(i: any): any {
-    //     return `${
-    //         i.companyName
-    //             ? i.companyName
-    //             : i.contactFirstName + '' + i.contactLastName
-    //     }`;
-    // }
+    getUser(email: string) {
+        let nUser;
+        console.log('users->', this.usersList);
+        nUser = this.usersList.filter((x) => x.email === email);
+        console.log('user', nUser);
+        return nUser;
+    }
 
-    // async getCommission(name: string) {
-    //     await this.commissionService.getCommissionSetups().subscribe((x) =>
-    //         x
-    //             .filter((x) => x.intermediaryName === name)
-    //             .map((m) => {
-    //                 this.commission = m.commission;
-    //                 // console.log('this comm',commission)
-    //             })
-    //     );
+    getBranch(email: string) {
+        let nUser;
+        nUser = this.usersList.filter((x) => x.email === email);
+        console.log('branch', nUser);
+        return nUser;
+    }
 
-    //     console.log('This Knew->', this.commission);
-    //     this.commission;
-    // }
+    getCommission(intermediary: string){
+        console.log('inter', intermediary);
+        console.log('inter-commission', this.commissionList);
+        let comm;
 
+        comm = this.commissionList.filter(
+            (x) => x.intermediaryName === intermediary
+        );
+
+        console.log('fcommf', comm);
+
+        return comm;
+    }
+
+    getSumMotor(column): number {
+        let sum = 0;
+        for (let i = 0; i < this.displayedMotor.length; i++) {
+            sum += this.displayedMotor[i][column];
+        }
+        return sum;
+    }
+
+    getTotalSumInsured() {
+        return this.displayedFilterMotor
+            .map((t) => t.sumInsured)
+            .reduce((acc, value) => acc + value);
+    }
+
+    getSum(column): number {
+        let sum = 0;
+        for (let i = 0; i < this.displayPremiumReport.length; i++) {
+            sum += this.displayPremiumReport[i][column];
+        }
+        return sum;
+    }
+
+    getCountNumber(name): number {
+        let count;
+        count = this.displayPremiumReport.filter((x) => {
+            x.intermediaryName === name;
+        }).length;
+
+        return count;
+    }
+    getName(name) {
+        return `${
+            name.companyName
+                ? name.companyName
+                : name.contactFirstName + ' ' + name.contactLastName
+        }`;
+    }
+
+    getCountQuotation(name): number {
+        let count;
+        count = this.displayedFilterMotor.filter((x) => {
+            x.intermediaryName === name;
+        }).length;
+
+        return count;
+    }
+
+    getRatio(name): number {
+        let nPolicy;
+        let nQuotes;
+        let results;
+
+        nPolicy = this.displayPremiumReport.filter((x) => {
+            x.intermediaryName === 'Bertha Muyunda';
+            // name.companyName ? name.companyName : name.contactFirstName + " " + name.contactLastName
+        }).length;
+
+        nQuotes = this.displayedFilterMotor.filter((x) => {
+            x.intermediaryName === 'Bertha Muyunda';
+        }).length;
+
+        results = (nPolicy / nQuotes) * 100;
+
+        return results;
+    }
     handleOk(): void {
         this.isVisible = false;
         this.isAnalysisReportVisible = false;
@@ -345,259 +436,6 @@ export class UnderwritingComponent implements OnInit {
         this.isIntermediaryQuotationListingReport = false;
     }
 
-    //Quotation Listing Report functions
-
-    // getIntermediaryQuoteCount(intermediary: any): number {
-    //     this.quotationService.getMotorQuotations().subscribe((quotes) => {
-    //         this.quotesList = quotes;
-
-    //         this.filteredQuotesList = this.quotesList.filter((x) =>
-    //             x.intermediaryName == intermediary.companyName
-    //                 ? intermediary.companyName
-    //                 : intermediary.contactFirstName +
-    //                   ' ' +
-    //                   intermediary.contactLastName
-    //         );
-    //     });
-    //     console.log('-------->-->->', this.filteredQuotesList.length);
-    //     return this.filteredQuotesList.length;
-    // }
-
-    // getIntermediaryPolicyCount(intermediary: any) {
-    //     this.policiesService.getPolicies().subscribe((policies) => {
-    //         console.log(policies);
-
-    //         this.policiesList = policies;
-    //         this.try = this.policiesList.filter(
-    //             (x) => x.intermediaryName === 'hobbiton'
-    //             // intermediary.companyName
-    //             //     ? intermediary.companyName
-    //             //     : intermediary.contactFirstName +
-    //             //       ' ' +
-    //             //       intermediary.contactLastName
-    //         );
-    //     });
-
-    //     console.log('am test you=>>>>' + this.try);
-
-    //     return this.try;
-    // }
-
-    // getRatio(intermediary: any): any {
-    //     let quoteNumber;
-    //     let policyNumber;
-
-    //     this.policiesService.getPolicies().subscribe((policies) => {
-    //         this.policiesList = policies;
-    //         this.filteredPoliciesList = this.policiesList.filter(
-    //             (x) => x.intermediaryName == 'hobbiton'
-
-    //             // intermediary.companyName
-    //             //     ? intermediary.companyName
-    //             //     : intermediary.contactFirstName +
-    //             //       ' ' +
-    //             //       intermediary.contactLastName
-    //         );
-
-    //         quoteNumber = this.filteredPoliciesList[0];
-    //     });
-
-    //     this.quotationService.getMotorQuotations().subscribe((policies) => {
-    //         this.quotesList = policies;
-    //         this.filteredQuotesList = this.quotesList.filter((x) =>
-    //             x.intermediaryName == intermediary.companyName
-    //                 ? intermediary.companyName
-    //                 : intermediary.contactFirstName +
-    //                   ' ' +
-    //                   intermediary.contactLastName
-    //         );
-
-    //         policyNumber = this.filteredQuotesList;
-    //     });
-    //     // console.log('Get=>>>>' + this.filteredQuotesList.length);
-    //     // console.log('Count=>>>>' + this.filteredPoliciesList.length);
-
-    //     return (34 / 70) * 100;
-    // }
-
-    downloadQuotationReportListPdf() {
-        console.log('Downloading Pdf....');
-        let doc = new jsPDF('l', 'pt', 'a4');
-        var img = new Image();
-        img.src = 'assets/images/apluslogo.png';
-        // let imgData = 'data:image/png;base64, '+ Base64.encode();
-        // console.log(imgData);
-
-        // doc.addImage(img, 'PNG', 10, 10, 280, 280);
-
-        var header = function (headerData: any) {
-            // var subtext = 'A Plus General Insurance',
-
-            // xOffset =
-            //     doc.internal.pageSize.width / 2 -
-            //     (doc.getStringUnitWidth(text) *
-            //         doc.internal.getFontSize()) /
-            //         2;
-
-            var text = 'Quotation Listing Report',
-                xOffset =
-                    doc.internal.pageSize.width / 2 -
-                    (doc.getStringUnitWidth(text) *
-                        doc.internal.getFontSize()) /
-                        2;
-
-            doc.setTextColor(173, 216, 230);
-            doc.text(text, xOffset, 60);
-            // doc.text(subtext, xOffset, 70)
-
-            doc.setFontSize(25);
-            doc.setTextColor(40);
-            doc.setFontStyle('normal');
-            doc.addImage(
-                img,
-                'PNG',
-                headerData.settings.margin.left,
-                20,
-                150,
-                60
-            );
-
-            // doc.text('Aplus Insurance', 60, 40, 250, 'center');
-            // const currentdate = new Date();
-            // const datetime =
-            //     currentdate.getDate() +
-            //     '/' +
-            //     (currentdate.getMonth() + 1) +
-            //     '/' +
-            //     currentdate.getFullYear();
-            // doc.text(
-            //     'Date: ' + datetime,
-            //     headerData.settings.margin.left + 400,
-            //     60
-            // );
-            // doc.setFontSize(5);
-        };
-
-        // const head = [
-        //     [
-        //         'No',
-        //         'Branch',
-        //         'Client',
-        //         'Intermediary Name',
-        //         'Number of Quotation',
-        //         'Acquisition Ratio',
-        //     ],
-        // ];
-
-        const totalPagesExp = '{total_pages_count_string}';
-
-        // const options = {
-        //     beforePageContent: header,
-        //     //   afterPageContent: footer,
-        //     margin: {
-        //         top: 100,
-        //     },
-        //     head: head,
-        //     styles: {
-        //         overflow: 'linebreak',
-        //         fontSize: 10,
-        //         tableWidth: 'auto',
-        //         columnWidth: 'auto',
-        //     },
-        //     columnStyles: {
-        //         1: { columnWidth: 'auto' },
-        //     },
-        // };
-
-        // const elem = document.getElementById('table');
-        // const data = doc.autoTableHtmlToJson(elem);
-        // doc.autoTable( data.columns, data.rows, options);
-
-        // Total page number plugin only available in jspdf v1.0+
-        if (typeof doc.putTotalPages === 'function') {
-            doc.putTotalPages(totalPagesExp);
-        }
-
-        //    doc.autoTable(columns, rows);
-        doc.setFontSize(15);
-
-        //@ts-ignore
-        doc.autoTable({
-            html: 'Table',
-            margin: { top: 80 },
-            didDrawPage: header,
-        });
-        // autoTable(doc, { html: '#Table' });
-        doc.save('quotationListingReport.pdf');
-    }
-
-    // downloadQuotationReportListPdf() {
-    //     console.log('Downloading Pdf....');
-    //     let doc = new jsPDF('l', 'pt', 'a4');
-
-    //     var company_logo = new Image();
-    //     company_logo.src = 'assets/images/apluslogo.png';
-
-    //     // A Plus General Insurance
-    //     // Plot No. 402, Roma Park, Zambezi Road
-    //     // P.O. Box 31700, Lusaka Zambia
-    //     // Tel: +260 211 239865/6 - Tele/Fax:+260 211 239867
-    //     // E-mail: info@aplusgeneral.com
-
-    //     const totalPagesExp = '{total_pages_count_string}';
-
-    //     var header = function (data) {
-    //         doc.setFontSize(8);
-    //         doc.setTextColor(40);
-    //         doc.setFontStyle('normal');
-    //     };
-
-    //     doc.setFontSize(8);
-    //     doc.setFontStyle('normal');
-
-    //     var options = {
-    //         beforePageContent: header,
-    //         margin: {
-    //             top: 50,
-    //         },
-    //         styles: {
-    //             overflow: 'linebreak',
-    //             fontSize: 8,
-    //             rowHeight: 'auto',
-    //             columnWidth: 'wrap',
-    //         },
-    //         columnStyles: {
-    //             1: { columnWidth: 'auto' },
-    //             2: { columnWidth: 'auto' },
-    //             3: { columnWidth: 'auto' },
-    //             4: { columnWidth: 'auto' },
-    //             5: { columnWidth: 'auto' },
-    //             6: { columnWidth: 'auto' },
-    //             7: { columnWidth: 'auto' },
-    //             8: { columnWidth: 'auto' },
-    //             9: { columnWidth: 'auto' },
-    //             10: { columnWidth: 'auto' },
-    //             11: { columnWidth: 'auto' },
-    //         },
-
-    //     };
-    //     // const elem = document.getElementById('table');
-    //     // const data = doc.autoTableHtmlToJson(elem);
-    //     // doc.autoTable( data.columns, data.rows, options);
-
-    //     // Total page number plugin only available in jspdf v1.0+
-    //     if (typeof doc.putTotalPages === 'function') {
-    //         doc.putTotalPages(totalPagesExp);
-    //     }
-
-    //     //@ts-ignore
-    //     doc.autoTable({
-    //         html: 'Table',
-    //         didDrawPage: options,
-    //     });
-    //     doc.save('quotationReport.pdf');
-    // }
-
     downloadPDF(tableId: string, title: string) {
         console.log('downloading pdf...');
         let doc = new jsPDF('l', 'pt', 'a4');
@@ -605,27 +443,45 @@ export class UnderwritingComponent implements OnInit {
         img.src = 'assets/images/apluslogo.png';
 
         var header = function (headerData: any) {
-            var name = 'A Plus General Insurance',
+            var name = title,
                 xOffset =
                     doc.internal.pageSize.width / 2 -
                     (doc.getStringUnitWidth(name) *
                         doc.internal.getFontSize()) /
                         2;
-            var address1 = 'Plot No. 402, Roma Park, Zambezi Road';
-            var address2 = 'P.O. Box 31700, Lusaka Zambia';
-            var phone = 'Tel: +260 211 239865/6 - Tele/Fax:+260 211 239867';
+            var address1 = 'Plot No. 402, Roma Park, Zambezi Road',
+                xOffset =
+                    doc.internal.pageSize.width / 2 -
+                    (doc.getStringUnitWidth(address1) *
+                        doc.internal.getFontSize()) /
+                        2;
+            // var address1 = 'Plot No. 402, Roma Park, Zambezi Road';
+            var address2 = 'P.O. Box 31700, Lusaka Zambia',
+                xOffset =
+                    doc.internal.pageSize.width / 2 -
+                    (doc.getStringUnitWidth(address2) *
+                        doc.internal.getFontSize()) /
+                        2;
+            var phone = 'Tel: +260 211 239865/6 - Tele/Fax:+260 211 239867',
+                xOffset =
+                    doc.internal.pageSize.width / 2 -
+                    (doc.getStringUnitWidth(phone) *
+                        doc.internal.getFontSize()) /
+                        2;
             var email = 'E-mail: info@aplusgeneral.com';
-            // var text = title,
-            //     xOffset =
-            //         doc.internal.pageSize.width / 2 -
-            //         (doc.getStringUnitWidth(text) *
-            //             doc.internal.getFontSize()) /
-            //             2;
+            // xOffset =
+            //     doc.internal.pageSize.width / 2 -
+            //     (doc.getStringUnitWidth(email) *
+            //         doc.internal.getFontSize()) /
+            //         2;
 
             doc.setTextColor(173, 216, 230);
-            // doc.text(name, xOffset, 40);
-            doc.text(name, xOffset, 60);
-            doc.setFontSize(25);
+            doc.text(address1, headerData.settings.margin.left + 550, 15);
+            doc.text(address2, headerData.settings.margin.left + 550, 25);
+            doc.text(phone, headerData.settings.margin.left + 550, 35);
+            doc.text(email, headerData.settings.margin.left + 550, 45);
+            doc.text(name, headerData.settings.margin.left + 550, 60);
+            doc.setFontSize(15);
             doc.setTextColor(40);
             doc.setFontStyle('normal');
             doc.addImage(
@@ -638,493 +494,52 @@ export class UnderwritingComponent implements OnInit {
             );
         };
 
-        const options = {
-            beforePageContent: header,
-            //   afterPageContent: footer,
-            // margin: {
-            //     top: 100,
-            // },
-            styles: {
-                overflow: 'linebreak',
-                fontSize: 10,
-                tableWidth: 'auto',
-                columnWidth: 'auto',
-            },
-            columnStyles: {
-                1: { columnWidth: 'auto' },
-            },
-        };
-
-        doc.setFontSize(15);
+        doc.setFontSize(10);
 
         //@ts-ignore
         doc.autoTable({
             html: tableId,
             margin: { top: 80 },
+            styles: {
+                overflow: 'linebreak',
+                fontSize: 8,
+                tableWidth: 'auto',
+                columnWidth: 'auto',
+            },
             didDrawPage: header,
         });
-        // autoTable(doc, { html: '#Table' });
-        doc.save(title + '.pdf');
+
+        doc.save(title + this.timeDay + '.pdf');
     }
-
-    downloadAnalysisListPdf() {
-        console.log('Downloading Pdf....');
-        let doc = new jsPDF('l', 'pt', 'a4');
-        var img = new Image();
-        img.src = 'assets/images/apluslogo.png';
-        // let imgData = 'data:image/png;base64, '+ Base64.encode();
-        // console.log(imgData);
-
-        // doc.addImage(img, 'PNG', 10, 10, 280, 280);
-
-        var header = function (headerData: any) {
-            // var subtext = 'A Plus General Insurance',
-
-            // xOffset =
-            //     doc.internal.pageSize.width / 2 -
-            //     (doc.getStringUnitWidth(text) *
-            //         doc.internal.getFontSize()) /
-            //         2;
-
-            var text = 'Quotation Listing Report',
-                xOffset =
-                    doc.internal.pageSize.width / 2 -
-                    (doc.getStringUnitWidth(text) *
-                        doc.internal.getFontSize()) /
-                        2;
-
-            doc.setTextColor(173, 216, 230);
-            doc.text(text, xOffset, 60);
-            // doc.text(subtext, xOffset, 70)
-
-            doc.setFontSize(25);
-            doc.setTextColor(40);
-            doc.setFontStyle('normal');
-            doc.addImage(
-                img,
-                'PNG',
-                headerData.settings.margin.left,
-                20,
-                150,
-                60
-            );
-
-            // doc.text('Aplus Insurance', 60, 40, 250, 'center');
-            // const currentdate = new Date();
-            // const datetime =
-            //     currentdate.getDate() +
-            //     '/' +
-            //     (currentdate.getMonth() + 1) +
-            //     '/' +
-            //     currentdate.getFullYear();
-            // doc.text(
-            //     'Date: ' + datetime,
-            //     headerData.settings.margin.left + 400,
-            //     60
-            // );
-            // doc.setFontSize(5);
-        };
-
-        const head = [
-            [
-                'No',
-                'Branch',
-                'Client',
-                'Intermediary Name',
-                'Number of Quotation',
-                'Acquisition Ratio',
-            ],
-        ];
-
-        const totalPagesExp = '{total_pages_count_string}';
-
-        const options = {
-            beforePageContent: header,
-            //   afterPageContent: footer,
-            margin: {
-                top: 100,
-            },
-            head: head,
-            styles: {
-                overflow: 'linebreak',
-                fontSize: 10,
-                tableWidth: 'auto',
-                columnWidth: 'auto',
-            },
-            columnStyles: {
-                1: { columnWidth: 'auto' },
-            },
-        };
-
-        // const elem = document.getElementById('table');
-        // const data = doc.autoTableHtmlToJson(elem);
-        // doc.autoTable( data.columns, data.rows, options);
-
-        // Total page number plugin only available in jspdf v1.0+
-        if (typeof doc.putTotalPages === 'function') {
-            doc.putTotalPages(totalPagesExp);
-        }
-
-        //    doc.autoTable(columns, rows);
-        doc.setFontSize(15);
-
-        //@ts-ignore
-        doc.autoTable({
-            html: 'Table',
-            margin: { top: 80 },
-            didDrawPage: options,
-        });
-        // autoTable(doc, { html: '#Table' });
-        doc.save('quotationAnalysisReport.pdf');
-    }
-
-    downloadRenewalListPdf() {
-        console.log('Downloading Pdf....');
-        let doc = new jsPDF('l', 'pt', 'a4');
-        var img = new Image();
-        img.src = 'assets/images/apluslogo.png';
-
-        var header = function (headerData: any) {
-            var text = 'Renewal Report',
-                xOffset =
-                    doc.internal.pageSize.width / 2 -
-                    (doc.getStringUnitWidth(text) *
-                        doc.internal.getFontSize()) /
-                        2;
-
-            doc.setTextColor(173, 216, 230);
-            doc.text(text, xOffset, 60);
-            // doc.text(subtext, xOffset, 70)
-
-            doc.setFontSize(25);
-            doc.setTextColor(40);
-            doc.setFontStyle('normal');
-            doc.addImage(
-                img,
-                'PNG',
-                headerData.settings.margin.left,
-                20,
-                150,
-                60
-            );
-        };
-
-        const head = [
-            [
-                'No',
-                'Branch',
-                'Client',
-                'Intermediary Name',
-                'Number of Quotation',
-                'Acquisition Ratio',
-            ],
-        ];
-
-        const totalPagesExp = '{total_pages_count_string}';
-
-        const options = {
-            beforePageContent: header,
-            //   afterPageContent: footer,
-            margin: {
-                top: 100,
-            },
-            head: head,
-            styles: {
-                overflow: 'linebreak',
-                fontSize: 10,
-                tableWidth: 'auto',
-                columnWidth: 'auto',
-            },
-            columnStyles: {
-                1: { columnWidth: 'auto' },
-            },
-        };
-
-        // Total page number plugin only available in jspdf v1.0+
-        if (typeof doc.putTotalPages === 'function') {
-            doc.putTotalPages(totalPagesExp);
-        }
-
-        //    doc.autoTable(columns, rows);
-        doc.setFontSize(15);
-
-        //@ts-ignore
-        doc.autoTable({
-            html: 'Table',
-            margin: { top: 80 },
-            didDrawPage: options,
-        });
-        // autoTable(doc, { html: '#Table' });
-        doc.save('quotationRenewalReport.pdf');
-    }
-
-    downloadDebitNoteReportPdf() {
-        console.log('Downloading Pdf....');
-        let doc = new jsPDF('l', 'pt', 'a4');
-        var img = new Image();
-        img.src = 'assets/images/apluslogo.png';
-
-        var header = function (headerData: any) {
-            var text = 'Debit Note Report',
-                xOffset =
-                    doc.internal.pageSize.width / 2 -
-                    (doc.getStringUnitWidth(text) *
-                        doc.internal.getFontSize()) /
-                        2;
-
-            doc.setTextColor(173, 216, 230);
-            doc.text(text, xOffset, 60);
-            // doc.text(subtext, xOffset, 70)
-
-            doc.setFontSize(11);
-            doc.setTextColor(40);
-            doc.setFontStyle('normal');
-            doc.addImage(
-                img,
-                'PNG',
-                headerData.settings.margin.left,
-                20,
-                150,
-                60
-            );
-        };
-
-        const head = [
-            [
-                'Client Name',
-                'Transaction Date',
-                'Underwriter',
-                'Policy Number',
-                'Intermediary',
-                'Branch',
-                'Class',
-                'Product',
-                'Sum Insured',
-                'Premium',
-                'Levy',
-                'Commission',
-                'Currency',
-                'Endor. Type',
-            ],
-        ];
-
-        const totalPagesExp = '{total_pages_count_string}';
-
-        const options = {
-            beforePageContent: header,
-            //   afterPageContent: footer,
-            margin: {
-                top: 100,
-            },
-            head: head,
-            styles: {
-                overflow: 'linebreak',
-                fontSize: 10,
-                tableWidth: 'auto',
-                columnWidth: 'auto',
-            },
-            columnStyles: {
-                1: { columnWidth: 'auto' },
-            },
-        };
-
-        // Total page number plugin only available in jspdf v1.0+
-        if (typeof doc.putTotalPages === 'function') {
-            doc.putTotalPages(totalPagesExp);
-        }
-
-        //    doc.autoTable(columns, rows);
-        doc.setFontSize(15);
-
-        //@ts-ignore
-        doc.autoTable({
-            html: 'Table',
-            margin: { top: 80 },
-            didDrawPage: header,
-        });
-        // autoTable(doc, { html: '#Table' });
-        doc.save('DebitNoteReport.pdf');
-    }
-
-    downloadProductionListPdf() {
-        console.log('Downloading Pdf....');
-        let doc = new jsPDF('l', 'pt', 'a4');
-        var img = new Image();
-        img.src = 'assets/images/apluslogo.png';
-
-        var header = function (headerData: any) {
-            var text = 'Quotation Listing Report',
-                xOffset =
-                    doc.internal.pageSize.width / 2 -
-                    (doc.getStringUnitWidth(text) *
-                        doc.internal.getFontSize()) /
-                        2;
-
-            doc.setTextColor(173, 216, 230);
-            doc.text(text, xOffset, 60);
-            // doc.text(subtext, xOffset, 70)
-
-            doc.setFontSize(25);
-            doc.setTextColor(40);
-            doc.setFontStyle('normal');
-            doc.addImage(
-                img,
-                'PNG',
-                headerData.settings.margin.left,
-                20,
-                150,
-                60
-            );
-        };
-
-        const head = [
-            [
-                'Client Name',
-                'Transaction Date',
-                'Underwriter',
-                'Policy Number',
-                'Intermediary Name',
-                'Branch',
-                'Class of Business',
-                'Product',
-                'Risk ID',
-                'Sum Insured',
-                'Gross Premium',
-                'Insurance Levy',
-                'Commission amount',
-                'Currency',
-            ],
-        ];
-
-        const totalPagesExp = '{total_pages_count_string}';
-
-        const options = {
-            beforePageContent: header,
-            //   afterPageContent: footer,
-            margin: {
-                top: 100,
-            },
-            head: head,
-            styles: {
-                overflow: 'linebreak',
-                fontSize: 10,
-                tableWidth: 'auto',
-                columnWidth: 'auto',
-            },
-            columnStyles: {
-                1: { columnWidth: 'auto' },
-            },
-        };
-
-        // Total page number plugin only available in jspdf v1.0+
-        if (typeof doc.putTotalPages === 'function') {
-            doc.putTotalPages(totalPagesExp);
-        }
-
-        //    doc.autoTable(columns, rows);
-        doc.setFontSize(15);
-
-        //@ts-ignore
-        doc.autoTable({
-            html: 'Table',
-            margin: { top: 80 },
-            didDrawPage: header,
-        });
-        // autoTable(doc, { html: '#Table' });
-        doc.save('quotationRenewalReport.pdf');
-    }
-
-    downloadPremiumWorkingPdf() {
-        console.log('Downloading Pdf....');
-        let doc = new jsPDF('l', 'pt', 'a4');
-        var img = new Image();
-        img.src = 'assets/images/apluslogo.png';
-
-        var header = function (headerData: any) {
-            var text = 'Quotation Listing Report',
-                xOffset =
-                    doc.internal.pageSize.width / 2 -
-                    (doc.getStringUnitWidth(text) *
-                        doc.internal.getFontSize()) /
-                        2;
-
-            doc.setTextColor(173, 216, 230);
-            doc.text(text, xOffset, 60);
-            doc.text(text, xOffset, 70);
-            doc.text(text, xOffset, 80);
-            doc.text(text, xOffset, 90);
-
-            // doc.text(subtext, xOffset, 70)
-
-            doc.setFontSize(25);
-            doc.setTextColor(40);
-            doc.setFontStyle('normal');
-            doc.addImage(
-                img,
-                'PNG',
-                headerData.settings.margin.left,
-                20,
-                150,
-                60
-            );
-        };
-
-        const head = [
-            [
-                'Policy Number',
-                'Debit note number',
-                'Gross Premium',
-                'Discount',
-                'Loading',
-                'Net Premium',
-                'Insurance Levy',
-                'Premium Due',
-            ],
-        ];
-
-        const totalPagesExp = '{total_pages_count_string}';
-
-        const options = {
-            beforePageContent: header,
-            //   afterPageContent: footer,
-            margin: {
-                top: 100,
-            },
-            head: head,
-            styles: {
-                overflow: 'linebreak',
-                fontSize: 10,
-                tableWidth: 'auto',
-                columnWidth: 'auto',
-            },
-            columnStyles: {
-                1: { columnWidth: 'auto' },
-            },
-        };
-
-        // Total page number plugin only available in jspdf v1.0+
-        if (typeof doc.putTotalPages === 'function') {
-            doc.putTotalPages(totalPagesExp);
-        }
-
-        //    doc.autoTable(columns, rows);
-        doc.setFontSize(15);
-
-        //@ts-ignore
-        doc.autoTable({
-            html: 'Table',
-            margin: { top: 80 },
-            didDrawPage: header,
-        });
-        // autoTable(doc, { html: '#Table' });
-        doc.save('PremiumWorkingReport.pdf');
-    }
-    // toPdf function to print the pdfBody which is an array of jsonobjects holding the table data into pdf.
 
     parseDate(input) {
         var parts = input.match(/(\d+)/g);
         // note parts[1]-1
         return new Date(parts[2], parts[1] - 1, parts[0]).getTime();
+    }
+
+    _getFilterMotorReportList(value) {
+        let fromDate = value.fromDate;
+        let toDate = value.toDate;
+        this.displayPremiumReport = this.filterPremiumList.filter((date) => {
+            let newDate = moment(date.startDate).format('YYYY-MM-DD');
+            toDate = moment(toDate).format('YYYY-MM-DD');
+            fromDate = moment(fromDate).format('YYYY-MM-DD');
+
+            let tt = this.parseDate(toDate);
+            let ff = this.parseDate(fromDate);
+
+            let nn = this.parseDate(newDate);
+
+            console.log('New Date', nn);
+            console.log('date from form', ff, tt);
+
+            if (newDate >= fromDate && newDate <= toDate) {
+                return date;
+            }
+
+            console.log('hey am filter', this.displayPremiumReport);
+        });
     }
 
     _getFilterReportList(value) {
@@ -1172,72 +587,6 @@ export class UnderwritingComponent implements OnInit {
 
             console.log('hey am filter', this.displayedFilterMotor);
         });
-
-        this.displayPremiumReport = this.filterPremiumList.filter((date) => {
-            let newDate = moment(date.startDate).format('YYYY-MM-DD');
-            toDate = moment(toDate).format('YYYY-MM-DD');
-            fromDate = moment(fromDate).format('YYYY-MM-DD');
-
-            let tt = this.parseDate(toDate);
-            let ff = this.parseDate(fromDate);
-
-            let nn = this.parseDate(newDate);
-
-            console.log('New Date', nn);
-            console.log('date from form', ff, tt);
-
-            if (newDate >= fromDate && newDate <= toDate) {
-                return date;
-            }
-
-            console.log('hey am filter', this.displayPremiumReport);
-        });
-
-        // }
-
-        //   this.quotationService.getMotorQuotations().subscribe((x) => {
-        //         x.filter((d) => {
-        //             d.dateCreated >= fromDate && d.dateCreated <= toDate;
-        //         });
-        //     });
-
-        //    this.displayedMotor = this.quotationService.getMotorQuotations().subscribe((d) => {
-        //         this.displayQuotationReport = d;
-
-        //         this.filterPremiumReport = this.displayQuotationReport.filter(
-        //             (x) => {
-        //                 let myDate: moment.Moment = moment('2020-06-07');
-        //                 myDate >= ff && myDate <= tt;
-        //             }
-        //         );
-
-        //         console.log('hey am filter', this.filterPremiumReport);
-        //     });
-
-        // this.quotationService
-        //     .getMotorQuotations()
-        //     .pipe(
-        //         map((premium) =>
-        //             from(premium).pipe(
-        //                 filter((d: MotorQuotationModel) => {
-        //                     // let date = new Date(d.dateCreated)
-        //                     let myDate: moment.Moment = moment('2020-06-09');
-        //                     // let myDate: moment.Moment = moment(d.dateCreated, "YYYY-MM-DD");
-        //                     // let mydate = d.dateCreated * 1000 | date:'yyyy-MM-dd';
-        //                     console.log('This Old->', myDate);
-
-        //                     return myDate >= ff && myDate <= tt;
-        //                 })
-        //             )
-        //         ),
-        //         tap((premium) =>
-        //             premium.subscribe((d) => {
-        //                 this.filterPremiumReport.push(d);
-        //                 console.log(this.filterPremiumReport);
-        //             })
-        //         )
-        //     )
-        //     .subscribe();
     }
 
     downloadQuotationReportListExcel() {
@@ -1267,7 +616,7 @@ export class UnderwritingComponent implements OnInit {
                 );
             case 'Sales Representative':
                 this.displayedMotor = this.motor.filter(
-                    (x) => x.sourceOfBusiness == 'Broker'
+                    (x) => x.sourceOfBusiness == 'Sales Representative'
                 );
         }
     }

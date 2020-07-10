@@ -194,71 +194,78 @@
                                 <form [formGroup]="riskComprehensiveForm">
                                     <div nz-row nzGutter="0">
                                         <div nz-col nzSpan="8">
-                                            <nz-form-item>
-                                                <nz-form-label [nzSpan]="10" nzFor="vehicleMake" nzRequired>
-                                                    Vehicle Make
-                                                </nz-form-label>
-                                                <nz-form-control nzSpan="10">
-                                                    <nz-select nzPlaceHolder="Select vehicle make" nzAllowClear
-                                                        nzShowSearch nzServerSearch [(ngModel)]="
-                                                                    selectedVehicleMake
-                                                                " formControlName="vehicleMake" (nzOnSearch)="
-                                                                    onVehicleMakeSearch(
-                                                                        $event
-                                                                    )
-                                                                ">
-                                                        <ng-container *ngFor="
-                                                                        let o of vehicleMakeOptionList
-                                                                    ">
-                                                            <nz-option *ngIf="
-                                                                            !isVehicleMakeLoading
-                                                                        " [nzValue]="
-                                                                            o
-                                                                        " [nzLabel]="
-                                                                            o
-                                                                        "></nz-option>
-                                                        </ng-container>
-                                                        <nz-option *ngIf="
-                                                                        isVehicleMakeLoading
-                                                                    " nzDisabled nzCustomContent>
-                                                            <i nz-icon nzType="loading" class="loading-icon"></i>
-                                                            Loading
-                                                            Data...
-                                                        </nz-option>
-                                                    </nz-select>
-                                                </nz-form-control>
-                                            </nz-form-item>
-                                            <nz-form-item>
-                                                <nz-form-label [nzSpan]="10" nzFor="vehicleModel" nzRequired>
-                                                    Vehicle Model
-                                                </nz-form-label>
-                                                <nz-form-control nzSpan="10">
-                                                    <nz-select nzPlaceHolder="Select vehicle model" nzAllowClear
-                                                        nzShowSearch nzServerSearch [(ngModel)]="
-                                                                    selectedVehicleModel
-                                                                " formControlName="vehicleModel" (nzOnSearch)="
-                                                                    onVehicleModelSearch(
-                                                                        $event
-                                                                    )
-                                                                ">
-                                                        <ng-container *ngFor="
-                                                                        let o of vehicleModelOptionList
-                                                                    ">
-                                                            <nz-option *ngIf="
-                                                                            !isVehicleModelLoading
-                                                                        " [nzValue]="
-                                                                            o
-                                                                        " [nzLabel]="
-                                                                            o
-                                                                        "></nz-option>
-                                                        </ng-container>
-                                                        <nz-option *ngIf="
-                                                                        isVehicleModelLoading
-                                                                    " nzDisabled nzCustomContent>
-                                                            <i nz-icon nzType="loading" class="loading-icon"></i>
-                                                            Loading
-                                                            Data...
-                                                        </nz-option>
+                                            <div nz-row nzGutter="0">
+                                                <div nz-col nzSpan="8">
+                                                    <nz-form-item>
+                                                        <nz-form-label
+                                                            [nzSpan]="10"
+                                                            nzFor="vehicleMake"
+                                                            nzRequired
+                                                        >
+                                                            Vehicle Make
+                                                        </nz-form-label>
+                                                        <nz-form-control
+                                                            nzSpan="10"
+                                                        >
+                                                            <nz-select
+
+                                                            nzShowSearch
+                                                            nzAllowClear
+                                                                nzPlaceHolder="Select vehicle make"
+                                                                formControlName="vehicleMake"
+
+                                                                (ngModelChange)="onChange($event)"
+                                                                                                                         >
+
+
+
+                                                           <nz-option *ngFor="let bodyMake of bodyMakes "
+
+
+                                                                        [nzValue]="
+                                                                            bodyMake"
+                                                                        [nzLabel]="
+                                                                            bodyMake.vehicleMake"
+
+                                                                    ></nz-option>
+
+                                                            </nz-select>
+                                                        </nz-form-control>
+                                                    </nz-form-item>
+                                                    <nz-form-item>
+                                                        <nz-form-label
+                                                            [nzSpan]="10"
+                                                            nzFor="vehicleModel"
+                                                            nzRequired
+                                                        >
+                                                            Vehicle Model
+                                                        </nz-form-label>
+                                                        <nz-form-control
+                                                            nzSpan="10"
+                                                        >
+                                                            <nz-select
+                                                            nzShowSearch
+                                                            nzAllowClear
+                                                                nzPlaceHolder="Select vehicle model"
+                                                                formControlName="vehicleModel"
+                                                                [(ngModel)]="selectedModel"
+                                                            >
+
+
+                                                                >
+                                                                <div *ngFor="let  vehicleModel of displayBodyModels">
+                                                                    <nz-option
+
+                                                                        [nzValue]="
+                                                                        vehicleModel.vehicleModels[0].vehicleModel
+                                                                        "
+                                                                        [nzLabel]="
+                                                                        vehicleModel.vehicleModels[0].vehicleModel
+
+                                                                        "
+
+                                                                    ></nz-option>
+                                                                    </div>
                                                     </nz-select>
                                                 </nz-form-control>
                                             </nz-form-item>
@@ -719,6 +726,37 @@
                                                                     'rate'
                                                                 ">
                                                     <nz-form-item>
+                                                        <nz-form-label
+                                                            nzSpan="10"
+                                                            nzRequired
+                                                            >Body
+                                                            Type</nz-form-label
+                                                        >
+                                                        <nz-form-control
+                                                            nzSpan="10"
+                                                        >
+                                                            <nz-select
+
+                                                            nzShowSearch
+                                                            nzAllowClear
+                                                                formControlName="bodyType"
+                                                                nzPlaceHolder="Select or create bodyType"
+                                                            >
+                                                                <div
+                                                                    *ngFor="
+                                                                        let bodyType of bodyTypes
+                                                                    "
+                                                                >
+                                                                    <nz-option
+                                                                        [nzValue]="
+                                                                            bodyType.vehicleType
+                                                                        "
+                                                                        [nzLabel]="
+                                                                            bodyType.vehicleType
+                                                                        "
+                                                                    ></nz-option>
+                                                                </div>
+                                                            </nz-select>
                                                         <nz-form-label [nzSpan]="
                                                                             10
                                                                         " nzFor="increasedThirdPartyLimitsRate">

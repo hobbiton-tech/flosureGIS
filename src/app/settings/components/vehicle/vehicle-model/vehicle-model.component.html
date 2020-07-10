@@ -1,0 +1,117 @@
+<nz-drawer
+    [nzClosable]="false"
+    [nzVisible]="isAddVehicleModelsFormDrawerVisible"
+    nzPlacement="left"
+    nzTitle="Add Vehicle Model"
+    (nzOnClose)="closeDrawer()"
+    [nzWidth]="700"
+>
+    <nz-spin
+        [nzSize]="'large'"
+        [nzSpinning]="addingVehicleModel"
+        [nzTip]="'Adding VehicleModel...'"
+    >
+        <div>
+            <form nz-form [formGroup]="vehicleModelForm">
+                <nz-divider
+                    nzText="Vehicle Model Details"
+                    nzOrientation="left"
+                ></nz-divider>
+
+                <div nz-row>
+                    <div nz-col [nzSpan]="24">
+                        <nz-form-item>
+                            <nz-form-label
+                                [nzSpan]="4"
+                                nzFor="bodyMake"
+                                nzRequired
+                                >Vehicle Make
+                            </nz-form-label>
+                            <nz-form-control nzSpan="12">
+                                <nz-select
+
+                                    nzAllowClear
+                                    id="vehicleMakeId"
+                                    formControlName="vehicleMake"
+                                    name="vehicleMake"
+                                    nzPlaceHolder="Select Vehicle Make"
+
+                                    (nzOpenChange)="reloadVehicleMake()"
+                                >
+                                    <nz-option
+                                        *ngFor="let bodyMake of bodyMakes"
+                                        [nzValue]="bodyMake.id"
+                                        [nzLabel]="bodyMake.vehicleMake"
+                                    ></nz-option>
+                                </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+
+                <div nz-row>
+                    <div nz-col [nzSpan]="24">
+                        <nz-form-item>
+                            <nz-form-label
+                                [nzSpan]="4"
+                                nzFor="vehicleModel"
+                                nzRequired
+                                >Vehicle Model</nz-form-label
+                            >
+                            <nz-form-control [nzSpan]="12">
+                                <input
+                                    nz-input
+                                    formControlName="vehicleModel"
+                                    name="vehicleModel"
+                                    type="text"
+                                    id="vehicleModel"
+                                    placeholder="Vehicle Model"
+                                />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+
+                <div nz-row>
+                    <div nz-col [nzSpan]="24">
+                        <nz-form-item>
+                            <nz-form-label
+                                [nzSpan]="4"
+                                nzFor="description"
+                                nzRequired
+                                >Description</nz-form-label
+                            >
+                            <nz-form-control [nzSpan]="12">
+                                <input
+                                    nz-input
+                                    formControlName="description"
+                                    name="description"
+                                    type="text"
+                                    id="description"
+                                    placeholder="Vehicle Description"
+                                />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+                <nz-form-item>
+                    <nz-form-control>
+                        <div style="text-align: center; margin-top: 10px;">
+                            <button
+                                nz-button
+                                nzType="primary"
+                                style="margin-right: 8px;"
+                                (click)="submitVehicleModel()"
+                            >
+                                Add Vehicle Model
+                            </button>
+                            <button nz-button nzType="default">
+                                Reset Form
+                            </button>
+                        </div>
+                    </nz-form-control>
+                </nz-form-item>
+            </form>
+        </div>
+    </nz-spin>
+</nz-drawer>

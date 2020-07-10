@@ -1,0 +1,86 @@
+<nz-drawer
+    [nzClosable]="false"
+    [nzVisible]="isAddVehicleTypesFormDrawerVisible"
+    nzPlacement="left"
+    nzTitle="Add Vehicle Type"
+    (nzOnClose)="closeDrawer()"
+    [nzWidth]="700"
+>
+    <nz-spin
+        [nzSize]="'large'"
+        [nzSpinning]="addingVehicleType"
+        [nzTip]="'Adding VehicleType...'"
+    >
+        <div>
+            <form nz-form [formGroup]="vehicleTypeForm">
+                <nz-divider
+                    nzText="Vehicle Type Details"
+                    nzOrientation="left"
+                ></nz-divider>
+
+                <div nz-row>
+                    <div nz-col [nzSpan]="24">
+                        <nz-form-item>
+                            <nz-form-label
+                                [nzSpan]="4"
+                                nzFor="vehicleType"
+                                nzRequired
+                                >Vehicle Type</nz-form-label
+                            >
+                            <nz-form-control [nzSpan]="12">
+                                <input
+                                    nz-input
+                                    formControlName="vehicleType"
+                                    name="vehicleType"
+                                    type="text"
+                                    id="vehicleType"
+                                    placeholder="Vehicle Type"
+                                />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+
+                <div nz-row>
+                    <div nz-col [nzSpan]="24">
+                        <nz-form-item>
+                            <nz-form-label
+                                [nzSpan]="4"
+                                nzFor="description"
+                                nzRequired
+                                >Description</nz-form-label
+                            >
+                            <nz-form-control [nzSpan]="12">
+                                <input
+                                    nz-input
+                                    formControlName="description"
+                                    name="description"
+                                    type="text"
+                                    id="description"
+                                    placeholder="Vehicle Description"
+                                />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+                <nz-form-item>
+                    <nz-form-control>
+                        <div style="text-align: center; margin-top: 10px;">
+                            <button
+                                nz-button
+                                nzType="primary"
+                                style="margin-right: 8px;"
+                                (click)="submitVehicleType()"
+                            >
+                                Add Vehicle Type
+                            </button>
+                            <button nz-button nzType="default">
+                                Reset Form
+                            </button>
+                        </div>
+                    </nz-form-control>
+                </nz-form-item>
+            </form>
+        </div>
+    </nz-spin>
+</nz-drawer>

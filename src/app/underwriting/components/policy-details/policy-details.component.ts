@@ -79,6 +79,7 @@ export class PolicyDetailsComponent implements OnInit {
     isDebitNotePDFVisible = false;
     isSchedulePDFVisible = false;
     isClausesPDFVisible = false;
+    isWordingsPDFVisible = false;
 
     isNewCertificatePdfVisible = false;
     isThirdPartyCertificatePdfVisible = false;
@@ -136,6 +137,7 @@ export class PolicyDetailsComponent implements OnInit {
     coverNote: CoverNote;
     coverNot: CoverNote;
     coverNotes: CoverNote[] = [];
+
     // tslint:disable-next-line: whitespace
     coverNotesRisks: any[] =[];
   selectedsRisks: RiskModel[];
@@ -159,6 +161,7 @@ export class PolicyDetailsComponent implements OnInit {
 
   excessList: Excess[] = [];
   excessListCert: Excess[] = [];
+
 
     constructor(
         private readonly router: Router,
@@ -190,6 +193,7 @@ export class PolicyDetailsComponent implements OnInit {
                 this.policiesService.getCoverNotes().subscribe((res) => {
                     console.log('RESULT COVER>>>>', res);
                     this.coverNotes = res;
+
 
                 // tslint:disable-next-line: semicolon
                 })
@@ -342,6 +346,7 @@ export class PolicyDetailsComponent implements OnInit {
                 
                 // this.discounts = risk.discounts;
                 this.policiesService.getCoverNotes().subscribe((res) => {
+
                    this.coverNotesRisks =  this.coverNotesRisks.concat(...res, ...this.risks);
                    console.log('COMBINE>>>>', this.coverNotesRisks);
 
@@ -376,8 +381,6 @@ export class PolicyDetailsComponent implements OnInit {
 
 
                 
-
-
 
                 //excesses
                 // this.below21Years = policy.risks[0].excesses.filter(
@@ -738,6 +741,7 @@ export class PolicyDetailsComponent implements OnInit {
             )[0];
             console.log('RISK ID', risk.id);
 
+
             this.coverNot = this.coverNotes.filter((x) => x.policyId === this.selectedRisk.id)[0];
 
             if (this.cnd === undefined) {
@@ -751,7 +755,9 @@ export class PolicyDetailsComponent implements OnInit {
             this.isComprehensiveCertificatePdfVisible = true;
             this.isThirdPartyCertificatePdfVisible = false;
         } else {
-            this.coverNot = this.coverNotes.filter((x) => x.policyId === risk.id)[0];
+            this.coverNot = this.coverNotes.filter(
+                (x) => x.policyId === risk.id
+            )[0];
             this.isComprehensiveCertificatePdfVisible = false;
             this.isThirdPartyCertificatePdfVisible = true;
         }

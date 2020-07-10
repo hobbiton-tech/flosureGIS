@@ -45,7 +45,7 @@ import { IntermediaryDetailsComponent } from './components/endorsements/intermed
 import { PolicyWordingComponent } from './documents/policy-wording/policy-wording.component';
 import { PolicyComprehensiveCertificateComponent } from './documents/policy-comprehensive-certificate/policy-comprehensive-certificate';
 import { PolicyThirdpartyCertificateComponent } from './documents/policy-thirdparty-certificate/policy-thirdparty-certificate.component';
-// tslint:disable-next-line: max-line-length
+import { PolicyWordingsDocumentComponent } from './documents/policy-wordings-document/policy-wordings-document.component';
 
 
 const routes: Routes = [
@@ -160,8 +160,8 @@ const routes: Routes = [
         PolicyWordingComponent,
         PolicyComprehensiveCertificateComponent,
         PolicyThirdpartyCertificateComponent,
+        PolicyWordingsDocumentComponent
         PolicyScheduleCombinedDocumentComponent
-
     ],
     imports: [
         CommonModule,
