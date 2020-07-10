@@ -65,8 +65,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let product of productsTable.data" (click)="onSelectProduct(product)"
-                                style="cursor: pointer;">
+                            <tr *ngFor="let product of productsTable.data" style="cursor: pointer;">
                                 <td>{{ product.productName }}</td>
                             </tr>
                         </tbody>
@@ -134,7 +133,7 @@
                 </div>
 
                 <div style="margin-top: 10px;">
-                    <nz-table #perilsTable [nzData]="perilList" [nzSize]="'small'" [nzBordered]="true"
+                    <nz-table #perilsTable [nzData]="" [nzSize]="'small'" [nzBordered]="true"
                         style="background-color: white;">
                         <thead>
                             <tr>
@@ -143,7 +142,7 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let peril of perilsTable.data">
-                                <td>{{ peril.name }}</td>
+                                <td>{{ peril.perilName }}</td>
                             </tr>
                         </tbody>
                     </nz-table>
@@ -171,5 +170,5 @@
     (closeAddCoverTypeFormDrawerVisible)="addCoverTypeFormDrawerVisible = false">
 </app-add-cover-type>
 
-<app-add-peril [isAddPerilFormDrawerVisible]="addPerilFormDrawerVisible" [selectedProductId]="clickedProductId"
+<app-add-peril [isAddPerilFormDrawerVisible]="addPerilFormDrawerVisible"
     (closeAddPerilFormDrawerVisible)="addPerilFormDrawerVisible = false"></app-add-peril>

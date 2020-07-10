@@ -56,9 +56,9 @@
 
         <!-- <h2 class="heading">A PLUS GENERAL INSURANCE LIMITED</h2> -->
         <P class="centerheading"
-            >SCHEDULE ATTACHING TO AND FORMING PART OF
-            <strong>{{ policy.risks[0].productType }} MOTOR</strong> CAR POLICY
-            NO. {{ policy.policyNumber }}</P
+            >Schedule attaching to and forming part of
+            <strong>{{ policy.risks[0].productType }} Motor</strong> Car Policy
+            No. {{ policy.policyNumber }}</P
         >
 
         <p>
@@ -88,7 +88,7 @@
             <p>
                 Address: {{ client ? client.address : 'TBA'
                 }}<span style="float: right;"
-                    >Captured by:
+                    >Email:
                     {{
                         policy.sourceOfBusiness
                             ? policy.sourceOfBusiness == 'direct'
@@ -103,6 +103,16 @@
                 }}<span style="float: right;"
                     ><span style="font-weight: bold;"></span
                 ></span>
+            </p>
+            <p>
+                Business or Profession:
+                <span style="font-weight: bold;">TBA</span
+                ><span style="float: right;"
+                    >Currency:
+                    <span style="font-weight: bold;">{{
+                        policy.currency
+                    }}</span></span
+                >
             </p>
 
             <p>
@@ -126,11 +136,11 @@
                 </li>
             </ol>
             <span style="float: right; text-align: left;">
-                Premium: {{ policy.currency
+                Premium: {{ policy.currency == 'ZMW' ? 'ZMW' : '$'
                 }}{{ basicPremium | number: '1.2-2' }}<br />
-                3% Levy: {{ policy.currency
+                3% Levy: {{ policy.currency == 'ZMW' ? 'ZMW' : '$'
                 }}{{ premiumLevy | number: '1.2-2' }}<br />
-                Total Premium: {{ policy.currency
+                Total Premium: {{ policy.currency == 'ZMW' ? 'ZMW' : '$'
                 }}{{ totalAmount | number: '1.2-2' }}<br />
             </span>
 
@@ -166,7 +176,7 @@
                 <td>{{ risk.cubicCapacity }}</td>
                 <td>{{ getYearOfManufacture(risk) }}</td>
                 <td>{{ risk.seatingCapacity }}</td>
-                <td>{{ policyRisk.sumInsured | number: '1.2-2' }}</td>
+                <td>{{ risk.estimatedValue ? risk.estimatedValue : 'TBA' }}</td>
                 <td>
                     {{
                         risk.insuranceType == 'ThirdParty'
@@ -199,49 +209,22 @@
                 Where the insurance Provided is “Third Party” Sections I of this
                 Policy is cancelled
             </li>
-
-            <!-- <ng-container
-                *ngIf="
-                    policy.risks[0].limitsOfLiability[0].liabilityType !==
-                        'combinedLimits';
-                    else standardLimit
-                "
-            > -->
-                <li>
-                    <p style="font-weight: bold;">Limits of Liability</p>
-                    <p>Limits of the amount of the company's liability under</p>
-                    <p>
-                        <span *ngIf="limits.liabilityType === 'combinedLimits'; else standardLimit" style="font-weight: bold;">Combined Limits {{policy.currency}}{{comb.amount}}</span>
-                        
-                        <!-- <span style="font-weight: bold;"
-                            >K{{ combinedLimits }}</span
-                        > -->
-
-
-                        <ng-template #standardLimit>
-                <!-- <p style="font-weight: bold;">Limits of Liability</p>
-                <p>Limit of the amount of the Company’s liability under</p> -->
-
-                <p>
-                    <span style="font-weight: bold;">Section I</span> - 3
-                    (Protection and Removal) –
-                    <span style="font-weight: bold;"
-                        >{{policy.currency}}{{ 0 | number: '1.2-2' }}</span
-                    >
-                </p>
-
+            <li>
+                <p style="font-weight: bold;">Limits of Liability</p>
+                <p>Limit of the amount of the Company’s liability under</p>
+                <!-- <p><span style="font-weight: bold;">Section I</span> - 3 (Protection and Removal) – <span
+                        style="font-weight: bold;">K{{0 | number: '1.2-2'}}</span></p> -->
                 <p>
                     <span style="font-weight: bold;">Section II</span> -1 (a)
                     and 2 (a) (Liability to Third Parties – death bodily injury)
                     in respect of any one claim or series Of claims arising out
                     of one event:
                     <span style="font-weight: bold;"
-                        >{{policy.currency}}{{ deathPE.amount | number: '1.2-2' }} per
-                        event / {{policy.currency}}{{
-                            deathPP.amount | number: '1.2-2'
+                        >ZMW{{ deathAndInjuryPerEvent | number: '1.2-2' }} per
+                        event / ZMW{{
+                            deathAndInjuryPerPerson | number: '1.2-2'
                         }}
                         per person</span
-                    >
                     >
                 </p>
                 <p>
@@ -250,7 +233,7 @@
                     respect of any claim or series Of claims arising out of one
                     event:
                     <span style="font-weight: bold;"
-                        >{{policy.currency}}{{ propertyD.amount | number: '1.2-2' }}</span
+                        >ZMW{{ propertyDamage | number: '1.2-2' }}</span
                     >
                     <span
                         >- arising from loss of use of a motor vehicle which is
@@ -260,17 +243,10 @@
                         event</span
                     >
                 </p>
-            </ng-template>
-                    </p>
-                </li>
-            <!-- </ng-container> -->
-
-            
-
-            <!-- <p>Section I-10 (Medical Expenses) in respect of any one accident/any one person <span
+                <!-- <p>Section I-10 (Medical Expenses) in respect of any one accident/any one person <span
                         style="font-weight: bold;">K{{0 | number: '1.2-2'}} /
                         K{{0 | number: '1.2-2'}}</span></p> -->
-            <!-- </li> -->
+            </li>
         </ol>
 
         <!-- <p><span style="font-weight: bold;">Unauthorized Repair Limit (Section 1 – 4 (a)):
@@ -321,12 +297,7 @@
             <span style="font-weight: bold;"><strong>Excess</strong></span>
         </p>
         <ul style="list-style-type: none;">
-
-            <li *ngFor="let ex of excessList">
-                {{ex.excessType}}
-                <span style="font-weight: bold;">{{policy.currency}}{{ex.amount}}</span>
-            </li>
-            <!-- <li>
+            <li>
                 The insured shall be responsible for the first 10% of each and
                 every claim/loss subject to retained minimum liability of USD
                 <span style="font-weight: bold;">100</span>
@@ -370,7 +341,7 @@
                 <span style="font-weight: bold;"
                     >USD{{ otherEndorsement | number: '1.2-2' }}</span
                 >
-            </li> -->
+            </li>
         </ul>
         <p><span style="font-weight: bold;">Limitations as to Use</span>:</p>
         <p>
@@ -396,10 +367,7 @@
             <span style="font-weight: bold;"
                 >Date of Signature of Proposal and Declaration</span
             >: AS PER COVERNOTE
-            <span style="font-weight: bold;">{{
-                coverNot.certificateNumber
-            }}</span>
-            DATED
+            <span style="font-weight: bold;">{{coverNot.certificateNumber}}</span> DATED
             {{ policy.dateOfIssue | date }}
         </p>
         <p>

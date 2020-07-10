@@ -12,24 +12,10 @@ export interface IWording {
     description: string;
 }
 
-export interface IWarranty {
-    id: string;
-    heading: string;
-    productId: string;
-    description: string;
-}
-
-export interface IExclusion {
-    id: string;
-    heading: string;
-    productId: string;
-    description: string;
-}
-
 export interface IExtension {
-    id?: string;
+    id: string;
     heading: string;
-    productId?: string;
+    productId: string;
     description: string;
 }
 
@@ -55,23 +41,6 @@ export interface IPolicyExtension {
     extensionId?: string;
     heading?: string;
     description?: string;
-}
-
-export interface ILimit {
-    id: string;
-    heading: string;
-    productId: string;
-    description: string;
-    amount: string;
-}
-
-export interface IExccess {
-    id: string;
-    heading: string;
-    productId: string;
-    description: string;
-    amount: string;
-    vehicleType: string;
 }
 
 // const createClause = () => {
