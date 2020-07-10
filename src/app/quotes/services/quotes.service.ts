@@ -147,7 +147,7 @@ export class QuotesService {
                 console.log('WHAT THE >>>>', motorQuotation);
                 this.http
                     .post<MotorQuotationModel>(
-                        'https://www.flosure-api.com/quotation',
+                        'http://api.goldenlotusinsurance.com/quotation',
                         motorQuotation
                     )
                     .subscribe(
@@ -179,14 +179,14 @@ export class QuotesService {
     }
     getMotorQuotations(): Observable<MotorQuotationModel[]> {
         return this.http.get<MotorQuotationModel[]>(
-            'https://www.flosure-api.com/quotation'
+            'http://api.goldenlotusinsurance.com/quotation'
         );
     }
     getMotorQuotationById(
         quotationId: string
     ): Observable<MotorQuotationModel> {
         return this.http.get<MotorQuotationModel>(
-            `https://www.flosure-api.com/quotation/${quotationId}`
+            `http://api.goldenlotusinsurance.com/quotation/${quotationId}`
         );
     }
     updateMotorQuotation(
@@ -194,7 +194,7 @@ export class QuotesService {
         quotationId: string
     ): Observable<MotorQuotationModel> {
         return this.http.put<MotorQuotationModel>(
-            `https://www.flosure-api.com/quotation/${quotationId}`,
+            `http://api.goldenlotusinsurance.com/quotation/${quotationId}`,
             motorQuotation
         );
     }

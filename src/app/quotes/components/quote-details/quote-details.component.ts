@@ -1645,7 +1645,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                         this.http
                         .post<CoverNote>(
-                            `https://www.flosure-api.com/documents/cover-note`,
+                            `http://api.goldenlotusinsurance.com/documents/cover-note`,
                             coverNote
                         )
                         .subscribe(
@@ -1676,7 +1676,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                             this.http
                                 .post<DebitNote>(
-                                    `https://www.flosure-api.com/documents/debit-note/${this.policyId}`,
+                                    `http://api.goldenlotusinsurance.com/documents/debit-note/${this.policyId}`,
                                     debitNote
                                 )
                                 .subscribe(
@@ -1893,7 +1893,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                             this.http
                                 .post<DebitNote>(
-                                    `https://www.flosure-api.com/documents/debit-note/${this.policyId}`,
+                                    `http://api.goldenlotusinsurance.com/documents/debit-note/${this.policyId}`,
                                     debitNote
                                 )
                                 .subscribe(
