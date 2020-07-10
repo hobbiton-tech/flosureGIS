@@ -33,8 +33,6 @@ export class PoliciesComponent implements OnInit {
             this.policiesList = policies;
             this.policiesCount = policies.length;
 
-            this.policiesList.sort((a,b) => a.policyNumber.localeCompare(b.policyNumber));
-
             this.displayPoliciesList = this.policiesList;
         });
     }

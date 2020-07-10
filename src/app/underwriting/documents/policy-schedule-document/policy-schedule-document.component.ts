@@ -1,5 +1,3 @@
-import { Risks } from './../../../reports/model/quotation.model';
-import { LimitsOfLiability, LiabilityType, Excess } from './../../../quotes/models/quote.model';
 import { Component, OnInit, Input } from '@angular/core';
 import { RiskModel } from 'src/app/quotes/models/quote.model';
 import { Policy } from '../../models/policy.model';
@@ -16,7 +14,6 @@ import { CoverNote } from '../models/documents.model';
     selector: 'app-policy-schedule-document',
     templateUrl: './policy-schedule-document.component.html',
     styleUrls: ['./policy-schedule-document.component.scss'],
-
 })
 export class PolicyScheduleDocumentComponent implements OnInit {
     @Input()
@@ -36,9 +33,6 @@ export class PolicyScheduleDocumentComponent implements OnInit {
 
     @Input()
     policyRisk: RiskModel;
-
-    @Input()
-    limitsOfLiablity: LimitsOfLiability[];
 
     @Input()
     issueDate: string;
@@ -97,10 +91,6 @@ export class PolicyScheduleDocumentComponent implements OnInit {
     @Input()
     noLicence: number;
 
-
-    @Input()
-    excessList: Excess[];
-
     @Input()
     careLessDriving: number;
 
@@ -115,44 +105,12 @@ export class PolicyScheduleDocumentComponent implements OnInit {
 
     generatingPDF = false;
 
-    comb:LimitsOfLiability;
-    limits:LimitsOfLiability;
-
-    deathPE: LimitsOfLiability;
-
-    deathPP: LimitsOfLiability;
-    propertyD: LimitsOfLiability;
-
-
-
     ngOnInit(): void {
         this.todayDate = new Date();
-        this.getLimit()
-    }
-
-    getLimit() {
-        for(const lim of this.limitsOfLiablity) {
-            this.limits = lim
-            if( lim.liabilityType === 'combinedLimits') {
-                this.comb = lim
-            }
-
-            if( lim.liabilityType === 'deathAndInjuryPerEvent') {
-                this.deathPE = lim
-            }
-
-            if( lim.liabilityType === 'deathAndInjuryPerPerson') {
-                this.deathPP = lim
-            }
-
-            if( lim.liabilityType === 'propertyDamage') {
-                this.propertyD = lim
-            }
-        }
     }
 
     getYearOfManufacture(risk: RiskModel) {
-        const year: string = moment(risk.yearOfManufacture).year().toString();
+        let year: string = moment(risk.yearOfManufacture).year().toString();
         return year;
     }
 
@@ -166,16 +124,16 @@ export class PolicyScheduleDocumentComponent implements OnInit {
         };
 
         html2canvas(div, options).then((canvas) => {
-            const doc = new jsPDF({
+            let doc = new jsPDF({
                 unit: 'mm',
                 format: 'a3',
             });
-            const imgData = canvas.toDataURL('image/PNG');
+            let imgData = canvas.toDataURL('image/PNG');
             doc.addImage(imgData, 'PNG', 0, 0, 297, 420);
 
-            const pdfOutput = doc.output();
-            const buffer = new ArrayBuffer(pdfOutput.length);
-            const array = new Uint8Array(buffer);
+            let pdfOutput = doc.output();
+            let buffer = new ArrayBuffer(pdfOutput.length);
+            let array = new Uint8Array(buffer);
             for (let i = 0; i < pdfOutput.length; i++) {
                 array[i] = pdfOutput.charCodeAt(i);
             }

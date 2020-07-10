@@ -17,9 +17,7 @@ import { QuoteDocumentComponent } from './documents/quote-document/quote-documen
 import { DraftQuoteDocumentComponent } from './documents/draft-quote-document/draft-quote-document.component';
 import { NgxPrintModule } from 'ngx-print';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
-import { WarrantiesComponent } from './components/warranties/warranties.component';
-import { ClausesComponent } from './components/clauses/clauses.component';
-import { PerilsComponent } from './components/perils/perils.component';
+
 const routes: Routes = [
     {
         path: 'create-quote',
@@ -43,10 +41,7 @@ const routes: Routes = [
         RiskDetailsComponent,
         QuoteComponent,
         QuoteDocumentComponent,
-        DraftQuoteDocumentComponent,
-        WarrantiesComponent,
-        ClausesComponent,
-        PerilsComponent,
+        DraftQuoteDocumentComponent
     ],
     imports: [
         CommonModule,

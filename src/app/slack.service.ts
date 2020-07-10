@@ -33,7 +33,6 @@ export class SlackService {
             .post(
                 'https://hooks.slack.com/services/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',
                 {
-                    // tslint:disable-next-line: deprecation
                     text: event,
                     attachments: [
                         {

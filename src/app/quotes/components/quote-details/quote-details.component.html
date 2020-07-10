@@ -576,9 +576,10 @@
                                                             <nz-form-control nzSpan="10">
                                                                 <nz-select name="load" nzPlaceHolder="Select Load"
                                                                     [(ngModel)]="
-                                                                        selectedLoadingValue"
-                                                                     nzAllowClear
-                                                                      style="
+                                                                        selectedLoadingValue
+                                                                    " [compareWith]="
+                                                                        compareFn
+                                                                    " nzAllowClear style="
                                                                         width: 100%;
                                                                     " [ngModelOptions]="{
                                                                         standalone: true
@@ -623,10 +624,10 @@
                                                             </nz-form-control>
                                                         </nz-form-item>
                                                     </div>
-                                                    <!-- <div *ngIf="
+                                                    <div *ngIf="
                                                             selectedLoadingValue.value ===
                                                             'increasedThirdPartyLimits'
-                                                        "> -->
+                                                        ">
                                                         <nz-form-item>
                                                             <nz-form-label nzSpan="10">Loading Input
                                                                 Type
@@ -724,9 +725,8 @@
                                                                 </button>
                                                             </nz-form-control>
                                                         </nz-form-item>
-                                                    <!-- </div> -->
-                                                    <!--COMMENT>>>-->
-                                                    <!-- <div *ngIf="
+                                                    </div>
+                                                    <div *ngIf="
                                                             selectedLoadingValue.value ===
                                                             'riotAndStrike'
                                                         ">
@@ -1619,7 +1619,7 @@
                                                                 </button>
                                                             </nz-form-control>
                                                         </nz-form-item>
-                                                    </div> -->
+                                                    </div>
                                                     <!-- Loading Ends here -->
 
                                                     <!-- Discount Starts here -->
@@ -2467,12 +2467,7 @@
                                             <div nz-col nzSpan="12">
                                                 <nz-card>
                                                     <nz-divider nzText="Excesses" nzOrientation="left"></nz-divider>
-                                                    <ul>
-                                                        <div *ngFor="let ex of excessList">
-                                                        <li>{{ex.excessType}}{{ex.amount}}</li>
-                                                    </div>
-                                                    </ul>
-                                                    <!-- <form [formGroup]="excessesForm">
+                                                    <form [formGroup]="excessesForm">
                                                         <nz-form-item>
                                                             <nz-form-label [nzSpan]="10" nzFor="collisionAndFire"
                                                                 nzRequired>
@@ -2521,7 +2516,7 @@
                                                             </nz-form-control>
                                                         </nz-form-item>
                                                         <nz-form-item></nz-form-item>
-                                                    </form> -->
+                                                    </form>
                                                 </nz-card>
                                             </div>
                                         </div>
@@ -3860,12 +3855,7 @@
                                             <div nz-col nzSpan="12">
                                                 <nz-card>
                                                     <nz-divider nzText="Excesses" nzOrientation="left"></nz-divider>
-                                                    <ul>
-                                                        <div *ngFor="let ex of excessTHP">
-                                                        <li>{{ex.description}}{{ex.amount}}</li>
-                                                    </div>
-                                                    </ul>
-                                                    <!-- <form [formGroup]="excessesForm">
+                                                    <form [formGroup]="excessesForm">
                                                         <nz-form-item>
                                                             <nz-form-label [nzSpan]="10" nzFor="collisionAndFire"
                                                                 nzRequired>
@@ -3914,7 +3904,7 @@
                                                             </nz-form-control>
                                                         </nz-form-item>
                                                         <nz-form-item></nz-form-item>
-                                                    </form> -->
+                                                    </form>
                                                 </nz-card>
                                             </div>
                                         </div>
@@ -7456,7 +7446,7 @@
                     [loadingAmount]="premiumLoadingTotal" [discountAmount]="quoteDiscountTotal"
                     [totalAmount]="quoteNetPremium" [premiumLevy]="quoteLevy" [numberOfRisks]="numberOfRisks"
                     [risks]="quoteData.risks" [quoteData]="quoteData" [totalSumInsured]="quoteSumInsured"
-                    [totalBasicPremium]="quoteBasicPremium" [totalLevy]="quoteLevy" [totalNetPremium]="quoteNetPremium" [excessList]="excessList" [limitsOfLiabilities]="limitsOfLiabilities">
+                    [totalBasicPremium]="quoteBasicPremium" [totalLevy]="quoteLevy" [totalNetPremium]="quoteNetPremium">
                 </app-draft-quote-document>
             </nz-card>
             <ng-template #pdfQuoteActions>

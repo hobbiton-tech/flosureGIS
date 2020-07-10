@@ -1,6 +1,3 @@
-// tslint:disable-next-line: max-line-length
-import { PolicyScheduleCombinedDocumentComponent } from './underwriting/documents/policy-schedule-combined-document/policy-schedule-combined-document.component';
-import { PolicyScheduleDocumentComponent } from './underwriting/documents/policy-schedule-document/policy-schedule-document.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
