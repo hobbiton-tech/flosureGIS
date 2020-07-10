@@ -172,7 +172,9 @@
                                         ><FONT SIZE="2"
                                             >Tpin:
                                             <span style="color: red;"
-                                                >1002167568</span
+                                                >{{
+                                                  receipt.tpinNumber
+                                                }}</span
                                             ></FONT
                                         ></FONT
                                     ></P
@@ -406,13 +408,7 @@
                                     <P ALIGN="LEFT"
                                         ><FONT FACE="Arial, serif"
                                             ><FONT SIZE="2"
-                                                >Amount in Words:
-                                                {{
-                                                    toWords(
-                                                        receipt.sumInDigits
-                                                            | number: '1.2-2'
-                                                    )
-                                                }}</FONT
+                                                ></FONT
                                             ></FONT
                                         ></P
                                     >
@@ -495,7 +491,45 @@
                                             ></P
                                         >
                                     </TD>
+                                    <TD
+                                    WIDTH="191"
+                                    HEIGHT="5"
+                                    BGCOLOR="#ffffff"
+                                    STYLE="border: none; padding: 0in"
+                                >
+                                    <P ALIGN="LEFT"
+                                        ><FONT FACE="Arial, serif"
+                                            ><FONT SIZE="2"
+                                                ></FONT
+                                            ></FONT
+                                        ></P
+                                    >
+                                </TD>
+
                                 </ng-container>
+                            </TR>
+                            <TR>
+
+                              <TD
+                              WIDTH="191"
+                              HEIGHT="5"
+                              BGCOLOR="#ffffff"
+                              STYLE="border: none; padding: 0in"
+                          >
+                              <P ALIGN="LEFT"
+                                  ><FONT FACE="Arial, serif"
+                                      ><FONT SIZE="2"
+                                          >Amount in Words:
+                                          {{
+                                              toWords(
+                                                  receipt.sumInDigits
+                                                      | number: '1.2-2'
+                                              )
+                                          }}</FONT
+                                      ></FONT
+                                  ></P
+                              >
+                          </TD>
                             </TR>
                         </TBODY>
                     </TABLE>
@@ -605,7 +639,7 @@
                                     <P ALIGN="LEFT"
                                         ><FONT FACE="Arial, serif"
                                             ><FONT SIZE="2"
-                                                >{{ receipt.sumInDigits }}
+                                                >{{ receipt.sumInDigits |number : '1.2-2'}}
                                             </FONT></FONT
                                         >
                                     </P>
@@ -651,7 +685,7 @@
                                             ><FONT SIZE="3"
                                                 ><B
                                                     >{{ receipt.currency }}
-                                                    {{ receipt.sumInDigits }}
+                                                    {{ receipt.sumInDigits |number : '1.2-2' }}
                                                 </B></FONT
                                             ></FONT
                                         >

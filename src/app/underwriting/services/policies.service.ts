@@ -57,6 +57,7 @@ export class PoliciesService {
     createPolicy(policy: Policy): Observable<Policy> {
         let insuranceType = '';
         const productType = policy.risks[0].insuranceType;
+        // tslint:disable-next-line: triple-equals
         if (productType == 'Comprehensive') {
             insuranceType = 'MCP';
         } else {
@@ -234,6 +235,7 @@ export class PoliciesService {
         // return this.policies;
     }
 
+    // tslint:disable-next-line: variable-name
     countGenerator(number) {
         if (number <= 9999) {
             number = ('0000' + number).slice(-5);
@@ -243,6 +245,7 @@ export class PoliciesService {
 
     // Generating Policy Number
     generatePolicyNumber(brokerName: string, totalPolicies: number) {
+        // tslint:disable-next-line: variable-name
         const broker_name = brokerName.substring(0, 2).toLocaleUpperCase();
         const count = this.countGenerator(totalPolicies);
         const today = new Date();
@@ -254,8 +257,9 @@ export class PoliciesService {
         return 'PO' + broker_name + dateString + count;
     }
 
-    //documents
-    //debit note
+    // tslint:disable-next-line: comment-format
+    // documents
+    // debit note
     createDebitNote(
         policyId: string,
         debitNote: DebitNote,
@@ -271,6 +275,7 @@ export class PoliciesService {
 
         let insuranceType = '';
         const productType = policy.risks[0].insuranceType;
+        // tslint:disable-next-line: triple-equals
         if (productType == 'Comprehensive') {
             insuranceType = 'MCP';
         } else {
@@ -290,6 +295,7 @@ export class PoliciesService {
                         debitNote
                     )
                     .subscribe(
+                        // tslint:disable-next-line: no-shadowed-variable
                         async (res) => {
                             console.log(res);
                         },
@@ -320,7 +326,7 @@ export class PoliciesService {
         );
     }
 
-    //credit note
+    // credit note
     createCreditNote(policyId: string, creditNote: CreditNote, policy: Policy) {
         console.log('create debit note method called');
         console.log(policyId);
@@ -331,6 +337,7 @@ export class PoliciesService {
 
         let insuranceType = '';
         const productType = policy.risks[0].insuranceType;
+        // tslint:disable-next-line: triple-equals
         if (productType == 'Comprehensive') {
             insuranceType = 'MCP';
         } else {
@@ -342,6 +349,7 @@ export class PoliciesService {
                 `https://flosure-number-generation.herokuapp.com/aplus-invoice-number/1/0/${insuranceType}`
             )
             .subscribe(async (res) => {
+                // tslint:disable-next-line: prefer-const
                 let tempCreditNoteNumber = res.data.invoice_number;
                 creditNote.creditNoteNumber = tempCreditNoteNumber.replace(
                     'DR',
@@ -354,6 +362,7 @@ export class PoliciesService {
                         creditNote
                     )
                     .subscribe(
+                        // tslint:disable-next-line: no-shadowed-variable
                         async (res) => {
                             console.log(res);
                         },
@@ -386,7 +395,7 @@ export class PoliciesService {
         );
     }
 
-    //cover note
+    // cover note
     createCoverNote(
         policyId: string,
         coverNote: CoverNote

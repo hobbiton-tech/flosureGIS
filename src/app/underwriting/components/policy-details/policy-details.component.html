@@ -317,12 +317,45 @@
 <nz-modal nzWidth="700" nzTitle="" [(nzVisible)]="isComprehensiveCertificatePdfVisible"
     (nzOnCancel)="isComprehensiveCertificatePdfVisible = false" (nzOnOk)="isComprehensiveCertificatePdfVisible = false">
     <nz-card [nzBordered]="true" nzTitle="Comprehensive Certificate Document">
-        <app-policy-comprehensive-certificate *ngIf="!risksLoading" [clientName]="clientName"
-            [clientNumber]="clientNumber" [clientEmail]="clientEmail" [insuredName]="clientName"
-            [policyNumber]="policyNumber" [issueDate]="issueDate" [basicPremium]="basicPremium"
-            [loadingAmount]="loadingAmount" [discountAmount]="discountAmount" [premiumLevy]="premiumLevy"
-            [totalAmount]="totalAmount" [issueTime]="issueTime" [policy]="policyData" [policyRisk]="selectedRisk"
-            [cndAmount]="cndAmount" [receipt]="receipt" [coverNot]="coverNot">
+
+        <app-policy-comprehensive-certificate
+            *ngIf="!risksLoading"
+            [clientName]="clientName"
+            [clientNumber]="clientNumber"
+            [clientEmail]="clientEmail"
+            [insuredName]="clientName"
+            [policyNumber]="policyNumber"
+            [issueDate]="issueDate"
+            [basicPremium]="basicPremium"
+            [loadingAmount]="loadingAmount"
+            [discountAmount]="discountAmount"
+            [premiumLevy]="premiumLevy"
+            [totalAmount]="totalAmount"
+            [issueTime]="issueTime"
+            [policy]="policyData"
+            [policyRisk]="selectedRisk"
+            [cndAmount]="cndAmount"
+            [receipt]="receipt"
+            [coverNot]="coverNot"
+            [excessListCert]="excessListCert"
+            [excessList]="excessList"
+            [limitsOfLiablityCert]="limitsOfLiablityCert"
+            [limitsOfLiablity]="limitsOfLiablity"
+            [combAmount]="combAmount"
+            [combInfo]="combInfo"
+            [proDInfo]="proDInfo"
+            [propDAmount]="propDAmounts"
+            [deathPEInfo]="deathPEInfo"
+            [deathPEAmount]="deathPEAmount"
+            [deathPPInfo]="deathPPInfo"
+            [deathPPAmount]="deathPPAmount"
+            [fExcexxType]="fExcexxType"
+            [fExcessAmount]="fExcessAmount"
+            [sExcessType]="sExcessType"
+            [sExcessAmount]="sExcessAmount"
+            [tExcessType]="tExcessType"
+            [tExcessAmount]="tExcessAmount"
+        >
             >
         </app-policy-comprehensive-certificate>
     </nz-card>
@@ -331,11 +364,46 @@
 <nz-modal nzWidth="700" nzTitle="" [(nzVisible)]="isThirdPartyCertificatePdfVisible"
     (nzOnCancel)="isThirdPartyCertificatePdfVisible = false" (nzOnOk)="isThirdPartyCertificatePdfVisible = false">
     <nz-card [nzBordered]="true" nzTitle="ThirdParty Certificate Document">
-        <app-policy-thirdparty-certificate *ngIf="!risksLoading" [clientName]="clientName" [clientNumber]="clientNumber"
-            [clientEmail]="clientEmail" [insuredName]="clientName" [policyNumber]="policyNumber" [issueDate]="issueDate"
-            [basicPremium]="basicPremium" [loadingAmount]="loadingAmount" [discountAmount]="discountAmount"
-            [premiumLevy]="premiumLevy" [totalAmount]="totalAmount" [issueTime]="issueTime" [policy]="policyData"
-            [policyRisk]="selectedRisk" [receipt]="receipt" [coverNot]="coverNot">
+
+        <app-policy-thirdparty-certificate
+            *ngIf="!risksLoading"
+            [clientName]="clientName"
+            [clientNumber]="clientNumber"
+            [clientEmail]="clientEmail"
+            [insuredName]="clientName"
+            [policyNumber]="policyNumber"
+            [issueDate]="issueDate"
+            [basicPremium]="basicPremium"
+            [loadingAmount]="loadingAmount"
+            [discountAmount]="discountAmount"
+            [premiumLevy]="premiumLevy"
+            [totalAmount]="totalAmount"
+            [issueTime]="issueTime"
+            [policy]="policyData"
+            [policyRisk]="selectedRisk"
+            [receipt]="receipt"
+            [coverNot]="coverNot"
+            [excessList]="excessList"
+            [limitsOfLiablity]="limitsOfLiablity"
+            [excessListCert]="excessListCert"
+            [limitsOfLiablityCert]="limitsOfLiablityCert"
+            [combAmount]="combAmount"
+            [combInfo]="combInfo"
+            [proDInfo]="proDInfo"
+            [propDAmount]="propDAmounts"
+            [deathPEInfo]="deathPEInfo"
+            [deathPEAmount]="deathPEAmount"
+            [deathPPInfo]="deathPPInfo"
+            [deathPPAmount]="deathPPAmount"
+            [fExcexxType]="fExcexxType"
+            [fExcessAmount]="fExcessAmount"
+            [sExcessType]="sExcessType"
+            [sExcessAmount]="sExcessAmount"
+            [tExcessType]="tExcessType"
+            [tExcessAmount]="tExcessAmount"
+        >
+        >
+
             >
         </app-policy-thirdparty-certificate>
     </nz-card>
@@ -364,19 +432,54 @@
     </nz-card>
 </nz-modal>
 
-<nz-modal style="width: 150%;" nzTitle="" nzWidth="950" [(nzVisible)]="isSchedulePDFVisible"
-    (nzOnCancel)="isSchedulePDFVisible = false" (nzOnOk)="isSchedulePDFVisible = false">
-    <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Schedule Document">
-        <app-policy-schedule-document *ngIf="!risksLoading" [clientName]="clientName" [clientNumber]="clientNumber"
-            [coverFrom]="coverForm" [coverTo]="coverTo" [clientEmail]="clientEmail" [policyNumber]="policyNumber"
-            [clientEmail]="''" [insuredName]="clientName" [policyRisk]="policyRisk" [policyNumber]="policyNumber"
-            [issueDate]="issueDate" [issueTime]="issueTime" [policy]="policyData" [basicPremium]="basicPremium"
-            [premiumLevy]="premiumLevy" [loadingAmount]="loadingAmount" [discountAmount]="discountAmount"
-            [totalAmount]="totalAmount" [client]="client" [deathAndInjuryPerPerson]="deathAndInjuryPerPerson"
-            [deathAndInjuryPerEvent]="deathAndInjuryPerEvent" [propertyDamage]="propertyDamage"
-            [combinedLimits]="combinedLimits" [below21Years]="below21Years" [over70Years]="over70Years"
-            [noLicence]="noLicence" [careLessDriving]="careLessDriving" [otherEndorsement]="otherEndorsement"
-            [coverNot]="coverNot">
+
+<nz-modal
+    style="width: 150%;"
+    nzTitle=""
+    nzWidth="950"
+    [(nzVisible)]="isSchedulePDFVisible"
+    (nzOnCancel)="isSchedulePDFVisible = false"
+    (nzOnOk)="isSchedulePDFVisible = false"
+>
+    <nz-card
+        style="width: 100%;"
+        [nzBordered]="true"
+        nzTitle="Schedule Document"
+    >
+        <app-policy-schedule-document
+            *ngIf="!risksLoading"
+            [clientName]="clientName"
+            [clientNumber]="clientNumber"
+            [coverFrom]="coverForm"
+            [coverTo]="coverTo"
+            [clientEmail]="clientEmail"
+            [policyNumber]="policyNumber"
+            [clientEmail]="''"
+            [insuredName]="clientName"
+            [policyRisk]="policyRisk"
+            [policyNumber]="policyNumber"
+            [issueDate]="issueDate"
+            [issueTime]="issueTime"
+            [policy]="policyData"
+            [basicPremium]="basicPremium"
+            [premiumLevy]="premiumLevy"
+            [loadingAmount]="loadingAmount"
+            [discountAmount]="discountAmount"
+            [totalAmount]="totalAmount"
+            [client]="client"
+            [deathAndInjuryPerPerson]="deathAndInjuryPerPerson"
+            [deathAndInjuryPerEvent]="deathAndInjuryPerEvent"
+            [propertyDamage]="propertyDamage"
+            [combinedLimits]="combinedLimits"
+            [excessList]="excessList"
+            [below21Years]="below21Years"
+            [over70Years]="over70Years"
+            [noLicence]="noLicence"
+            [careLessDriving]="careLessDriving"
+            [otherEndorsement]="otherEndorsement"
+            [coverNot]="coverNot"
+            [limitsOfLiablity]="limitsOfLiablity"
+        >
         </app-policy-schedule-document>
     </nz-card>
 </nz-modal>

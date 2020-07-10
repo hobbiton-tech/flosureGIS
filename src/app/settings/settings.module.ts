@@ -28,10 +28,15 @@ import { AddCoverTypeComponent } from './components/product-setups/components/ad
 import { AddPerilComponent } from './components/product-setups/components/add-peril/add-peril.component';
 import { AddProductCommissionComponent } from './components/agents/add-product-commission/add-product-commission.component';
 import { ClausesService } from './components/underwriting-setups/services/clauses.service';
+
 import { VehicleComponent } from './components/vehicle/vehicle.component';
 import { VehicleTypeComponent } from './components/vehicle/vehicle-type/vehicle-type.component';
 import { VehicleMakeComponent } from './components/vehicle/vehicle-make/vehicle-make.component';
 import { VehicleModelComponent } from './components/vehicle/vehicle-model/vehicle-model.component';
+
+import { WarrantiesComponent } from './components/warranties/warranties.component';
+import { ExtensionsComponent } from './components/extensions/extensions.component';
+
 
 const routes: Routes = [
     {
@@ -74,6 +79,14 @@ const routes: Routes = [
       path: 'vehicle-setups',
       component: VehicleComponent
     }
+        path: 'warranties',
+        component: WarrantiesComponent,
+    },
+    {
+        path: 'extensions',
+        component: ExtensionsComponent,
+    },
+
 ];
 
 @NgModule({
@@ -106,6 +119,8 @@ const routes: Routes = [
         VehicleTypeComponent,
         VehicleMakeComponent,
         VehicleModelComponent
+        WarrantiesComponent,
+        ExtensionsComponent,
 
     ],
     imports: [

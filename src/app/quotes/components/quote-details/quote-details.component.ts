@@ -40,6 +40,7 @@ import {
     IPolicyClauses,
     IPolicyWording,
     IPolicyExtension,
+    IExccess,
 } from 'src/app/settings/models/underwriting/clause.model';
 import {
     VehicleBodyType,
@@ -474,6 +475,13 @@ export class QuoteDetailsComponent implements OnInit {
     amount = '';
     policyId: string;
     newRisks: RiskModel[];
+     //Excess Variable
+     excessList:Excess[]=[];
+
+     excessTHP:IExccess[]=[];
+     excessAct:IExccess[]=[];
+     excessFT:IExccess[]=[];
+     limitsOfLiabilities: LimitsOfLiability[] = [];
 
     constructor(
         private formBuilder: FormBuilder,
@@ -519,6 +527,19 @@ export class QuoteDetailsComponent implements OnInit {
                 console.log('this.quote>>>>>', this.quoteData);
 
                 this.risks = this.quoteData.risks;
+
+                this.excessList = this.risks[0].excesses
+
+                this.limitsOfLiabilities = this.risks[0].limitsOfLiability
+                console.log('RISKS<<<<<<', this.excessList)
+
+                // this.productClauseService.getExccesses().subscribe((res) => {
+                //     this.excessList = res;
+                //     this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                //     this.excessAct = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                //     this.excessFT = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+        
+                // })
 
                 this.productClauseService
                     .getPolicyClauses()
@@ -1586,7 +1607,7 @@ export class QuoteDetailsComponent implements OnInit {
                     this.policyId = res.id;
                     this.newRisks = res.risks;
                     console.log('Risks>>>>>>>>', this.newRisks);
-                    
+
 
                     // this.policiesService.createDebitNote(
                     //     res.id,
@@ -1622,7 +1643,7 @@ export class QuoteDetailsComponent implements OnInit {
                         coverNote.policyId = r.id;
                         console.log(
                             'Cover Note>>>>',
-                            res.data.certificate_number
+                            res.data.certificate_number, coverNote
                         );
 
                         this.http
@@ -1632,17 +1653,17 @@ export class QuoteDetailsComponent implements OnInit {
                         )
                         .subscribe(
                             async (res) => {
-                                console.log(res);
+                                console.log("CHECK for RESULTS<<<<<<<",res);
                             },
                             async (err) => {
-                                console.log(err);
+                                console.log("CHECK for ERRORS<<<<<<<",err);
                             }
                         );
 
                     });
 
                     }
-                    
+
 
                     this.http
                         .get<any>(
@@ -2282,7 +2303,7 @@ export class QuoteDetailsComponent implements OnInit {
             )
             .subscribe((data) => {
                 this.loads.push({
-                    loadType: 'Increased Third Party Limit',
+                    loadType: this.selectedLoadingValue.value,
                     amount: Number(data.thirdPartyLoadingPremium),
                 });
                 this.premiumLoadingTotal = this.sumArray(this.loads, 'amount');
@@ -2970,6 +2991,7 @@ export class QuoteDetailsComponent implements OnInit {
 
     addLimitsOfLiability(): void {
         this.limitsOfLiability.push({
+
             liabilityType: 'deathAndInjuryPerPerson',
             amount: this.deathAndInjuryPerPerson,
             rate: this.deathAndInjuryPerPersonRate,
@@ -2977,6 +2999,7 @@ export class QuoteDetailsComponent implements OnInit {
         });
 
         this.limitsOfLiability.push({
+
             liabilityType: 'deathAndInjuryPerEvent',
             amount: this.deathAndInjuryPerEvent,
             rate: this.deathAndInjuryPerEventRate,
@@ -2984,6 +3007,7 @@ export class QuoteDetailsComponent implements OnInit {
         });
 
         this.limitsOfLiability.push({
+
             liabilityType: 'propertyDamage',
             amount: this.propertyDamage,
             rate: this.propertyDamageRate,
@@ -2991,6 +3015,7 @@ export class QuoteDetailsComponent implements OnInit {
         });
 
         this.limitsOfLiability.push({
+
             liabilityType: 'combinedLimits',
             amount: this.combinedLimits,
             rate: this.combinedLimitsRate,
@@ -2999,30 +3024,45 @@ export class QuoteDetailsComponent implements OnInit {
     }
 
     addExcesses(): void {
-        this.excesses.push({
-            excessType: 'below21Years',
-            amount: Number(this.excessesForm.get('below21Years').value),
-        });
+        if(this.selectedValue.value === "Comprehensive") {
+            for(const ex of this.excessList) {
+                this.excesses.push({
+                    excessType: ex.excessType,
+                    amount: Number(ex.amount),
+                });
+            }
+        }else if(this.selectedValue.value === "ThirdParty") {
+            for(const exTHP of this.excessTHP) {
+                this.excesses.push({
+                    excessType: exTHP.description,
+                    amount: Number(exTHP.amount),
+                });
+            }
+        }
+        // this.excesses.push({
+        //     excessType: 'below21Years',
+        //     amount: Number(this.excessesForm.get('below21Years').value),
+        // });
 
-        this.excesses.push({
-            excessType: 'over70Years',
-            amount: Number(this.excessesForm.get('over70Years').value),
-        });
+        // this.excesses.push({
+        //     excessType: 'over70Years',
+        //     amount: Number(this.excessesForm.get('over70Years').value),
+        // });
 
-        this.excesses.push({
-            excessType: 'noLicence',
-            amount: Number(this.excessesForm.get('noLicence').value),
-        });
+        // this.excesses.push({
+        //     excessType: 'noLicence',
+        //     amount: Number(this.excessesForm.get('noLicence').value),
+        // });
 
-        this.excesses.push({
-            excessType: 'careLessDriving',
-            amount: Number(this.excessesForm.get('careLessDriving').value),
-        });
+        // this.excesses.push({
+        //     excessType: 'careLessDriving',
+        //     amount: Number(this.excessesForm.get('careLessDriving').value),
+        // });
 
-        this.excesses.push({
-            excessType: 'otherEndorsement',
-            amount: Number(this.excessesForm.get('otherEndorsement').value),
-        });
+        // this.excesses.push({
+        //     excessType: 'otherEndorsement',
+        //     amount: Number(this.excessesForm.get('otherEndorsement').value),
+        // });
     }
     get receiptFormControl() {
         return this.receiptForm.controls;

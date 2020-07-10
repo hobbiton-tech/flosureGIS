@@ -6,16 +6,15 @@ export interface IPeril {
     perilType: string;
 }
 
-
 const createPeril = () => {
     let peril: IPeril = {
-       perilId: faker.random.number(100),
-       perilDescription: faker.random.words(13),
-       perilType: faker.random.word(), 
-    }
+        perilId: faker.random.number(100),
+        perilDescription: faker.random.words(13),
+        perilType: faker.random.word(),
+    };
 
     return peril;
-}
+};
 
 export const generatePerils = () => {
     let perilList: IPeril[] = [];
@@ -23,4 +22,4 @@ export const generatePerils = () => {
         perilList.push(createPeril());
     }
     return perilList;
-}
+};

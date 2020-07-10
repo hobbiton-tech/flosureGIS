@@ -1,3 +1,5 @@
+import { LiabilityType, LimitsOfLiability, Excess } from './../../../quotes/models/quote.model';
+import { RiskDetailsComponent } from './../../../quotes/components/risk-details/risk-details.component';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -25,6 +27,7 @@ import {
     IIndividualClient,
     ICorporateClient,
 } from 'src/app/clients/models/clients.model';
+import { Risks } from 'src/app/reports/model/quotation.model';
 
 @Component({
     selector: 'app-policy-details',
@@ -45,7 +48,7 @@ export class PolicyDetailsComponent implements OnInit {
     singleDebitNote: DebitNote;
     latestDebitNote: DebitNote;
 
-    //client details
+    // client details
     client: IIndividualClient & ICorporateClient;
     clientsList: Array<IIndividualClient & ICorporateClient>;
 
@@ -69,6 +72,7 @@ export class PolicyDetailsComponent implements OnInit {
     isEditmode = false;
 
     selectedRisk: RiskModel = new RiskModel();
+    selectedRisks: RiskModel[] = [];
 
     // PDFS
     isCertificatePDFVisible = false;
@@ -80,6 +84,8 @@ export class PolicyDetailsComponent implements OnInit {
     isNewCertificatePdfVisible = false;
     isThirdPartyCertificatePdfVisible = false;
     isComprehensiveCertificatePdfVisible = false;
+
+    isScheduleCombinedPDFVisible = false;
 
     // For Modal
     clientName = '';
@@ -99,13 +105,13 @@ export class PolicyDetailsComponent implements OnInit {
     totalAmount: string;
     premiumLevy: string;
 
-    //documents limits of liability
+    // documents limits of liability
     deathAndInjuryPerPerson: number;
     deathAndInjuryPerEvent: number;
     propertyDamage: number;
     combinedLimits: number;
 
-    //documents excesses
+    // documents excesses
     below21Years: number;
     over70Years: number;
     noLicence: number;
@@ -122,7 +128,8 @@ export class PolicyDetailsComponent implements OnInit {
     // clientName: any;
     netPremium: any;
     formattedeDate: Date;
-    _;
+    excesses: any;
+
     _id: string;
     cnd: DiscountModel;
     cndAmount = 0;
@@ -130,7 +137,31 @@ export class PolicyDetailsComponent implements OnInit {
     coverNote: CoverNote;
     coverNot: CoverNote;
     coverNotes: CoverNote[] = [];
-    coverNotesRisks: any[] = [];
+
+    // tslint:disable-next-line: whitespace
+    coverNotesRisks: any[] =[];
+  selectedsRisks: RiskModel[];
+  limitsOfLiablity: LimitsOfLiability[] = [];
+  limitsOfLiablityCert: LimitsOfLiability[] = [];
+  combAmount:number;
+  combInfo: string;
+  proDInfo: string;
+  propDAmounts:number;
+  deathPEInfo: string;
+  deathPEAmount:number;
+  deathPPInfo: string;
+  deathPPAmount:number;
+
+  fExcexxType='';
+  fExcessAmount=0;
+  sExcessType='';
+  sExcessAmount=0;
+  tExcessType='';
+  tExcessAmount=0;
+
+  excessList: Excess[] = [];
+  excessListCert: Excess[] = [];
+
 
     constructor(
         private readonly router: Router,
@@ -162,7 +193,12 @@ export class PolicyDetailsComponent implements OnInit {
                 this.policiesService.getCoverNotes().subscribe((res) => {
                     console.log('RESULT COVER>>>>', res);
                     this.coverNotes = res;
-                });
+
+
+                // tslint:disable-next-line: semicolon
+                })
+
+
 
                 this.productClauseService
                     .getPolicyClauses()
@@ -238,54 +274,131 @@ export class PolicyDetailsComponent implements OnInit {
                 });
 
                 this.risks = policy.risks;
+                console.log('GET RISKS >>>>', this.risks);
+
+
+                for(const ri of this.risks ) {
+                    if(ri.limitsOfLiability !== []) {
+                        for(const lim of ri.limitsOfLiability) {
+                            console.log("LIABILITIES<<<<", lim)
+                            if (lim.liabilityType === 'combinedLimits'){
+                                this.combAmount = lim.amount;
+                                this.combInfo = 'Combined Limits';
+  
+                            }
+                            if (lim.liabilityType === 'propertyDamage'){
+                                this.combAmount = 0;
+                                this.combInfo = '';
+                                this.proDInfo='(i) Third Party Limit for injury/ Death per person ZMW';
+  this.propDAmounts=lim.amount;
+
+                      console.log("LIABILITIES<<<<", this.proDInfo, this.propDAmounts)          
+
+                            }
+                            if (lim.liabilityType === 'deathAndInjuryPerEvent'){
+                                this.combAmount = 0;
+                                this.combInfo = '';
+                                this.deathPEInfo='(ii) Third party limit per Event';
+  this.deathPEAmount=lim.amount;
+  
+  console.log("LIABILITIES<<<<", this.deathPEInfo)
+                            }
+                             if (lim.liabilityType === 'deathAndInjuryPerPerson'){
+                                this.combAmount = 0;
+                                this.combInfo = '';
+                                this.deathPPInfo='(iii)Third Party Property Damage';
+  this.deathPPAmount=lim.amount;
+  console.log("LIABILITIES<<<<", this.deathPPInfo)
+                            }
+                        }
+
+                    }
+
+ 
+
+  if(ri.excesses !== []) {
+      for(const ex of ri.excesses) {
+        if (ex.excessType === 'Third Party Property Damage (TPPD ) 10% Minimum'){
+            this.fExcessAmount = ex.amount;
+            this.fExcexxType = 'Third Party Property Damage (TPPD ) 10% Minimum';
+
+        } 
+         if(ex.excessType === 'Own Damage 10% Minimum') {
+            this.sExcessAmount = ex.amount;
+            this.sExcessType = 'Own Damage 10% Minimum';
+
+        } 
+         if(ex.excessType === 'Theft Excess [15%] Minimum') {
+            this.tExcessAmount = ex.amount;
+            this.tExcessType = 'Theft Excess [15%] Minimum';
+
+        } 
+      }
+  }
+
+                }
+
+
+                this.limitsOfLiablity = this.risks[0].limitsOfLiability
+                this.limitsOfLiablityCert = this.risks[0].limitsOfLiability
+                this.excessList = this.risks[0].excesses
+                this.excessListCert = this.risks[0].excesses
+                
                 // this.discounts = risk.discounts;
                 this.policiesService.getCoverNotes().subscribe((res) => {
-                    this.coverNotesRisks = this.coverNotesRisks.concat(
-                        ...res,
-                        ...this.risks
-                    );
-                    console.log('COMBINE>>>>', this.coverNotesRisks);
 
-                    for (const r of this.risks)
-                        this.coverNot = res.filter(
-                            (x) => x.policyId === r.id
-                        )[0];
+                   this.coverNotesRisks =  this.coverNotesRisks.concat(...res, ...this.risks);
+                   console.log('COMBINE>>>>', this.coverNotesRisks);
+
+                    
+                   for (const r of this.risks ) {
+                    this.coverNot = res.filter((x) => x.policyId === r.id)[0];
+
+                    // this.excessListCert = r.excesses
+                    // console.log('Excess>>>>', this.excessListCert);
+                    // this.limitsOfLiablityCert = r.limitsOfLiability
+
+                    }
                 });
+
 
                 this.policyRisk = policy.risks[0];
                 // this.loading =
 
-                //limits Of Liability
-                this.deathAndInjuryPerPerson = policy.risks[0].limitsOfLiability.filter(
-                    (x) => x.liabilityType === 'deathAndInjuryPerPerson'
-                )[0].amount;
-                this.deathAndInjuryPerEvent = policy.risks[0].limitsOfLiability.filter(
-                    (x) => x.liabilityType === 'deathAndInjuryPerEvent'
-                )[0].amount;
-                this.propertyDamage = policy.risks[0].limitsOfLiability.filter(
-                    (x) => x.liabilityType === 'propertyDamage'
-                )[0].amount;
-                this.combinedLimits = policy.risks[0].limitsOfLiability.filter(
-                    (x) => x.liabilityType === 'combinedLimits'
-                )[0].amount;
+                // limits Of Liability
+                // this.deathAndInjuryPerPerson = policy.risks[0].limitsOfLiability.filter(
+                //     (x) => x.liabilityType === 'deathAndInjuryPerPerson'
+                // )[0].amount;
+                // this.deathAndInjuryPerEvent = policy.risks[0].limitsOfLiability.filter(
+                //     (x) => x.liabilityType === 'deathAndInjuryPerEvent'
+                // )[0].amount;
+                // this.propertyDamage = policy.risks[0].limitsOfLiability.filter(
+                //     (x) => x.liabilityType === 'propertyDamage'
+                // )[0].amount;
+                // this.combinedLimits = policy.risks[0].limitsOfLiability.filter(
+                //     (x) => x.liabilityType === 'combinedLimits'
+                // )[0].amount;
+
+
+                
 
                 //excesses
-                this.below21Years = policy.risks[0].excesses.filter(
-                    (x) => x.excessType === 'below21Years'
-                )[0].amount;
-                this.over70Years = policy.risks[0].excesses.filter(
-                    (x) => x.excessType === 'over70Years'
-                )[0].amount;
-                this.noLicence = policy.risks[0].excesses.filter(
-                    (x) => x.excessType === 'noLicence'
-                )[0].amount;
-                this.careLessDriving = policy.risks[0].excesses.filter(
-                    (x) => x.excessType === 'careLessDriving'
-                )[0].amount;
+                // this.below21Years = policy.risks[0].excesses.filter(
+                //     (x) => x.excessType === 'below21Years'
+                // )[0].amount;
+                // this.over70Years = policy.risks[0].excesses.filter(
+                //     (x) => x.excessType === 'over70Years'
+                // )[0].amount;
+                // this.noLicence = policy.risks[0].excesses.filter(
+                //     (x) => x.excessType === 'noLicence'
+                // )[0].amount;
+                // this.careLessDriving = policy.risks[0].excesses.filter(
+                //     (x) => x.excessType === 'careLessDriving'
+                // )[0].amount;
 
-                this.otherEndorsement = policy.risks[0].excesses.filter(
-                    (x) => x.excessType === 'otherEndorsement'
-                )[0].amount;
+                // this.otherEndorsement = policy.risks[0].excesses.filter(
+                //     (x) => x.excessType === 'otherEndorsement'
+                // )[0].amount;
 
                 const doo = new Date(policy.endDate);
                 const nd = new Date(
@@ -298,8 +411,8 @@ export class PolicyDetailsComponent implements OnInit {
                 // if(this.clientAddress === null || undefined) { this.clientAddress = ''; } else {}
 
                 this.agency = 'Direct'; // TODO: Track this guy too
-                this.coverForm = nd.toString();
-                this.coverTo = policy.endDate.toString();
+                this.coverForm = policy.startDate.toString();
+                this.coverTo = nd.toString();
                 // this.basicPremium = this.policy
                 this.loadingAmount = '-';
                 this.discountAmount = '-';
@@ -621,21 +734,22 @@ export class PolicyDetailsComponent implements OnInit {
 
     isNewCertificateVisible(risk: RiskModel) {
         this.selectedRisk = risk;
+        // tslint:disable-next-line: triple-equals
         if (this.selectedRisk.insuranceType == 'Comprehensive') {
             this.cnd = risk.discounts.filter(
                 (x) => x.discountType === 'No Claims Discount'
             )[0];
             console.log('RISK ID', risk.id);
 
-            this.coverNot = this.coverNotes.filter(
-                (x) => x.policyId === this.selectedRisk.id
-            )[0];
+
+            this.coverNot = this.coverNotes.filter((x) => x.policyId === this.selectedRisk.id)[0];
 
             if (this.cnd === undefined) {
                 this.cndAmount = 0;
             } else {
                 this.cndAmount = Number(this.cnd.amount);
             }
+            
 
             console.log('CND>>>>>', this.cndAmount);
             this.isComprehensiveCertificatePdfVisible = true;
@@ -651,8 +765,22 @@ export class PolicyDetailsComponent implements OnInit {
         // this.isNewCertificatePdfVisible = true;
     }
 
+    isSchedule() {
+      this.isSchedulePDFVisible = true;
+        // this.selectedsRisks = risk;
+        // // this.selectedRisk = this.policyRisk[0].limitsOfLiability;
+        // if (this.selectedRisks[0].LiabilityType === 'combinedLimits') {
+        //     this.isScheduleCombinedPDFVisible = true;
+        //     this.isSchedulePDFVisible = false;
+        // } else {
+        //     this.isScheduleCombinedPDFVisible = true;
+        //     this.isSchedulePDFVisible = false;
+        // }
+    }
+
     sumArray(items, prop) {
-        return items.reduce(function (a, b) {
+        // tslint:disable-next-line: only-arrow-functions
+        return items.reduce(function(a, b) {
             return a + b[prop];
         }, 0);
     }

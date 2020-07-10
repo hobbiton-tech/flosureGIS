@@ -5,6 +5,8 @@ import {
     RiskModel,
     ITimestamp,
     DiscountModel,
+    Excess,
+    LimitsOfLiability,
 } from 'src/app/quotes/models/quote.model';
 import { Policy } from '../../models/policy.model';
 import moment from 'moment';
@@ -33,6 +35,12 @@ export class PolicyComprehensiveCertificateComponent implements OnInit {
     clientAddress: string;
 
     @Input()
+    excessListCert: Excess[]=[];
+
+    @Input()
+    limitsOfLiablityCert: LimitsOfLiability[]=[];
+
+    @Input()
     cndAmount = 0;
 
     @Input()
@@ -57,10 +65,46 @@ export class PolicyComprehensiveCertificateComponent implements OnInit {
     policyRisk: RiskModel;
 
     @Input()
+    excessList: Excess[];
+
+    @Input()
+    limitsOfLiablity: LimitsOfLiability[]=[];
+
+    @Input()
     issueDate: string;
 
     @Input()
     issueTime: string;
+
+    @Input()
+    combInfo:string;
+    @Input()
+    combAmount:number;
+    @Input()
+    proDInfo:string;
+    @Input()
+    propDAmount:number;
+    @Input()
+    deathPEInfo:string;
+    @Input()
+    deathPEAmount:number;
+    @Input()
+    deathPPInfo:string;
+    @Input()
+    deathPPAmount:number;
+
+    @Input()
+    fExcexxType:string;
+    @Input()
+    fExcessAmount:number;
+    @Input()
+    sExcessType:string;
+    @Input()
+    sExcessAmount:number;
+    @Input()
+    tExcessType:string;
+    @Input()
+    tExcessAmount:number;
 
     @Input()
     policyNumber: string;
@@ -74,10 +118,42 @@ export class PolicyComprehensiveCertificateComponent implements OnInit {
 
     generatingPDF = false;
     dateOfIssue = new Date();
+    limits: LimitsOfLiability;
+    comb: LimitsOfLiability;
+    deathPE: LimitsOfLiability;
+    deathPP: LimitsOfLiability;
+    propertyD: LimitsOfLiability;
+    firstExcess: Excess;
+    secondExcess: Excess;
+    thirdExcess: Excess;
+    co = false;
+    pe = false;
+    pp = false;
+    pd = false;
+    tppd: boolean;
+    excT1 = '';
+    excA1 = 0;
+    excT2 = '';
+    excA2 = 0;
+    excT3 = '';
+    excA3 = 0;
+
 
     constructor() {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.excT1 = this.excessList[0].excessType; 
+        this.excT2 = this.excessList[1].excessType;
+        this.excT3 = this.excessList[2].excessType;
+
+        this.excA1 = this.excessList[0].amount;
+        this.excA2 = this.excessList[1].amount;
+        this.excA3 = this.excessList[2].amount;
+     
+    }
+
+
+    
 
     getYearOfManufacture(risk: RiskModel) {
         let year: string = moment(risk.yearOfManufacture).year().toString();

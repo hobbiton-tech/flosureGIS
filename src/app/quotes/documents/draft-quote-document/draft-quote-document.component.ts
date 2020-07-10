@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { MotorQuotationModel, RiskModel } from '../../models/quote.model';
+import { MotorQuotationModel, RiskModel, Excess, LimitsOfLiability } from '../../models/quote.model';
 import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
@@ -14,6 +14,8 @@ export class DraftQuoteDocumentComponent implements OnInit {
 
     @Input()
     dateCreated: string;
+
+   
 
     @Input()
     clientName: string;
@@ -50,6 +52,12 @@ export class DraftQuoteDocumentComponent implements OnInit {
 
     @Input()
     risks: RiskModel[];
+
+    @Input()
+    limitsOfLiabilities: LimitsOfLiability[];
+
+    @Input()
+    excessList: Excess[];
 
     @Input()
     totalSumInsured: number;
