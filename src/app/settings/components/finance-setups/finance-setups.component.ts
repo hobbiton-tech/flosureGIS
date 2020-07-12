@@ -22,7 +22,25 @@ import { from } from 'rxjs';
 
 export class FinanceSetupsComponent implements OnInit {
 
+  i = 0;
+  branchId: string | null = null;
+
+  starBranch(id: string): void {
+    this.branchId = id;
+  }
+
+  stopBranch(): void {
+    this.branchId = null;
+  }
+
+
+  deleteRow(id: string): void {
+    this.bankList = this.bankList.filter(d => d.id !== id);
+  }
+
+
   bankList: IBank[] = [];
+  banks: IBank[] = [];
   branchList: IBranch[] = [];
   paymentMethodList: IPaymentMethod[] = [];
   receiptTypeList: IReceiptTypes[] = [];
@@ -60,6 +78,7 @@ export class FinanceSetupsComponent implements OnInit {
   branch_code: any;
   swift_code: any;
   receiptType: IReceiptTypes;
+  selectedBankId: string;
 
   constructor(
     private BankService: BankService,
@@ -104,7 +123,8 @@ export class FinanceSetupsComponent implements OnInit {
     /// BANK SERVICE //////
 //////////////////////////////
     this.BankService.getBanks().subscribe((res) =>{
-      this.bankList = res;
+      this.banks = res
+      this.bankList = this.banks;
     });
 
 ///////////////////////////////////
@@ -142,6 +162,7 @@ export class FinanceSetupsComponent implements OnInit {
       console.log('YEEEEEEEE>>>>', res);
 
       this.bankList = res;
+    
     });
 
   
@@ -298,7 +319,8 @@ export class FinanceSetupsComponent implements OnInit {
   submitBranchForm() {
     const branch: IBranch = {
       ...this.branchForm.value,
-      id: v4()
+      id: v4(),
+      bankId: this.selectedBankId,
     };
     this.BranchService.addBranch(branch);
     console.log('DDDDDDDDDD>>>>>>>', branch);
@@ -319,6 +341,10 @@ export class FinanceSetupsComponent implements OnInit {
   
   resetDiscountTypeForm(value){}
 
-  
 
+
+
+
+
+  
 }

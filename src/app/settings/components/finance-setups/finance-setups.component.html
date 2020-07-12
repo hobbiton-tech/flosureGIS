@@ -35,12 +35,13 @@
                             <tr>
                                 <th>Bank Name</th>
                                 <th>Swift Code</th>
-                                <td>Description</td>
+                                <th>Description</th>
                             </tr>
                         </thead>
                             <tbody>
                                 <tr *ngFor="let bank of bankTable.data"  (click)="onSelectBank(bank)"
-                                    style="cursor: pointer;">
+                                    style="cursor: pointer;"
+                                    >
                                     <td>{{bank.bank_name }}</td>
                                     <td>{{bank.swift_code}}</td>
                                     <td>{{bank.description}}</td>
@@ -50,7 +51,8 @@
             </nz-tab>
 
 <!-- ///////////////////////////////////////////
-///////////////branches//////////////////// -->
+///////////////branches////////////////////
+/////////////////////////////////////// -->
             <nz-tab nzTitle="Branch Setups">
                     
                 <div style="margin-bottom: 10px;">
@@ -59,7 +61,12 @@
                             <button nz-button nzType="primary" style="position: right;" (click)="openBranches()">
                                 Add Branch
                             </button>
-                        </div>
+
+
+                            <nz-select ngModel="bank" nzAllowClear nzPlaceHolder="Choose" >
+                                <nz-option *ngFor="let bank of bankList" nzValue="{{bank.id}}" nzLabel="{{bank.bank_name}}" ng></nz-option>
+                              </nz-select>
+                    </div>
                     </div>
                 </div>
                 <nz-table #branchTable [nzData]="branchList">
@@ -73,7 +80,12 @@
                         <tbody>
                             <tr *ngFor="let branch of branchTable.data"  (click)="onSelectBranch(branch)"
                                 style="cursor: pointer;">
-                                <td>{{branch.branch_name}}</td>
+                                <td>
+                                    <div class="branchTable.data" [hidden]="branchId === branch.id" (click)="starBranch(branch.id)">
+                                      {{ branch.branch_name }}
+                                    </div>
+                                    <input [hidden]="branchId !== branch.id" type="text" nz-input [(ngModel)]="branch.branch_name" (blur)="stopBranch()" />
+                                  </td>
                                 <td>{{branch.branch_code}}</td>
                                 <td>{{branch.description}}</td>
                             </tr>
@@ -419,7 +431,7 @@
         
                     <nz-form-item>
                         <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
-                        <nz-form-control [nzSpan]="12" nzHasFeedBack nzValidatingTip="Validating" [nzErrorTip]="bankErrorTp1!">
+                        <nz-form-control [nzSpan]="12">
                           <textarea formControlName="dtype" nz-input rows="3" placeholder="write any description"></textarea>
                           <ng-template #dtypenErrorTp1 let-control>
                             <ng-container *ngIf="control.hasError('required')">
