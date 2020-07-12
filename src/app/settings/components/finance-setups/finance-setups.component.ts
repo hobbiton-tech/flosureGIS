@@ -11,7 +11,7 @@ import {BranchService} from '../../components/finance-setups/services/branch.ser
 import { ReceiptTypesService } from 'src/app/settings/components/finance-setups/services/receipt-types.service';
 import { DiscountTypesService } from 'src/app/settings/components/finance-setups/services/discount-types.service';
 import { v4 } from 'uuid';
-import { from } from 'rxjs';
+import { from } from 'rxjs'; 
  
 
 @Component({
@@ -25,7 +25,7 @@ export class FinanceSetupsComponent implements OnInit {
   i = 0;
   branchId: string | null = null;
 
-  starBranch(id: string): void {
+  startBranch(id: string): void {
     this.branchId = id;
   }
 
@@ -33,11 +33,56 @@ export class FinanceSetupsComponent implements OnInit {
     this.branchId = null;
   }
 
+  
+  bankId: string | null = null;
 
-  deleteRow(id: string): void {
-    this.bankList = this.bankList.filter(d => d.id !== id);
+  startBank(id: string): void {
+    this.bankId = id;
   }
 
+  stopBank(): void {
+    this.bankId = null;
+  }
+  
+  
+  paymentMethodId: string | null = null;
+
+  startPaymentMethodId(id: string): void {
+    this.paymentMethodId = id;
+  }
+
+  stopPaymentMethodId(): void {
+    this.paymentMethodId = null;
+  }
+
+  
+  receiptTypeId: string | null = null;
+
+  startReceiptTypeId(id: string): void {
+    this.receiptTypeId = id;
+  }
+
+  stopReceiptTypeId(): void {
+    this.receiptTypeId = null;
+  }
+  
+  discountTypeId: string | null = null;
+
+  startDiscountTypeId(id: string): void {
+    this.discountTypeId = id;
+  }
+
+  stopDiscountTypeId(): void {
+    this.discountTypeId = null;
+  }
+
+  deleteRow(id: string): void {
+    this.branchList = this.branchList.filter(d => d.id !== id);
+    this.bankList = this.bankList.filter(d => d.id !== id);
+    this.paymentMethodList = this.paymentMethodList.filter(d => d.id !== id);
+    this.receiptTypeList = this.receiptTypeList.filter(d => d.id !== id);
+    this.discountTypeList = this.discountTypeList.filter(d => d.id !== id);
+  }
 
   bankList: IBank[] = [];
   banks: IBank[] = [];

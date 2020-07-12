@@ -36,15 +36,33 @@
                                 <th>Bank Name</th>
                                 <th>Swift Code</th>
                                 <th>Description</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                             <tbody>
                                 <tr *ngFor="let bank of bankTable.data"  (click)="onSelectBank(bank)"
                                     style="cursor: pointer;"
                                     >
-                                    <td>{{bank.bank_name }}</td>
-                                    <td>{{bank.swift_code}}</td>
-                                    <td>{{bank.description}}</td>
+                                    <td>
+                                        <div class="bankTable.data" [hidden]="bankId === bank.id" (click)="startBank(bank.id)">
+                                            {{bank.bank_name }}
+                                        </div>
+                                        <input [hidden]="bankId !== bank.id" type="text" nz-input [(ngModel)]="bank.bank_name" (blur)="stopBank()" />
+                                    </td>
+                                    <td>
+                                        <div class="bankTable.data" [hidden]="bankId === bank.id" (click)="startBank(bank.id)">
+                                            {{bank.swift_code}}
+                                        </div>
+                                        <input [hidden]="bankId !== bank.id" type="text" nz-input [(ngModel)]="bank.swift_code" (blur)="stopBank()" />
+                                     </td>
+                                    <td> <div class="bankTable.data" [hidden]="bankId === bank.id" (click)="startBank(bank.id)">
+                                        {{bank.description}}
+                                    </div>
+                                    <input [hidden]="bankId !== bank.id" type="text" nz-input [(ngModel)]="bank.description" (blur)="stopBank()" />
+                            </td>
+                            <td>
+                                <a nz-popconfirm nzPopconfirmTitle="Sure to delete?" (nzOnConfirm)="deleteRow(bank.id)">Delete</a>
+                              </td>
                                 </tr>
                             </tbody>
                 </nz-table>
@@ -75,19 +93,32 @@
                             <th>Branch Name</th>
                             <th>Branch Code</th>
                             <th>Description</th>
+                            <th>Action/th>
                         </tr>
                     </thead>
                         <tbody>
                             <tr *ngFor="let branch of branchTable.data"  (click)="onSelectBranch(branch)"
                                 style="cursor: pointer;">
                                 <td>
-                                    <div class="branchTable.data" [hidden]="branchId === branch.id" (click)="starBranch(branch.id)">
+                                    <div class="branchTable.data" [hidden]="branchId === branch.id" (click)="startBranch(branch.id)">
                                       {{ branch.branch_name }}
                                     </div>
                                     <input [hidden]="branchId !== branch.id" type="text" nz-input [(ngModel)]="branch.branch_name" (blur)="stopBranch()" />
                                   </td>
-                                <td>{{branch.branch_code}}</td>
-                                <td>{{branch.description}}</td>
+                                <td>
+                                    <div class="branchTable.data" [hidden]="branchId === branch.id" (click)="startBranch(branch.id)">
+                                        {{ branch.branch_name }}
+                                      </div>
+                                      <input [hidden]="branchId !== branch.id" type="text" nz-input [(ngModel)]="branch.branch_code" (blur)="stopBranch()" />
+                                  </td>
+                                <td><div class="branchTable.data" [hidden]="branchId === branch.id" (click)="startBranch(branch.id)">
+                                    {{branch.description}}
+                                  </div>
+                                  <input [hidden]="branchId !== branch.id" type="text" nz-input [(ngModel)]="branch.description" (blur)="stopBranch()" />
+                          </td>
+                          <td>
+                            <a nz-popconfirm nzPopconfirmTitle="Sure to delete?" (nzOnConfirm)="deleteRow(branch.id)">Delete</a>
+                          </td>
                             </tr>
                         </tbody>
             </nz-table>
@@ -111,14 +142,26 @@
                             <tr>
                                 <th> Name</th>
                                 <th> Description</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let paymentMethod of paymentMethodTable.data"  (click)="onSelectPaymentMethod(paymentMethod)"
                                 style="cursor: pointer;">
-                                <td>{{paymentMethod.Method_name }}</td>
-                                <td> {{ paymentMethod.description }}</td>
-                            
+                                <td><div class="paymentMethodTable.data" [hidden]="paymentMethodId === paymentMethod.id" (click)="startPaymentMethodId(paymentMethod.id)">
+                                    {{paymentMethod.Method_name }}
+                                </div>
+                                <input [hidden]="paymentMethodId !== paymentMethod.id" type="text" nz-input [(ngModel)]="paymentMethod.Method_name" (blur)="stopPaymentMethodId()" />
+                           </td>
+                                <td>
+                                    <div class="paymentMethodTable.data" [hidden]="paymentMethodId === paymentMethod.id" (click)="startPaymentMethodId(paymentMethod.id)">
+                                    {{ paymentMethod.description }}
+                                </div>
+                                <input [hidden]="paymentMethodId !== paymentMethod.id" type="text" nz-input [(ngModel)]="paymentMethod.description" (blur)="stopPaymentMethodId()" />
+                           </td>
+                           <td>
+                            <a nz-popconfirm nzPopconfirmTitle="Sure to delete?" (nzOnConfirm)="deleteRow(paymentMethod.id)">Delete</a>
+                          </td>
                             </tr>
                         </tbody>
                     </nz-table>
@@ -143,13 +186,29 @@
                             <tr>
                                 <th> Name</th>
                                 <th> Description</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let receiptType of receiptTypeTable.data"  (click)="onSelectReceiptType(receiptType)"
                                 style="cursor: pointer;">
-                                <td>{{receiptType.Type_name }}</td>
-                                <td>{{receiptType.Description }}</td>
+                                <td>
+                                    <div class="receiptTypeTable.data" [hidden]="receiptTypeId === receiptType.id" (click)="startReceiptTypeId(receiptType.id)">
+                                        {{receiptType.Type_name }}
+                                    </div>
+                                    <input [hidden]="receiptTypeId !== receiptType.id" type="text" nz-input [(ngModel)]="receiptType.Type_name" (blur)="stopReceiptTypeId()" />
+                        </td>
+                                <td>
+                                    
+                                    <div class="receiptTypeTable.data" [hidden]="receiptTypeId === receiptType.id" (click)="startReceiptTypeId(receiptType.id)">
+                                        {{receiptType.Description }}
+                                    </div>
+                                    <input [hidden]="receiptTypeId !== receiptType.id" type="text" nz-input [(ngModel)]="receiptType.Description" (blur)="stopReceiptTypeId()" />
+                    
+                                           </td>
+                                           <td>
+                                            <a nz-popconfirm nzPopconfirmTitle="Sure to delete?" (nzOnConfirm)="deleteRow(receiptType.id)">Delete</a>
+                                          </td>
                             
                             </tr>
                         </tbody>
@@ -170,19 +229,33 @@
                             </button>
                         </div>
                     </div> 
-                <nz-table #dicountTypeTable [nzData]="discountTypeList">
+                <nz-table #discountTypeTable [nzData]="discountTypeList">
                     <thead>
                         <tr>
                             <th> Name</th>
                             <th> Description</th>
+                            <th>Action/th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let discountType of dicountTypeTable.data"  (click)="onSelectDiscountType(discountType)"
+                        <tr *ngFor="let discountType of discountTypeTable.data"  (click)="onSelectDiscountType(discountType)"
                             style="cursor: pointer;">
-                            <td>{{discountType.dtype }}</td>
-                            <td>{{discountType.ddescription }}</td>
-                        
+                            <td>
+                                
+                                <div class="discountTypeTable.data" [hidden]="discountTypeId === discountType.id" (click)="startDiscountTypeId(discountType.id)">
+                                    {{discountType.dtype }}
+                                </div>
+                                <input [hidden]="discountTypeId !== discountType.id" type="text" nz-input [(ngModel)]="discountType.Description" (blur)="stopDiscountTypeId()" />
+                    </td>
+                            <td>
+                                <div class="discountTypeTable.data" [hidden]="discountTypeId === discountType.id" (click)="startDiscountTypeId(discountType.id)">
+                                    {{discountType.ddescription }}
+                                </div>
+                                <input [hidden]="discountTypeId !== discountType.id" type="text" nz-input [(ngModel)]="discountType.ddescription" (blur)="stopDiscountTypeId()" />
+                     </td>
+                     <td>
+                        <a nz-popconfirm nzPopconfirmTitle="Sure to delete?" (nzOnConfirm)="deleteRow(discountType.id)">Delete</a>
+                      </td>
                         </tr>
                     </tbody>
                 </nz-table>
@@ -434,7 +507,7 @@
                         <nz-form-control [nzSpan]="12">
                           <textarea formControlName="dtype" nz-input rows="3" placeholder="write any description"></textarea>
                           <ng-template #dtypenErrorTp1 let-control>
-                            <ng-container *ngIf="control.hasError('required')">
+                            <ng-container >
                                 Please Add Input  !
                             </ng-container>
                             </ng-template>
