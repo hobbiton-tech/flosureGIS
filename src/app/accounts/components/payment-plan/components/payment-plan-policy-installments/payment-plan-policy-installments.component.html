@@ -33,7 +33,7 @@
             <div nz-row [nzGutter]="8">
                 <div nz-col [nzSpan]="12">
                     <nz-card nzTitle="Client Details">
-                        <nz-descriptions
+                        <!-- <nz-descriptions
                             nzBordered
                             nzSize="small"
                             nzSpan="6"
@@ -85,12 +85,12 @@
                             <nz-descriptions-item nzTitle="Phone Number">
                                 {{ clientI.phone }}</nz-descriptions-item
                             >
-                        </nz-descriptions>
+                        </nz-descriptions> -->
                     </nz-card>
                 </div>
                 <div nz-col [nzSpan]="12">
                     <nz-card nzTitle="Account Details">
-                        <nz-descriptions
+                        <!-- <nz-descriptions
                             nzBordered
                             nzSize="small"
                             nzSpan="6"
@@ -128,7 +128,7 @@
                                     paymentPlanData.numberOfPaidInstallments
                                 }}</nz-descriptions-item
                             >
-                        </nz-descriptions>
+                        </nz-descriptions> -->
                     </nz-card>
                 </div>
             </div>
@@ -153,7 +153,7 @@
             </ng-template>
         </div> -->
 
-                        <nz-table
+                        <!-- <nz-table
                             #receiptTable
                             [nzData]="displayReceiptsList"
                             [nzSize]="'small'"
@@ -202,7 +202,7 @@
                                     </td>
                                 </tr>
                             </tbody>
-                        </nz-table>
+                        </nz-table> -->
                     </nz-collapse-panel>
                 </nz-collapse>
             </div>
@@ -224,7 +224,7 @@
             </ng-template>
         </div> -->
 
-                    <nz-table
+                    <!-- <nz-table
                         #policiesTable
                         [nzData]="displayPoliciesList"
                         [nzSize]="'small'"
@@ -253,7 +253,7 @@
                                 <td>{{ policy.netPremium }}</td>
                                 <td>{{ policy.allocatedAmount }}</td>
                                 <td>{{ policy.allocationStatus }}</td>
-                                <!--<td>
+                                !--<td>
                                      <div
                                         *ngIf="
                                             policy.allocationStatus !==
@@ -268,10 +268,10 @@
                                             Allocate
                                         </button>
                                     </div>
-                                </td> -->
+                                </td> --
                             </tr>
                         </tbody>
-                    </nz-table>
+                    </nz-table> -->
                 </nz-collapse-panel>
             </nz-collapse>
             <div style="margin-bottom: 20px; margin-top: 20px; width: 50%;">
@@ -307,19 +307,19 @@
                     >
                         <td>
                             {{
-                                paymentPlanPolicyInstallment.installmentAmount
+                                paymentPlanPolicyInstallment.installment_amount
                                     | number: '1.2-2'
                             }}
                         </td>
                         <td>
                             {{
-                                paymentPlanPolicyInstallment.installmentDate
+                                paymentPlanPolicyInstallment.installment_date
                                     | date: 'dd/MM/yyyy'
                             }}
                         </td>
                         <td>
                             {{
-                                paymentPlanPolicyInstallment.actualPaidDate
+                                paymentPlanPolicyInstallment.actual_paid_date
                                     | date: 'dd/MM/yyyy'
                             }}
                         </td>
@@ -330,12 +330,12 @@
                             }}
                         </td>
                         <td>
-                            {{ paymentPlanPolicyInstallment.installmentStatus }}
+                            {{ paymentPlanPolicyInstallment.installment_status }}
                         </td>
                         <td>
                             <div
                                 *ngIf="
-                                    paymentPlanPolicyInstallment.installmentStatus !==
+                                    paymentPlanPolicyInstallment.installment_status !==
                                     'Fully Paid'
                                 "
                             >
@@ -382,7 +382,7 @@
                             >
                                 <input
                                     nz-input
-                                    formControlName="receivedFrom"
+                                    formControlName="received_from"
                                     name="receivedFrom"
                                     type="text"
                                     id="receivedFrom"
@@ -409,7 +409,7 @@
                         <nz-form-item>
                             <nz-form-label
                                 [nzSpan]="8"
-                                nzFor="sumInDigits"
+                                nzFor="sum_in_digits"
                                 nzRequired
                                 >Amount</nz-form-label
                             >
@@ -419,7 +419,7 @@
                                     name="sumInDigits"
                                     type="number"
                                     id="sumInDigits"
-                                    formControlName="sumInDigits"
+                                    formControlName="sum_in_digits"
                                 />
 
                                 <!-- <span
@@ -452,7 +452,7 @@
                             <nz-form-control nzSpan="18">
                                 <nz-select
                                     name="receiptType"
-                                    formControlName="receiptType"
+                                    formControlName="receipt_type"
                                     nzAllowClear
                                     nzPlaceHolder="Choose"
                                 >
@@ -488,7 +488,7 @@
                             <nz-form-control [nzSpan]="16">
                                 <nz-select
                                     name="paymentMethod"
-                                    formControlName="paymentMethod"
+                                    formControlName="payment_method"
                                     nzAllowClear
                                     nzPlaceHolder="Choose payment Method"
                                 >

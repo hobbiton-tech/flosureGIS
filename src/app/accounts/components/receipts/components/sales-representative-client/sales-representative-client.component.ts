@@ -108,18 +108,15 @@ export class SalesRepresentativeClientComponent implements OnInit {
         private agentService: AgentsService
     ) {
         this.receiptForm = this.formBuilder.group({
-            receivedFrom: ['', Validators.required],
+            received_from: ['', Validators.required],
             // sumInDigits: [this.policyAmount],
-            paymentMethod: ['', Validators.required],
-            tpinNumber: ['4324324324324324'],
-            address: [''],
-            receiptType: ['', Validators.required],
+            payment_method: ['', Validators.required],
+            receipt_type: ['', Validators.required],
             narration: ['', Validators.required],
-            sumInWords: [''],
-            dateReceived: [''],
-            todayDate: [this.today],
+            date_received: [''],
+            today_date: [''],
             remarks: [''],
-            cheqNumber: [''],
+            cheq_number: [''],
         });
 
         this.cancelForm = this.formBuilder.group({
@@ -163,20 +160,20 @@ export class SalesRepresentativeClientComponent implements OnInit {
 
         this.receiptService.getReciepts().subscribe((receipts) => {
             this.receiptedList = _.filter(
-                receipts,
+                receipts.data,
                 (x) =>
-                    x.receiptStatus === 'Receipted' &&
-                    x.sourceOfBusiness === 'salesRepresentative'
+                    x.receipt_status === 'Receipted' &&
+                    x.source_of_business === 'salesRepresentative'
             );
 
             console.log('======= Receipt List =======');
             console.log(this.receiptedList);
 
             this.cancelReceiptList = _.filter(
-                receipts,
+                receipts.data,
                 (x) =>
-                    x.receiptStatus === 'Cancelled' &&
-                    x.sourceOfBusiness === 'salesRepresentative'
+                    x.receipt_status === 'Cancelled' &&
+                    x.source_of_business === 'salesRepresentative'
             );
 
             console.log('======= Cancelled Receipt List =======');
@@ -230,32 +227,31 @@ export class SalesRepresentativeClientComponent implements OnInit {
             this.isOkLoading = true;
             this._id = v4();
             const receipt: IReceiptModel = {
-                id: this._id,
-                ...this.receiptForm.value,
-                onBehalfOf: this.clientName,
-                capturedBy: this.user,
-                policyNumber: this.policyNumber,
-                receiptStatus: this.recStatus,
-                sumInDigits: this.policyAmount,
-                todayDate: new Date(),
-                invoiceNumber: this.debitnote.debitNoteNumber,
-                sourceOfBusiness: this.sourceOfBusiness,
-                intermediaryName: this.intermediaryName,
+                received_from: this.receiptForm.controls.received_from.value,
+                payment_method: this.receiptForm.controls.payment_method.value,
+                receipt_type: this.receiptForm.controls.receipt_type.value,
+                narration: this.receiptForm.controls.narration.value,
+                date_received: new Date(),
+                remarks: this.receiptForm.controls.remarks.value,
+                cheq_number: this.receiptForm.controls.cheq_number.value,
+                on_behalf_of: this.clientName,
+                captured_by: this.user,
+                receipt_status: this.recStatus,
+                sum_in_digits: Number(this.policyAmount),
+                today_date: new Date(),
+                invoice_number: this.debitnote.debitNoteNumber,
+                source_of_business: this.sourceOfBusiness,
+                intermediary_name: this.intermediaryName,
                 currency: this.currency,
             };
-
             this.receiptNum = this._id;
             await this.receiptService
                 .addReceipt(
                     receipt,
                     this.policy.risks[0].insuranceType
-                )
-                .then((mess) => {
-                    this.message.success('Receipt Successfully created');
+                ).then((mess) => {
                     this.policy.receiptStatus = 'Receipted';
                     this.policy.paymentPlan = 'Created';
-                    console.log('<++++++++++++++++++CLAIN+++++++++>');
-                    console.log(this.policy);
 
                     this.policeServices.updatePolicy(this.policy).subscribe();
                     console.log(mess);
@@ -270,7 +266,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
                 this.isOkLoading = false;
             }, 30);
 
-            this.generateID(this._id);
+            // this.generateID(this._id);
         }
     }
 
@@ -287,7 +283,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
     }
 
     async onCancel() {
-        this.cancelReceipt.receiptStatus = 'Cancelled';
+        this.cancelReceipt.receipt_status = 'Cancelled';
         this.cancelReceipt.remarks = this.cancelForm.controls.remarks.value;
         console.log('<++++++++++++++++++CLAIN+++++++++>');
         console.log(this.cancelReceipt);
@@ -305,7 +301,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
     }
 
     async onReinstate() {
-        this.reinstateReceipt.receiptStatus = 'Receipted';
+        this.reinstateReceipt.receipt_status = 'Receipted';
         this.reinstateReceipt.remarks = this.cancelForm.controls.remarks.value;
         console.log('<++++++++++++++++++CLAIN+++++++++>');
         console.log(this.reinstateReceipt);

@@ -30,7 +30,7 @@
                         nzTitle="Payment Plan"
                         style="float: right;"
                         (nzOnCancel)="handleCancel()"
-                        (nzOnOk)="handleOk()"
+                        (nzOnOk)="addPaymentPlan()"
                         [nzWidth]="800"
                     >
                         <div nz-row nzGutter="0" style="margin-left: 20px;">
@@ -51,7 +51,7 @@
                                                 <nz-select
                                                     formControlName="clientName"
                                                     nzPlaceHolder="Select client"
-                                                    [compareWith]="compareFn"
+                                                    
                                                     (ngModelChange)="
                                                         log($event)
                                                     "
@@ -127,15 +127,15 @@
                                                 [nzSm]="12"
                                                 [nzXs]="24"
                                             >
-                                                <input
+                                                <!-- <input
                                                     id="startDate"
                                                     type="date"
                                                     nz-input
                                                     formControlName="startDate"
-                                                />
-                                                <!-- <nz-date-picker
+                                                /> -->
+                                                <nz-date-picker
                                                     formControlName="startDate"
-                                                ></nz-date-picker> -->
+                                                ></nz-date-picker>
                                             </nz-form-control>
                                         </nz-form-item>
                                     </div>
@@ -223,8 +223,8 @@
                 <tbody>
                     <thead>
                         <tr>
-                            <th>Client Name</th>
-                            <th>Client ID</th>
+                            <!-- <th>Client Name</th> -->
+                            <!-- <th>Client ID</th> -->
                             <th>Number of Policies</th>
                             <th>Total Premium</th>
                             <th>Initial Payment</th>
@@ -245,30 +245,30 @@
                         *ngFor="let paymentPlan of paymentPlansTable.data"
                         (click)="viewPaymentPlanDetails(paymentPlan)"
                     >
-                        <td>{{ paymentPlan.clientName }}</td>
-                        <td>{{ paymentPlan.clientId }}</td>
-                        <td>{{ paymentPlan.numberOfPolicies }}</td>
+                        <!-- <td>{{ paymentPlan.clientName }}</td> -->
+                        <!-- <td>{{ paymentPlan.client_id }}</td> -->
+                        <td>{{ paymentPlan.number_of_policies }}</td>
                         <td>
-                            {{ paymentPlan.totalPremium | number: '1.2-2' }}
+                            {{ paymentPlan.total_premium | number: '1.2-2' }}
                         </td>
                         <td>
                             {{
-                                paymentPlan.initialInstallmentAmount
+                                paymentPlan.initial_installment_amount
                                     | number: '1.2-2'
                             }}
                         </td>
                         <td>
                             {{
-                                paymentPlan.amountOutstanding | number: '1.2-2'
+                                paymentPlan.amount_outstanding | number: '1.2-2'
                             }}
                         </td>
-                        <td>{{ paymentPlan.amountPaid | number: '1.2-2' }}</td>
+                        <td>{{ paymentPlan.amount_paid | number: '1.2-2' }}</td>
                         <td>
-                            {{ paymentPlan.startDate | date }}
+                            {{ paymentPlan.start_date | date }}
                         </td>
-                        <td>{{ paymentPlan.endDate | date }}</td>
-                        <td>{{ paymentPlan.numberOfPaidInstallments }}</td>
-                        <td>{{ paymentPlan.remainingInstallments }}</td>
+                        <td>{{ paymentPlan.end_date | date }}</td>
+                        <td>{{ paymentPlan.number_of_paid_installments }}</td>
+                        <td>{{ paymentPlan.remaining_installments }}</td>
                         <td>{{ paymentPlan.status }}</td>
                     </tr>
                 </tbody>

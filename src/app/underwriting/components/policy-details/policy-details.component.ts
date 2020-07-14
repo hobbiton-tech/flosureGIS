@@ -235,7 +235,7 @@ export class PolicyDetailsComponent implements OnInit {
                     this.receiptService.getReciepts().subscribe((receipts) => {
                         this.receipt = receipts.filter(
                             (x) =>
-                                x.invoiceNumber ===
+                                x.invoice_number ===
                                 this.singleDebitNote.debitNoteNumber
                         )[0];
                         console.log('RECEIPTS>>>>>', this.receipt);
@@ -627,12 +627,12 @@ export class PolicyDetailsComponent implements OnInit {
                 iDate.setMonth(iDate.getMonth() + 1);
                 this.formattedDate = iDate;
 
-                installment.push({
-                    installmentAmount: iAmount,
-                    installmentDate: this.formattedDate,
-                    balance: iAmount,
-                    installmentStatus: 'UnPaid',
-                });
+                // installment.push({
+                //     installmentAmount: iAmount,
+                //     installmentDate: this.formattedDate,
+                //     balance: iAmount,
+                //     installmentStatus: 'UnPaid',
+                // });
             }
 
             // Payment Plan
@@ -666,20 +666,18 @@ export class PolicyDetailsComponent implements OnInit {
 
             this._id = v4();
             const receipt: IReceiptModel = {
-                id: this._id,
-                paymentMethod: '',
-                receivedFrom: policyData.client,
-                onBehalfOf: policyData.client,
+                payment_method: '',
+                received_from: policyData.client,
+                on_behalf_of: policyData.client,
                 // receivedFrom: this.paymentPlanForm.controls.clientName.value,
                 // onBehalfOf: this.paymentPlanForm.controls.clientName.value,
-                capturedBy: 'charles malama',
-                policyNumber: '',
-                receiptStatus: 'Receipted',
+                captured_by: 'charles malama',
+                receipt_status: 'Receipted',
                 narration: 'Payment Plan',
-                receiptType: 'Premium Payment',
-                sumInDigits: this.paymentPlanForm.controls
+                receipt_type: 'Premium Payment',
+                sum_in_digits: this.paymentPlanForm.controls
                     .initialInstallmentAmount.value,
-                todayDate: new Date(),
+                today_date: new Date(),
             };
 
             const planReceipt: PlanReceipt[] = [];
@@ -692,13 +690,13 @@ export class PolicyDetailsComponent implements OnInit {
                 policyNumber: '',
             });
 
-            plan.planReceipt = planReceipt;
+            // plan.planReceipt = planReceipt;
             console.log('=====================');
 
             console.log(receipt, plan);
 
             // add payment plan
-            this.paymentPlanService.addPaymentPlanReceipt(receipt, plan);
+            // this.paymentPlanService.addPaymentPlanReceipt(receipt, plan);
 
             console.log('What is happening');
             // this.paymentPlanService.addPaymentPlan(plan);

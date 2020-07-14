@@ -147,7 +147,7 @@ export class ReceiptsComponent implements OnInit {
         this.receiptService.getReciepts().subscribe((receipts) => {
             this.receiptedList = _.filter(
                 receipts,
-                (x) => x.receiptStatus === 'Receipted'
+                (x) => x.receipt_status === 'Receipted'
             );
 
             console.log('======= Receipt List =======');
@@ -155,7 +155,7 @@ export class ReceiptsComponent implements OnInit {
 
             this.cancelReceiptList = _.filter(
                 receipts,
-                (x) => x.receiptStatus === 'Cancelled'
+                (x) => x.receipt_status === 'Cancelled'
             );
 
             console.log('======= Cancelled Receipt List =======');
@@ -178,14 +178,13 @@ export class ReceiptsComponent implements OnInit {
             this.isOkBrokerReceiptingLoading = true;
             this._id = v4();
             const receipt: IReceiptModel = {
-                id: this._id,
                 ...this.receiptForm.value,
-                onBehalfOf: this.clientName,
-                capturedBy: 'this.user',
-                receiptStatus: this.recStatus,
-                todayDate: new Date(),
-                sourceOfBusiness: 'broker',
-                intermediaryName: this.receiptForm.controls.onBehalfOf.value,
+                on_behalf_of: this.clientName,
+                captured_by: 'this.user',
+                receipt_status: this.recStatus,
+                today_date: new Date(),
+                source_of_business: 'broker',
+                intermediary_name: this.receiptForm.controls.onBehalfOf.value,
             };
 
             this.receiptNum = this._id;

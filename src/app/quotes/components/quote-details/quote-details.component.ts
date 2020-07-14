@@ -1689,7 +1689,7 @@ export class QuoteDetailsComponent implements OnInit {
                                     }
                                 );
 
-                            receipt.invoiceNumber = res.data.invoice_number;
+                            receipt.invoice_number = res.data.invoice_number;
                             this.receiptService
                                 .addReceipt(
                                     receipt,
@@ -1906,7 +1906,7 @@ export class QuoteDetailsComponent implements OnInit {
                                     }
                                 );
 
-                            receipt.invoiceNumber = res.data.invoice_number;
+                            receipt.invoice_number = res.data.invoice_number;
                             this.receiptService
                                 .addReceipt(
                                     receipt,

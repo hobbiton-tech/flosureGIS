@@ -48,7 +48,7 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
     displayInstallmentsList: InstallmentsModel[];
 
     // payment plan Id
-    paymentPlanId: string;
+    paymentPlanId: number;
 
     // policy number
     policyNumber: string;
@@ -68,7 +68,7 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
     paymentPlanPolicies: Policy[] = [];
 
     // payment plan policy installments
-    paymentPlanPolicyInstallments = [];
+    paymentPlanPolicyInstallments: InstallmentsModel[] = [];
 
     // search value for filtering installment table
     searchString: string;
@@ -139,21 +139,21 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
         });
 
         this.receiptForm = this.formBuilder.group({
-            sumInDigits: ['', Validators.required],
-            paymentMethod: ['', Validators.required],
-            tpinNumber: ['4324324324324324'],
-            address: [''],
-            receiptType: ['', Validators.required],
+            sum_in_digits: ['', Validators.required],
+            received_from: ['', Validators.required],
+            payment_method: ['', Validators.required],
+            receipt_type: ['', Validators.required],
             narration: ['', Validators.required],
-            sumInWords: [''],
-            dateReceived: [''],
-            todayDate: [this.today],
+            date_received: [''],
+            today_date: [''],
             remarks: [''],
         });
     }
 
     ngOnInit(): void {
         this.route.params.subscribe(async (param) => {
+            
+            
             this.paymentPlanId = param.id;
             this.policyNumber = param.policyNumber;
 
@@ -163,82 +163,92 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
                 this.loadingReceipt = false;
             }, 3000);
 
-            this.paymentPlanService
-                .getPaymentPlans()
-                .subscribe((paymentPlans) => {
-                    this.paymentPlanData = paymentPlans.filter(
-                        (x) => x.id === this.paymentPlanId
-                    )[0];
-
-                    console.log('---------POLICY DATA---------');
-                    console.log(this.paymentPlanData);
-
-                    // this.paymentPlanPolicyData = this.paymentPlanData.policyPaymentPlan.filter(
-                    //     (x) => x.policyNumber === this.policyNumber
-                    // )[0];
-
-                    this.paymentPlanPolicyInstallments = this.paymentPlanData.installments;
-                    this.paymentPlanPolicyInstallmentsCount = this.paymentPlanData.installments.length;
-
-                    this.displayPoliciesList = this.paymentPlanData.policyPaymentPlan;
-
-                    this.listOfPolicies = this.displayPoliciesList.filter(
-                        (x) => x.allocationStatus !== 'Allocated'
-                    );
-                    this.displayReceiptsList = this.paymentPlanData.planReceipt;
-
-                    console.log(this.paymentPlanData.policyPaymentPlan);
-
-                    console.log(this.paymentPlanPolicyInstallments);
-
-                    this.clientsService
-                        .getCorporateClients()
-                        .subscribe((clients) => {
-                            console.log(clients);
-                            this.clientN = clients.filter(
-                                (x) =>
-                                    x.companyName ===
-                                    this.paymentPlanData.clientName
-                            )[0];
-                            this.clientType = this.clientN.clientType;
-
-                            // this.client = [...clients[1], ...clients[0]].filter(
-                            //     (x) => x.f === this.id
-                            // )[0] as IIndividualClient & ICorporateClient;
-
-                            // console.log('CLIENTS', this.client);
-                        });
-
-                    this.clientsService
-                        .getIndividualClients()
-                        .subscribe((clients) => {
-                            console.log(clients);
-                            this.clientI = clients.filter(
-                                (x) =>
-                                    x.firstName + ' ' + x.lastName ===
-                                    this.paymentPlanData.clientName
-                            )[0];
-                            this.clientType = this.clientI.clientType;
-
-                            // this.client = [...clients[1], ...clients[0]].filter(
-                            //     (x) => x.f === this.id
-                            // )[0] as IIndividualClient & ICorporateClient;
-
-                            // console.log('CLIENTS', this.client);
-                        });
-                });
-            this.policyService.getPolicies().subscribe((policies) => {
-                this.policy = policies.filter(
-                    (x) => x.policyNumber === this.policyNumber
-                )[0];
+            this.paymentPlanService.getInstallments().subscribe((res) => {
+                console.log('INSTALL', res.data);
+                this.paymentPlanPolicyInstallments = res.data.filter((x: InstallmentsModel) => x.payment_plan_id  === Number(param.id));
+                    this.paymentPlanPolicyInstallmentsCount = res.data.filter((x) => x.payment_plan_id === Number(param.id)).length;
+                    console.log('INSTALLe', this.paymentPlanPolicyInstallments, param.id);
             });
 
-            // this.paymentPlanService.generateReceiptNumber().subscribe((rct) => {
-            //     this.rptNo = rct.receiptNumber;
-            // });
-            this.rcpt = await this.paymentPlanService.generateReceiptNumber();
+        //     this.paymentPlanService
+        //         .getPaymentPlans()
+        //         .subscribe((paymentPlans) => {
+        //             this.paymentPlanData = paymentPlans.filter(
+        //                 (x) => x.id === this.paymentPlanId
+        //             )[0];
 
-            console.log();
+        //             console.log('---------POLICY DATA---------');
+        //             console.log(this.paymentPlanData);
+
+        //             this.paymentPlanPolicyInstallments = this.paymentPlanData.installments;
+        //             this.paymentPlanPolicyInstallmentsCount = this.paymentPlanData.installments.length;
+
+        //             // this.paymentPlanPolicyData = this.paymentPlanData.policyPaymentPlan.filter(
+        //             //     (x) => x.policyNumber === this.policyNumber
+        //             // )[0];
+
+        //             this.paymentPlanPolicyInstallments = this.paymentPlanData.installments;
+        //             this.paymentPlanPolicyInstallmentsCount = this.paymentPlanData.installments.length;
+
+        //             // this.displayPoliciesList = this.paymentPlanData.policyPaymentPlan;
+
+        //             this.listOfPolicies = this.displayPoliciesList.filter(
+        //                 (x) => x.allocationStatus !== 'Allocated'
+        //             );
+        //             // this.displayReceiptsList = this.paymentPlanData.planReceipt;
+
+        //             // console.log(this.paymentPlanData.policyPaymentPlan);
+
+        //             console.log(this.paymentPlanPolicyInstallments);
+
+        //             this.clientsService
+        //                 .getCorporateClients()
+        //                 .subscribe((clients) => {
+        //                     console.log(clients);
+        //                     this.clientN = clients.filter(
+        //                         (x) =>
+        //                             x.companyName ===
+        //                             this.paymentPlanData.clientName
+        //                     )[0];
+        //                     this.clientType = this.clientN.clientType;
+
+        //                     // this.client = [...clients[1], ...clients[0]].filter(
+        //                     //     (x) => x.f === this.id
+        //                     // )[0] as IIndividualClient & ICorporateClient;
+
+        //                     // console.log('CLIENTS', this.client);
+        //                 });
+
+        //             this.clientsService
+        //                 .getIndividualClients()
+        //                 .subscribe((clients) => {
+        //                     console.log(clients);
+        //                     this.clientI = clients.filter(
+        //                         (x) =>
+        //                             x.firstName + ' ' + x.lastName ===
+        //                             this.paymentPlanData.clientName
+        //                     )[0];
+        //                     this.clientType = this.clientI.clientType;
+
+        //                     // this.client = [...clients[1], ...clients[0]].filter(
+        //                     //     (x) => x.f === this.id
+        //                     // )[0] as IIndividualClient & ICorporateClient;
+
+        //                     // console.log('CLIENTS', this.client);
+        //                 });
+        //         });
+        //     this.policyService.getPolicies().subscribe((policies) => {
+        //         this.policy = policies.filter(
+        //             (x) => x.policyNumber === this.policyNumber
+        //         )[0];
+        //     });
+
+        //     // this.paymentPlanService.generateReceiptNumber().subscribe((rct) => {
+        //     //     this.rptNo = rct.receiptNumber;
+        //     // });
+        //     this.rcpt = await this.paymentPlanService.generateReceiptNumber();
+
+        //     console.log();
         });
     }
 
@@ -255,9 +265,9 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
         this.user = 'Chalres Malama';
         // this.policy = unreceipted;
         this.receiptForm
-            .get('sumInDigits')
+            .get('sum_in_digits')
             .setValue(paymentPlanPolicyInstallment.balance);
-        this.installmentAmount = paymentPlanPolicyInstallment.installmentAmount;
+        this.installmentAmount = paymentPlanPolicyInstallment.installment_amount;
     }
 
     get receiptFormControl() {
@@ -277,25 +287,71 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
         console.log(this.rptNo);
 
         if (this.receiptForm.valid) {
-            const amount = this.receiptForm.controls.sumInDigits.value;
+            const amount = this.receiptForm.controls.sum_in_digits.value;
             let count = 0;
             this.isOkLoading = true;
             this._id = v4();
+            
+
+
+
             const receipt: IReceiptModel = {
-                id: this._id,
-                ...this.receiptForm.value,
-                onBehalfOf: this.paymentPlanData.clientName,
-                capturedBy: this.user,
-                policyNumber: '',
-                receiptStatus: this.recStatus,
-                sumInDigits: amount,
-                todayDate: new Date(),
+                received_from: this.receiptForm.controls.received_from.value,
+                payment_method: this.receiptForm.controls.payment_method.value,
+                receipt_type: this.receiptForm.controls.receipt_type.value,
+                narration: this.receiptForm.controls.narration.value,
+                date_received: new Date(),
+                remarks: this.receiptForm.controls.remarks.value,
+                cheq_number: this.receiptForm.controls.cheq_number.value,
+                on_behalf_of: this.clientName,
+                captured_by: this.user,
+                receipt_status: this.recStatus,
+                sum_in_digits: Number(amount),
+                today_date: new Date(),
+                invoice_number: '',
+                source_of_business: '',
+                intermediary_name: '',
+                currency: '',
             };
+    
+    
+            // this.receiptNum = this._id;
+          await this.receiptService
+                .addReceipt(
+                    receipt,
+                    'Comprehensive'
+                ).then((mess) => {
+                    // this.policyNumber[0].receiptStatus = 'Receipted';
+                    // this.policyNumber[0].paymentPlan = 'Created';
+    
+                    // this.policeServices.updatePolicy(this.policy).subscribe();
+                })
+                .catch((err) => {
+                    this.message.warning('Receipt Failed');
+                    console.log('Receipt failed>>>>',err);
+                });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             const planReceipt: PlanReceipt[] = [];
             planReceipt.push({
                 ...this.receiptForm.value,
                 id: this._id,
-                onBehalfOf: this.paymentPlanData.clientName,
+                onBehalfOf: '',
                 allocationStatus: 'Unallocated',
                 sumInDigits: amount,
                 policyNumber: '',
@@ -310,67 +366,67 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
             }
 
             this.receiptNum = this._id;
-            this.paymentPlanData.planReceipt = this.displayReceiptsList;
+            // this.paymentPlanData.planReceipt = this.displayReceiptsList;
 
-            const p = this.paymentPlanPolicyInstallments;
-            let d = amount;
+            // const p = this.paymentPlanPolicyInstallments;
+            // let d = amount;
 
-            this.paymentPlanData.amountOutstanding =
-                this.paymentPlanData.amountOutstanding - amount;
-            this.paymentPlanData.amountPaid =
-                this.paymentPlanData.amountPaid + amount;
-            if (this.paymentPlanData.amountOutstanding !== 0) {
-                this.paymentPlanData.status = 'Partially Paid';
-            } else if (this.paymentPlanData.amountOutstanding >= 0) {
-                this.paymentPlanData.status = 'Fully Paid';
-            }
-            for (let i = 0; i < p.length; i++) {
-                console.log(d);
+            // this.paymentPlanData.amount_outstanding =
+            //     this.paymentPlanData.amount_outstanding - amount;
+            // this.paymentPlanData.amount_paid =
+            //     this.paymentPlanData.amount_paid + amount;
+            // if (this.paymentPlanData.amount_outstanding !== 0) {
+            //     this.paymentPlanData.status = 'Partially Paid';
+            // } else if (this.paymentPlanData.amount_outstanding >= 0) {
+            //     this.paymentPlanData.status = 'Fully Paid';
+            // }
+            // for (let i = 0; i < p.length; i++) {
+            //     console.log(d);
 
-                if (d > p[i].balance && p[i].balance !== 0) {
-                    d = d - p[i].balance;
-                    p[i].balance = 0;
-                    p[i].installmentStatus = 'Fully Paid';
-                    p[i].actualPaidDate = this.today;
-                    count++;
-                    this.paymentPlanData.numberOfPaidInstallments =
-                        this.paymentPlanData.numberOfPaidInstallments + count;
-                    this.paymentPlanData.remainingInstallments =
-                        this.paymentPlanData.remainingInstallments - count;
-                    // this.isVisible = false;
-                }
-                if (d < p[i].balance && p[i].balance !== 0) {
-                    p[i].balance = p[i].balance - d;
-                    p[i].installmentStatus = 'Partially Paid';
-                    p[i].actualPaidDate = this.today;
-                    console.log(count);
+            //     if (d > p[i].balance && p[i].balance !== 0) {
+            //         d = d - p[i].balance;
+            //         p[i].balance = 0;
+            //         p[i].installment_status = 'Fully Paid';
+            //         p[i].actual_paid_date = this.today;
+            //         count++;
+            //         this.paymentPlanData.number_of_paid_installments =
+            //             this.paymentPlanData.number_of_paid_installments + count;
+            //         this.paymentPlanData.remaining_installments =
+            //             this.paymentPlanData.remaining_installments - count;
+            //         // this.isVisible = false;
+            //     }
+            //     if (d < p[i].balance && p[i].balance !== 0) {
+            //         p[i].balance = p[i].balance - d;
+            //         p[i].installment_status = 'Partially Paid';
+            //         p[i].actual_paid_date = this.today;
+            //         console.log(count);
 
-                    break;
-                }
+            //         break;
+            //     }
 
-                if (d === p[i].balance && p[i].balance !== 0) {
-                    p[i].balance = p[i].balance - d;
-                    p[i].installmentStatus = 'Fully Paid';
-                    p[i].actualPaidDate = this.today;
-                    count++;
-                    this.paymentPlanData.numberOfPaidInstallments =
-                        this.paymentPlanData.numberOfPaidInstallments + count;
-                    this.paymentPlanData.remainingInstallments =
-                        this.paymentPlanData.remainingInstallments - count;
-                    console.log(count);
-                    break;
-                }
-            }
+            //     if (d === p[i].balance && p[i].balance !== 0) {
+            //         p[i].balance = p[i].balance - d;
+            //         p[i].installment_status = 'Fully Paid';
+            //         p[i].actual_paid_date = this.today;
+            //         count++;
+            //         this.paymentPlanData.number_of_paid_installments =
+            //             this.paymentPlanData.number_of_paid_installments + count;
+            //         this.paymentPlanData.remaining_installments =
+            //             this.paymentPlanData.remaining_installments - count;
+            //         console.log(count);
+            //         break;
+            //     }
+            // }
             this.receiptForm.reset();
             setTimeout(() => {
                 this.isVisible = false;
                 this.isOkLoading = false;
             }, 30);
 
-            await this.paymentPlanService.addReceipt(
-                receipt,
-                this.paymentPlanData
-            );
+            // await this.paymentPlanService.addReceipt(
+            //     receipt,
+            //     this.paymentPlanData
+            // );
             // this.policy.receiptStatus = 'Receipted';
             // console.log('<++++++++++++++++++CLAIN+++++++++>');
             // console.log(this.policy);
@@ -379,7 +435,7 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
             // await this.paymentPlanService.updatePaymentPlan(
             //     this.paymentPlanData
             // );
-            this.generateID(this._id);
+            // this.generateID(this._id);
         }
     }
 
@@ -393,12 +449,12 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
     }
 
     getInstallmentDate(installment: InstallmentsModel) {
-        const date = installment.installmentDate as ITimestamp;
+        const date = installment.installment_date as ITimestamp;
         return date.seconds * 1000;
     }
 
     getActualDate(installment: InstallmentsModel): number {
-        const date = installment.actualPaidDate as ITimestamp;
+        const date = installment.actual_paid_date as ITimestamp;
         return date.seconds * 1000;
     }
 
@@ -472,7 +528,7 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
 
         this.listOfPolicies = policies;
 
-        this.paymentPlanData.policyPaymentPlan = this.listOfPolicies;
+        // this.paymentPlanData.policyPaymentPlan = this.listOfPolicies;
         this.paymentPlanService.updatePaymentPlan(this.paymentPlanData);
         this.isAllocationVisible = false;
     }

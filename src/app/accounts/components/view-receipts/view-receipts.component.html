@@ -169,9 +169,7 @@
                                     ><FONT FACE="Arial, serif"
                                         ><FONT SIZE="2"
                                             >Tpin:
-                                            <span style="color: red;">{{
-                                                receipt.tpinNumber
-                                            }}</span></FONT
+                                            <span style="color: red;"></span></FONT
                                         ></FONT
                                     ></P
                                 >
@@ -184,7 +182,7 @@
                                 <P ALIGN="LEFT"
                                     ><FONT FACE="Arial, serif"
                                         ><FONT SIZE="2">{{
-                                            receipt.receiptNumber
+                                            receipt.receipt_number
                                         }}</FONT></FONT
                                     ></P
                                 >
@@ -197,7 +195,7 @@
                                 <P ALIGN="LEFT"
                                     ><FONT FACE="Arial, serif"
                                         ><FONT SIZE="2">{{
-                                            receipt.invoiceNumber
+                                            receipt.invoice_number
                                         }}</FONT></FONT
                                     ></P
                                 >
@@ -305,7 +303,7 @@
                                         ><FONT FACE="Arial, serif"
                                             ><FONT SIZE="2"
                                                 >Recieved From:
-                                                {{ receipt.receivedFrom }}</FONT
+                                                {{ receipt.received_from }}</FONT
                                             ></FONT
                                         ></P
                                     >
@@ -320,7 +318,7 @@
                                         ><FONT FACE="Arial, serif"
                                             ><FONT SIZE="2"
                                                 >Captured By:
-                                                {{ receipt.capturedBy }}</FONT
+                                                {{ receipt.captured_by }}</FONT
                                             ></FONT
                                         ></P
                                     >
@@ -337,7 +335,7 @@
                                         ><FONT FACE="Arial, serif"
                                             ><FONT SIZE="2"
                                                 >On Behalf Of:
-                                                {{ receipt.onBehalfOf }}</FONT
+                                                {{ receipt.on_behalf_of }}</FONT
                                             ></FONT
                                         ></P
                                     >
@@ -370,7 +368,7 @@
                                             ><FONT SIZE="2"
                                                 >Date Issued:
                                                 {{
-                                                    receipt.todayDate | date
+                                                    receipt.today_date | date
                                                 }}</FONT
                                             ></FONT
                                         ></P
@@ -387,7 +385,7 @@
                                             ><FONT SIZE="2"
                                                 >Source of Business:
                                                 {{
-                                                    receipt.sourceOfBusiness
+                                                    receipt.source_of_business
                                                 }}</FONT
                                             ></FONT
                                         ></P
@@ -408,7 +406,7 @@
                                 </TD>
                                 <ng-container
                                     *ngIf="
-                                        receipt.sourceOfBusiness !== 'Direct'
+                                        receipt.source_of_business !== 'Direct'
                                     "
                                 >
                                     <TD
@@ -422,7 +420,7 @@
                                                 ><FONT SIZE="2"
                                                     >Intemediary Name:
                                                     {{
-                                                        receipt.intermediaryName
+                                                        receipt.intermediary_name
                                                     }}</FONT
                                                 ></FONT
                                             ></P
@@ -458,14 +456,14 @@
                                             ><FONT SIZE="2"
                                                 >Payment Method:
                                                 {{
-                                                    receipt.paymentMethod
+                                                    receipt.payment_method
                                                 }}</FONT
                                             ></FONT
                                         ></P
                                     >
                                 </TD>
                                 <ng-container
-                                    *ngIf="receipt.paymentMethod === 'cheque'"
+                                    *ngIf="receipt.payment_method === 'cheque'"
                                 >
                                     <TD
                                         WIDTH="191"
@@ -478,7 +476,7 @@
                                                 ><FONT SIZE="2"
                                                     >Cheque Number:
                                                     {{
-                                                        receipt.cheqNumber
+                                                        receipt.cheq_number
                                                     }}</FONT
                                                 ></FONT
                                             ></P
@@ -510,7 +508,7 @@
                                                 >Amount in Words:
                                                 {{
                                                     toWords(
-                                                        receipt.sumInDigits
+                                                        receipt.sum_in_digits
                                                             | number: '1.2-2'
                                                     )
                                                 }}</FONT
@@ -607,7 +605,7 @@
                                     <P STYLE="text-indent: 0.14in" ALIGN="LEFT"
                                         ><FONT FACE="Arial, serif"
                                             ><FONT SIZE="2">{{
-                                                receipt.receiptType
+                                                receipt.receipt_type
                                             }}</FONT></FONT
                                         ></P
                                     >
@@ -628,7 +626,7 @@
                                         ><FONT FACE="Arial, serif"
                                             ><FONT SIZE="2"
                                                 >{{
-                                                    receipt.sumInDigits
+                                                    receipt.sum_in_digits
                                                         | number: '1.2-2'
                                                 }}
                                             </FONT></FONT
@@ -677,7 +675,7 @@
                                                 ><B
                                                     >{{ receipt.currency }}
                                                     {{
-                                                        receipt.sumInDigits
+                                                        receipt.sum_in_digits
                                                             | number: '1.2-2'
                                                     }}
                                                 </B></FONT
