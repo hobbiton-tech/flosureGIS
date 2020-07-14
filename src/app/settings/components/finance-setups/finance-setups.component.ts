@@ -32,16 +32,20 @@ export class FinanceSetupsComponent implements OnInit {
     @Output() onBankSelected: EventEmitter<any> = new EventEmitter();
     @Output() onPaymentMethodSelected: EventEmitter<any> = new EventEmitter();
     @Output() onRecceiptTypeSelected: EventEmitter<any> = new EventEmitter();
+    @Output() onBranchSelected: EventEmitter<any> = new EventEmitter();
 
     selectedBankValue: any[] = [];
+    selectedBranchValue: any[] = [];
     selectedPaymentMethodValue: any[] = [];
     selectedReceiptTypeValue: any[] = [];
 
     isBankEditVisible: boolean = false;
+    isBranchEditVisible: boolean = false;
     isPaymentMethodEditVisible: boolean = false;
     isReceiptTypeEditVisible: boolean = false;
 
     editBank: any;
+    editBranch: any;
     editPaymentMethod: any;
     editReceiptType: any;
 
@@ -128,6 +132,7 @@ export class FinanceSetupsComponent implements OnInit {
         /////////////////////////////////////////
         this.PaymentMethodService.getPaymentMethods().subscribe((res) => {
             this.paymentMethodList = res;
+            // this.paymentMethod.replace(/[^A-Za-z0-9-,.;'&/.() ]|^ /g,'')  paymentMethod=""
         });
         //////////////////////////////////
         /////////// RECEIPT ///////////////
@@ -264,13 +269,53 @@ export class FinanceSetupsComponent implements OnInit {
     selectReceiptType() {
         this.onRecceiptTypeSelected.emit(this.selectedReceiptTypeValue);
     }
+    /////////////////////////////
+    ///EDIT  BRANCH SERVICE //////
+    //////////////////////////////
+    onEditBranch(value) {
+        this.editBranch = value;
+        this.branchForm
+            .get('branch_name')
+            .setValue(this.editBranch.branch_name);
+        this.branchForm
+            .get('branch_code')
+            .setValue(this.editBranch.branch_code);
+        this.branchForm
+            .get('description')
+            .setValue(this.editBranch.description);
+        this.isBranchEditVisible = true;
+    }
+
+    handleEditBranchOk() {
+        this.editBranch.branch_name = this.branchForm.controls.branch_name.value;
+        this.editBranch.branch_code = this.branchForm.controls.branch_code.value;
+        this.editBranch.description = this.branchForm.controls.description.value;
+
+        const index = this.selectedBranchValue.indexOf(this.editBranch);
+        this.selectedBranchValue[index] = this.editBranch;
+
+        const branch: IBranch = {
+            ...this.branchForm.value,
+            id: this.editBranch.id,
+        };
+        this.BranchService.updateBranch(branch);
+
+        this.isBranchEditVisible = false;
+    }
+
+    handleEditBranchCancel() {
+        this.isBranchEditVisible = false;
+    }
+    selectBranch() {
+        this.onBranchSelected.emit(this.selectedBranchValue);
+    }
 
     onChange(value) {
         console.log('WWWWWWWWWWW>>>>>>>>', value);
-        this.BankService.getBanks().subscribe((res) => {
+        this.BranchService.getBranch().subscribe((res) => {
             console.log('YEEEEEEEE>>>>', res);
 
-            this.bankList = res;
+            this.branchList = res;
         });
 
         console.log('WWWWWWWWWWW>>>>>>>>', value);
