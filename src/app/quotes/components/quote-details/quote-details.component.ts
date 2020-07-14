@@ -56,6 +56,10 @@ import moment from 'moment';
 import { IReceiptModel } from 'src/app/accounts/components/models/receipts.model';
 import { v4 } from 'uuid';
 import { AccountService } from 'src/app/accounts/services/account.service';
+import { ReceiptTypesService } from 'src/app/settings/components/finance-setups/services/receipt-types.service';
+import { IReceiptTypes } from 'src/app/settings/models/finance/receipt-types.model';
+import { IPaymentMethod} from 'src/app/settings/models/finance/payment-methodes.model';
+import {PaymentMethodService} from 'src/app/settings/components/finance-setups/services/payment-method.service'
 
 type AOA = any[][];
 
@@ -106,6 +110,18 @@ export class QuoteDetailsComponent implements OnInit {
     productTypeOptions = ProductTypeOptions;
     insuranceTypeOptions = InsuranceTypeOptions;
     limitsTypeOptions = LimitsOfLiabilityOptions;
+
+
+
+    
+  receiptTypeList: IReceiptTypes[] = [];
+//   receiptTypeId: string | null = null;
+
+paymentMethodList: IPaymentMethod[] = [];
+
+
+  Type_name: any;
+  Method_name: any;
 
     private header = new HttpHeaders({
         'content-type': 'application/json',
@@ -450,23 +466,23 @@ export class QuoteDetailsComponent implements OnInit {
     isFullPayment = false;
     receiptForm: FormGroup;
     paymentPlanForm: FormGroup;
-    optionTypeOfReceiptList = [
-        { label: 'Premium Payment', value: 'Premium Payment' },
-        { label: 'Third Party Recovery', value: 'Third Party Recovery' },
-        {
-            label: 'Imprest Retirement Receipt',
-            value: 'Imprest Retirement Receipt',
-        },
-        { label: 'Third Party Recovery', value: 'Third Party Recovery' },
-        { label: 'General Receipt', value: 'General Receipt' },
-    ];
+    // optionTypeOfReceiptList = [
+    //     { label: 'Premium Payment', value: 'Premium Payment' },
+    //     { label: 'Third Party Recovery', value: 'Third Party Recovery' },
+    //     {
+    //         label: 'Imprest Retirement Receipt',
+    //         value: 'Imprest Retirement Receipt',
+    //     },
+    //     { label: 'Third Party Recovery', value: 'Third Party Recovery' },
+    //     { label: 'General Receipt', value: 'General Receipt' },
+    // ];
 
-    paymentMethodList = [
-        { label: 'Cash', value: 'cash' },
-        { label: 'EFT', value: 'eft' },
-        { label: 'Bank Transfer', value: 'bank transfer' },
-        { label: 'Cheque', value: 'cheque' },
-    ];
+    // paymentMethodList = [
+    //     { label: 'Cash', value: 'cash' },
+    //     { label: 'EFT', value: 'eft' },
+    //     { label: 'Bank Transfer', value: 'bank transfer' },
+    //     { label: 'Cheque', value: 'cheque' },
+    // ];
     paymentMethod: any;
     submitted = false;
     _id = '';
@@ -495,7 +511,9 @@ export class QuoteDetailsComponent implements OnInit {
         private readonly agentsService: AgentsService,
         private productClauseService: ClausesService,
         private receiptService: AccountService,
-        private message: NzMessageService
+        private message: NzMessageService,
+        private ReceiptTypeService: ReceiptTypesService,
+        private PaymentMethodService: PaymentMethodService,
     ) {
         this.receiptForm = this.formBuilder.group({
             receivedFrom: ['', Validators.required],
@@ -541,6 +559,20 @@ export class QuoteDetailsComponent implements OnInit {
         
                 // })
 
+
+                //////////////////////////////////
+/////////// RECEIPT ///////////////
+////////////////////////////////
+      this.ReceiptTypeService.getReceiptTypes().subscribe((res) => {
+        this.receiptTypeList = res;
+      });
+
+///////////////////////////////////
+///////// PAYMENT ////////////////////
+/////////////////////////////////////////
+this.PaymentMethodService.getPaymentMethods().subscribe((res) =>{
+    this.paymentMethodList = res;
+  });
                 this.productClauseService
                     .getPolicyClauses()
                     .subscribe((res) => {
