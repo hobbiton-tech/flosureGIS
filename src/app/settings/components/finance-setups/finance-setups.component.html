@@ -189,7 +189,7 @@
             </nz-tab>
 
             <!-- ///////////////////////////////////////////
-///////////////Edit Branches////////////////////
+///////////////Edit Paymentss////////////////////
 /////////////////////////////////////// -->
 
             <nz-modal [(nzVisible)]="isPaymentMethodEditVisible" nzTitle="Edit PayemntMethods"
@@ -251,12 +251,12 @@
                     </tbody>
                 </nz-table>
             </nz-tab>
-
-            <!-- ///////////////////////////////////////////
-///////////////Edit Receipt Types////////////////////
-/////////////////////////////////////// -->
-
-            <nz-modal [(nzVisible)]="isReceiptTypeEditVisible" nzTitle="Edit Receipt Types"
+            <!--
+                        ///////////////////////////////////////////////////////////////////////
+                        /////////// Edit Rece TYPES/////////////////////////////////////////
+                        /////////////////////////////////////////////////
+                    -->
+            <nz-modal [(nzVisible)]="isReceiptTypeEditVisible" nzTitle="Edit ReceiptType"
                 (nzOnCancel)="handleEditReceiptTypeCancel()" (nzOnOk)="handleEditReceiptTypeOk()">
                 <form nz-form [formGroup]="receiptTypeForm">
                     <nz-form-item>
@@ -269,7 +269,7 @@
                     <nz-form-item>
                         <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
                         <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating...">
-                            <textarea nz-input rows="5"></textarea>
+                            <textarea formControlName="Description" nz-input rows="5"></textarea>
                         </nz-form-control>
                     </nz-form-item>
                 </form>
@@ -302,10 +302,38 @@
                             (click)="onSelectDiscountType(discountType)" style="cursor: pointer;">
                             <td>{{ discountType.dtype }}</td>
                             <td>{{ discountType.ddescription }}</td>
+                            <td>
+                                <button nz-button nzType="default" (click)="onEditDiscountType(discountType)">
+                                    Edit
+                                </button>
+                            </td>
                         </tr>
                     </tbody>
                 </nz-table>
             </nz-tab>
+
+            <!-- ///////////////////////////////////////////
+///////////////Edit Discounts////////////////////
+/////////////////////////////////////// -->
+
+            <nz-modal [(nzVisible)]="isDiscountTypeEditVisible" nzTitle="Edit Discount Types"
+                (nzOnCancel)="handleEditDiscountTypeCancel()" (nzOnOk)="handleEditDiscountTypeOk()">
+                <form nz-form [formGroup]="discountTypeForm">
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired>Name</nz-form-label>
+                        <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating...">
+                            <input nz-input formControlName="dtype" />
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
+                        <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating...">
+                            <textarea formControlName="ddescription" nz-input rows="5"></textarea>
+                        </nz-form-control>
+                    </nz-form-item>
+                </form>
+            </nz-modal>
+
         </nz-tabset>
     </nz-card>
 </div>

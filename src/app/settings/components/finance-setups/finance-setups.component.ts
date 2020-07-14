@@ -33,23 +33,28 @@ export class FinanceSetupsComponent implements OnInit {
     @Output() onPaymentMethodSelected: EventEmitter<any> = new EventEmitter();
     @Output() onRecceiptTypeSelected: EventEmitter<any> = new EventEmitter();
     @Output() onBranchSelected: EventEmitter<any> = new EventEmitter();
+    @Output() onDiscountTypeSelected: EventEmitter<any> = new EventEmitter();
 
     selectedBankValue: any[] = [];
     selectedBranchValue: any[] = [];
     selectedPaymentMethodValue: any[] = [];
     selectedReceiptTypeValue: any[] = [];
+    selectedDiscountTypeValue: any[] = [];
 
     isBankEditVisible: boolean = false;
     isBranchEditVisible: boolean = false;
     isPaymentMethodEditVisible: boolean = false;
     isReceiptTypeEditVisible: boolean = false;
+    isDiscountTypeEditVisible: boolean = false;
 
     editBank: any;
     editBranch: any;
     editPaymentMethod: any;
     editReceiptType: any;
+    editDicountType: any;
 
     paymentMethod: any;
+
     bankForm: FormGroup;
     branchForm: FormGroup;
     paymentMethodForm: FormGroup;
@@ -341,6 +346,43 @@ export class FinanceSetupsComponent implements OnInit {
         });
     }
 
+    /////////////////////////////
+    ///EDIT  Discount SERVICE //////
+    //////////////////////////////
+    onEditDiscountType(value) {
+        this.editDicountType = value;
+        this.discountTypeForm.get('dtype').setValue(this.editDicountType.dtype);
+        this.discountTypeForm
+            .get('ddescription')
+            .setValue(this.editDicountType.ddescription);
+        this.isDiscountTypeEditVisible = true;
+    }
+
+    handleEditDiscountTypeOk() {
+        this.editDicountType.dtype = this.discountTypeForm.controls.dtype.value;
+        this.editDicountType.ddescription = this.discountTypeForm.controls.ddescription.value;
+
+        const index = this.selectedDiscountTypeValue.indexOf(
+            this.editDicountType
+        );
+        this.selectedDiscountTypeValue[index] = this.editDicountType;
+
+        const discountType: IDiscountType = {
+            ...this.discountTypeForm.value,
+            id: this.editDicountType.id,
+        };
+        this.DiscountTypesService.updateDiscountType(discountType);
+
+        this.isDiscountTypeEditVisible = false;
+    }
+
+    handleEditDiscountTypeCancel() {
+        this.isDiscountTypeEditVisible = false;
+    }
+    selectDiscountType() {
+        this.onDiscountTypeSelected.emit(this.selectedDiscountTypeValue);
+    }
+
     onSelectBank(bank) {
         console.log('PEEEEEEEE>>>>', bank);
         this.bank_name = bank.bank_name;
@@ -412,7 +454,6 @@ export class FinanceSetupsComponent implements OnInit {
     closeBranches(): void {
         this.isBranchVisible = false;
     }
-
     submitBankForm() {
         const bank: IBank = {
             ...this.bankForm.value,

@@ -7556,7 +7556,7 @@
                                         </span> -->
                             </nz-form-control>
                         </nz-form-item>
-                    </div> 
+                    </div>
                 </div>
 
                 <div nz-row>
@@ -7566,9 +7566,10 @@
                             <nz-form-control nzSpan="18">
                                 <nz-select name="receiptType" formControlName="receiptType" nzAllowClear
                                     nzPlaceHolder="Choose">
-                                        <nz-option *ngFor="let receiptType of receiptTypeList" nzValue="{{receiptType.id}}" nzLabel="{{receiptType.Type_name}}" ></nz-option>
-                                      </nz-select>
-                                    <!-- <nz-option *ngFor="
+                                    <nz-option *ngFor="let receiptType of receiptTypeList" nzValue="{{receiptType.id}}"
+                                        nzLabel="{{receiptType.Type_name}}"></nz-option>
+                                </nz-select>
+                                <!-- <nz-option *ngFor="
                                             let option of optionTypeOfReceiptList
                                         " [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
                                 </nz-select> -->
@@ -7592,8 +7593,10 @@
                                     nzPlaceHolder="Choose payment Method" (ngModelChange)="
                                         paymentMethodChange($event)
                                     ">
-                                    <nz-option *ngFor="let paymentMethod of paymentMethodList" nzValue=" {{paymentMethod.Method_name }}" nzLabel=" {{paymentMethod.Method_name }}" ></nz-option>
-                                  </nz-select>
+                                    <nz-option *ngFor="let paymentMethod of paymentMethodList"
+                                        nzValue=" {{paymentMethod.Method_name }}"
+                                        nzLabel=" {{paymentMethod.Method_name }}"></nz-option>
+                                </nz-select>
                                 <span class="text-danger" *ngIf="
                                         (receiptFormControl.paymentMethod
                                             .touched ||
