@@ -35,7 +35,7 @@ export class ClaimantComponent implements OnInit {
             email: ['', Validators.required],
             gender: ['', Validators.required],
             idType: ['', Validators.required],
-            claimantType: ['', Validators.required],
+            claimantType: ['Third Party'],
         });
     }
 

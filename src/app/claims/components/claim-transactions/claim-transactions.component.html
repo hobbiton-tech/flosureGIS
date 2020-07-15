@@ -1,88 +1,78 @@
 <div style="margin: 20px;">
-   <nz-breadcrumb>
+  <nz-breadcrumb>
     <nz-breadcrumb-item>
       Claims
     </nz-breadcrumb-item>
     <nz-breadcrumb-item>
-      Claims Transactions
+      Claims List
     </nz-breadcrumb-item>
   </nz-breadcrumb>
-    <div >
-      <div style="margin-bottom: 20px; margin-top: 20px; background: #fff;">
-        <nz-page-header>
-          <nz-page-header-title>Claims</nz-page-header-title>
-          <nz-page-header-extra>
-            <button nz-button routerLink="/flosure/claims/intimate-claims" nzType="primary">Intimate Claim</button>
-          </nz-page-header-extra>
-          <nz-page-header-content>
-            <nz-row [nzGutter]="1">
-              <nz-col [nzSpan]="9">
-                <nz-statistic [nzValueTemplate]="claimsStats" [nzTitle]="'Total Claims'"></nz-statistic>
-              </nz-col>
-              <!-- <nz-col [nzSpan]="6">
+  <div>
+    <div style="margin-bottom: 20px; margin-top: 20px; background: #fff;">
+      <nz-page-header>
+        <nz-page-header-title>Claims</nz-page-header-title>
+        <nz-page-header-extra>
+          <button nz-button routerLink="/flosure/claims/intimate-claims" nzType="primary">Intimate Claim</button>
+        </nz-page-header-extra>
+        <nz-page-header-content>
+          <nz-row [nzGutter]="1">
+            <nz-col [nzSpan]="9">
+              <nz-statistic [nzValueTemplate]="claimsStats" [nzTitle]="'Total Claims'"></nz-statistic>
+            </nz-col>
+            <!-- <nz-col [nzSpan]="6">
                 <nz-statistic [nzValue]="2019 | number " [nzTitle]="'Individual Clients'"></nz-statistic>
               </nz-col> -->
-              <nz-col [nzSpan]="9">
-                <nz-statistic [nzValueTemplate]="claimsStats" [nzTitle]="'Claimants'"></nz-statistic>
-              </nz-col>
-            </nz-row>
-          </nz-page-header-content>
-        </nz-page-header>
-      </div>
+            <nz-col [nzSpan]="9">
+              <nz-statistic [nzValueTemplate]="claimsStats" [nzTitle]="'Claimants'"></nz-statistic>
+            </nz-col>
+          </nz-row>
+        </nz-page-header-content>
+      </nz-page-header>
     </div>
-    <nz-card>
-        <nz-card nzTitle="Claim Transactions">
-            <div style="margin-bottom: 10px; width: 50%">
-                <nz-input-group [nzSuffix]="suffixIconSearch">
-                    <input
-                        type="text"
-                        nz-input
-                        placeholder="Search by Client, ClaimID, Policy Number, Status"
-                        [(ngModel)]="searchString"
-                        (ngModelChange)="search($event)"
-                    />
-                </nz-input-group>
-                <ng-template #suffixIconSearch>
-                    <i nz-icon nzType="search"></i>
-                </ng-template>
-            </div>
-        	<nz-table #claimsTable [nzData]="displayClaimsList" nzSize="small">
-        	    <thead>
-        	        <tr>
-                      <th>Client Name</th>
-                      <th>Claim Id</th>
-                      <th>Policy Number</th>
-                      <th>Risk</th>
-                      <th>Activity</th>
-        	            <th>Loss Date</th>
-        	            <th>Status</th>
-        	            <th>Notification Date</th>
-        	            <th>Booked By</th>
-        	        </tr>
-        	    </thead>
-        	    <tbody>
-                  <tr *ngFor="let claim of claimsTable.data" (click)="viewClaimDetails(claim)" style="cursor: pointer;">
-                      <td>{{claim.clientName }}</td>
-                      <td>{{claim.claimId}}</td>
-                      <td>{{claim.policyNumber }}</td>
-                      <td>{{claim.risk}}</td>
-                      <td>{{claim.activity}}</td>
-        	            <td>{{claim.lossDate.seconds * 1000 | date}}</td>
-        	            <td>{{claim.status }}</td>
-        	            <td>{{claim.notificationDate.seconds * 1000 | date}}</td>
-        	            <td>{{claim.bookedBy}}</td>
-        	        </tr>
-        	    </tbody>
-        	</nz-table>
-        </nz-card>
-    </nz-card>
+  </div>
+  <nz-card nzTitle="Claim List">
+    <div style="margin-bottom: 10px; width: 50%">
+      <nz-input-group [nzSuffix]="suffixIconSearch">
+        <input type="text" nz-input placeholder="Search by Client, ClaimID, Policy Number, Status" />
+      </nz-input-group>
+      <ng-template #suffixIconSearch>
+        <i nz-icon nzType="search"></i>
+      </ng-template>
+    </div>
+    <nz-table #claimsTable [nzData]="displayClaimsList" nzSize="small">
+      <thead>
+        <tr>
+          <th>Client Name</th>
+          <th>Claimant Type</th>
+          <th>Policy Number</th>
+          <th>Risk</th>
+          <th>Date of Loss</th>
+          <th>Loss Estimate</th>
+          <th>Third Party Involvement</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let claim of claimsTable.data" (click)="viewClaimDetails(claim)" style="cursor: pointer;">
+          <td>{{getClient(claim.clientId).clientType === 'Individual'
+            ? capitalize(getClient(claim.clientId).firstName + ' ' + getClient(claim.clientId).lastName)
+            : capitalize(getClient(claim.clientId).companyName) }}</td>
+          <td>{{claim.claimantType}}</td>
+          <td>{{claim.policyNumber }}</td>
+          <td>{{getRisk(claim.policyNumber, claim.riskId).regNumber}}</td>
+          <td>{{claim.lossDate.seconds * 1000 | date}}</td>
+          <td>{{claim.lossEstimate}}</td>
+          <td>{{claim.tpFault}}</td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-card>
 </div>
 
 <ng-template #claimsStats>
   <div *ngIf="claimsLoading">
-      <nz-spin nzSimple></nz-spin>
+    <nz-spin nzSimple></nz-spin>
   </div>
   <div *ngIf="!claimsLoading">
-      {{claimsCount | number}}
+    {{claimsCount | number}}
   </div>
 </ng-template>

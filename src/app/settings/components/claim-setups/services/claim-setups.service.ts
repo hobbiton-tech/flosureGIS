@@ -10,6 +10,7 @@ import {
     IClaimant,
     ISalvageBuyer,
 } from 'src/app/settings/models/underwriting/claims.model';
+import 'firebase/firestore';
 import { Observable, combineLatest } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd';
 
