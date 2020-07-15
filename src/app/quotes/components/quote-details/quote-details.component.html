@@ -7628,7 +7628,11 @@
                             </nz-form-control>
                         </nz-form-item>
                     </div>
-                    <div *ngIf="paymentMethod === 'cheque'" nz-col [nzSpan]="12">
+                    <!-- <div *ngIf="
+                    selectedBasicPremiunTypeValue ==
+                    'amount'
+                "> -->
+                    <div *ngIf="Method_name === 'cheque'" nz-col [nzSpan]="12" ; else dontfill>
                         <nz-form-item>
                             <nz-form-label [nzSpan]="8" nzFor="cheqNumber">Cheque Number</nz-form-label>
                             <nz-form-control [nzSpan]="16">

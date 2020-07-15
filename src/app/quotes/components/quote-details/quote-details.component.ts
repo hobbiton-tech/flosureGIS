@@ -58,8 +58,8 @@ import { v4 } from 'uuid';
 import { AccountService } from 'src/app/accounts/services/account.service';
 import { ReceiptTypesService } from 'src/app/settings/components/finance-setups/services/receipt-types.service';
 import { IReceiptTypes } from 'src/app/settings/models/finance/receipt-types.model';
-import { IPaymentMethod} from 'src/app/settings/models/finance/payment-methodes.model';
-import {PaymentMethodService} from 'src/app/settings/components/finance-setups/services/payment-method.service'
+import { IPaymentMethod } from 'src/app/settings/models/finance/payment-methodes.model';
+import { PaymentMethodService } from 'src/app/settings/components/finance-setups/services/payment-method.service'
 
 type AOA = any[][];
 
@@ -113,15 +113,15 @@ export class QuoteDetailsComponent implements OnInit {
 
 
 
-    
-  receiptTypeList: IReceiptTypes[] = [];
-//   receiptTypeId: string | null = null;
 
-paymentMethodList: IPaymentMethod[] = [];
+    receiptTypeList: IReceiptTypes[] = [];
+    //   receiptTypeId: string | null = null;
+
+    paymentMethodList: IPaymentMethod[] = [];
 
 
-  Type_name: any;
-  Method_name: any;
+    Type_name: any;
+    Method_name: any;
 
     private header = new HttpHeaders({
         'content-type': 'application/json',
@@ -304,6 +304,8 @@ paymentMethodList: IPaymentMethod[] = [];
     selectedBasicPremiunTypeValue = 'rate';
     // basic premium amount when user selects amount as basic premium input type
     basicPremiumAmount: number;
+
+    selectedPaymentMethodValue = 'cheque';
 
     // selected increase third party input type
     selectedIncreaseThirdPartyLimitInputTypeValue = 'rate';
@@ -491,13 +493,13 @@ paymentMethodList: IPaymentMethod[] = [];
     amount = '';
     policyId: string;
     newRisks: RiskModel[];
-     //Excess Variable
-     excessList:Excess[]=[];
+    //Excess Variable
+    excessList: Excess[] = [];
 
-     excessTHP:IExccess[]=[];
-     excessAct:IExccess[]=[];
-     excessFT:IExccess[]=[];
-     limitsOfLiabilities: LimitsOfLiability[] = [];
+    excessTHP: IExccess[] = [];
+    excessAct: IExccess[] = [];
+    excessFT: IExccess[] = [];
+    limitsOfLiabilities: LimitsOfLiability[] = [];
 
     constructor(
         private formBuilder: FormBuilder,
@@ -556,23 +558,23 @@ paymentMethodList: IPaymentMethod[] = [];
                 //     this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
                 //     this.excessAct = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
                 //     this.excessFT = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
-        
+
                 // })
 
 
                 //////////////////////////////////
-/////////// RECEIPT ///////////////
-////////////////////////////////
-      this.ReceiptTypeService.getReceiptTypes().subscribe((res) => {
-        this.receiptTypeList = res;
-      });
+                /////////// RECEIPT ///////////////
+                ////////////////////////////////
+                this.ReceiptTypeService.getReceiptTypes().subscribe((res) => {
+                    this.receiptTypeList = res;
+                });
 
-///////////////////////////////////
-///////// PAYMENT ////////////////////
-/////////////////////////////////////////
-this.PaymentMethodService.getPaymentMethods().subscribe((res) =>{
-    this.paymentMethodList = res;
-  });
+                ///////////////////////////////////
+                ///////// PAYMENT ////////////////////
+                /////////////////////////////////////////
+                this.PaymentMethodService.getPaymentMethods().subscribe((res) => {
+                    this.paymentMethodList = res;
+                });
                 this.productClauseService
                     .getPolicyClauses()
                     .subscribe((res) => {
@@ -1547,7 +1549,7 @@ this.PaymentMethodService.getPaymentMethods().subscribe((res) =>{
         this.isPlanVisible = false;
     }
 
-    handleReceiptOk() {}
+    handleReceiptOk() { }
     showPaymentModal() {
         this.isPlanVisible = true;
     }
@@ -1656,7 +1658,7 @@ this.PaymentMethodService.getPaymentMethods().subscribe((res) =>{
                         insuranceType = 'THP';
                     }
 
-                    for( const r of this.newRisks){
+                    for (const r of this.newRisks) {
 
                         let insuranceType = '';
                         const productType = r.insuranceType;
@@ -1667,32 +1669,32 @@ this.PaymentMethodService.getPaymentMethods().subscribe((res) =>{
                         }
 
                         this.http
-                    .get<any>(
-                        `https://flosure-number-generation.herokuapp.com/aplus-certificate-number/1/0/${insuranceType}`
-                    )
-                    .subscribe(async (res) => {
-                        coverNote.certificateNumber = res.data.certificate_number;
-                        coverNote.policyId = r.id;
-                        console.log(
-                            'Cover Note>>>>',
-                            res.data.certificate_number, coverNote
-                        );
+                            .get<any>(
+                                `https://flosure-number-generation.herokuapp.com/aplus-certificate-number/1/0/${insuranceType}`
+                            )
+                            .subscribe(async (res) => {
+                                coverNote.certificateNumber = res.data.certificate_number;
+                                coverNote.policyId = r.id;
+                                console.log(
+                                    'Cover Note>>>>',
+                                    res.data.certificate_number, coverNote
+                                );
 
-                        this.http
-                        .post<CoverNote>(
-                            `https://www.flosure-api.com/documents/cover-note`,
-                            coverNote
-                        )
-                        .subscribe(
-                            async (res) => {
-                                console.log("CHECK for RESULTS<<<<<<<",res);
-                            },
-                            async (err) => {
-                                console.log("CHECK for ERRORS<<<<<<<",err);
-                            }
-                        );
+                                this.http
+                                    .post<CoverNote>(
+                                        `https://www.flosure-api.com/documents/cover-note`,
+                                        coverNote
+                                    )
+                                    .subscribe(
+                                        async (res) => {
+                                            console.log("CHECK for RESULTS<<<<<<<", res);
+                                        },
+                                        async (err) => {
+                                            console.log("CHECK for ERRORS<<<<<<<", err);
+                                        }
+                                    );
 
-                    });
+                            });
 
                     }
 
@@ -3056,15 +3058,15 @@ this.PaymentMethodService.getPaymentMethods().subscribe((res) =>{
     }
 
     addExcesses(): void {
-        if(this.selectedValue.value === "Comprehensive") {
-            for(const ex of this.excessList) {
+        if (this.selectedValue.value === "Comprehensive") {
+            for (const ex of this.excessList) {
                 this.excesses.push({
                     excessType: ex.excessType,
                     amount: Number(ex.amount),
                 });
             }
-        }else if(this.selectedValue.value === "ThirdParty") {
-            for(const exTHP of this.excessTHP) {
+        } else if (this.selectedValue.value === "ThirdParty") {
+            for (const exTHP of this.excessTHP) {
                 this.excesses.push({
                     excessType: exTHP.description,
                     amount: Number(exTHP.amount),
