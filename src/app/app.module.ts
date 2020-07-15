@@ -48,15 +48,15 @@ registerLocaleData(en);
 // };
 
 const firebaseConfig = {
-    apiKey: 'AIzaSyA4otys77Tb4bX7uXJONdquRlj0HCzzn1M',
-    authDomain: 'aplus-insurance.firebaseapp.com',
-    databaseURL: 'https://aplus-insurance.firebaseio.com',
-    projectId: 'aplus-insurance',
-    storageBucket: 'aplus-insurance.appspot.com',
-    messagingSenderId: '526693014551',
-    appId: '1:526693014551:web:edce6fd10c1c52742dd052',
-    measurementId: 'G-GNB5VZE6XQ'
-};
+    apiKey: "AIzaSyChAmlEMnEYeFe-s8gGE-tJcxN439XDPFU",
+    authDomain: "golden-lotus-a6afc.firebaseapp.com",
+    databaseURL: "https://golden-lotus-a6afc.firebaseio.com",
+    projectId: "golden-lotus-a6afc",
+    storageBucket: "golden-lotus-a6afc.appspot.com",
+    messagingSenderId: "190302342488",
+    appId: "1:190302342488:web:c7b69cdf194dfa439ce92d",
+    measurementId: "G-1X9LY72JCD"
+  };
 
 @NgModule({
     declarations: [AppComponent, NavigationComponent, LoginComponent],
