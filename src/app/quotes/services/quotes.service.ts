@@ -140,7 +140,7 @@ export class QuotesService {
         };
         this.http
             .get<any>(
-                `https://flosure-number-generation.herokuapp.com/aplus-quote-number/1/0/${insuranceType}`
+                `https://number-generation.flosure-api.com/golden-lotus-quote-number`
             )
             .subscribe(async res => {
                 motorQuotation.quoteNumber = res.data.quotation_number;

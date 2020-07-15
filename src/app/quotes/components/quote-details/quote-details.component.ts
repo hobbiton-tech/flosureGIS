@@ -1633,7 +1633,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                         this.http
                     .get<any>(
-                        `https://flosure-number-generation.herokuapp.com/aplus-certificate-number/1/0/${insuranceType}`
+                        `https://number-generation.flosure-api.com/golden-lotus-certificate-number`
                     )
                     .subscribe(async (res) => {
                         coverNote.certificateNumber = res.data.certificate_number;
@@ -1664,7 +1664,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                     this.http
                         .get<any>(
-                            `https://flosure-number-generation.herokuapp.com/aplus-invoice-number/1/0/${insuranceType}`
+                            `https://number-generation.flosure-api.com/golden-lotus-invoice-number`
                         )
                         .subscribe(async (res) => {
                             debitNote.debitNoteNumber = res.data.invoice_number;
@@ -1881,7 +1881,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                     this.http
                         .get<any>(
-                            `https://flosure-number-generation.herokuapp.com/aplus-invoice-number/1/0/${insuranceType}`
+                            `https://number-generation.flosure-api.com/golden-lotus-invoice-number`
                         )
                         .subscribe(async (res) => {
                             debitNote.debitNoteNumber = res.data.invoice_number;

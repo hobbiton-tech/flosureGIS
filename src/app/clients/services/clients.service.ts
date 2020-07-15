@@ -181,7 +181,7 @@ export class ClientsService {
     addCorporateClient(client: ICorporateClient): Observable<ICorporateClient> {
         // this.http
         //     .get<any>(
-        //         `https://flosure-number-generation.herokuapp.com/aplus-client-number/COR`
+        //         `https://number-generation.flosure-api.com/aplus-client-number/COR`
         //     )
         //     .subscribe((res) => {
         //         console.log('Client ID>>>>>>', res.data.client_number);
@@ -228,7 +228,7 @@ export class ClientsService {
     ): Observable<IIndividualClient> {
         // this.http
         //     .get<any>(
-        //         `https://flosure-number-generation.herokuapp.com/aplus-client-number/IND`
+        //         `https://number-generation.flosure-api.com/aplus-client-number/IND`
         //     )
         //     .subscribe((res) => {
         //         console.log('Client ID>>>>>>', res.data.client_number);

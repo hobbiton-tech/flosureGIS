@@ -284,7 +284,7 @@ export class PoliciesService {
 
         this.http
             .get<any>(
-                `https://flosure-number-generation.herokuapp.com/aplus-invoice-number/1/0/${insuranceType}`
+                `https://number-generation.flosure-api.com/aplus-invoice-number/1/0/${insuranceType}`
             )
             .subscribe(async (res) => {
                 debitNote.debitNoteNumber = res.data.invoice_number;
@@ -346,7 +346,7 @@ export class PoliciesService {
 
         this.http
             .get<any>(
-                `https://flosure-number-generation.herokuapp.com/aplus-invoice-number/1/0/${insuranceType}`
+                `https://number-generation.flosure-api.com/aplus-invoice-number/1/0/${insuranceType}`
             )
             .subscribe(async (res) => {
                 // tslint:disable-next-line: prefer-const

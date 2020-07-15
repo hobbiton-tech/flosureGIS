@@ -179,7 +179,7 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
         this.creatingClient = true;
         this.http
         .get<any>(
-            `https://flosure-number-generation.herokuapp.com/aplus-client-number/IND`
+            `https://number-generation.flosure-api.com/golden-lotus-client-number/IND`
         )
         .subscribe(async (res) => {
             console.log('Client ID>>>>>>', res.data.client_number);
@@ -214,7 +214,7 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
         this.creatingClient = true;
         this.http
             .get<any>(
-                `https://flosure-number-generation.herokuapp.com/aplus-client-number/COR`
+                `https://number-generation.flosure-api.com/golden-lotus-client-number/COR`
             )
             .subscribe(async (res) => {
                 console.log('Client ID>>>>>>', res.data.client_number);

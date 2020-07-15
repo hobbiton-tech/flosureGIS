@@ -68,7 +68,7 @@ export class AccountService {
 
             this.http
                 .get<any>(
-                    `https://flosure-number-generation.herokuapp.com/aplus-receipt-number/1`
+                    `https://number-generation.flosure-api.com/golden-lotus-receipt-number`
                 )
                 .subscribe(async (res) => {
                     receipt.receiptNumber = res.data.receipt_number;
