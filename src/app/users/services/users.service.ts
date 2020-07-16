@@ -45,6 +45,16 @@ export class UsersService {
     
             this.userDetails
         ).subscribe();
+        const emailDetails = {
+          username: this.userDetails.email,
+          text: 'Dear' + this.userDetails.firstName + ' ' + this.userDetails.surname + ', ' + ' your username is ' + this.userDetails.email + ' and your password is ' + this.userDetails.password + ' for https://www.goldenlotusinsurance.com (flosure General Insurance System)',
+          subject: 'Flosure General insurance System Credentials',
+          receiver: this.userDetails.email,
+          sender: 'Flosure General Insurance System',
+          password: this.userDetails.password,
+          url: 'https://www.goldenlotusinsurance.com'
+        }
+        this.http.post<any>('https://number-generation.flosure-api.com/email', emailDetails).toPromise()
         console.log("Password>>>>", randomstring)
       })
       .catch((error) => {

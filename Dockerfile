@@ -6,7 +6,6 @@ ENV NODE_OPTIONS=--max-old-space-size=${MAX_OLD_SPACE_SIZE}
 ENV CI=true
 WORKDIR /app
 COPY package.json ./
-RUN npm ci
 RUN npm i yarn
 RUN yarn install --ignore-engines
 RUN yarn global add @angular/cli@9.0.7
