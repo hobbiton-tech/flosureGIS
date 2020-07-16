@@ -47,7 +47,7 @@ export class UsersService {
         ).subscribe();
         const emailDetails = {
           username: this.userDetails.email,
-          text: 'Dear' + this.userDetails.firstName + ' ' + this.userDetails.surname + ', ' + ' your username is ' + this.userDetails.email + ' and your password is ' + this.userDetails.password + ' for https://www.goldenlotusinsurance.com (flosure General Insurance System)',
+          text: 'Dear ' + this.userDetails.firstName + ' ' + this.userDetails.surname + ', ' + ' your username is ' + this.userDetails.email + ' and your password is ' + this.userDetails.password + ' for https://www.goldenlotusinsurance.com (flosure General Insurance System)',
           subject: 'Flosure General insurance System Credentials',
           receiver: this.userDetails.email,
           sender: 'Flosure General Insurance System',
