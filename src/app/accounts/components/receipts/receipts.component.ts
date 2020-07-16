@@ -18,6 +18,11 @@ import {
 } from 'src/app/settings/components/agents/models/agents.model';
 import { AgentsService } from 'src/app/settings/components/agents/services/agents.service';
 
+import { IPaymentMethod } from 'src/app/settings/models/finance/payment-methodes.model';
+import { PaymentMethodService } from 'src/app/settings/components/finance-setups/services/payment-method.service'
+import { ReceiptTypesService } from 'src/app/settings/components/finance-setups/services/receipt-types.service';
+import { IReceiptTypes } from 'src/app/settings/models/finance/receipt-types.model';
+
 @Component({
     selector: 'app-receipts',
     templateUrl: './receipts.component.html',
@@ -41,6 +46,14 @@ export class ReceiptsComponent implements OnInit {
     cancelReceipt: IReceiptModel = new IReceiptModel();
     reinstateReceipt: IReceiptModel = new IReceiptModel();
     size = 'large';
+
+
+
+    paymentMethodList: IPaymentMethod[] = [];
+
+
+    receiptTypeList: IReceiptTypes[] = [];
+    //   receiptTypeId: string | null = null;
 
     recStatus = 'Receipted';
 
@@ -82,11 +95,14 @@ export class ReceiptsComponent implements OnInit {
         { label: 'General Receipt', value: 'General Receipt' },
     ];
 
-    paymentMethodList = [
-        { label: 'Cash', value: 'cash' },
-        { label: 'EFT', value: 'eft' },
-        { label: 'Bank Transfer', value: 'bank transfer' },
-    ];
+    paymentMethod: any;
+    Method_name: any;
+
+    // paymentMethodList = [
+    //     { label: 'Cash', value: 'cash' },
+    //     { label: 'EFT', value: 'eft' },
+    //     { label: 'Bank Transfer', value: 'bank transfer' },
+    // ];
 
     typeOfClient = ['Direct', 'Agent', 'Broker', 'Sales Representatives'];
 
@@ -99,7 +115,9 @@ export class ReceiptsComponent implements OnInit {
         private formBuilder: FormBuilder,
         private message: NzMessageService,
         private router: Router,
-        private agentService: AgentsService
+        private agentService: AgentsService,
+        private PaymentMethodService: PaymentMethodService,
+        private ReceiptTypeService: ReceiptTypesService,
     ) {
         this.receiptForm = this.formBuilder.group({
             receivedFrom: ['', Validators.required],
@@ -161,6 +179,18 @@ export class ReceiptsComponent implements OnInit {
             console.log('======= Cancelled Receipt List =======');
             console.log(this.cancelReceiptList);
             this.receiptNewCount = receipts.length;
+        });
+        ///////////////////////////////////
+        ///////// PAYMENT ////////////////////
+        /////////////////////////////////////////
+        this.PaymentMethodService.getPaymentMethods().subscribe((res) => {
+            this.paymentMethodList = res;
+        });
+        //////////////////////////////////
+        /////////// RECEIPT ///////////////
+        ////////////////////////////////
+        this.ReceiptTypeService.getReceiptTypes().subscribe((res) => {
+            this.receiptTypeList = res;
         });
     }
 
@@ -256,8 +286,16 @@ export class ReceiptsComponent implements OnInit {
     //     this.isReinstateVisible = false;
     // }
 
+
+
+
+    paymentMethodChange(value) {
+        console.log('ON CHANGE>>>>', value);
+        this.paymentMethod = value;
+    }
+
     // pop Confirm
-    cancel() {}
+    cancel() { }
 
     generateID(id) {
         console.log('++++++++++++ID++++++++++++');

@@ -7606,7 +7606,18 @@
                                     ">
                                     Please choose payment method!
                                 </span>
+
                             </nz-form-control>
+                            <div *ngIf="Method_name == 'cheque'" nz-col [nzSpan]="12">
+                                <nz-form-item>
+                                    <nz-form-label [nzSpan]="8" nzFor="cheqNumber">Cheque Number</nz-form-label>
+                                    <nz-form-control [nzSpan]="16">
+                                        <input nz-input formControlName="cheqNumber" name="cheqNumber" type="text"
+                                            id="cheqNumber" nzRequired placeholder="Cheque Number" />
+
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
                         </nz-form-item>
                     </div>
                 </div>
@@ -7632,29 +7643,9 @@
                     selectedBasicPremiunTypeValue ==
                     'amount'
                 "> -->
-                    <div *ngIf="Method_name === 'cheque'" nz-col [nzSpan]="12" ; else dontfill>
-                        <nz-form-item>
-                            <nz-form-label [nzSpan]="8" nzFor="cheqNumber">Cheque Number</nz-form-label>
-                            <nz-form-control [nzSpan]="16">
-                                <input nz-input formControlName="cheqNumber" name="cheqNumber" type="text"
-                                    id="cheqNumber" nzRequired placeholder="Cheque Number" />
-                                <!-- <span
-                                        class="text-danger"
-                                        *ngIf="
-                                            (receiptFormControl
-                                                .receivedFrom.touched ||
-                                                submitted) &&
-                                            receiptFormControl
-                                                .receivedFrom.errors
-                                                ?.required
-                                        "
-                                    >
-                                        Please enter Depositor's name!
-                                    </span> -->
-                            </nz-form-control>
-                        </nz-form-item>
-                    </div>
+
                 </div>
+
             </form>
         </div>
         <div nz-row nzGutter="0" style="margin-left: 20px;" *ngIf="selectedPlan === 'plan'">

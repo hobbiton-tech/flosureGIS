@@ -100,6 +100,7 @@ interface IRateRequest {
     selector: 'app-quote-details',
     templateUrl: './quote-details.component.html',
     styleUrls: ['./quote-details.component.scss'],
+
 })
 export class QuoteDetailsComponent implements OnInit {
     vehicleBodyType = VehicleBodyType;
@@ -306,6 +307,8 @@ export class QuoteDetailsComponent implements OnInit {
     basicPremiumAmount: number;
 
     selectedPaymentMethodValue = 'cheque';
+
+    // $scope.selectedPaymentMethod = "cheque";
 
     // selected increase third party input type
     selectedIncreaseThirdPartyLimitInputTypeValue = 'rate';
@@ -560,6 +563,7 @@ export class QuoteDetailsComponent implements OnInit {
                 //     this.excessFT = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
 
                 // })
+
 
 
                 //////////////////////////////////
