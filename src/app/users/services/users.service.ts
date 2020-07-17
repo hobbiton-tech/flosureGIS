@@ -93,4 +93,6 @@ export class UsersService {
         return this.http.get<UserModel>(` http://api.goldenlotusinsurance.com/${userId}`);
 
     }
+
+
 }
