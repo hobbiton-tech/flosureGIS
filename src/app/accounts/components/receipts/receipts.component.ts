@@ -27,8 +27,10 @@ import { IReceiptTypes } from 'src/app/settings/models/finance/receipt-types.mod
     selector: 'app-receipts',
     templateUrl: './receipts.component.html',
     styleUrls: ['./receipts.component.scss'],
+
 })
 export class ReceiptsComponent implements OnInit {
+
     receiptForm: FormGroup;
     cancelForm: FormGroup;
     reinstateForm: FormGroup;
@@ -47,6 +49,7 @@ export class ReceiptsComponent implements OnInit {
     reinstateReceipt: IReceiptModel = new IReceiptModel();
     size = 'large';
 
+    cheque = false;
 
 
     paymentMethodList: IPaymentMethod[] = [];
@@ -97,7 +100,7 @@ export class ReceiptsComponent implements OnInit {
 
     paymentMethod: any;
     Method_name: any;
-
+    // cheque : any;
     // paymentMethodList = [
     //     { label: 'Cash', value: 'cash' },
     //     { label: 'EFT', value: 'eft' },
@@ -109,6 +112,8 @@ export class ReceiptsComponent implements OnInit {
     selectedType = 'Direct';
     selectedAgent = '';
     receiptNewCount: number;
+
+    // cheque: (value: any) => void;
 
     constructor(
         private receiptService: AccountService,
@@ -141,6 +146,8 @@ export class ReceiptsComponent implements OnInit {
             remarks: ['', Validators.required],
         });
     }
+
+
 
     ngOnInit(): void {
         this.agentService.getBrokers().subscribe((brokers) => {
@@ -289,10 +296,29 @@ export class ReceiptsComponent implements OnInit {
 
 
 
-    paymentMethodChange(value) {
-        console.log('ON CHANGE>>>>', value);
-        this.paymentMethod = value;
+    // paymentMethodChange(value) {
+    //     console.log('ON CHANGE>>>>', value);
+    //     this.paymentMethod = value;
+    // }
+
+
+
+
+    payChange(value) {
+        console.log('value....', value);
+        if (value !== 'cheque') {
+            this.cheque = true;
+        }
     }
+
+
+    // paymentMethodChange(value) {
+    //     console.log('ON CHANGE>>>>', value);
+    //     this.paymentMethod = value;
+
+    //     if (value === 'cheque')
+    //         this.cheque = true;
+    // }
 
     // pop Confirm
     cancel() { }

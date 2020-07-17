@@ -1,3 +1,16 @@
+<!-- <script>
+    function showChequeForm() {
+        var selectBox = document.getElementsByName('paymentMethod');
+        var userInput = selectBox.options[selectBox.selectIndex].value;
+        if (userInput == 'cheque') {
+            document.getElementsByName('chequNumForm').style.visibility = 'visible';
+        } else {
+            document.getElementsByName('chequNumForm').style.visibility = 'hidden';
+        }
+        return fasle;
+    }
+</script> -->
+
 <div style="margin: 20px;">
     <div style="margin-bottom: 20px; background: #fff;">
         <nz-page-header>
@@ -145,12 +158,13 @@
                                         </nz-form-label>
                                         <nz-form-control [nzSpan]="16">
                                             <nz-select name="paymentMethod" formControlName="paymentMethod" nzAllowClear
-                                                nzPlaceHolder="Choose payment Method" (ngModelChange)="
-                                                    paymentMethodChange($event)
+                                                nzPlaceHolder="Choose payment Method" onchange="return chequeForm()"
+                                                (ngModelChange)="
+                                                payChange($event) 
                                                 ">
                                                 <nz-option *ngFor="let paymentMethod of paymentMethodList"
                                                     nzValue=" {{paymentMethod.Method_name }}"
-                                                    nzLabel=" {{paymentMethod.Method_name }}"></nz-option>
+                                                    nzLabel=" {{paymentMethod.Method_name }} "></nz-option>
                                             </nz-select>
                                             <span class="text-danger" *ngIf="
                                                     (receiptFormControl.paymentMethod
@@ -162,16 +176,17 @@
                                                 Please choose payment method!
                                             </span>
                                         </nz-form-control>
-                                        <nz-form-item>
-                                            <nz-form-label [nzSpan]="8" nzFor="cheqNumber">Cheque Number</nz-form-label>
-                                            <nz-form-control [nzSpan]="16">
-                                                <input nz-input formControlName="cheqNumber" name="cheqNumber"
-                                                    type="text" id="cheqNumber" nzRequired
-                                                    placeholder="Cheque Number" />
-
-                                            </nz-form-control>
-                                        </nz-form-item>
-
+                                        <!-- <div *ngIf="cheque" nz-col [nzSpan]="12">
+                                            <nz-form-item>
+                                                <nz-form-label [nzSpan]="8" nzFor="cheqNumber">Cheque Number
+                                                </nz-form-label>
+                                                <nz-form-control [nzSpan]="16">
+                                                    <input nz-input formControlName="cheqNumber" name="cheqNumber"
+                                                        type="text" id="cheqNumber" nzRequired
+                                                        placeholder="Cheque Number" />
+                                                </nz-form-control>
+                                            </nz-form-item>
+                                        </div> -->
                                     </nz-form-item>
                                 </div>
 
@@ -195,13 +210,13 @@
                                     </nz-form-item>
                                 </div>
                             </div>
-                            <div *ngIf="Method_name === 'cheque'" nz-col [nzSpan]="12">
+                            <div *ngIf="cheque" nz-col [nzSpan]="12">
                                 <nz-form-item>
-                                    <nz-form-label [nzSpan]="8" nzFor="cheqNumber">Cheque Number</nz-form-label>
+                                    <nz-form-label [nzSpan]="8" nzFor="cheqNumber">Cheque Number
+                                    </nz-form-label>
                                     <nz-form-control [nzSpan]="16">
                                         <input nz-input formControlName="cheqNumber" name="cheqNumber" type="text"
                                             id="cheqNumber" nzRequired placeholder="Cheque Number" />
-
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
