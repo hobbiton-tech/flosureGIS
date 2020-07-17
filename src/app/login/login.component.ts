@@ -121,4 +121,10 @@ export class LoginComponent implements OnInit {
                 });
         }
     }
+
+    forgotPass() {
+        this.router.navigateByUrl(
+            '/flosure/users/forgot-password'
+        );
+    }
 }
