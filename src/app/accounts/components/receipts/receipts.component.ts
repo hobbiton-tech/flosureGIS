@@ -136,6 +136,7 @@ export class ReceiptsComponent implements OnInit {
             sumInWords: [''],
             dateReceived: [''],
             todayDate: [this.today],
+            cheqNumber: [''],
             remarks: [''],
         });
 
@@ -306,8 +307,10 @@ export class ReceiptsComponent implements OnInit {
 
     payChange(value) {
         console.log('value....', value);
-        if (value !== 'cheque') {
+        if (value === ' cheque') {
             this.cheque = true;
+        } else {
+            this.cheque = false;
         }
     }
 

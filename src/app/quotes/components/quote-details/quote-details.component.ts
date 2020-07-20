@@ -120,7 +120,7 @@ export class QuoteDetailsComponent implements OnInit {
 
     paymentMethodList: IPaymentMethod[] = [];
 
-
+    cheque = false;
     Type_name: any;
     Method_name: any;
 
@@ -3102,6 +3102,22 @@ export class QuoteDetailsComponent implements OnInit {
         //     amount: Number(this.excessesForm.get('otherEndorsement').value),
         // });
     }
+
+
+
+    //////////////////////////////////////////////////////////////
+    /////////// cheque form//////////////////////////////
+    /////////////////
+    payChange(value) {
+        console.log('value....', value);
+        if (value === ' cheque') {
+            this.cheque = true;
+        } else {
+            this.cheque = false;
+        }
+    }
+
+
     get receiptFormControl() {
         return this.receiptForm.controls;
     }
