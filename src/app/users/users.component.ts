@@ -70,7 +70,7 @@ export class UsersComponent implements OnInit {
         this.isVisible = true;
     }
 
-    
+
 
     handleCancel(): void {
         console.log('Button cancel clicked!');
@@ -78,7 +78,7 @@ export class UsersComponent implements OnInit {
     }
 
     // async addUser(userDto: UserModel) {
-        
+
 
     //     //     ,
     //     //     () => {
@@ -87,7 +87,7 @@ export class UsersComponent implements OnInit {
     //     // );
     // }
 
-   async submitUser() {
+    async submitUser() {
         // for (const i in this.userDetailsForm.controls) {
         //     this.userDetailsForm.controls[i].markAsDirty();
         //     this.userDetailsForm.controls[i].updateValueAndValidity();
@@ -97,18 +97,18 @@ export class UsersComponent implements OnInit {
             // this.addUser(this.userDetailsForm.value).then(res => {
             //     this.userDetailsForm.reset();
             // });
-            const details:UserModel = {...this.userDetailsForm.value}
-            
-            
+            const details: UserModel = { ...this.userDetailsForm.value }
+
+
             await this.usersService.SignUp(details)
-            .then(
-                (res) => {
-                     this.isVisible = false;
-                     this.refresh(details)
-                     this.msg.success('User successfully Added');
-                 }).catch((err) => {
-                     this.msg.success('Failed to add User');
-                 })
+                .then(
+                    (res) => {
+                        this.isVisible = false;
+                        this.refresh(details)
+                        this.msg.success('User successfully Added');
+                    }).catch((err) => {
+                        this.msg.success('Failed to add User');
+                    })
         }
     }
 
@@ -133,11 +133,11 @@ export class UsersComponent implements OnInit {
     };
 
     refresh(data: UserModel) {
-        
-            this.displayUsersList.push(data) 
-            const clone = this.displayUsersList.slice()
-            this.displayUsersList = clone;
 
-            console.log('DATATATA>>>>', this.displayUsersList);
-      }
+        this.displayUsersList.push(data)
+        const clone = this.displayUsersList.slice()
+        this.displayUsersList = clone;
+
+        console.log('DATATATA>>>>', this.displayUsersList);
+    }
 }

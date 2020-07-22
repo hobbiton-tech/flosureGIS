@@ -6,26 +6,27 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { UsersRolesComponent } from './components/users-roles/users-roles.component';
 import { UsersPermissionsComponent } from './components/users-permissions/users-permissions.component';
+import { RolesPermissionsComponent } from 'src/app/users/components/roles-permissions.component';
 
 const routes: Routes = [
-    {
-        path: 'users-roles',
-        component: UsersRolesComponent
-    },
-    {
-        path: 'roles-permissions',
-        component: UsersPermissionsComponent
-    },
-    {
-        path: 'users',
-        component: UsersComponent
-    }
+  {
+    path: 'users-roles',
+    component: UsersRolesComponent
+  },
+  {
+    path: 'roles-permissions',
+    component: RolesPermissionsComponent
+  },
+  {
+    path: 'users',
+    component: UsersComponent
+  }
 ];
 
 
 
 @NgModule({
-  declarations: [UsersComponent, UsersRolesComponent, UsersPermissionsComponent],
+  declarations: [UsersComponent, UsersRolesComponent, UsersPermissionsComponent, RolesPermissionsComponent],
   imports: [
     CommonModule,
     NgZorroAntdModule,
@@ -34,4 +35,4 @@ const routes: Routes = [
     ReactiveFormsModule
   ]
 })
-export class UsersModule {}
+export class UsersModule { }

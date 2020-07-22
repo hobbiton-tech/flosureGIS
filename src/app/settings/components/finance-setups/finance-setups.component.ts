@@ -505,13 +505,13 @@ export class FinanceSetupsComponent implements OnInit {
         this.isBranchVisible = false;
     }
 
-    resetBankForm(value) {}
+    resetBankForm(value) { }
 
-    resetBranchForm(value) {}
+    resetBranchForm(value) { }
 
-    resetPaymentMethodForm(value) {}
+    resetPaymentMethodForm(value) { }
 
-    resetReceiptTypeForm(value) {}
+    resetReceiptTypeForm(value) { }
 
-    resetDiscountTypeForm(value) {}
+    resetDiscountTypeForm(value) { }
 }

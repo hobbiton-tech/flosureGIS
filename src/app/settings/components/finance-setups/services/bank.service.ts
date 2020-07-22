@@ -21,7 +21,7 @@ export class BankService {
     private http: HttpClient,
     private firebase: AngularFirestore,
     private message: NzMessageService
-  ) { 
+  ) {
     this.bankCollection = firebase.collection<IBank>('banks');
     this.banks = this.bankCollection.valueChanges();
   }
@@ -32,35 +32,36 @@ export class BankService {
 
 
   // Bank Methods
-  async addBank(bank: IBank): Promise<void>{
+  async addBank(bank: IBank): Promise<void> {
     await this.bankCollection
-    .doc(bank.id)
-    .set(bank)
-    .then((mess) => {
-      this.message.success('Bank Successfullt Added')
-    })
-    .catch((err) => {
-      this.message.warning('Bank Creeation failed')
-      console.log(err);
-    });
+      .doc(bank.id)
+      .set(bank)
+      .then((mess) => {
+        this.message.success('Bank Successfully Added')
+      })
+      .catch((err) => {
+        this.message.warning('Bank Creeation failed')
+        console.log(err);
+      });
   }
 
- 
+
   async updateBank(bank: IBank): Promise<void> {
     return this.bankCollection
-        .doc(`${bank.id}`)
-        .update(bank)
-        .then((res) => {
-            console.log(res);
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-}
+      .doc(`${bank.id}`)
+      .update(bank)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
 
-getBank(): Observable<IBank[]> {
-    return this.banks;}
+  getBank(): Observable<IBank[]> {
+    return this.banks;
+  }
 
 
 }
