@@ -18,6 +18,7 @@ import { Subject, BehaviorSubject, from } from 'rxjs';
 import { IRolesPermissions } from '../models/roles-permissions.model';
 import { v4 } from 'uuid';
 import { EventEmitter } from '@angular/core';
+import { IdType } from 'src/app/clients/models/client.model';
 @Component({
   selector: 'app-roles-permissions',
   templateUrl: './roles-permissions.component.html',
@@ -49,10 +50,11 @@ export class RolesPermissionsComponent implements OnInit {
   permission: any;
 
 
+
   isRolesVisible = false;
   isPermissionsVisible = false;
 
-  selectedRolesPermissionId: any;
+  selectedRoleName: any;
   rolePermissionName: any;
 
   rolesForm: FormGroup;
@@ -61,6 +63,7 @@ export class RolesPermissionsComponent implements OnInit {
   roleName: any;
   Description: any;
   permissionName: any;
+  selectedRole: string;
   selectedRoleId: string;
 
   // listOfOption = ['TeamLeader', 'Co-ordinator', 'Tester'];
@@ -89,6 +92,7 @@ export class RolesPermissionsComponent implements OnInit {
 
 
     this.permissionsForm = formBuilder.group({
+      roleId: ['', Validators.required],
       permissionName: ['', Validators.required],
       Description: ['', Validators.required]
     });
@@ -106,14 +110,30 @@ export class RolesPermissionsComponent implements OnInit {
       this.permissions = res;
       this.permissionsList = this.permissions;
     });
-    // this.rolesService
-    //   .getRole()
-    //   .subscribe((res) => {
-    //     this.roles = res.filter(
-    //       (x) => x.id === this.roles[0].id)
-    //   });
-    // console.log('PERMISSIONS>>>>>', this.roles)
+
+
   }
+
+
+
+
+  changeRoleName(value: any): void {
+    this.rolesService.getRole().subscribe((res) => {
+      console.log('rrroooo>>>>>', value)
+    });
+  }
+
+
+
+
+
+
+
+
+
+
+
+
   ///EDIT  ROLES SERVICE //////
 
   onEditRole(value) {
@@ -200,11 +220,15 @@ export class RolesPermissionsComponent implements OnInit {
 
       this.permissionsList = res;
     });
+
   }
   onSelectRole(role) {
     console.log('PEEEEEEEE>>>>', role);
+    this.selectedRoleId = role.roleId;
     this.roleName = role.roleName;
     this.Description = role.Description;
+    this.permissions = this.permissions.filter((x) => x === role.roleId);
+
 
   }
   onSelectPermission(permission) {
@@ -212,6 +236,25 @@ export class RolesPermissionsComponent implements OnInit {
     this.permissionName = permission.permissionName;
     this.Description = permission.Description;
 
+  }
+
+
+
+
+
+  cleanFunc(value: any) {
+    this.permissions = this.permissions.filter((x) => x === value.roleId);
+
+    this.permssionService.getPermission().subscribe((res) => {
+      console.log('R>>>>', res)
+
+    });
+
+  }
+
+
+  change(event): void {
+    console.log(event);
   }
 
   openRoles(): void {
@@ -243,18 +286,41 @@ export class RolesPermissionsComponent implements OnInit {
     const permission: IPermission = {
       ...this.permissionsForm.value,
       id: v4(),
-      // roleId: this.selectedRoleId,
     };
 
     this.permssionService.addPermission(permission);
-    console.log('DDDDDDDDDD>>>>>>>', permission);
+    console.log('Permission>>>>>>>', permission);
     this.isPermissionsVisible = false;
   }
-
+  // 
 
   resetpermissionsForm(value) { }
 
   resetrolesForm(value) { }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   //  this.roleUpdate.subscribe(update =>

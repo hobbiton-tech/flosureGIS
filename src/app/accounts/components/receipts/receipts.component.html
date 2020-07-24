@@ -15,56 +15,99 @@
     <div style="margin-bottom: 20px; background: #fff;">
         <nz-page-header>
             <nz-page-header-title>Receipts</nz-page-header-title>
-            <nz-page-header-subtitle>List of all receipts</nz-page-header-subtitle>
+            <nz-page-header-subtitle
+                >List of all receipts</nz-page-header-subtitle
+            >
             <nz-page-header-extra> </nz-page-header-extra>
             <nz-page-header-content>
                 <nz-descriptions [nzColumn]="3">
-                    <nz-descriptions-item nzTitle="Total Unreceipted Receipts" [nzSpan]="1">{{ receiptsCount }}
+                    <nz-descriptions-item
+                        nzTitle="Total Unreceipted Receipts"
+                        [nzSpan]="1"
+                        >{{ receiptsCount }}
                     </nz-descriptions-item>
                 </nz-descriptions>
             </nz-page-header-content>
             <nz-page-header-extra>
-                <button nz-button nzType="primary" (click)="showClientTypeModal()">
+                <button
+                    nz-button
+                    nzType="primary"
+                    (click)="showClientTypeModal()"
+                >
                     Select Client Type
                 </button>
 
-                <nz-modal [(nzVisible)]="isVisibleClientType" nzTitle="Client Type"
-                    (nzOnCancel)="handleCancelClientType()" (nzOnOk)="handleOkClientType()"
-                    [nzOkLoading]="isOkClientTypeLoading">
+                <nz-modal
+                    [(nzVisible)]="isVisibleClientType"
+                    nzTitle="Client Type"
+                    (nzOnCancel)="handleCancelClientType()"
+                    (nzOnOk)="handleOkClientType()"
+                    [nzOkLoading]="isOkClientTypeLoading"
+                >
                     <div nz-row>
                         <div nz-col nzSpan="24">
                             <nz-select [(ngModel)]="selectedType">
-                                <nz-option *ngFor="let option of typeOfClient" [nzLabel]="option" [nzValue]="option"
-                                    placeholder="Select Agent"></nz-option>
+                                <nz-option
+                                    *ngFor="let option of typeOfClient"
+                                    [nzLabel]="option"
+                                    [nzValue]="option"
+                                    placeholder="Select Agent"
+                                ></nz-option>
                             </nz-select>
                         </div>
                     </div>
                 </nz-modal>
 
                 <ng-container *ngIf="selectedType === 'Broker'">
-                    <button nz-button nzType="default" (click)="showBrokerReceiptModal()">
+                    <button
+                        nz-button
+                        nzType="default"
+                        (click)="showBrokerReceiptModal()"
+                    >
                         Receipt Broker
                     </button>
 
-                    <nz-modal [(nzVisible)]="isVisibleBrokerReceipting" nzTitle="Client Type"
-                        (nzOnCancel)="handleCancelBrokerReceipting()" (nzOnOk)="handleOkBrokerReceipting()"
-                        [nzOkLoading]="isOkBrokerReceiptingLoading" [nzWidth]="'1200'">
+                    <nz-modal
+                        [(nzVisible)]="isVisibleBrokerReceipting"
+                        nzTitle="Client Type"
+                        (nzOnCancel)="handleCancelBrokerReceipting()"
+                        (nzOnOk)="handleOkBrokerReceipting()"
+                        [nzOkLoading]="isOkBrokerReceiptingLoading"
+                        [nzWidth]="'1200'"
+                    >
                         <form [formGroup]="receiptForm" nz-form>
                             <div nz-row>
                                 <div nz-col [nzSpan]="12">
                                     <nz-form-item>
-                                        <nz-form-label [nzSpan]="8" nzFor="receivedFrom">Received From</nz-form-label>
-                                        <nz-form-control [nzSpan]="16" nzErrorTip="Please enter Depositor's name!">
-                                            <input nz-input formControlName="receivedFrom" name="receivedFrom"
-                                                type="text" id="receivedFrom" nzRequired placeholder="Received From" />
-                                            <span class="text-danger" *ngIf="
+                                        <nz-form-label
+                                            [nzSpan]="8"
+                                            nzFor="receivedFrom"
+                                            >Received From</nz-form-label
+                                        >
+                                        <nz-form-control
+                                            [nzSpan]="16"
+                                            nzErrorTip="Please enter Depositor's name!"
+                                        >
+                                            <input
+                                                nz-input
+                                                formControlName="receivedFrom"
+                                                name="receivedFrom"
+                                                type="text"
+                                                id="receivedFrom"
+                                                nzRequired
+                                                placeholder="Received From"
+                                            />
+                                            <span
+                                                class="text-danger"
+                                                *ngIf="
                                                     (receiptFormControl
                                                         .receivedFrom.touched ||
                                                         submitted) &&
                                                     receiptFormControl
                                                         .receivedFrom.errors
                                                         ?.required
-                                                ">
+                                                "
+                                            >
                                                 Please enter Depositor's name!
                                             </span>
                                         </nz-form-control>
@@ -73,27 +116,45 @@
 
                                 <div nz-col [nzSpan]="12">
                                     <nz-form-item>
-                                        <nz-form-label [nzSpan]="8" nzFor="onBehalfOf">On Behalf Of</nz-form-label>
-                                        <nz-form-control [nzSpan]="16" nzErrorTip="Please enter Broker's name!">
-                                            <nz-select name="onBehalfOf" formControlName="onBehalfOf" nzAllowClear
-                                                nzPlaceHolder="Choose Broker">
-                                                <nz-option *ngFor="
+                                        <nz-form-label
+                                            [nzSpan]="8"
+                                            nzFor="onBehalfOf"
+                                            >On Behalf Of</nz-form-label
+                                        >
+                                        <nz-form-control
+                                            [nzSpan]="16"
+                                            nzErrorTip="Please enter Broker's name!"
+                                        >
+                                            <nz-select
+                                                name="onBehalfOf"
+                                                formControlName="onBehalfOf"
+                                                nzAllowClear
+                                                nzPlaceHolder="Choose Broker"
+                                            >
+                                                <nz-option
+                                                    *ngFor="
                                                         let broker of brokerList
-                                                    " [nzValue]="
+                                                    "
+                                                    [nzValue]="
                                                         broker.companyName
-                                                    " [nzLabel]="
+                                                    "
+                                                    [nzLabel]="
                                                         broker.companyName
-                                                    "></nz-option>
+                                                    "
+                                                ></nz-option>
                                             </nz-select>
 
-                                            <span class="text-danger" *ngIf="
+                                            <span
+                                                class="text-danger"
+                                                *ngIf="
                                                     (receiptFormControl
                                                         .onBehalfOf.touched ||
                                                         submitted) &&
                                                     receiptFormControl
                                                         .onBehalfOf.errors
                                                         ?.required
-                                                ">
+                                                "
+                                            >
                                                 Please enter Broker's name!
                                             </span>
                                         </nz-form-control>
@@ -104,19 +165,32 @@
                             <div nz-row>
                                 <div nz-col [nzSpan]="12">
                                     <nz-form-item>
-                                        <nz-form-label [nzSpan]="8" nzFor="sumInDigits" nzRequired>Amount
+                                        <nz-form-label
+                                            [nzSpan]="8"
+                                            nzFor="sumInDigits"
+                                            nzRequired
+                                            >Amount
                                         </nz-form-label>
                                         <nz-form-control [nzSpan]="16">
-                                            <input formControlName="sumInDigits" nz-input name="sumInDigits"
-                                                type="number" id="sumInDigits" placeholder="Please Enter Amount" />
-                                            <span class="text-danger" *ngIf="
+                                            <input
+                                                formControlName="sumInDigits"
+                                                nz-input
+                                                name="sumInDigits"
+                                                type="number"
+                                                id="sumInDigits"
+                                                placeholder="Please Enter Amount"
+                                            />
+                                            <span
+                                                class="text-danger"
+                                                *ngIf="
                                                     (receiptFormControl
                                                         .sumInDigits.touched ||
                                                         submitted) &&
                                                     receiptFormControl
                                                         .sumInDigits.errors
                                                         ?.required
-                                                ">
+                                                "
+                                            >
                                                 Please enter sum in digits!
                                             </span>
                                         </nz-form-control>
@@ -125,26 +199,47 @@
 
                                 <div nz-col [nzSpan]="12">
                                     <nz-form-item>
-                                        <nz-form-label [nzSpan]="6" nzFor="receiptType" nzRequired>Receipt Type
+                                        <nz-form-label
+                                            [nzSpan]="6"
+                                            nzFor="receiptType"
+                                            nzRequired
+                                            >Receipt Type
                                         </nz-form-label>
                                         <nz-form-control nzSpan="18">
-                                            <nz-select name="receiptType" formControlName="receiptType" nzAllowClear
-                                                nzPlaceHolder="Choose">
-                                                <nz-option *ngFor="let receiptType of receiptTypeList"
-                                                    nzValue="{{receiptType.id}}" nzLabel="{{receiptType.Type_name}}">
+                                            <nz-select
+                                                name="receiptType"
+                                                formControlName="receiptType"
+                                                nzAllowClear
+                                                nzPlaceHolder="Choose"
+                                            >
+                                                <nz-option
+                                                    *ngFor="
+                                                        let receiptType of receiptTypeList
+                                                    "
+                                                    nzValue="{{
+                                                        receiptType.id
+                                                    }}"
+                                                    nzLabel="{{
+                                                        receiptType.Type_name
+                                                    }}"
+                                                >
                                                 </nz-option>
                                             </nz-select>
                                             <!-- <nz-option *ngFor="
                                                         let option of optionTypeOfReceiptList
                                                     " [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
                                             </nz-select> -->
-                                            <span class="text-danger" *ngIf="
-                                                    (receiptFormControl.receiptType
-                                                        .touched ||
+                                            <span
+                                                class="text-danger"
+                                                *ngIf="
+                                                    (receiptFormControl
+                                                        .receiptType.touched ||
                                                         submitted) &&
-                                                    receiptFormControl.receiptType.errors
+                                                    receiptFormControl
+                                                        .receiptType.errors
                                                         ?.required
-                                                ">
+                                                "
+                                            >
                                                 Please choose receipt type!
                                             </span>
                                         </nz-form-control>
@@ -154,25 +249,47 @@
                             <div nz-row>
                                 <div nz-col [nzSpan]="12">
                                     <nz-form-item>
-                                        <nz-form-label [nzSpan]="8" nzFor="paymentMethod" nzRequired>Payment Method
+                                        <nz-form-label
+                                            [nzSpan]="8"
+                                            nzFor="paymentMethod"
+                                            nzRequired
+                                            >Payment Method
                                         </nz-form-label>
                                         <nz-form-control [nzSpan]="16">
-                                            <nz-select name="paymentMethod" formControlName="paymentMethod" nzAllowClear
-                                                nzPlaceHolder="Choose payment Method" onchange="return chequeForm()"
+                                            <nz-select
+                                                name="paymentMethod"
+                                                formControlName="paymentMethod"
+                                                nzAllowClear
+                                                nzPlaceHolder="Choose payment Method"
+                                                onchange="return chequeForm()"
                                                 (ngModelChange)="
-                                                payChange($event) 
-                                                ">
-                                                <nz-option *ngFor="let paymentMethod of paymentMethodList"
-                                                    nzValue=" {{paymentMethod.Method_name }}"
-                                                    nzLabel=" {{paymentMethod.Method_name }} "></nz-option>
+                                                    payChange($event)
+                                                "
+                                            >
+                                                <nz-option
+                                                    *ngFor="
+                                                        let paymentMethod of paymentMethodList
+                                                    "
+                                                    nzValue=" {{
+                                                        paymentMethod.Method_name
+                                                    }}"
+                                                    nzLabel=" {{
+                                                        paymentMethod.Method_name
+                                                    }} "
+                                                ></nz-option>
                                             </nz-select>
-                                            <span class="text-danger" *ngIf="
-                                                    (receiptFormControl.paymentMethod
+                                            <span
+                                                class="text-danger"
+                                                *ngIf="
+                                                    (receiptFormControl
+                                                        .paymentMethod
                                                         .touched ||
                                                         submitted) &&
-                                                    receiptFormControl.paymentMethod.errors
+                                                    receiptFormControl
+                                                        .paymentMethod.errors
                                                         ?.required
-                                                ">
+                                                "
+                                            >
                                                 Please choose payment method!
                                             </span>
                                         </nz-form-control>
@@ -192,18 +309,29 @@
 
                                 <div nz-col [nzSpan]="12">
                                     <nz-form-item>
-                                        <nz-form-label [nzSpan]="6" nzFor="narration" nzRequired>Narration
+                                        <nz-form-label
+                                            [nzSpan]="6"
+                                            nzFor="narration"
+                                            nzRequired
+                                            >Narration
                                         </nz-form-label>
                                         <nz-form-control nzSpan="18">
-                                            <textarea formControlName="narration" nz-input rows="2"
-                                                placeholder="Write Your Narration Here"></textarea>
-                                            <span class="text-danger" *ngIf="
+                                            <textarea
+                                                formControlName="narration"
+                                                nz-input
+                                                rows="2"
+                                                placeholder="Write Your Narration Here"
+                                            ></textarea>
+                                            <span
+                                                class="text-danger"
+                                                *ngIf="
                                                     (receiptFormControl
                                                         .narration.touched ||
                                                         submitted) &&
                                                     receiptFormControl.narration
                                                         .errors?.required
-                                                ">
+                                                "
+                                            >
                                                 Please enter your Narration!
                                             </span>
                                         </nz-form-control>
@@ -212,11 +340,21 @@
                             </div>
                             <div *ngIf="cheque" nz-col [nzSpan]="12">
                                 <nz-form-item>
-                                    <nz-form-label [nzSpan]="8" nzFor="cheqNumber">Cheque Number
+                                    <nz-form-label
+                                        [nzSpan]="8"
+                                        nzFor="cheqNumber"
+                                        >Cheque Number
                                     </nz-form-label>
                                     <nz-form-control [nzSpan]="16">
-                                        <input nz-input formControlName="cheqNumber" name="cheqNumber" type="text"
-                                            id="cheqNumber" nzRequired placeholder="Cheque Number" />
+                                        <input
+                                            nz-input
+                                            formControlName="cheqNumber"
+                                            name="cheqNumber"
+                                            type="text"
+                                            id="cheqNumber"
+                                            nzRequired
+                                            placeholder="Cheque Number"
+                                        />
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>

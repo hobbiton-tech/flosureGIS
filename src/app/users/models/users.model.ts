@@ -8,6 +8,6 @@ export class UserModel {
   role: string;
   phoneNumber: string;
   password: string;
-  roleID: string;
+  roleId: string;
   jobTitle: string;
 }

@@ -1,5 +1,7 @@
 export class IRole {
-    id?: string;
-    role: string;
+    // id: string;
+    id: string;
+    roleName: string;
     description: string;
+
 }
