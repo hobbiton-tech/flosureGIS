@@ -763,12 +763,9 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
 
             const planReceipt: PlanReceipt[] = [];
             planReceipt.push({
-                id: this._id,
-                onBehalfOf: this.paymentPlanForm.controls.clientName.value,
-                allocationStatus: 'Unallocated',
-                sumInDigits: this.paymentPlanForm.controls
+                allocation_status: 'Unallocated',
+                amount: this.paymentPlanForm.controls
                     .initialInstallmentAmount.value,
-                policyNumber: '',
             });
 
             // plan.planReceipt = planReceipt;

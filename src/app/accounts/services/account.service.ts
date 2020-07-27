@@ -5,7 +5,7 @@ import {
 } from '@angular/fire/firestore';
 import 'firebase/firestore';
 import { filter, first } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 // import { MotorQuotationModel } from 'src/app/quotes/models/quote.model';
 import { IReceiptModel } from '../components/models/receipts.model';
 import { v4 } from 'uuid';
@@ -37,6 +37,7 @@ export class AccountService {
     receipt: Observable<IReceiptModel>;
     receipted: IReceiptModel;
     url: string;
+    receiptN: any;
 
     constructor(
         private firebase: AngularFirestore,
@@ -49,37 +50,39 @@ export class AccountService {
 
         this.receiptCollection = firebase.collection<IReceiptModel>('receipts');
 
-        this.receipts = this.receiptCollection.valueChanges();
+        // this.receipts = this.receiptCollection.valueChanges();
     }
 
 
 
 
     // add receipt
-    async addReceipt(
+     addReceipt(
         receipt: IReceiptModel,
         insuranceType: InsuranceType
-    ) {
-        this.receipts.pipe(first()).subscribe(async (receipts) => {
+    ): Observable<any> {
+        // this.receipts.pipe(first()).subscribe((receipts) => {
             // receipt.id = v4();
 
-            let insuranceType = '';
+            let insuranceTyp= '';
             const productType = insuranceType;
             if (productType == 'Comprehensive') {
-                insuranceType = '07001';
+                insuranceTyp = '07001';
             } else {
-                insuranceType = '07002';
+                insuranceTyp = '07002';
             }
 
             this.http
                 .get<any>(
-                    `https://flosure-number-generation.herokuapp.com/savenda-receipt-number/1`
+                    `https://number-generation.flosure-api.com/savenda-receipt-number/1`
                 )
                 .subscribe(async (res) => {
                     receipt.receipt_number = res.data.receipt_number;
                     console.log(res.data.receipt_number);
 
-                    await this.http.post('http://localhost:8022/receipt', receipt).subscribe((res: any) => {
+                    this.receiptN = receipt
+
+                   this.http.post('http://localhost:8022/receipt', receipt).subscribe((res: any) => {
                         console.log("RECEIPT RESULTS", res.data);
                         // if(res.status === 'true') {
                             this.message.success(
@@ -96,19 +99,10 @@ export class AccountService {
                         
                         this.message.warning('Receipt Failed');
                     });
-
-                    // await this.receiptCollection.doc(receipt.ID).set(receipt);
-                    // .then((mess) => {
-                    //     this.message.success(
-                    //         'Receipt Successfully created'
-                    //     );
-                    // })
-                    // .catch((err) => {
-                    //     this.message.warning('Receipt Failed');
-                    //     console.log(err);
-                    // });
                 });
-        });
+                
+        // });
+        return of(this.receiptN);
     }
 
     async updatePolicy(policy: Policy): Promise<void> {

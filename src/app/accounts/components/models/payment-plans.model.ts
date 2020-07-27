@@ -20,16 +20,15 @@ export class IPaymentModel {
     initial_installment_amount: number;
 }
 
-export class PolicyPaymentPlan {
-    id: string;
-    policyNumber: string;
-    startDate: Date | ITimestamp;
-    endDate: Date | ITimestamp;
-    client: string;
-    clientCode: string;
-    netPremium: number;
-    allocationStatus: AllocationStatus;
-    allocatedAmount: number;
+export class PlanPolicy {
+    ID?: number;
+    policy_number: string;
+    start_date: Date | ITimestamp;
+    end_date: Date | ITimestamp;
+    plan_id: number;
+    net_premium: number;
+    allocation_status: AllocationStatus;
+    allocation_amount: number;
 }
 
 export class InstallmentsModel {
@@ -43,12 +42,11 @@ export class InstallmentsModel {
 }
 
 export class PlanReceipt {
-    id: string;
-    receiptNumber?: string;
-    onBehalfOf: string;
-    sumInDigits: number;
-    allocationStatus: AllocationStatus;
-    policyNumber: string;
+    ID?: number;
+    receipt_number?: string;
+    plan_id?: number;
+    amount: number;
+    allocation_status: AllocationStatus;
 }
 
 export type ReceiptStatus = 'Receipted' | 'Cancelled';

@@ -236,19 +236,24 @@ export class BrokerClientComponent implements OnInit {
 
             this.receiptNum = this._id;
             await this.receiptService
-                .addReceipt(
-                    receipt,
-                    this.policy.risks[0].insuranceType
-                ).then((mess) => {
-                    this.policy.receiptStatus = 'Receipted';
-                    this.policy.paymentPlan = 'Created';
-
-                    this.policeServices.updatePolicy(this.policy).subscribe();
-                })
-                .catch((err) => {
+                .addReceipt( receipt, this.policy.risks[0].insuranceType ).subscribe((mess) => {
+                    this.message.success('Receipt Successfully created');
+                    console.log(mess);
+                },
+                (err) => {
                     this.message.warning('Receipt Failed');
                     console.log(err);
                 });
+                // .then((mess) => {
+                //     this.policy.receiptStatus = 'Receipted';
+                //     this.policy.paymentPlan = 'Created';
+
+                //     this.policeServices.updatePolicy(this.policy).subscribe();
+                // })
+                // .catch((err) => {
+                //     this.message.warning('Receipt Failed');
+                //     console.log(err);
+                // });
             this.receiptForm.reset();
             setTimeout(() => {
                 this.isVisible = false;

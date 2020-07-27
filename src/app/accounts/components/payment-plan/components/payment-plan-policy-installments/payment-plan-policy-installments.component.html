@@ -33,33 +33,6 @@
             <div nz-row [nzGutter]="8">
                 <div nz-col [nzSpan]="12">
                     <nz-card nzTitle="Client Details">
-                        <!-- <nz-descriptions
-                            nzBordered
-                            nzSize="small"
-                            nzSpan="6"
-                            style="margin-top: 5px;"
-                            [nzColumn]="1"
-                            [nzBordered]="true"
-                            nzSize="middle"
-                            *ngIf="clientType === 'Corporate'"
-                        >
-                            <nz-descriptions-item nzTitle="Client Name">
-                                {{ clientN.companyName }}
-                            </nz-descriptions-item>
-                            <nz-descriptions-item nzTitle="Registration Number">
-                                {{ clientN.registrationNumber }}
-                            </nz-descriptions-item>
-                            <nz-descriptions-item nzTitle="Address">
-                                {{ clientN.address }}
-                            </nz-descriptions-item>
-                            <nz-descriptions-item nzTitle="Email">
-                                {{ clientN.email }}
-                            </nz-descriptions-item>
-                            <nz-descriptions-item nzTitle="Phone Number">
-                                {{ clientN.phone }}</nz-descriptions-item
-                            >
-                        </nz-descriptions>
-
                         <nz-descriptions
                             nzBordered
                             nzSize="small"
@@ -68,29 +41,33 @@
                             [nzColumn]="1"
                             [nzBordered]="true"
                             nzSize="middle"
-                            *ngIf="clientType === 'Individual'"
                         >
                             <nz-descriptions-item nzTitle="Client Name">
-                                {{ clientI.firstName }}{{ clientI.lastName }}
-                            </nz-descriptions-item>
-                            <nz-descriptions-item nzTitle="Registration Number">
-                                {{ clientI.idNumber }}
+                                {{ client.clientType === 'Individual'
+                                ? capitalize(client.firstName + ' ' + client.lastName)
+                                : capitalize(client.companyName) }}
+                            </nz-descriptions-item> 
+                             <nz-descriptions-item nzTitle="Registration Number">
+                                {{ client.clientType === 'Individual'
+                                ? client.idNumber 
+                                : client.registrationNumber}}
                             </nz-descriptions-item>
                             <nz-descriptions-item nzTitle="Address">
-                                {{ clientI.address }}
+                                {{ client.address }}
                             </nz-descriptions-item>
                             <nz-descriptions-item nzTitle="Email">
-                                {{ clientI.email }}
+                                {{ client.email }}
                             </nz-descriptions-item>
                             <nz-descriptions-item nzTitle="Phone Number">
-                                {{ clientI.phone }}</nz-descriptions-item
+                                {{ client.phone }}</nz-descriptions-item
                             >
-                        </nz-descriptions> -->
+                       
+                        </nz-descriptions>
                     </nz-card>
                 </div>
                 <div nz-col [nzSpan]="12">
                     <nz-card nzTitle="Account Details">
-                        <!-- <nz-descriptions
+                        <nz-descriptions
                             nzBordered
                             nzSize="small"
                             nzSpan="6"
@@ -101,34 +78,34 @@
                         >
                             <nz-descriptions-item nzTitle="Total Premium">
                                 {{
-                                    paymentPlanData.totalPremium
+                                    paymentPlan.total_premium
                                         | number: '1.2-2'
                                 }}
                             </nz-descriptions-item>
                             <nz-descriptions-item nzTitle="Amount Paid">
                                 {{
-                                    paymentPlanData.amountPaid | number: '1.2-2'
+                                    paymentPlan.amount_paid | number: '1.2-2'
                                 }}
                             </nz-descriptions-item>
                             <nz-descriptions-item nzTitle="Amount Outstanding">
                                 {{
-                                    paymentPlanData.amountOutstanding
+                                    paymentPlan.amount_outstanding
                                         | number: '1.2-2'
                                 }}
                             </nz-descriptions-item>
                             <nz-descriptions-item
                                 nzTitle="Remaining Installments"
                             >
-                                {{ paymentPlanData.remainingInstallments }}
+                                {{ paymentPlan.remaining_installments }}
                             </nz-descriptions-item>
                             <nz-descriptions-item
                                 nzTitle="Number of Paid Installments"
                             >
                                 {{
-                                    paymentPlanData.numberOfPaidInstallments
+                                    paymentPlan.number_of_paid_installments
                                 }}</nz-descriptions-item
                             >
-                        </nz-descriptions> -->
+                        </nz-descriptions>
                     </nz-card>
                 </div>
             </div>
@@ -153,7 +130,7 @@
             </ng-template>
         </div> -->
 
-                        <!-- <nz-table
+                        <nz-table
                             #receiptTable
                             [nzData]="displayReceiptsList"
                             [nzSize]="'small'"
@@ -162,7 +139,6 @@
                             <thead>
                                 <tr>
                                     <th>Receipt Number</th>
-                                    <th>Client</th>
                                     <th>Amount</th>
                                     <th>Status</th>
                                     <th></th>
@@ -173,19 +149,18 @@
                                     *ngFor="let receipt of receiptTable.data"
                                     style="cursor: pointer;"
                                 >
-                                    <td>{{ receipt.receiptNumber }}</td>
-                                    <td>{{ receipt.onBehalfOf }}</td>
+                                    <td>{{ receipt.receipt_number }}</td>
                                     <td>
                                         {{
-                                            receipt.sumInDigits
+                                            receipt.amount
                                                 | number: '1.2-2'
                                         }}
                                     </td>
-                                    <td>{{ receipt.allocationStatus }}</td>
+                                    <td>{{ receipt.allocation_status }}</td>
                                     <td>
                                         <div
                                             *ngIf="
-                                                receipt.allocationStatus !==
+                                                receipt.allocation_status !==
                                                 'Allocated'
                                             "
                                         >
@@ -202,7 +177,7 @@
                                     </td>
                                 </tr>
                             </tbody>
-                        </nz-table> -->
+                        </nz-table>
                     </nz-collapse-panel>
                 </nz-collapse>
             </div>
@@ -224,9 +199,9 @@
             </ng-template>
         </div> -->
 
-                    <!-- <nz-table
+                    <nz-table
                         #policiesTable
-                        [nzData]="displayPoliciesList"
+                        [nzData]="policyPlan"
                         [nzSize]="'small'"
                         [nzBordered]="true"
                     >
@@ -246,17 +221,16 @@
                                 *ngFor="let policy of policiesTable.data"
                                 style="cursor: pointer;"
                             >
-                                <td>{{ policy.policyNumber }}</td>
-                                <td>{{ policy.startDate | date }}</td>
-                                <td>{{ policy.endDate | date }}</td>
-                                <td>{{ policy.client }}</td>
-                                <td>{{ policy.netPremium }}</td>
-                                <td>{{ policy.allocatedAmount }}</td>
-                                <td>{{ policy.allocationStatus }}</td>
-                                !--<td>
+                                <td>{{ policy.policy_number }}</td>
+                                <td>{{ policy.start_date | date }}</td>
+                                <td>{{ policy.end_date | date }}</td>
+                                <td>{{ policy.net_premium }}</td>
+                                <td>{{ policy.allocated_amount }}</td>
+                                <td>{{ policy.allocation_status }}</td>
+                                <!--<td>
                                      <div
                                         *ngIf="
-                                            policy.allocationStatus !==
+                                            policy.allocation_status !==
                                             'Allocated'
                                         "
                                     >
@@ -268,10 +242,10 @@
                                             Allocate
                                         </button>
                                     </div>
-                                </td> --
+                                </td> -->
                             </tr>
                         </tbody>
-                    </nz-table> -->
+                    </nz-table>
                 </nz-collapse-panel>
             </nz-collapse>
             <div style="margin-bottom: 20px; margin-top: 20px; width: 50%;">
@@ -578,7 +552,7 @@
                                     name="sumInDigits"
                                     type="number"
                                     id="sumInDigits"
-                                    formControlName="sumInDigits"
+                                    formControlName="amount"
                                     placeholder="{{ amount }}"
                                     readonly
                                 />

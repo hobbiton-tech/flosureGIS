@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import {
     IPaymentModel,
     InstallmentsModel,
-    PolicyPaymentPlan,
+    PlanPolicy,
     PlanReceipt,
 } from '../models/payment-plans.model';
 import { PaymentPlanService } from '../../services/payment-plan.service';
@@ -23,6 +23,7 @@ import {
 import { AccountService } from '../../services/account.service';
 import { IReceiptModel } from '../models/receipts.model';
 import { NzMessageService } from 'ng-zorro-antd';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'app-payment-plan',
@@ -31,7 +32,7 @@ import { NzMessageService } from 'ng-zorro-antd';
 })
 export class PaymentPlanComponent implements OnInit {
     paymentPlansList: IPaymentModel[];
-    dispalyPaymentPlansList: IPaymentModel[];
+    dispalyPaymentPlansList: IPaymentModel[] = [];
 
     policies: any;
 
@@ -60,6 +61,9 @@ export class PaymentPlanComponent implements OnInit {
     formattedeDate: any;
     _id: string;
     user: string;
+    clientId: any;
+    planID: any;
+    receiptID: any;
     constructor(
         private router: Router,
         private paymentPlanService: PaymentPlanService,
@@ -70,6 +74,7 @@ export class PaymentPlanComponent implements OnInit {
         private formBuilder: FormBuilder,
         private message: NzMessageService,
         private changeDetectorRefs: ChangeDetectorRef,
+        private http: HttpClient,
     ) {
         this.paymentPlanForm = this.formBuilder.group({
             numberOfInstallments: ['', Validators.required],
@@ -85,6 +90,7 @@ export class PaymentPlanComponent implements OnInit {
 
     ngOnInit(): void {
         
+        this.user = localStorage.getItem('user');
 
         this.refresh()
         this.clientsService.getAllClients().subscribe((clients) => {
@@ -153,10 +159,22 @@ export class PaymentPlanComponent implements OnInit {
         let pAmount = 0;
 
         let policyCount = 0;
-        const policyPlan: PolicyPaymentPlan[] = [];
+        let policyPlan: PlanPolicy;
+        // policyPlan = {
+        //     start_date: policy.startDate,
+        //     end_date: policy.endDate,
+        //     net_premium: policy.netPremium,
+        //     allocation_status: 'Unallocated',
+        //     policy_number: policy.policyNumber,
+        //     allocation_amount: 0,
+        //     plan_id: res.data.ID
+        // }
 
         for (const policy of this.policyNumber) {
             this.policyUpdate = policy;
+
+            
+
 
             console.log(this.policyUpdate);
 
@@ -165,6 +183,7 @@ export class PaymentPlanComponent implements OnInit {
 
             
             this.clientName = policy.client;
+            this.clientId = policy.clientCode
             this.netPremium = this.netPremium + policy.netPremium;
             // this.policyPlan = policyPlan;
             this.policyUpdate.paymentPlan = 'Created';
@@ -172,7 +191,7 @@ export class PaymentPlanComponent implements OnInit {
         }
 
         const plan: IPaymentModel = {
-            client_id: 'trtrhthtrhrrtrh',
+            client_id: this.clientId,
             number_of_installments: this.paymentPlanForm.controls
             .numberOfInstallments.value,
             initial_installment_amount: this.paymentPlanForm.controls.initialInstallmentAmount
@@ -195,47 +214,85 @@ export class PaymentPlanComponent implements OnInit {
         console.log("PAY PLAN", plan);
         
 
-        await this.paymentPlanService.createPaymentPlan(plan).subscribe(async (res) => {
+        this.paymentPlanService.createPaymentPlan(plan).subscribe(async (res) => {
             console.log('RESU', res);
             // const ed =res.data
             plan.end_date = res.end_date;
-            this.message.success('Payment Plan Created Successfully')
-           this.dispalyPaymentPlansList = [...this.dispalyPaymentPlansList,...[res.data]]
+            this.message.success('Payment Plan Created Successfully');
+            this.dispalyPaymentPlansList = [...this.dispalyPaymentPlansList, ...[res.data]];
 
-           const receipt: IReceiptModel = {
-            payment_method: '',
-            received_from: this.clientName,
-            on_behalf_of: this.clientName,
-            captured_by: 'charles malama',
-            receipt_status: 'Receipted',
-            narration: 'Payment Plan',
-            receipt_type: 'Premium Payment',
-            sum_in_digits: Number(res.data.amount_paid),
-            today_date: new Date(),
-        };
+            const receipt: IReceiptModel = {
+                payment_method: '',
+                received_from: this.clientName,
+                on_behalf_of: this.clientName,
+                captured_by: this.user,
+                receipt_status: 'Receipted',
+                narration: 'Payment Plan',
+                receipt_type: 'Premium Payment',
+                sum_in_digits: Number(res.data.amount_paid),
+                today_date: new Date(),
+            };
+
+            this.planID = res.data.ID
 
 
+            const planPaymentReceipt: PlanReceipt = {
+                plan_id: res.data.ID,
+                allocation_status: 'Unallocated',
+                amount: Number(res.data.amount_paid),
+            };
 
-        // this.receiptNum = this._id;
-      await this.receiptService
-            .addReceipt(
-                receipt,
-                'Comprehensive'
-            ).then((mess) => {
-                // this.policyNumber[0].receiptStatus = 'Receipted';
-                // this.policyNumber[0].paymentPlan = 'Created';
 
-                // this.policeServices.updatePolicy(this.policy).subscribe();
-            })
-            .catch((err) => {
-                this.message.warning('Receipt Failed');
-                console.log('Receipt failed>>>>',err);
-            });
+            this.http
+                .get<any>(
+                    `https://number-generation.flosure-api.com/savenda-receipt-number/1`
+                )
+                .subscribe(async (res) => {
+                    receipt.receipt_number = res.data.receipt_number;
+                    console.log(res.data.receipt_number);
 
+                    this.http.post('http://localhost:8022/receipt', receipt).subscribe((res: any) => {
+                        this.message.success('Receipt Successfully created');
+                        console.log('RECEIPT NUMBER<><><><>', res);
+
+                        planPaymentReceipt.receipt_number = res.data.receipt_number;
+                        this.paymentPlanService.addPlanReceipt(planPaymentReceipt).toPromise();
+
+                        this.receiptID = res.data.ID
+                        
+                    },
+                        err => {
+                            this.message.warning('Receipt Failed');
+                            console.log(err);
+                        });
+                });
         }, (err) => {
-            this.message.error('Receipt Failed')
+            this.message.error('Receipt Failed');
         });
 
+        for (const policy of this.policyNumber) {
+            console.log('NEW MWMWMWMW>>>>', policy);
+            policyPlan = {
+                start_date: policy.startDate,
+                end_date: policy.endDate,
+                net_premium: Number(policy.netPremium),
+                allocation_status: 'Unallocated',
+                policy_number: policy.policyNumber,
+                allocation_amount: 0,
+                plan_id: Number(this.planID)
+            }
+
+
+            this.paymentPlanService.addPlanPolicy(policyPlan).subscribe((mess) =>{
+                console.log('WUWUWUW><><><><><', this.receiptID);
+            }, (err) => {
+                this.message.warning('Plan Policy Failed');
+                console.log(err);
+            });
+            
+        }
+
+        // this.generateID(this.receiptID);
         this.paymentPlanForm.reset();
         this.isVisible = false;
     }
@@ -272,6 +329,10 @@ export class PaymentPlanComponent implements OnInit {
     handleCancel(): void {
         console.log('Button cancel clicked!');
         this.isVisible = false;
+    }
+
+    generateID(id) {
+        this.router.navigateByUrl('/flosure/accounts/view-receipt/' + id);
     }
 
     

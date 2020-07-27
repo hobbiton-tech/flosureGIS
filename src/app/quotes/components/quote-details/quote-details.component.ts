@@ -1636,7 +1636,7 @@ export class QuoteDetailsComponent implements OnInit {
                         }
                         this.http
                             .get<any>(
-                                `https://flosure-number-generation.herokuapp.com/savenda-certificate-number`
+                                `https://number-generation.flosure-api.com/savenda-certificate-number`
                             )
                             .subscribe(async (res) => {
                                 coverNote.certificateNumber =
@@ -1665,7 +1665,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                     this.http
                         .get<any>(
-                            `https://flosure-number-generation.herokuapp.com/savenda-invoice-number/1/${insuranceType}`
+                            `https://number-generation.flosure-api.com/savenda-invoice-number/1/${insuranceType}`
                         )
                         .subscribe(async (res) => {
                             debitNote.debitNoteNumber = res.data.invoice_number;
@@ -1691,21 +1691,25 @@ export class QuoteDetailsComponent implements OnInit {
 
                             receipt.invoice_number = res.data.invoice_number;
                             this.receiptService
-                                .addReceipt(
-                                    receipt,
-                                    this.quote.risks[0].insuranceType
-                                )
-                                .then((mess) => {
-                                    this.message.success(
-                                        'Receipt Successfully created'
-                                    );
-
+                                .addReceipt( receipt,this.quote.risks[0].insuranceType).subscribe((mess) => {
+                                    this.message.success('Receipt Successfully created');
                                     console.log(mess);
-                                })
-                                .catch((err) => {
+                                },
+                                (err) => {
                                     this.message.warning('Receipt Failed');
                                     console.log(err);
                                 });
+                                // .then((mess) => {
+                                //     this.message.success(
+                                //         'Receipt Successfully created'
+                                //     );
+
+                                //     console.log(mess);
+                                // })
+                                // .catch((err) => {
+                                //     this.message.warning('Receipt Failed');
+                                //     console.log(err);
+                                // });
                         });
 
                     for (const clause of this.clauses) {
@@ -1882,7 +1886,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                     this.http
                         .get<any>(
-                            `https://flosure-number-generation.herokuapp.com/savenda-invoice-number/1/${insuranceType}`
+                            `https://number-generation.flosure-api.com/savenda-invoice-number/1/${insuranceType}`
                         )
                         .subscribe(async (res) => {
                             debitNote.debitNoteNumber = res.data.invoice_number;
@@ -1908,25 +1912,29 @@ export class QuoteDetailsComponent implements OnInit {
 
                             receipt.invoice_number = res.data.invoice_number;
                             this.receiptService
-                                .addReceipt(
-                                    receipt,
-                                    this.quote.risks[0].insuranceType
-                                )
-                                .then((mess) => {
-                                    console.log(
-                                        'DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD',
-                                        mess
-                                    );
-                                    this.message.success(
-                                        'Receipt Successfully created'
-                                    );
-
+                                .addReceipt( receipt, this.quote.risks[0].insuranceType).subscribe((mess) => {
+                                    this.message.success('Receipt Successfully created');
                                     console.log(mess);
-                                })
-                                .catch((err) => {
+                                },
+                                (err) => {
                                     this.message.warning('Receipt Failed');
                                     console.log(err);
                                 });
+                                // .then((mess) => {
+                                //     console.log(
+                                //         'DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD',
+                                //         mess
+                                //     );
+                                //     this.message.success(
+                                //         'Receipt Successfully created'
+                                //     );
+
+                                //     console.log(mess);
+                                // })
+                                // .catch((err) => {
+                                //     this.message.warning('Receipt Failed');
+                                //     console.log(err);
+                                // });
                         });
 
                     for (const clause of this.clauses) {
