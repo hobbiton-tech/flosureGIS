@@ -10,7 +10,7 @@ RUN npm i yarn
 RUN yarn install --ignore-engines
 RUN yarn global add @angular/cli@9.0.7
 COPY . .
-RUN ng build --prod --build Optimizer=false --optimization=false --aot
+RUN ng build --prod --buildOptimizer=false --optimization=false --aot
 
 
 
