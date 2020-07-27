@@ -82,7 +82,7 @@ export class AccountService {
 
                     this.receiptN = receipt
 
-                   this.http.post('http://localhost:8022/receipt', receipt).subscribe((res: any) => {
+                   this.http.post('https://payment-api.savenda-flosure.com/receipt', receipt).subscribe((res: any) => {
                         console.log("RECEIPT RESULTS", res.data);
                         // if(res.status === 'true') {
                             this.message.success(
@@ -119,7 +119,7 @@ export class AccountService {
 
     async updateReceipt(receipt: IReceiptModel) {
 
-        this.http.put(`http://localhost:8022/receipt/${receipt.ID}`, receipt).subscribe((res) => {
+        this.http.put(`https://payment-api.savenda-flosure.com/receipt/${receipt.ID}`, receipt).subscribe((res) => {
             this.message.success(
                         'Receipt Successfully Updated'
                     );
@@ -132,11 +132,11 @@ export class AccountService {
     }
 
     getReciepts(): Observable<any> {
-        return this.http.get<any>('http://localhost:8022/receipt');
+        return this.http.get<any>('https://payment-api.savenda-flosure.com/receipt');
     }
 
     getReciept(id): Observable<any> {
-        return this.http.get<any>(`http://localhost:8022/receipt/${id}`);
+        return this.http.get<any>(`https://payment-api.savenda-flosure.com/receipt/${id}`);
     }
 
     getPolicies(): Observable<Policy[]> {

@@ -251,7 +251,7 @@ export class PaymentPlanComponent implements OnInit {
                     receipt.receipt_number = res.data.receipt_number;
                     console.log(res.data.receipt_number);
 
-                    this.http.post('http://localhost:8022/receipt', receipt).subscribe((res: any) => {
+                    this.http.post('https://payment-api.savenda-flosure.com/receipt', receipt).subscribe((res: any) => {
                         this.message.success('Receipt Successfully created');
                         console.log('RECEIPT NUMBER<><><><>', res);
 

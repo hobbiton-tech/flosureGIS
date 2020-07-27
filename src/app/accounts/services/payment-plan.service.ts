@@ -35,8 +35,8 @@ export class PaymentPlanService implements Resolve<any> {
     rcptNumber: any;
     _id: any;
 
-    basePaymentPlanUrl: 'http://localhost:8022/payment-plan';
-    baseInstallmentUrl: 'http://localhost:8022/payment-plan/installment'
+    basePaymentPlanUrl: 'https://payment-api.savenda-flosure.com/payment-plan';
+    baseInstallmentUrl: 'https://payment-api.savenda-flosure.com/payment-plan/installment'
     receiptN: IReceiptModel;
 
     constructor(
@@ -88,7 +88,7 @@ export class PaymentPlanService implements Resolve<any> {
 
                     this.receiptN = receipt
 
-                   this.http.post('http://localhost:8022/receipt', receipt).toPromise()
+                   this.http.post('https://payment-api.savenda-flosure.com/receipt', receipt).toPromise()
                 });
                 
         // });
@@ -111,11 +111,11 @@ export class PaymentPlanService implements Resolve<any> {
     createPaymentPlan(
         paymentPlan: IPaymentModel
     ): Observable<any> {
-        return this.http.post<IPaymentModel>('http://localhost:8022/payment-plan',paymentPlan);
+        return this.http.post<IPaymentModel>('https://payment-api.savenda-flosure.com/payment-plan',paymentPlan);
     }
 
     getPaymentPlan(): Observable<any> {
-        return this.http.get<any>('http://localhost:8022/payment-plan');
+        return this.http.get<any>('https://payment-api.savenda-flosure.com/payment-plan');
     }
 
     
@@ -123,23 +123,23 @@ export class PaymentPlanService implements Resolve<any> {
     getInstallments(): Observable<any>{
         return this.http
             .get<any>(
-                'http://localhost:8022/payment-plan/installment'
+                'https://payment-api.savenda-flosure.com/payment-plan/installment'
             )
     }
 
 
     addPlanReceipt( planReceipt: PlanReceipt): Observable<any> {
-        return this.http.post<PlanReceipt>('http://localhost:8022/plan-receipt',planReceipt);
+        return this.http.post<PlanReceipt>('https://payment-api.savenda-flosure.com/plan-receipt',planReceipt);
     }
 
     getReceiptPlan(): Observable<any> {
-        return this.http.get<any>('http://localhost:8022/plan-receipt');
+        return this.http.get<any>('https://payment-api.savenda-flosure.com/plan-receipt');
     }
 
 
     updatePlanReceipt(planReceipt: PlanReceipt) {
 
-        this.http.put(`http://localhost:8022/plan-receipt/${planReceipt.ID}`, planReceipt).subscribe((res) => {
+        this.http.put(`https://payment-api.savenda-flosure.com/plan-receipt/${planReceipt.ID}`, planReceipt).subscribe((res) => {
             this.message.success(
                         'Plan Receipt Successfully Updated'
                     );
@@ -153,17 +153,17 @@ export class PaymentPlanService implements Resolve<any> {
 
 
     addPlanPolicy( policyPaymentPlan: PlanPolicy): Observable<PlanPolicy> {
-        return this.http.post<PlanPolicy>('http://localhost:8022/plan-policy',policyPaymentPlan);
+        return this.http.post<PlanPolicy>('https://payment-api.savenda-flosure.com/plan-policy',policyPaymentPlan);
     }
 
     getPlanPolicy(): Observable<any> {
-        return this.http.get<any>('http://localhost:8022/plan-policy');
+        return this.http.get<any>('https://payment-api.savenda-flosure.com/plan-policy');
     }
 
 
     updatePlanPolicy(policyPaymentPlan: PlanPolicy) {
 
-        this.http.put(`http://localhost:8022/plan-policy/${policyPaymentPlan.ID}`, policyPaymentPlan).subscribe((res) => {
+        this.http.put(`https://payment-api.savenda-flosure.com/plan-policy/${policyPaymentPlan.ID}`, policyPaymentPlan).subscribe((res) => {
             // this.message.success(
             //             'Plan Receipt Successfully Updated'
             //         );
