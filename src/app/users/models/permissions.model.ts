@@ -1,6 +1,7 @@
 export class IPermission {
     id: string;
-    permission: string;
+    name: string;
     description: string;
-    roleId: string;
-} 
+    rId: string;
+}
+

@@ -21,42 +21,42 @@ export class BranchService {
     private firebase: AngularFirestore,
     private message: NzMessageService
   ) {
-    
-  this.branchCollection = firebase.collection<IBranch>('branches');
-  this.branches = this.branchCollection.valueChanges();
 
-   }
-   
-  // Baranch Methods
-  async addBranch(branch: IBranch): Promise<void>{
+    this.branchCollection = firebase.collection<IBranch>('branches');
+    this.branches = this.branchCollection.valueChanges();
+
+  }
+
+  // Branches Methods
+  async addBranch(branch: IBranch): Promise<void> {
     await this.branchCollection
-    .doc(branch.id)
-    .set(branch)
-    .then((mess) => {
-      this.message.success('Branch Successfully Added')
-    })
-    .catch((err) => {
-      this.message.warning('Branch Creeation failed')
-      console.log(err);
-    });
+      .doc(branch.id)
+      .set(branch)
+      .then((mess) => {
+        this.message.success('Branch Successfully Added')
+      })
+      .catch((err) => {
+        this.message.warning('Branch Creeation failed')
+        console.log(err);
+      });
   }
 
   async updateBranch(branch: IBranch): Promise<void> {
     return this.branchCollection
-        .doc(`${branch.id}`)
-        .update(branch)
-        .then((res) => {
-            console.log(res);
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+      .doc(`${branch.id}`)
+      .update(branch)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
 
   getBranch(): Observable<IBranch[]> {
     return this.branches;
   }
-  
+
 
 }

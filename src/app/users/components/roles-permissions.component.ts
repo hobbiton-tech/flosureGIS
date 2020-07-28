@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { AngularFirestore } from '@angular/fire/firestore';
 
+import { NzModalModule } from 'ng-zorro-antd/modal';
 import 'firebase/firestore';
 
 import { RolesService } from '../services/roles.service';
@@ -22,13 +23,15 @@ import { IdType } from 'src/app/clients/models/client.model';
 @Component({
   selector: 'app-roles-permissions',
   templateUrl: './roles-permissions.component.html',
-  styleUrls: ['./roles-permissions.component.scss']
+  styleUrls: ['./roles-permissions.component.scss'],
 })
 export class RolesPermissionsComponent implements OnInit {
-
+  displayPermissionsList: IPermission[] = [];
+  // cleanFun: Array<IRole & IRolesPermissions & IPermission>;
   roles: IRole[] = [];
   rolesList: IRole[] = [];
   permissions: IPermission[] = [];
+  perm: IPermission[] = [];
   permissionsList: IPermission[] = [];
   rolesPermission: [] = [];
   rolesPermissionList: IRolesPermissions[] = [];
@@ -40,14 +43,17 @@ export class RolesPermissionsComponent implements OnInit {
   selectedRoleValue: any[] = [];
   seletedPermissionValue: any[] = [];
 
+  isPopUpVisible = false;
   isRoleEidtVisible: boolean = false;
   isPermissionEditVisible: boolean = false;
+
 
   editRole: any;
   editPermission: any;
 
   role: any;
   permission: any;
+
 
 
 
@@ -61,8 +67,8 @@ export class RolesPermissionsComponent implements OnInit {
   permissionsForm: FormGroup;
 
   roleName: any;
-  Description: any;
-  permissionName: any;
+  description: any;
+  name: any;
   selectedRole: string;
   selectedRoleId: string;
 
@@ -87,15 +93,33 @@ export class RolesPermissionsComponent implements OnInit {
 
     this.rolesForm = formBuilder.group({
       roleName: ['', Validators.required],
-      Description: ['', Validators.required],
+      description: ['', Validators.required],
     });
 
 
     this.permissionsForm = formBuilder.group({
-      roleId: ['', Validators.required],
-      permissionName: ['', Validators.required],
-      Description: ['', Validators.required]
+      rId: ['', Validators.required],
+      name: ['', Validators.required],
+      description: ['', Validators.required]
     });
+  }
+
+  // showModal(value: any) {
+  //   this.permissions === this.permissions.filter((x) => x.id === value.RoleId);
+  //   console.log('popUp>>>>', value)
+
+  //   this.isPopUpVisible = true;
+  // }
+
+
+  handleOk(): void {
+    console.log('Button ok clicked!');
+    this.isPopUpVisible = false;
+  }
+
+  handleCancel(): void {
+    console.log('Button cancel clicked!');
+    this.isPopUpVisible = false;
   }
 
   ngOnInit(): void {
@@ -109,11 +133,10 @@ export class RolesPermissionsComponent implements OnInit {
     this.permssionService.getPermission().subscribe((res) => {
       this.permissions = res;
       this.permissionsList = this.permissions;
+
+      this.displayPermissionsList = this.permissionsList;
     });
-
-
   }
-
 
 
 
@@ -126,42 +149,34 @@ export class RolesPermissionsComponent implements OnInit {
 
 
 
+  // ///EDIT  ROLES SERVICE //////
 
+  // onEditRole(value) {
+  //   this.editRole = value;
+  //   this.rolesForm.get('roleName').setValue(this.editRole.roleName);
+  //   this.rolesForm.get('Description').setValue(this.editRole.Description)
+  //   this.isRoleEidtVisible = true;
+  // }
 
+  // handleEditRoleOk() {
+  //   this.editRole.roleName = this.rolesForm.controls.roleName.value;
+  //   this.editRole.Description = this.rolesForm.controls.Description.value;
 
+  //   const index = this.selectedRoleValue.indexOf(this.editRole);
+  //   this.selectedRoleValue[index] = this.editRole;
 
+  //   const role: IRole = {
+  //     ...this.rolesForm.value,
+  //     id: this.editRole.id,
+  //   };
+  //   this.rolesService.updateRole(role);
 
+  //   this.isRoleEidtVisible = false;
+  // }
 
-
-
-  ///EDIT  ROLES SERVICE //////
-
-  onEditRole(value) {
-    this.editRole = value;
-    this.rolesForm.get('roleName').setValue(this.editRole.roleName);
-    this.rolesForm.get('Description').setValue(this.editRole.Description)
-    this.isRoleEidtVisible = true;
-  }
-
-  handleEditRoleOk() {
-    this.editRole.roleName = this.rolesForm.controls.roleName.value;
-    this.editRole.Description = this.rolesForm.controls.Description.value;
-
-    const index = this.selectedRoleValue.indexOf(this.editRole);
-    this.selectedRoleValue[index] = this.editRole;
-
-    const role: IRole = {
-      ...this.rolesForm.value,
-      id: this.editRole.id,
-    };
-    this.rolesService.updateRole(role);
-
-    this.isRoleEidtVisible = false;
-  }
-
-  handleEditRoleCancel() {
-    this.isRoleEidtVisible = false;
-  }
+  // handleEditRoleCancel() {
+  //   this.isRoleEidtVisible = false;
+  // }
   handleRolesCancel() {
     this.isRolesVisible = false;
   }
@@ -171,31 +186,31 @@ export class RolesPermissionsComponent implements OnInit {
 
   ///EDIT  Permissions SERVICE //////
 
-  onEditPermission(value) {
-    this.editPermission = value;
-    this.permissionsForm.get('permissionName').setValue(this.editPermission.permissionName);
-    this.permissionsForm.get('Description').setValue(this.editPermission.Description)
-    this.isPermissionEditVisible = true;
-  }
+  // onEditPermission(value) {
+  //   this.editPermission = value;
+  //   this.permissionsForm.get('permissionName').setValue(this.editPermission.permissionName);
+  //   this.permissionsForm.get('Description').setValue(this.editPermission.Description)
+  //   this.isPermissionEditVisible = true;
+  // }
 
-  handleEditPermissionOk() {
-    this.editPermission.permissionName = this.permissionsForm.controls.permissionName.value;
-    this.editPermission.Description = this.permissionsForm.controls.Description.value;
+  // handleEditPermissionOk() {
+  //   this.editPermission.permissionName = this.permissionsForm.controls.permissionName.value;
+  //   this.editPermission.Description = this.permissionsForm.controls.Description.value;
 
-    const index = this.seletedPermissionValue.indexOf(this.editPermission);
-    this.seletedPermissionValue[index] = this.editPermission;
+  //   const index = this.seletedPermissionValue.indexOf(this.editPermission);
+  //   this.seletedPermissionValue[index] = this.editPermission;
 
-    const permission: IPermission = {
-      ...this.permissionsForm.value,
-      id: this.editPermission.id,
-    };
-    this.permssionService.updatePermission(permission);
+  //   const permission: IPermission = {
+  //     ...this.permissionsForm.value,
+  //     id: this.editPermission.id,
+  //   };
+  //   this.permssionService.updatePermission(permission);
 
-    this.isPermissionEditVisible = false;
-  }
-  handleEditPermissionCancel() {
-    this.isPermissionEditVisible = false;
-  }
+  //   this.isPermissionEditVisible = false;
+  // }
+  // handleEditPermissionCancel() {
+  //   this.isPermissionEditVisible = false;
+  // }
 
   handlePermissionCancel() {
     this.isPermissionsVisible = false;
@@ -223,34 +238,40 @@ export class RolesPermissionsComponent implements OnInit {
 
   }
   onSelectRole(role) {
-    console.log('PEEEEEEEE>>>>', role);
-    this.selectedRoleId = role.roleId;
+    this.selectedRoleId = role.rId;
     this.roleName = role.roleName;
-    this.Description = role.Description;
-    this.permissions = this.permissions.filter((x) => x === role.roleId);
+    this.description = role.description;
 
+    // rId.replace(/\s/g, "");
+
+    this.permissionsList = this.permissions.filter((x) => x.rId === role.id);
+    console.log('FIlt>>>>', role.id, this.permissions, this.permissionsList);
 
   }
   onSelectPermission(permission) {
     console.log('PEEEEEEEE>>>>', permission);
-    this.permissionName = permission.permissionName;
-    this.Description = permission.Description;
+    this.name = permission.name;
+    this.description = permission.description;
+
 
   }
 
+  // cleanFunc(value: any) {
+  //   this.permissions = this.permissions.filter((x) => x === value.roleId);
+  //   this.permssionService.getPermission().subscribe((res) => {
+  //     console.log('R>>>>', res)
 
+  //   });
 
+  // }
+  // cleanFun(value: any) {
+  //   this.permission = this.permissions.filter((x) => x.id === value.roleId)
+  //   this.permssionService.getPermission().subscribe((res) => {
+  //     console.log('R>>>>', res)
 
+  //   });
+  // }
 
-  cleanFunc(value: any) {
-    this.permissions = this.permissions.filter((x) => x === value.roleId);
-
-    this.permssionService.getPermission().subscribe((res) => {
-      console.log('R>>>>', res)
-
-    });
-
-  }
 
 
   change(event): void {
@@ -284,8 +305,11 @@ export class RolesPermissionsComponent implements OnInit {
   }
   submitPermissionForm() {
     const permission: IPermission = {
-      ...this.permissionsForm.value,
+
       id: v4(),
+      name: this.permissionsForm.controls.name.value,
+      description: this.permissionsForm.controls.description.value,
+      rId: this.permissionsForm.controls.rId.value.replace(/\s/g, ""),
     };
 
     this.permssionService.addPermission(permission);
@@ -297,29 +321,6 @@ export class RolesPermissionsComponent implements OnInit {
   resetpermissionsForm(value) { }
 
   resetrolesForm(value) { }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

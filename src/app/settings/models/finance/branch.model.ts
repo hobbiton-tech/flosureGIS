@@ -1,9 +1,9 @@
 
 
 export interface IBranch {
-    id:string;
+    id: string;
     branch_name: string;
     branch_code: string;
     bankId: string;
+    description: string;
 }
- 

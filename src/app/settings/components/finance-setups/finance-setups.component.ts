@@ -23,9 +23,10 @@ import { FeGaussianBlurElement } from 'canvg';
 export class FinanceSetupsComponent implements OnInit {
     bankList: IBank[] = [];
     banks: IBank[] = [];
+    branches: IBranch[] = [];
     branchList: IBranch[] = [];
     paymentMethodList: IPaymentMethod[] = [];
-    paymentMethods: [] = [];
+    paymentMethods: IPaymentMethod[] = [];
     receiptTypeList: IReceiptTypes[] = [];
     discountTypeList: IDiscountType[] = [];
 
@@ -86,6 +87,8 @@ export class FinanceSetupsComponent implements OnInit {
     selectedBankId: string;
     selectedPaymentMethodId: string;
     selectedReceiptTypeId: string;
+    receiptTypes: IReceiptTypes[] = [];
+    DiscountTypes: IDiscountType[] = [];
 
     constructor(
         private BankService: BankService,
@@ -102,6 +105,7 @@ export class FinanceSetupsComponent implements OnInit {
         });
 
         this.branchForm = formBuider.group({
+            bankId: ['', Validators.required],
             branch_name: ['', Validators.required],
             branch_code: ['', Validators.required],
             description: ['', Validators.required],
@@ -136,29 +140,33 @@ export class FinanceSetupsComponent implements OnInit {
         ///////// PAYMENT ////////////////////
         /////////////////////////////////////////
         this.PaymentMethodService.getPaymentMethods().subscribe((res) => {
-            this.paymentMethodList = res;
+            this.paymentMethods = res;
+            this.paymentMethodList = this.paymentMethods;
             // this.paymentMethod.replace(/[^A-Za-z0-9-,.;'&/.() ]|^ /g,'')  paymentMethod=""
         });
         //////////////////////////////////
         /////////// RECEIPT ///////////////
         ////////////////////////////////
         this.ReceiptTypeService.getReceiptTypes().subscribe((res) => {
-            this.receiptTypeList = res;
+            this.receiptTypes = res;
+            this.receiptTypeList = this.receiptTypes;
         });
         //////////////////////////////////
         /////////// Discount ///////////////
         ////////////////////////////////
 
         this.DiscountTypesService.getDiscountType().subscribe((res) => {
-            this.discountTypeList = res;
+            this.DiscountTypes = res;
+            this.discountTypeList = this.DiscountTypes;
         });
 
         //////////////////////////////////
-        /////////// Discount ///////////////
+        /////////// Branches ///////////////
         ////////////////////////////////
 
         this.BranchService.getBranch().subscribe((res) => {
-            this.branchList = res;
+            this.branches = res;
+            this.branchList = this.branches;
         });
     }
 
@@ -313,6 +321,15 @@ export class FinanceSetupsComponent implements OnInit {
     }
     selectBranch() {
         this.onBranchSelected.emit(this.selectedBranchValue);
+    }
+
+    onChangeBank(bank) {
+        console.log('PEEEEEEEE>>>>', bank);
+        this.selectedBankId = bank.bankId;
+        this.bank_name = bank.bank_name;
+
+        this.branchList = this.branches.filter((x) => x.bankId === bank.id);
+        console.log('FIlt>>>>', bank.id, this.branches, this.branchList);
     }
 
     onChange(value) {
@@ -494,11 +511,15 @@ export class FinanceSetupsComponent implements OnInit {
         this.isDiscountTypeVisible = false;
     }
 
+
+
     submitBranchForm() {
         const branch: IBranch = {
-            ...this.branchForm.value,
             id: v4(),
-            bankId: this.selectedBankId,
+            bankId: this.branchForm.controls.bankId.value.replace(/\s/g, ""),
+            branch_name: this.branchForm.controls.branch_name.value,
+            branch_code: this.branchForm.controls.branch_code.value,
+            description: this.branchForm.controls.description.value
         };
         this.BranchService.addBranch(branch);
         console.log('DDDDDDDDDD>>>>>>>', branch);
