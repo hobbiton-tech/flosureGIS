@@ -41,10 +41,20 @@ export class UsersService {
         // this.SendVerificationMail();
         // this.addUser(this.userDetails);
         this.http.post<UserModel>(
-            ' https://savenda.flosure-api.com/users',
+            ' http://api.goldenlotusinsurance.com/users',
     
             this.userDetails
         ).subscribe();
+        const emailDetails = {
+          username: this.userDetails.email,
+          text: 'Dear ' + this.userDetails.firstName + ' ' + this.userDetails.surname + ', ' + ' your username is ' + this.userDetails.email + ' and your password is ' + this.userDetails.password + ' for https://www.goldenlotusinsurance.com (flosure General Insurance System)',
+          subject: 'Flosure General insurance System Credentials',
+          receiver: this.userDetails.email,
+          sender: 'Flosure General Insurance System',
+          password: this.userDetails.password,
+          url: 'https://www.goldenlotusinsurance.com'
+        }
+        this.http.post<any>('https://number-generation.flosure-api.com/email', emailDetails).toPromise()
         console.log("Password>>>>", randomstring)
       })
       .catch((error) => {
@@ -69,18 +79,20 @@ export class UsersService {
     addUser(dto: UserModel): Observable<UserModel> {
         console.log(dto)
         return this.http.post<UserModel>(
-            ' https://savenda.flosure-api.com/users',
+            ' http://api.goldenlotusinsurance.com/users',
 
             dto
         );
     }
 
     getUsers(): Observable<UserModel[]> {
-        return this.http.get<UserModel[]>(' https://savenda.flosure-api.com/users');
+        return this.http.get<UserModel[]>(' http://api.goldenlotusinsurance.com/users');
     }
 
     getSingleUser(userId: string): Observable<UserModel> {
-        return this.http.get<UserModel>(` https://savenda.flosure-api.com/${userId}`);
+        return this.http.get<UserModel>(` http://api.goldenlotusinsurance.com/${userId}`);
 
     }
+
+
 }
