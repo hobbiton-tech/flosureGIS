@@ -4,10 +4,10 @@
     "reportVersion": 2,
     "event": "Allocation failed - JavaScript heap out of memory",
     "trigger": "FatalError",
-    "filename": "report.20200622.114423.3500.0.001.json",
-    "dumpEventTime": "2020-06-22T11:44:23Z",
-    "dumpEventTimeStamp": "1592819063759",
-    "processId": 3500,
+    "filename": "report.20200714.104527.11332.0.001.json",
+    "dumpEventTime": "2020-07-14T10:45:28Z",
+    "dumpEventTimeStamp": "1594716328326",
+    "processId": 11332,
     "threadId": null,
     "cwd": "C:\\Users\\Hobbiton\\Documents\\hobbiton-projects\\flosure-broker-ui",
     "commandLine": [
@@ -54,20 +54,20 @@
       {
         "model": "Intel(R) Pentium(R) CPU G4400 @ 3.30GHz",
         "speed": 3312,
-        "user": 2252171,
+        "user": 606515,
         "nice": 0,
-        "sys": 941578,
-        "idle": 5035703,
-        "irq": 31359
+        "sys": 463171,
+        "idle": 277359,
+        "irq": 32140
       },
       {
         "model": "Intel(R) Pentium(R) CPU G4400 @ 3.30GHz",
         "speed": 3312,
-        "user": 2280578,
+        "user": 635109,
         "nice": 0,
-        "sys": 874531,
-        "idle": 5074156,
-        "irq": 5468
+        "sys": 417531,
+        "idle": 294187,
+        "irq": 11718
       }
     ],
     "networkInterfaces": [
@@ -78,7 +78,7 @@
         "address": "fe80::9ac:47a9:33f2:a9aa",
         "netmask": "ffff:ffff:ffff:ffff::",
         "family": "IPv6",
-        "scopeid": 9
+        "scopeid": 11
       },
       {
         "name": "Ethernet",
@@ -104,6 +104,23 @@
         "address": "127.0.0.1",
         "netmask": "255.0.0.0",
         "family": "IPv4"
+      },
+      {
+        "name": "vEthernet (Default Switch)",
+        "internal": false,
+        "mac": "00:15:5d:9f:4d:c7",
+        "address": "fe80::f4b9:1760:f3e9:5887",
+        "netmask": "ffff:ffff:ffff:ffff::",
+        "family": "IPv6",
+        "scopeid": 21
+      },
+      {
+        "name": "vEthernet (Default Switch)",
+        "internal": false,
+        "mac": "00:15:5d:9f:4d:c7",
+        "address": "172.17.85.225",
+        "netmask": "255.255.255.240",
+        "family": "IPv4"
       }
     ],
     "host": "Hobbiton"
@@ -116,83 +133,75 @@
   },
   "nativeStack": [
     {
-      "pc": "0x00007ff785b52309",
+      "pc": "0x00007ff7daad2309",
       "symbol": "std::basic_ostream<char,std::char_traits<char> >::operator<<+11577"
     },
     {
-      "pc": "0x00007ff785b56869",
+      "pc": "0x00007ff7daad6869",
       "symbol": "std::basic_ostream<char,std::char_traits<char> >::operator<<+29337"
     },
     {
-      "pc": "0x00007ff785b556e8",
+      "pc": "0x00007ff7daad56e8",
       "symbol": "std::basic_ostream<char,std::char_traits<char> >::operator<<+24856"
     },
     {
-      "pc": "0x00007ff785c7dd82",
+      "pc": "0x00007ff7dabfdd82",
       "symbol": "v8::base::CPU::has_sse+59378"
     },
     {
-      "pc": "0x00007ff78649a27e",
+      "pc": "0x00007ff7db41a27e",
       "symbol": "v8::Isolate::ReportExternalAllocationLimitReached+94"
     },
     {
-      "pc": "0x00007ff786482351",
+      "pc": "0x00007ff7db402351",
       "symbol": "v8::SharedArrayBuffer::Externalize+833"
     },
     {
-      "pc": "0x00007ff78634e8ac",
+      "pc": "0x00007ff7db2ce8ac",
       "symbol": "v8::internal::Heap::EphemeronKeyWriteBarrierFromCode+1436"
     },
     {
-      "pc": "0x00007ff786359ae0",
+      "pc": "0x00007ff7db2d9ae0",
       "symbol": "v8::internal::Heap::ProtectUnprotectedMemoryChunks+1312"
     },
     {
-      "pc": "0x00007ff786356604",
+      "pc": "0x00007ff7db2d6604",
       "symbol": "v8::internal::Heap::PageFlagsAreConsistent+3204"
     },
     {
-      "pc": "0x00007ff78634be03",
+      "pc": "0x00007ff7db2cbe03",
       "symbol": "v8::internal::Heap::CollectGarbage+1283"
     },
     {
-      "pc": "0x00007ff78634a474",
+      "pc": "0x00007ff7db2ca474",
       "symbol": "v8::internal::Heap::AddRetainedMap+2452"
     },
     {
-      "pc": "0x00007ff78636b67d",
+      "pc": "0x00007ff7db2eb67d",
       "symbol": "v8::internal::Factory::NewFillerObject+61"
     },
     {
-      "pc": "0x00007ff7860d13d1",
+      "pc": "0x00007ff7db0513d1",
       "symbol": "v8::internal::interpreter::JumpTableTargetOffsets::iterator::operator=+1665"
     },
     {
-      "pc": "0x00007ff7868e730d",
+      "pc": "0x00007ff7db86730d",
       "symbol": "v8::internal::SetupIsolateDelegate::SetupHeap+546637"
     },
     {
-      "pc": "0x00007ff786951b94",
-      "symbol": "v8::internal::SetupIsolateDelegate::SetupHeap+982996"
+      "pc": "0x00007ff7db7ed7b1",
+      "symbol": "v8::internal::SetupIsolateDelegate::SetupHeap+48113"
     },
     {
-      "pc": "0x00007ff78686c2bc",
-      "symbol": "v8::internal::SetupIsolateDelegate::SetupHeap+42748"
-    },
-    {
-      "pc": "0x00007ff786867850",
-      "symbol": "v8::internal::SetupIsolateDelegate::SetupHeap+23696"
-    },
-    {
-      "pc": "0x000002969df9fa80",
+      "pc": "0x000001d22f4b54f4",
       "symbol": ""
     }
   ],
   "javascriptHeap": {
-    "totalMemory": 2181562368,
-    "totalCommittedMemory": 2181562368,
-    "usedMemory": 2102345736,
-    "availableMemory": 47885080,
+    "totalMemory": 2151292928,
+    "totalCommittedMemory": 2151292928,
+    "usedMemory": 2115534112,
+    "availableMemory": 48507416,
     "memoryLimit": 2197815296,
     "heapSpaces": {
       "read_only_space": {
@@ -203,38 +212,38 @@
         "available": 0
       },
       "new_space": {
-        "memorySize": 33554432,
-        "committedMemory": 33554432,
-        "capacity": 16759296,
-        "used": 1909664,
-        "available": 14849632
+        "memorySize": 2097152,
+        "committedMemory": 2097152,
+        "capacity": 1047456,
+        "used": 118168,
+        "available": 929288
       },
       "old_space": {
-        "memorySize": 1880236032,
-        "committedMemory": 1880236032,
-        "capacity": 1856851040,
-        "used": 1856827816,
-        "available": 23224
+        "memorySize": 1892556800,
+        "committedMemory": 1892556800,
+        "capacity": 1874604096,
+        "used": 1874595792,
+        "available": 8304
       },
       "code_space": {
         "memorySize": 5148672,
         "committedMemory": 5148672,
-        "capacity": 4572832,
-        "used": 4572832,
+        "capacity": 4482944,
+        "used": 4482944,
         "available": 0
       },
       "map_space": {
-        "memorySize": 30150656,
-        "committedMemory": 30150656,
-        "capacity": 7425040,
-        "used": 7425040,
+        "memorySize": 22810624,
+        "committedMemory": 22810624,
+        "capacity": 8578160,
+        "used": 8578160,
         "available": 0
       },
       "large_object_space": {
-        "memorySize": 231587840,
-        "committedMemory": 231587840,
-        "capacity": 231033192,
-        "used": 231033192,
+        "memorySize": 227794944,
+        "committedMemory": 227794944,
+        "capacity": 227181856,
+        "used": 227181856,
         "available": 0
       },
       "code_large_object_space": {
@@ -247,24 +256,24 @@
       "new_large_object_space": {
         "memorySize": 0,
         "committedMemory": 0,
-        "capacity": 16759296,
+        "capacity": 1047456,
         "used": 0,
-        "available": 16759296
+        "available": 1047456
       }
     }
   },
   "resourceUsage": {
-    "userCpuSeconds": 658.625,
-    "kernelCpuSeconds": 26.031,
-    "cpuConsumptionPercent": 16.462,
-    "maxRss": 2437840896,
+    "userCpuSeconds": 405.156,
+    "kernelCpuSeconds": 22.906,
+    "cpuConsumptionPercent": 46.3271,
+    "maxRss": 2433204224,
     "pageFaults": {
-      "IORequired": 4681829,
+      "IORequired": 2434201,
       "IONotRequired": 0
     },
     "fsActivity": {
-      "reads": 22371,
-      "writes": 16
+      "reads": 11864,
+      "writes": 9
     }
   },
   "libuv": [
@@ -283,6 +292,8 @@
     "COMPUTERNAME": "HOBBITON",
     "ComSpec": "C:\\WINDOWS\\system32\\cmd.exe",
     "DriverData": "C:\\Windows\\System32\\Drivers\\DriverData",
+    "FPS_BROWSER_APP_PROFILE_STRING": "Internet Explorer",
+    "FPS_BROWSER_USER_PROFILE_STRING": "Default",
     "GIT_ASKPASS": "c:\\Users\\Hobbiton\\AppData\\Local\\Programs\\Microsoft VS Code\\resources\\app\\extensions\\git\\dist\\askpass.sh",
     "GOPATH": "C:\\Users\\Hobbiton\\go",
     "HOMEDRIVE": "C:",
@@ -390,9 +401,10 @@
     "npm_package_version": "0.0.0",
     "NUMBER_OF_PROCESSORS": "2",
     "OneDrive": "C:\\Users\\Hobbiton\\OneDrive",
+    "OneDriveConsumer": "C:\\Users\\Hobbiton\\OneDrive",
     "ORIGINAL_XDG_CURRENT_DESKTOP": "undefined",
     "OS": "Windows_NT",
-    "Path": "C:\\Users\\Hobbiton\\AppData\\Local\\Temp\\yarn--1592814904740-0.16490583702802697;C:\\Users\\Hobbiton\\Documents\\hobbiton-projects\\flosure-broker-ui\\node_modules\\.bin;C:\\Users\\Hobbiton\\AppData\\Local\\Yarn\\Data\\link\\node_modules\\.bin;C:\\Program Files\\libexec\\lib\\node_modules\\npm\\bin\\node-gyp-bin;C:\\Program Files\\lib\\node_modules\\npm\\bin\\node-gyp-bin;C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\node-gyp-bin;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Git\\cmd;C:\\Program Files (x86)\\Yarn\\bin\\;C:\\Program Files\\nodejs\\;C:\\Program Files\\Microsoft SQL Server\\130\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Go\\bin;C:\\Users\\Hobbiton\\AppData\\Local\\Microsoft\\WindowsApps;;C:\\Users\\Hobbiton\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Users\\Hobbiton\\AppData\\Local\\Yarn\\bin;C:\\Users\\Hobbiton\\AppData\\Roaming\\npm;C:\\Program Files\\JetBrains\\WebStorm 2020.1.1\\bin;;C:\\Users\\Hobbiton\\go\\bin",
+    "Path": "C:\\Users\\Hobbiton\\AppData\\Local\\Temp\\yarn--1594715403636-0.9900179977085146;C:\\Users\\Hobbiton\\Documents\\hobbiton-projects\\flosure-broker-ui\\node_modules\\.bin;C:\\Users\\Hobbiton\\AppData\\Local\\Yarn\\Data\\link\\node_modules\\.bin;C:\\Program Files\\libexec\\lib\\node_modules\\npm\\bin\\node-gyp-bin;C:\\Program Files\\lib\\node_modules\\npm\\bin\\node-gyp-bin;C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\node-gyp-bin;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Git\\cmd;C:\\Program Files (x86)\\Yarn\\bin\\;C:\\Program Files\\nodejs\\;C:\\Program Files\\Microsoft SQL Server\\130\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Go\\bin;C:\\Program Files\\Docker\\Docker\\resources\\bin;C:\\ProgramData\\DockerDesktop\\version-bin;C:\\Users\\Hobbiton\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\Hobbiton\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Users\\Hobbiton\\AppData\\Local\\Yarn\\bin;C:\\Users\\Hobbiton\\AppData\\Roaming\\npm;C:\\Program Files\\JetBrains\\WebStorm 2020.1.1\\bin;;C:\\Users\\Hobbiton\\go\\bin;C:\\Users\\Hobbiton\\Documents\\flutter\\bin;",
     "PATHEXT": ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JSE;.WSF;.WSH;.MSC;.CPL",
     "PROCESSOR_ARCHITECTURE": "AMD64",
     "PROCESSOR_IDENTIFIER": "Intel64 Family 6 Model 94 Stepping 3, GenuineIntel",
@@ -438,18 +450,18 @@
     "C:\\WINDOWS\\System32\\USER32.dll",
     "C:\\WINDOWS\\System32\\win32u.dll",
     "C:\\WINDOWS\\System32\\GDI32.dll",
-    "C:\\WINDOWS\\SYSTEM32\\dbghelp.dll",
     "C:\\WINDOWS\\System32\\gdi32full.dll",
-    "C:\\WINDOWS\\System32\\ucrtbase.dll",
     "C:\\WINDOWS\\System32\\msvcp_win.dll",
+    "C:\\WINDOWS\\System32\\ucrtbase.dll",
     "C:\\WINDOWS\\System32\\CRYPT32.dll",
     "C:\\WINDOWS\\System32\\MSASN1.dll",
     "C:\\WINDOWS\\System32\\bcrypt.dll",
+    "C:\\WINDOWS\\SYSTEM32\\dbghelp.dll",
     "C:\\WINDOWS\\SYSTEM32\\IPHLPAPI.DLL",
     "C:\\WINDOWS\\SYSTEM32\\USERENV.dll",
     "C:\\WINDOWS\\System32\\profapi.dll",
     "C:\\WINDOWS\\SYSTEM32\\WINMM.dll",
-    "C:\\WINDOWS\\SYSTEM32\\winmmbase.dll",
+    "C:\\WINDOWS\\SYSTEM32\\WINMMBASE.dll",
     "C:\\WINDOWS\\System32\\cfgmgr32.dll",
     "C:\\WINDOWS\\System32\\bcryptPrimitives.dll",
     "C:\\WINDOWS\\System32\\IMM32.DLL",

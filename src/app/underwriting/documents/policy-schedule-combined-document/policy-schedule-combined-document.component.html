@@ -30,7 +30,7 @@
                             <td class="title" style="border: none;">
                                 <img
                                     src="/assets/images/Savenda-Logo-Final.png"
-                                    style="width: 100%; max-width: 100px;"
+                                    style="width: 100%; max-width: 240px;"
                                 />
                             </td>
 
@@ -91,7 +91,7 @@
                     {{
                         policy.sourceOfBusiness
                             ? policy.sourceOfBusiness == 'direct'
-                                ? ''
+                                ? policy.user
                                 : policy.user
                             : '-'
                     }}<span style="font-weight: bold;"></span
@@ -135,13 +135,11 @@
                 </li>
             </ol>
             <span style="float: right; text-align: left;">
-
-                Premium: {{ policy.currency }}{{ basicPremium | number: '1.2-2'
-                }}<br />
-                3% Levy: {{ policy.currency }}{{ premiumLevy | number: '1.2-2'
-                }}<br />
-                Total Premium: {{ policy.currency
-
+                Premium: {{ policy.currency == 'ZMW' ? 'K' : '$'
+                }}{{ basicPremium | number: '1.2-2' }}<br />
+                3% Levy: {{ policy.currency == 'ZMW' ? 'K' : '$'
+                }}{{ premiumLevy | number: '1.2-2' }}<br />
+                Total Premium: {{ policy.currency == 'ZMW' ? 'K' : '$'
                 }}{{ totalAmount | number: '1.2-2' }}<br />
             </span>
 
@@ -210,86 +208,87 @@
                 Where the insurance Provided is “Third Party” Sections I of this
                 Policy is cancelled
             </li>
-
-
-            <!-- <ng-container
+            <li
                 *ngIf="
-                    policy.risks[0].limitsOfLiability[0].liabilityType !==
-                        'combinedLimits';
-                    else standardLimit
+                    policy.risks[0].limitsOfLiability[0].liabilityType[0] ===
+                    'combinedLimits'
                 "
-            > -->
-            <li>
+            >
                 <p style="font-weight: bold;">Limits of Liability</p>
                 <p>Limits of the amount of the company's liability under</p>
                 <p>
-                    <span
-                        *ngIf="
-                            limits.liabilityType === 'combinedLimits';
-                            else standardLimit
-                        "
-                        style="font-weight: bold;"
-                        >Combined Limits {{ policy.currency
-                        }}{{ comb.amount }}</span
+                    <span style="font-weight: bold;">Combined</span>Risk :
+                    <span style="font-weight: bold;"
+                        >K{{ combinedLimits }}</span
                     >
-
-                    <!-- <span style="font-weight: bold;"
-                            >K{{ combinedLimits }}</span
-                        > -->
-
-                    <ng-template #standardLimit>
-                        <!-- <p style="font-weight: bold;">Limits of Liability</p>
-                <p>Limit of the amount of the Company’s liability under</p> -->
-
-                        <p>
-                            <span style="font-weight: bold;">Section I</span> -
-                            3 (Protection and Removal) –
-                            <span style="font-weight: bold;"
-                                >{{ policy.currency
-                                }}{{ 0 | number: '1.2-2' }}</span
-                            >
-                        </p>
-
-                        <p>
-                            <span style="font-weight: bold;">Section II</span>
-                            -1 (a) and 2 (a) (Liability to Third Parties – death
-                            bodily injury) in respect of any one claim or series
-                            Of claims arising out of one event:
-                            <span style="font-weight: bold;"
-                                >{{ policy.currency
-                                }}{{ deathPE.amount | number: '1.2-2' }} per
-                                event / {{ policy.currency
-                                }}{{ deathPP.amount | number: '1.2-2' }} per
-                                person</span
-                            >
-                            >
-                        </p>
-                        <p>
-                            <span style="font-weight: bold;">Section II</span> -
-                            1 (b) and 2 (b) (Liability to third Parties –
-                            Property Damage) in respect of any claim or series
-                            Of claims arising out of one event:
-                            <span style="font-weight: bold;"
-                                >{{ policy.currency
-                                }}{{ propertyD.amount | number: '1.2-2' }}</span
-                            >
-                            <span
-                                >- arising from loss of use of a motor vehicle
-                                which is limited to in respect of any one claim
-                                or series of claims arising out of one Event –
-                                <span style="font-weight: bold;">NIL</span> per
-                                event</span
-                            >
-                        </p>
-                    </ng-template>
                 </p>
             </li>
-            <!-- </ng-container> -->
 
-            <!-- <p>Section I-10 (Medical Expenses) in respect of any one accident/any one person <span
+            <li
+                *ngIf="
+                    policy.risks[0].limitsOfLiability[0].liabilityType[0] !==
+                    'combinedLimits'
+                "
+            >
+                <p>Limit of the amount of the Company’s liability under</p>
+                <p>
+                    <span style="font-weight: bold;">Section II</span> -1 (a)
+                    and 2 (a) (Liability to Third Parties – death bodily injury)
+                    in respect of any one claim or series Of claims arising out
+                    of one event:
+                    <span style="font-weight: bold;"
+                        >K{{ deathAndInjuryPerEvent | number: '1.2-2' }} per
+                        event / K{{
+                            deathAndInjuryPerPerson | number: '1.2-2'
+                        }}
+                        per person</span
+                    >
+                </p>
+                <p>
+                    <span style="font-weight: bold;">Section II</span> - 1 (b)
+                    and 2 (b) (Liability to third Parties – Property Damage) in
+                    respect of any claim or series Of claims arising out of one
+                    event:
+                    <span style="font-weight: bold;"
+                        >K{{ propertyDamage | number: '1.2-2' }}</span
+                    >
+                    <span
+                        >- arising from loss of use of a motor vehicle which is
+                        limited to in respect of any one claim or series of
+                        claims arising out of one Event –
+                        <span style="font-weight: bold;">NIL</span> per
+                        event</span
+                    >
+                </p>
+            </li>
+
+            <!---
+            <li>
+
+                <p style="font-weight: bold;">Limits of Liability</p>
+                <p>Limit of the amount of the Company’s liability under</p>
+                <!-- <p><span style="font-weight: bold;">Section I</span> - 3 (Protection and Removal) – <span
+                        style="font-weight: bold;">K{{0 | number: '1.2-2'}}</span></p> --
+                <p><span style="font-weight: bold;">Section II</span> -1 (a) and 2 (a) (Liability to Third Parties –
+                    death bodily injury) in respect of any one
+                    claim or series
+                    Of claims arising out of one event: <span
+                        style="font-weight: bold;">K{{deathAndInjuryPerEvent | number: '1.2-2'}} per event /
+                        K{{deathAndInjuryPerPerson | number: '1.2-2'}} per
+                        person</span></p>
+                <p><span style="font-weight: bold;">Section II</span> - 1 (b) and 2 (b) (Liability to third Parties –
+                    Property Damage) in respect of any claim
+                    or series
+                    Of claims arising out of one event: <span
+                        style="font-weight: bold;">K{{propertyDamage | number: '1.2-2'}}</span>
+                    <span>- arising from loss of use of a motor vehicle which is limited to in respect of any one claim
+                        or series of claims arising out of one
+                        Event – <span style="font-weight: bold;">NIL</span> per event</span></p>
+                <!-- <p>Section I-10 (Medical Expenses) in respect of any one accident/any one person <span
                         style="font-weight: bold;">K{{0 | number: '1.2-2'}} /
-                        K{{0 | number: '1.2-2'}}</span></p> -->
-            <!-- </li> -->
+                        K{{0 | number: '1.2-2'}}</span></p> --
+
+            </li> -->
         </ol>
 
         <!-- <p><span style="font-weight: bold;">Unauthorized Repair Limit (Section 1 – 4 (a)):
@@ -320,80 +319,42 @@
                 Zambia
             </li>
         </ol>
-        <!-- <p>
-            <span style="font-weight: bold;">COMPULSORY Excesses to apply on each and every claim as
-                follows:</span>
+        <p>
+            <span style="font-weight: bold;"
+                >COMPULSORY Excesses to apply on each and every claim as
+                follows:</span
+            >
         </p>
         <ol type="a">
-            <li>Collision &amp; Fire: 10% minimum: <span
-                    style="font-weight: bold;">K{{collisionAndFire | number: '1.2-2'}}</span></li>
-            <li>Theft of vehicle with anti theft device: 10% minimum: <span
-                    style="font-weight: bold;">K{{theftOfVehicleWithAntiTheftDevice | number: '1.2-2'}}</span></li>
-            <li>Theft of vehicle without anti theft device: 15% minimum: <span
-                    style="font-weight: bold;">K{{theftOfVehicleWithoutAntiTheftDevice | number: '1.2-2'}}</span>
-            </li>
-            <li>Third Party Property damage: 10% minimum: <span
-                    style="font-weight: bold;">K{{thirdPartyPropertyDamage | number: '1.2-2'}}</span></li>
-        </ol> -->
-
-        <p>
-            <span style="font-weight: bold;"><strong>Excess</strong></span>
-        </p>
-        <ul style="list-style-type: none;">
-
-            <li *ngFor="let ex of excessList">
-                {{ ex.excessType }}
-                <span style="font-weight: bold;"
-                    >{{ policy.currency }}{{ ex.amount }}</span
-                >
-            </li>
-            <!-- <li>
-
-                The insured shall be responsible for the first 10% of each and
-                every claim/loss subject to retained minimum liability of USD
-                <span style="font-weight: bold;">100</span>
-            </li>
             <li>
-                Excess applicable on young/inexperienced drivers shall be as
-                hereunder:
-            </li>
-            <li>
-                (i) Any person below 21 years of age - 10% minimum of
+                Collision &amp; Fire: 10% minimum:
                 <span style="font-weight: bold;"
-                    >USD{{ below21Years | number: '1.2-2' }}</span
+                    >K{{ collisionAndFire | number: '1.2-2' }}</span
                 >
             </li>
             <li>
-                (ii)Any person over 70 years of age 10% minimum of
+                Theft of vehicle with anti theft device: 10% minimum:
                 <span style="font-weight: bold;"
-                    >USD{{ over70Years | number: '1.2-2' }}</span
+                    >K{{
+                        theftOfVehicleWithAntiTheftDevice | number: '1.2-2'
+                    }}</span
                 >
             </li>
             <li>
-                (iii)Any Person who has not held a full drivers license for a
-                minimum period of 24 months 10% minimum of
+                Theft of vehicle without anti theft device: 15% minimum:
                 <span style="font-weight: bold;"
-                    >USD{{ noLicence | number: '1.2-2' }}</span
+                    >K{{
+                        theftOfVehicleWithoutAntiTheftDevice | number: '1.2-2'
+                    }}</span
                 >
             </li>
             <li>
-                (iv) Any person who has been convicted and has had a license
-                endorsed as a result of following during the previous three
-                years: >
-            </li>
-            <li>
-                (1)Careless or reckless driving - 10% minimum of
+                Third Party Property damage: 10% minimum:
                 <span style="font-weight: bold;"
-                    >USD{{ careLessDriving | number: '1.2-2' }}</span
+                    >K{{ thirdPartyPropertyDamage | number: '1.2-2' }}</span
                 >
             </li>
-            <li>
-                (2) Any other endorsement - 10% minimum of
-                <span style="font-weight: bold;"
-                    >USD{{ otherEndorsement | number: '1.2-2' }}</span
-                >
-            </li>-->
-        </ul>
+        </ol>
         <p><span style="font-weight: bold;">Limitations as to Use</span>:</p>
         <p>
             Use only for social domestic and pleasure purposes and for the
@@ -418,7 +379,7 @@
             <span style="font-weight: bold;"
                 >Date of Signature of Proposal and Declaration</span
             >: AS PER COVERNOTE
-            <span style="font-weight: bold;">{{coverNot.certificateNumber}}</span> DATED
+            <span style="font-weight: bold;">[Cover note number]</span> DATED
             {{ policy.dateOfIssue | date }}
         </p>
         <p>
@@ -433,7 +394,7 @@
             <span style="float: center;"></span
             ><span style="float: right;"
                 ><span style="font-weight: bold;"
-                    >For /Chief Executive Officer</span
+                    >For Chief Executive Officer</span
                 ></span
             >
         </p>

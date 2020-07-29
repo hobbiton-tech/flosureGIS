@@ -33,27 +33,27 @@ registerLocaleData(en);
 //     measurementId: 'G-4565Y5EHD4'
 // };
 
-// const firebaseConfig = {
-//     apiKey: 'AIzaSyCIwedzdF9Og67CsT8oChO8UkMBk1OVQPE',
-//     authDomain: 'savenda-insurance.firebaseapp.com',
-//     databaseURL: 'https://savenda-insurance.firebaseio.com',
-//     projectId: 'savenda-insurance',
-//     storageBucket: 'savenda-insurance.appspot.com',
-//     messagingSenderId: '795733102142',
-//     appId: '1:795733102142:web:62eaa45624e4473e35cb6f',
-//     measurementId: 'G-SCN3RMBTB7',
-// };
-
 const firebaseConfig = {
-    apiKey: 'AIzaSyA4otys77Tb4bX7uXJONdquRlj0HCzzn1M',
-    authDomain: 'aplus-insurance.firebaseapp.com',
-    databaseURL: 'https://aplus-insurance.firebaseio.com',
-    projectId: 'aplus-insurance',
-    storageBucket: 'aplus-insurance.appspot.com',
-    messagingSenderId: '526693014551',
-    appId: '1:526693014551:web:edce6fd10c1c52742dd052',
-    measurementId: 'G-GNB5VZE6XQ'
+    apiKey: 'AIzaSyCIwedzdF9Og67CsT8oChO8UkMBk1OVQPE',
+    authDomain: 'savenda-insurance.firebaseapp.com',
+    databaseURL: 'https://savenda-insurance.firebaseio.com',
+    projectId: 'savenda-insurance',
+    storageBucket: 'savenda-insurance.appspot.com',
+    messagingSenderId: '795733102142',
+    appId: '1:795733102142:web:62eaa45624e4473e35cb6f',
+    measurementId: 'G-SCN3RMBTB7',
 };
+
+// const firebaseConfig = {
+//     apiKey: 'AIzaSyA4otys77Tb4bX7uXJONdquRlj0HCzzn1M',
+//     authDomain: 'aplus-insurance.firebaseapp.com',
+//     databaseURL: 'https://aplus-insurance.firebaseio.com',
+//     projectId: 'aplus-insurance',
+//     storageBucket: 'aplus-insurance.appspot.com',
+//     messagingSenderId: '526693014551',
+//     appId: '1:526693014551:web:edce6fd10c1c52742dd052',
+//     measurementId: 'G-GNB5VZE6XQ'
+// };
 
 @NgModule({
     declarations: [AppComponent, NavigationComponent, LoginComponent],

@@ -22,7 +22,7 @@ export class ViewReceiptsComponent implements OnInit {
     showReceiptModal = false;
     receiptedList: IReceiptModel[];
     receiptObj: IReceiptModel = new IReceiptModel();
-    receipt: IReceiptModel;
+    receipt: any;
     today = new Date();
     receiptURl: string;
     _id: string;
@@ -84,8 +84,10 @@ export class ViewReceiptsComponent implements OnInit {
                 this.loadingReceipt = false;
             }, 3000);
 
-            this.receiptService.getReciepts().subscribe((receipts) => {
-                this.receipt = receipts.filter((x) => x.id === param.id)[0];
+            this.receiptService.getReciept(this._id).subscribe((receipts) => {
+                console.log("NEW Receipt", receipts);
+                this.receipt = receipts.data
+                console.log("NEW Receipt Data", receipts.data);
             });
 
             // this.generateDocuments();
@@ -155,7 +157,7 @@ export class ViewReceiptsComponent implements OnInit {
             for (let i = 0; i < pdfOutput.length; i++) {
                 array[i] = pdfOutput.charCodeAt(i);
             }
-            const fileName = `${this.receipt.receiptNumber}-receipt.pdf`;
+            const fileName = `${this.receipt.receipt_number}-receipt.pdf`;
             doc.save(fileName);
             this.generatingPDF = false;
         });

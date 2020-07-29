@@ -710,12 +710,12 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
                 iDate.setMonth(iDate.getMonth() + 1);
                 this.formattedDate = iDate;
 
-                installment.push({
-                    installmentAmount: iAmount,
-                    installmentDate: this.formattedDate,
-                    balance: iAmount,
-                    installmentStatus: 'UnPaid',
-                });
+                // installment.push({
+                //     installmentAmount: iAmount,
+                //     installmentDate: this.formattedDate,
+                //     balance: iAmount,
+                //     installmentStatus: 'UnPaid',
+                // });
             }
 
             // Payment Plan
@@ -749,37 +749,32 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
 
             this._id = v4();
             const receipt: IReceiptModel = {
-                id: this._id,
-                paymentMethod: '',
-                receivedFrom: this.paymentPlanForm.controls.clientName.value,
-                onBehalfOf: this.paymentPlanForm.controls.clientName.value,
-                capturedBy: 'charles malama',
-                policyNumber: '',
-                receiptStatus: 'Receipted',
+                payment_method: '',
+                received_from: this.paymentPlanForm.controls.clientName.value,
+                on_behalf_of: this.paymentPlanForm.controls.clientName.value,
+                captured_by: 'charles malama',
+                receipt_status: 'Receipted',
                 narration: 'Payment Plan',
-                receiptType: 'Premium Payment',
-                sumInDigits: this.paymentPlanForm.controls
+                receipt_type: 'Premium Payment',
+                sum_in_digits: this.paymentPlanForm.controls
                     .initialInstallmentAmount.value,
-                todayDate: new Date(),
+                today_date: new Date(),
             };
 
             const planReceipt: PlanReceipt[] = [];
             planReceipt.push({
-                id: this._id,
-                onBehalfOf: this.paymentPlanForm.controls.clientName.value,
-                allocationStatus: 'Unallocated',
-                sumInDigits: this.paymentPlanForm.controls
+                allocation_status: 'Unallocated',
+                amount: this.paymentPlanForm.controls
                     .initialInstallmentAmount.value,
-                policyNumber: '',
             });
 
-            plan.planReceipt = planReceipt;
+            // plan.planReceipt = planReceipt;
             console.log('=====================');
 
             console.log(receipt, plan);
 
             // add payment plan
-            this.paymentPlanService.addPaymentPlanReceipt(receipt, plan);
+            // this.paymentPlanService.addPaymentPlanReceipt(receipt, plan);
 
             // add payment plan
             // this.paymentPlanService.addPaymentPlan(plan);

@@ -10,7 +10,6 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { ReceiptsComponent } from './components/receipts/receipts.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PaymentPlanComponent } from './components/payment-plan/payment-plan.component';
-import { PaymentPlanPoliciesComponent } from './components/payment-plan/components/payment-plan-policies/payment-plan-policies.component';
 import { PaymentPlanPolicyInstallmentsComponent } from './components/payment-plan/components/payment-plan-policy-installments/payment-plan-policy-installments.component';
 import { ReceiptDocumentComponent } from './components/receipts/documents/receipt-document/receipt-document.component';
 import { DirectClientComponent } from './components/receipts/components/direct-client/direct-client.component';
@@ -35,10 +34,6 @@ const routes: Routes = [
         path: 'payment-plan',
         component: PaymentPlanComponent,
     },
-    // {
-    //     path: 'payment-plan/:id',
-    //     component: PaymentPlanPoliciesComponent,
-    // },
     {
         path: 'payment-plan/:id',
         component: PaymentPlanPolicyInstallmentsComponent,
@@ -72,7 +67,6 @@ const routes: Routes = [
         PaymentsComponent,
         ReceiptsComponent,
         PaymentPlanComponent,
-        PaymentPlanPoliciesComponent,
         PaymentPlanPolicyInstallmentsComponent,
         ReceiptDocumentComponent,
         DirectClientComponent,

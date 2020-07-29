@@ -34,7 +34,10 @@ import {
     ISalesRepresentative,
 } from 'src/app/settings/components/agents/models/agents.model';
 import { ImageElement } from 'canvg';
-import { DebitNote, CoverNote } from 'src/app/underwriting/documents/models/documents.model';
+import {
+    DebitNote,
+    CoverNote,
+} from 'src/app/underwriting/documents/models/documents.model';
 import { ClausesService } from 'src/app/settings/components/underwriting-setups/services/clauses.service';
 import {
     IPolicyClauses,
@@ -474,6 +477,13 @@ export class QuoteDetailsComponent implements OnInit {
     amount = '';
     policyId: string;
     newRisks: RiskModel[];
+    //Excess Variable
+    excessList: Excess[] = [];
+
+    excessTHP: IExccess[] = [];
+    excessAct: IExccess[] = [];
+    excessFT: IExccess[] = [];
+    limitsOfLiabilities: LimitsOfLiability[] = [];
 
     constructor(
         private formBuilder: FormBuilder,
@@ -519,6 +529,19 @@ export class QuoteDetailsComponent implements OnInit {
                 console.log('this.quote>>>>>', this.quoteData);
 
                 this.risks = this.quoteData.risks;
+
+                this.excessList = this.risks[0].excesses;
+
+                this.limitsOfLiabilities = this.risks[0].limitsOfLiability;
+                console.log('RISKS<<<<<<', this.excessList);
+
+                // this.productClauseService.getExccesses().subscribe((res) => {
+                //     this.excessList = res;
+                //     this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                //     this.excessAct = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+                //     this.excessFT = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+
+                // })
 
                 this.productClauseService
                     .getPolicyClauses()
@@ -1574,8 +1597,8 @@ export class QuoteDetailsComponent implements OnInit {
 
                 const coverNote: CoverNote = {
                     dateCreated: new Date(),
-                    dateUpdated: new Date()
-                }
+                    dateUpdated: new Date(),
+                };
 
                 // const policy = this.quoteDetailsForm.value as Policy;
                 console.log(policy);
@@ -1586,7 +1609,6 @@ export class QuoteDetailsComponent implements OnInit {
                     this.policyId = res.id;
                     this.newRisks = res.risks;
                     console.log('Risks>>>>>>>>', this.newRisks);
-                    
 
                     // this.policiesService.createDebitNote(
                     //     res.id,
@@ -1603,50 +1625,46 @@ export class QuoteDetailsComponent implements OnInit {
                         insuranceType = 'THP';
                     }
 
-                    for( const r of this.newRisks){
-
+                    for (const r of this.newRisks) {
                         let insuranceType = '';
                         const productType = r.insuranceType;
                         if (productType == 'Comprehensive') {
-                            insuranceType = 'MCP';
+                            insuranceType = '07001';
                         } else {
-                            insuranceType = 'THP';
+                            insuranceType = '07002';
                         }
-
                         this.http
-                    .get<any>(
-                        `https://flosure-number-generation.herokuapp.com/aplus-certificate-number/1/0/${insuranceType}`
-                    )
-                    .subscribe(async (res) => {
-                        coverNote.certificateNumber = res.data.certificate_number;
-                        coverNote.policyId = r.id;
-                        console.log(
-                            'Cover Note>>>>',
-                            res.data.certificate_number
-                        );
+                            .get<any>(
+                                `https://number-generation.flosure-api.com/savenda-certificate-number`
+                            )
+                            .subscribe(async (res) => {
+                                coverNote.certificateNumber =
+                                    res.data.certificate_number;
+                                coverNote.policyId = r.id;
+                                console.log(
+                                    'Cover Note>>>>',
+                                    res.data.certificate_number
+                                );
 
-                        this.http
-                        .post<CoverNote>(
-                            `https://www.flosure-api.com/documents/cover-note`,
-                            coverNote
-                        )
-                        .subscribe(
-                            async (res) => {
-                                console.log(res);
-                            },
-                            async (err) => {
-                                console.log(err);
-                            }
-                        );
-
-                    });
-
+                                this.http
+                                    .post<CoverNote>(
+                                        `https://savenda.flosure-api.com/documents/cover-note`,
+                                        coverNote
+                                    )
+                                    .subscribe(
+                                        async (res) => {
+                                            console.log(res);
+                                        },
+                                        async (err) => {
+                                            console.log(err);
+                                        }
+                                    );
+                            });
                     }
-                    
 
                     this.http
                         .get<any>(
-                            `https://flosure-number-generation.herokuapp.com/aplus-invoice-number/1/0/${insuranceType}`
+                            `https://number-generation.flosure-api.com/savenda-invoice-number/1/${insuranceType}`
                         )
                         .subscribe(async (res) => {
                             debitNote.debitNoteNumber = res.data.invoice_number;
@@ -1658,7 +1676,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                             this.http
                                 .post<DebitNote>(
-                                    `https://www.flosure-api.com/documents/debit-note/${this.policyId}`,
+                                    `https://savenda.flosure-api.com/documents/debit-note/${this.policyId}`,
                                     debitNote
                                 )
                                 .subscribe(
@@ -1670,23 +1688,27 @@ export class QuoteDetailsComponent implements OnInit {
                                     }
                                 );
 
-                            receipt.invoiceNumber = res.data.invoice_number;
+                            receipt.invoice_number = res.data.invoice_number;
                             this.receiptService
-                                .addReceipt(
-                                    receipt,
-                                    this.quote.risks[0].insuranceType
-                                )
-                                .then((mess) => {
-                                    this.message.success(
-                                        'Receipt Successfully created'
-                                    );
-
+                                .addReceipt( receipt,this.quote.risks[0].insuranceType).subscribe((mess) => {
+                                    this.message.success('Receipt Successfully created');
                                     console.log(mess);
-                                })
-                                .catch((err) => {
+                                },
+                                (err) => {
                                     this.message.warning('Receipt Failed');
                                     console.log(err);
                                 });
+                                // .then((mess) => {
+                                //     this.message.success(
+                                //         'Receipt Successfully created'
+                                //     );
+
+                                //     console.log(mess);
+                                // })
+                                // .catch((err) => {
+                                //     this.message.warning('Receipt Failed');
+                                //     console.log(err);
+                                // });
                         });
 
                     for (const clause of this.clauses) {
@@ -1856,14 +1878,14 @@ export class QuoteDetailsComponent implements OnInit {
                     let insuranceType = '';
                     const productType = this.getInsuranceType;
                     if (productType == 'Comprehensive') {
-                        insuranceType = 'MCP';
+                        insuranceType = '07001';
                     } else {
-                        insuranceType = 'THP';
+                        insuranceType = '07002';
                     }
 
                     this.http
                         .get<any>(
-                            `https://flosure-number-generation.herokuapp.com/aplus-invoice-number/1/0/${insuranceType}`
+                            `https://number-generation.flosure-api.com/savenda-invoice-number/1/${insuranceType}`
                         )
                         .subscribe(async (res) => {
                             debitNote.debitNoteNumber = res.data.invoice_number;
@@ -1875,7 +1897,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                             this.http
                                 .post<DebitNote>(
-                                    `https://www.flosure-api.com/documents/debit-note/${this.policyId}`,
+                                    `https://savenda.flosure-api.com/documents/debit-note/${this.policyId}`,
                                     debitNote
                                 )
                                 .subscribe(
@@ -1887,27 +1909,31 @@ export class QuoteDetailsComponent implements OnInit {
                                     }
                                 );
 
-                            receipt.invoiceNumber = res.data.invoice_number;
+                            receipt.invoice_number = res.data.invoice_number;
                             this.receiptService
-                                .addReceipt(
-                                    receipt,
-                                    this.quote.risks[0].insuranceType
-                                )
-                                .then((mess) => {
-                                    console.log(
-                                        'DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD',
-                                        mess
-                                    );
-                                    this.message.success(
-                                        'Receipt Successfully created'
-                                    );
-
+                                .addReceipt( receipt, this.quote.risks[0].insuranceType).subscribe((mess) => {
+                                    this.message.success('Receipt Successfully created');
                                     console.log(mess);
-                                })
-                                .catch((err) => {
+                                },
+                                (err) => {
                                     this.message.warning('Receipt Failed');
                                     console.log(err);
                                 });
+                                // .then((mess) => {
+                                //     console.log(
+                                //         'DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD',
+                                //         mess
+                                //     );
+                                //     this.message.success(
+                                //         'Receipt Successfully created'
+                                //     );
+
+                                //     console.log(mess);
+                                // })
+                                // .catch((err) => {
+                                //     this.message.warning('Receipt Failed');
+                                //     console.log(err);
+                                // });
                         });
 
                     for (const clause of this.clauses) {
@@ -2999,30 +3025,45 @@ export class QuoteDetailsComponent implements OnInit {
     }
 
     addExcesses(): void {
-        this.excesses.push({
-            excessType: 'below21Years',
-            amount: Number(this.excessesForm.get('below21Years').value),
-        });
+        if (this.selectedValue.value === 'Comprehensive') {
+            for (const ex of this.excessList) {
+                this.excesses.push({
+                    excessType: ex.excessType,
+                    amount: Number(ex.amount),
+                });
+            }
+        } else if (this.selectedValue.value === 'ThirdParty') {
+            for (const exTHP of this.excessTHP) {
+                this.excesses.push({
+                    excessType: exTHP.description,
+                    amount: Number(exTHP.amount),
+                });
+            }
+        }
+        // this.excesses.push({
+        //     excessType: 'below21Years',
+        //     amount: Number(this.excessesForm.get('below21Years').value),
+        // });
 
-        this.excesses.push({
-            excessType: 'over70Years',
-            amount: Number(this.excessesForm.get('over70Years').value),
-        });
+        // this.excesses.push({
+        //     excessType: 'over70Years',
+        //     amount: Number(this.excessesForm.get('over70Years').value),
+        // });
 
-        this.excesses.push({
-            excessType: 'noLicence',
-            amount: Number(this.excessesForm.get('noLicence').value),
-        });
+        // this.excesses.push({
+        //     excessType: 'noLicence',
+        //     amount: Number(this.excessesForm.get('noLicence').value),
+        // });
 
-        this.excesses.push({
-            excessType: 'careLessDriving',
-            amount: Number(this.excessesForm.get('careLessDriving').value),
-        });
+        // this.excesses.push({
+        //     excessType: 'careLessDriving',
+        //     amount: Number(this.excessesForm.get('careLessDriving').value),
+        // });
 
-        this.excesses.push({
-            excessType: 'otherEndorsement',
-            amount: Number(this.excessesForm.get('otherEndorsement').value),
-        });
+        // this.excesses.push({
+        //     excessType: 'otherEndorsement',
+        //     amount: Number(this.excessesForm.get('otherEndorsement').value),
+        // });
     }
     get receiptFormControl() {
         return this.receiptForm.controls;

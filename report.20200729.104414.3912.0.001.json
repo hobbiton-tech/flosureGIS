@@ -4,15 +4,15 @@
     "reportVersion": 2,
     "event": "Allocation failed - JavaScript heap out of memory",
     "trigger": "FatalError",
-    "filename": "report.20200619.014256.72528.0.001.json",
-    "dumpEventTime": "2020-06-19T01:42:57Z",
-    "dumpEventTimeStamp": "1592523777083",
-    "processId": 72528,
+    "filename": "report.20200729.104414.3912.0.001.json",
+    "dumpEventTime": "2020-07-29T10:44:14Z",
+    "dumpEventTimeStamp": "1596012254812",
+    "processId": 3912,
     "threadId": null,
-    "cwd": "C:\\Users\\user\\Documents\\projects\\flosure-broker-ui",
+    "cwd": "C:\\Users\\Hobbiton\\Documents\\hobbiton-projects\\flosure-broker-ui",
     "commandLine": [
       "C:\\Program Files\\nodejs\\node.exe",
-      "C:\\Users\\user\\Documents\\projects\\flosure-broker-ui\\node_modules\\.bin\\\\..\\@angular\\cli\\bin\\ng",
+      "C:\\Users\\Hobbiton\\Documents\\hobbiton-projects\\flosure-broker-ui\\node_modules\\.bin\\\\..\\@angular\\cli\\bin\\ng",
       "serve",
       "--port",
       "4300"
@@ -47,62 +47,44 @@
       "libUrl": "https://nodejs.org/download/release/v12.16.2/win-x64/node.lib"
     },
     "osName": "Windows_NT",
-    "osRelease": "10.0.18362",
+    "osRelease": "10.0.18363",
     "osVersion": "Windows 10 Pro",
     "osMachine": "x86_64",
     "cpus": [
       {
-        "model": "Intel(R) Core(TM) i5-4300M CPU @ 2.60GHz",
-        "speed": 2594,
-        "user": 13395031,
+        "model": "Intel(R) Pentium(R) CPU G4400 @ 3.30GHz",
+        "speed": 3312,
+        "user": 1891406,
         "nice": 0,
-        "sys": 22032593,
-        "idle": 24963906,
-        "irq": 611500
+        "sys": 944437,
+        "idle": 7319593,
+        "irq": 100046
       },
       {
-        "model": "Intel(R) Core(TM) i5-4300M CPU @ 2.60GHz",
-        "speed": 2594,
-        "user": 13312265,
+        "model": "Intel(R) Pentium(R) CPU G4400 @ 3.30GHz",
+        "speed": 3312,
+        "user": 1992062,
         "nice": 0,
-        "sys": 22036890,
-        "idle": 25042125,
-        "irq": 174375
-      },
-      {
-        "model": "Intel(R) Core(TM) i5-4300M CPU @ 2.60GHz",
-        "speed": 2594,
-        "user": 13048734,
-        "nice": 0,
-        "sys": 24834281,
-        "idle": 22508250,
-        "irq": 110734
-      },
-      {
-        "model": "Intel(R) Core(TM) i5-4300M CPU @ 2.60GHz",
-        "speed": 2594,
-        "user": 12881859,
-        "nice": 0,
-        "sys": 25991765,
-        "idle": 21517640,
-        "irq": 75000
+        "sys": 823671,
+        "idle": 7339484,
+        "irq": 21625
       }
     ],
     "networkInterfaces": [
       {
-        "name": "Wi-Fi",
+        "name": "Ethernet",
         "internal": false,
-        "mac": "7c:7a:91:cc:14:74",
-        "address": "fe80::553:6414:9c1:a44d",
+        "mac": "18:31:bf:09:4d:30",
+        "address": "fe80::9ac:47a9:33f2:a9aa",
         "netmask": "ffff:ffff:ffff:ffff::",
         "family": "IPv6",
-        "scopeid": 51
+        "scopeid": 10
       },
       {
-        "name": "Wi-Fi",
+        "name": "Ethernet",
         "internal": false,
-        "mac": "7c:7a:91:cc:14:74",
-        "address": "192.168.43.144",
+        "mac": "18:31:bf:09:4d:30",
+        "address": "192.168.100.177",
         "netmask": "255.255.255.0",
         "family": "IPv4"
       },
@@ -126,22 +108,22 @@
       {
         "name": "vEthernet (Default Switch)",
         "internal": false,
-        "mac": "00:15:5d:6e:43:1c",
-        "address": "fe80::3158:140f:621f:bb25",
+        "mac": "00:15:5d:f8:77:04",
+        "address": "fe80::20f9:fc37:74c0:fd64",
         "netmask": "ffff:ffff:ffff:ffff::",
         "family": "IPv6",
-        "scopeid": 69
+        "scopeid": 21
       },
       {
         "name": "vEthernet (Default Switch)",
         "internal": false,
-        "mac": "00:15:5d:6e:43:1c",
-        "address": "172.17.69.225",
+        "mac": "00:15:5d:f8:77:04",
+        "address": "172.17.217.113",
         "netmask": "255.255.255.240",
         "family": "IPv4"
       }
     ],
-    "host": "DESKTOP-H8191UC"
+    "host": "Hobbiton"
   },
   "javascriptStack": {
     "message": "No stack.",
@@ -151,71 +133,75 @@
   },
   "nativeStack": [
     {
-      "pc": "0x00007ff6620c2309",
+      "pc": "0x00007ff62b202309",
       "symbol": "std::basic_ostream<char,std::char_traits<char> >::operator<<+11577"
     },
     {
-      "pc": "0x00007ff6620c6869",
+      "pc": "0x00007ff62b206869",
       "symbol": "std::basic_ostream<char,std::char_traits<char> >::operator<<+29337"
     },
     {
-      "pc": "0x00007ff6620c56e8",
+      "pc": "0x00007ff62b2056e8",
       "symbol": "std::basic_ostream<char,std::char_traits<char> >::operator<<+24856"
     },
     {
-      "pc": "0x00007ff6621edd82",
+      "pc": "0x00007ff62b32dd82",
       "symbol": "v8::base::CPU::has_sse+59378"
     },
     {
-      "pc": "0x00007ff662a0a27e",
+      "pc": "0x00007ff62bb4a27e",
       "symbol": "v8::Isolate::ReportExternalAllocationLimitReached+94"
     },
     {
-      "pc": "0x00007ff6629f2351",
+      "pc": "0x00007ff62bb32351",
       "symbol": "v8::SharedArrayBuffer::Externalize+833"
     },
     {
-      "pc": "0x00007ff6628be8ac",
+      "pc": "0x00007ff62b9fe8ac",
       "symbol": "v8::internal::Heap::EphemeronKeyWriteBarrierFromCode+1436"
     },
     {
-      "pc": "0x00007ff6628c9ae0",
+      "pc": "0x00007ff62ba09ae0",
       "symbol": "v8::internal::Heap::ProtectUnprotectedMemoryChunks+1312"
     },
     {
-      "pc": "0x00007ff6628c6604",
+      "pc": "0x00007ff62ba06604",
       "symbol": "v8::internal::Heap::PageFlagsAreConsistent+3204"
     },
     {
-      "pc": "0x00007ff6628bbe03",
+      "pc": "0x00007ff62b9fbe03",
       "symbol": "v8::internal::Heap::CollectGarbage+1283"
     },
     {
-      "pc": "0x00007ff6628ba474",
+      "pc": "0x00007ff62b9fa474",
       "symbol": "v8::internal::Heap::AddRetainedMap+2452"
     },
     {
-      "pc": "0x00007ff6628db67d",
+      "pc": "0x00007ff62ba1b67d",
       "symbol": "v8::internal::Factory::NewFillerObject+61"
     },
     {
-      "pc": "0x00007ff6626413d1",
+      "pc": "0x00007ff62b7813d1",
       "symbol": "v8::internal::interpreter::JumpTableTargetOffsets::iterator::operator=+1665"
     },
     {
-      "pc": "0x00007ff662e5730d",
+      "pc": "0x00007ff62bf9730d",
       "symbol": "v8::internal::SetupIsolateDelegate::SetupHeap+546637"
     },
     {
-      "pc": "0x0000021a596d949d",
+      "pc": "0x00007ff62bfaaf1f",
+      "symbol": "v8::internal::SetupIsolateDelegate::SetupHeap+627551"
+    },
+    {
+      "pc": "0x000002207978af32",
       "symbol": ""
     }
   ],
   "javascriptHeap": {
-    "totalMemory": 2177413120,
-    "totalCommittedMemory": 2177413120,
-    "usedMemory": 2104672840,
-    "availableMemory": 51678368,
+    "totalMemory": 2178981888,
+    "totalCommittedMemory": 2178981888,
+    "usedMemory": 2093173624,
+    "availableMemory": 51599648,
     "memoryLimit": 2197815296,
     "heapSpaces": {
       "read_only_space": {
@@ -229,42 +215,42 @@
         "memorySize": 33554432,
         "committedMemory": 33554432,
         "capacity": 16759296,
-        "used": 2243240,
-        "available": 14516056
+        "used": 851944,
+        "available": 15907352
       },
       "old_space": {
-        "memorySize": 1872371712,
-        "committedMemory": 1872371712,
-        "capacity": 1850730096,
-        "used": 1850729256,
-        "available": 840
+        "memorySize": 1756766208,
+        "committedMemory": 1756766208,
+        "capacity": 1725456056,
+        "used": 1725356464,
+        "available": 99592
       },
       "code_space": {
-        "memorySize": 4886528,
-        "committedMemory": 4886528,
-        "capacity": 4222944,
-        "used": 4222944,
+        "memorySize": 6983680,
+        "committedMemory": 6983680,
+        "capacity": 6223648,
+        "used": 6223648,
         "available": 0
       },
       "map_space": {
-        "memorySize": 26218496,
-        "committedMemory": 26218496,
-        "capacity": 7965520,
-        "used": 7965520,
+        "memorySize": 27267072,
+        "committedMemory": 27267072,
+        "capacity": 7362480,
+        "used": 7362480,
         "available": 0
       },
       "large_object_space": {
-        "memorySize": 239497216,
-        "committedMemory": 239497216,
-        "capacity": 238934784,
-        "used": 238934784,
+        "memorySize": 353525760,
+        "committedMemory": 353525760,
+        "capacity": 352801896,
+        "used": 352801896,
         "available": 0
       },
       "code_large_object_space": {
         "memorySize": 622592,
         "committedMemory": 622592,
-        "capacity": 544288,
-        "used": 544288,
+        "capacity": 544384,
+        "used": 544384,
         "available": 0
       },
       "new_large_object_space": {
@@ -277,16 +263,16 @@
     }
   },
   "resourceUsage": {
-    "userCpuSeconds": 764.578,
-    "kernelCpuSeconds": 44.718,
-    "cpuConsumptionPercent": 78.7253,
-    "maxRss": 2429014016,
+    "userCpuSeconds": 364.375,
+    "kernelCpuSeconds": 23.093,
+    "cpuConsumptionPercent": 6.36341,
+    "maxRss": 2283229184,
     "pageFaults": {
-      "IORequired": 2043810,
+      "IORequired": 2400357,
       "IONotRequired": 0
     },
     "fsActivity": {
-      "reads": 12198,
+      "reads": 10780,
       "writes": 8
     }
   },
@@ -295,64 +281,44 @@
   "workers": [
   ],
   "environmentVariables": {
-    "=C:": "C:\\Users\\user\\Documents\\projects\\flosure-broker-ui",
+    "=C:": "C:\\Users\\Hobbiton\\Documents\\hobbiton-projects\\flosure-broker-ui",
     "ALLUSERSPROFILE": "C:\\ProgramData",
-    "APPDATA": "C:\\Users\\user\\AppData\\Roaming",
+    "APPDATA": "C:\\Users\\Hobbiton\\AppData\\Roaming",
     "BROWSERSLIST_IGNORE_OLD_DATA": "1",
     "ChocolateyInstall": "C:\\ProgramData\\chocolatey",
-    "ChocolateyLastPathUpdate": "132342697166309984",
-    "ChocolateyToolsLocation": "C:\\tools",
+    "ChocolateyLastPathUpdate": "132397981966842807",
     "COLORTERM": "truecolor",
     "CommonProgramFiles": "C:\\Program Files\\Common Files",
     "CommonProgramFiles(x86)": "C:\\Program Files (x86)\\Common Files",
     "CommonProgramW6432": "C:\\Program Files\\Common Files",
-    "COMPUTERNAME": "DESKTOP-H8191UC",
+    "COMPUTERNAME": "HOBBITON",
     "ComSpec": "C:\\WINDOWS\\system32\\cmd.exe",
-    "DART_SDK": "C:\\Program Files\\Dart\\dart-sdk",
-    "DokanLibrary1": "C:\\Program Files\\Dokan\\Dokan Library-1.2.0\\",
-    "DokanLibrary1_LibraryPath_x64": "C:\\Program Files\\Dokan\\Dokan Library-1.2.0\\lib\\",
-    "DokanLibrary1_LibraryPath_x86": "C:\\Program Files\\Dokan\\Dokan Library-1.2.0\\x86\\lib\\",
     "DriverData": "C:\\Windows\\System32\\Drivers\\DriverData",
-    "flutter": "C:\\Users\\user\\Documents\\flutter\\bin\\flutter.bat",
-    "FSHARPINSTALLDIR": "C:\\Program Files (x86)\\Microsoft SDKs\\F#\\4.1\\Framework\\v4.0\\",
-    "GDAL_DATA": "C:\\Program Files\\PostgreSQL\\12\\gdal-data",
-    "GIT_ASKPASS": "c:\\Users\\user\\AppData\\Local\\Programs\\Microsoft VS Code\\resources\\app\\extensions\\git\\dist\\askpass.sh",
-    "GoLand": "C:\\Program Files\\JetBrains\\GoLand 2019.1\\bin;",
-    "GOOGLE_DEFAULT_CLIENT_ID": "no",
-    "GOOGLE_DEFAULT_CLIENT_SECRET": "no",
-    "GOPATH": "C:\\Users\\user\\Documents\\projects\\bus_management\\btmms\\",
-    "GOROOT": "C:\\Go\\",
-    "GTK_BASEPATH": "C:\\Program Files (x86)\\GtkSharp\\2.12\\",
+    "GIT_ASKPASS": "c:\\Users\\Hobbiton\\AppData\\Local\\Programs\\Microsoft VS Code\\resources\\app\\extensions\\git\\dist\\askpass.sh",
+    "GOPATH": "C:\\Users\\Hobbiton\\go",
     "HOMEDRIVE": "C:",
-    "HOMEPATH": "\\Users\\user",
-    "INIT_CWD": "C:\\Users\\user\\Documents\\projects\\flosure-broker-ui",
+    "HOMEPATH": "\\Users\\Hobbiton",
+    "INIT_CWD": "C:\\Users\\Hobbiton\\Documents\\hobbiton-projects\\flosure-broker-ui",
     "LANG": "en_US.UTF-8",
-    "LOCALAPPDATA": "C:\\Users\\user\\AppData\\Local",
-    "LOGONSERVER": "\\\\DESKTOP-H8191UC",
-    "MOZ_PLUGIN_PATH": "C:\\Program Files (x86)\\Foxit Software\\Foxit Reader\\plugins\\",
-    "MSMPI_BIN": "C:\\Program Files\\Microsoft MPI\\Bin\\",
+    "LOCALAPPDATA": "C:\\Users\\Hobbiton\\AppData\\Local",
+    "LOGONSERVER": "\\\\HOBBITON",
     "NODE": "C:\\Program Files\\nodejs\\node.exe",
-    "NODE_PATH": "C:\\Users\\user\\scoop\\apps\\yarn\\current\\global\\node_modules",
     "npm_config_argv": "{\"remain\":[],\"cooked\":[\"run\",\"start\"],\"original\":[\"start\",\"--port\",\"4300\"]}",
     "npm_config_bin_links": "true",
-    "npm_config_cache_folder": "C:\\Users\\user\\scoop\\apps\\yarn\\current\\cache",
-    "npm_config_global_folder": "C:\\Users\\user\\scoop\\apps\\yarn\\current\\global",
     "npm_config_ignore_optional": "",
     "npm_config_ignore_scripts": "",
     "npm_config_init_license": "MIT",
     "npm_config_init_version": "1.0.0",
-    "npm_config_prefix": "C:\\Users\\user\\scoop\\apps\\yarn\\current\\global",
     "npm_config_registry": "https://registry.yarnpkg.com",
     "npm_config_save_prefix": "^",
     "npm_config_strict_ssl": "true",
-    "npm_config_user_agent": "yarn/1.22.0 npm/? node/v12.16.2 win32 x64",
+    "npm_config_user_agent": "yarn/1.22.4 npm/? node/v12.16.2 win32 x64",
     "npm_config_version_commit_hooks": "true",
     "npm_config_version_git_message": "v%s",
     "npm_config_version_git_sign": "",
     "npm_config_version_git_tag": "true",
     "npm_config_version_tag_prefix": "v",
-    "npm_config_yarn_offline_mirror": "C:\\Users\\user\\scoop\\apps\\yarn\\current\\mirror",
-    "npm_execpath": "C:\\Users\\user\\scoop\\apps\\yarn\\1.22.0\\Yarn\\bin\\yarn.js",
+    "npm_execpath": "C:\\Program Files (x86)\\Yarn\\bin\\yarn.js",
     "npm_lifecycle_event": "start",
     "npm_lifecycle_script": "ng serve",
     "npm_node_execpath": "C:\\Program Files\\nodejs\\node.exe",
@@ -360,17 +326,20 @@
     "npm_package_dependencies_chance": "^1.1.4",
     "npm_package_dependencies_datejs": "^1.0.0-rc3",
     "npm_package_dependencies_date_fns": "^2.11.0",
+    "npm_package_dependencies_exceljs": "1.12.0",
     "npm_package_dependencies_faker": "^4.1.0",
     "npm_package_dependencies_file_saver": "^2.0.2",
     "npm_package_dependencies_firebase": "^7.8.0",
     "npm_package_dependencies_graphql": "^14.6.0",
     "npm_package_dependencies_graphql_tag": "^2.10.0",
     "npm_package_dependencies_html2canvas": "^1.0.0-rc.5",
+    "npm_package_dependencies_i": "^0.3.6",
     "npm_package_dependencies_jspdf": "^1.5.3",
     "npm_package_dependencies_jspdf_autotable": "^3.5.3",
     "npm_package_dependencies_lodash": "^4.17.15",
     "npm_package_dependencies_moment": "^2.25.3",
     "npm_package_dependencies_ng2_pdf_viewer": "^6.1.2",
+    "npm_package_dependencies_ng2_search_filter": "^0.5.1",
     "npm_package_dependencies_ngx_print": "^1.2.0-beta.4",
     "npm_package_dependencies_ngx_printer": "^0.5.0",
     "npm_package_dependencies_ng_connection_service": "^1.0.4",
@@ -430,45 +399,40 @@
     "npm_package_scripts_start": "ng serve",
     "npm_package_scripts_test": "ng test",
     "npm_package_version": "0.0.0",
-    "NUMBER_OF_PROCESSORS": "4",
-    "OneDrive": "C:\\Users\\user\\OneDrive",
-    "OneDriveConsumer": "C:\\Users\\user\\OneDrive",
-    "OPENSSL_CONF": "C:\\Program Files\\PostgreSQL\\psqlODBC\\etc\\openssl.cnf",
+    "NUMBER_OF_PROCESSORS": "2",
+    "OneDrive": "C:\\Users\\Hobbiton\\OneDrive",
+    "OneDriveConsumer": "C:\\Users\\Hobbiton\\OneDrive",
     "ORIGINAL_XDG_CURRENT_DESKTOP": "undefined",
     "OS": "Windows_NT",
-    "Path": "C:\\Users\\user\\AppData\\Local\\Temp\\yarn--1592522750261-0.8127027464337535;C:\\Users\\user\\Documents\\projects\\flosure-broker-ui\\node_modules\\.bin;C:\\Users\\user\\AppData\\Local\\Yarn\\Data\\link\\node_modules\\.bin;C:\\Users\\user\\scoop\\apps\\yarn\\current\\global\\bin;C:\\Program Files\\libexec\\lib\\node_modules\\npm\\bin\\node-gyp-bin;C:\\Program Files\\lib\\node_modules\\npm\\bin\\node-gyp-bin;C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\node-gyp-bin;C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath;C:\\Program Files\\Microsoft MPI\\Bin\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;C:\\Program Files\\Microsoft SQL Server\\130\\Tools\\Binn\\;C:\\Program Files\\dotnet\\;C:\\Program Files (x86)\\GtkSharp\\2.12\\bin;C:\\xampp\\php;C:\\ProgramData\\ComposerSetup\\bin;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;C:\\Program Files\\PuTTY\\;C:\\Program Files\\Dart\\dart-sdk\\bin;C:\\Go\\bin;C:\\Program Files (x86)\\AOMEI Backupper;C:\\Program Files\\PostgreSQL\\12\\bin;C:\\Program Files\\PostgreSQL\\12\\lib;;C:\\TDM-GCC-64\\bin;C:\\Program Files\\mg\\bin;C:\\ProgramData\\chocolatey\\bin;;C:\\Program Files (x86)\\Bitvise SSH Client;C:\\Program Files\\nodejs\\;C:\\Program Files\\Docker\\Docker\\resources\\bin;C:\\ProgramData\\DockerDesktop\\version-bin;C:\\Users\\user\\scoop\\apps\\yarn\\current\\Yarn\\bin;C:\\Users\\user\\scoop\\apps\\yarn\\current\\global\\node_modules\\.bin;C:\\Users\\user\\.cargo\\bin;C:\\Users\\user\\scoop\\shims;C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python37\\Scripts\\;C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python37\\;C:\\Users\\user\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\user\\AppData\\Roaming\\Composer\\vendor\\bin;C:\\Program Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common Files\\Intel\\WirelessCommon\\;C:\\Users\\user\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Users\\user\\Documents\\flutter\\bin;C:\\Users\\user\\go\\bin;C:\\Program Files\\JetBrains\\GoLand 2019.1\\bin;C:\\Users\\user\\AppData\\Roaming\\npm;C:\\tools\\dart-sdk\\bin;C:\\Users\\user\\AppData\\Roaming\\Pub\\Cache\\bin;C:\\Users\\user\\AppData\\Local\\Google\\Cloud SDK\\google-cloud-sdk\\bin;C:\\Program Files\\heroku\\bin",
+    "Path": "C:\\Users\\Hobbiton\\AppData\\Local\\Temp\\yarn--1596006165497-0.5079532569810399;C:\\Users\\Hobbiton\\Documents\\hobbiton-projects\\flosure-broker-ui\\node_modules\\.bin;C:\\Users\\Hobbiton\\AppData\\Local\\Yarn\\Data\\link\\node_modules\\.bin;C:\\Program Files\\libexec\\lib\\node_modules\\npm\\bin\\node-gyp-bin;C:\\Program Files\\lib\\node_modules\\npm\\bin\\node-gyp-bin;C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\node-gyp-bin;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Git\\cmd;C:\\Program Files (x86)\\Yarn\\bin\\;C:\\Program Files\\nodejs\\;C:\\Program Files\\Microsoft SQL Server\\130\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Go\\bin;C:\\ProgramData\\chocolatey\\bin;;C:\\Program Files\\Docker\\Docker\\resources\\bin;C:\\ProgramData\\DockerDesktop\\version-bin;C:\\Users\\Hobbiton\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\Hobbiton\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Users\\Hobbiton\\AppData\\Local\\Yarn\\bin;C:\\Users\\Hobbiton\\AppData\\Roaming\\npm;C:\\Program Files\\JetBrains\\WebStorm 2020.1.1\\bin;;C:\\Users\\Hobbiton\\go\\bin;C:\\Users\\Hobbiton\\Documents\\flutter\\bin;c:\\Users\\Hobbiton\\Documents\\flutter\\bin;c:\\Hugo\\bin;",
     "PATHEXT": ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JSE;.WSF;.WSH;.MSC;.CPL",
-    "POSTGIS_ENABLE_OUTDB_RASTERS": "1",
-    "POSTGIS_GDAL_ENABLED_DRIVERS": "GTiff PNG JPEG GIF XYZ DTED USGSDEM AAIGrid",
     "PROCESSOR_ARCHITECTURE": "AMD64",
-    "PROCESSOR_IDENTIFIER": "Intel64 Family 6 Model 60 Stepping 3, GenuineIntel",
+    "PROCESSOR_IDENTIFIER": "Intel64 Family 6 Model 94 Stepping 3, GenuineIntel",
     "PROCESSOR_LEVEL": "6",
-    "PROCESSOR_REVISION": "3c03",
+    "PROCESSOR_REVISION": "5e03",
     "ProgramData": "C:\\ProgramData",
     "ProgramFiles": "C:\\Program Files",
     "ProgramFiles(x86)": "C:\\Program Files (x86)",
     "ProgramW6432": "C:\\Program Files",
     "PROMPT": "$P$G",
-    "PSModulePath": "C:\\Users\\user\\Documents\\WindowsPowerShell\\Modules;C:\\Users\\user\\AppData\\Local\\Google\\Cloud SDK\\google-cloud-sdk\\platform\\PowerShell;C:\\Program Files\\WindowsPowerShell\\Modules;C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\Modules;C:\\Program Files\\WindowsPowerShell\\Modules\\;C:\\Program Files (x86)\\Microsoft SDKs\\Azure\\PowerShell\\ResourceManager\\AzureResourceManager\\;C:\\Program Files (x86)\\Microsoft SDKs\\Azure\\PowerShell\\ServiceManagement\\;C:\\Program Files (x86)\\Microsoft SDKs\\Azure\\PowerShell\\Storage\\;C:\\Program Files (x86)\\Google\\Cloud SDK\\google-cloud-sdk\\platform\\PowerShell",
+    "PSModulePath": "C:\\Users\\Hobbiton\\Documents\\WindowsPowerShell\\Modules;C:\\Program Files\\WindowsPowerShell\\Modules;C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\Modules",
     "PUBLIC": "C:\\Users\\Public",
-    "python": "C:\\Program Files\\Python36",
     "SESSIONNAME": "Console",
-    "SNF": "C:\\ProgramData\\Tolnix\\snp.sc",
-    "SNP": "https://%66%65%65%64.%68%65%6C%70%65%72%62%61%72.%63%6F%6D?publisher=defaultap&co=ZM&userid=5fd15ef4-cdb9-ff91-7323-99aeb65b2798&searchtype=sc&installDate=&barcodeid=50014999&channelid=999&av=windows",
     "SystemDrive": "C:",
     "SystemRoot": "C:\\WINDOWS",
-    "TEMP": "C:\\Users\\user\\AppData\\Local\\Temp",
+    "TEMP": "C:\\Users\\Hobbiton\\AppData\\Local\\Temp",
     "TERM_PROGRAM": "vscode",
-    "TERM_PROGRAM_VERSION": "1.46.1",
-    "TMP": "C:\\Users\\user\\AppData\\Local\\Temp",
-    "USERDOMAIN": "DESKTOP-H8191UC",
-    "USERDOMAIN_ROAMINGPROFILE": "DESKTOP-H8191UC",
-    "USERNAME": "user",
-    "USERPROFILE": "C:\\Users\\user",
-    "VSCODE_GIT_ASKPASS_MAIN": "c:\\Users\\user\\AppData\\Local\\Programs\\Microsoft VS Code\\resources\\app\\extensions\\git\\dist\\askpass-main.js",
-    "VSCODE_GIT_ASKPASS_NODE": "C:\\Users\\user\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
-    "VSCODE_GIT_IPC_HANDLE": "\\\\.\\pipe\\vscode-git-d3a9068e94-sock",
+    "TERM_PROGRAM_VERSION": "1.47.2",
+    "TMP": "C:\\Users\\Hobbiton\\AppData\\Local\\Temp",
+    "USERDOMAIN": "HOBBITON",
+    "USERDOMAIN_ROAMINGPROFILE": "HOBBITON",
+    "USERNAME": "Hobbiton",
+    "USERPROFILE": "C:\\Users\\Hobbiton",
+    "VSCODE_GIT_ASKPASS_MAIN": "c:\\Users\\Hobbiton\\AppData\\Local\\Programs\\Microsoft VS Code\\resources\\app\\extensions\\git\\dist\\askpass-main.js",
+    "VSCODE_GIT_ASKPASS_NODE": "C:\\Users\\Hobbiton\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+    "VSCODE_GIT_IPC_HANDLE": "\\\\.\\pipe\\vscode-git-458349adb7-sock",
     "WEBPACK_DEV_SERVER": "true",
+    "WebStorm": "C:\\Program Files\\JetBrains\\WebStorm 2020.1.1\\bin;",
     "windir": "C:\\WINDOWS",
     "YARN_WRAP_OUTPUT": "false"
   },
@@ -483,19 +447,19 @@
     "C:\\WINDOWS\\System32\\ADVAPI32.dll",
     "C:\\WINDOWS\\System32\\msvcrt.dll",
     "C:\\WINDOWS\\System32\\sechost.dll",
-    "C:\\WINDOWS\\SYSTEM32\\dbghelp.dll",
     "C:\\WINDOWS\\System32\\USER32.dll",
-    "C:\\WINDOWS\\System32\\ucrtbase.dll",
     "C:\\WINDOWS\\System32\\win32u.dll",
-    "C:\\WINDOWS\\SYSTEM32\\IPHLPAPI.DLL",
     "C:\\WINDOWS\\System32\\GDI32.dll",
-    "C:\\WINDOWS\\SYSTEM32\\USERENV.dll",
     "C:\\WINDOWS\\System32\\gdi32full.dll",
-    "C:\\WINDOWS\\System32\\profapi.dll",
     "C:\\WINDOWS\\System32\\msvcp_win.dll",
+    "C:\\WINDOWS\\System32\\ucrtbase.dll",
     "C:\\WINDOWS\\System32\\CRYPT32.dll",
     "C:\\WINDOWS\\System32\\MSASN1.dll",
+    "C:\\WINDOWS\\SYSTEM32\\dbghelp.dll",
     "C:\\WINDOWS\\System32\\bcrypt.dll",
+    "C:\\WINDOWS\\SYSTEM32\\IPHLPAPI.DLL",
+    "C:\\WINDOWS\\SYSTEM32\\USERENV.dll",
+    "C:\\WINDOWS\\System32\\profapi.dll",
     "C:\\WINDOWS\\SYSTEM32\\WINMM.dll",
     "C:\\WINDOWS\\SYSTEM32\\WINMMBASE.dll",
     "C:\\WINDOWS\\System32\\cfgmgr32.dll",
@@ -508,18 +472,16 @@
     "C:\\WINDOWS\\System32\\combase.dll",
     "C:\\WINDOWS\\system32\\mswsock.dll",
     "C:\\WINDOWS\\System32\\kernel.appcore.dll",
-    "\\\\?\\C:\\Users\\user\\Documents\\projects\\node_modules\\node-sass\\vendor\\win32-x64-72\\binding.node",
     "C:\\WINDOWS\\System32\\NSI.dll",
     "C:\\WINDOWS\\SYSTEM32\\dhcpcsvc6.DLL",
     "C:\\WINDOWS\\SYSTEM32\\dhcpcsvc.DLL",
     "C:\\WINDOWS\\SYSTEM32\\DNSAPI.dll",
-    "C:\\Program Files\\Bonjour\\mdnsNSP.dll",
-    "C:\\Windows\\System32\\rasadhlp.dll",
-    "C:\\WINDOWS\\System32\\fwpuclnt.dll",
     "C:\\WINDOWS\\system32\\napinsp.dll",
     "C:\\WINDOWS\\system32\\pnrpnsp.dll",
     "C:\\WINDOWS\\System32\\winrnr.dll",
     "C:\\WINDOWS\\system32\\NLAapi.dll",
-    "C:\\WINDOWS\\system32\\wshbth.dll"
+    "C:\\WINDOWS\\system32\\wshbth.dll",
+    "C:\\Windows\\System32\\rasadhlp.dll",
+    "C:\\WINDOWS\\System32\\fwpuclnt.dll"
   ]
 }

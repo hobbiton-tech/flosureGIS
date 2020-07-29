@@ -1,83 +1,239 @@
-<div style="
+<!-- <button nz-button (click)="htmlToPdf()">Download</button> -->
+<div
+    style="
         display: flex;
         margin-bottom: 15px;
         align-items: flex-end;
         width: 100%;
-    ">
-    <!-- <button nz-button nzType="primary" style="margin-right: 8px;" (click)="htmlToPdf()">
+    "
+>
+    <button
+        nz-button
+        nzType="primary"
+        style="margin-right: 8px;"
+        (click)="htmlToPdf()"
+    >
         Download
     </button> -->
     <button nz-button nzType="primary" [useExistingCss]="true" [printSectionId]="'wordingPrintSection'" ngxPrint>
         Print
     </button>
 </div>
+<nz-spin [nzSpinning]="generatingPDF">
+    <div id="clauses">
+        <div class="invoice-box">
+            <table cellpadding="0" cellspacing="0">
+                <tr class="top">
+                    <td colspan="2">
+                        <table>
+                            <tr>
+                                <td class="title">
+                                    <img
+                                        src="assets/images/Savenda-Logo-Final.png"
+                                        style="width: 100%; max-width: 300px;"
+                                    />
+                                </td>
 
-<div id="wordingPrintSection">
-    <div class="invoice-box">
-        <table cellpadding="0" cellspacing="0">
-            <tr class="top">
-                <td colspan="6">
-                    <table>
-                        <tr>
-                            <td class="title">
-                                <img src="/assets/images/apluslogo.png" style="width: 100%; max-width: 240px;" />
-                            </td>
-                            <td>
-                                A Plus General Insurance<br />
-                                Plot No. 402, Roma Park, Zambezi Road<br />
-                                P.O. Box 31700, Lusaka Zambia<br />
-                                Tel: +260 211 239865/6 - Tele/Fax:+260 211 239867<br />
-                                E-mail: info@aplusgeneral.com<br />
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-        <hr style="width: 100%; height: 2px; background-color: red;" />
-        <br />
-        <br />
-        <br />
-        <div *ngFor="let clause of policyClauses">
-            <h2 id="title">{{ clause.heading }}</h2>
-            <!-- <h4 class="bottom" style="font-weight: bold;">
-                (Loss or Damage to the Motor Car)
-            </h4> -->
-            <p>{{ clause.clauseDetails }}</p> -->
+                                <td></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr class="information">
+                    <td colspan="2">
+                        <table>
+                            <tr>
+                                <td>
+                                    Savenda General Insurance Limited<br />
+                                    Plot 20849 PSC Corporate Park, Alick Nkhatha
+                                    Road<br />
+                                    Mass Media P.O. Box 30363, Lusaka Zambia<br />
+                                </td>
+
+                                <td></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr class="information">
+                    <td colspan="2">
+                        <strong>POLICY CLAUSES</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <strong>Cancellation Clause</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        This policy or any section may be cancelled at any time
+                        by the company giving 30 days' notice in writing (or
+                        such other period as may be mutually agreed) or by the
+                        insured giving immediate notice. On cancellation by the
+                        insured, the company shall be entitled to retain the
+                        customary short period or minimum premium for the period
+                        the policy or section has been in force. On cancellation
+                        by the company, the insured shall be entitled to claim a
+                        pro-rata proportion of the premium for the remainder of
+                        the period of insurance from the date of cancellation.
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <strong>Windscreen Limitation Clause</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        This policy or any section may be cancelled at any time
+                        by the company giving 30 days' notice in writing (or
+                        such other period as may be mutually agreed) or by the
+                        insured giving immediate notice. On cancellation by the
+                        insured, the company shall be entitled to retain the
+                        customary short period or minimum premium for the period
+                        the policy or section has been in force. On cancellation
+                        by the company, the insured shall be entitled to claim a
+                        pro-rata proportion of the premium for the remainder of
+                        the period of insurance from the date of cancellation.
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <strong>Political Risks Exclusion Clause</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        This policy or any section may be cancelled at any time
+                        by the company giving 30 days' notice in writing (or
+                        such other period as may be mutually agreed) or by the
+                        insured giving immediate notice. On cancellation by the
+                        insured, the company shall be entitled to retain the
+                        customary short period or minimum premium for the period
+                        the policy or section has been in force. On cancellation
+                        by the company, the insured shall be entitled to claim a
+                        pro-rata proportion of the premium for the remainder of
+                        the period of insurance from the date of cancellation.
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <strong>Towing Charges</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        This policy or any section may be cancelled at any time
+                        by the company giving 30 days' notice in writing (or
+                        such other period as may be mutually agreed) or by the
+                        insured giving immediate notice. On cancellation by the
+                        insured, the company shall be entitled to retain the
+                        customary short period or minimum premium for the period
+                        the policy or section has been in force. On cancellation
+                        by the company, the insured shall be entitled to claim a
+                        pro-rata proportion of the premium for the remainder of
+                        the period of insurance from the date of cancellation.
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <strong>Drivers Clause</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        This policy or any section may be cancelled at any time
+                        by the company giving 30 days' notice in writing (or
+                        such other period as may be mutually agreed) or by the
+                        insured giving immediate notice. On cancellation by the
+                        insured, the company shall be entitled to retain the
+                        customary short period or minimum premium for the period
+                        the policy or section has been in force. On cancellation
+                        by the company, the insured shall be entitled to claim a
+                        pro-rata proportion of the premium for the remainder of
+                        the period of insurance from the date of cancellation.
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <strong>Memorundum (Unexplained Clauses)</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        This policy or any section may be cancelled at any time
+                        by the company giving 30 days' notice in writing (or
+                        such other period as may be mutually agreed) or by the
+                        insured giving immediate notice. On cancellation by the
+                        insured, the company shall be entitled to retain the
+                        customary short period or minimum premium for the period
+                        the policy or section has been in force. On cancellation
+                        by the company, the insured shall be entitled to claim a
+                        pro-rata proportion of the premium for the remainder of
+                        the period of insurance from the date of cancellation.
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <strong>Terrorism Exclusion Clause</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        This policy or any section may be cancelled at any time
+                        by the company giving 30 days' notice in writing (or
+                        such other period as may be mutually agreed) or by the
+                        insured giving immediate notice. On cancellation by the
+                        insured, the company shall be entitled to retain the
+                        customary short period or minimum premium for the period
+                        the policy or section has been in force. On cancellation
+                        by the company, the insured shall be entitled to claim a
+                        pro-rata proportion of the premium for the remainder of
+                        the period of insurance from the date of cancellation.
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <strong>Excess Clause</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        This policy or any section may be cancelled at any time
+                        by the company giving 30 days' notice in writing (or
+                        such other period as may be mutually agreed) or by the
+                        insured giving immediate notice. On cancellation by the
+                        insured, the company shall be entitled to retain the
+                        customary short period or minimum premium for the period
+                        the policy or section has been in force. On cancellation
+                        by the company, the insured shall be entitled to claim a
+                        pro-rata proportion of the premium for the remainder of
+                        the period of insurance from the date of cancellation.
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <strong>Average Clause</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        This policy or any section may be cancelled at any time
+                        by the company giving 30 days' notice in writing (or
+                        such other period as may be mutually agreed) or by the
+                        insured giving immediate notice. On cancellation by the
+                        insured, the company shall be entitled to retain the
+                        customary short period or minimum premium for the period
+                        the policy or section has been in force. On cancellation
+                        by the company, the insured shall be entitled to claim a
+                        pro-rata proportion of the premium for the remainder of
+                        the period of insurance from the date of cancellation.
+                    </td>
+                </tr>
+            </table>
         </div>
-        <div *ngFor="let extension of policyExtension">
-            <h2 id="title">{{ extension.heading }}</h2> -->
-            <!-- <h4 class="bottom" style="font-weight: bold;">
-                (Loss or Damage to the Motor Car)
-            </h4> -->
-            <p>{{ extension.description }}</p>
-        </div>
-        <div class="bottom">
-            <p>
-                .......................................................
-            </p>
-            <p>For and on behalf of</p>
-            <p style="font-weight: bold;">
-                A PLUS GENERAL INSURANCE LIMITED
-            </p>
-        </div>
-        <!-- <br />
-        <br />
-        <br />
-        <br /> -->
-        <!-- <div *ngFor="let clause of policyClauses">
-            <h3 id="title">{{ clause.heading }}</h3> -->
-        <!-- <h4 class="bottom" style="font-weight: bold;">
-        (Loss or Damage to the Motor Car)
-    </h4> -->
-        <!-- <p>{{ clause.clauseDetails }}</p> -->
-        <!-- </div>
-        <div *ngFor="let extension of policyExtension"> -->
-        <!-- <h3 id="title">{{ extension.heading }}</h3>  -->
-        <!-- <h4 class="bottom" style="font-weight: bold;">
-        (Loss or Damage to the Motor Car)
-    </h4> -->
-        <!-- <p>{{ extension.description }}</p>
-        </div> -->
-        <!-- </div> -->
     </div>
+</nz-spin>

@@ -529,17 +529,22 @@ export class CreateQuoteComponent implements OnInit {
             this.lastItem = this.quotesList[this.quotesList.length - 1];
         });
 
-        this.vehicleType.getVehicleType().subscribe((bodyType) => {
-            this.bodyTypes = bodyType;
-        });
-
-        this.vehicleMakeService.getVehicleMake().subscribe((bodyMake) => {
-            this.bodyMakes = bodyMake;
-
-            // this.displayBodyModels = this.bodyMakes.filter((x) => {
-            //   console.log('clickedId', this.makeObj)
-            //     x.id === this.clickedMakeId;
-            // });
+        this.productClauseService.getExccesses().subscribe((res) => {
+            this.excessList = res.filter(
+                (x) => x.productId === 'f5e755a0-338e-4db8-a47c-5513d858bcc3'
+            );
+            // this.excessTHP = res.filter((x) => x.productId === 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d');
+            this.excessTHP = res.filter(
+                (x) =>
+                    x.productId === 'bacb211d-cf2c-4a5b-8631-eca6f285261e' &&
+                    x.vehicleType === 'private'
+            );
+            this.excessAct = res.filter(
+                (x) => x.productId === '4e9aadeb-3d60-4dd5-8e75-4e646a38b7d3'
+            );
+            this.excessFT = res.filter(
+                (x) => x.productId === 'f47c8df6-5a21-43bb-8917-5dcabec15658'
+            );
         });
 
         // this.vehicleModelService.getVehicleModel().subscribe((bodyModel) => {
