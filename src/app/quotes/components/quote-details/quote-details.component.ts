@@ -478,7 +478,7 @@ export class QuoteDetailsComponent implements OnInit {
     amount = '';
     policyId: string;
     newRisks: RiskModel[];
-    //Excess Variable
+    // Excess Variable
     excessList: Excess[] = [];
 
     excessTHP: IExccess[] = [];
@@ -1536,149 +1536,115 @@ export class QuoteDetailsComponent implements OnInit {
 
             this.submitted = true;
             // console.log('DEBIT NOTE NUMBER>>>>>', this.debitnote.debitNoteNumber);
-            if (this.receiptForm.valid) {
-                this.isOkLoading = true;
-                this._id = v4();
-                const receipt: IReceiptModel = {
-                    id: this._id,
-                    ...this.receiptForm.value,
-                    onBehalfOf: this.quoteData.client,
-                    capturedBy: localStorage.getItem('user'),
-                    sumInDigits: this.amount,
-                    // policyNumber: this.policyNumber,
-                    receiptStatus: 'Receipted',
-                    todayDate: new Date(),
-                    // invoiceNumber: this.debitnote.debitNoteNumber,
-                    sourceOfBusiness: this.quoteData.sourceOfBusiness,
-                    intermediaryName: this.quoteData.intermediaryName,
-                    currency: this.quoteData.currency,
-                };
+            // if (this.receiptForm.valid) {
+            // this.isOkLoading = true;
+            // this._id = v4();
+            // const receipt: IReceiptModel = {
+            //     id: this._id,
+            //     ...this.receiptForm.value,
+            //     onBehalfOf: this.quoteData.client,
+            //     capturedBy: localStorage.getItem('user'),
+            //     sumInDigits: this.amount,
+            //     // policyNumber: this.policyNumber,
+            //     receiptStatus: 'Receipted',
+            //     todayDate: new Date(),
+            //     // invoiceNumber: this.debitnote.debitNoteNumber,
+            //     sourceOfBusiness: this.quoteData.sourceOfBusiness,
+            //     intermediaryName: this.quoteData.intermediaryName,
+            //     currency: this.quoteData.currency,
+            // };
 
-                this.receiptNum = this._id;
+            // this.receiptNum = this._id;
 
-                // combineLatest().subscribe(async ([debit, cert]) => {
-                this.quote.status = 'Approved';
-                this.quotesService
-                    .updateMotorQuotation(this.quote, this.quote.id)
-                    .subscribe((quotation) => (res) => console.log(res));
+            // combineLatest().subscribe(async ([debit, cert]) => {
+            this.quote.status = 'Approved';
+            this.quotesService
+                .updateMotorQuotation(this.quote, this.quote.id)
+                .subscribe((quotation) => (res) => console.log(res));
 
-                // convert to policy
-                const policy: Policy = {
-                    ...this.quoteDetailsForm.value,
-                    nameOfInsured: this.quoteData.client,
-                    clientCode: this.quoteData.clientCode,
-                    policyNumber: this.quoteNumber.replace('Q', 'P'),
-                    dateOfIssue: new Date(),
-                    expiryDate: this.quoteData.endDate,
-                    timeOfIssue: new Date(),
-                    // new Date().getHours() + ':' + new Date().getMinutes(),
-                    status: 'Active',
-                    receiptStatus: 'Receipted',
-                    risks: this.quoteData.risks,
-                    sumInsured: this.sumArray(
-                        this.quoteData.risks,
-                        'sumInsured'
-                    ),
-                    netPremium: this.sumArray(
-                        this.quoteData.risks,
-                        'netPremium'
-                    ),
-                    paymentPlan: 'Created',
-                    underwritingYear: new Date(),
-                    user: localStorage.getItem('user'),
-                    sourceOfBusiness: this.quoteData.sourceOfBusiness,
-                    intermediaryName: this.quoteData.intermediaryName,
-                };
+            // convert to policy
+            const policy: Policy = {
+                ...this.quoteDetailsForm.value,
+                nameOfInsured: this.quoteData.client,
+                clientCode: this.quoteData.clientCode,
+                policyNumber: this.quoteNumber.replace('Q', 'P'),
+                dateOfIssue: new Date(),
+                expiryDate: this.quoteData.endDate,
+                timeOfIssue: new Date(),
+                // new Date().getHours() + ':' + new Date().getMinutes(),
+                status: 'Active',
+                receiptStatus: 'Unreceipted',
+                risks: this.quoteData.risks,
+                sumInsured: this.sumArray(this.quoteData.risks, 'sumInsured'),
+                netPremium: this.sumArray(this.quoteData.risks, 'netPremium'),
+                paymentPlan: 'NotCreated',
+                underwritingYear: new Date(),
+                user: localStorage.getItem('user'),
+                sourceOfBusiness: this.quoteData.sourceOfBusiness,
+                intermediaryName: this.quoteData.intermediaryName,
+            };
 
-                const debitNote: DebitNote = {
-                    remarks: '-',
-                    dateCreated: new Date(),
-                    dateUpdated: new Date(),
-                };
+            const debitNote: DebitNote = {
+                remarks: '-',
+                dateCreated: new Date(),
+                dateUpdated: new Date(),
+            };
 
-                const coverNote: CoverNote = {
-                    dateCreated: new Date(),
-                    dateUpdated: new Date(),
-                };
+            const coverNote: CoverNote = {
+                dateCreated: new Date(),
+                dateUpdated: new Date(),
+            };
 
-                // const policy = this.quoteDetailsForm.value as Policy;
-                console.log(policy);
+            // const policy = this.quoteDetailsForm.value as Policy;
+            console.log(policy);
 
-                this.policiesService.createPolicy(policy).subscribe((res) => {
-                    console.log('response:', res);
+            this.policiesService.createPolicy(policy).subscribe((res) => {
+                console.log('response:', res);
 
-                    this.policyId = res.id;
-                    this.newRisks = res.risks;
-                    console.log('Risks>>>>>>>>', this.newRisks);
+                this.policyId = res.id;
+                this.newRisks = res.risks;
+                console.log('Risks>>>>>>>>', this.newRisks);
 
-                    // this.policiesService.createDebitNote(
-                    //     res.id,
-                    //     debitNote,
-                    //     res,
-                    //     this.policiesCount
-                    // );
+                // this.policiesService.createDebitNote(
+                //     res.id,
+                //     debitNote,
+                //     res,
+                //     this.policiesCount
+                // );
 
+                let insuranceType = '';
+                const productType = this.getInsuranceType;
+                if (productType == 'Comprehensive') {
+                    insuranceType = 'MCP';
+                } else {
+                    insuranceType = 'THP';
+                }
+
+                for (const r of this.newRisks) {
                     let insuranceType = '';
-                    const productType = this.getInsuranceType;
+                    const productType = r.insuranceType;
                     if (productType == 'Comprehensive') {
-                        insuranceType = 'MCP';
+                        insuranceType = '07001';
                     } else {
-                        insuranceType = 'THP';
+                        insuranceType = '07002';
                     }
-
-                    for (const r of this.newRisks) {
-                        let insuranceType = '';
-                        const productType = r.insuranceType;
-                        if (productType == 'Comprehensive') {
-                            insuranceType = '07001';
-                        } else {
-                            insuranceType = '07002';
-                        }
-                        this.http
-                            .get<any>(
-                                `https://number-generation.flosure-api.com/savenda-certificate-number`
-                            )
-                            .subscribe(async (res) => {
-                                coverNote.certificateNumber =
-                                    res.data.certificate_number;
-                                coverNote.policyId = r.id;
-                                console.log(
-                                    'Cover Note>>>>',
-                                    res.data.certificate_number
-                                );
-
-                                this.http
-                                    .post<CoverNote>(
-                                        `https://savenda.flosure-api.com/documents/cover-note`,
-                                        coverNote
-                                    )
-                                    .subscribe(
-                                        async (res) => {
-                                            console.log(res);
-                                        },
-                                        async (err) => {
-                                            console.log(err);
-                                        }
-                                    );
-                            });
-                    }
-
                     this.http
                         .get<any>(
-                            `https://number-generation.flosure-api.com/savenda-invoice-number/1/${insuranceType}`
+                            `https://number-generation.flosure-api.com/savenda-certificate-number`
                         )
                         .subscribe(async (res) => {
-                            debitNote.debitNoteNumber = res.data.invoice_number;
-
+                            coverNote.certificateNumber =
+                                res.data.certificate_number;
+                            coverNote.policyId = r.id;
                             console.log(
-                                'DEBITNOTE>>>>',
-                                res.data.invoice_number
+                                'Cover Note>>>>',
+                                res.data.certificate_number
                             );
 
                             this.http
-                                .post<DebitNote>(
-                                    `https://savenda.flosure-api.com/documents/debit-note/${this.policyId}`,
-                                    debitNote
+                                .post<CoverNote>(
+                                    `https://savenda.flosure-api.com/documents/cover-note`,
+                                    coverNote
                                 )
                                 .subscribe(
                                     async (res) => {
@@ -1688,341 +1654,341 @@ export class QuoteDetailsComponent implements OnInit {
                                         console.log(err);
                                     }
                                 );
-
-                            receipt.invoice_number = res.data.invoice_number;
-                            this.receiptService
-                                .addReceipt( receipt,this.quote.risks[0].insuranceType).subscribe((mess) => {
-                                    this.message.success('Receipt Successfully created');
-                                    console.log(mess);
-                                },
-                                (err) => {
-                                    this.message.warning('Receipt Failed');
-                                    console.log(err);
-                                });
-                                // .then((mess) => {
-                                //     this.message.success(
-                                //         'Receipt Successfully created'
-                                //     );
-
-                                //     console.log(mess);
-                                // })
-                                // .catch((err) => {
-                                //     this.message.warning('Receipt Failed');
-                                //     console.log(err);
-                                // });
                         });
+                }
 
-                    for (const clause of this.clauses) {
-                        clause.policyId = res.id;
-                        this.productClauseService.updatePolicyClause(clause);
-                    }
+                this.http
+                    .get<any>(
+                        `https://number-generation.flosure-api.com/savenda-invoice-number/1/${insuranceType}`
+                    )
+                    .subscribe(async (res) => {
+                        debitNote.debitNoteNumber = res.data.invoice_number;
 
-                    for (const extenstion of this.extensions) {
-                        extenstion.policyId = res.id;
-                        this.productClauseService.updatePolicyExtension(
-                            extenstion
+                        console.log('DEBITNOTE>>>>', res.data.invoice_number);
+
+                        this.http
+                            .post<DebitNote>(
+                                `https://savenda.flosure-api.com/documents/debit-note/${this.policyId}`,
+                                debitNote
+                            )
+                            .subscribe(
+                                async (res) => {
+                                    console.log(res);
+                                },
+                                async (err) => {
+                                    console.log(err);
+                                }
+                            );
+
+                        // receipt.invoice_number = res.data.invoice_number;
+                        // this.receiptService
+                        //     .addReceipt( receipt,this.quote.risks[0].insuranceType).subscribe((mess) => {
+                        //         this.message.success('Receipt Successfully created');
+                        //         console.log(mess);
+                        //     },
+                        //     (err) => {
+                        //         this.message.warning('Receipt Failed');
+                        //         console.log(err);
+                        //     });
+                        // .then((mess) => {
+                        //     this.message.success(
+                        //         'Receipt Successfully created'
+                        //     );
+
+                        //     console.log(mess);
+                        // })
+                        // .catch((err) => {
+                        //     this.message.warning('Receipt Failed');
+                        //     console.log(err);
+                        // });
+                    });
+
+                for (const clause of this.clauses) {
+                    clause.policyId = res.id;
+                    this.productClauseService.updatePolicyClause(clause);
+                }
+
+                for (const extenstion of this.extensions) {
+                    extenstion.policyId = res.id;
+                    this.productClauseService.updatePolicyExtension(extenstion);
+                }
+
+                for (const wording of this.wordings) {
+                    wording.policyId = res.id;
+                    this.productClauseService.updatePolicyWording(wording);
+                }
+
+                console.log(
+                    'CLAUSE>>>>>>',
+                    this.clauses,
+                    this.extensions,
+                    this.wordings
+                );
+
+                for (const risk of policy.risks) {
+                    console.log('Risks>>>>', risk);
+
+                    if (
+                        risk.insuranceType === 'ThirdParty' ||
+                        'ActOnly' ||
+                        'ThirdPartyFireAndTheft'
+                    ) {
+                        const params = {
+                            insuranceType: 1,
+                            status: 1,
+                            registrationMark: risk.regNumber.replace(/\s/g, ''),
+                            dateFrom: risk.riskStartDate,
+                            dateTo: risk.riskEndDate,
+                            insurancePolicyNo: policy.policyNumber,
+                            chassisNumber: risk.chassisNumber,
+                        };
+
+                        console.log('PARAMS>>>>>>', params);
+
+                        // this.quotesService.postRtsa(params);
+                    } else if (risk.insuranceType === 'Comprehensive') {
+                        const params = {
+                            insuranceType: 2,
+                            status: 1,
+                            registrationMark: risk.regNumber.replace(/\s/g, ''),
+                            dateFrom: risk.riskStartDate,
+                            dateTo: risk.riskEndDate,
+                            insurancePolicyNo: policy.policyNumber,
+                            chassisNumber: risk.chassisNumber,
+                        };
+                        console.log('PARAMS>>>>>>', params);
+
+                        // this.quotesService.postRtsa(params);
+
+                        console.log(
+                            'Risk Type>>>>',
+                            risk.insuranceType,
+                            policy.policyNumber
                         );
                     }
+                }
+            });
 
-                    for (const wording of this.wordings) {
-                        wording.policyId = res.id;
-                        this.productClauseService.updatePolicyWording(wording);
-                    }
+            this.isQuoteApproved = true;
+            this.approvingQuote = false;
+            // });
 
-                    console.log(
-                        'CLAUSE>>>>>>',
-                        this.clauses,
-                        this.extensions,
-                        this.wordings
-                    );
+            // this.receiptForm.reset();
+            // setTimeout(() => {
+            //     this.isVisible = false;
+            //     this.isOkLoading = false;
+            // }, 3000);
 
-                    for (const risk of policy.risks) {
-                        console.log('Risks>>>>', risk);
-
-                        if (
-                            risk.insuranceType === 'ThirdParty' ||
-                            'ActOnly' ||
-                            'ThirdPartyFireAndTheft'
-                        ) {
-                            const params = {
-                                insuranceType: 1,
-                                status: 1,
-                                registrationMark: risk.regNumber.replace(
-                                    /\s/g,
-                                    ''
-                                ),
-                                dateFrom: risk.riskStartDate,
-                                dateTo: risk.riskEndDate,
-                                insurancePolicyNo: policy.policyNumber,
-                                chassisNumber: risk.chassisNumber,
-                            };
-
-                            console.log('PARAMS>>>>>>', params);
-
-                            // this.quotesService.postRtsa(params);
-                        } else if (risk.insuranceType === 'Comprehensive') {
-                            const params = {
-                                insuranceType: 2,
-                                status: 1,
-                                registrationMark: risk.regNumber.replace(
-                                    /\s/g,
-                                    ''
-                                ),
-                                dateFrom: risk.riskStartDate,
-                                dateTo: risk.riskEndDate,
-                                insurancePolicyNo: policy.policyNumber,
-                                chassisNumber: risk.chassisNumber,
-                            };
-                            console.log('PARAMS>>>>>>', params);
-
-                            // this.quotesService.postRtsa(params);
-
-                            console.log(
-                                'Risk Type>>>>',
-                                risk.insuranceType,
-                                policy.policyNumber
-                            );
-                        }
-                    }
-                });
-
-                this.isQuoteApproved = true;
-                this.approvingQuote = false;
-                // });
-
-                this.receiptForm.reset();
-                setTimeout(() => {
-                    this.isVisible = false;
-                    this.isOkLoading = false;
-                }, 3000);
-
-                this.generateID(this._id);
-            }
+            // this.generateID(this._id);
+            // }
             console.log('HOOOOORAY>>>>>>', this.getInsuranceType);
         } else if (this.quote.risks[0].insuranceType === 'Comprehensive') {
             this.getInsuranceType = this.quote.risks[0].insuranceType;
 
             this.submitted = true;
             // console.log('DEBIT NOTE NUMBER>>>>>', this.debitnote.debitNoteNumber);
-            if (this.receiptForm.valid) {
-                this.isOkLoading = true;
-                this._id = v4();
-                const receipt: IReceiptModel = {
-                    id: this._id,
-                    ...this.receiptForm.value,
-                    onBehalfOf: this.quoteData.client,
-                    capturedBy: localStorage.getItem('user'),
-                    // policyNumber: this.policyNumber,
-                    receiptStatus: 'Receipted',
-                    todayDate: new Date(),
-                    // invoiceNumber: this.debitnote.debitNoteNumber,
-                    sourceOfBusiness: this.quoteData.sourceOfBusiness,
-                    intermediaryName: this.quoteData.intermediaryName,
-                    currency: this.quoteData.currency,
-                };
+            // if (this.receiptForm.valid) {
+            //     this.isOkLoading = true;
+            //     this._id = v4();
+            //     const receipt: IReceiptModel = {
+            //         id: this._id,
+            //         ...this.receiptForm.value,
+            //         onBehalfOf: this.quoteData.client,
+            //         capturedBy: localStorage.getItem('user'),
+            //         // policyNumber: this.policyNumber,
+            //         receiptStatus: 'Receipted',
+            //         todayDate: new Date(),
+            //         // invoiceNumber: this.debitnote.debitNoteNumber,
+            //         sourceOfBusiness: this.quoteData.sourceOfBusiness,
+            //         intermediaryName: this.quoteData.intermediaryName,
+            //         currency: this.quoteData.currency,
+            //     };
 
-                this.receiptNum = this._id;
-                console.log('Receipt>>>>', receipt);
+            //     this.receiptNum = this._id;
+            //     console.log('Receipt>>>>', receipt);
 
-                // combineLatest().subscribe(async ([debit, cert]) => {
-                this.quote.status = 'Approved';
-                this.quotesService
-                    .updateMotorQuotation(this.quote, this.quote.id)
-                    .subscribe((quotation) => (res) => console.log(res));
+            // combineLatest().subscribe(async ([debit, cert]) => {
+            this.quote.status = 'Approved';
+            this.quotesService
+                .updateMotorQuotation(this.quote, this.quote.id)
+                .subscribe((quotation) => (res) => console.log(res));
 
-                // convert to policy
-                const policy: Policy = {
-                    ...this.quoteDetailsForm.value,
-                    nameOfInsured: this.quoteData.client,
-                    policyNumber: this.quoteNumber.replace('Q', 'P'),
-                    dateOfIssue: new Date(),
-                    expiryDate: this.quoteData.endDate,
-                    timeOfIssue: new Date(),
-                    // new Date().getHours() + ':' + new Date().getMinutes(),
-                    status: 'Active',
-                    receiptStatus: 'Receipted',
-                    risks: this.quoteData.risks,
-                    sumInsured: this.sumArray(
-                        this.quoteData.risks,
-                        'sumInsured'
-                    ),
-                    netPremium: this.sumArray(
-                        this.quoteData.risks,
-                        'netPremium'
-                    ),
-                    paymentPlan: 'Created',
-                    underwritingYear: new Date(),
-                    user: localStorage.getItem('user'),
-                    sourceOfBusiness: this.quoteData.sourceOfBusiness,
-                    intermediaryName: this.quoteData.intermediaryName,
-                };
+            // convert to policy
+            const policy: Policy = {
+                ...this.quoteDetailsForm.value,
+                nameOfInsured: this.quoteData.client,
+                policyNumber: this.quoteNumber.replace('Q', 'P'),
+                dateOfIssue: new Date(),
+                expiryDate: this.quoteData.endDate,
+                timeOfIssue: new Date(),
+                // new Date().getHours() + ':' + new Date().getMinutes(),
+                status: 'Active',
+                receiptStatus: 'Unreceipted',
+                risks: this.quoteData.risks,
+                sumInsured: this.sumArray(this.quoteData.risks, 'sumInsured'),
+                netPremium: this.sumArray(this.quoteData.risks, 'netPremium'),
+                paymentPlan: 'NotCreated',
+                underwritingYear: new Date(),
+                user: localStorage.getItem('user'),
+                sourceOfBusiness: this.quoteData.sourceOfBusiness,
+                intermediaryName: this.quoteData.intermediaryName,
+            };
 
-                const debitNote: DebitNote = {
-                    remarks: '-',
-                    dateCreated: new Date(),
-                    dateUpdated: new Date(),
-                };
+            const debitNote: DebitNote = {
+                remarks: '-',
+                dateCreated: new Date(),
+                dateUpdated: new Date(),
+            };
 
-                // const policy = this.quoteDetailsForm.value as Policy;
-                console.log(policy);
+            // const policy = this.quoteDetailsForm.value as Policy;
+            console.log(policy);
 
-                this.policiesService.createPolicy(policy).subscribe((res) => {
-                    console.log('response:', res);
-                    this.policyId = res.id;
+            this.policiesService.createPolicy(policy).subscribe((res) => {
+                console.log('response:', res);
+                this.policyId = res.id;
 
-                    // this.policiesService.createDebitNote(
-                    //     res.id,
-                    //     debitNote,
-                    //     res,
-                    //     this.policiesCount
-                    // );
-                    let insuranceType = '';
-                    const productType = this.getInsuranceType;
-                    if (productType == 'Comprehensive') {
-                        insuranceType = '07001';
-                    } else {
-                        insuranceType = '07002';
-                    }
+                // this.policiesService.createDebitNote(
+                //     res.id,
+                //     debitNote,
+                //     res,
+                //     this.policiesCount
+                // );
+                let insuranceType = '';
+                const productType = this.getInsuranceType;
+                if (productType == 'Comprehensive') {
+                    insuranceType = '07001';
+                } else {
+                    insuranceType = '07002';
+                }
 
-                    this.http
-                        .get<any>(
-                            `https://number-generation.flosure-api.com/savenda-invoice-number/1/${insuranceType}`
-                        )
-                        .subscribe(async (res) => {
-                            debitNote.debitNoteNumber = res.data.invoice_number;
+                this.http
+                    .get<any>(
+                        `https://number-generation.flosure-api.com/savenda-invoice-number/1/${insuranceType}`
+                    )
+                    .subscribe(async (res) => {
+                        debitNote.debitNoteNumber = res.data.invoice_number;
 
-                            console.log(
-                                'DEBITNOTE>>>>',
-                                res.data.invoice_number
+                        console.log('DEBITNOTE>>>>', res.data.invoice_number);
+
+                        this.http
+                            .post<DebitNote>(
+                                `https://savenda.flosure-api.com/documents/debit-note/${this.policyId}`,
+                                debitNote
+                            )
+                            .subscribe(
+                                async (res) => {
+                                    console.log(res);
+                                },
+                                async (err) => {
+                                    console.log(err);
+                                }
                             );
 
-                            this.http
-                                .post<DebitNote>(
-                                    `https://savenda.flosure-api.com/documents/debit-note/${this.policyId}`,
-                                    debitNote
-                                )
-                                .subscribe(
-                                    async (res) => {
-                                        console.log(res);
-                                    },
-                                    async (err) => {
-                                        console.log(err);
-                                    }
-                                );
+                        // receipt.invoice_number = res.data.invoice_number;
+                        // this.receiptService
+                        //     .addReceipt( receipt, this.quote.risks[0].insuranceType).subscribe((mess) => {
+                        //         this.message.success('Receipt Successfully created');
+                        //         console.log(mess);
+                        //     },
+                        //     (err) => {
+                        //         this.message.warning('Receipt Failed');
+                        //         console.log(err);
+                        //     });
+                        // .then((mess) => {
+                        //     console.log(
+                        //         'DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD',
+                        //         mess
+                        //     );
+                        //     this.message.success(
+                        //         'Receipt Successfully created'
+                        //     );
 
-                            receipt.invoice_number = res.data.invoice_number;
-                            this.receiptService
-                                .addReceipt( receipt, this.quote.risks[0].insuranceType).subscribe((mess) => {
-                                    this.message.success('Receipt Successfully created');
-                                    console.log(mess);
-                                },
-                                (err) => {
-                                    this.message.warning('Receipt Failed');
-                                    console.log(err);
-                                });
-                                // .then((mess) => {
-                                //     console.log(
-                                //         'DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD',
-                                //         mess
-                                //     );
-                                //     this.message.success(
-                                //         'Receipt Successfully created'
-                                //     );
+                        //     console.log(mess);
+                        // })
+                        // .catch((err) => {
+                        //     this.message.warning('Receipt Failed');
+                        //     console.log(err);
+                        // });
+                    });
 
-                                //     console.log(mess);
-                                // })
-                                // .catch((err) => {
-                                //     this.message.warning('Receipt Failed');
-                                //     console.log(err);
-                                // });
-                        });
+                for (const clause of this.clauses) {
+                    clause.policyId = res.id;
+                    this.productClauseService.updatePolicyClause(clause);
+                }
 
-                    for (const clause of this.clauses) {
-                        clause.policyId = res.id;
-                        this.productClauseService.updatePolicyClause(clause);
-                    }
+                for (const extenstion of this.extensions) {
+                    extenstion.policyId = res.id;
+                    this.productClauseService.updatePolicyExtension(extenstion);
+                }
 
-                    for (const extenstion of this.extensions) {
-                        extenstion.policyId = res.id;
-                        this.productClauseService.updatePolicyExtension(
-                            extenstion
+                for (const wording of this.wordings) {
+                    wording.policyId = res.id;
+                    this.productClauseService.updatePolicyWording(wording);
+                }
+
+                console.log(
+                    'CLAUSE>>>>>>',
+                    this.clauses,
+                    this.extensions,
+                    this.wordings
+                );
+
+                for (const risk of policy.risks) {
+                    console.log('Risks>>>>', risk);
+
+                    if (
+                        risk.insuranceType === 'ThirdParty' ||
+                        'ActOnly' ||
+                        'ThirdPartyFireAndTheft'
+                    ) {
+                        const params = {
+                            insuranceType: 1,
+                            status: 1,
+                            registrationMark: risk.regNumber.replace(/\s/g, ''),
+                            dateFrom: risk.riskStartDate,
+                            dateTo: risk.riskEndDate,
+                            insurancePolicyNo: policy.policyNumber,
+                            chassisNumber: risk.chassisNumber,
+                        };
+
+                        console.log('PARAMS>>>>>>', params);
+
+                        // this.quotesService.postRtsa(params);
+                    } else if (risk.insuranceType === 'Comprehensive') {
+                        const params = {
+                            insuranceType: 2,
+                            status: 1,
+                            registrationMark: risk.regNumber.replace(/\s/g, ''),
+                            dateFrom: risk.riskStartDate,
+                            dateTo: risk.riskEndDate,
+                            insurancePolicyNo: policy.policyNumber,
+                            chassisNumber: risk.chassisNumber,
+                        };
+                        console.log('PARAMS>>>>>>', params);
+
+                        // this.quotesService.postRtsa(params);
+
+                        console.log(
+                            'Risk Type>>>>',
+                            risk.insuranceType,
+                            policy.policyNumber
                         );
                     }
+                }
+            });
 
-                    for (const wording of this.wordings) {
-                        wording.policyId = res.id;
-                        this.productClauseService.updatePolicyWording(wording);
-                    }
+            this.isQuoteApproved = true;
+            this.approvingQuote = false;
+            // });
 
-                    console.log(
-                        'CLAUSE>>>>>>',
-                        this.clauses,
-                        this.extensions,
-                        this.wordings
-                    );
+            // this.receiptForm.reset();
+            // setTimeout(() => {
+            //     this.isVisible = false;
+            //     this.isOkLoading = false;
+            // }, 3000);
 
-                    for (const risk of policy.risks) {
-                        console.log('Risks>>>>', risk);
-
-                        if (
-                            risk.insuranceType === 'ThirdParty' ||
-                            'ActOnly' ||
-                            'ThirdPartyFireAndTheft'
-                        ) {
-                            const params = {
-                                insuranceType: 1,
-                                status: 1,
-                                registrationMark: risk.regNumber.replace(
-                                    /\s/g,
-                                    ''
-                                ),
-                                dateFrom: risk.riskStartDate,
-                                dateTo: risk.riskEndDate,
-                                insurancePolicyNo: policy.policyNumber,
-                                chassisNumber: risk.chassisNumber,
-                            };
-
-                            console.log('PARAMS>>>>>>', params);
-
-                            // this.quotesService.postRtsa(params);
-                        } else if (risk.insuranceType === 'Comprehensive') {
-                            const params = {
-                                insuranceType: 2,
-                                status: 1,
-                                registrationMark: risk.regNumber.replace(
-                                    /\s/g,
-                                    ''
-                                ),
-                                dateFrom: risk.riskStartDate,
-                                dateTo: risk.riskEndDate,
-                                insurancePolicyNo: policy.policyNumber,
-                                chassisNumber: risk.chassisNumber,
-                            };
-                            console.log('PARAMS>>>>>>', params);
-
-                            // this.quotesService.postRtsa(params);
-
-                            console.log(
-                                'Risk Type>>>>',
-                                risk.insuranceType,
-                                policy.policyNumber
-                            );
-                        }
-                    }
-                });
-
-                this.isQuoteApproved = true;
-                this.approvingQuote = false;
-                // });
-
-                this.receiptForm.reset();
-                setTimeout(() => {
-                    this.isVisible = false;
-                    this.isOkLoading = false;
-                }, 3000);
-
-                this.generateID(this._id);
-            }
+            // this.generateID(this._id);
+            // }
 
             console.log('WHAAAAAAAT>>>>>>', this.getInsuranceType);
         }
