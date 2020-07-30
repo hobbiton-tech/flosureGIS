@@ -243,11 +243,12 @@ export class RolesPermissionsComponent implements OnInit {
     this.description = role.description;
 
     // rId.replace(/\s/g, "");
-
+    this.selectedRole = role;
     this.permissionsList = this.permissions.filter((x) => x.rId === role.id);
     console.log('FIlt>>>>', role.id, this.permissions, this.permissionsList);
 
   }
+
   onSelectPermission(permission) {
     console.log('PEEEEEEEE>>>>', permission);
     this.name = permission.name;

@@ -17,7 +17,7 @@ import { ClientsService } from 'src/app/clients/services/clients.service';
 import { ITimestamp } from 'src/app/claims/models/claim.model';
 import { IDebitNoteDTO } from '../../models/debit-note.dto';
 import { ICertificateDTO } from '../../models/certificate.dto';
-import { combineLatest, BehaviorSubject, Observable } from 'rxjs';
+import { combineLatest, BehaviorSubject, Observable, from } from 'rxjs';
 import * as XLSX from 'xlsx';
 import {
     IIndividualClient,
@@ -60,6 +60,7 @@ import { ReceiptTypesService } from 'src/app/settings/components/finance-setups/
 import { IReceiptTypes } from 'src/app/settings/models/finance/receipt-types.model';
 import { IPaymentMethod } from 'src/app/settings/models/finance/payment-methodes.model';
 import { PaymentMethodService } from 'src/app/settings/components/finance-setups/services/payment-method.service'
+
 
 type AOA = any[][];
 
@@ -111,7 +112,6 @@ export class QuoteDetailsComponent implements OnInit {
     productTypeOptions = ProductTypeOptions;
     insuranceTypeOptions = InsuranceTypeOptions;
     limitsTypeOptions = LimitsOfLiabilityOptions;
-
 
 
 

@@ -10,17 +10,30 @@ import { UserModel } from './models/users.model';
 import { NzMessageService } from 'ng-zorro-antd';
 import { Subject, BehaviorSubject } from 'rxjs';
 
+import { IBranch } from 'src/app/settings/models/finance/branch.model';
+import { BranchService } from 'src/app/settings/components/finance-setups/services/branch.service'
+import { RolesService } from 'src/app/users/services/roles.service';
+import { IRole } from 'src/app/users/models/roles.model'
+
 @Component({
     selector: 'app-users',
     templateUrl: './users.component.html',
     styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
+
+    // branches: IBranch[] = [];
+    branchList: IBranch[] = [];
+    roles: IRole[] = [];
+    rolesList: IRole[] = [];
+
+    selectedBranchValue: any[] = [];
     usersList: UserModel[] = [];
     displayUsersList: UserModel[] = [];
 
     userUpdate = new BehaviorSubject<boolean>(false);
-
+    role: any;
+    branch: any;
     isVisible = false;
     // Declarations
     userDetailsForm: FormGroup;
@@ -35,7 +48,9 @@ export class UsersComponent implements OnInit {
     constructor(
         private formBuilder: FormBuilder,
         private readonly usersService: UsersService,
-        private msg: NzMessageService, private changeDetectorRefs: ChangeDetectorRef
+        private msg: NzMessageService, private changeDetectorRefs: ChangeDetectorRef,
+        private BranchService: BranchService,
+        private rolesService: RolesService,
     ) {
         this.userDetailsForm = this.formBuilder.group({
             firstName: ['', Validators.required],
@@ -43,7 +58,7 @@ export class UsersComponent implements OnInit {
             email: ['', Validators.required],
             password: ['', Validators.required],
             phoneNumber: ['', Validators.required],
-            role: ['', Validators.required],
+            roleName: ['', Validators.required],
             branch: ['', Validators.required],
             department: ['', Validators.required],
             jobTitle: ['', Validators.required]
@@ -64,12 +79,28 @@ export class UsersComponent implements OnInit {
         //           })
         //         : ''
         // );
+        this.BranchService.getBranch().subscribe((res) => {
+            this.branchList = res;
+        });
+        this.rolesService.getRole().subscribe((res) => {
+            this.roles = res;
+            this.rolesList = this.roles;
+        });
     }
 
     showModal(): void {
         this.isVisible = true;
     }
 
+    branchChange(value) {
+        console.log('ON CHANGE>>>>', value);
+        this.branch = value;
+    }
+    changeRoleName(value: any): void {
+        this.rolesService.getRole().subscribe((res) => {
+            console.log('rrroooo>>>>>', value)
+        });
+    }
 
 
     handleCancel(): void {

@@ -15,6 +15,7 @@ import { from } from 'rxjs';
 import { EventEmitter } from '@angular/core';
 import { FeGaussianBlurElement } from 'canvg';
 
+
 @Component({
     selector: 'app-finance-setups',
     templateUrl: './finance-setups.component.html',
@@ -331,7 +332,14 @@ export class FinanceSetupsComponent implements OnInit {
         this.branchList = this.branches.filter((x) => x.bankId === bank.id);
         console.log('FIlt>>>>', bank.id, this.branches, this.branchList);
     }
+    bankChange(value) {
+        console.log('value....', value);
+        this.selectedBankId = value.bankId;
+        this.bank_name = value.bank_name;
+        this.branchList = this.branches.filter((x) => x.bankId === value.id);
+        console.log('FIlt>>>>', value.id, this.branches, this.branchList);
 
+    }
     onChange(value) {
         console.log('WWWWWWWWWWW>>>>>>>>', value);
         this.BranchService.getBranch().subscribe((res) => {
@@ -405,6 +413,25 @@ export class FinanceSetupsComponent implements OnInit {
         this.bank_name = bank.bank_name;
         this.swift_code = bank.swift_code;
         this.description = bank.description;
+    }
+
+    // this.selectedRoleId = role.rId;
+    // this.roleName = role.roleName;
+    // this.description = role.description;
+
+    // // rId.replace(/\s/g, "");
+
+    // this.permissionsList = this.permissions.filter((x) => x.rId === role.id);
+    // console.log('FIlt>>>>', role.id, this.permissions, this.permissionsList);
+
+    bankChanged(value: any) {
+        console.log('PRODUCT TYPE<<<<<', value);
+        this.selectedBankId = value.id;
+        this.bank_name = value.bank_name;
+
+        this.branchList = this.branches.filter((x) => x.bankId === value.id);
+        console.log('FIlt>>>>', value.id, this.branches, this.branchList);
+
     }
 
     onSelectPaymentMethod(paymentMethod) {

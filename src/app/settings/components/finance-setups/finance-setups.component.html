@@ -130,7 +130,9 @@
                 ngModel="bank"
                 nzAllowClear
                 nzPlaceHolder="Select Bank"
-                onChange="onChangeBank($event)"
+                (ngModelChange)="bankChanged($event)"
+                name="bank"
+                id="bank"
               >
                 <nz-option
                   *ngFor="let bank of bankList"
@@ -138,12 +140,6 @@
                   nzLabel="{{ bank.bank_name }}"
                 ></nz-option>
               </nz-select>
-              <!-- <ng-template #multipleTemplate let-selected>
-                <div class="onSelectedBank">
-                  <i nz-icon [nzType]="selected.nzValue"></i> {{
-                  selected.nzLabel }}
-                </div>
-              </ng-template> -->
             </div>
           </div>
         </div>
