@@ -39,7 +39,7 @@ export class PaymentPlanComponent implements OnInit {
     listOfPolicies: any[];
     // number of payment plans
     paymentPlansCount = 0;
-    policyNumber = [];
+    policyNumber: Policy;
 
     policyUpdate: Policy = new Policy();
     clients: Array<IIndividualClient & ICorporateClient>;
@@ -159,7 +159,6 @@ export class PaymentPlanComponent implements OnInit {
         let pAmount = 0;
 
         let policyCount = 0;
-        let policyPlan: PlanPolicy;
         // policyPlan = {
         //     start_date: policy.startDate,
         //     end_date: policy.endDate,
@@ -170,25 +169,25 @@ export class PaymentPlanComponent implements OnInit {
         //     plan_id: res.data.ID
         // }
 
-        for (const policy of this.policyNumber) {
-            this.policyUpdate = policy;
+        // for (const policy of this.policyNumber) {
+            this.policyUpdate = { ...this.policyNumber}
 
             
 
 
-            console.log(this.policyUpdate);
+            console.log('wawwawawa', this.policyNumber);
 
-            pAmount = pAmount + policy.netPremium;
+            pAmount = pAmount + this.policyNumber.netPremium;
             policyCount++;
 
             
-            this.clientName = policy.client;
-            this.clientId = policy.clientCode
-            this.netPremium = this.netPremium + policy.netPremium;
+            this.clientName = this.policyNumber.client;
+            this.clientId = this.policyNumber.clientCode
+            this.netPremium = this.netPremium + this.policyNumber.netPremium;
             // this.policyPlan = policyPlan;
             this.policyUpdate.paymentPlan = 'Created';
             // this.accountService.updatePolicy(this.policyUpdate);
-        }
+        // }
 
         const plan: IPaymentModel = {
             client_id: this.clientId,
@@ -208,6 +207,18 @@ export class PaymentPlanComponent implements OnInit {
             .value,
             start_date: this.paymentPlanForm.controls.startDate.value,
         };
+
+
+        const policyPlan: PlanPolicy = {
+            start_date: this.policyNumber.startDate,
+            end_date: this.policyNumber.endDate,
+            net_premium: Number(this.policyNumber.netPremium),
+            allocation_status: 'Unallocated',
+            policy_number: this.policyNumber.policyNumber,
+            allocation_amount: 0,
+            balance: Number(this.policyNumber.netPremium)
+        }
+        
 
         
 
@@ -233,7 +244,11 @@ export class PaymentPlanComponent implements OnInit {
                 today_date: new Date(),
             };
 
-            this.planID = res.data.ID
+            
+            console.log('POlicy PAY>>>', policyPlan);
+            
+
+            this.planID = Number(res.data.ID)
 
 
             const planPaymentReceipt: PlanReceipt = {
@@ -266,31 +281,47 @@ export class PaymentPlanComponent implements OnInit {
                             console.log(err);
                         });
                 });
+
+
+                // for (const policy of this.policyNumber) {
+                    // console.log('NEW MWMWMWMW>>>>', policy, this.planID);
+                    
+        
+                    policyPlan.plan_id = this.planID
+                    this.paymentPlanService.addPlanPolicy(policyPlan).subscribe((mess) =>{
+                        console.log('WUWUWUW><><><><><', this.receiptID);
+                    }, (err) => {
+                        this.message.warning('Plan Policy Failed');
+                        console.log(err);
+                    });
+                    
+                // }
         }, (err) => {
             this.message.error('Receipt Failed');
         });
+        console.log('CHECK><><><><><>ID????', this.planID);
 
-        for (const policy of this.policyNumber) {
-            console.log('NEW MWMWMWMW>>>>', policy);
-            policyPlan = {
-                start_date: policy.startDate,
-                end_date: policy.endDate,
-                net_premium: Number(policy.netPremium),
-                allocation_status: 'Unallocated',
-                policy_number: policy.policyNumber,
-                allocation_amount: 0,
-                plan_id: Number(this.planID)
-            }
+        // for (const policy of this.policyNumber) {
+        //     console.log('NEW MWMWMWMW>>>>', policy, this.planID);
+        //     policyPlan = {
+        //         start_date: policy.startDate,
+        //         end_date: policy.endDate,
+        //         net_premium: Number(policy.netPremium),
+        //         allocation_status: 'Unallocated',
+        //         policy_number: policy.policyNumber,
+        //         allocation_amount: 0,
+        //         plan_id: Number(this.planID)
+        //     }
 
 
-            this.paymentPlanService.addPlanPolicy(policyPlan).subscribe((mess) =>{
-                console.log('WUWUWUW><><><><><', this.receiptID);
-            }, (err) => {
-                this.message.warning('Plan Policy Failed');
-                console.log(err);
-            });
+        //     this.paymentPlanService.addPlanPolicy(policyPlan).subscribe((mess) =>{
+        //         console.log('WUWUWUW><><><><><', this.receiptID);
+        //     }, (err) => {
+        //         this.message.warning('Plan Policy Failed');
+        //         console.log(err);
+        //     });
             
-        }
+        // }
 
         // this.generateID(this.receiptID);
         this.paymentPlanForm.reset();

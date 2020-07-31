@@ -25,10 +25,11 @@ export class PlanPolicy {
     policy_number: string;
     start_date: Date | ITimestamp;
     end_date: Date | ITimestamp;
-    plan_id: number;
+    plan_id?: number;
     net_premium: number;
-    allocation_status: AllocationStatus;
+    allocation_status: string;
     allocation_amount: number;
+    balance: number;
 }
 
 export class InstallmentsModel {
@@ -46,7 +47,7 @@ export class PlanReceipt {
     receipt_number?: string;
     plan_id?: number;
     amount: number;
-    allocation_status: AllocationStatus;
+    allocation_status: string;
 }
 
 export type ReceiptStatus = 'Receipted' | 'Cancelled';
