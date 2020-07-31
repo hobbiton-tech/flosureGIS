@@ -123,13 +123,13 @@ export class PaymentPlanService implements Resolve<any> {
     getInstallments(): Observable<any>{
         return this.http
             .get<any>(
-                'http://localhost:8022/payment-plan/installment'
+                'https://payment-api.savenda-flosure.com/payment-plan/installment'
             )
     }
 
 
     addPlanReceipt( planReceipt: PlanReceipt): Observable<any> {
-        return this.http.post<PlanReceipt>('http://localhost:8022/plan-receipt',planReceipt);
+        return this.http.post<PlanReceipt>('https://payment-api.savenda-flosure.com/plan-receipt',planReceipt);
     }
 
     getReceiptPlan(): Observable<any> {
@@ -139,7 +139,7 @@ export class PaymentPlanService implements Resolve<any> {
 
     updatePlanReceipt(planReceipt: PlanReceipt) {
 
-        this.http.put(`http://localhost:8022/plan-receipt/${planReceipt.ID}`, planReceipt).subscribe((res) => {
+        this.http.put(`https://payment-api.savenda-flosure.com/plan-receipt/${planReceipt.ID}`, planReceipt).subscribe((res) => {
             this.message.success(
                         'Plan Receipt Successfully Updated'
                     );
@@ -163,7 +163,7 @@ export class PaymentPlanService implements Resolve<any> {
 
     updatePlanPolicy(policyPaymentPlan: PlanPolicy) {
 
-        this.http.put(`http://localhost:8022/plan-policy/${policyPaymentPlan.ID}`, policyPaymentPlan).subscribe((res) => {
+        this.http.put(`https://payment-api.savenda-flosure.com/plan-policy/${policyPaymentPlan.ID}`, policyPaymentPlan).subscribe((res) => {
             this.message.success(
                         'Plan Receipt Successfully Updated'
                     );
@@ -181,7 +181,7 @@ export class PaymentPlanService implements Resolve<any> {
         let header = new HttpHeaders();
         header.set('Access-Control-Allow-Origin', '*');
 
-        this.http.put(`http://localhost:8022/payment-plan/installment`, policyPaymentInstallment, { headers: header }).subscribe((res) => {
+        this.http.put(`https://payment-api.savenda-flosure.com/payment-plan/installment`, policyPaymentInstallment, { headers: header }).subscribe((res) => {
             // this.message.success(
             //             'Plan Receipt Successfully Updated'
             //         );
