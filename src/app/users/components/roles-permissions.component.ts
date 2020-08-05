@@ -56,7 +56,6 @@ export class RolesPermissionsComponent implements OnInit {
 
 
 
-
   isRolesVisible = false;
   isPermissionsVisible = false;
 
@@ -149,34 +148,34 @@ export class RolesPermissionsComponent implements OnInit {
 
 
 
-  // ///EDIT  ROLES SERVICE //////
+  ///EDIT  ROLES SERVICE //////
 
-  // onEditRole(value) {
-  //   this.editRole = value;
-  //   this.rolesForm.get('roleName').setValue(this.editRole.roleName);
-  //   this.rolesForm.get('Description').setValue(this.editRole.Description)
-  //   this.isRoleEidtVisible = true;
-  // }
+  onEditRole(value) {
+    this.editRole = value;
+    this.rolesForm.get('roleName').setValue(this.editRole.roleName);
+    this.rolesForm.get('Description').setValue(this.editRole.Description)
+    this.isRoleEidtVisible = true;
+  }
 
-  // handleEditRoleOk() {
-  //   this.editRole.roleName = this.rolesForm.controls.roleName.value;
-  //   this.editRole.Description = this.rolesForm.controls.Description.value;
+  handleEditRoleOk() {
+    this.editRole.roleName = this.rolesForm.controls.roleName.value;
+    this.editRole.Description = this.rolesForm.controls.Description.value;
 
-  //   const index = this.selectedRoleValue.indexOf(this.editRole);
-  //   this.selectedRoleValue[index] = this.editRole;
+    const index = this.selectedRoleValue.indexOf(this.editRole);
+    this.selectedRoleValue[index] = this.editRole;
 
-  //   const role: IRole = {
-  //     ...this.rolesForm.value,
-  //     id: this.editRole.id,
-  //   };
-  //   this.rolesService.updateRole(role);
+    const role: IRole = {
+      ...this.rolesForm.value,
+      id: this.editRole.id,
+    };
+    this.rolesService.updateRole(role);
 
-  //   this.isRoleEidtVisible = false;
-  // }
+    this.isRoleEidtVisible = false;
+  }
 
-  // handleEditRoleCancel() {
-  //   this.isRoleEidtVisible = false;
-  // }
+  handleEditRoleCancel() {
+    this.isRoleEidtVisible = false;
+  }
   handleRolesCancel() {
     this.isRolesVisible = false;
   }
@@ -186,31 +185,31 @@ export class RolesPermissionsComponent implements OnInit {
 
   ///EDIT  Permissions SERVICE //////
 
-  // onEditPermission(value) {
-  //   this.editPermission = value;
-  //   this.permissionsForm.get('permissionName').setValue(this.editPermission.permissionName);
-  //   this.permissionsForm.get('Description').setValue(this.editPermission.Description)
-  //   this.isPermissionEditVisible = true;
-  // }
+  onEditPermission(value) {
+    this.editPermission = value;
+    this.permissionsForm.get('permissionName').setValue(this.editPermission.permissionName);
+    this.permissionsForm.get('Description').setValue(this.editPermission.Description)
+    this.isPermissionEditVisible = true;
+  }
 
-  // handleEditPermissionOk() {
-  //   this.editPermission.permissionName = this.permissionsForm.controls.permissionName.value;
-  //   this.editPermission.Description = this.permissionsForm.controls.Description.value;
+  handleEditPermissionOk() {
+    this.editPermission.permissionName = this.permissionsForm.controls.permissionName.value;
+    this.editPermission.Description = this.permissionsForm.controls.Description.value;
 
-  //   const index = this.seletedPermissionValue.indexOf(this.editPermission);
-  //   this.seletedPermissionValue[index] = this.editPermission;
+    const index = this.seletedPermissionValue.indexOf(this.editPermission);
+    this.seletedPermissionValue[index] = this.editPermission;
 
-  //   const permission: IPermission = {
-  //     ...this.permissionsForm.value,
-  //     id: this.editPermission.id,
-  //   };
-  //   this.permssionService.updatePermission(permission);
+    const permission: IPermission = {
+      ...this.permissionsForm.value,
+      id: this.editPermission.id,
+    };
+    this.permssionService.updatePermission(permission);
 
-  //   this.isPermissionEditVisible = false;
-  // }
-  // handleEditPermissionCancel() {
-  //   this.isPermissionEditVisible = false;
-  // }
+    this.isPermissionEditVisible = false;
+  }
+  handleEditPermissionCancel() {
+    this.isPermissionEditVisible = false;
+  }
 
   handlePermissionCancel() {
     this.isPermissionsVisible = false;

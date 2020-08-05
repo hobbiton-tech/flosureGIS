@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
-import { Observable, from } from 'rxjs';
+import { Observable } from 'rxjs';
 import { IPermission } from '../models/permissions.model'
 import { AngularFireAuth } from "@angular/fire/auth";
 import { auth } from "firebase";

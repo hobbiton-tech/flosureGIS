@@ -1,103 +1,111 @@
 <div style="margin: 10px;">
-  <div style="margin-bottom: 10px; background: #fff;">
-    <nz-page-header>
-      <nz-page-header-title>Users</nz-page-header-title>
-      <!-- <nz-page-header-subtitle>List of all users</nz-page-header-subtitle> -->
-      <nz-page-header-extra>
-        <!-- <button nz-button>View Summary</button> -->
-        <button nz-button nzType="primary" (click)="showModal()">
-          Add New User
-        </button>
-        <nz-modal
-          [(nzVisible)]="isVisible"
-          [nzWidth]="'1200'"
-          nzTitle="Create User"
-          (nzOnCancel)="handleCancel()"
-          (nzOnOk)="submitUser()"
-        >
-          <nz-card
-            style="width: 90%; margin: 0 auto;"
-            [nzBordered]="true"
-            nzTitle="User Details"
-          >
-            <form nz-form [formGroup]="userDetailsForm" novalidate>
-              <div nz-row>
-                <div nz-col [nzSpan]="12">
-                  <nz-form-item>
-                    <nz-form-label [nzSpan]="7" nzFor="firstName"
-                      >First Name</nz-form-label
+    <div style="margin-bottom: 10px; background: #fff;">
+        <nz-page-header>
+            <nz-page-header-title>Users</nz-page-header-title>
+            <!-- <nz-page-header-subtitle>List of all users</nz-page-header-subtitle> -->
+            <nz-page-header-extra>
+                <!-- <button nz-button>View Summary</button> -->
+                <button nz-button nzType="primary" (click)="showModal()">
+                    Add New User
+                </button>
+                <nz-modal
+                    [(nzVisible)]="isVisible"
+                    [nzWidth]="'1200'"
+                    nzTitle="Create User"
+                    (nzOnCancel)="handleCancel()"
+                    (nzOnOk)="submitUser()"
+                >
+                    <nz-card
+                        style="width: 90%; margin: 0 auto;"
+                        [nzBordered]="true"
+                        nzTitle="User Details"
                     >
-                    <nz-form-control [nzSpan]="17">
-                      <input
-                        nz-input
-                        formControlName="firstName"
-                        name="firstName"
-                        type="text"
-                        id="firstName"
-                        placeholder="First Name"
-                      />
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
+                        <form nz-form [formGroup]="userDetailsForm" novalidate>
+                            <div nz-row>
+                                <div nz-col [nzSpan]="12">
+                                    <nz-form-item>
+                                        <nz-form-label
+                                            [nzSpan]="7"
+                                            nzFor="firstName"
+                                            >First Name</nz-form-label
+                                        >
+                                        <nz-form-control [nzSpan]="17">
+                                            <input
+                                                nz-input
+                                                formControlName="firstName"
+                                                name="firstName"
+                                                type="text"
+                                                id="firstName"
+                                                placeholder="First Name"
+                                            />
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                </div>
 
-                <div nz-col [nzSpan]="12">
-                  <nz-form-item>
-                    <nz-form-label [nzSpan]="7" nzFor="surname"
-                      >Last Name</nz-form-label
-                    >
-                    <nz-form-control [nzSpan]="17">
-                      <input
-                        nz-input
-                        formControlName="surname"
-                        name="surname"
-                        type="text"
-                        id="surname"
-                        placeholder="Last Name"
-                      />
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-              </div>
+                                <div nz-col [nzSpan]="12">
+                                    <nz-form-item>
+                                        <nz-form-label
+                                            [nzSpan]="7"
+                                            nzFor="surname"
+                                            >Last Name</nz-form-label
+                                        >
+                                        <nz-form-control [nzSpan]="17">
+                                            <input
+                                                nz-input
+                                                formControlName="surname"
+                                                name="surname"
+                                                type="text"
+                                                id="surname"
+                                                placeholder="Last Name"
+                                            />
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                </div>
+                            </div>
 
-              <div nz-row>
-                <div nz-col [nzSpan]="12">
-                  <nz-form-item>
-                    <nz-form-label [nzSpan]="7" nzFor="email"
-                      >Email</nz-form-label
-                    >
-                    <nz-form-control [nzSpan]="17">
-                      <input
-                        nz-input
-                        formControlName="email"
-                        name="email"
-                        type="email"
-                        id="email"
-                        placeholder="Email Address"
-                      />
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
+                            <div nz-row>
+                                <div nz-col [nzSpan]="12">
+                                    <nz-form-item>
+                                        <nz-form-label
+                                            [nzSpan]="7"
+                                            nzFor="email"
+                                            >Email</nz-form-label
+                                        >
+                                        <nz-form-control [nzSpan]="17">
+                                            <input
+                                                nz-input
+                                                formControlName="email"
+                                                name="email"
+                                                type="email"
+                                                id="email"
+                                                placeholder="Email Address"
+                                            />
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                </div>
 
-                <div nz-col [nzSpan]="12">
-                  <nz-form-item>
-                    <nz-form-label [nzSpan]="7" nzFor="phoneNumber"
-                      >Phone No.</nz-form-label
-                    >
-                    <nz-form-control [nzSpan]="17">
-                      <input
-                        nz-input
-                        formControlName="phoneNumber"
-                        name="phoneNumber"
-                        type="tel"
-                        id="phoneNumber"
-                        placeholder="Phone Number"
-                      />
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-              </div>
+                                <div nz-col [nzSpan]="12">
+                                    <nz-form-item>
+                                        <nz-form-label
+                                            [nzSpan]="7"
+                                            nzFor="phoneNumber"
+                                            >Phone No.</nz-form-label
+                                        >
+                                        <nz-form-control [nzSpan]="17">
+                                            <input
+                                                nz-input
+                                                formControlName="phoneNumber"
+                                                name="phoneNumber"
+                                                type="tel"
+                                                id="phoneNumber"
+                                                placeholder="Phone Number"
+                                            />
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                </div>
+                            </div>
 
-              <!-- <div nz-row>
+                            <!-- <div nz-row>
                                 <div nz-col [nzSpan]="12">
                                     <nz-form-item>
                                         <nz-form-label
@@ -170,138 +178,155 @@
                                 </div>
                             </div> -->
 
-              <div nz-row>
-                <div nz-col [nzSpan]="12">
-                  <nz-form-item>
-                    <nz-form-label [nzSpan]="7" nzFor="role"
-                      >Branch</nz-form-label
-                    >
-                    <nz-form-control [nzSpan]="17">
-                      <nz-select
-                        name="branch"
-                        formControlName="branch"
-                        nzAllowClear
-                        PlaceHolder="Branch"
-                        (ngModelChange)="
-                                branchChange($event)
-                                "
-                      >
-                        <nz-option
-                          *ngFor="let branch of branchList"
-                          nzValue=" {{branch.id }}"
-                          nzLabel=" {{branch.branch_name }}"
-                        ></nz-option>
-                      </nz-select>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
+                            <div nz-row>
+                                <div nz-col [nzSpan]="12">
+                                    <nz-form-item>
+                                        <nz-form-label [nzSpan]="7" nzFor="role"
+                                            >Branch</nz-form-label
+                                        >
+                                        <nz-form-control [nzSpan]="17">
+                                            <nz-select
+                                                name="branch"
+                                                formControlName="branch"
+                                                nzAllowClear
+                                                PlaceHolder="Branch"
+                                                (ngModelChange)="
+                                                    branchChange($event)
+                                                "
+                                            >
+                                                <nz-option
+                                                    *ngFor="
+                                                        let branch of branchList
+                                                    "
+                                                    nzValue=" {{ branch.id }}"
+                                                    nzLabel=" {{
+                                                        branch.branch_name
+                                                    }}"
+                                                ></nz-option>
+                                            </nz-select>
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                </div>
 
-                <div nz-col [nzSpan]="12">
-                  <nz-form-item>
-                    <nz-form-label [nzSpan]="7" nzFor="department"
-                      >Department</nz-form-label
-                    >
-                    <nz-form-control [nzSpan]="17">
-                      <input
-                        nz-input
-                        formControlName="department"
-                        name="department"
-                        type="department"
-                        id="department"
-                        placeholder="Department"
-                      />
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-              </div>
+                                <div nz-col [nzSpan]="12">
+                                    <nz-form-item>
+                                        <nz-form-label
+                                            [nzSpan]="7"
+                                            nzFor="department"
+                                            >Department</nz-form-label
+                                        >
+                                        <nz-form-control [nzSpan]="17">
+                                            <input
+                                                nz-input
+                                                formControlName="department"
+                                                name="department"
+                                                type="department"
+                                                id="department"
+                                                placeholder="Department"
+                                            />
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                </div>
+                            </div>
 
-              <div nz-row>
-                <div nz-col [nzSpan]="12">
-                  <nz-form-item>
-                    <nz-form-label [nzSpan]="7" nzFor="role"
-                      >Roles</nz-form-label
-                    >
-                    <nz-form-control [nzSpan]="17">
-                      <nz-select
-                        formControlName="roleName"
-                        nzShowSearch
-                        nzServerSearch
-                        nzAllowClear
-                        placeholder="Role"
-                      >
-                        <nz-option
-                          *ngFor="let role of rolesList"
-                          nzValue=" {{role.id }}"
-                          nzLabel=" {{role.roleName }}"
-                        ></nz-option>
-                      </nz-select>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="12">
-                  <nz-form-item>
-                    <nz-form-label [nzSpan]="7" nzFor="jobTitle"
-                      >Job Title</nz-form-label
-                    >
-                    <nz-form-control [nzSpan]="17">
-                      <input
-                        nz-input
-                        formControlName="jobTitle"
-                        name="jobTitle"
-                        type="jobTitle"
-                        id="jobTitle"
-                        placeholder="Job Title"
-                      />
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-              </div>
-            </form>
-          </nz-card>
-        </nz-modal>
-      </nz-page-header-extra>
-      <nz-page-header-content>
-        <nz-descriptions [nzColumn]="3"> </nz-descriptions>
-      </nz-page-header-content>
-    </nz-page-header>
-  </div>
-  <nz-card>
-    <div style="margin-bottom: 10px; width: 50%;">
-      <nz-input-group [nzSuffix]="suffixIconSearch">
-        <input type="text" nz-input placeholder="Search by user name" />
-      </nz-input-group>
-      <ng-template #suffixIconSearch>
-        <i nz-icon nzType="search"></i>
-      </ng-template>
+                            <div nz-row>
+                                <div nz-col [nzSpan]="12">
+                                    <nz-form-item>
+                                        <nz-form-label [nzSpan]="7" nzFor="role"
+                                            >Roles</nz-form-label
+                                        >
+                                        <nz-form-control [nzSpan]="17">
+                                            <nz-select
+                                                formControlName="roleName"
+                                                nzShowSearch
+                                                nzServerSearch
+                                                nzAllowClear
+                                                placeholder="Role"
+                                            >
+                                                <nz-option
+                                                    *ngFor="
+                                                        let role of rolesList
+                                                    "
+                                                    nzValue=" {{ role.id }}"
+                                                    nzLabel=" {{
+                                                        role.roleName
+                                                    }}"
+                                                ></nz-option>
+                                            </nz-select>
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                </div>
+                                <div nz-col [nzSpan]="12">
+                                    <nz-form-item>
+                                        <nz-form-label
+                                            [nzSpan]="7"
+                                            nzFor="jobTitle"
+                                            >Job Title</nz-form-label
+                                        >
+                                        <nz-form-control [nzSpan]="17">
+                                            <input
+                                                nz-input
+                                                formControlName="jobTitle"
+                                                name="jobTitle"
+                                                type="jobTitle"
+                                                id="jobTitle"
+                                                placeholder="Job Title"
+                                            />
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                </div>
+                            </div>
+                        </form>
+                    </nz-card>
+                </nz-modal>
+            </nz-page-header-extra>
+            <nz-page-header-content>
+                <nz-descriptions [nzColumn]="3"> </nz-descriptions>
+            </nz-page-header-content>
+        </nz-page-header>
     </div>
-    <nz-table
-      #usersTable
-      [nzData]="displayUsersList"
-      [nzSize]="'small'"
-      [nzBordered]="true"
-    >
-      <thead>
-        <tr>
-          <th>User Name</th>
-          <th>Email</th>
-          <th>Job Title</th>
-          <th>Role</th>
-          <th>Branch</th>
-          <th>Department</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let user of usersTable.data">
-          <td>{{user.firstName}} {{user.surname}}</td>
-          <td>{{user.email}}</td>
-          <td>{{user.jobTitle}}</td>
-          <td>{{user.role}}</td>
-          <td>{{user.branch}}</td>
-          <td>{{user.department}}</td>
+    <nz-card>
+        <div style="margin-bottom: 10px; width: 50%;">
+            <nz-input-group [nzSuffix]="suffixIconSearch">
+                <input type="text" nz-input placeholder="Search by user name" />
+            </nz-input-group>
+            <ng-template #suffixIconSearch>
+                <i nz-icon nzType="search"></i>
+            </ng-template>
+        </div>
+        <nz-table
+            #usersTable
+            [nzData]="displayUsersList"
+            [nzSize]="'small'"
+            [nzBordered]="true"
+        >
+            <thead>
+                <tr>
+                    <th>User Name</th>
+                    <th>Email</th>
+                    <th>Job Title</th>
+                    <th>Role</th>
+                    <th>Branch</th>
+                    <th>Department</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr
+                    *ngFor="let user of usersTable.data"
+                    (click)="ChangeEmail(user)"
+                >
+                    <td>{{ user.firstName }} {{ user.surname }}</td>
+                    <td>
+                        {{ user.email }}
+                    </td>
+                    <td>{{ user.jobTitle }}</td>
+                    <td>{{ user.role }}</td>
+                    <td>{{ user.branch }}</td>
+                    <td>{{ user.department }}</td>
 
-          <!-- <td>
+                    <!-- <td>
           <nz-badge [nzStatus]="user.status === 'Draft' ? 'warning' : 'success'" [nzText]="user.status"></nz-badge>-->
-          <!-- <td>
+                    <!-- <td>
                         <button nz-button nzType="default">
                             <i nz-icon nzType="edit"></i>
                         </button>
@@ -309,8 +334,56 @@
                             <i nz-icon nzType="delete"></i>
                         </button>
                     </td> -->
-        </tr>
-      </tbody>
-    </nz-table>
-  </nz-card>
+                </tr>
+            </tbody>
+        </nz-table>
+    </nz-card>
+
+    <nz-modal
+        [(nzVisible)]="isPopUpVisible"
+        nzTitle="Test Selection"
+        (nzOnCancel)="handleSelectCancel()"
+        (nzOnOk)="handleSelectOk()"
+    >
+        <form nz-form [formGroup]="userDetailsForm">
+            <nz-form-item>
+                <nz-form-label [nzSpan]="7" nzRequired>Email</nz-form-label>
+
+                <div nz-col nzSpan="12">
+                    <div style="width: 75%;">
+                        <nz-select
+                            name="email"
+                            formControlName="email"
+                            nzAllowClear
+                            PlaceHolder="email"
+                            (ngModelChange)="ChangeEmail($event)"
+                        >
+                            <nz-option
+                                *ngFor="let user of usersTable.data"
+                                nzValue=" {{ user.id }}"
+                                nzLabel=" {{ user.email }}"
+                            ></nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </nz-form-item>
+
+            <!-- <nz-form-item>
+                <nz-form-label [nzSpan]="7" nzRequired> Name</nz-form-label>
+                <nz-form-control
+                    [nzSpan]="12"
+                    nzHasFeedback
+                    nzValidatingTip="Validating..."
+                >
+                    <input
+                        nz-input
+                        formControlName="firstName"
+                        *ngFor="let user of usersList"
+                        placeholder="
+                        "
+                    />
+                </nz-form-control>
+            </nz-form-item> -->
+        </form>
+    </nz-modal>
 </div>

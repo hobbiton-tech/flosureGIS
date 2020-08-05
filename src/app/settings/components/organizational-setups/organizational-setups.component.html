@@ -1,639 +1,419 @@
-<div style="margin: 20px;">
-    <nz-card [nzBordered]="false">
-        <nz-tabset>
-            <nz-tab nzTitle="Account Type">
-                <nz-card [nzBordered]="false">
-                    <div style="margin-bottom: 10px;">
-                        <div nz-row [nzGutter]="24">
-                            <div nz-col nzSpan="12">
-                                <div style="width: 75%;">
-                                    <nz-input-group
-                                        [nzSuffix]="suffixIconSearch"
-                                    >
-                                        <input
-                                            type="text"
-                                            nz-input
-                                            placeholder="Search by type, account type"
-                                        />
-                                    </nz-input-group>
-                                    <ng-template #suffixIconSearch>
-                                        <i nz-icon nzType="search"></i>
-                                    </ng-template>
-                                </div>
-                            </div>
-                            <div nz-col nzSpan="12">
-                                <button
-                                    nz-button
-                                    nzType="primary"
-                                    style="float: right;"
-                                    (click)="openAccountTypeFormDrawer()"
-                                >
-                                    Add New Account Type
-                                </button>
-                            </div>
-                        </div>
+<div style="margin: 10px;">
+    <div style="margin-bottom: 10px; background: #fff;">
+        <nz-page-header>
+            <nz-page-header-title
+                >Branches and Sales Points</nz-page-header-title
+            >
+            <nz-page-header-content>
+                <nz-descriptions [nzColumn]="3"> </nz-descriptions>
+            </nz-page-header-content>
+        </nz-page-header>
+    </div>
+</div>
+
+<div style="margin: 25px;">
+    <nz-card>
+        <div style="margin-bottom: 10px;">
+            <div nz-row [nzGutter]="24">
+                <div nz-col nzSpan="12">
+                    <div style="width: 75%;">
+                        <nz-input-group [nzSuffix]="suffixIconSearch">
+                            <input
+                                type="text"
+                                nz-input
+                                placeholder="Selected Branch"
+                            />
+                        </nz-input-group>
+                        <ng-template #suffixIconSearch>
+                            <i nz-icon nzType="search"></i>
+                        </ng-template>
                     </div>
-
-                    <nz-table
-                        #accountTypeTable
-                        [nzData]="accountTypes"
-                        [nzSize]="'small'"
-                        [nzBordered]="true"
-                        style="background-color: white;"
-                    >
-                        <thead>
-                            <tr>
-                                <th>Type</th>
-                                <th>Short Desc</th>
-                                <th>Account Type</th>
-                                <th>Commission Rate</th>
-                                <th>VAT Rate</th>
-                                <th>Withholding Tax Rate</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr
-                                *ngFor="
-                                    let accountType of accountTypeTable.data
-                                "
-                            >
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td style="width: 70px;">
-                                    <div
-                                        class="icons-list"
-                                        style="text-align: center; width: 65px;"
-                                    >
-                                        <i
-                                            nz-icon
-                                            [nzType]="'edit'"
-                                            [nzTheme]="'twotone'"
-                                            [nzTwotoneColor]="'#b3cde8'"
-                                        ></i>
-                                        <nz-divider
-                                            nzType="vertical"
-                                        ></nz-divider>
-                                        <i
-                                            nz-icon
-                                            [nzType]="'delete'"
-                                            [nzTheme]="'twotone'"
-                                            [nzTwotoneColor]="'#eb2f32'"
-                                        ></i>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </nz-table>
-                </nz-card>
-            </nz-tab>
-
-            <nz-tab nzTitle="Accounts">
-                <nz-card [nzBordered]="false">
-                    <div style="margin-bottom: 10px;">
-                        <div nz-row [nzGutter]="24">
-                            <div nz-col nzSpan="12">
-                                <div style="width: 75%;">
-                                    <nz-input-group
-                                        [nzSuffix]="suffixIconSearch"
-                                    >
-                                        <input
-                                            type="text"
-                                            nz-input
-                                            placeholder="Search by account id, account name, bank"
-                                        />
-                                    </nz-input-group>
-                                    <ng-template #suffixIconSearch>
-                                        <i nz-icon nzType="search"></i>
-                                    </ng-template>
-                                </div>
-                            </div>
-                            <div nz-col nzSpan="12">
-                                <button
-                                    nz-button
-                                    nzType="primary"
-                                    style="float: right;"
-                                    (click)="openAccountFormDrawer()"
-                                >
-                                    Add New Account
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <nz-table
-                        #accountTable
-                        [nzData]="accountList"
-                        [nzSize]="'small'"
-                        [nzBordered]="true"
-                        style="background-color: white;"
-                    >
-                        <thead>
-                            <tr>
-                                <th>Account ID</th>
-                                <th>Account Name</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>Bank</th>
-                                <th>Bank Branch</th>
-                                <th>Payment Mode</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr
-                                *ngFor="let account of accountTable.data"
-                                (click)="openAccountsDrawer(account)"
-                                class="table-row"
-                            >
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>
-                                    <nz-badge
-                                        [nzStatus]="
-                                            account.status === 'Inactive'
-                                                ? 'error'
-                                                : 'success'
-                                        "
-                                        [nzText]="account.status"
-                                    >
-                                    </nz-badge>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </nz-table>
-
-                    <nz-drawer
-                        nzWidth="350"
-                        [nzClosable]="false"
-                        [nzVisible]="accountsDrawerVisible"
-                        nzPlacement="right"
-                        nzTitle="more details"
-                        (nzOnClose)="accountsDrawerVisible = false"
-                        nzData="accountList"
-                    >
-                        <nz-descriptions
-                            nzBordered
-                            [nzColumn]="1"
-                            nzSize="small"
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <div nz-col nzSpan="12">
+                        <button
+                            nz-button
+                            nzType="primary"
+                            style="float: right;"
+                            (click)="openBranches()"
                         >
-                            <nz-descriptions-item
-                                nzTitle="Pin Number"
-                            ></nz-descriptions-item>
-                            <nz-descriptions-item
-                                nzTitle="Contact Title"
-                            ></nz-descriptions-item>
-                            <nz-descriptions-item nzTitle="Account Short Desc">
-                            </nz-descriptions-item>
-                        </nz-descriptions>
-                    </nz-drawer>
-                </nz-card>
-            </nz-tab>
-
-            <nz-tab nzTitle="Client Type">
-                <nz-card [nzBordered]="false">
-                    <div style="margin-bottom: 10px;">
-                        <div nz-row [nzGutter]="24">
-                            <div nz-col nzSpan="12">
-                                <div style="width: 75%;">
-                                    <nz-input-group
-                                        [nzSuffix]="suffixIconSearch"
-                                    >
-                                        <input
-                                            type="text"
-                                            nz-input
-                                            placeholder="Search by type"
-                                        />
-                                    </nz-input-group>
-                                    <ng-template #suffixIconSearch>
-                                        <i nz-icon nzType="search"></i>
-                                    </ng-template>
-                                </div>
-                            </div>
-                            <div nz-col nzSpan="12">
-                                <button
-                                    nz-button
-                                    nzType="primary"
-                                    style="float: right;"
-                                    (click)="openClientTypeFormDrawer()"
-                                >
-                                    Add New Client Type
-                                </button>
-                            </div>
-                        </div>
+                            Add New Branch
+                        </button>
                     </div>
+                </div>
+            </div>
+        </div>
 
-                    <nz-table
-                        #clientTable
-                        [nzData]="clientList"
-                        [nzSize]="'small'"
-                        [nzBordered]="true"
-                        style="background-color: white;"
-                    >
-                        <thead>
-                            <tr>
-                                <th>Type</th>
-                                <th>Description</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let client of clientTable.data">
-                                <td></td>
-                                <td></td>
-                                <td style="width: 70px;">
-                                    <div
-                                        class="icons-list"
-                                        style="text-align: center; width: 65px;"
-                                    >
-                                        <i
-                                            nz-icon
-                                            [nzType]="'edit'"
-                                            [nzTheme]="'twotone'"
-                                            [nzTwotoneColor]="'#b3cde8'"
-                                        ></i>
-                                        <nz-divider
-                                            nzType="vertical"
-                                        ></nz-divider>
-                                        <i
-                                            nz-icon
-                                            [nzType]="'delete'"
-                                            [nzTheme]="'twotone'"
-                                            [nzTwotoneColor]="'#eb2f32'"
-                                        ></i>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </nz-table>
-                </nz-card>
-            </nz-tab>
+        <nz-table #OrganizationbranchesTable [nzData]="orgBranchesList">
+            <thead>
+                <tr>
+                    <th>Name</th>
 
-            <nz-tab nzTitle="Currency">
-                <nz-card [nzBordered]="false">
-                    <div style="margin-bottom: 10px;">
-                        <div nz-row [nzGutter]="24">
-                            <div nz-col nzSpan="12">
-                                <div style="width: 75%;">
-                                    <nz-input-group
-                                        [nzSuffix]="suffixIconSearch"
-                                    >
-                                        <input
-                                            type="text"
-                                            nz-input
-                                            placeholder="Search by name"
-                                        />
-                                    </nz-input-group>
-                                    <ng-template #suffixIconSearch>
-                                        <i nz-icon nzType="search"></i>
-                                    </ng-template>
-                                </div>
-                            </div>
-                            <div nz-col nzSpan="12">
-                                <button
-                                    nz-button
-                                    nzType="primary"
-                                    style="float: right;"
-                                    (click)="openCurrencyFormDrawer()"
-                                >
-                                    Add New Currency
-                                </button>
-                            </div>
-                        </div>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr
+                    *ngFor="let orgbranch of OrganizationbranchesTable.data"
+                    style="cursor: pointer;"
+                    (click)="onSelectBranch(orgbranch)"
+                    [class.selected]="orgbranch === selectedOrgBranch"
+                >
+                    <td>{{ orgbranch.orgName }}</td>
+                    <td>{{ orgbranch.orgDescription }}</td>
+                    <td>
+                        <button
+                            nz-button
+                            nzType="default"
+                            (click)="onEditBranch(orgbranch)"
+                        >
+                            Edit
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+
+        <nz-divider nzType="horizontal"></nz-divider>
+
+        <nz-divider nzType="horizontal">Sales Points</nz-divider>
+
+        <h4 nz-typography>Sales Points</h4>
+        <nz-divider nzType="horizontal"></nz-divider>
+        <div style="margin-bottom: 10px;">
+            <div nz-row [nzGutter]="24">
+                <div nz-col nzSpan="12">
+                    <div style="width: 75%;">
+                        <nz-input-group [nzSuffix]="suffixIconSearch">
+                            <input type="text" nz-input placeholder="Search " />
+                        </nz-input-group>
+                        <ng-template #suffixIconSearch>
+                            <i nz-icon nzType="search"></i>
+                        </ng-template>
                     </div>
-
-                    <nz-table
-                        #currencyTable
-                        [nzData]="currencyList"
-                        [nzSize]="'small'"
-                        [nzBordered]="true"
-                        style="background-color: white;"
+                </div>
+                <div nz-col nzSpan="12">
+                    <button
+                        nz-button
+                        nzType="primary"
+                        style="float: right;"
+                        (click)="openSalesPoints()"
                     >
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Symbol</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let currency of currencyTable.data">
-                                <td></td>
-                                <td></td>
-                                <td style="width: 70px;">
-                                    <div
-                                        class="icons-list"
-                                        style="text-align: center; width: 65px;"
-                                    >
-                                        <i
-                                            nz-icon
-                                            [nzType]="'edit'"
-                                            [nzTheme]="'twotone'"
-                                            [nzTwotoneColor]="'#b3cde8'"
-                                        ></i>
-                                        <nz-divider
-                                            nzType="vertical"
-                                        ></nz-divider>
-                                        <i
-                                            nz-icon
-                                            [nzType]="'delete'"
-                                            [nzTheme]="'twotone'"
-                                            [nzTwotoneColor]="'#eb2f32'"
-                                        ></i>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </nz-table>
-                </nz-card>
-            </nz-tab>
-
-            <nz-tab nzTitle="Payment Mode">
-                <nz-card [nzBordered]="false">
-                    <div style="margin-bottom: 10px;">
-                        <div nz-row [nzGutter]="24">
-                            <div nz-col nzSpan="12">
-                                <div style="width: 75%;">
-                                    <nz-input-group
-                                        [nzSuffix]="suffixIconSearch"
-                                    >
-                                        <input
-                                            type="text"
-                                            nz-input
-                                            placeholder="Search"
-                                        />
-                                    </nz-input-group>
-                                    <ng-template #suffixIconSearch>
-                                        <i nz-icon nzType="search"></i>
-                                    </ng-template>
-                                </div>
-                            </div>
-                            <div nz-col nzSpan="12">
-                                <button
-                                    nz-button
-                                    nzType="primary"
-                                    style="float: right;"
-                                    (click)="openPaymentModeFormDrawer()"
-                                >
-                                    Add New Payment Mode
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <nz-table
-                        #paymentModeTable
-                        [nzData]="paymentModes"
-                        [nzSize]="'small'"
-                        [nzBordered]="true"
-                        style="background-color: white;"
-                    >
-                        <thead>
-                            <tr>
-                                <th>Short Description</th>
-                                <th>Min Amount</th>
-                                <th>Max Amount</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr
-                                *ngFor="
-                                    let paymentMode of paymentModeTable.data
-                                "
-                            >
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td style="width: 70px;">
-                                    <div
-                                        class="icons-list"
-                                        style="text-align: center; width: 65px;"
-                                    >
-                                        <i
-                                            nz-icon
-                                            [nzType]="'edit'"
-                                            [nzTheme]="'twotone'"
-                                            [nzTwotoneColor]="'#b3cde8'"
-                                        ></i>
-                                        <nz-divider
-                                            nzType="vertical"
-                                        ></nz-divider>
-                                        <i
-                                            nz-icon
-                                            [nzType]="'delete'"
-                                            [nzTheme]="'twotone'"
-                                            [nzTwotoneColor]="'#eb2f32'"
-                                        ></i>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </nz-table>
-                </nz-card>
-            </nz-tab>
-
-            <nz-tab nzTitle="Relationship Type">
-                <nz-card [nzBordered]="false">
-                    <div style="margin-bottom: 10px;">
-                        <div nz-row [nzGutter]="24">
-                            <div nz-col nzSpan="12">
-                                <div style="width: 75%;">
-                                    <nz-input-group
-                                        [nzSuffix]="suffixIconSearch"
-                                    >
-                                        <input
-                                            type="text"
-                                            nz-input
-                                            placeholder="Search by type"
-                                        />
-                                    </nz-input-group>
-                                    <ng-template #suffixIconSearch>
-                                        <i nz-icon nzType="search"></i>
-                                    </ng-template>
-                                </div>
-                            </div>
-                            <div nz-col nzSpan="12">
-                                <button
-                                    nz-button
-                                    nzType="primary"
-                                    style="float: right;"
-                                    (click)="openRelationshipTypeFormDrawer()"
-                                >
-                                    Add New Relationship Type
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <nz-table
-                        #relationshipTypeTable
-                        [nzData]="relationshipTypes"
-                        [nzSize]="'small'"
-                        [nzBordered]="true"
-                        style="background-color: white;"
-                    >
-                        <thead>
-                            <tr>
-                                <th>Type</th>
-                                <th>Description</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr
-                                *ngFor="
-                                    let relationshipType of relationshipTypeTable.data
-                                "
-                            >
-                                <td></td>
-                                <td></td>
-                                <td style="width: 70px;">
-                                    <div
-                                        class="icons-list"
-                                        style="text-align: center; width: 65px;"
-                                    >
-                                        <i
-                                            nz-icon
-                                            [nzType]="'edit'"
-                                            [nzTheme]="'twotone'"
-                                            [nzTwotoneColor]="'#b3cde8'"
-                                            class="icon-hover"
-                                        ></i>
-                                        <nz-divider
-                                            nzType="vertical"
-                                        ></nz-divider>
-                                        <i
-                                            nz-icon
-                                            [nzType]="'delete'"
-                                            [nzTheme]="'twotone'"
-                                            [nzTwotoneColor]="'#eb2f32'"
-                                            class="icon-hover"
-                                        ></i>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </nz-table>
-                </nz-card>
-            </nz-tab>
-
-            <nz-tab nzTitle="Sector">
-                <nz-card [nzBordered]="false">
-                    <div style="margin-bottom: 10px;">
-                        <div nz-row [nzGutter]="24">
-                            <div nz-col nzSpan="12">
-                                <div style="width: 75%;">
-                                    <nz-input-group
-                                        [nzSuffix]="suffixIconSearch"
-                                    >
-                                        <input
-                                            type="text"
-                                            nz-input
-                                            placeholder="Search by sector id, sector name"
-                                        />
-                                    </nz-input-group>
-                                    <ng-template #suffixIconSearch>
-                                        <i nz-icon nzType="search"></i>
-                                    </ng-template>
-                                </div>
-                            </div>
-                            <div nz-col nzSpan="12">
-                                <button
-                                    nz-button
-                                    nzType="primary"
-                                    style="float: right;"
-                                    (click)="openSectorFormDrawer()"
-                                >
-                                    Add New Sector
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <nz-table
-                        #sectorTable
-                        [nzData]="sectorsList"
-                        [nzSize]="'small'"
-                        [nzBordered]="true"
-                        style="background-color: white;"
-                    >
-                        <thead>
-                            <tr>
-                                <th>Sector ID</th>
-                                <th>Sector Name</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let sector of sectorTable.data">
-                                <td></td>
-                                <td></td>
-                                <td style="width: 70px;">
-                                    <div
-                                        class="icons-list"
-                                        style="text-align: center; width: 65px;"
-                                    >
-                                        <i
-                                            nz-icon
-                                            [nzType]="'edit'"
-                                            [nzTheme]="'twotone'"
-                                            [nzTwotoneColor]="'#b3cde8'"
-                                        ></i>
-                                        <nz-divider
-                                            nzType="vertical"
-                                        ></nz-divider>
-                                        <i
-                                            nz-icon
-                                            [nzType]="'delete'"
-                                            [nzTheme]="'twotone'"
-                                            [nzTwotoneColor]="'#eb2f32'"
-                                        ></i>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </nz-table>
-                </nz-card>
-            </nz-tab>
-        </nz-tabset>
+                        Add New Sales Point
+                    </button>
+                </div>
+            </div>
+        </div>
+        <nz-table #salesPointsTable [nzData]="salesPointsList">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Code</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr
+                    *ngFor="let salesPoints of salesPointsTable.data"
+                    style="cursor: pointer;"
+                >
+                    <td>
+                        {{ salesPoints.sp_name }}
+                    </td>
+                    <td>
+                        {{ salesPoints.code }}
+                    </td>
+                    <td>
+                        {{ salesPoints.description }}
+                    </td>
+                    <td>
+                        <button
+                            nz-button
+                            nzType="default"
+                            (click)="onEditSalesPoint(salesPoints)"
+                        >
+                            Edit
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
     </nz-card>
 </div>
 
-<app-create-account-type
-    [isDrawerVisible]="newAccountTypeFormDrawerVisible"
-    (closeAccountTypeDrawer)="newAccountTypeFormDrawerVisible = false"
-></app-create-account-type>
-<app-create-account
-    [isDrawerVisible]="newAccountFormDrawerVisible"
-    (closeAccountDrawer)="newAccountFormDrawerVisible = false"
-></app-create-account>
-<app-create-client-type
-    [isDrawerVisible]="newClientTypeFormDrawerVisible"
-    (closeClientTypeDrawer)="newClientTypeFormDrawerVisible = false"
-></app-create-client-type>
-<app-create-currency
-    [isDrawerVisible]="newCurrencyFormDrawerVisible"
-    (closeCurrencyDrawer)="newCurrencyFormDrawerVisible = false"
-></app-create-currency>
-<app-create-payment-mode
-    [isDrawerVisible]="newPaymentModeFormDrawerVisible"
-    (closePaymentModeDrawer)="newPaymentModeFormDrawerVisible = false"
-></app-create-payment-mode>
-<app-create-relationship-type
-    [isDrawerVisible]="newRelationshipTypeFormDrawerVisible"
-    (closeRelationshipTypeDrawer)="newRelationshipTypeFormDrawerVisible = false"
-></app-create-relationship-type>
-<app-create-sector
-    [isDrawerVisible]="newSectorFormDrawerVisible"
-    (closeSectorDrawer)="newSectorFormDrawerVisible = false"
-></app-create-sector>
+<!--
+                    ///////////////////////////////////////////////////////////////////////
+                    /////////// Branch INPUTS/////////////////////////////////////////
+                    /////////////////////////////////////////////////
+-->
+
+<nz-modal
+    [(nzVisible)]="isOrgBranchVisible"
+    nzTitle="Add Branch"
+    (nzOnCancel)="handleOrgBranchCancel()"
+    (nzOnOk)="submitOrgBranchForm()"
+    ><form nz-form [formGroup]="orgbranchForm">
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired> Name</nz-form-label>
+            <nz-form-control
+                [nzSpan]="12"
+                nzHasFeedback
+                nzValidatingTip="Validating..."
+                [nzErrorTip]="orgNameErrorTpl"
+            >
+                <input
+                    nz-input
+                    formControlName="orgName"
+                    placeholder="Enter Name"
+                />
+                <ng-template #orgNameErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please input Name!
+                    </ng-container>
+                    <ng-container *ngIf="control.hasError('duplicated')">
+                        The Name is redundant!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
+            <nz-form-control
+                [nzSpan]="12"
+                nzHasFeedBack
+                nxValidatingTip="Validating"
+                [nzErrorTip]="orgDescriptionErrorTp1!"
+            >
+                <textarea
+                    formControlName="orgDescription"
+                    nz-input
+                    rows="3"
+                    placeholder="write description"
+                ></textarea>
+                <ng-template #orgDescriptionErrorTp1 let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please add Description!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</nz-modal>
+
+<!-- ///////////////////////////////////////////
+///////////////Edit Branches////////////////////
+/////////////////////////////////////// -->
+<nz-modal
+    [(nzVisible)]="isOrgBranchEditVisible"
+    nzTitle="Edit Organization"
+    (nzOnCancel)="handleEditOrgBranchCancel()"
+    (nzOnOk)="handleEditBranchOk()"
+>
+    <form nz-form [formGroup]="orgbranchForm">
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Name</nz-form-label>
+            <nz-form-control
+                [nzSpan]="12"
+                nzHasFeedback
+                nzValidatingTip="Validating..."
+            >
+                <input nz-input formControlName="orgName" />
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
+            <nz-form-control
+                [nzSpan]="12"
+                nzHasFeedback
+                nzValidatingTip="Validating..."
+            >
+                <textarea
+                    formControlName="orgDescription"
+                    nz-input
+                    rows="5"
+                ></textarea>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</nz-modal>
+
+<!--
+      /////////////////////////////////////////////////////
+     /////////// Sales Points INPUTS//////////////////////
+      /////////////////////////////////////////////////
+-->
+
+<nz-modal
+    [(nzVisible)]="isSalesPointVisible"
+    nzTitle="Add Sales Point"
+    (nzOnCancel)="handleSalesPointCancel()"
+    (nzOnOk)="submitSalesPointForm()"
+    (ngSelect)="(onSelectSalesPoint)"
+>
+    <form nz-form [formGroup]="salesPointForm">
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Branch</nz-form-label>
+
+            <div nz-col nzSpan="12">
+                <div style="width: 85%;">
+                    <nz-select
+                        nzSHowSearch
+                        formControlName="branchId"
+                        name="orgbranch"
+                        nzAllowClear
+                        nzPlaceHolder="Select a Branch"
+                    >
+                        <nz-option
+                            *ngFor="let orgbranch of orgBranchesList"
+                            nzValue=" {{ orgbranch.id }}"
+                            nzLabel=" {{ orgbranch.orgName }} "
+                        ></nz-option>
+                    </nz-select>
+                </div>
+            </div>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired> Name</nz-form-label>
+            <nz-form-control
+                [nzSpan]="12"
+                nzHasFeedback
+                nzValidatingTip="Validating..."
+                [nzErrorTip]="sp_nameErrorTpl"
+            >
+                <input
+                    nz-input
+                    formControlName="sp_name"
+                    placeholder="Enter Name"
+                />
+                <ng-template #sp_nameErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please input Name!
+                    </ng-container>
+                    <ng-container *ngIf="control.hasError('duplicated')">
+                        The Name is redundant!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired
+                >Sales Point Code</nz-form-label
+            >
+            <nz-form-control
+                [nzSpan]="12"
+                nzHasFeedback
+                nzValidatingTip="Validating..."
+                [nzErrorTip]="codeErrorTpl"
+            >
+                <input
+                    nz-input
+                    formControlName="code"
+                    placeholder="Enetr Code"
+                />
+                <ng-template #codeErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please input Name!
+                    </ng-container>
+                    <ng-container *ngIf="control.hasError('duplicated')">
+                        The Name is redundant!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
+            <nz-form-control
+                [nzSpan]="12"
+                nzHasFeedBack
+                nxValidatingTip="Validating"
+                [nzErrorTip]="descriptionErrorTp1!"
+            >
+                <textarea
+                    formControlName="description"
+                    nz-input
+                    rows="3"
+                    placeholder="write description"
+                ></textarea>
+                <ng-template #descriptionErrorTp1 let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please add Description!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+    </form></nz-modal
+>
+<!-- ///////////////////////////////////////////
+///////////////Edit Sales Points ////////////////////
+/////////////////////////////////////// -->
+<nz-modal
+    [(nzVisible)]="isSalesPointEidtVisible"
+    nzTitle="Edit Sales point"
+    (nzOnCancel)="handleEditSalesPointCancel()"
+    (nzOnOk)="handleEditSalesPointsOk()"
+    ><form nz-form [formGroup]="salesPointForm">
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Role</nz-form-label>
+
+            <div nz-col nzSpan="12">
+                <div style="width: 85%;">
+                    <nz-select
+                        nzSHowSearch
+                        formControlName="branchId"
+                        name="orgbranch"
+                        nzAllowClear
+                        nzPlaceHolder="Select a Branch"
+                    >
+                        <nz-option
+                            *ngFor="let orgbranch of orgBranchesList"
+                            nzValue=" {{ orgbranch.id }}"
+                            nzLabel=" {{ orgbranch.orgName }} "
+                        ></nz-option>
+                    </nz-select>
+                </div>
+            </div>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Name</nz-form-label>
+            <nz-form-control
+                [nzSpan]="12"
+                nzHasFeedback
+                nzValidatingTip="Validating..."
+            >
+                <input nz-input formControlName="sp_name" />
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Branch Code</nz-form-label>
+            <nz-form-control
+                [nzSpan]="12"
+                nzHasFeedback
+                nzValidatingTip="Validating..."
+            >
+                <input nz-input formControlName="code" />
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
+            <nz-form-control
+                [nzSpan]="12"
+                nzHasFeedback
+                nzValidatingTip="Validating..."
+            >
+                <textarea
+                    formControlName="description"
+                    nz-input
+                    rows="5"
+                ></textarea>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</nz-modal>

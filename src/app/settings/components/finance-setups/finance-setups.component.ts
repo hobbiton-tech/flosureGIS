@@ -1,25 +1,24 @@
-import { Component, OnInit, Output } from '@angular/core';
-import { IBank } from '../../models/finance/bank.model';
-import { IBranch } from '../../models/finance/branch.model';
-import { IPaymentMethod } from '../../models/finance/payment-methodes.model';
-import { IReceiptTypes } from '../../models/finance/receipt-types.model';
-import { IDiscountType } from '../../models/finance/discount-type.model';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { PaymentMethodService } from 'src/app/settings/components/finance-setups/services/payment-method.service';
-import { BankService } from '../../components/finance-setups/components/bank-setups/services/bank.service';
-import { BranchService } from '../../components/finance-setups/services/branch.service';
-import { ReceiptTypesService } from 'src/app/settings/components/finance-setups/services/receipt-types.service';
-import { DiscountTypesService } from 'src/app/settings/components/finance-setups/services/discount-types.service';
-import { v4 } from 'uuid';
-import { from } from 'rxjs';
-import { EventEmitter } from '@angular/core';
-import { FeGaussianBlurElement } from 'canvg';
-
+import { Component, OnInit, Output } from "@angular/core";
+import { IBank } from "../../models/finance/bank.model";
+import { IBranch } from "../../models/finance/branch.model";
+import { IPaymentMethod } from "../../models/finance/payment-methodes.model";
+import { IReceiptTypes } from "../../models/finance/receipt-types.model";
+import { IDiscountType } from "../../models/finance/discount-type.model";
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { PaymentMethodService } from "src/app/settings/components/finance-setups/services/payment-method.service";
+import { BankService } from "../../components/finance-setups/components/bank-setups/services/bank.service";
+import { BranchService } from "../../components/finance-setups/services/branch.service";
+import { ReceiptTypesService } from "src/app/settings/components/finance-setups/services/receipt-types.service";
+import { DiscountTypesService } from "src/app/settings/components/finance-setups/services/discount-types.service";
+import { v4 } from "uuid";
+// import { from } from 'rxjs';
+import { EventEmitter } from "@angular/core";
+// import { FeGaussianBlurElement } from 'canvg';
 
 @Component({
-    selector: 'app-finance-setups',
-    templateUrl: './finance-setups.component.html',
-    styleUrls: ['./finance-setups.component.scss'],
+    selector: "app-finance-setups",
+    templateUrl: "./finance-setups.component.html",
+    styleUrls: ["./finance-setups.component.scss"],
 })
 export class FinanceSetupsComponent implements OnInit {
     bankList: IBank[] = [];
@@ -100,31 +99,31 @@ export class FinanceSetupsComponent implements OnInit {
         private formBuider: FormBuilder
     ) {
         this.bankForm = formBuider.group({
-            bank_name: ['', Validators.required],
-            swift_code: ['', Validators.required],
-            description: ['', Validators.required],
+            bank_name: ["", Validators.required],
+            swift_code: ["", Validators.required],
+            description: ["", Validators.required],
         });
 
         this.branchForm = formBuider.group({
-            bankId: ['', Validators.required],
-            branch_name: ['', Validators.required],
-            branch_code: ['', Validators.required],
-            description: ['', Validators.required],
+            bankId: ["", Validators.required],
+            branch_name: ["", Validators.required],
+            branch_code: ["", Validators.required],
+            description: ["", Validators.required],
         });
 
         this.paymentMethodForm = formBuider.group({
-            Method_name: ['', Validators.required],
-            description: ['', Validators.required],
+            Method_name: ["", Validators.required],
+            description: ["", Validators.required],
         });
 
         this.receiptTypeForm = formBuider.group({
-            Type_name: ['', Validators.required],
-            Description: ['', Validators.required],
+            Type_name: ["", Validators.required],
+            Description: ["", Validators.required],
         });
 
         this.discountTypeForm = formBuider.group({
-            dtype: ['', Validators.required],
-            ddescription: ['', Validators.required],
+            dtype: ["", Validators.required],
+            ddescription: ["", Validators.required],
         });
     }
 
@@ -176,9 +175,9 @@ export class FinanceSetupsComponent implements OnInit {
     //////////////////////////////
     onEditBank(value) {
         this.editBank = value;
-        this.bankForm.get('bank_name').setValue(this.editBank.bank_name);
-        this.bankForm.get('swift_code').setValue(this.editBank.swift_code);
-        this.bankForm.get('description').setValue(this.editBank.description);
+        this.bankForm.get("bank_name").setValue(this.editBank.bank_name);
+        this.bankForm.get("swift_code").setValue(this.editBank.swift_code);
+        this.bankForm.get("description").setValue(this.editBank.description);
         this.isBankEditVisible = true;
     }
 
@@ -212,10 +211,10 @@ export class FinanceSetupsComponent implements OnInit {
     onEditPaymentMethod(value) {
         this.editPaymentMethod = value;
         this.paymentMethodForm
-            .get('Method_name')
+            .get("Method_name")
             .setValue(this.editPaymentMethod.Method_name);
         this.paymentMethodForm
-            .get('description')
+            .get("description")
             .setValue(this.editPaymentMethod.description);
         this.isPaymentMethodEditVisible = true;
     }
@@ -251,10 +250,10 @@ export class FinanceSetupsComponent implements OnInit {
     onEditReceiptTypes(value) {
         this.editReceiptType = value;
         this.receiptTypeForm
-            .get('Type_name')
+            .get("Type_name")
             .setValue(this.editReceiptType.Type_name);
         this.receiptTypeForm
-            .get('Description')
+            .get("Description")
             .setValue(this.editReceiptType.Description);
         this.isReceiptTypeEditVisible = true;
     }
@@ -263,9 +262,7 @@ export class FinanceSetupsComponent implements OnInit {
         this.editReceiptType.Type_name = this.receiptTypeForm.controls.Type_name.value;
         this.editReceiptType.Description = this.receiptTypeForm.controls.Description.value;
 
-        const index = this.selectedReceiptTypeValue.indexOf(
-            this.editReceiptType
-        );
+        const index = this.selectedReceiptTypeValue.indexOf(this.editReceiptType);
         this.selectedReceiptTypeValue[index] = this.editReceiptType;
 
         const receiptType: IReceiptTypes = {
@@ -288,15 +285,9 @@ export class FinanceSetupsComponent implements OnInit {
     //////////////////////////////
     onEditBranch(value) {
         this.editBranch = value;
-        this.branchForm
-            .get('branch_name')
-            .setValue(this.editBranch.branch_name);
-        this.branchForm
-            .get('branch_code')
-            .setValue(this.editBranch.branch_code);
-        this.branchForm
-            .get('description')
-            .setValue(this.editBranch.description);
+        this.branchForm.get("branch_name").setValue(this.editBranch.branch_name);
+        this.branchForm.get("branch_code").setValue(this.editBranch.branch_code);
+        this.branchForm.get("description").setValue(this.editBranch.description);
         this.isBranchEditVisible = true;
     }
 
@@ -325,47 +316,46 @@ export class FinanceSetupsComponent implements OnInit {
     }
 
     onChangeBank(bank) {
-        console.log('PEEEEEEEE>>>>', bank);
+        console.log("PEEEEEEEE>>>>", bank);
         this.selectedBankId = bank.bankId;
         this.bank_name = bank.bank_name;
 
         this.branchList = this.branches.filter((x) => x.bankId === bank.id);
-        console.log('FIlt>>>>', bank.id, this.branches, this.branchList);
+        console.log("FIlt>>>>", bank.id, this.branches, this.branchList);
     }
     bankChange(value) {
-        console.log('value....', value);
+        console.log("value....", value);
         this.selectedBankId = value.bankId;
         this.bank_name = value.bank_name;
         this.branchList = this.branches.filter((x) => x.bankId === value.id);
-        console.log('FIlt>>>>', value.id, this.branches, this.branchList);
-
+        console.log("FIlt>>>>", value.id, this.branches, this.branchList);
     }
     onChange(value) {
-        console.log('WWWWWWWWWWW>>>>>>>>', value);
+        console.log("WWWWWWWWWWW>>>>>>>>", value);
         this.BranchService.getBranch().subscribe((res) => {
-            console.log('YEEEEEEEE>>>>', res);
+            console.log("YEEEEEEEE>>>>", res);
 
             this.branchList = res;
         });
 
-        console.log('WWWWWWWWWWW>>>>>>>>', value);
+        console.log("WWWWWWWWWWW>>>>>>>>", value);
         this.PaymentMethodService.getPaymentMethods().subscribe((res) => {
-            console.log('YEEEEEEEE>>>>', res);
+            console.log("YEEEEEEEE>>>>", res);
 
             this.paymentMethodList = res;
         });
 
-        console.log('WWWWWWWWWWW>>>>>>>>', value);
+        console.log("WWWWWWWWWWW>>>>>>>>", value);
         this.ReceiptTypeService.getReceiptTypes().subscribe((res) => {
             this.receiptTypeList = res;
         });
 
-        console.log('WWWWWWWWWWW>>>>>>>>', value);
+        console.log("WWWWWWWWWWW>>>>>>>>", value);
         this.DiscountTypesService.getDiscountType().subscribe((res) => {
             this.discountTypeList = res;
         });
 
-        console.log('WWWWWWWWWWW>>>>>>>>', value);
+        console.log("WWWWWWWWWWW>>>>>>>>", value);
         this.BranchService.getBranch().subscribe((res) => {
             this.branchList = res;
         });
@@ -376,9 +366,9 @@ export class FinanceSetupsComponent implements OnInit {
     //////////////////////////////
     onEditDiscountType(value) {
         this.editDicountType = value;
-        this.discountTypeForm.get('dtype').setValue(this.editDicountType.dtype);
+        this.discountTypeForm.get("dtype").setValue(this.editDicountType.dtype);
         this.discountTypeForm
-            .get('ddescription')
+            .get("ddescription")
             .setValue(this.editDicountType.ddescription);
         this.isDiscountTypeEditVisible = true;
     }
@@ -387,9 +377,7 @@ export class FinanceSetupsComponent implements OnInit {
         this.editDicountType.dtype = this.discountTypeForm.controls.dtype.value;
         this.editDicountType.ddescription = this.discountTypeForm.controls.ddescription.value;
 
-        const index = this.selectedDiscountTypeValue.indexOf(
-            this.editDicountType
-        );
+        const index = this.selectedDiscountTypeValue.indexOf(this.editDicountType);
         this.selectedDiscountTypeValue[index] = this.editDicountType;
 
         const discountType: IDiscountType = {
@@ -409,7 +397,7 @@ export class FinanceSetupsComponent implements OnInit {
     }
 
     onSelectBank(bank) {
-        console.log('PEEEEEEEE>>>>', bank);
+        console.log("PEEEEEEEE>>>>", bank);
         this.bank_name = bank.bank_name;
         this.swift_code = bank.swift_code;
         this.description = bank.description;
@@ -425,35 +413,34 @@ export class FinanceSetupsComponent implements OnInit {
     // console.log('FIlt>>>>', role.id, this.permissions, this.permissionsList);
 
     bankChanged(value: any) {
-        console.log('PRODUCT TYPE<<<<<', value);
+        console.log("PRODUCT TYPE<<<<<", value);
         this.selectedBankId = value.id;
         this.bank_name = value.bank_name;
 
         this.branchList = this.branches.filter((x) => x.bankId === value.id);
-        console.log('FIlt>>>>', value.id, this.branches, this.branchList);
-
+        console.log("FIlt>>>>", value.id, this.branches, this.branchList);
     }
 
     onSelectPaymentMethod(paymentMethod) {
-        console.log('PEEEEEEEE>>>>', paymentMethod);
+        console.log("PEEEEEEEE>>>>", paymentMethod);
         this.Method_name = paymentMethod.Method_name;
         this.description = paymentMethod.description;
     }
 
     onSelectReceiptType(receiptType) {
-        console.log('PEEEEEEEE>>>>', receiptType);
+        console.log("PEEEEEEEE>>>>", receiptType);
         this.Type_name = receiptType.Type_name;
         this.Description = receiptType.Description;
     }
 
     onSelectDiscountType(discountType) {
-        console.log('PEEEEEEEE>>>>', discountType);
+        console.log("PEEEEEEEE>>>>", discountType);
         this.dtype = discountType.dtype;
         this.ddescription = discountType.ddescription;
     }
 
     onSelectBranch(branch) {
-        console.log('PEEEEEEEE>>>>', branch);
+        console.log("PEEEEEEEE>>>>", branch);
         this.branch_name = branch.branch_name;
         this.branch_code = branch.branch_code;
         this.description = branch.description;
@@ -504,7 +491,7 @@ export class FinanceSetupsComponent implements OnInit {
             id: v4(),
         };
         this.BankService.addBank(bank);
-        console.log('DDDDDDDDDD>>>>>>>', bank);
+        console.log("DDDDDDDDDD>>>>>>>", bank);
         this.isBankVisible = false;
     }
 
@@ -514,7 +501,7 @@ export class FinanceSetupsComponent implements OnInit {
             id: v4(),
         };
         this.PaymentMethodService.addPaymentMethod(paymentMethod);
-        console.log('DDDDDDDDDD>>>>>>>', paymentMethod);
+        console.log("DDDDDDDDDD>>>>>>>", paymentMethod);
         this.isPaymentMethodVisible = false;
     }
 
@@ -524,7 +511,7 @@ export class FinanceSetupsComponent implements OnInit {
             id: v4(),
         };
         this.ReceiptTypeService.addReceiptType(receiptType);
-        console.log('DDDDDDDDDD>>>>>>>', receiptType);
+        console.log("DDDDDDDDDD>>>>>>>", receiptType);
         this.isReceiptTypeVisible = false;
     }
 
@@ -534,11 +521,9 @@ export class FinanceSetupsComponent implements OnInit {
             id: v4(),
         };
         this.DiscountTypesService.addDiscountType(discountType);
-        console.log('DDDDDDDDDD>>>>>>>', discountType);
+        console.log("DDDDDDDDDD>>>>>>>", discountType);
         this.isDiscountTypeVisible = false;
     }
-
-
 
     submitBranchForm() {
         const branch: IBranch = {
@@ -546,10 +531,10 @@ export class FinanceSetupsComponent implements OnInit {
             bankId: this.branchForm.controls.bankId.value.replace(/\s/g, ""),
             branch_name: this.branchForm.controls.branch_name.value,
             branch_code: this.branchForm.controls.branch_code.value,
-            description: this.branchForm.controls.description.value
+            description: this.branchForm.controls.description.value,
         };
         this.BranchService.addBranch(branch);
-        console.log('DDDDDDDDDD>>>>>>>', branch);
+        console.log("DDDDDDDDDD>>>>>>>", branch);
         this.isBranchVisible = false;
     }
 

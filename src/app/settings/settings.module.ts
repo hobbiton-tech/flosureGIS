@@ -74,8 +74,8 @@ const routes: Routes = [
         component: WarrantiesComponent,
     },
     {
-    path: 'finance',
-    component: FinanceSetupsComponent,
+        path: 'finance',
+        component: FinanceSetupsComponent,
     },
     {
         path: 'extensions',
@@ -111,7 +111,7 @@ const routes: Routes = [
         AddProductCommissionComponent,
         WarrantiesComponent,
         ExtensionsComponent,
-       
+
     ],
     imports: [
         CommonModule,
@@ -122,4 +122,4 @@ const routes: Routes = [
     ],
     providers: [AgentsService, ClausesService],
 })
-export class SettingsModule {}
+export class SettingsModule { }

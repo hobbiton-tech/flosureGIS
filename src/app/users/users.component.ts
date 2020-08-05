@@ -21,6 +21,9 @@ import { IRole } from 'src/app/users/models/roles.model'
     styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
+    //testing Email and Name
+    ////////////////////////
+    isPopUpVisible = false;
 
     // branches: IBranch[] = [];
     branchList: IBranch[] = [];
@@ -40,6 +43,13 @@ export class UsersComponent implements OnInit {
     // role values
     listOfOption = ['Admin', 'Agent', 'Broker'];
     listOfSelectedValue: string[] = [];
+    userId: any;
+    firstName: any;
+    surname: any;
+    email: any;
+    SelectedEmail: any;
+    selectedUser: any;
+    users: UserModel[] = [];
 
     isNotSelected(value: string): boolean {
         return this.listOfSelectedValue.indexOf(value) === -1;
@@ -79,6 +89,10 @@ export class UsersComponent implements OnInit {
         //           })
         //         : ''
         // );
+        this.usersService.getUsers().subscribe((res) => {
+            this.users = res;
+            this.usersList = this.users;
+        })
         this.BranchService.getBranch().subscribe((res) => {
             this.branchList = res;
         });
@@ -86,6 +100,44 @@ export class UsersComponent implements OnInit {
             this.roles = res;
             this.rolesList = this.roles;
         });
+    }
+
+    /////////////////////////////
+    ///Email and Name //////
+    //////////////////////////////
+    onSelect(user) {
+
+        this.isPopUpVisible = true
+
+    }
+
+    handleSelectCancel() {
+        this.isPopUpVisible = false;
+    }
+    handleSelectOk() {
+        this.isPopUpVisible = false;
+    }
+    ChangeEmail(user) {
+        console.log('On Select>>>>', user);
+        this.firstName = user.firstName;
+        this.surname = user.surname;
+        this.SelectedEmail = user.email;
+
+        this.selectedUser = user;
+        console.log(this.usersList)
+        this.usersList = this.users.filter(
+            (x) => x.email === user.email
+        );
+        console.log(this.usersList)
+        console.log(
+            "Filer>>>>",
+            user.email,
+            user.firstName,
+            user.surname,
+            this.usersList,
+
+        );
+
     }
 
     showModal(): void {
@@ -171,4 +223,6 @@ export class UsersComponent implements OnInit {
 
         console.log('DATATATA>>>>', this.displayUsersList);
     }
+
+
 }

@@ -1,146 +1,132 @@
 <div style="margin: 25px;">
-  <nz-card>
-    <h4 nz-typography>Roles and Permissions</h4>
-    <div style="margin-bottom: 10px;">
-      <div nz-row [nzGutter]="24">
-        <!-- <div nz-col [nzSpan]="12">
+    <nz-card>
+        <h4 nz-typography>Roles and Permissions</h4>
+        <div style="margin-bottom: 10px;">
+            <div nz-row [nzGutter]="24">
+                <div nz-col nzSpan="12">
                     <div style="width: 75%;">
                         <nz-input-group [nzSuffix]="suffixIconSearch">
                             <input
                                 type="text"
                                 nz-input
-                                placeholder="Search Role"
+                                placeholder="Selected Role"
                             />
                         </nz-input-group>
                         <ng-template #suffixIconSearch>
                             <i nz-icon nzType="search"></i>
                         </ng-template>
                     </div>
-                </div> -->
-        <div nz-col nzSpan="12">
-          <div style="width: 75%;">
-            <nz-input-group [nzSuffix]="suffixIconSearch">
-              <input type="text" nz-input placeholder="Selected Role" />
-            </nz-input-group>
-            <ng-template #suffixIconSearch>
-              <i nz-icon nzType="search"></i>
-            </ng-template>
-          </div>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <div nz-col nzSpan="12">
+                        <button
+                            nz-button
+                            nzType="primary"
+                            style="float: right;"
+                            (click)="openRoles()"
+                        >
+                            Add New Role
+                        </button>
+                    </div>
+                    <!-- </div> -->
+                </div>
+            </div>
         </div>
+
+        <nz-table #rolesTable [nzData]="rolesList">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr
+                    *ngFor="let role of rolesTable.data"
+                    style="cursor: pointer;"
+                    (click)="onSelectRole(role)"
+                    [class.selected]="role === selectedRole"
+                >
+                    <td>
+                        {{ role.roleName }}
+                    </td>
+                    <td>{{ role.description }}</td>
+                    <td>
+                        <button
+                            nz-button
+                            nzType="default"
+                            (click)="onEditRole(role)"
+                        >
+                            Edit
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+
+        <nz-divider nzType="horizontal"></nz-divider>
+
+        <nz-divider nzType="horizontal">Permissions</nz-divider>
+
+        <h4 nz-typography>Permissions</h4>
+        <nz-divider nzType="horizontal"></nz-divider>
         <div style="margin-bottom: 10px;">
-          <div nz-col nzSpan="12">
-            <button
-              nz-button
-              nzType="primary"
-              style="float: right;"
-              (click)="openRoles()"
-            >
-              Add New Role
-            </button>
-          </div>
-          <!-- </div> -->
+            <div nz-row [nzGutter]="24">
+                <div nz-col nzSpan="12">
+                    <div style="width: 75%;">
+                        <nz-input-group [nzSuffix]="suffixIconSearch">
+                            <input
+                                type="text"
+                                nz-input
+                                placeholder="Search by Permission Name"
+                            />
+                        </nz-input-group>
+                        <ng-template #suffixIconSearch>
+                            <i nz-icon nzType="search"></i>
+                        </ng-template>
+                    </div>
+                </div>
+                <div nz-col nzSpan="12">
+                    <button
+                        nz-button
+                        nzType="primary"
+                        style="float: right;"
+                        (click)="openPermissions()"
+                    >
+                        Add New Permission
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-
-    <nz-table #rolesTable [nzData]="rolesList">
-      <thead>
-        <tr>
-          <th>Name</th>
-
-          <th>Description</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr
-          *ngFor="let role of rolesTable.data"
-          style="cursor: pointer;"
-          (click)="onSelectRole(role)"
-          [class.selected]="role === selectedRole"
-        >
-          <td>
-            {{ role.roleName }}
-          </td>
-          <td>{{ role.description }}</td>
-        </tr>
-      </tbody>
-    </nz-table>
-
-    <nz-divider nzType="horizontal"></nz-divider>
-    <!-- <nz-modal
-            [(nzVisible)]="isPopUpVisible"
-            nzTitle="Permissions For This Role"
-            (nzOnCancel)="handleCancel()"
-            (nzOnOk)="handleOk()"
-            
-        >
-            <nz-table #permissionTable [nzData]="permissionsList">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let permission of permissionTable.data">
-                        <td (click)="onSelectPermission(permission)">
-                            {{ permission.permissionName }}
-                        </td>
-                        <td>{{ permission.Description }}</td>
-                    </tr>
-                </tbody>
-            </nz-table>
-        </nz-modal> -->
-    <nz-divider nzType="horizontal">Permissions</nz-divider>
-
-    <h4 nz-typography>Permissions</h4>
-    <nz-divider nzType="horizontal"></nz-divider>
-    <div style="margin-bottom: 10px;">
-      <div nz-row [nzGutter]="24">
-        <div nz-col nzSpan="12">
-          <div style="width: 75%;">
-            <nz-input-group [nzSuffix]="suffixIconSearch">
-              <input
-                type="text"
-                nz-input
-                placeholder="Search by Permission Name"
-              />
-            </nz-input-group>
-            <ng-template #suffixIconSearch>
-              <i nz-icon nzType="search"></i>
-            </ng-template>
-          </div>
-        </div>
-        <div nz-col nzSpan="12">
-          <button
-            nz-button
-            nzType="primary"
-            style="float: right;"
-            (click)="openPermissions()"
-          >
-            Add New Permission
-          </button>
-        </div>
-      </div>
-    </div>
-    <nz-table #permissionTable [nzData]="permissionsList">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let permission of permissionTable.data">
-          <td (click)="onSelectPermission(permission)">
-            {{ permission.name }}
-          </td>
-          <td>{{ permission.description }}</td>
-        </tr>
-      </tbody>
-    </nz-table>
-  </nz-card>
+        <nz-table #permissionTable [nzData]="permissionsList">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let permission of permissionTable.data">
+                    <td (click)="onSelectPermission(permission)">
+                        {{ permission.name }}
+                    </td>
+                    <td>{{ permission.description }}</td>
+                    <td>
+                        <button
+                            nz-button
+                            nzType="default"
+                            (click)="onEditPermission(permission)"
+                        >
+                            Edit
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </nz-card>
 </div>
 
 <!--
@@ -158,55 +144,59 @@
     [nzWidth]="600"
 > -->
 <nz-modal
-  [(nzVisible)]="isRolesVisible"
-  nzTitle="Add Role"
-  (nzOnCancel)="handleRolesCancel()"
-  (nzOnOk)="submitRoleForm()"
+    [(nzVisible)]="isRolesVisible"
+    nzTitle="Add Role"
+    (nzOnCancel)="handleRolesCancel()"
+    (nzOnOk)="submitRoleForm()"
 >
-  <form nz-form [formGroup]="rolesForm">
-    <nz-form-item>
-      <nz-form-label [nzSpan]="7" nzRequired> Name</nz-form-label>
-      <nz-form-control
-        [nzSpan]="12"
-        nzHasFeedback
-        nzValidatingTip="Validating..."
-        [nzErrorTip]="roleNameErrorTpl"
-      >
-        <input nz-input formControlName="roleName" placeholder="Enter Role" />
-        <ng-template #roleNameErrorTpl let-control>
-          <ng-container *ngIf="control.hasError('required')">
-            Please input Role!
-          </ng-container>
-          <ng-container *ngIf="control.hasError('duplicated')">
-            The Role is redundant!
-          </ng-container>
-        </ng-template>
-      </nz-form-control>
-    </nz-form-item>
+    <form nz-form [formGroup]="rolesForm">
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired> Name</nz-form-label>
+            <nz-form-control
+                [nzSpan]="12"
+                nzHasFeedback
+                nzValidatingTip="Validating..."
+                [nzErrorTip]="roleNameErrorTpl"
+            >
+                <input
+                    nz-input
+                    formControlName="roleName"
+                    placeholder="Enter Role"
+                />
+                <ng-template #roleNameErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please input Role!
+                    </ng-container>
+                    <ng-container *ngIf="control.hasError('duplicated')">
+                        The Role is redundant!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
 
-    <nz-form-item>
-      <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
-      <nz-form-control
-        [nzSpan]="12"
-        nzHasFeedBack
-        nxValidatingTip="Validating"
-        [nzErrorTip]="descriptionErrorTp1!"
-      >
-        <textarea
-          formControlName="description"
-          nz-input
-          rows="3"
-          placeholder="write description"
-        ></textarea>
-        <ng-template #descriptionErrorTp1 let-control>
-          <ng-container *ngIf="control.hasError('required')">
-            Please add Description!
-          </ng-container>
-        </ng-template>
-      </nz-form-control>
-    </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
+            <nz-form-control
+                [nzSpan]="12"
+                nzHasFeedBack
+                nxValidatingTip="Validating"
+                [nzErrorTip]="descriptionErrorTp1!"
+            >
+                <textarea
+                    formControlName="description"
+                    nz-input
+                    rows="3"
+                    placeholder="write description"
+                ></textarea>
+                <ng-template #descriptionErrorTp1 let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please add Description!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
 
-    <!-- <nz-form-item>
+        <!-- <nz-form-item>
             <nz-form-control [nzOffset]="7" [nzSpan]="12">
                 <button
                     nz-button
@@ -220,7 +210,47 @@
                 </button>
             </nz-form-control>
         </nz-form-item> -->
-  </form>
+    </form>
+</nz-modal>
+
+<!--
+                    ///////////////////////////////////////////////////////////////////////
+                    ///////////EDIT ROLES /////////////////////////////////////////
+                    /////////////////////////////////////////////////
+-->
+<nz-modal
+    [(nzVisible)]="isRoleEidtVisible"
+    nzTitle="Edit Role"
+    (nzOnCancel)="handleEditRoleCancel()"
+    (nzOnOk)="handleEditRoleOk()"
+>
+    <form nz-form [formGroup]="rolesForm">
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Name</nz-form-label>
+            <nz-form-control
+                [nzSpan]="12"
+                nzHasFeedback
+                nzValidatingTip="Validating..."
+            >
+                <input nz-input formControlName="roleName" />
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
+            <nz-form-control
+                [nzSpan]="12"
+                nzHasFeedback
+                nzValidatingTip="Validating..."
+            >
+                <textarea
+                    formControlName="Description"
+                    nz-input
+                    rows="5"
+                ></textarea>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
 </nz-modal>
 
 <!--
@@ -230,79 +260,184 @@
 -->
 
 <nz-modal
-  [(nzVisible)]="isPermissionsVisible"
-  nzTitle="Add Permmison"
-  (nzOnCancel)="handlePermissionCancel()"
-  (nzOnOk)="submitPermissionForm()"
-  (ngSelect)="(onSelectPermission)"
+    [(nzVisible)]="isPermissionsVisible"
+    nzTitle="Add Permmison"
+    (nzOnCancel)="handlePermissionCancel()"
+    (nzOnOk)="submitPermissionForm()"
+    (ngSelect)="(onSelectPermission)"
 >
-  <form nz-form [formGroup]="permissionsForm">
-    <nz-form-item>
-      <nz-form-label [nzSpan]="7" nzRequired>Role</nz-form-label>
+    <form nz-form [formGroup]="permissionsForm">
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Role</nz-form-label>
 
-      <div nz-col nzSpan="12">
-        <div style="width: 15%;">
-          <nz-select
-            nzSHowSearch
-            formControlName="rId"
-            name="roles"
-            nzAllowClear
-            nzPlaceHolder="Select a Role"
-          >
-            <nz-option
-              *ngFor="let role of rolesList"
-              nzValue=" {{role.id }}"
-              nzLabel=" {{role.roleName }} "
-            ></nz-option>
-          </nz-select>
-        </div>
-      </div>
-    </nz-form-item>
+            <div nz-col nzSpan="12">
+                <div style="width: 15%;">
+                    <nz-select
+                        nzSHowSearch
+                        formControlName="rId"
+                        name="roles"
+                        nzAllowClear
+                        nzPlaceHolder="Select a Role"
+                    >
+                        <nz-option
+                            *ngFor="let role of rolesList"
+                            nzValue=" {{ role.id }}"
+                            nzLabel=" {{ role.roleName }} "
+                        ></nz-option>
+                    </nz-select>
+                </div>
+            </div>
+        </nz-form-item>
 
-    <nz-form-item>
-      <nz-form-label [nzSpan]="7" nzRequired> Name</nz-form-label>
-      <nz-form-control
-        [nzSpan]="12"
-        nzHasFeedback
-        nzValidatingTip="Validating..."
-        [nzErrorTip]="nameErrorTpl"
-      >
-        <input
-          nz-input
-          formControlName="name"
-          placeholder="Enter Permission Name"
-        />
-        <ng-template #nameErrorTpl let-control>
-          <ng-container *ngIf="control.hasError('required')">
-            Please input Permission Name!
-          </ng-container>
-          <ng-container *ngIf="control.hasError('duplicated')">
-            The Name is redundant!
-          </ng-container>
-        </ng-template>
-      </nz-form-control>
-    </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired> Name</nz-form-label>
+            <nz-form-control
+                [nzSpan]="12"
+                nzHasFeedback
+                nzValidatingTip="Validating..."
+                [nzErrorTip]="nameErrorTpl"
+            >
+                <input
+                    nz-input
+                    formControlName="name"
+                    placeholder="Enter Permission Name"
+                />
+                <ng-template #nameErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please input Permission Name!
+                    </ng-container>
+                    <ng-container *ngIf="control.hasError('duplicated')">
+                        The Name is redundant!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
 
-    <nz-form-item>
-      <nz-form-label [nzSpan]="7" nzRequired>description</nz-form-label>
-      <nz-form-control
-        [nzSpan]="12"
-        nzHasFeedBack
-        nxValidatingTip="Validating"
-        [nzErrorTip]="descriptionErrorTp1!"
-      >
-        <textarea
-          formControlName="description"
-          nz-input
-          rows="3"
-          placeholder="write description"
-        ></textarea>
-        <ng-template #descriptionErrorTp1 let-control>
-          <ng-container *ngIf="control.hasError('required')">
-            Please add Description!
-          </ng-container>
-        </ng-template>
-      </nz-form-control>
-    </nz-form-item>
-  </form>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>description</nz-form-label>
+            <nz-form-control
+                [nzSpan]="12"
+                nzHasFeedBack
+                nxValidatingTip="Validating"
+                [nzErrorTip]="descriptionErrorTp1!"
+            >
+                <textarea
+                    formControlName="description"
+                    nz-input
+                    rows="3"
+                    placeholder="write description"
+                ></textarea>
+                <ng-template #descriptionErrorTp1 let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please add Description!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
 </nz-modal>
+<!--
+                    ///////////////////////////////////////////////////////////////////////
+                    ///////////EDIT PERMISSIONS /////////////////////////////////////////
+                    /////////////////////////////////////////////////
+-->
+<nz-modal
+    [(nzVisible)]="isPermissionEditVisible"
+    nzTitle="Edit Permission"
+    (nzOnCancel)="handleEditPermissionCancel()"
+    (nzOnOk)="handleEditPermissionOk()"
+>
+    <form nz-form [formGroup]="permissionsForm">
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Role</nz-form-label>
+
+            <div nz-col nzSpan="12">
+                <div style="width: 85%;">
+                    <nz-select
+                        nzSHowSearch
+                        formControlName="rId"
+                        name="roles"
+                        nzAllowClear
+                        nzPlaceHolder="Select a Role"
+                    >
+                        <nz-option
+                            *ngFor="let role of rolesList"
+                            nzValue=" {{ role.id }}"
+                            nzLabel=" {{ role.roleName }} "
+                        ></nz-option>
+                    </nz-select>
+                </div>
+            </div>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired> Name</nz-form-label>
+            <nz-form-control
+                [nzSpan]="12"
+                nzHasFeedback
+                nzValidatingTip="Validating..."
+                [nzErrorTip]="sp_nameErrorTpl"
+            >
+                <input
+                    nz-input
+                    formControlName="sp_name"
+                    placeholder="Enter Name"
+                />
+                <ng-template #sp_nameErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please input Name!
+                    </ng-container>
+                    <ng-container *ngIf="control.hasError('duplicated')">
+                        The Name is redundant!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired
+                >Sales Point Code</nz-form-label
+            >
+            <nz-form-control
+                [nzSpan]="12"
+                nzHasFeedback
+                nzValidatingTip="Validating..."
+                [nzErrorTip]="codeErrorTpl"
+            >
+                <input
+                    nz-input
+                    formControlName="code"
+                    placeholder="Enetr Code"
+                />
+                <ng-template #codeErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please input Name!
+                    </ng-container>
+                    <ng-container *ngIf="control.hasError('duplicated')">
+                        The Name is redundant!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
+            <nz-form-control
+                [nzSpan]="12"
+                nzHasFeedBack
+                nxValidatingTip="Validating"
+                [nzErrorTip]="descriptionErrorTp1!"
+            >
+                <textarea
+                    formControlName="description"
+                    nz-input
+                    rows="3"
+                    placeholder="write description"
+                ></textarea>
+                <ng-template #descriptionErrorTp1 let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please add Description!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+    </form></nz-modal
+>
