@@ -57,8 +57,8 @@ export class PaymentPlanService implements Resolve<any> {
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         throw new Error("Method not implemented.");
     }
-    
-   
+
+
 
     generateID(id) {
         console.log('++++++++++++ID++++++++++++');
@@ -90,13 +90,13 @@ export class PaymentPlanService implements Resolve<any> {
 
                    this.http.post('https://payment-api.savenda-flosure.com/receipt', receipt).toPromise()
                 });
-                
+
         // });
         return of(this.receiptN);
     }
 
-    
-    
+
+
 
     generateReceiptNumber(): Promise<any> {
         return this.http
@@ -114,16 +114,23 @@ export class PaymentPlanService implements Resolve<any> {
         return this.http.post<IPaymentModel>('https://payment-api.savenda-flosure.com/payment-plan',paymentPlan);
     }
 
+
+  updatePaymentPlan(policyPaymentPlan: PlanPolicy) {
+
+    return this.http.put(`https://payment-api.savenda-flosure.com/payment-plan/${policyPaymentPlan.ID}`, policyPaymentPlan)
+
+  }
+
     getPaymentPlan(): Observable<any> {
         return this.http.get<any>('https://payment-api.savenda-flosure.com/payment-plan');
     }
 
-    
+
 
     getInstallments(): Observable<any>{
         return this.http
             .get<any>(
-                'https://payment-api.savenda-flosure.com/payment-plan/installment'
+                'https://payment-api.savenda-flosure.com/installment'
             )
     }
 
@@ -143,10 +150,10 @@ export class PaymentPlanService implements Resolve<any> {
             this.message.success(
                         'Plan Receipt Successfully Updated'
                     );
-        }, 
+        },
         (err) => {
             console.log('Check ERR>>>>',err);
-            
+
             this.message.warning('Plan Receipt Failed');
         });
     }
@@ -167,30 +174,31 @@ export class PaymentPlanService implements Resolve<any> {
             this.message.success(
                         'Plan Receipt Successfully Updated'
                     );
-        }, 
+        },
         (err) => {
             console.log('Check ERR>>>>',err);
-            
+
             this.message.warning('Plan Policy Failed');
         });
+
     }
 
 
     updatePlanInstallment(policyPaymentInstallment: InstallmentsModel[]) {
-        
+
         let header = new HttpHeaders();
         header.set('Access-Control-Allow-Origin', '*');
 
-        this.http.put(`https://payment-api.savenda-flosure.com/payment-plan/installment`, policyPaymentInstallment, { headers: header }).subscribe((res) => {
+        this.http.put(`https://payment-api.savenda-flosure.com/installment`, policyPaymentInstallment, { headers: header }).subscribe((res) => {
             // this.message.success(
             //             'Plan Receipt Successfully Updated'
             //         );
-        }, 
+        },
         (err) => {
             console.log('Check ERR>>>>',err);
-            
+
             this.message.warning('Plan Policy Failed');
         });
     }
-    
+
 }

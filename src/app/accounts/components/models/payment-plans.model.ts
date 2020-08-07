@@ -39,6 +39,7 @@ export class InstallmentsModel {
     actual_paid_date?: Date | ITimestamp;
     installment_status: InstallmentStatus;
     balance: number;
+    amount_paid: number;
     payment_plan_id: number;
 }
 

@@ -46,10 +46,10 @@
                                 {{ client.clientType === 'Individual'
                                 ? capitalize(client.firstName + ' ' + client.lastName)
                                 : capitalize(client.companyName) }}
-                            </nz-descriptions-item> 
+                            </nz-descriptions-item>
                              <nz-descriptions-item nzTitle="Registration Number">
                                 {{ client.clientType === 'Individual'
-                                ? client.idNumber 
+                                ? client.idNumber
                                 : client.registrationNumber}}
                             </nz-descriptions-item>
                             <nz-descriptions-item nzTitle="Address">
@@ -61,7 +61,7 @@
                             <nz-descriptions-item nzTitle="Phone Number">
                                 {{ client.phone }}</nz-descriptions-item
                             >
-                       
+
                         </nz-descriptions>
                     </nz-card>
                 </div>
@@ -228,9 +228,9 @@
                                 <td>{{ policy.policy_number }}</td>
                                 <td>{{ policy.start_date | date }}</td>
                                 <td>{{ policy.end_date | date }}</td>
-                                <td>{{ policy.net_premium }}</td>
-                                <td>{{ policy.allocation_amount }}</td>
-                                <td>{{ policy.balance }}</td>
+                                <td>{{ policy.net_premium | number: '1.2-2'}}</td>
+                                <td>{{ policy.allocation_amount | number: '1.2-2'}}</td>
+                                <td>{{ policy.balance | number: '1.2-2'}}</td>
                                 <td>{{ policy.allocation_status }}</td>
                                 <td>
                                      <div
@@ -270,6 +270,7 @@
                 <thead>
                     <tr>
                         <th>Installment Amount</th>
+                      <th>Paid Amount</th>
                         <th>Installment Date</th>
                         <th>Actual Paid Date</th>
                         <th>Balance</th>
@@ -290,6 +291,13 @@
                                     | number: '1.2-2'
                             }}
                         </td>
+
+                      <td>
+                        {{
+                        paymentPlanPolicyInstallment.amount_paid
+                          | number: '1.2-2'
+                        }}
+                      </td>
                         <td>
                             {{
                                 paymentPlanPolicyInstallment.installment_date
@@ -600,7 +608,7 @@
         >
             <form [formGroup]="policyForm" nz-form>
                 <div nz-row>
-                    <div nz-col [nzSpan]="12">
+                    <div nz-col [nzSpan]="24">
                         <nz-form-item>
                             <nz-form-label [nzSpan]="12" nzFor="policies"
                                 >Policy</nz-form-label
@@ -621,7 +629,7 @@
                         </nz-form-item>
                         <nz-form-item>
                             <nz-form-label [nzSpan]="12" nzFor="policies"
-                                >Policy</nz-form-label
+                                >Additional Installments</nz-form-label
                             >
                             <nz-form-control nzSpan="12">
                                 <input
@@ -631,7 +639,6 @@
                                     type="number"
                                     id="number_of_installments"
                                     formControlName="number_of_installments"
-                                    [min]="minInstallments"
                                 />
                             </nz-form-control>
                         </nz-form-item>
