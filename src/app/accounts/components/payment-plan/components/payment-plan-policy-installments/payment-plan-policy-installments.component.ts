@@ -105,6 +105,11 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
         { label: 'Bank Transfer', value: 'bank transfer' },
     ];
 
+  currencyList = [
+    { label: 'ZMW', value: 'ZMW' },
+    { label: 'USD', value: 'USD' },
+  ];
+
     displayPoliciesList: PlanPolicy[];
     displayReceiptsList: any[] = [];
     clientI: any;
@@ -157,6 +162,7 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
             today_date: [''],
             remarks: [''],
             cheq_number: [''],
+            currency: ['', Validators.required]
         });
 
         this.policyForm = this.formBuilder.group({
@@ -231,8 +237,7 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
               policies,
               (x) => x.paymentPlan === 'NotCreated'
             );
-            console.log('-------POLICIES--------');
-            console.log(this.policies);
+            console.log('-------POLICIES--------', this.policies);
           });
 
         });
@@ -307,9 +312,9 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
                 sum_in_digits: Number(amount),
                 today_date: new Date(),
                 invoice_number: '',
-                source_of_business: '',
+                source_of_business: 'Plan-Receipt',
                 intermediary_name: '',
-                currency: '',
+                currency: this.receiptForm.controls.currency.value,
             };
 
             const plan: PlanReceipt = {
@@ -558,6 +563,11 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
       this.paymentPlan.number_of_installments =Number(this.paymentPlan.number_of_installments ) + Number( this.policyForm.controls.number_of_installments.value)
       this.paymentPlan.remaining_installments =Number(this.paymentPlan.remaining_installments ) + Number( this.policyForm.controls.number_of_installments.value)
 
+      const policyUpdate = this.policyForm.value
+        policyUpdate.paymentPlan = 'Created';
+
+      console.log('Updated POLICY????????????????', policyUpdate);
+
       const policyPlan: PlanPolicy = {
         start_date: this.policyForm.controls.policy.value.startDate,
         end_date: this.policyForm.controls.policy.value.endDate,
@@ -583,6 +593,8 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
           this.paymentPlanService.addPlanPolicy(policyPlan).subscribe((mess) =>{
             console.log('WUWUWUW><><><><><', mess);
             this.policyPlan = [...this.policyPlan, ...[policyPlan]]
+            this.policyService.updatePolicy(policyUpdate).subscribe((res) => {}, (err) => {
+              console.log('Update Policy error', err);})
           }, (err) => {
             this.message.warning('Plan Policy Failed');
             console.log(err);

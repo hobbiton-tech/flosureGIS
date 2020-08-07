@@ -135,7 +135,7 @@ export class PaymentPlanComponent implements OnInit {
 
     log(value): void {
         this.listOfPolicies = this.policies.filter((x) => x.client === value);
-        console.log(value);
+        console.log('WHATS HAPPENINGNNNNNN>>>>>',value);
     }
 
     clientChange(value) {
@@ -186,7 +186,10 @@ export class PaymentPlanComponent implements OnInit {
             this.netPremium = this.netPremium + this.policyNumber.netPremium;
             // this.policyPlan = policyPlan;
             this.policyUpdate.paymentPlan = 'Created';
-            // this.accountService.updatePolicy(this.policyUpdate);
+            this.policyService.updatePolicy(this.policyUpdate).subscribe((res) => {
+              console.log('Updated Policy', res);
+            }, (err) => {
+              console.log('Update Policy error', err);})
         // }
 
         const plan: IPaymentModel = {
@@ -243,6 +246,8 @@ export class PaymentPlanComponent implements OnInit {
                 receipt_type: 'Premium Payment',
                 sum_in_digits: Number(res.data.amount_paid),
                 today_date: new Date(),
+              source_of_business: 'Plan-Receipt',
+              currency: this.policyNumber.currency,
             };
 
 

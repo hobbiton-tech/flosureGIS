@@ -90,17 +90,17 @@ export class AccountService {
                             );
                             this.generateID(res.data.ID);
                         // }
-                        
-                        
 
-                    }, 
+
+
+                    },
                     (err) => {
                         console.log("RECEIPT ERR>>>", err);
-                        
+
                         this.message.warning('Receipt Failed');
                     });
                 });
-                
+
         // });
         return of(this.receiptN);
     }
@@ -117,18 +117,9 @@ export class AccountService {
             });
     }
 
-    async updateReceipt(receipt: IReceiptModel) {
+    updateReceipt(receipt: IReceiptModel):Observable<any> {
 
-        this.http.put(`https://payment-api.savenda-flosure.com/receipt/${receipt.ID}`, receipt).subscribe((res) => {
-            this.message.success(
-                        'Receipt Successfully Updated'
-                    );
-        }, 
-        (err) => {
-            console.log('Check ERR>>>>',err);
-            
-            this.message.warning('Receipt Failed');
-        });
+       return this.http.put(`https://payment-api.savenda-flosure.com/receipt/${receipt.ID}`, receipt);
     }
 
     getReciepts(): Observable<any> {
@@ -143,12 +134,12 @@ export class AccountService {
         return this.policies;
     }
 
-   
+
     generateID(id) {
         this.router.navigateByUrl('/flosure/accounts/view-receipt/' + id);
         // this.isConfirmLoading = true;
         // this.generateDocuments();
     }
 
-   
+
 }

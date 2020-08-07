@@ -127,60 +127,63 @@ export class BrokerClientComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.agentService.getBrokers().subscribe((brokers) => {
-            this.brokerList = brokers;
-
-            console.log('===================');
-            console.log(this.brokerList);
-        });
-        this.policeServices.getPolicies().subscribe((quotes) => {
-            this.listofUnreceiptedReceipts = _.filter(
-                quotes,
-                (x) =>
-                    x.receiptStatus === 'Unreceipted' &&
-                    x.sourceOfBusiness === 'broker'
-            );
-
-            this.displayedListOfUnreceiptedReceipts = this.listofUnreceiptedReceipts;
-
-            this.receiptsCount = _.filter(
-                quotes,
-                (x) =>
-                    x.receiptStatus === 'Unreceipted' &&
-                    x.sourceOfBusiness === 'broker'
-            ).length;
-            console.log('======= Unreceipt List =======');
-            console.log(this.listofUnreceiptedReceipts);
-        });
-
-        this.policeServices.getDebitNotes().subscribe((invoice) => {
-            this.debitnoteList = invoice;
-        });
-
-        this.receiptService.getReciepts().subscribe((receipts) => {
-            this.receiptedList = _.filter(
-                receipts.data,
-                (x) =>
-                    x.receipt_status === 'Receipted' &&
-                    x.source_of_business === 'broker'
-            );
-
-            console.log('======= Receipt List =======');
-            console.log(this.receiptedList);
-
-            this.cancelReceiptList = _.filter(
-                receipts.data,
-                (x) =>
-                    x.receipt_status === 'Cancelled' &&
-                    x.source_of_business === 'broker'
-            );
-
-            console.log('======= Cancelled Receipt List =======');
-            console.log(this.cancelReceiptList);
-            this.receiptNewCount = receipts.length;
-        });
+        this.refresh()
     }
 
+    refresh() {
+      this.agentService.getBrokers().subscribe((brokers) => {
+        this.brokerList = brokers;
+
+        console.log('===================');
+        console.log(this.brokerList);
+      });
+      this.policeServices.getPolicies().subscribe((quotes) => {
+        this.listofUnreceiptedReceipts = _.filter(
+          quotes,
+          (x) =>
+            x.receiptStatus === 'Unreceipted' &&
+            x.sourceOfBusiness === 'broker'
+        );
+
+        this.displayedListOfUnreceiptedReceipts = this.listofUnreceiptedReceipts;
+
+        this.receiptsCount = _.filter(
+          quotes,
+          (x) =>
+            x.receiptStatus === 'Unreceipted' &&
+            x.sourceOfBusiness === 'broker'
+        ).length;
+        console.log('======= Unreceipt List =======');
+        console.log(this.listofUnreceiptedReceipts);
+      });
+
+      this.policeServices.getDebitNotes().subscribe((invoice) => {
+        this.debitnoteList = invoice;
+      });
+
+      this.receiptService.getReciepts().subscribe((receipts) => {
+        this.receiptedList = _.filter(
+          receipts.data,
+          (x) =>
+            x.receipt_status === 'Receipted' &&
+            x.source_of_business === 'broker'
+        );
+
+        console.log('======= Receipt List =======');
+        console.log(this.receiptedList);
+
+        this.cancelReceiptList = _.filter(
+          receipts.data,
+          (x) =>
+            x.receipt_status === 'Cancelled' &&
+            x.source_of_business === 'broker'
+        );
+
+        console.log('======= Cancelled Receipt List =======');
+        console.log(this.cancelReceiptList);
+        this.receiptNewCount = receipts.length;
+      });
+    }
     log(value): void {
         // this.listOfPolicies = this.policies.filter((x) => x.client === value);
         this.displayedListOfUnreceiptedReceipts = this.listofUnreceiptedReceipts.filter(
@@ -275,12 +278,18 @@ export class BrokerClientComponent implements OnInit {
         this.isCancelVisible = false;
     }
 
-    async onCancel() {
+     onCancel() {
         this.cancelReceipt.receipt_status = 'Cancelled';
         this.cancelReceipt.remarks = this.cancelForm.controls.remarks.value;
         console.log('<++++++++++++++++++CLAIN+++++++++>');
         console.log(this.cancelReceipt);
-        await this.receiptService.updateReceipt(this.cancelReceipt);
+        this.receiptService.updateReceipt(this.cancelReceipt).subscribe((res) => {
+          this.message.success('Receipt Successfully Updated');
+          this.refresh()
+        }, (err) => {
+          console.log('Check ERR>>>>', err);
+          this.message.warning('Receipt Failed');
+        });
         this.isCancelVisible = false;
     }
 
@@ -293,12 +302,18 @@ export class BrokerClientComponent implements OnInit {
         this.isReinstateVisible = false;
     }
 
-    async onReinstate() {
+     onReinstate() {
         this.reinstateReceipt.receipt_status = 'Receipted';
         this.reinstateReceipt.remarks = this.cancelForm.controls.remarks.value;
         console.log('<++++++++++++++++++CLAIN+++++++++>');
         console.log(this.reinstateReceipt);
-        await this.receiptService.updateReceipt(this.reinstateReceipt);
+        this.receiptService.updateReceipt(this.reinstateReceipt).subscribe((res) => {
+          this.message.success('Receipt Successfully Updated');
+          this.refresh()
+        }, (err) => {
+          console.log('Check ERR>>>>', err);
+          this.message.warning('Receipt Failed');
+        });
         this.isReinstateVisible = false;
     }
 

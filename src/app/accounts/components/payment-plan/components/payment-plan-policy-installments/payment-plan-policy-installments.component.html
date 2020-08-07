@@ -506,17 +506,23 @@
                         <nz-form-item>
                             <nz-form-label
                                 [nzSpan]="6"
-                                nzFor="narration"
+                                nzFor="currency"
                                 nzRequired
                                 >Narration</nz-form-label
                             >
                             <nz-form-control nzSpan="18">
-                                <textarea
-                                    formControlName="narration"
-                                    nz-input
-                                    rows="2"
-                                    placeholder="Write Your Narration Here"
-                                ></textarea>
+                              <nz-select
+                                name="paymentMethod"
+                                formControlName="currency"
+                                nzAllowClear
+                                nzPlaceHolder="Choose Currency"
+                              >
+                                <nz-option
+                                  *ngFor="let currency of currencyList"
+                                  [nzValue]="currency.value"
+                                  [nzLabel]="currency.label"
+                                ></nz-option>
+                              </nz-select>
                                 <!-- <span
                                     class="text-danger"
                                     *ngIf="
@@ -531,6 +537,35 @@
                             </nz-form-control>
                         </nz-form-item>
                     </div>
+                  <div nz-col [nzSpan]="12">
+                    <nz-form-item>
+                      <nz-form-label
+                        [nzSpan]="6"
+                        nzFor="narration"
+                        nzRequired
+                      >Narration</nz-form-label
+                      >
+                      <nz-form-control nzSpan="18">
+                                <textarea
+                                  formControlName="narration"
+                                  nz-input
+                                  rows="2"
+                                  placeholder="Write Your Narration Here"
+                                ></textarea>
+                        <!-- <span
+                            class="text-danger"
+                            *ngIf="
+                                (receiptFormControl.narration.touched ||
+                                    submitted) &&
+                                receiptFormControl.narration.errors
+                                    ?.required
+                            "
+                        >
+                            Please enter your Narration!
+                        </span> -->
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
                 </div>
             </form>
         </nz-card>

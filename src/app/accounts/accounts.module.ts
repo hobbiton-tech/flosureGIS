@@ -16,6 +16,7 @@ import { DirectClientComponent } from './components/receipts/components/direct-c
 import { BrokerClientComponent } from './components/receipts/components/broker-client/broker-client.component';
 import { AgentClientComponent } from './components/receipts/components/agent-client/agent-client.component';
 import { SalesRepresentativeClientComponent } from './components/receipts/components/sales-representative-client/sales-representative-client.component';
+import { PlanReceiptComponent } from './components/receipts/components/plan-receipt/plan-receipt.component';
 
 const routes: Routes = [
     {
@@ -58,6 +59,11 @@ const routes: Routes = [
         path: 'sales-representative',
         component: SalesRepresentativeClientComponent,
     },
+
+  {
+    path: 'plan-receipt',
+    component: PlanReceiptComponent,
+  },
 ];
 
 @NgModule({
@@ -73,6 +79,7 @@ const routes: Routes = [
         BrokerClientComponent,
         AgentClientComponent,
         SalesRepresentativeClientComponent,
+        PlanReceiptComponent,
     ],
     imports: [
         CommonModule,
