@@ -7,6 +7,10 @@ import {
     EventEmitter
 } from '@angular/core';
 import { Router } from '@angular/router';
+import { IBank } from "../../../settings/models/finance/bank.model";
+import { IBranch } from "../../../settings/models/finance/branch.model";
+import { BankService } from "../../../settings/components/finance-setups/components/bank-setups/services/bank.service";
+
 import { FormGroup, FormBuilder, Validators, FormControl, ValidationErrors } from '@angular/forms';
 import {
     IIndividualClient,
@@ -16,6 +20,7 @@ import { ClientsService } from '../../services/clients.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { BehaviorSubject, Observable, Observer } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { BranchService } from 'src/app/settings/components/finance-setups/services/branch.service';
 
 @Component({
     selector: 'app-create-client',
@@ -23,6 +28,13 @@ import { HttpClient } from '@angular/common/http';
     styleUrls: ['./create-client.component.scss']
 })
 export class CreateClientComponent implements OnInit, AfterViewInit {
+
+    bankList: IBank[] = [];
+    banks: IBank[] = [];
+    branches: IBranch[] = [];
+    branchList: IBranch[] = [];
+
+
     //feedback loading
     creatingClient: boolean = false;
     defaultDate = new Date();
@@ -45,6 +57,8 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
         private formBuilder: FormBuilder,
         private clientsService: ClientsService,
         private msg: NzMessageService,
+        private BankService: BankService,
+        private BranchService: BranchService,
         private cdr: ChangeDetectorRef, private http: HttpClient
     ) {
         this.individualClientForm = this.formBuilder.group({
@@ -102,61 +116,87 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
             this.corporateClients = res;
         })
         this.cdr.detectChanges();
+
+        ///////////////////////////////
+        /// BANK SERVICE //////
+        //////////////////////////////
+        this.BankService.getBanks().subscribe((res) => {
+            this.banks = res;
+            this.bankList = this.banks;
+        });
+        //////////////////////////////////
+        /////////// Branches ///////////////
+        ////////////////////////////////
+
+        this.BranchService.getBranch().subscribe((res) => {
+            this.branches = res;
+            this.branchList = this.branches;
+        });
+
     }
 
+    bankChange(value) {
+        console.log("value....", value);
 
+        console.log("BankPick>>>>", value.id, this.banks, this.bankList);
+    }
+    branchChange(value) {
+        console.log("value....", value);
+
+        console.log("BranchPick>>>>", value.id, this.branches, this.branchList);
+    }
     clientIDAsyncValidator = (control: FormControl) =>
-    new Observable((observer: Observer<ValidationErrors | null>) => {
-      setTimeout(() => {
-        this.clientsService.getIndividualClients().subscribe((res) => {
-            this.individualClients = res;
-            if(this.individualClients.length > 0) {
-                console.log("ARRAY>>", this.individualClients);
-                
-              for (const ind of this.individualClients) {
-                  console.log("ERROR>>>",control.value, ind.idNumber);
-                if (control.value === ind.idNumber) {
-                    // you have to return `{error: true}` to mark it as an error event
-                    observer.next({ error: true, duplicated: true });
-                    break;
-                  } else {
-                    observer.next(null);
-                  }
-              }
-            } else {
-              observer.next(null);
-            }
-            observer.complete();
-        })
-         
-      }, 1000);
-    });
+        new Observable((observer: Observer<ValidationErrors | null>) => {
+            setTimeout(() => {
+                this.clientsService.getIndividualClients().subscribe((res) => {
+                    this.individualClients = res;
+                    if (this.individualClients.length > 0) {
+                        console.log("ARRAY>>", this.individualClients);
+
+                        for (const ind of this.individualClients) {
+                            console.log("ERROR>>>", control.value, ind.idNumber);
+                            if (control.value === ind.idNumber) {
+                                // you have to return `{error: true}` to mark it as an error event
+                                observer.next({ error: true, duplicated: true });
+                                break;
+                            } else {
+                                observer.next(null);
+                            }
+                        }
+                    } else {
+                        observer.next(null);
+                    }
+                    observer.complete();
+                })
+
+            }, 1000);
+        });
 
     companyRegAsyncValidator = (control: FormControl) =>
-    new Observable((observer: Observer<ValidationErrors | null>) => {
-      setTimeout(() => {
-        this.clientsService.getCorporateClients().subscribe((res) => {
-            this.corporateClients = res;
-            if(this.corporateClients.length > 0) {
-                for (const cor of this.corporateClients) {
-                    console.log("ERROR>>>", cor.registrationNumber);
-                    
-                  if (control.value === cor.registrationNumber) {
-                      // you have to return `{error: true}` to mark it as an error event
-                      observer.next({ error: true, duplicated: true });
-                      break;
+        new Observable((observer: Observer<ValidationErrors | null>) => {
+            setTimeout(() => {
+                this.clientsService.getCorporateClients().subscribe((res) => {
+                    this.corporateClients = res;
+                    if (this.corporateClients.length > 0) {
+                        for (const cor of this.corporateClients) {
+                            console.log("ERROR>>>", cor.registrationNumber);
+
+                            if (control.value === cor.registrationNumber) {
+                                // you have to return `{error: true}` to mark it as an error event
+                                observer.next({ error: true, duplicated: true });
+                                break;
+                            } else {
+                                observer.next(null);
+                            }
+                        }
                     } else {
-                      observer.next(null);
+                        observer.next(null);
                     }
-                }
-              } else {
-                  observer.next(null);
-              }
-              observer.complete();
-        })
-       
-      }, 1000);
-    });
+                    observer.complete();
+                })
+
+            }, 1000);
+        });
 
 
 
@@ -178,36 +218,36 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
     async addIndividualClient(client: IIndividualClient): Promise<void> {
         this.creatingClient = true;
         this.http
-        .get<any>(
-            `https://flosure-number-generation.herokuapp.com/aplus-client-number/IND`
-        )
-        .subscribe(async (res) => {
-            console.log('Client ID>>>>>>', res.data.client_number);
-            this.clientID = res.data.client_number;
-            console.log('Client ID>>>>>>', this.clientID);
-        client.clientType = 'Individual';
-        client.dateCreated = new Date();
-        client.dateUpdated = new Date();
-        client.status = 'Inactive';
-        client.clientID = this.clientID;
+            .get<any>(
+                `https://flosure-number-generation.herokuapp.com/aplus-client-number/IND`
+            )
+            .subscribe(async (res) => {
+                console.log('Client ID>>>>>>', res.data.client_number);
+                this.clientID = res.data.client_number;
+                console.log('Client ID>>>>>>', this.clientID);
+                client.clientType = 'Individual';
+                client.dateCreated = new Date();
+                client.dateUpdated = new Date();
+                client.status = 'Inactive';
+                client.clientID = this.clientID;
 
-        console.log(client);
-            await this.clientsService.addIndividualClient(client).subscribe(
-                async res => {
-                    this.creatingClient = false;
-                    this.msg.success('Client Created successfully');
-                    this.router.navigateByUrl('/flosure/clients/clients-list');
-                },
-                async err => {
-                    this.creatingClient = false;
-                    this.msg.error('Client Creation failed');
-                },
-                async () => {
-                    this.closeDrawer();
-                }
-            );
-        });
-        
+                console.log(client);
+                await this.clientsService.addIndividualClient(client).subscribe(
+                    async res => {
+                        this.creatingClient = false;
+                        this.msg.success('Client Created successfully');
+                        this.router.navigateByUrl('/flosure/clients/clients-list');
+                    },
+                    async err => {
+                        this.creatingClient = false;
+                        this.msg.error('Client Creation failed');
+                    },
+                    async () => {
+                        this.closeDrawer();
+                    }
+                );
+            });
+
     }
 
     async addCorporateClient(client: ICorporateClient): Promise<void> {
@@ -220,32 +260,32 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
                 console.log('Client ID>>>>>>', res.data.client_number);
                 this.clientID = res.data.client_number;
                 client.clientType = 'Corporate';
-        client.dateCreated = new Date();
-        client.dateUpdated = new Date();
-        client.status = 'Inactive';
-        client.clientID = this.clientID;
-        console.log(client);
-        await this.clientsService.addCorporateClient(client).subscribe(
-            async res => {
-                this.creatingClient = true;
-                this.msg.success('Client Created successfully');
-                this.router.navigateByUrl('/flosure/clients/clients-list');
-            },
-            async err => {
-                this.msg.error('Client Creation failed');
-                this.creatingClient = false;
-            },
+                client.dateCreated = new Date();
+                client.dateUpdated = new Date();
+                client.status = 'Inactive';
+                client.clientID = this.clientID;
+                console.log(client);
+                await this.clientsService.addCorporateClient(client).subscribe(
+                    async res => {
+                        this.creatingClient = true;
+                        this.msg.success('Client Created successfully');
+                        this.router.navigateByUrl('/flosure/clients/clients-list');
+                    },
+                    async err => {
+                        this.msg.error('Client Creation failed');
+                        this.creatingClient = false;
+                    },
 
-            async () => {
-                this.creatingClient = false;
-                this.closeDrawer();
-            }
-            
-        );
+                    async () => {
+                        this.creatingClient = false;
+                        this.closeDrawer();
+                    }
+
+                );
             });
-        
-        
-        
+
+
+
     }
 
     submitIndividualClient(): void {

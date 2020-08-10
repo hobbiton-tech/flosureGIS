@@ -18,11 +18,13 @@
         <nz-page-header
             (nzBack)="goToClientsList()"
             nzBackIcon
-            nzTitle="Client ID: {{ client.clientID }}"
+            nzTitle="Client ID: {{ client ? client.clientID : '-' }}"
             [nzSubtitle]="
-                client.clientType === 'Individual'
-                    ? client.firstName + ' ' + client.lastName
-                    : client.companyName 
+                client
+                    ? client.clientType === 'Individual'
+                        ? client.firstName + ' ' + client.lastName
+                        : client.companyName
+                    : '-'
             "
         >
             <nz-page-header-extra>
@@ -30,7 +32,7 @@
                     *ngIf="isEditmode"
                     nz-button
                     nzType="primary"
-                    (click)="isEditmode = false"
+                    (click)="saveDetails()"
                 >
                     Save Changes
                 </button>
@@ -46,7 +48,7 @@
         </nz-page-header>
     </nz-breadcrumb>
     <div class="client-personal-details" style="margin-top: 20px;">
-        <div *ngIf="client.clientType == 'Individual'">
+        <div *ngIf="client ? client.clientType == 'Individual' : '-'">
             <nz-card>
                 <nz-divider
                     nzText="Personal Details"
@@ -59,26 +61,65 @@
                                 <nz-form-label nzSpan="7" nzRequired
                                     >First Name</nz-form-label
                                 >
-                                <nz-form-control nzSpan="17">
+                                <nz-form-control
+                                    nzSpan="17"
+                                    [nzErrorTip]="perFirstNameErrorTpl"
+                                >
                                     <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
                                     <input
                                         nz-input
                                         [(placeholder)]="client.firstName"
+                                        formControlName="firstName"
                                         [disabled]="!isEditmode"
                                     />
+                                    <ng-template
+                                        #perFirstNameErrorTpl
+                                        let-control
+                                    >
+                                        <ng-container
+                                            *ngIf="control.hasError('required')"
+                                        >
+                                            Please input First Name!
+                                        </ng-container>
+                                        <!-- <ng-container
+                                            *ngIf="
+                                                control.hasError('duplicated')
+                                            "
+                                        >
+                                            Adress is already taken!
+                                        </ng-container> -->
+                                    </ng-template>
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
                                 <nz-form-label nzSpan="7" nzRequired
                                     >Last Name</nz-form-label
                                 >
-                                <nz-form-control nzSpan="17">
+                                <nz-form-control
+                                    nzSpan="17"
+                                    [nzErrorTip]="lastNameErrorTp1"
+                                >
                                     <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
                                     <input
                                         nz-input
                                         [(placeholder)]="client.lastName"
                                         [disabled]="!isEditmode"
+                                        formControlName="lastName"
                                     />
+                                    <ng-template #lastNameErrorTp1 let-control>
+                                        <ng-container
+                                            *ngIf="control.hasError('required')"
+                                        >
+                                            Please input Last Name!
+                                        </ng-container>
+                                        <!-- <ng-container
+                                            *ngIf="
+                                                control.hasError('duplicated')
+                                            "
+                                        >
+                                            Adress is already taken!
+                                        </ng-container> -->
+                                    </ng-template>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -89,27 +130,48 @@
                                 >
                                 <nz-form-control nzSpan="17">
                                     <nz-select
+                                        formControlName="title"
                                         nzPlaceHolder="{{ client.title }}"
                                         [nzDisabled]="!isEditmode"
+                                    >
+                                        <nz-option
+                                            nzLabel="Mr"
+                                            nzValue="mr"
+                                        ></nz-option>
+                                        <nz-option
+                                            nzLabel="Mrs"
+                                            nzValue="mrs"
+                                        ></nz-option>
+                                        <nz-option
+                                            nzLabel="Miss"
+                                            nzValue="miss"
+                                        ></nz-option>
+                                        <nz-option
+                                            nzLabel="Dr"
+                                            nzValue="dr"
+                                        ></nz-option>
+                                        <nz-option
+                                            nzLabel="Prof"
+                                            nzValue="prof"
+                                        ></nz-option
                                     ></nz-select>
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
-                                <nz-form-label nzSpan="7" nzRequired
-                                    >email</nz-form-label
-                                >
+                                <nz-form-label nzSpan="7">email</nz-form-label>
                                 <nz-form-control nzSpan="17">
                                     <input
                                         nz-input
                                         [(placeholder)]="client.email"
                                         [disabled]="!isEditmode"
+                                        formControlName="email"
                                     />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
                         <div nz-col nzSpan="12">
                             <nz-form-item>
-                                <nz-form-label nzSpan="7" nzRequired
+                                <nz-form-label nzSpan="7"
                                     >Date of Birth</nz-form-label
                                 >
                                 <nz-form-control nzSpan="17">
@@ -119,21 +181,44 @@
                                         nz-input
                                         [disabled]="!isEditmode"
                                     /> -->
-                                    <nz-date-picker formControlName="dateOfBirth" nzFormat="dd-MM-yyyy" [nzDisabled]="!isEditmode"
-                                [nzDisabled]="!isEditmode"></nz-date-picker>
+                                    <nz-date-picker
+                                        formControlName="dateOfBirth"
+                                        nzFormat="dd-MM-yyyy"
+                                        [nzDisabled]="!isEditmode"
+                                        [nzDisabled]="!isEditmode"
+                                    ></nz-date-picker>
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
                                 <nz-form-label nzSpan="7" nzRequired
                                     >Address</nz-form-label
                                 >
-                                <nz-form-control nzSpan="17">
+                                <nz-form-control
+                                    nzSpan="17"
+                                    nzHasFeedback
+                                    [nzErrorTip]="addressErrorTpl"
+                                >
                                     <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
                                     <input
                                         nz-input
                                         [(placeholder)]="client.address"
                                         [disabled]="!isEditmode"
+                                        formControlName="address"
                                     />
+                                    <ng-template #addressErrorTpl let-control>
+                                        <ng-container
+                                            *ngIf="control.hasError('required')"
+                                        >
+                                            Please input your Address!
+                                        </ng-container>
+                                        <!-- <ng-container
+                                            *ngIf="
+                                                control.hasError('duplicated')
+                                            "
+                                        >
+                                            Adress is already taken!
+                                        </ng-container> -->
+                                    </ng-template>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -142,13 +227,32 @@
                                 <nz-form-label nzSpan="7" nzRequired
                                     >Phone</nz-form-label
                                 >
-                                <nz-form-control nzSpan="17">
+                                <nz-form-control
+                                    [nzErrorTip]="phoneErrorTpl"
+                                    nzSpan="17"
+                                >
                                     <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
                                     <input
                                         nz-input
                                         [(placeholder)]="client.phone"
                                         [disabled]="!isEditmode"
+                                        formControlName="phone"
+                                        maxlength="13"
                                     />
+                                    <ng-template #phoneErrorTpl let-control>
+                                        <ng-container
+                                            *ngIf="control.hasError('required')"
+                                        >
+                                            Please input your Phone!
+                                        </ng-container>
+                                        <ng-container
+                                            *ngIf="
+                                                control.hasError('duplicated')
+                                            "
+                                        >
+                                            Adress is already taken!
+                                        </ng-container>
+                                    </ng-template>
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
@@ -159,6 +263,16 @@
                                     <nz-select
                                         nzPlaceHolder="{{ client.gender }}"
                                         [nzDisabled]="!isEditmode"
+                                        formControlName="gender"
+                                    >
+                                        <nz-option
+                                            nzLabel="Male"
+                                            nzValue="male"
+                                        ></nz-option>
+                                        <nz-option
+                                            nzLabel="Female"
+                                            nzValue="female"
+                                        ></nz-option
                                     ></nz-select>
                                 </nz-form-control>
                             </nz-form-item>
@@ -172,7 +286,17 @@
                                     <nz-select
                                         nzPlaceHolder="{{ client.idType }}"
                                         [nzDisabled]="!isEditmode"
-                                    ></nz-select>
+                                        formControlName="idType"
+                                    >
+                                        <nz-option
+                                            nzLabel="NRC"
+                                            nzValue="nrc"
+                                        ></nz-option>
+                                        <nz-option
+                                            nzLabel="Passport"
+                                            nzValue="passport"
+                                        ></nz-option>
+                                    </nz-select>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -181,13 +305,32 @@
                                 <nz-form-label nzSpan="7" nzRequired
                                     >Identfication No.</nz-form-label
                                 >
-                                <nz-form-control nzSpan="17">
+                                <nz-form-control
+                                    nzSpan="17"
+                                    nzHasFeedback
+                                    [nzErrorTip]="idNumberErrorTpl"
+                                >
                                     <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
                                     <input
                                         nz-input
-                                        [(placeholder)]="client.phone"
+                                        [(placeholder)]="client.idNumber"
                                         [disabled]="!isEditmode"
+                                        formControlName="idNumber"
                                     />
+                                    <ng-template #idNumberErrorTpl let-control>
+                                        <ng-container
+                                            *ngIf="control.hasError('required')"
+                                        >
+                                            Please input your ID Number!
+                                        </ng-container>
+                                        <ng-container
+                                            *ngIf="
+                                                control.hasError('duplicated')
+                                            "
+                                        >
+                                            The ID Number is already taken!
+                                        </ng-container>
+                                    </ng-template>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -196,23 +339,45 @@
             </nz-card>
 
             <nz-card>
-                <nz-divider
-                    nzText="Occupation Details"
-                    nzOrientation="left"
-                ></nz-divider>
-                <form nz-form>
+                <form nz-form [formGroup]="occupationDetailsForm">
+                    <nz-divider
+                        nzText="Occupation Details"
+                        nzOrientation="left"
+                    ></nz-divider>
+
                     <div nz-row nzGutter="0">
                         <div nz-col nzSpan="12">
                             <nz-form-item>
-                                <nz-form-label nzSpan="7" nzRequired
+                                <nz-form-label nzSpan="7"
                                     >Occupation</nz-form-label
                                 >
-                                <nz-form-control nzSpan="17">
+                                <nz-form-control
+                                    nzSpan="17"
+                                    [nzErrorTip]="occupationErrorTpl"
+                                >
                                     <input
                                         nz-input
                                         [(placeholder)]="client.occupation"
                                         [disabled]="!isEditmode"
+                                        formControlName="occupation"
                                     />
+                                    <ng-template
+                                        #occupationErrorTpl
+                                        let-control
+                                    >
+                                        <ng-container
+                                            *ngIf="control.hasError('required')"
+                                        >
+                                            Please input Occupation!
+                                        </ng-container>
+                                        <!-- <ng-container
+                                            *ngIf="
+                                                control.hasError('duplicated')
+                                            "
+                                        >
+                                            Adress is already taken!
+                                        </ng-container> -->
+                                    </ng-template>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -242,12 +407,33 @@
                                 <nz-form-label nzSpan="7" nzRequired
                                     >Company Name</nz-form-label
                                 >
-                                <nz-form-control nzSpan="17">
+                                <nz-form-control
+                                    nzSpan="17"
+                                    [nzErrorTip]="companyNameErrorTpl"
+                                >
                                     <input
                                         nz-input
                                         [(placeholder)]="client.companyName"
                                         [disabled]="!isEditmode"
+                                        formControlName="companyName"
                                     />
+                                    <ng-template
+                                        #companyNameErrorTpl
+                                        let-control
+                                    >
+                                        <ng-container
+                                            *ngIf="control.hasError('required')"
+                                        >
+                                            Please input Company Name!
+                                        </ng-container>
+                                        <ng-container
+                                            *ngIf="
+                                                control.hasError('duplicated')
+                                            "
+                                        >
+                                            This Name is already taken!
+                                        </ng-container>
+                                    </ng-template>
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
@@ -260,6 +446,7 @@
                                         nz-input
                                         [(placeholder)]="client.taxPin"
                                         [disabled]="!isEditmode"
+                                        formControlName="taxPin"
                                     />
                                 </nz-form-control>
                             </nz-form-item>
@@ -269,24 +456,60 @@
                                 <nz-form-label nzSpan="7" nzRequired
                                     >Sector</nz-form-label
                                 >
-                                <nz-form-control nzSpan="17">
+                                <nz-form-control
+                                    nzSpan="17"
+                                    [nzErrorTip]="sectorErrorTpl"
+                                >
                                     <input
                                         nz-input
                                         [(placeholder)]="client.sector"
                                         [disabled]="!isEditmode"
+                                        formControlName="sector"
                                     />
+                                    <ng-template #sectorErrorTpl let-control>
+                                        <ng-container
+                                            *ngIf="control.hasError('required')"
+                                        >
+                                            Please input Client Sector!
+                                        </ng-container>
+                                        <!-- <ng-container
+                                            *ngIf="
+                                                control.hasError('duplicated')
+                                            "
+                                        >
+                                            Adress is already taken!
+                                        </ng-container> -->
+                                    </ng-template>
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
                                 <nz-form-label nzSpan="7" nzRequired
                                     >Tpin Number</nz-form-label
                                 >
-                                <nz-form-control nzSpan="17">
+                                <nz-form-control
+                                    nzSpan="17"
+                                    [nzErrorTip]="taxPinErrorTpl"
+                                >
                                     <input
                                         nz-input
                                         [(placeholder)]="client.taxPin"
                                         [disabled]="!isEditmode"
+                                        formControlName="taxPin"
                                     />
+                                    <ng-template #taxPinErrorTpl let-control>
+                                        <ng-container
+                                            *ngIf="control.hasError('required')"
+                                        >
+                                            Please input Tpin!
+                                        </ng-container>
+                                        <ng-container
+                                            *ngIf="
+                                                control.hasError('duplicated')
+                                            "
+                                        >
+                                            Adress is already taken!
+                                        </ng-container>
+                                    </ng-template>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -295,26 +518,77 @@
                                 <nz-form-label nzSpan="7" nzRequired
                                     >Phone</nz-form-label
                                 >
-                                <nz-form-control nzSpan="17">
+                                <nz-form-control
+                                    nzSpan="17"
+                                    [nzErrorTip]="phoneErrorTpl"
+                                >
                                     <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
                                     <input
                                         nz-input
                                         [(placeholder)]="client.phone"
                                         [disabled]="!isEditmode"
+                                        formControlName="phone"
                                     />
+                                    <ng-template #phoneErrorTpl let-control>
+                                        <ng-container
+                                            *ngIf="control.hasError('required')"
+                                        >
+                                            Please input Phone Number!
+                                        </ng-container>
+                                        <ng-container
+                                            *ngIf="
+                                                control.hasError('duplicated')
+                                            "
+                                        >
+                                            Adress is already taken!
+                                        </ng-container>
+                                    </ng-template>
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
                                 <nz-form-label nzSpan="7" nzRequired
                                     >Address</nz-form-label
                                 >
-                                <nz-form-control nzSpan="17">
+                                <ng-template #addressErrorTpl let-control>
+                                    <ng-container
+                                        *ngIf="control.hasError('required')"
+                                    >
+                                        Please input your Address!
+                                    </ng-container>
+                                    <!-- <ng-container
+                                            *ngIf="
+                                                control.hasError('duplicated')
+                                            "
+                                        >
+                                            Adress is already taken!
+                                        </ng-container> -->
+                                </ng-template>
+                                <nz-form-control
+                                    nzSpan="17"
+                                    nzHasFeedback
+                                    [nzErrorTip]="addressErrorTpl"
+                                >
                                     <!-- <nz-select nzPlaceHolder="Select or create client" [nzDisabled]="isEditmode"></nz-select> -->
                                     <input
                                         nz-input
                                         [(placeholder)]="client.address"
                                         [disabled]="!isEditmode"
+                                        formControlName="address"
                                     />
+                                    <ng-template #addressErrorTpl let-control>
+                                        <ng-container
+                                            *ngIf="control.hasError('required')"
+                                        >
+                                            Please input your Address!
+                                        </ng-container>
+                                        <ng-container
+                                            *ngIf="
+                                                control.hasError('duplicated')
+                                            "
+                                        >
+                                            Adress is already taken!
+                                        </ng-container>
+                                    </ng-template>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -323,12 +597,33 @@
                                 <nz-form-label nzSpan="7" nzRequired
                                     >Email</nz-form-label
                                 >
-                                <nz-form-control nzSpan="17">
+                                <nz-form-control
+                                    [nzErrorTip]="contactEmailErrorTpl"
+                                    nzSpan="17"
+                                >
                                     <input
                                         nz-input
                                         [(placeholder)]="client.contactEmail"
                                         [disabled]="!isEditmode"
+                                        formControlName="contactEmail"
                                     />
+                                    <ng-template
+                                        #contactEmailErrorTpl
+                                        let-control
+                                    >
+                                        <ng-container
+                                            *ngIf="control.hasError('required')"
+                                        >
+                                            Please input Contact Email!
+                                        </ng-container>
+                                        <ng-container
+                                            *ngIf="
+                                                control.hasError('duplicated')
+                                            "
+                                        >
+                                            Adress is Email taken!
+                                        </ng-container>
+                                    </ng-template>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -348,26 +643,68 @@
                                 <nz-form-label nzSpan="7" nzRequired
                                     >First Name</nz-form-label
                                 >
-                                <nz-form-control nzSpan="17">
+                                <nz-form-control
+                                    [nzErrorTip]="cnttFirstNameErrorTpl"
+                                    nzSpan="17"
+                                >
                                     <input
                                         nz-input
                                         [(placeholder)]="
                                             client.contactFirstName
                                         "
                                         [disabled]="!isEditmode"
+                                        formControlName="contactFirstName"
                                     />
+                                    <ng-template
+                                        #cnttFirstNameErrorTpl
+                                        let-control
+                                    >
+                                        <ng-container
+                                            *ngIf="control.hasError('required')"
+                                        >
+                                            Please input Contact First Name!
+                                        </ng-container>
+                                        <!-- <ng-container
+                                            *ngIf="
+                                                control.hasError('duplicated')
+                                            "
+                                        >
+                                            Adress is already taken!
+                                        </ng-container> -->
+                                    </ng-template>
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
                                 <nz-form-label nzSpan="7" nzRequired
                                     >Email</nz-form-label
                                 >
-                                <nz-form-control nzSpan="17">
+                                <nz-form-control
+                                    [nzErrorTip]="contactEmailErrorTpl"
+                                    nzSpan="17"
+                                >
                                     <input
                                         nz-input
                                         [(placeholder)]="client.contactEmail"
                                         [disabled]="!isEditmode"
+                                        formControlName="contactEmail"
                                     />
+                                    <ng-template
+                                        #contactEmailErrorTpl
+                                        let-control
+                                    >
+                                        <ng-container
+                                            *ngIf="control.hasError('required')"
+                                        >
+                                            Please input Contact Email!
+                                        </ng-container>
+                                        <ng-container
+                                            *ngIf="
+                                                control.hasError('duplicated')
+                                            "
+                                        >
+                                            Email is already taken!
+                                        </ng-container>
+                                    </ng-template>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -376,13 +713,33 @@
                                 <nz-form-label nzSpan="7" nzRequired
                                     >Last Name</nz-form-label
                                 >
-                                <nz-form-control nzSpan="17">
-                                    <nz-select
-                                        nzPlaceHolder="{{
-                                            client.contactLastName
-                                        }}"
-                                        [nzDisabled]="!isEditmode"
-                                    ></nz-select>
+                                <nz-form-control
+                                    [nzErrorTip]="contactLastNameErrorTpl"
+                                    nzSpan="17"
+                                >
+                                    <input
+                                        nz-input
+                                        [(placeholder)]="client.contactLastName"
+                                        [disabled]="!isEditmode"
+                                        formControlName="contactLastName"
+                                    />
+                                    <ng-template
+                                        #contactLastNameErrorTpl
+                                        let-control
+                                    >
+                                        <ng-container
+                                            *ngIf="control.hasError('required')"
+                                        >
+                                            Please input Contact Last Name!
+                                        </ng-container>
+                                        <!-- <ng-container
+                                            *ngIf="
+                                                control.hasError('duplicated')
+                                            "
+                                        >
+                                            Adress is already taken!
+                                        </ng-container> -->
+                                    </ng-template>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -393,11 +750,12 @@
 
         <nz-card>
             <nz-divider nzText="Bank Details" nzOrientation="left"></nz-divider>
-            <form nz-form>
+
+            <form nz-form [formGroup]="bankDetailsForm">
                 <div nz-row nzGutter="0">
                     <div nz-col nzSpan="12">
                         <nz-form-item>
-                            <nz-form-label nzSpan="6" nzRequired
+                            <nz-form-label nzSpan="6"
                                 >Account Name</nz-form-label
                             >
                             <nz-form-control nzSpan="18">
@@ -405,11 +763,12 @@
                                     nz-input
                                     [(placeholder)]="client.accountName"
                                     [disabled]="!isEditmode"
+                                    formControlName="accountName"
                                 />
                             </nz-form-control>
                         </nz-form-item>
                         <nz-form-item>
-                            <nz-form-label nzSpan="6" nzRequired
+                            <nz-form-label nzSpan="6"
                                 >Account Number</nz-form-label
                             >
                             <nz-form-control nzSpan="18">
@@ -417,31 +776,45 @@
                                     nz-input
                                     [(placeholder)]="client.accountNumber"
                                     [disabled]="!isEditmode"
+                                    formControlName="accountNumber"
                                 />
                             </nz-form-control>
                         </nz-form-item>
                     </div>
                     <div nz-col nzSpan="12">
                         <nz-form-item>
-                            <nz-form-label nzSpan="7" nzRequired
-                                >Bank</nz-form-label
-                            >
+                            <nz-form-label nzSpan="7">Bank</nz-form-label>
                             <nz-form-control nzSpan="16">
                                 <nz-select
                                     [nzPlaceHolder]="client.bank"
                                     [nzDisabled]="!isEditmode"
-                                ></nz-select>
+                                    (ngModelChange)="bankChange($event)"
+                                    name="bank"
+                                    id="bank"
+                                    formControlName="bank"
+                                    ><nz-option
+                                        *ngFor="let bank of bankList"
+                                        nzValue="{{ bank.id }}"
+                                        nzLabel="{{ bank.bank_name }}"
+                                    ></nz-option>
+                                </nz-select>
                             </nz-form-control>
                         </nz-form-item>
                         <nz-form-item>
-                            <nz-form-label nzSpan="7" nzRequired
-                                >Branch</nz-form-label
-                            >
+                            <nz-form-label nzSpan="7">Branch</nz-form-label>
                             <nz-form-control nzSpan="16">
                                 <nz-select
                                     [nzPlaceHolder]="client.branch"
-                                    [nzDisabled]="!isEditmode"
-                                ></nz-select>
+                                    (ngModelChange)="bankChange($event)"
+                                    name="branch"
+                                    id="branch"
+                                    formControlName="branch"
+                                    ><nz-option
+                                        *ngFor="let branch of branchList"
+                                        nzValue="{{ branch.id }}"
+                                        nzLabel="{{ branch.branch_name }}"
+                                    ></nz-option>
+                                </nz-select>
                             </nz-form-control>
                         </nz-form-item>
                     </div>

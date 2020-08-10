@@ -1,495 +1,524 @@
 <div style="margin: 20px;">
-  <nz-card>
-    <h4 nz-typography>Finance</h4>
-    <div style="margin-bottom: 10px;">
-      <div nz-row [nzGutter]="24">
-        <div nz-col nzSpan="12">
-          <div style="width: 75%;"></div>
+    k
+    <nz-card>
+        <h4 nz-typography>Finance</h4>
+        <div style="margin-bottom: 10px;">
+            <div nz-row [nzGutter]="24">
+                <div nz-col nzSpan="12">
+                    <div style="width: 75%;"></div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <nz-divider nzType="horizontal"></nz-divider>
+        <nz-divider nzType="horizontal"></nz-divider>
 
-    <nz-tabset>
-      <!--
+        <nz-tabset>
+            <!--
                         ///////////////////////////////////////////////////////////////////////
                         /////////// Banks /////////////////////////////////////////
                         /////////////////////////////////////////////////
                     -->
-      <nz-tab nzTitle="Banks Setups">
-        <div style="margin-bottom: 10px;">
-          <div nz-row [nzGutter]="24">
-            <div nz-col nzSpan="12">
-              <button
-                nz-button
-                nzType="primary"
-                style="position: right;"
-                (click)="openBanks()"
-              >
-                Add Bank
-              </button>
-            </div>
-          </div>
-        </div>
-        <nz-table #bankTable [nzData]="bankList">
-          <thead>
-            <tr>
-              <th>Bank Name</th>
-              <th>Swift Code</th>
-              <th>Description</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              *ngFor="let bank of bankTable.data"
-              (click)="onSelectBank(bank)"
-              style="cursor: pointer;"
-            >
-              <td>{{ bank.bank_name }}</td>
-              <td>{{ bank.swift_code }}</td>
-              <td>{{ bank.description }}</td>
-              <td>
-                <button nz-button nzType="default" (click)="onEditBank(bank)">
-                  Edit
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </nz-table>
-      </nz-tab>
+            <nz-tab nzTitle="Banks Setups">
+                <div style="margin-bottom: 10px;">
+                    <div nz-row [nzGutter]="24">
+                        <div nz-col nzSpan="12">
+                            <button
+                                nz-button
+                                nzType="primary"
+                                style="position: right;"
+                                (click)="openBanks()"
+                            >
+                                Add Bank
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <nz-table #bankTable [nzData]="bankList">
+                    <thead>
+                        <tr>
+                            <th>Bank Name</th>
+                            <th>Swift Code</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            *ngFor="let bank of bankTable.data"
+                            (click)="onSelectBank(bank)"
+                            style="cursor: pointer;"
+                        >
+                            <td>{{ bank.bank_name }}</td>
+                            <td>{{ bank.swift_code }}</td>
+                            <td>{{ bank.description }}</td>
+                            <td>
+                                <button
+                                    nz-button
+                                    nzType="default"
+                                    (click)="onEditBank(bank)"
+                                >
+                                    Edit
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </nz-tab>
 
-      <!-- ///////////////////////////////////////////
+            <!-- ///////////////////////////////////////////
 ///////////////Edit banks////////////////////
 /////////////////////////////////////// -->
 
-      <nz-modal
-        [(nzVisible)]="isBankEditVisible"
-        nzTitle="Edit Banks"
-        (nzOnCancel)="handleEditBankCancel()"
-        (nzOnOk)="handleEditBankOk()"
-      >
-        <form nz-form [formGroup]="bankForm">
-          <nz-form-item>
-            <nz-form-label [nzSpan]="7" nzRequired>Name</nz-form-label>
-            <nz-form-control
-              [nzSpan]="12"
-              nzHasFeedback
-              nzValidatingTip="Validating..."
-              [nzErrorTip]="bankErrorTpl"
+            <nz-modal
+                [(nzVisible)]="isBankEditVisible"
+                nzTitle="Edit Banks"
+                (nzOnCancel)="handleEditBankCancel()"
+                (nzOnOk)="handleEditBankOk()"
             >
-              <input nz-input formControlName="bank_name" />
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-label [nzSpan]="7" nzRequired>Swift Code</nz-form-label>
-            <nz-form-control
-              [nzSpan]="12"
-              nzHasFeedback
-              nzValidatingTip="Validating..."
-              [nzErrorTip]="bankErrorTpl"
-            >
-              <input nz-input formControlName="swift_code" />
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
-            <nz-form-control
-              [nzSpan]="12"
-              nzHasFeedback
-              nzValidatingTip="Validating..."
-            >
-              <textarea
-                formControlName="description"
-                nz-input
-                rows="5"
-              ></textarea>
-            </nz-form-control>
-          </nz-form-item>
-        </form>
-      </nz-modal>
+                <form nz-form [formGroup]="bankForm">
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired
+                            >Name</nz-form-label
+                        >
+                        <nz-form-control
+                            [nzSpan]="12"
+                            nzHasFeedback
+                            nzValidatingTip="Validating..."
+                            [nzErrorTip]="banknameErrorTpl"
+                        >
+                            <input nz-input formControlName="bank_name" />
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired
+                            >Swift Code</nz-form-label
+                        >
+                        <nz-form-control
+                            [nzSpan]="12"
+                            nzHasFeedback
+                            nzValidatingTip="Validating..."
+                            [nzErrorTip]="swifErrorTpl"
+                        >
+                            <input nz-input formControlName="swift_code" />
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired
+                            >Description</nz-form-label
+                        >
+                        <nz-form-control
+                            [nzSpan]="12"
+                            nzHasFeedback
+                            nzValidatingTip="Validating..."
+                        >
+                            <textarea
+                                formControlName="description"
+                                nz-input
+                                rows="5"
+                            ></textarea>
+                        </nz-form-control>
+                    </nz-form-item>
+                </form>
+            </nz-modal>
 
-      <!-- ///////////////////////////////////////////
+            <!-- ///////////////////////////////////////////
 ///////////////branches////////////////////
 /////////////////////////////////////// -->
-      <nz-tab nzTitle="Branch Setups">
-        <div style="margin-bottom: 10px;">
-          <div nz-row [nzGutter]="24">
-            <div nz-col nzSpan="12">
-              <button
-                nz-button
-                nzType="primary"
-                style="position: right;"
-                (click)="openBranches()"
-              >
-                Add Branch
-              </button>
+            <nz-tab nzTitle="Branch Setups">
+                <div style="margin-bottom: 10px;">
+                    <div nz-row [nzGutter]="24">
+                        <div nz-col nzSpan="12">
+                            <button
+                                nz-button
+                                nzType="primary"
+                                style="position: right;"
+                                (click)="openBranches()"
+                            >
+                                Add Branch
+                            </button>
 
-              <nz-select
-                ngModel="bank"
-                nzAllowClear
-                nzPlaceHolder="Select Bank"
-                (ngModelChange)="bankChanged($event)"
-                name="bank"
-                id="bank"
-              >
-                <nz-option
-                  *ngFor="let bank of bankList"
-                  nzValue="{{ bank.id }}"
-                  nzLabel="{{ bank.bank_name }}"
-                ></nz-option>
-              </nz-select>
-            </div>
-          </div>
-        </div>
-        <nz-table #branchTable [nzData]="branchList">
-          <thead>
-            <tr>
-              <th>Branch Name</th>
-              <th>Branch Code</th>
-              <th>Description</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              *ngFor="let branch of branchTable.data"
-              (click)="onSelectBranch(branch)"
-              style="cursor: pointer;"
-            >
-              <td>{{ branch.branch_name }}</td>
-              <td>{{ branch.branch_code }}</td>
-              <td>{{ branch.description }}</td>
-              <td>
-                <button
-                  nz-button
-                  nzType="default"
-                  (click)="onEditBranch(branch)"
-                >
-                  Edit
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </nz-table>
-      </nz-tab>
+                            <nz-select
+                                ngModel="bank"
+                                nzAllowClear
+                                nzPlaceHolder="Select Bank"
+                                (ngModelChange)="bankChanged($event)"
+                                name="bank"
+                                id="bank"
+                            >
+                                <nz-option
+                                    *ngFor="let bank of bankList"
+                                    nzValue="{{ bank.id }}"
+                                    nzLabel="{{ bank.bank_name }}"
+                                ></nz-option>
+                            </nz-select>
+                        </div>
+                    </div>
+                </div>
+                <nz-table #branchTable [nzData]="branchList">
+                    <thead>
+                        <tr>
+                            <th>Branch Name</th>
+                            <th>Branch Code</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            *ngFor="let branch of branchTable.data"
+                            (click)="onSelectBranch(branch)"
+                            style="cursor: pointer;"
+                        >
+                            <td>{{ branch.branch_name }}</td>
+                            <td>{{ branch.branch_code }}</td>
+                            <td>{{ branch.description }}</td>
+                            <td>
+                                <button
+                                    nz-button
+                                    nzType="default"
+                                    (click)="onEditBranch(branch)"
+                                >
+                                    Edit
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </nz-tab>
 
-      <!-- ///////////////////////////////////////////
+            <!-- ///////////////////////////////////////////
 ///////////////Edit Branches////////////////////
 /////////////////////////////////////// -->
 
-      <nz-modal
-        [(nzVisible)]="isBranchEditVisible"
-        nzTitle="Edit Branchess"
-        (nzOnCancel)="handleEditBranchCancel()"
-        (nzOnOk)="handleEditBranchOk()"
-      >
-        <form nz-form [formGroup]="branchForm">
-          <nz-form-item>
-            <nz-form-label [nzSpan]="7" nzRequired>Name</nz-form-label>
-            <nz-form-control
-              [nzSpan]="12"
-              nzHasFeedback
-              nzValidatingTip="Validating..."
+            <nz-modal
+                [(nzVisible)]="isBranchEditVisible"
+                nzTitle="Edit Branchess"
+                (nzOnCancel)="handleEditBranchCancel()"
+                (nzOnOk)="handleEditBranchOk()"
             >
-              <input nz-input formControlName="branch_name" />
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-label [nzSpan]="7" nzRequired>Branch Code</nz-form-label>
-            <nz-form-control
-              [nzSpan]="12"
-              nzHasFeedback
-              nzValidatingTip="Validating..."
-            >
-              <input nz-input formControlName="branch_code" />
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
-            <nz-form-control
-              [nzSpan]="12"
-              nzHasFeedback
-              nzValidatingTip="Validating..."
-            >
-              <textarea
-                formControlName="description"
-                nz-input
-                rows="5"
-              ></textarea>
-            </nz-form-control>
-          </nz-form-item>
-        </form>
-      </nz-modal>
+                <form nz-form [formGroup]="branchForm">
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired
+                            >Name</nz-form-label
+                        >
+                        <nz-form-control
+                            [nzSpan]="12"
+                            nzHasFeedback
+                            nzValidatingTip="Validating..."
+                        >
+                            <input nz-input formControlName="branch_name" />
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired
+                            >Branch Code</nz-form-label
+                        >
+                        <nz-form-control
+                            [nzSpan]="12"
+                            nzHasFeedback
+                            nzValidatingTip="Validating..."
+                        >
+                            <input nz-input formControlName="branch_code" />
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired
+                            >Description</nz-form-label
+                        >
+                        <nz-form-control
+                            [nzSpan]="12"
+                            nzHasFeedback
+                            nzValidatingTip="Validating..."
+                        >
+                            <textarea
+                                formControlName="description"
+                                nz-input
+                                rows="5"
+                            ></textarea>
+                        </nz-form-control>
+                    </nz-form-item>
+                </form>
+            </nz-modal>
 
-      <!--
+            <!--
                         ///////////////////////////////////////////////////////////////////////
                         /////////// PAYMENTS/////////////////////////////////////////
                         /////////////////////////////////////////////////
                     -->
-      <nz-tab nzTitle="Payment Methods Setups">
-        <div nz-row [nzGutter]="24">
-          <div nz-col nzSpan="12">
-            <button
-              nz-button
-              nzType="primary"
-              style="position: right;"
-              (click)="openPaymentMethods()"
-            >
-              Add Method
-            </button>
-          </div>
-        </div>
-        <nz-table #paymentMethodTable [nzData]="paymentMethodList">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              *ngFor="
+            <nz-tab nzTitle="Payment Methods Setups">
+                <div nz-row [nzGutter]="24">
+                    <div nz-col nzSpan="12">
+                        <button
+                            nz-button
+                            nzType="primary"
+                            style="position: right;"
+                            (click)="openPaymentMethods()"
+                        >
+                            Add Method
+                        </button>
+                    </div>
+                </div>
+                <nz-table #paymentMethodTable [nzData]="paymentMethodList">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            *ngFor="
                                 let paymentMethod of paymentMethodTable.data
                             "
-              (click)="onSelectPaymentMethod(paymentMethod)"
-              style="cursor: pointer;"
-            >
-              <td>{{ paymentMethod.Method_name }}</td>
-              <td>{{ paymentMethod.description }}</td>
-              <td>
-                <button
-                  nz-button
-                  nzType="default"
-                  (click)="onEditPaymentMethod(paymentMethod)"
-                >
-                  Edit
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </nz-table>
-      </nz-tab>
+                            (click)="onSelectPaymentMethod(paymentMethod)"
+                            style="cursor: pointer;"
+                        >
+                            <td>{{ paymentMethod.Method_name }}</td>
+                            <td>{{ paymentMethod.description }}</td>
+                            <td>
+                                <button
+                                    nz-button
+                                    nzType="default"
+                                    (click)="onEditPaymentMethod(paymentMethod)"
+                                >
+                                    Edit
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </nz-tab>
 
-      <!-- ///////////////////////////////////////////
+            <!-- ///////////////////////////////////////////
 ///////////////Edit Paymentss////////////////////
 /////////////////////////////////////// -->
 
-      <nz-modal
-        [(nzVisible)]="isPaymentMethodEditVisible"
-        nzTitle="Edit PayemntMethods"
-        (nzOnCancel)="handleEditPaymentMethodCancel()"
-        (nzOnOk)="handleEditPaymentMethodOk()"
-      >
-        <form nz-form [formGroup]="paymentMethodForm">
-          <nz-form-item>
-            <nz-form-label [nzSpan]="7" nzRequired>Name</nz-form-label>
-            <nz-form-control
-              [nzSpan]="12"
-              nzHasFeedback
-              nzValidatingTip="Validating..."
+            <nz-modal
+                [(nzVisible)]="isPaymentMethodEditVisible"
+                nzTitle="Edit PayemntMethods"
+                (nzOnCancel)="handleEditPaymentMethodCancel()"
+                (nzOnOk)="handleEditPaymentMethodOk()"
             >
-              <input nz-input formControlName="Method_name" />
-            </nz-form-control>
-          </nz-form-item>
-          <!-- <nz-form-item>
+                <form nz-form [formGroup]="paymentMethodForm">
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired
+                            >Name</nz-form-label
+                        >
+                        <nz-form-control
+                            [nzSpan]="12"
+                            nzHasFeedback
+                            nzValidatingTip="Validating..."
+                        >
+                            <input nz-input formControlName="Method_name" />
+                        </nz-form-control>
+                    </nz-form-item>
+                    <!-- <nz-form-item>
         <nz-form-label [nzSpan]="7" nzRequired>Branch Code</nz-form-label>
         <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating...">
             <input nz-input formControlName="branch_code" />
         </nz-form-control>
     </nz-form-item> -->
-          <nz-form-item>
-            <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
-            <nz-form-control
-              [nzSpan]="12"
-              nzHasFeedback
-              nzValidatingTip="Validating..."
-            >
-              <textarea
-                formControlName="description"
-                nz-input
-                rows="5"
-              ></textarea>
-            </nz-form-control>
-          </nz-form-item>
-        </form>
-      </nz-modal>
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired
+                            >Description</nz-form-label
+                        >
+                        <nz-form-control
+                            [nzSpan]="12"
+                            nzHasFeedback
+                            nzValidatingTip="Validating..."
+                        >
+                            <textarea
+                                formControlName="description"
+                                nz-input
+                                rows="5"
+                            ></textarea>
+                        </nz-form-control>
+                    </nz-form-item>
+                </form>
+            </nz-modal>
 
-      <nz-tab nzTitle="Receipt Types Setups">
-        <!--
+            <nz-tab nzTitle="Receipt Types Setups">
+                <!--
                         ///////////////////////////////////////////////////////////////////////
                         /////////// RECEIPTS TYPES/////////////////////////////////////////
                         /////////////////////////////////////////////////
                     -->
-        <div nz-row [nzGutter]="24">
-          <div nz-col nzSpan="12">
-            <button
-              nz-button
-              nzType="primary"
-              style="position: right;"
-              (click)="openReceiptTypes()"
-            >
-              Add Receipt Type
-            </button>
-          </div>
-        </div>
-        <nz-table #receiptTypeTable [nzData]="receiptTypeList">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              *ngFor="let receiptType of receiptTypeTable.data"
-              (click)="onSelectReceiptType(receiptType)"
-              style="cursor: pointer;"
-            >
-              <td>{{ receiptType.Type_name }}</td>
-              <td>{{ receiptType.Description }}</td>
-              <td>
-                <button
-                  nz-button
-                  nzType="default"
-                  (click)="onEditReceiptTypes(receiptType)"
-                >
-                  Edit
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </nz-table>
-      </nz-tab>
-      <!--
+                <div nz-row [nzGutter]="24">
+                    <div nz-col nzSpan="12">
+                        <button
+                            nz-button
+                            nzType="primary"
+                            style="position: right;"
+                            (click)="openReceiptTypes()"
+                        >
+                            Add Receipt Type
+                        </button>
+                    </div>
+                </div>
+                <nz-table #receiptTypeTable [nzData]="receiptTypeList">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            *ngFor="let receiptType of receiptTypeTable.data"
+                            (click)="onSelectReceiptType(receiptType)"
+                            style="cursor: pointer;"
+                        >
+                            <td>{{ receiptType.Type_name }}</td>
+                            <td>{{ receiptType.Description }}</td>
+                            <td>
+                                <button
+                                    nz-button
+                                    nzType="default"
+                                    (click)="onEditReceiptTypes(receiptType)"
+                                >
+                                    Edit
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </nz-tab>
+            <!--
                         ///////////////////////////////////////////////////////////////////////
                         /////////// Edit Rece TYPES/////////////////////////////////////////
                         /////////////////////////////////////////////////
                     -->
-      <nz-modal
-        [(nzVisible)]="isReceiptTypeEditVisible"
-        nzTitle="Edit ReceiptType"
-        (nzOnCancel)="handleEditReceiptTypeCancel()"
-        (nzOnOk)="handleEditReceiptTypeOk()"
-      >
-        <form nz-form [formGroup]="receiptTypeForm">
-          <nz-form-item>
-            <nz-form-label [nzSpan]="7" nzRequired>Name</nz-form-label>
-            <nz-form-control
-              [nzSpan]="12"
-              nzHasFeedback
-              nzValidatingTip="Validating..."
+            <nz-modal
+                [(nzVisible)]="isReceiptTypeEditVisible"
+                nzTitle="Edit ReceiptType"
+                (nzOnCancel)="handleEditReceiptTypeCancel()"
+                (nzOnOk)="handleEditReceiptTypeOk()"
             >
-              <input nz-input formControlName="Type_name" />
-            </nz-form-control>
-          </nz-form-item>
+                <form nz-form [formGroup]="receiptTypeForm">
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired
+                            >Name</nz-form-label
+                        >
+                        <nz-form-control
+                            [nzSpan]="12"
+                            nzHasFeedback
+                            nzValidatingTip="Validating..."
+                        >
+                            <input nz-input formControlName="Type_name" />
+                        </nz-form-control>
+                    </nz-form-item>
 
-          <nz-form-item>
-            <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
-            <nz-form-control
-              [nzSpan]="12"
-              nzHasFeedback
-              nzValidatingTip="Validating..."
-            >
-              <textarea
-                formControlName="Description"
-                nz-input
-                rows="5"
-              ></textarea>
-            </nz-form-control>
-          </nz-form-item>
-        </form>
-      </nz-modal>
-      <nz-tab nzTitle="Discounts Setups">
-        <!--
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired
+                            >Description</nz-form-label
+                        >
+                        <nz-form-control
+                            [nzSpan]="12"
+                            nzHasFeedback
+                            nzValidatingTip="Validating..."
+                        >
+                            <textarea
+                                formControlName="Description"
+                                nz-input
+                                rows="5"
+                            ></textarea>
+                        </nz-form-control>
+                    </nz-form-item>
+                </form>
+            </nz-modal>
+            <nz-tab nzTitle="Discounts Setups">
+                <!--
                         ///////////////////////////////////////////////////////////////////////
                         /////////// Discount TYPES/////////////////////////////////////////
                         /////////////////////////////////////////////////
                     -->
-        <div nz-row [nzGutter]="24">
-          <div nz-col nzSpan="12">
-            <button
-              nz-button
-              nzType="primary"
-              style="position: right;"
-              (click)="openDiscountTypes()"
-            >
-              Add Discount Type
-            </button>
-          </div>
-        </div>
-        <nz-table #discountTypeTable [nzData]="discountTypeList">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              *ngFor="let discountType of discountTypeTable.data"
-              (click)="onSelectDiscountType(discountType)"
-              style="cursor: pointer;"
-            >
-              <td>{{ discountType.dtype }}</td>
-              <td>{{ discountType.ddescription }}</td>
-              <td>
-                <button
-                  nz-button
-                  nzType="default"
-                  (click)="onEditDiscountType(discountType)"
-                >
-                  Edit
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </nz-table>
-      </nz-tab>
+                <div nz-row [nzGutter]="24">
+                    <div nz-col nzSpan="12">
+                        <button
+                            nz-button
+                            nzType="primary"
+                            style="position: right;"
+                            (click)="openDiscountTypes()"
+                        >
+                            Add Discount Type
+                        </button>
+                    </div>
+                </div>
+                <nz-table #discountTypeTable [nzData]="discountTypeList">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            *ngFor="let discountType of discountTypeTable.data"
+                            (click)="onSelectDiscountType(discountType)"
+                            style="cursor: pointer;"
+                        >
+                            <td>{{ discountType.dtype }}</td>
+                            <td>{{ discountType.ddescription }}</td>
+                            <td>
+                                <button
+                                    nz-button
+                                    nzType="default"
+                                    (click)="onEditDiscountType(discountType)"
+                                >
+                                    Edit
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </nz-tab>
 
-      <!-- ///////////////////////////////////////////
+            <!-- ///////////////////////////////////////////
 ///////////////Edit Discounts////////////////////
 /////////////////////////////////////// -->
 
-      <nz-modal
-        [(nzVisible)]="isDiscountTypeEditVisible"
-        nzTitle="Edit Discount Types"
-        (nzOnCancel)="handleEditDiscountTypeCancel()"
-        (nzOnOk)="handleEditDiscountTypeOk()"
-      >
-        <form nz-form [formGroup]="discountTypeForm">
-          <nz-form-item>
-            <nz-form-label [nzSpan]="7" nzRequired>Name</nz-form-label>
-            <nz-form-control
-              [nzSpan]="12"
-              nzHasFeedback
-              nzValidatingTip="Validating..."
+            <nz-modal
+                [(nzVisible)]="isDiscountTypeEditVisible"
+                nzTitle="Edit Discount Types"
+                (nzOnCancel)="handleEditDiscountTypeCancel()"
+                (nzOnOk)="handleEditDiscountTypeOk()"
             >
-              <input nz-input formControlName="dtype" />
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
-            <nz-form-control
-              [nzSpan]="12"
-              nzHasFeedback
-              nzValidatingTip="Validating..."
-            >
-              <textarea
-                formControlName="ddescription"
-                nz-input
-                rows="5"
-              ></textarea>
-            </nz-form-control>
-          </nz-form-item>
-        </form>
-      </nz-modal>
-    </nz-tabset>
-  </nz-card>
+                <form nz-form [formGroup]="discountTypeForm">
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired
+                            >Name</nz-form-label
+                        >
+                        <nz-form-control
+                            [nzSpan]="12"
+                            nzHasFeedback
+                            nzValidatingTip="Validating..."
+                        >
+                            <input nz-input formControlName="dtype" />
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired
+                            >Description</nz-form-label
+                        >
+                        <nz-form-control
+                            [nzSpan]="12"
+                            nzHasFeedback
+                            nzValidatingTip="Validating..."
+                        >
+                            <textarea
+                                formControlName="ddescription"
+                                nz-input
+                                rows="5"
+                            ></textarea>
+                        </nz-form-control>
+                    </nz-form-item>
+                </form>
+            </nz-modal>
+        </nz-tabset>
+    </nz-card>
 </div>
 
 <!--///////////////////////////////////////////////////////////////////////
@@ -497,34 +526,38 @@
   /////////////////////////////////////////////////-->
 
 <nz-drawer
-  [nzClosable]="false"
-  [nzVisible]="isBankVisible"
-  nzPlacement="left"
-  nzTitle="Create Banks"
-  (nzOnClose)="closeBanks()"
-  [nzWidth]="600"
+    [nzClosable]="false"
+    [nzVisible]="isBankVisible"
+    nzPlacement="left"
+    nzTitle="Create Banks"
+    (nzOnClose)="closeBanks()"
+    [nzWidth]="600"
 >
-  <form nz-form [formGroup]="bankForm" (ngSubmit)="submitBankForm()">
-    <nz-form-item>
-      <nz-form-label [nzSpan]="7" nzRequired>Name</nz-form-label>
-      <nz-form-control
-        [nzSpan]="12"
-        nzHasFeedback
-        nzValidatingTip="Validating..."
-        [nzErrorTip]="bankErrorTpl"
-      >
-        <input nz-input formControlName="bank_name" placeholder="Enter Name" />
-        <ng-template #bankErrorTpl let-control>
-          <ng-container *ngIf="control.hasError('required')">
-            Please input your Bank Name!
-          </ng-container>
-          <ng-container *ngIf="control.hasError('duplicated')">
-            The Name is redundant!
-          </ng-container>
-        </ng-template>
-      </nz-form-control>
-    </nz-form-item>
-    <!-- <nz-form-item>
+    <form nz-form [formGroup]="bankForm" (ngSubmit)="submitBankForm()">
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Name</nz-form-label>
+            <nz-form-control
+                [nzSpan]="12"
+                nzHasFeedback
+                nzValidatingTip="Validating..."
+                [nzErrorTip]="banknameErrorTpl"
+            >
+                <input
+                    nz-input
+                    formControlName="bank_name"
+                    placeholder="Enter Name"
+                />
+                <ng-template #banknameErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please input your Bank Name!
+                    </ng-container>
+                    <!-- <ng-container *ngIf="control.hasError('duplicated')">
+                        The Name is redundant!
+                    </ng-container> -->
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+        <!-- <nz-form-item>
             <nz-form-label [nzSpan]="7" nzRequired>Branch</nz-form-label>
             <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="bankErrorTpl">
                 <input nz-input formControlName="branch_name" placeholder="Enter Branch Name" />
@@ -539,425 +572,479 @@
             </nz-form-control>
         </nz-form-item> -->
 
-    <nz-form-item>
-      <nz-form-label [nzSpan]="7" nzRequired>Swift Code</nz-form-label>
-      <nz-form-control
-        [nzSpan]="12"
-        nzHasFeedback
-        nzValidatingTip="Validating..."
-        [nzErrorTip]="bankErrorTpl"
-      >
-        <input
-          nz-input
-          nz-type="text"
-          formControlName="swift_code"
-          [ngModel]="'BAZAZMLU'"
-        />
-        <ng-template #bankErrorTpl let-control>
-          <ng-container *ngIf="control.hasError('required')">
-            Please input your Swift Code!
-          </ng-container>
-          <ng-container *ngIf="control.hasError('duplicated')">
-            The Code is redundant!
-          </ng-container>
-        </ng-template>
-      </nz-form-control>
-    </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Swift Code</nz-form-label>
+            <nz-form-control
+                [nzSpan]="12"
+                nzHasFeedback
+                nzValidatingTip="Validating..."
+                [nzErrorTip]="swifErrorTpl"
+            >
+                <input
+                    nz-input
+                    nz-type="text"
+                    formControlName="swift_code"
+                    [ngModel]="'BAZAZMLU'"
+                />
+                <ng-template #swifErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please input your Swift Code!
+                    </ng-container>
+                    <ng-container *ngIf="control.hasError('duplicated')">
+                        The Code is redundant!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
 
-    <nz-form-item>
-      <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
-      <nz-form-control
-        [nzSpan]="12"
-        nzHasFeedBack
-        nxValidatingTip="Validating"
-        [nzErrorTip]="descriptionErrorTp1!"
-      >
-        <textarea
-          formControlName="description"
-          nz-input
-          rows="3"
-          placeholder="Type Description"
-        ></textarea>
-        <ng-template #descriptionErrorTp1 let-control>
-          <ng-container *ngIf="control.hasError('required')">
-            Please input Description!
-          </ng-container>
-        </ng-template>
-      </nz-form-control>
-    </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
+            <nz-form-control
+                [nzSpan]="12"
+                nzHasFeedBack
+                nxValidatingTip="Validating"
+                [nzErrorTip]="bdescriptionErrorTp1!"
+            >
+                <textarea
+                    formControlName="description"
+                    nz-input
+                    rows="3"
+                    placeholder="Type Description"
+                ></textarea>
+                <ng-template #bdescriptionErrorTp1 let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please input Description!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
 
-    <nz-form-item>
-      <nz-form-control [nzOffset]="7" [nzSpan]="12">
-        <button nz-button nzType="primary" [disabled]="!bankForm.valid">
-          Submit
-        </button>
-        <button nz-button (click)="resetBankForm($event)">
-          Reset
-        </button>
-      </nz-form-control>
-    </nz-form-item>
-    <!--
+        <nz-form-item>
+            <nz-form-control [nzOffset]="7" [nzSpan]="12">
+                <button nz-button nzType="primary" [disabled]="!bankForm.valid">
+                    Submit
+                </button>
+                <!-- <button nz-button (click)="resetBankForm($event)">
+                    Reset
+                </button> -->
+            </nz-form-control>
+        </nz-form-item>
+        <!--
                     ///////////////////////////////////////////////////////////////////////
                     /////////// Branch INPUTS/////////////////////////////////////////
                     /////////////////////////////////////////////////
                 -->
 
-    <nz-drawer
-      [nzClosable]="false"
-      [nzVisible]="isBranchVisible"
-      nzPlacement="left"
-      nzTitle="Create Banks"
-      (nzOnClose)="closeBranches()"
-      [nzWidth]="600"
-    >
-      <form nz-form [formGroup]="branchForm" (ngSubmit)="submitBranchForm()">
-        <nz-form-item>
-          <nz-form-label [nzSpan]="7" nzRequired>Name</nz-form-label>
-          <nz-form-control
-            [nzSpan]="12"
-            nzHasFeedback
-            nzValidatingTip="Validating..."
-            [nzErrorTip]="bankErrorTpl"
-          >
-            <nz-select
-              formControlName="bankId"
-              nzAllowClear
-              nzPlaceHolder="Select Bank"
+        <nz-drawer
+            [nzClosable]="false"
+            [nzVisible]="isBranchVisible"
+            nzPlacement="left"
+            nzTitle="Create Banks"
+            (nzOnClose)="closeBranches()"
+            [nzWidth]="600"
+        >
+            <form
+                nz-form
+                [formGroup]="branchForm"
+                (ngSubmit)="submitBranchForm()"
             >
-              <nz-option
-                *ngFor="let bank of bankList"
-                nzValue="{{ bank.id }}"
-                nzLabel="{{ bank.bank_name }}"
-                ng
-              ></nz-option>
-            </nz-select>
-            <ng-template #bankErrorTpl let-control>
-              <ng-container *ngIf="control.hasError('required')">
-                Please input your Bank Name!
-              </ng-container>
-              <ng-container *ngIf="control.hasError('duplicated')">
-                The Name is redundant!
-              </ng-container>
-            </ng-template>
-          </nz-form-control>
-        </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="7" nzRequired>Name</nz-form-label>
+                    <nz-form-control
+                        [nzSpan]="12"
+                        nzHasFeedback
+                        nzValidatingTip="Validating..."
+                        [nzErrorTip]="bankNameErrorTpl"
+                    >
+                        <nz-select
+                            formControlName="bankId"
+                            nzAllowClear
+                            nzPlaceHolder="Select Bank"
+                        >
+                            <nz-option
+                                *ngFor="let bank of bankList"
+                                nzValue="{{ bank.id }}"
+                                nzLabel="{{ bank.bank_name }}"
+                                ng
+                            ></nz-option>
+                        </nz-select>
+                        <ng-template #bankNameErrorTpl let-control>
+                            <ng-container *ngIf="control.hasError('required')">
+                                Please input your Bank Name!
+                            </ng-container>
+                            <ng-container
+                                *ngIf="control.hasError('duplicated')"
+                            >
+                                The Name is redundant!
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
 
-        <nz-form-item>
-          <nz-form-label [nzSpan]="7" nzRequired>Branch Name</nz-form-label>
-          <nz-form-control
-            [nzSpan]="12"
-            nzHasFeedback
-            nzValidatingTip="Validating..."
-            [nzErrorTip]="bankErrorTpl"
-          >
-            <input
-              nz-input
-              formControlName="branch_name"
-              placeholder="Enter Branch Name"
-            />
-            <ng-template #bankErrorTpl let-control>
-              <ng-container *ngIf="control.hasError('required')">
-                Please input your Branch Name!
-              </ng-container>
-              <ng-container *ngIf="control.hasError('duplicated')">
-                The Name is redundant!
-              </ng-container>
-            </ng-template>
-          </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-          <nz-form-label [nzSpan]="7" nzRequired>Branch Code</nz-form-label>
-          <nz-form-control
-            [nzSpan]="12"
-            nzHasFeedback
-            nzValidatingTip="Validating..."
-            [nzErrorTip]="bankErrorTpl"
-          >
-            <input
-              nz-input
-              formControlName="branch_code"
-              placeholder="Enter code"
-            />
-            <ng-template #bankErrorTpl let-control>
-              <ng-container *ngIf="control.hasError('required')">
-                Please input your Branch Code!
-              </ng-container>
-              <ng-container *ngIf="control.hasError('duplicated')">
-                The code is redundant!
-              </ng-container>
-            </ng-template>
-          </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-          <nz-form-item>
-            <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
-            <nz-form-control
-              [nzSpan]="12"
-              nzHasFeedBack
-              nxValidatingTip="Validating"
-              [nzErrorTip]="descriptionErrorTp1!"
-            >
-              <textarea
-                formControlName="description"
-                nz-input
-                rows="3"
-                placeholder="Type Description"
-              ></textarea>
-              <ng-template #descriptionErrorTp1 let-control>
-                <ng-container *ngIf="control.hasError('required')">
-                  Please input Description!
-                </ng-container>
-              </ng-template>
-            </nz-form-control>
-          </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="7" nzRequired
+                        >Branch Name</nz-form-label
+                    >
+                    <nz-form-control
+                        [nzSpan]="12"
+                        nzHasFeedback
+                        nzValidatingTip="Validating..."
+                        [nzErrorTip]="branchNameErrorTpl"
+                    >
+                        <input
+                            nz-input
+                            formControlName="branch_name"
+                            placeholder="Enter Branch Name"
+                        />
+                        <ng-template #branchNameErrorTpl let-control>
+                            <ng-container *ngIf="control.hasError('required')">
+                                Please input your Branch Name!
+                            </ng-container>
+                            <ng-container
+                                *ngIf="control.hasError('duplicated')"
+                            >
+                                The Name is redundant!
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="7" nzRequired
+                        >Branch Code</nz-form-label
+                    >
+                    <nz-form-control
+                        [nzSpan]="12"
+                        nzHasFeedback
+                        nzValidatingTip="Validating..."
+                        [nzErrorTip]="branchCodeErrorTpl"
+                    >
+                        <input
+                            nz-input
+                            formControlName="branch_code"
+                            placeholder="Enter code"
+                        />
+                        <ng-template #branchCodeErrorTpl let-control>
+                            <ng-container *ngIf="control.hasError('required')">
+                                Please input your Branch Code!
+                            </ng-container>
+                            <ng-container
+                                *ngIf="control.hasError('duplicated')"
+                            >
+                                The code is redundant!
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="7" nzRequired
+                            >Description</nz-form-label
+                        >
+                        <nz-form-control
+                            [nzSpan]="12"
+                            nzHasFeedBack
+                            nxValidatingTip="Validating"
+                            [nzErrorTip]="brdescriptionErrorTp1!"
+                        >
+                            <textarea
+                                formControlName="description"
+                                nz-input
+                                rows="3"
+                                placeholder="Type Description"
+                            ></textarea>
+                            <ng-template #brdescriptionErrorTp1 let-control>
+                                <ng-container
+                                    *ngIf="control.hasError('required')"
+                                >
+                                    Please input Description!
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
 
-          <nz-form-control [nzOffset]="7" [nzSpan]="12">
-            <button nz-button nzType="primary" [disabled]="!branchForm.valid">
-              Submit
-            </button>
-            <button nz-button (click)="resetBranchForm($event)">
-              Reset
-            </button>
-          </nz-form-control>
-        </nz-form-item>
-        <!--
+                    <nz-form-control [nzOffset]="7" [nzSpan]="12">
+                        <button
+                            nz-button
+                            nzType="primary"
+                            [disabled]="!branchForm.valid"
+                        >
+                            Submit
+                        </button>
+                        <!-- <button nz-button (click)="resetBranchForm($event)">
+                            Reset
+                        </button> -->
+                    </nz-form-control>
+                </nz-form-item>
+                <!--
                     ///////////////////////////////////////////////////////////////////////
                     /////////// PAYMENTS INPUTS/////////////////////////////////////////
                     /////////////////////////////////////////////////
                 -->
 
-        <nz-drawer
-          [nzClosable]="false"
-          [nzVisible]="isPaymentMethodVisible"
-          nzPlacement="left"
-          nzTitle="Create paymentMethod"
-          (nzOnClose)="closePaymentMethods()"
-          [nzWidth]="600"
-        >
-          <form
-            nz-form
-            [formGroup]="paymentMethodForm"
-            (ngSubmit)="submitPaymentMethodForm()"
-          >
-            <nz-form-item>
-              <nz-form-label [nzSpan]="7" nzRequired>Method Name</nz-form-label>
-              <nz-form-control
-                [nzSpan]="12"
-                nzHasFeedback
-                nzValidatingTip="Validating..."
-                [nzErrorTip]="paymentMethodErrorTpl"
-              >
-                <input
-                  nz-input
-                  formControlName="Method_name"
-                  placeholder="Enter Method"
-                />
-                <ng-template #paymentMethodErrorTpl let-control>
-                  <ng-container *ngIf="control.hasError('required')">
-                    Please input Method Name!
-                  </ng-container>
-                  <ng-container *ngIf="control.hasError('duplicated')">
-                    The Method is redundant!
-                  </ng-container>
-                </ng-template>
-              </nz-form-control>
-            </nz-form-item>
-
-            <nz-form-item>
-              <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
-              <nz-form-control
-                [nzSpan]="12"
-                nzHasFeedBack
-                nxValidatingTip="Validating"
-                [nzErrorTip]="descriptionErrorTp1!"
-              >
-                <textarea
-                  formControlName="description"
-                  nz-input
-                  rows="3"
-                  placeholder="write any thing"
-                ></textarea>
-                <ng-template #descriptionErrorTp1 let-control>
-                  <ng-container *ngIf="control.hasError('required')">
-                    Please input Method Name!
-                  </ng-container>
-                </ng-template>
-              </nz-form-control>
-            </nz-form-item>
-
-            <nz-form-item>
-              <nz-form-control [nzOffset]="7" [nzSpan]="12">
-                <button
-                  nz-button
-                  nzType="primary"
-                  [disabled]="!paymentMethodForm.valid"
+                <nz-drawer
+                    [nzClosable]="false"
+                    [nzVisible]="isPaymentMethodVisible"
+                    nzPlacement="left"
+                    nzTitle="Create paymentMethod"
+                    (nzOnClose)="closePaymentMethods()"
+                    [nzWidth]="600"
                 >
-                  Submit
-                </button>
+                    <form
+                        nz-form
+                        [formGroup]="paymentMethodForm"
+                        (ngSubmit)="submitPaymentMethodForm()"
+                    >
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="7" nzRequired
+                                >Method Name</nz-form-label
+                            >
+                            <nz-form-control
+                                [nzSpan]="12"
+                                nzHasFeedback
+                                nzValidatingTip="Validating..."
+                                [nzErrorTip]="paymentNameErrorTpl"
+                            >
+                                <input
+                                    nz-input
+                                    formControlName="Method_name"
+                                    placeholder="Enter Method"
+                                />
+                                <ng-template #paymentNameErrorTpl let-control>
+                                    <ng-container
+                                        *ngIf="control.hasError('required')"
+                                    >
+                                        Please input Method Name!
+                                    </ng-container>
+                                    <ng-container
+                                        *ngIf="control.hasError('duplicated')"
+                                    >
+                                        The Method is redundant!
+                                    </ng-container>
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
 
-                <button nz-button nzType="default">
-                  Reset Form
-                </button>
-              </nz-form-control>
-            </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="7" nzRequired
+                                >Description</nz-form-label
+                            >
+                            <nz-form-control
+                                [nzSpan]="12"
+                                nzHasFeedBack
+                                nxValidatingTip="Validating"
+                                [nzErrorTip]="pdescriptionErrorTp1!"
+                            >
+                                <textarea
+                                    formControlName="description"
+                                    nz-input
+                                    rows="3"
+                                    placeholder="write any thing"
+                                ></textarea>
+                                <ng-template #pdescriptionErrorTp1 let-control>
+                                    <ng-container
+                                        *ngIf="control.hasError('required')"
+                                    >
+                                        Please input Description!
+                                    </ng-container>
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
 
-            <!--
+                        <nz-form-item>
+                            <nz-form-control [nzOffset]="7" [nzSpan]="12">
+                                <button
+                                    nz-button
+                                    nzType="primary"
+                                    [disabled]="!paymentMethodForm.valid"
+                                >
+                                    Submit
+                                </button>
+
+                                <button nz-button nzType="default">
+                                    Reset Form
+                                </button>
+                            </nz-form-control>
+                        </nz-form-item>
+
+                        <!--
                     ///////////////////////////////////////////////////////////////////////
                     /////////// RECEIPT INPUTS/////////////////////////////////////////
                     /////////////////////////////////////////////////
                 -->
 
-            <nz-drawer
-              [nzClosable]="false"
-              [nzVisible]="isReceiptTypeVisible"
-              nzPlacement="left"
-              nzTitle="Create ReceiptType"
-              (nzOnClose)="closeReceiptTypes()"
-              [nzWidth]="600"
-            >
-              <form
-                nz-form
-                [formGroup]="receiptTypeForm"
-                (ngSubmit)="submitReceiptTypeForm()"
-              >
-                <nz-form-item>
-                  <nz-form-label [nzSpan]="7" nzRequired> Name</nz-form-label>
-                  <nz-form-control
-                    [nzSpan]="12"
-                    nzHasFeedback
-                    nzValidatingTip="Validating..."
-                    [nzErrorTip]="DescriptionErrorTp1"
-                  >
-                    <input
-                      nz-input
-                      formControlName="Type_name"
-                      placeholder="Enter Type"
-                    />
-                  </nz-form-control>
-                </nz-form-item>
+                        <nz-drawer
+                            [nzClosable]="false"
+                            [nzVisible]="isReceiptTypeVisible"
+                            nzPlacement="left"
+                            nzTitle="Create ReceiptType"
+                            (nzOnClose)="closeReceiptTypes()"
+                            [nzWidth]="600"
+                        >
+                            <form
+                                nz-form
+                                [formGroup]="receiptTypeForm"
+                                (ngSubmit)="submitReceiptTypeForm()"
+                            >
+                                <nz-form-item>
+                                    <nz-form-label [nzSpan]="7" nzRequired>
+                                        Name</nz-form-label
+                                    >
+                                    <nz-form-control
+                                        [nzSpan]="12"
+                                        nzHasFeedback
+                                        nzValidatingTip="Validating..."
+                                        [nzErrorTip]="DescriptionErrorTp1"
+                                    >
+                                        <input
+                                            nz-input
+                                            formControlName="Type_name"
+                                            placeholder="Enter Type"
+                                        />
+                                    </nz-form-control>
+                                </nz-form-item>
 
-                <nz-form-item>
-                  <nz-form-label [nzSpan]="7" nzRequired
-                    >Description</nz-form-label
-                  >
-                  <nz-form-control
-                    [nzSpan]="12"
-                    nzHasFeedBack
-                    nxValidatingTip="Validating"
-                    [nzErrorTip]="DescriptionErrorTp1!"
-                  >
-                    <textarea
-                      formControlName="Description"
-                      nz-input
-                      rows="3"
-                      placeholder="write any thing"
-                    ></textarea>
-                    <ng-template #DescriptionErrorTp1 let-control>
-                      <ng-container
-                        *ngIf="
+                                <nz-form-item>
+                                    <nz-form-label [nzSpan]="7" nzRequired
+                                        >Description</nz-form-label
+                                    >
+                                    <nz-form-control
+                                        [nzSpan]="12"
+                                        nzHasFeedBack
+                                        nxValidatingTip="Validating"
+                                        [nzErrorTip]="DescriptionErrorTp1!"
+                                    >
+                                        <textarea
+                                            formControlName="Description"
+                                            nz-input
+                                            rows="3"
+                                            placeholder="write any thing"
+                                        ></textarea>
+                                        <ng-template
+                                            #DescriptionErrorTp1
+                                            let-control
+                                        >
+                                            <ng-container
+                                                *ngIf="
                                                     control.hasError('required')
                                                 "
-                      >
-                        Please Add Input !
-                      </ng-container>
-                    </ng-template>
-                  </nz-form-control>
-                </nz-form-item>
+                                            >
+                                                Please Add Input !
+                                            </ng-container>
+                                        </ng-template>
+                                    </nz-form-control>
+                                </nz-form-item>
 
-                <nz-form-item>
-                  <nz-form-control [nzOffset]="7" [nzSpan]="12">
-                    <button
-                      nz-button
-                      nzType="primary"
-                      [disabled]="!receiptTypeForm.valid"
-                    >
-                      Submit
-                    </button>
-                    <!-- <button nz-button nzType="default">Reset Form</button> -->
-                  </nz-form-control>
-                </nz-form-item>
+                                <nz-form-item>
+                                    <nz-form-control
+                                        [nzOffset]="7"
+                                        [nzSpan]="12"
+                                    >
+                                        <button
+                                            nz-button
+                                            nzType="primary"
+                                            [disabled]="!receiptTypeForm.valid"
+                                        >
+                                            Submit
+                                        </button>
+                                        <!-- <button nz-button nzType="default">Reset Form</button> -->
+                                    </nz-form-control>
+                                </nz-form-item>
 
-                <!--
+                                <!--
                     ///////////////////////////////////////////////////////////////////////
                     /////////// Discount INPUTS/////////////////////////////////////////
                     /////////////////////////////////////////////////
                 -->
 
-                <nz-drawer
-                  [nzClosable]="false"
-                  [nzVisible]="isDiscountTypeVisible"
-                  nzPlacement="left"
-                  nzTitle="Create discountType"
-                  (nzOnClose)="closeDiscountTypes()"
-                  [nzWidth]="600"
-                >
-                  <form
-                    nz-form
-                    [formGroup]="discountTypeForm"
-                    (ngSubmit)="submitDiscountTypeForm()"
-                  >
-                    <nz-form-item>
-                      <nz-form-label [nzSpan]="7" nzRequired>
-                        Name</nz-form-label
-                      >
-                      <nz-form-control
-                        [nzSpan]="12"
-                        nzHasFeedback
-                        nzValidatingTip="Validating..."
-                        [nzErrorTip]="
+                                <nz-drawer
+                                    [nzClosable]="false"
+                                    [nzVisible]="isDiscountTypeVisible"
+                                    nzPlacement="left"
+                                    nzTitle="Create discountType"
+                                    (nzOnClose)="closeDiscountTypes()"
+                                    [nzWidth]="600"
+                                >
+                                    <form
+                                        nz-form
+                                        [formGroup]="discountTypeForm"
+                                        (ngSubmit)="submitDiscountTypeForm()"
+                                    >
+                                        <nz-form-item>
+                                            <nz-form-label
+                                                [nzSpan]="7"
+                                                nzRequired
+                                            >
+                                                Name</nz-form-label
+                                            >
+                                            <nz-form-control
+                                                [nzSpan]="12"
+                                                nzHasFeedback
+                                                nzValidatingTip="Validating..."
+                                                [nzErrorTip]="
                                                     DescriptionErrorTp1
                                                 "
-                      >
-                        <input
-                          nz-input
-                          formControlName="dtype"
-                          placeholder="Enter Type"
-                        />
-                      </nz-form-control>
-                    </nz-form-item>
+                                            >
+                                                <input
+                                                    nz-input
+                                                    formControlName="dtype"
+                                                    placeholder="Enter Type"
+                                                />
+                                            </nz-form-control>
+                                        </nz-form-item>
 
-                    <nz-form-item>
-                      <nz-form-label [nzSpan]="7" nzRequired
-                        >Description</nz-form-label
-                      >
-                      <nz-form-control [nzSpan]="12">
-                        <textarea
-                          formControlName="dtype"
-                          nz-input
-                          rows="3"
-                          placeholder="write any description"
-                        ></textarea>
-                        <ng-template #dtypenErrorTp1 let-control>
-                          <ng-container>
-                            Please Add Input !
-                          </ng-container>
-                        </ng-template>
-                      </nz-form-control>
-                    </nz-form-item>
+                                        <nz-form-item>
+                                            <nz-form-label
+                                                [nzSpan]="7"
+                                                nzRequired
+                                                >Description</nz-form-label
+                                            >
+                                            <nz-form-control [nzSpan]="12">
+                                                <textarea
+                                                    formControlName="dtype"
+                                                    nz-input
+                                                    rows="3"
+                                                    placeholder="write any description"
+                                                ></textarea>
+                                                <ng-template
+                                                    #dtypenErrorTp1
+                                                    let-control
+                                                >
+                                                    <ng-container>
+                                                        Please Add Input !
+                                                    </ng-container>
+                                                </ng-template>
+                                            </nz-form-control>
+                                        </nz-form-item>
 
-                    <nz-form-item>
-                      <nz-form-control [nzOffset]="7" [nzSpan]="12">
-                        <button
-                          nz-button
-                          nzType="primary"
-                          [disabled]="
+                                        <nz-form-item>
+                                            <nz-form-control
+                                                [nzOffset]="7"
+                                                [nzSpan]="12"
+                                            >
+                                                <button
+                                                    nz-button
+                                                    nzType="primary"
+                                                    [disabled]="
                                                         !discountTypeForm.valid
                                                     "
-                        >
-                          Submit
-                        </button>
-                        <button nz-button nzType="default">
-                          Reset Form
-                        </button>
-                      </nz-form-control>
-                    </nz-form-item>
-                  </form>
+                                                >
+                                                    Submit
+                                                </button>
+                                                <button
+                                                    nz-button
+                                                    nzType="default"
+                                                >
+                                                    Reset Form
+                                                </button>
+                                            </nz-form-control>
+                                        </nz-form-item>
+                                    </form>
+                                </nz-drawer>
+                            </form>
+                        </nz-drawer>
+                    </form>
                 </nz-drawer>
-              </form>
-            </nz-drawer>
-          </form>
+            </form>
         </nz-drawer>
-      </form>
-    </nz-drawer>
-  </form>
+    </form>
 </nz-drawer>

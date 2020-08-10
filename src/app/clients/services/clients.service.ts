@@ -254,6 +254,20 @@ export class ClientsService {
         );
     }
 
+
+    // async updateIndividualClients(individualClient: IIndividualClient): Promise<void> {
+    //     return this.individualClientsCollection
+    //         .doc(`${individualClient.id}`)
+    //         .update(individualClient)
+    //         .then((res) => {
+    //             console.log(res);
+    //         })
+    //         .catch((err) => {
+    //             console.log(err);
+    //         });
+    // }
+
+
     updateIndividualClient(
         client: IIndividualClient,
         id: string
