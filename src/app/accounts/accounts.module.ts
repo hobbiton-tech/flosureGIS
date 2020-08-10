@@ -10,13 +10,13 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { ReceiptsComponent } from './components/receipts/receipts.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PaymentPlanComponent } from './components/payment-plan/payment-plan.component';
-import { PaymentPlanPoliciesComponent } from './components/payment-plan/components/payment-plan-policies/payment-plan-policies.component';
 import { PaymentPlanPolicyInstallmentsComponent } from './components/payment-plan/components/payment-plan-policy-installments/payment-plan-policy-installments.component';
 import { ReceiptDocumentComponent } from './components/receipts/documents/receipt-document/receipt-document.component';
 import { DirectClientComponent } from './components/receipts/components/direct-client/direct-client.component';
 import { BrokerClientComponent } from './components/receipts/components/broker-client/broker-client.component';
 import { AgentClientComponent } from './components/receipts/components/agent-client/agent-client.component';
 import { SalesRepresentativeClientComponent } from './components/receipts/components/sales-representative-client/sales-representative-client.component';
+import { PlanReceiptComponent } from './components/receipts/components/plan-receipt/plan-receipt.component';
 
 const routes: Routes = [
     {
@@ -35,10 +35,6 @@ const routes: Routes = [
         path: 'payment-plan',
         component: PaymentPlanComponent,
     },
-    // {
-    //     path: 'payment-plan/:id',
-    //     component: PaymentPlanPoliciesComponent,
-    // },
     {
         path: 'payment-plan/:id',
         component: PaymentPlanPolicyInstallmentsComponent,
@@ -63,6 +59,11 @@ const routes: Routes = [
         path: 'sales-representative',
         component: SalesRepresentativeClientComponent,
     },
+
+  {
+    path: 'plan-receipt',
+    component: PlanReceiptComponent,
+  },
 ];
 
 @NgModule({
@@ -72,13 +73,13 @@ const routes: Routes = [
         PaymentsComponent,
         ReceiptsComponent,
         PaymentPlanComponent,
-        PaymentPlanPoliciesComponent,
         PaymentPlanPolicyInstallmentsComponent,
         ReceiptDocumentComponent,
         DirectClientComponent,
         BrokerClientComponent,
         AgentClientComponent,
         SalesRepresentativeClientComponent,
+        PlanReceiptComponent,
     ],
     imports: [
         CommonModule,
