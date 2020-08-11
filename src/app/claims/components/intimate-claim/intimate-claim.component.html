@@ -7,104 +7,452 @@
             Intimate Claim
         </nz-breadcrumb-item>
     </nz-breadcrumb>
+
+    <nz-page-header (nzBack)="backToTransactions()" nzBackIcon nzTitle="Intimate Claim">
+    </nz-page-header>
+
     <!-- <nz-card style="padding: 20px"> -->
-    <form nz-form style="margin-top: 20px;" [formGroup]="intimateClaimForm" (ngSubmit)="onSubmit()">
+    <form nz-form style="margin-top: 20px;" [formGroup]="intimateClaimForm">
+
+        <div style="margin-bottom: 20px; margin-top: 20px; background: #fff;">
+            <nz-page-header>
+                <nz-page-header-title>Claimant Details</nz-page-header-title>
+                <nz-page-header-extra>
+                    <button nz-button nzType="primary" *ngIf="selectedClaimantType != 'Insured'"
+                        (click)="isAddClaimantVisible = true">
+                        Add New Claimant
+                    </button>
+                </nz-page-header-extra>
+                <nz-page-header-content>
+                    <nz-row [nzGutter]="1">
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-item>
+                                <nz-form-label nzSpan="8" nzRequired>Claimant Type
+                                </nz-form-label>
+                                <nz-form-control nzSpan="15">
+                                    <nz-select nzPlaceHolder="Select a Claimant Type" formControlName="claimantType"
+                                        (ngModelChange)="claimantTypeChange($event)">
+                                        <nz-option nzValue="Insured" nzLabel="Insured"></nz-option>
+                                        <nz-option nzValue="Third Party" nzLabel="Third Party"></nz-option>
+                                        <nz-option nzValue="Other" nzLabel="Other"></nz-option>
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="12" *ngIf="selectedClaimantType != 'Insured'">
+                            <nz-form-item>
+                                <nz-form-label nzSpan="7" nzRequired>Claimant Name</nz-form-label>
+                                <nz-form-control nzSpan="16">
+                                    <nz-select nzPlaceHolder="Claimant Name" formControlName="claimantId">
+                                        <nz-option *ngFor="let o of claimantList" [nzValue]="o.id"
+                                            [nzLabel]="o.firstName+' '+o.surname">
+                                        </nz-option>
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </nz-row>
+                </nz-page-header-content>
+            </nz-page-header>
+        </div>
+
         <nz-card style="margin-bottom: 5px;">
-            <nz-divider nzText="Claim Details" nzOrientation="left"></nz-divider>
-            <div nz-row nzGutter="0">
-                <div nz-col nzSpan="12">
+
+            <nz-divider nzText="Claim Opening" nzOrientation="left"></nz-divider>
+            <div nz-row>
+                <div nz-col [nzSpan]="12">
                     <nz-form-item>
                         <nz-form-label nzSpan="8" nzRequired>Client Name</nz-form-label>
                         <nz-form-control nzSpan="15">
-                            <input nz-input  formControlName="clientName">
-                        </nz-form-control>
-                    </nz-form-item>
-                    <nz-form-item>
-                        <nz-form-label nzSpan="8" nzRequired>Service Provider</nz-form-label>
-                        <nz-form-control nzSpan="15">
-                            <nz-select nzPlaceHolder="Select service provider" formControlName="serviceProvider">
-                                    <nz-option nzValue="service provider 1" nzLabel="service provider 1"></nz-option>
-                                    <nz-option nzValue="service provider 2" nzLabel="service provider 2"></nz-option>
+                            <nz-select nzPlaceHolder="Client Name" formControlName="clientId"
+                                (ngModelChange)="onClientChange($event)">
+                                <nz-option *ngFor="let o of displayClientList" [nzValue]="o.id" [nzLabel]="o.clientType === 'Individual'
+                                    ? capitalize(o.firstName + ' ' + o.lastName)
+                                    : capitalize(o.companyName)">
+                                </nz-option>
                             </nz-select>
                         </nz-form-control>
                     </nz-form-item>
-                    <nz-form-item>
-                        <nz-form-label nzSpan="8" nzRequired>Service Type</nz-form-label>
-                        <nz-form-control nzSpan="15">
-                            <nz-select nzPlaceHolder="Select service provider type" formControlName="serviceType">
-                                    <nz-option nzValue="service provider type 1" nzLabel="service provider type 1"></nz-option>
-                                    <nz-option nzValue="service provider type 2" nzLabel="service provider type 2"></nz-option>
-                            </nz-select>
-                        </nz-form-control>
-                    </nz-form-item>
-                    <nz-form-item>
-                        <nz-form-label nzRequired nzSpan="8">Claim Description</nz-form-label>
-                        <nz-form-control nzSpan="15">
-                            <textarea nz-input 
-                                formControlName="claimDescription"></textarea>
-                        </nz-form-control>
-                    </nz-form-item>
-                    
-                    <nz-form-item>
-                            <nz-form-label nzSpan="8" nzRequired>Booked by</nz-form-label>
-                            <nz-form-control nzSpan="15">
-                                <input nz-input  formControlName="bookedBy">
-                            </nz-form-control>
-                        </nz-form-item>
-
                 </div>
-                <div nz-col nzSpan="12">
-                    
+                <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                            <nz-form-label nzSpan="7" nzRequired>Policy number</nz-form-label>
-                            <nz-form-control nzSpan="16">
-                                <input nz-input  formControlName="policyNumber"/>
-                            </nz-form-control>
-                        </nz-form-item>
-                    <nz-form-item>
-                            <nz-form-item>
-                                    <nz-form-label nzSpan="7" nzRequired>Select Risk</nz-form-label>
-                                    <nz-form-control nzSpan="16">
-                                        <nz-select nzPlaceHolder="Select risk" formControlName="risk">
-                                                <nz-option nzValue="risk 1" nzLabel="risk 1"></nz-option>
-                                                <nz-option nzValue="risk 2" nzLabel="risk 2"></nz-option>
-                                        </nz-select>
-                                    </nz-form-control>
-                                </nz-form-item>
-                        <nz-form-label nzSpan="7" nzRequired>Select Activity</nz-form-label>
+                        <nz-form-label nzRequired nzSpan="7">Risk</nz-form-label>
                         <nz-form-control nzSpan="16">
-                            <nz-select nzPlaceHolder="Select activity" formControlName="activity">
-                                    <nz-option nzValue="activity 1" nzLabel="activity 1"></nz-option>
-                                    <nz-option nzValue="activity 2" nzLabel="activity 2"></nz-option>
+                            <nz-select nzPlacholder="Risk" formControlName="riskId">
+                                <nz-option *ngFor="let o of riskList" [nzValue]="o.id" [nzLabel]="o.regNumber">
+                                </nz-option>
                             </nz-select>
                         </nz-form-control>
                     </nz-form-item>
+                </div>
+            </div>
+
+            <div nz-row>
+                <div nz-col [nzSpan]="12">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8" nzRequired>Policy Number</nz-form-label>
+                        <nz-form-control nzSpan="15">
+                            <input nz-input formControlName="policyNumber" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="12">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="7" nzRequired>Loss Estimate</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input formControlName="lossEstimate" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+
+            <div nz-row>
+                <div nz-col [nzSpan]="12">
+                    <nz-form-item>
+                        <nz-form-label nzRequired nzSpan="8">Loss Location</nz-form-label>
+                        <nz-form-control nzSpan="15">
+                            <input nz-input formControlName="lossLocation" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="12">
+                    <nz-form-item>
+                        <nz-form-label nzRequired nzSpan="7">Causation</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <nz-select nzPlaceHolder="Select a Causation" formControlName="causation">
+                                <nz-option nzValue="Accident" nzLabel="Accident"></nz-option>
+                                <nz-option nzValue="T.P. Bodily Injury" nzLabel="T.P. Bodily Injury"></nz-option>
+                                <nz-option nzValue="T.P. Property Loss-Damage" nzLabel="T.P. Property Loss-Damage">
+                                </nz-option>
+                                <nz-option nzValue="Medical" nzLabel="Medical"></nz-option>
+                                <nz-option nzValue="Fire" nzLabel="Fire"></nz-option>
+                                <nz-option nzValue="Theft" nzLabel="Theft"></nz-option>
+                                <nz-option nzValue="Others" nzLabel="Others"></nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+
+            <div nz-row>
+                <div nz-col [nzSpan]="12">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8" nzRequired>Third Party Involvement</nz-form-label>
+                        <nz-form-control nzSpan="15">
+                            <nz-select nzPlaceHolder="Was Third Party at Fault?" formControlName="tpFault"
+                                (ngModelChange)="onTPInvolvementChange($event)">
+                                <nz-option nzValue="At Fault" nzLabel="At Fault"></nz-option>
+                                <nz-option nzValue="Not at Fault" nzLabel="Not at Fault"></nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="12">
+                    <nz-form-item>
+                        <nz-form-label nzRequired nzSpan="7">Description</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <textarea nz-input placeholder="Enter Claim Description" formControlName="claimDescription"
+                                [nzAutosize]="{ minRows: 2, maxRows: 6 }"></textarea>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+
+            <div nz-row>
+                <div nz-col [nzSpan]="12">
+                    <nz-form-item *ngIf="atFault == 'At Fault'">
+                        <nz-form-label nzSpan="8" nzRequired>Party To Blame</nz-form-label>
+                        <nz-form-control nzSpan="15">
+                            <nz-select nzPlaceHolder="Is Third Party Insuraned?" formControlName="tpInsured">
+                                <nz-option nzValue="Insured" nzLabel="Insured"></nz-option>
+                                <nz-option nzValue="Not Insured" nzLabel="Not Insured"></nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="12">
                     <nz-form-item>
                         <nz-form-label nzRequired nzSpan="7">Loss Date</nz-form-label>
                         <nz-form-control nzSpan="16">
-                            <nz-date-picker formControlName="lossDate" nzFormat="dd-MM-yyyy" ></nz-date-picker>
+                            <nz-date-picker formControlName="lossDate" nzFormat="dd-MM-yyyy"></nz-date-picker>
                         </nz-form-control>
                     </nz-form-item>
+                </div>
+            </div>
+
+            <div nz-row>
+                <div nz-col [nzSpan]="12">
+
+                </div>
+                <div nz-col [nzSpan]="12">
                     <nz-form-item>
                         <nz-form-label nzRequired nzSpan="7">Notification Date</nz-form-label>
                         <nz-form-control nzSpan="16">
-                            <nz-date-picker formControlName="notificationDate" nzFormat="dd-MM-yyyy">
-                            </nz-date-picker>
+                            <nz-date-picker formControlName="notificationDate" nzFormat="dd-MM-yyyy"></nz-date-picker>
                         </nz-form-control>
                     </nz-form-item>
-                </div>   
+                </div>
             </div>
-            <nz-form-item>
-                <nz-form-control>
-                    <div style="text-align: center; margin-top: 10px">
-
-                            <button nz-button nzType="primary" style="margin-right: 8px" >Intimate Claim</button>
-                            <button nz-button nzType="default" (click)="resetForm($event)">Reset Form</button>
-                        </div>
-                    </nz-form-control>
-            </nz-form-item>
         </nz-card>
     </form>
-    
-    <!-- </nz-card> -->
+    <nz-card style="margin-bottom: 5px;">
+        <!--Perils-->
+        <nz-divider nzText="Perils" nzOrientation="left"></nz-divider>
+        <div style="margin-bottom: 10px;">
+            <div nz-row [nzGutter]="24">
+                <div nz-col nzSpan="12">
+                    <!-- <div style="width: 75%;">
+                        <nz-input-group [nzSuffix]="
+                                suffixIconSearch
+                            ">
+                            <input type="text" nz-input placeholder="Search by Warranty ID, Warranty type" />
+                        </nz-input-group>
+                        <ng-template #suffixIconSearch>
+                            <i nz-icon nzType="search"></i>
+                        </ng-template>
+                    </div> -->
+                </div>
+
+                <diV nz-col nzSpan="12">
+                    <nz-select style="
+                            width: 100%;
+                        " nzShowSearch nzAllowClear nzPlaceHolder="Select a Peril" nzMode="multiple"
+                        [(ngModel)]="selectedPerilsValue">
+                        <nz-option *ngFor="
+                                let o of perilsList
+                            " [nzLabel]="
+                                o.name
+                            " [nzValue]="o"></nz-option>
+                    </nz-select>
+                </diV>
+            </div>
+        </div>
+        <nz-table #perilsTable [nzData]="selectedPerilsValue" nzSize="small">
+            <thead>
+                <tr>
+                    <!-- <th>Claimant</th> -->
+                    <!-- <th>Claim Id</th> -->
+                    <th>Peril</th>
+                    <th>Description</th>
+                    <!-- <th>Estimate Amount</th> -->
+                    <!-- <th>Expired Section</th> -->
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let peril of perilsTable.data">
+                    <td>{{peril.name}}</td>
+                    <td>{{peril.description}}</td>
+                    <!-- <td>{{peril.claimant}}</td>  -->
+                    <!-- <td>{{peril.claimId}}</td>
+                        <td>{{peril.peril}}</td>
+                        <td>{{peril.estimatedAmount}}</td>
+                        <td>{{peril.expiredSection}}</td> -->
+                </tr>
+            </tbody>
+        </nz-table>
+
+        <!-- Intimate Buttons -->
+        <!-- <nz-form-item> -->
+        <!-- <nz-form-control> -->
+        <div style="text-align: center; margin-top: 10px">
+            <button nz-button nzType="primary" style="margin-right: 8px" (click)="onSubmit()"
+                [disabled]="!intimateClaimForm.valid">Intimate
+                Claim</button>
+            <button nz-button nzType="default" (click)="resetForm($event)">Reset Form</button>
+        </div>
+        <!-- </nz-form-control> -->
+        <!-- </nz-form-item> -->
+    </nz-card>
+    <!-- </form> -->
 </div>
+
+<!-- Add Claimant Drawer -->
+<nz-drawer [nzBodyStyle]="{
+    height: 'calc(100% - 55px)',
+    overflow: 'auto',
+    'padding-bottom': '53px'
+}" [nzPlacement]="'left'" [nzMaskClosable]="false" [nzWidth]="900" [nzVisible]="isAddClaimantVisible"
+    nzTitle="Create Claimant" (nzOnClose)="isAddClaimantVisible = false">
+    <form nz-form [formGroup]="claimantForm">
+        <!-- <div nz-row>
+        <div nz-col [nzSpan]="12">
+            <nz-form-item>
+                <nz-form-label [nzSpan]="8" nzFor="claimantType" nzRequired>Claimant Type</nz-form-label>
+                <nz-form-control [nzSpan]="14">
+                    <nz-select [(ngModel)]="selectedClaimantType" formControlName="claimantType" nzShowSearch
+                        placeholder="Select a Type">
+                        <nz-option nzLabel="Insured" nzValue="insured"></nz-option>
+                        <nz-option nzLabel="Third Party" nzValue="third party"></nz-option>
+                        <nz-option nzLabel="Other" nzValue="other"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div> -->
+        <div nz-row>
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzRequired>First Name</nz-form-label>
+                    <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating..."
+                        [nzErrorTip]="firstNameErrorTpl">
+                        <input nz-input formControlName="firstName" name="firstName" type="text"
+                            placeholder="First Name" />
+                        <ng-template #firstNameErrorTpl let-control>
+                            <ng-container *ngIf="control.hasError('required')">
+                                Please input your First Name!
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8">Middle Name</nz-form-label>
+                    <nz-form-control [nzSpan]="14">
+                        <input nz-input formControlName="middleName" name="middleName" type="text"
+                            placeholder="Middle Name" />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <div nz-row>
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzRequired>Last Name</nz-form-label>
+                    <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating..."
+                        [nzErrorTip]="lastNameErrorTpl">
+                        <input nz-input formControlName="surname" name="surname" type="text" placeholder="Last Name" />
+                        <ng-template #lastNameErrorTpl let-control>
+                            <ng-container *ngIf="control.hasError('required')">
+                                Please input your Last Name!
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzFor="gender" nzRequired>Gender</nz-form-label>
+                    <nz-form-control [nzSpan]="14">
+                        <nz-select formControlName="gender" nzShowSearch placeholder="Select a Type">
+                            <nz-option nzLabel="Male" nzValue="male"></nz-option>
+                            <nz-option nzLabel="Female" nzValue="female"></nz-option>
+                            <nz-option nzLabel="Other" nzValue="other"></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <div nz-row>
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzFor="idType" nzRequired>ID Type</nz-form-label>
+                    <nz-form-control [nzSpan]="14">
+                        <nz-select formControlName="idType" nzShowSearch placeholder="Select a Type">
+                            <nz-option nzLabel="NRC" nzValue="nrc"></nz-option>
+                            <nz-option nzLabel="Passport" nzValue="passport"></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzRequired nzFor="idNumber">ID Number</nz-form-label>
+                    <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating..."
+                        [nzErrorTip]="idNumberErrorTpl">
+                        <input nz-input formControlName="idNumber" name="idNumber" type="text"
+                            placeholder="ID Number" />
+                        <ng-template #idNumberErrorTpl let-control>
+                            <ng-container *ngIf="control.hasError('required')">
+                                Please input your ID Number!
+                            </ng-container>
+                            <ng-container *ngIf="control.hasError('duplicated')">
+                                The ID Number is redundant!
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <div nz-row>
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzRequired nzFor="postal">Postal</nz-form-label>
+                    <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating..."
+                        [nzErrorTip]="postalErrorTpl">
+                        <input nz-input formControlName="postal" name="postal" type="text" placeholder="Postal" />
+                        <ng-template #postalErrorTpl let-control>
+                            <ng-container *ngIf="control.hasError('required')">
+                                Please input your Postal!
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzRequired nzFor="physicalAddress">Physical Address</nz-form-label>
+                    <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating"
+                        [nzErrorTip]="addressDeailsErrorTpl">
+                        <textarea formControlName="physicalAddress" nz-input rows="5"
+                            placeholder="Enter Physical Address"></textarea>
+                        <ng-template #addressDeailsErrorTpl let-control>
+                            <ng-container *ngIf="control.hasError('required')">
+                                Please input your address!
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <div nz-row>
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzRequired nzFor="phoneNumber">Phone Number</nz-form-label>
+                    <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating..."
+                        [nzErrorTip]="phoneNumberErrorTpl">
+                        <input nz-input formControlName="phoneNumber" name="phoneNumber" type="text"
+                            placeholder="Phone Number" />
+                        <ng-template #phoneNumberErrorTpl let-control>
+                            <ng-container *ngIf="control.hasError('required')">
+                                Please input your Phone Number!
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="8" nzRequired nzFor="email">Email</nz-form-label>
+                    <nz-form-control [nzSpan]="14" nzHasFeedback nzValidatingTip="Validating..."
+                        [nzErrorTip]="emailErrorTpl">
+                        <input nz-input formControlName="email" name="email" type="email" placeholder="Email" />
+                        <ng-template #emailErrorTpl let-control>
+                            <ng-container *ngIf="control.hasError('required')">
+                                Please input your Email!
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <nz-form-item>
+            <nz-form-control>
+                <div style="text-align: center; margin-top: 10px;">
+                    <button nz-button nzType="primary" style="margin-right: 8px;" (click)="submitClaimantForm()"
+                        [disabled]="!claimantForm.valid">
+                        Add Claimant
+                    </button>
+                    <button nz-button (click)="resetClaimantForm()">
+                        Reset Form
+                    </button>
+                </div>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</nz-drawer>

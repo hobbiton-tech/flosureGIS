@@ -4,7 +4,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { IntimateClaimComponent } from './components/intimate-claim/intimate-claim.component';
 import { ClaimTransactionsComponent } from './components/claim-transactions/claim-transactions.component';
-import { ClaimantsComponent } from './components/claimants/claimants.component';
 import { ClaimDetailsComponent } from './components/claim-details/claim-details.component';
 import { ClaimsService } from './services/claims-service.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -21,10 +20,6 @@ const routes: Routes = [
         component: ClaimTransactionsComponent,
     },
     {
-        path: 'claimants',
-        component: ClaimantsComponent,
-    },
-    {
         path: 'claim-details',
         component: ClaimDetailsComponent,
     },
@@ -38,7 +33,6 @@ const routes: Routes = [
     declarations: [
         IntimateClaimComponent,
         ClaimTransactionsComponent,
-        ClaimantsComponent,
         ClaimDetailsComponent,
         PerilsComponent,
         AddPerilsComponent,

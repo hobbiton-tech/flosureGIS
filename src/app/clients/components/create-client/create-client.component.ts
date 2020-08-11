@@ -4,7 +4,7 @@ import {
     AfterViewInit,
     ChangeDetectorRef,
     Output,
-    EventEmitter
+    EventEmitter,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { IBank } from "../../../settings/models/finance/bank.model";
@@ -14,7 +14,7 @@ import { BankService } from "../../../settings/components/finance-setups/compone
 import { FormGroup, FormBuilder, Validators, FormControl, ValidationErrors } from '@angular/forms';
 import {
     IIndividualClient,
-    ICorporateClient
+    ICorporateClient,
 } from '../../models/clients.model';
 import { ClientsService } from '../../services/clients.service';
 import { NzMessageService } from 'ng-zorro-antd';
@@ -25,7 +25,7 @@ import { BranchService } from 'src/app/settings/components/finance-setups/servic
 @Component({
     selector: 'app-create-client',
     templateUrl: './create-client.component.html',
-    styleUrls: ['./create-client.component.scss']
+    styleUrls: ['./create-client.component.scss'],
 })
 export class CreateClientComponent implements OnInit, AfterViewInit {
 
@@ -82,13 +82,17 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
             accountNumber: [''],
             accountType: [''],
             bank: [''],
-            branch: ['']
+            branch: [''],
         });
 
         this.corporateClientForm = this.formBuilder.group({
             companyName: ['', Validators.required],
             taxPin: [''],
-            registrationNumber: ['', Validators.required, [this.companyRegAsyncValidator]],
+            registrationNumber: [
+                '',
+                Validators.required,
+                [this.companyRegAsyncValidator],
+            ],
             email: [''],
             phone: [''],
             address: [''],
@@ -103,7 +107,7 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
             accountNumber: [''],
             accountType: [''],
             bank: [''],
-            branch: ['']
+            branch: [''],
         });
     }
 
@@ -111,10 +115,10 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
         this.selectedClientType = 'Corporate';
         this.clientsService.getIndividualClients().subscribe((res) => {
             this.individualClients = res;
-        })
+        });
         this.clientsService.getCorporateClients().subscribe((res) => {
             this.corporateClients = res;
-        })
+        });
         this.cdr.detectChanges();
 
         ///////////////////////////////
@@ -151,13 +155,20 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
                 this.clientsService.getIndividualClients().subscribe((res) => {
                     this.individualClients = res;
                     if (this.individualClients.length > 0) {
-                        console.log("ARRAY>>", this.individualClients);
+                        console.log('ARRAY>>', this.individualClients);
 
                         for (const ind of this.individualClients) {
-                            console.log("ERROR>>>", control.value, ind.idNumber);
+                            console.log(
+                                'ERROR>>>',
+                                control.value,
+                                ind.idNumber
+                            );
                             if (control.value === ind.idNumber) {
                                 // you have to return `{error: true}` to mark it as an error event
-                                observer.next({ error: true, duplicated: true });
+                                observer.next({
+                                    error: true,
+                                    duplicated: true,
+                                });
                                 break;
                             } else {
                                 observer.next(null);
@@ -167,8 +178,7 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
                         observer.next(null);
                     }
                     observer.complete();
-                })
-
+                });
             }, 1000);
         });
 
@@ -179,11 +189,14 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
                     this.corporateClients = res;
                     if (this.corporateClients.length > 0) {
                         for (const cor of this.corporateClients) {
-                            console.log("ERROR>>>", cor.registrationNumber);
+                            console.log('ERROR>>>', cor.registrationNumber);
 
                             if (control.value === cor.registrationNumber) {
                                 // you have to return `{error: true}` to mark it as an error event
-                                observer.next({ error: true, duplicated: true });
+                                observer.next({
+                                    error: true,
+                                    duplicated: true,
+                                });
                                 break;
                             } else {
                                 observer.next(null);
@@ -193,21 +206,18 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
                         observer.next(null);
                     }
                     observer.complete();
-                })
-
+                });
             }, 1000);
         });
-
-
 
     ngAfterViewInit(): void {
         this.selectedClientType = 'Corporate';
         this.clientsService.getIndividualClients().subscribe((res) => {
             this.individualClients = res;
-        })
+        });
         this.clientsService.getCorporateClients().subscribe((res) => {
             this.corporateClients = res;
-        })
+        });
         this.cdr.detectChanges();
     }
 
@@ -219,7 +229,9 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
         this.creatingClient = true;
         this.http
             .get<any>(
-                `https://flosure-number-generation.herokuapp.com/aplus-client-number/IND`
+
+                `https://number-generation.flosure-api.com/savenda-client-number/IND`
+
             )
             .subscribe(async (res) => {
                 console.log('Client ID>>>>>>', res.data.client_number);
@@ -233,12 +245,14 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
 
                 console.log(client);
                 await this.clientsService.addIndividualClient(client).subscribe(
-                    async res => {
+                    async (res) => {
                         this.creatingClient = false;
                         this.msg.success('Client Created successfully');
-                        this.router.navigateByUrl('/flosure/clients/clients-list');
+                        this.router.navigateByUrl(
+                            '/flosure/clients/clients-list'
+                        );
                     },
-                    async err => {
+                    async (err) => {
                         this.creatingClient = false;
                         this.msg.error('Client Creation failed');
                     },
@@ -247,14 +261,13 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
                     }
                 );
             });
-
     }
 
     async addCorporateClient(client: ICorporateClient): Promise<void> {
         this.creatingClient = true;
         this.http
             .get<any>(
-                `https://flosure-number-generation.herokuapp.com/aplus-client-number/COR`
+                `https://number-generation.flosure-api.com/savenda-client-number/COR`
             )
             .subscribe(async (res) => {
                 console.log('Client ID>>>>>>', res.data.client_number);
@@ -266,12 +279,14 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
                 client.clientID = this.clientID;
                 console.log(client);
                 await this.clientsService.addCorporateClient(client).subscribe(
-                    async res => {
+                    async (res) => {
                         this.creatingClient = true;
                         this.msg.success('Client Created successfully');
-                        this.router.navigateByUrl('/flosure/clients/clients-list');
+                        this.router.navigateByUrl(
+                            '/flosure/clients/clients-list'
+                        );
                     },
-                    async err => {
+                    async (err) => {
                         this.msg.error('Client Creation failed');
                         this.creatingClient = false;
                     },
@@ -280,12 +295,8 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
                         this.creatingClient = false;
                         this.closeDrawer();
                     }
-
                 );
             });
-
-
-
     }
 
     submitIndividualClient(): void {
@@ -301,7 +312,7 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
             !this.individualClientForm.valid
         ) {
             this.addIndividualClient(this.individualClientForm.value).then(
-                res => {
+                (res) => {
                     console.log('Added Individaul');
                     this.individualClientForm.reset();
                 }
@@ -310,7 +321,7 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
     }
 
     submitCorporateClient(): void {
-        this.addCorporateClient(this.corporateClientForm.value).then(res => {
+        this.addCorporateClient(this.corporateClientForm.value).then((res) => {
             console.log('Added Corporate.');
             this.corporateClientForm.reset();
         });

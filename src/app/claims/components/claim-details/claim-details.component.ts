@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Claim } from '../../models/claim.model';
-import { AngularFireStorage } from '@angular/fire/storage';
-import { finalize } from 'rxjs/operators';
 import { ClaimsService } from '../../services/claims-service.service';
-import { Peril } from '../../models/peril.model';
-import { PerilService } from '../../services/peril-service.service';
-import { IDocument } from '../../models/claim.model';
-
-import * as _ from 'lodash';
+import { ClaimSetupsService } from 'src/app/settings/components/claim-setups/services/claim-setups.service';
+import { IClaimant } from 'src/app/settings/models/underwriting/claims.model';
+import { Policy } from 'src/app/underwriting/models/policy.model';
+import { RiskModel } from 'src/app/quotes/models/quote.model';
+import { PoliciesService } from 'src/app/underwriting/services/policies.service';
+import {
+    IIndividualClient,
+    ICorporateClient,
+} from 'src/app/clients/models/clients.model';
+import { ClientsService } from 'src/app/clients/services/clients.service';
 
 @Component({
     selector: 'app-claim-details',
@@ -17,120 +19,74 @@ import * as _ from 'lodash';
     styleUrls: ['./claim-details.component.scss'],
 })
 export class ClaimDetailsComponent implements OnInit {
-    claimDetailsForm: FormGroup;
-    perilsList: Peril[];
+    claimData: Claim;
+    id: string;
+    claimantList: IClaimant[] = [];
+    policiesList: Policy[];
+    transactionsList: [] = [];
 
-    claimsList: Claim[];
-
-    //hide peril form drawer
-    addPerilFormDrawerVisible = false;
-
-    isEditmode = false;
-
-    //claim id
-    claimId: string;
-    claimData: Claim = new Claim();
-
-    //selected file upload
-    selectedFile: any = null;
-
-    //file upload url
-    url: string;
+    displayClientList: Array<IIndividualClient & ICorporateClient>;
+    clientList: Array<IIndividualClient & ICorporateClient>;
 
     constructor(
         private readonly route: Router,
         private router: ActivatedRoute,
-        private formBuilder: FormBuilder,
+        private readonly policiesService: PoliciesService,
         private claimsService: ClaimsService,
-        private perilService: PerilService,
-        private storage: AngularFireStorage
+        private readonly claimSetupsService: ClaimSetupsService,
+        private readonly clientsService: ClientsService
     ) {}
 
     ngOnInit(): void {
         //get claimId from parameters
         this.router.params.subscribe((param) => {
-            this.claimId = param.id;
+            this.id = param.id;
         });
 
-        this.claimDetailsForm = this.formBuilder.group({
-            serviceProvider: [``, Validators.required],
-            serviceProviderType: [``, Validators.required],
-            claimDescription: [``, Validators.required],
-            risk: [``, Validators.required],
-            activity: [``, Validators.required],
-            lossDate: [``, Validators.required],
-            notificationDate: [``, Validators.required],
-            status: 'resolved',
-            document: [``, Validators.required],
+        this.claimSetupsService.getClaimants().subscribe((claimants) => {
+            this.claimantList = claimants;
         });
 
         this.claimsService.getClaims().subscribe((claims) => {
-            this.claimsList = claims.filter((x) => x.claimId === this.claimId);
-
-            this.claimData = claims.filter(
-                (x) => x.claimId === this.claimId
-            )[0];
-
-            this.claimDetailsForm
-                .get('serviceProvider')
-                .setValue(this.claimData.serviceProvider);
-            this.claimDetailsForm
-                .get('serviceProviderType')
-                .setValue(this.claimData.serviceType);
-            this.claimDetailsForm
-                .get('claimDescription')
-                .setValue(this.claimData.claimDescription);
-            this.claimDetailsForm.get('risk').setValue(this.claimData.risk);
-            this.claimDetailsForm
-                .get('activity')
-                .setValue(this.claimData.activity);
-            //this.claimDetailsForm.get('lossDate').setValue(this.claimData.lossDate);
-            //this.claimDetailsForm.get('notificationDate').setValue(this.claimData.notificationDate);
+            this.claimData = claims.filter((x) => x.id === this.id)[0] as Claim;
         });
 
-        //populate perils list
-        this.perilService.getPerils().subscribe((perils) => {
-            this.perilsList = perils.filter(
-                (x) => x.claimId === this.claimData.claimId
-            );
+        this.policiesService.getPolicies().subscribe((policies) => {
+            this.policiesList = policies;
         });
-    }
 
-    //cliam details form submission
-    onSubmit() {
-        const name = this.selectedFile.name;
-        const fileRef = this.storage.ref(name);
-        this.storage
-            .upload(name, this.selectedFile)
-            .snapshotChanges()
-            .pipe(
-                finalize(() => {
-                    fileRef.getDownloadURL().subscribe((url) => {
-                        this.url = url;
-
-                        const claim = this.claimDetailsForm.value as Claim;
-                        claim.document = { url: url, name: name };
-                        this.claimsService.updateClaimDoc(
-                            this.claimData.claimId,
-                            claim
-                        );
-                    });
-                })
-            )
-            .subscribe();
-    }
-
-    //show document preview
-    showPreview(event: any) {
-        this.selectedFile = event.target.files[0];
-    }
-
-    //open add peril form drawer
-    openAddPerilFormDrawer() {
-        this.addPerilFormDrawerVisible = true;
+        this.clientsService.getAllClients().subscribe((clients) => {
+            this.clientList = [...clients[0], ...clients[1]] as Array<
+                ICorporateClient & IIndividualClient
+            >;
+            this.displayClientList = this.clientList;
+        });
     }
 
     intimateClaim(): void {
         this.route.navigateByUrl('/flosure/claims/claim-transactions');
+    }
+
+    getRisk(policyNumber: string, riskId: string): RiskModel {
+        const policy = this.policiesList.filter(
+            (x) => x.policyNumber == policyNumber
+        )[0] as Policy;
+        const risk = policy.risks.filter(
+            (y) => (y.id = riskId)
+        )[0] as RiskModel;
+        return risk;
+    }
+
+    getClient(id: string): any {
+        const currentClient = this.displayClientList.filter(
+            (x) => x.id === id
+        )[0];
+        return currentClient;
+    }
+
+    capitalize(s) {
+        return s.toLowerCase().replace(/\b./g, function (a) {
+            return a.toUpperCase();
+        });
     }
 }

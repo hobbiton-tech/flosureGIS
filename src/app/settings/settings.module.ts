@@ -31,6 +31,15 @@ import { ClausesService } from './components/underwriting-setups/services/clause
 import { WarrantiesComponent } from './components/warranties/warranties.component';
 import { ExtensionsComponent } from './components/extensions/extensions.component';
 import { FinanceSetupsComponent } from './components/finance-setups/finance-setups.component';
+import { ClaimSetupsComponent } from './components/claim-setups/claim-setups.component';
+import { ServiceProviderComponent } from './components/claim-setups/components/service-provider/service-provider.component';
+import { LossAdjustorComponent } from './components/claim-setups/components/loss-adjustor/loss-adjustor.component';
+import { ClaimantComponent } from './components/claim-setups/components/claimant/claimant.component';
+import { SalvageBuyerComponent } from './components/claim-setups/components/salvage-buyer/salvage-buyer.component';
+import { LossAdjustorDetailsComponent } from './components/claim-setups/components/loss-adjustor-details/loss-adjustor-details.component';
+import { ServiceProviderDetailsComponent } from './components/claim-setups/components/service-provider-details/service-provider-details.component';
+import { ClaimantDetailsComponent } from './components/claim-setups/components/claimant-details/claimant-details.component';
+import { SalvageBuyerDetailsComponent } from './components/claim-setups/components/salvage-buyer-details/salvage-buyer-details.component';
 
 const routes: Routes = [
     {
@@ -81,6 +90,27 @@ const routes: Routes = [
         path: 'extensions',
         component: ExtensionsComponent,
     },
+    {
+        path: 'claims',
+        component: ClaimSetupsComponent,
+    },
+    {
+        path: 'loss-adjustor-details/:id',
+        component: LossAdjustorDetailsComponent,
+    },
+    {
+        path: 'service-provider-details/:id',
+        component: ServiceProviderDetailsComponent,
+    },
+    {
+        path: 'claimant-details/:id',
+        component: ClaimantDetailsComponent,
+    },
+
+    {
+        path: 'salvage-buyer-details/:id',
+        component: SalvageBuyerDetailsComponent,
+    },
 ];
 
 @NgModule({
@@ -111,7 +141,15 @@ const routes: Routes = [
         AddProductCommissionComponent,
         WarrantiesComponent,
         ExtensionsComponent,
-
+        ClaimSetupsComponent,
+        ServiceProviderComponent,
+        LossAdjustorComponent,
+        ClaimantComponent,
+        SalvageBuyerComponent,
+        LossAdjustorDetailsComponent,
+        ServiceProviderDetailsComponent,
+        ClaimantDetailsComponent,
+        SalvageBuyerDetailsComponent,
     ],
     imports: [
         CommonModule,

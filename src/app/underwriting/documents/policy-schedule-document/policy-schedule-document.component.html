@@ -29,10 +29,11 @@
                         <tr style="border: none;">
                             <td class="title" style="border: none;">
                                 <img
-                                    src="/assets/images/apluslogo.png"
-                                    style="width: 100%; max-width: 240px;"
+                                    src="/assets/images/Savenda-Logo-Final.png"
+                                    style="width: 100%; max-width: 100px;"
                                 />
                             </td>
+
                             <td
                                 style="
                                     font-size: 11px;
@@ -40,12 +41,10 @@
                                     border: none;
                                 "
                             >
-                                A Plus General Insurance<br />
-                                Plot No. 402, Roma Park, Zambezi Road<br />
-                                P.O. Box 31700, Lusaka Zambia<br />
-                                Tel: +260 211 239865/6 - Tele/Fax:+260 211
-                                239867<br />
-                                E-mail: info@aplusgeneral.com<br />
+                                Savenda General Insurance LTD<br />
+                                Plot 20849 PSC Corporate Park, <br />
+                                P.O Box 30363, Lusaka Zambia<br />
+                                Tel: :+260 977 893 878, +260 960 344 478<br />
                             </td>
                         </tr>
                     </table>
@@ -92,7 +91,7 @@
                     {{
                         policy.sourceOfBusiness
                             ? policy.sourceOfBusiness == 'direct'
-                                ? 'info@aplusgeneral.com'
+                                ? ''
                                 : policy.user
                             : '-'
                     }}<span style="font-weight: bold;"></span
@@ -126,10 +125,10 @@
                 </li>
             </ol>
             <span style="float: right; text-align: left;">
-                Premium: {{ policy.currency
-                }}{{ basicPremium | number: '1.2-2' }}<br />
-                3% Levy: {{ policy.currency
-                }}{{ premiumLevy | number: '1.2-2' }}<br />
+                Premium: {{ policy.currency }}{{ basicPremium | number: '1.2-2'
+                }}<br />
+                3% Levy: {{ policy.currency }}{{ premiumLevy | number: '1.2-2'
+                }}<br />
                 Total Premium: {{ policy.currency
                 }}{{ totalAmount | number: '1.2-2' }}<br />
             </span>
@@ -207,65 +206,72 @@
                     else standardLimit
                 "
             > -->
-                <li>
-                    <p style="font-weight: bold;">Limits of Liability</p>
-                    <p>Limits of the amount of the company's liability under</p>
-                    <p>
-                        <span *ngIf="limits.liabilityType === 'combinedLimits'; else standardLimit" style="font-weight: bold;">Combined Limits {{policy.currency}}{{comb.amount}}</span>
-                        
-                        <!-- <span style="font-weight: bold;"
+            <li>
+                <p style="font-weight: bold;">Limits of Liability</p>
+                <p>Limits of the amount of the company's liability under</p>
+                <p>
+                    <span
+                        *ngIf="
+                            limits.liabilityType === 'combinedLimits';
+                            else standardLimit
+                        "
+                        style="font-weight: bold;"
+                        >Combined Limits {{ policy.currency
+                        }}{{ comb.amount }}</span
+                    >
+
+                    <!-- <span style="font-weight: bold;"
                             >K{{ combinedLimits }}</span
                         > -->
 
-
-                        <ng-template #standardLimit>
-                <!-- <p style="font-weight: bold;">Limits of Liability</p>
+                    <ng-template #standardLimit>
+                        <!-- <p style="font-weight: bold;">Limits of Liability</p>
                 <p>Limit of the amount of the Company’s liability under</p> -->
 
-                <p>
-                    <span style="font-weight: bold;">Section I</span> - 3
-                    (Protection and Removal) –
-                    <span style="font-weight: bold;"
-                        >{{policy.currency}}{{ 0 | number: '1.2-2' }}</span
-                    >
-                </p>
+                        <p>
+                            <span style="font-weight: bold;">Section I</span> -
+                            3 (Protection and Removal) –
+                            <span style="font-weight: bold;"
+                                >{{ policy.currency
+                                }}{{ 0 | number: '1.2-2' }}</span
+                            >
+                        </p>
 
-                <p>
-                    <span style="font-weight: bold;">Section II</span> -1 (a)
-                    and 2 (a) (Liability to Third Parties – death bodily injury)
-                    in respect of any one claim or series Of claims arising out
-                    of one event:
-                    <span style="font-weight: bold;"
-                        >{{policy.currency}}{{ deathPE.amount | number: '1.2-2' }} per
-                        event / {{policy.currency}}{{
-                            deathPP.amount | number: '1.2-2'
-                        }}
-                        per person</span
-                    >
-                    >
+                        <p>
+                            <span style="font-weight: bold;">Section II</span>
+                            -1 (a) and 2 (a) (Liability to Third Parties – death
+                            bodily injury) in respect of any one claim or series
+                            Of claims arising out of one event:
+                            <span style="font-weight: bold;"
+                                >{{ policy.currency
+                                }}{{ deathPE.amount | number: '1.2-2' }} per
+                                event / {{ policy.currency
+                                }}{{ deathPP.amount | number: '1.2-2' }} per
+                                person</span
+                            >
+                            >
+                        </p>
+                        <p>
+                            <span style="font-weight: bold;">Section II</span> -
+                            1 (b) and 2 (b) (Liability to third Parties –
+                            Property Damage) in respect of any claim or series
+                            Of claims arising out of one event:
+                            <span style="font-weight: bold;"
+                                >{{ policy.currency
+                                }}{{ propertyD.amount | number: '1.2-2' }}</span
+                            >
+                            <span
+                                >- arising from loss of use of a motor vehicle
+                                which is limited to in respect of any one claim
+                                or series of claims arising out of one Event –
+                                <span style="font-weight: bold;">NIL</span> per
+                                event</span
+                            >
+                        </p>
+                    </ng-template>
                 </p>
-                <p>
-                    <span style="font-weight: bold;">Section II</span> - 1 (b)
-                    and 2 (b) (Liability to third Parties – Property Damage) in
-                    respect of any claim or series Of claims arising out of one
-                    event:
-                    <span style="font-weight: bold;"
-                        >{{policy.currency}}{{ propertyD.amount | number: '1.2-2' }}</span
-                    >
-                    <span
-                        >- arising from loss of use of a motor vehicle which is
-                        limited to in respect of any one claim or series of
-                        claims arising out of one Event –
-                        <span style="font-weight: bold;">NIL</span> per
-                        event</span
-                    >
-                </p>
-            </ng-template>
-                    </p>
-                </li>
+            </li>
             <!-- </ng-container> -->
-
-            
 
             <!-- <p>Section I-10 (Medical Expenses) in respect of any one accident/any one person <span
                         style="font-weight: bold;">K{{0 | number: '1.2-2'}} /
@@ -321,10 +327,11 @@
             <span style="font-weight: bold;"><strong>Excess</strong></span>
         </p>
         <ul style="list-style-type: none;">
-
             <li *ngFor="let ex of excessList">
-                {{ex.excessType}}
-                <span style="font-weight: bold;">{{policy.currency}}{{ex.amount}}</span>
+                {{ ex.excessType }}
+                <span style="font-weight: bold;"
+                    >{{ policy.currency }}{{ ex.amount }}</span
+                >
             </li>
             <!-- <li>
                 The insured shall be responsible for the first 10% of each and

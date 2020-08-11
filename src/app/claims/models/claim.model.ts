@@ -1,18 +1,22 @@
+import { RiskModel } from 'src/app/quotes/models/quote.model';
+import { IPeril } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
+
 export class Claim {
     id: string;
-    claimId: string;
+    claimantId: string;
+    clientId: string;
+    claimantType: string;
+    lossLocation: string;
+    lossEstimate: string;
+    lossDate: Date;
+    notificationDate: Date;
+    tpFault: string;
+    tpInsured: string;
     policyNumber: string;
-    clientName: string;
-    lossDate: Date | ITimestamp;
-    status: ClaimStatus;
-    notificationDate: Date | ITimestamp;
-    bookedBy: string;
-    serviceProvider: string;
-    serviceType: string;
     claimDescription: string;
-    risk: string;
-    activity: string;
-    document?: IDocument;
+    riskId: string;
+    perils: string[];
+    causation: string;
 }
 
 export interface IDocument {
@@ -21,6 +25,7 @@ export interface IDocument {
 }
 
 export type ClaimStatus = 'Pending' | 'Resolved' | 'Cancelled';
+
 export interface ITimestamp {
     seconds: number;
     milliseconds: number;

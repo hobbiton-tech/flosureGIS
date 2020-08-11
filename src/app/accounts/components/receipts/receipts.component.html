@@ -380,6 +380,9 @@
     <div *ngIf="selectedType === 'Sales Representatives'">
         <app-sales-representative-client></app-sales-representative-client>
     </div>
+    <div>
+      <app-plan-receipt *ngIf="selectedType === 'Plan Receipt'"></app-plan-receipt>
+    </div>
 
     <!-- <nz-card [nzBordered]="false">
         <nz-tabset>

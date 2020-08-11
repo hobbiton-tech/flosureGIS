@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { UsersRolesComponent } from './components/users-roles/users-roles.component';
 import { UsersPermissionsComponent } from './components/users-permissions/users-permissions.component';
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { RolesPermissionsComponent } from 'src/app/users/components/roles-permissions.component';
 
 const routes: Routes = [
@@ -15,18 +16,19 @@ const routes: Routes = [
   },
   {
     path: 'roles-permissions',
-    component: RolesPermissionsComponent
+    component: UsersPermissionsComponent
   },
   {
     path: 'users',
     component: UsersComponent
-  }
+  },
+  { path: "forgot-password", component: ForgotPasswordComponent },
 ];
 
 
 
 @NgModule({
-  declarations: [UsersComponent, UsersRolesComponent, UsersPermissionsComponent, RolesPermissionsComponent],
+  declarations: [UsersComponent, UsersRolesComponent, UsersPermissionsComponent, ForgotPasswordComponent, RolesPermissionsComponent],
   imports: [
     CommonModule,
     NgZorroAntdModule,

@@ -1,159 +1,174 @@
 <div style="margin: 15px;">
-  <nz-breadcrumb>
-    <nz-breadcrumb-item>
-        Claims
-    </nz-breadcrumb-item>
-    <nz-breadcrumb-item>
-      Claim Details
-    </nz-breadcrumb-item>
-  </nz-breadcrumb>
-<nz-page-header (nzBack)="intimateClaim()" nzBackIcon nzTitle="Claim Number: {{claimData.claimId}}">
-        <nz-page-header-extra>
-            <button *ngIf="isEditmode" nz-button nzType="primary" (click)="isEditmode = false">Save Changes</button>
-        </nz-page-header-extra>
+    <nz-breadcrumb>
+        <nz-breadcrumb-item>
+            Claims
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            Claim Details
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+    <nz-page-header (nzBack)="intimateClaim()" nzBackIcon nzTitle="Claim Number: ">
     </nz-page-header>
     <!-- <nz-card style="padding: 20px"> -->
-        <form nz-form style="margin-top: 20px;" [formGroup]="claimDetailsForm" (ngSubmit)="onSubmit()">
-            <nz-card style="margin-bottom: 5px;">
-          <nz-divider nzText="Claim Details" nzOrientation="left"></nz-divider>
-                <div nz-row nzGutter="0">
-                    <div nz-col nzSpan="12">
-                        <nz-form-item>
-                            <nz-form-label nzSpan="8" nzRequired>Service Provider</nz-form-label>
-                            <nz-form-control nzSpan="15">
-                            <nz-select formControlName="serviceProvider">
-                                    <nz-option nzValue="service provider 1" nzLabel="service provider 1"></nz-option>
-                                    <nz-option nzValue="service provider 2" nzLabel="service provider 2"></nz-option>
-                                </nz-select>
-                            </nz-form-control>
-                        </nz-form-item>
-                        <nz-form-item>
-                            <nz-form-label nzSpan="8" nzRequired>Service Provider Type</nz-form-label>
-                            <nz-form-control nzSpan="15">
-                                <nz-select nzPlaceHolder="Select service provider type" formControlName="serviceProviderType">
-                                    <nz-option nzValue="service provider type 1" nzLabel="service provider type 1"></nz-option>
-                                    <nz-option nzValue="service provider type 2" nzLabel="service provider type 2"></nz-option>
-                                </nz-select>
-                            </nz-form-control>
-                        </nz-form-item>
-                        <!-- <nz-form-item> -->
-                        <!--     <nz-form-label nzRequired nzSpan="7">Notification Date</nz-form-label> -->
-                        <!--     <nz-form-control nzSpan="16"> -->
-                        <!--         <nz-date-picker formControlName="rangePicker"></nz-date-picker> -->
-                        <!--     </nz-form-control> -->
-                        <!-- </nz-form-item> -->
-                        <nz-form-item>
-                            <nz-form-label nzRequired nzSpan="8">Claim Description</nz-form-label>
-                            <nz-form-control nzSpan="15">
-                                <textarea nz-input placeholder="Input claim description" formControlName="claimDescription"></textarea>
-                            </nz-form-control>
-                        </nz-form-item>
-
+    <nz-card style="margin-bottom: 5px;">
+        <nz-divider nzText="Claim Details" nzOrientation="left"></nz-divider>
+        <div nz-row>
+            <div nz-col [nzSpan]="6">
+                <div nz-row>
+                    <div nz-col [nzSpan]="8">
+                        Client
                     </div>
-                    <div nz-col nzSpan="12">
-                        <nz-form-item>
-                            <nz-form-label nzSpan="7" nzRequired>Select Risk</nz-form-label>
-                            <nz-form-control nzSpan="16">
-                                <nz-select nzPlaceHolder="Select risk" formControlName="risk">
-                                    <nz-option nzValue="risk 1" nzLabel="risk 1"></nz-option>
-                                    <nz-option nzValue="risk 2" nzLabel="risk 2"></nz-option>
-                                </nz-select>
-                            </nz-form-control>
-                        </nz-form-item>
-                        <nz-form-item>
-                            <nz-form-label nzSpan="7" nzRequired>Select Activity</nz-form-label>
-                            <nz-form-control nzSpan="16">
-                                <nz-select nzPlaceHolder="Select activity" formControlName="activity">
-                                    <nz-option nzValue="activity 1" nzLabel="activity 1"></nz-option>
-                                    <nz-option nzValue="activity 2" nzLabel="activity 2"></nz-option>
-                                </nz-select>
-                            </nz-form-control>
-                        </nz-form-item>
-                        <nz-form-item>
-                            <nz-form-label nzRequired nzSpan="7">Loss Date</nz-form-label>
-                            <nz-form-control nzSpan="16">
-                                <nz-date-picker formControlName="lossDate"></nz-date-picker>
-                            </nz-form-control>
-                        </nz-form-item>
-                        <nz-form-item>
-                            <nz-form-label nzRequired nzSpan="7">Notification Date</nz-form-label>
-                            <nz-form-control nzSpan="16">
-                                <nz-date-picker formControlName="notificationDate"></nz-date-picker>
-                            </nz-form-control>
-                        </nz-form-item>
-                        <!-- <nz-form-item>
-              <nz-form-label nzSpan="7" nzRequired>Claim Description</nz-form-label>
-              <nz-form-control nzSpan="16">
-                  <textarea nz-input placeholder="Write the claim descrition"></textarea>
-              </nz-form-control>
-            </nz-form-item> -->
-                    </div>
-                    <div nz-col nzSpan="12">
+                    <div nz-col [nzSpan]="15">
+                        {{getClient(claimData.clientId).clientType === 'Individual'
+                        ? capitalize(getClient(claimData.clientId).firstName + ' ' + getClient(claimData.clientId).lastName)
+                        : capitalize(getClient(claimData.clientId).companyName)}}
                     </div>
                 </div>
-            </nz-card>
-            <nz-card style="margin-bottom: 5px;">
-          <nz-divider nzText="Perils" nzOrientation="left"></nz-divider>
-                    <div style="margin-bottom: 10px;">
-                        <div nz-row [nzGutter]="24">
-                            <div nz-col nzSpan="12">
-                                <div style="width: 75%">
-                                    <ng-template #suffixIconSearch>
-                                        <i nz-icon nzType="search"></i>
-                                    </ng-template>
-                                </div>
-                            </div>
-                            <div nz-col nzSpan=12>
-                                <button nz-button nzType="primary" style="float: right" (click)="openAddPerilFormDrawer()">Add Peril</button>
-                            </div>
-
-                        </div>
+            </div>
+            <div nz-col [nzSpan]="6">
+                <div nz-row>
+                    <div nz-col class="item-label" [nzSpan]="8">
+                        Policy No.:
                     </div>
-                <nz-table #perilsTable [nzData]="perilsList" nzSize="small">
-                    <thead>
-                        <tr>
-                            <th>Claimant</th>
-                            <th>Claim Id</th>
-                            <th>Peril</th>
-                            <th>Estimate Amount</th>
-                            <th>Expired Section</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let peril of perilsTable.data">
-                            <td>{{peril.claimant}}</td>
-                            <td>{{peril.claimId}}</td>
-                            <td>{{peril.peril}}</td>
-                            <td>{{peril.estimatedAmount}}</td>
-                            <td>{{peril.expiredSection}}</td>
-                        </tr>
-                    </tbody>
-                </nz-table>
-            </nz-card>
-            <nz-card style="margin-bottom: 5px;">
-          <nz-divider nzText="Document Uploads" nzOrientation="left"></nz-divider>
+                    <div nz-col [nzSpan]="15">
+                        {{claimData.policyNumber}}
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6">
+                <div nz-row>
+                    <div nz-col class="item-label" [nzSpan]="8">
+                        Risk:
+                    </div>
+                    <div nz-col [nzSpan]="15">
+                        {{getRisk(claimData.policyNumber, claimData.riskId).regNumber}}
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6">
+                <div nz-row>
+                    <div nz-col class="item-label" [nzSpan]="8">
+                        Loss Estimate:
+                    </div>
+                    <div nz-col [nzSpan]="15">
+                        {{claimData.lossEstimate}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div nz-row>
+            <div nz-col [nzSpan]="6">
+                <div nz-row>
+                    <div nz-col [nzSpan]="8">
+                        Loss Location
+                    </div>
+                    <div nz-col [nzSpan]="15">
+                        {{claimData.lossLocation}}
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6">
+                <div nz-row>
+                    <div nz-col class="item-label" [nzSpan]="8">
+                        Causation:
+                    </div>
+                    <div nz-col [nzSpan]="15">
+                        {{claimData.causation}}
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6">
+                <div nz-row>
+                    <div nz-col class="item-label" [nzSpan]="8">
+                        Third Party:
+                    </div>
+                    <div nz-col [nzSpan]="15">
+                        {{claimData.claimantType}}
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6">
+                <div nz-row>
+                    <div nz-col class="item-label" [nzSpan]="8">
+                        Description:
+                    </div>
+                    <div nz-col [nzSpan]="15">
+                        {{claimData.claimDescription}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nz-card>
 
-          <nz-table #claimDocumentsTable [nzData]="claimsList">
+    <!-- Claim Transactions -->
+
+    <nz-card style="margin-bottom: 5px;">
+        <nz-divider nzText="Claim Transactions" nzOrientation="left"></nz-divider>
+        <div style="margin-bottom: 10px;">
+            <div nz-row [nzGutter]="24">
+                <div nz-col nzSpan="12">
+                    <div style="width: 75%">
+                        <ng-template #suffixIconSearch>
+                            <i nz-icon nzType="search"></i>
+                        </ng-template>
+                    </div>
+                </div>
+                <div nz-col nzSpan=12>
+                    <!-- <button nz-button nzType="primary" style="float: right" (click)="openAddPerilFormDrawer()">Add
+                            Peril</button> -->
+                </div>
+
+            </div>
+        </div>
+        <nz-table #transactionsTable [nzData]="transactionsList" nzSize="small">
             <thead>
-              <tr>
-                <th>Name</th>
-                <th>Action</th>
-              </tr>
+                <tr>
+                    <th>Trans Type</th>
+                    <th>Trans Date</th>
+                    <th>Gross Liability</th>
+                    <th>Net Liability</th>
+                    <th>Payee</th>
+                    <th>Paid Amount</th>
+                    <th>Authorised By</th>
+                    <th>Authorised Date</th>
+                </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let file of claimDocumentsTable.data">
-                <td>{{ file.document.name }}</td>
-                <td>
-                  <a href = {{file.document.url}}>View</a>
-                </td>
-              </tr>
+                <tr *ngFor="let peril of transactionsTable.data">
+                    <!-- <td>{{peril.claimant}}</td>
+                        <td>{{peril.claimId}}</td>
+                        <td>{{peril.peril}}</td>
+                        <td>{{peril.estimatedAmount}}</td>
+                        <td>{{peril.expiredSection}}</td> -->
+                </tr>
             </tbody>
-          </nz-table>
+        </nz-table>
+    </nz-card>
+    <!-- <nz-card style="margin-bottom: 5px;">
+            <nz-divider nzText="Document Uploads" nzOrientation="left"></nz-divider>
 
-          <nz-form-item>
-            <input type="file" (change)="showPreview($event)" formControlName="document" multiple>
-        </nz-form-item>
-                <!-- <nz-upload nzType="drag" [nzMultiple]="true" [nzLimit]="2" nzAction="https://jsonplaceholder.typicode.com/posts/">
+            <nz-table #claimDocumentsTable [nzData]="claimsList">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let file of claimDocumentsTable.data">
+                        <td>{{ file.document.name }}</td>
+                        <td>
+                            <a href={{file.document.url}}>View</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+
+            <nz-form-item>
+                <input type="file" (change)="showPreview($event)" formControlName="document" multiple>
+            </nz-form-item> -->
+    <!-- <nz-upload nzType="drag" [nzMultiple]="true" [nzLimit]="2" nzAction="https://jsonplaceholder.typicode.com/posts/">
                     <p class="ant-upload-drag-icon">
                         <i nz-icon nzType="inbox"></i>
                     </p>
@@ -163,16 +178,9 @@
                     </p>
                 </nz-upload> -->
 
-            </nz-card>
-        <nz-form-item>
-        <div style="text-align: center; margin-top: 10px">
-
-            <button nz-button nzType="primary" style="margin-right: 8px">Update Claim</button>
-            <button nz-button nzType="default">Reset Form</button>
-        </div>
-    </nz-form-item>
-    </form>
+    <!-- </nz-card> -->
     <!-- </nz-card> -->
 </div>
 
-<app-add-perils [isAddPerilDrawerVisible]="addPerilFormDrawerVisible" (closeAddPerilDrawer)="addPerilFormDrawerVisible = false"></app-add-perils>
+<!-- <app-add-perils [isAddPerilDrawerVisible]="addPerilFormDrawerVisible"
+    (closeAddPerilDrawer)="addPerilFormDrawerVisible = false"></app-add-perils> -->

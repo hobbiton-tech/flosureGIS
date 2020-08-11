@@ -107,7 +107,7 @@ export class ReceiptsComponent implements OnInit {
     //     { label: 'Bank Transfer', value: 'bank transfer' },
     // ];
 
-    typeOfClient = ['Direct', 'Agent', 'Broker', 'Sales Representatives'];
+    typeOfClient = ['Direct', 'Agent', 'Broker', 'Sales Representatives', 'Plan Receipt'];
 
     selectedType = 'Direct';
     selectedAgent = '';
@@ -173,7 +173,7 @@ export class ReceiptsComponent implements OnInit {
         this.receiptService.getReciepts().subscribe((receipts) => {
             this.receiptedList = _.filter(
                 receipts,
-                (x) => x.receiptStatus === 'Receipted'
+                (x) => x.receipt_status === 'Receipted'
             );
 
             console.log('======= Receipt List =======');
@@ -181,7 +181,7 @@ export class ReceiptsComponent implements OnInit {
 
             this.cancelReceiptList = _.filter(
                 receipts,
-                (x) => x.receiptStatus === 'Cancelled'
+                (x) => x.receipt_status === 'Cancelled'
             );
 
             console.log('======= Cancelled Receipt List =======');
@@ -216,30 +216,33 @@ export class ReceiptsComponent implements OnInit {
             this.isOkBrokerReceiptingLoading = true;
             this._id = v4();
             const receipt: IReceiptModel = {
-                id: this._id,
                 ...this.receiptForm.value,
-                onBehalfOf: this.clientName,
-                capturedBy: 'this.user',
-                receiptStatus: this.recStatus,
-                todayDate: new Date(),
-                sourceOfBusiness: 'broker',
-                intermediaryName: this.receiptForm.controls.onBehalfOf.value,
+                on_behalf_of: this.clientName,
+                captured_by: 'this.user',
+                receipt_status: this.recStatus,
+                today_date: new Date(),
+                source_of_business: 'broker',
+                intermediary_name: this.receiptForm.controls.onBehalfOf.value,
             };
 
             this.receiptNum = this._id;
             await this.receiptService
-                .addReceipt(
-                    receipt,
-                    this.policy.risks[0].insuranceType
-                )
-                .then((mess) => {
+                .addReceipt(receipt, this.policy.risks[0].insuranceType ).subscribe((mess) => {
                     this.message.success('Receipt Successfully created');
                     console.log(mess);
-                })
-                .catch((err) => {
+                },
+                (err) => {
                     this.message.warning('Receipt Failed');
                     console.log(err);
                 });
+                // .then((mess) => {
+                //     this.message.success('Receipt Successfully created');
+                //     console.log(mess);
+                // })
+                // .catch((err) => {
+                //     this.message.warning('Receipt Failed');
+                //     console.log(err);
+                // });
             this.receiptForm.reset();
             this.policy.receiptStatus = 'Receipted';
             this.policy.paymentPlan = 'Created';

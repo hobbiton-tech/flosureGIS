@@ -5,7 +5,7 @@ import {
 } from '@angular/fire/firestore';
 import 'firebase/firestore';
 import { filter, first } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 // import { MotorQuotationModel } from 'src/app/quotes/models/quote.model';
 import { IReceiptModel } from '../components/models/receipts.model';
 import { v4 } from 'uuid';
@@ -16,6 +16,8 @@ import { NzMessageService } from 'ng-zorro-antd';
 import { PoliciesComponent } from 'src/app/underwriting/components/policies/policies.component';
 import { Policy } from 'src/app/underwriting/models/policy.model';
 import { InsuranceType } from '../../quotes/models/quote.model';
+import { PoliciesService } from 'src/app/underwriting/services/policies.service';
+import { Router } from '@angular/router';
 
 interface IReceiptNumberResult {
     receiptNumber: string;
@@ -35,11 +37,12 @@ export class AccountService {
     receipt: Observable<IReceiptModel>;
     receipted: IReceiptModel;
     url: string;
+    receiptN: any;
 
     constructor(
         private firebase: AngularFirestore,
         private http: HttpClient,
-        private message: NzMessageService
+        private message: NzMessageService, private policeServices: PoliciesService, private router: Router
     ) {
         this.policyCollection = firebase.collection<Policy>('policies');
 
@@ -47,47 +50,59 @@ export class AccountService {
 
         this.receiptCollection = firebase.collection<IReceiptModel>('receipts');
 
-        this.receipts = this.receiptCollection.valueChanges();
+        // this.receipts = this.receiptCollection.valueChanges();
     }
 
+
+
+
     // add receipt
-    async addReceipt(
+     addReceipt(
         receipt: IReceiptModel,
-        insuranceType: InsuranceType,
-    ): Promise<void> {
-        this.receipts.pipe(first()).subscribe(async (receipts) => {
+        insuranceType: InsuranceType
+    ): Observable<any> {
+        // this.receipts.pipe(first()).subscribe((receipts) => {
             // receipt.id = v4();
 
-            let insuranceTyp = '';
+            let insuranceTyp= '';
             const productType = insuranceType;
             if (productType == 'Comprehensive') {
-                insuranceTyp = 'MCP';
+                insuranceTyp = '07001';
             } else {
-                insuranceTyp = 'THP';
+                insuranceTyp = '07002';
             }
 
             this.http
                 .get<any>(
-                    `https://flosure-number-generation.herokuapp.com/aplus-receipt-number/1`
+                    `https://number-generation.flosure-api.com/savenda-receipt-number/1`
                 )
                 .subscribe(async (res) => {
-                    receipt.receiptNumber = res.data.receipt_number;
+                    receipt.receipt_number = res.data.receipt_number;
                     console.log(res.data.receipt_number);
 
-                    await this.receiptCollection
-                        .doc(receipt.id)
-                        .set(receipt)
-                        // .then((mess) => {
-                        //     this.message.success(
-                        //         'Receipt Successfully created'
-                        //     );
-                        // })
-                        // .catch((err) => {
-                        //     this.message.warning('Receipt Failed');
-                        //     console.log(err);
-                        // });
+                    this.receiptN = receipt
+
+                   this.http.post('https://payment-api.savenda-flosure.com/receipt', receipt).subscribe((res: any) => {
+                        console.log("RECEIPT RESULTS", res.data);
+                        // if(res.status === 'true') {
+                            this.message.success(
+                                'Receipt Successfully created'
+                            );
+                            this.generateID(res.data.ID);
+                        // }
+
+
+
+                    },
+                    (err) => {
+                        console.log("RECEIPT ERR>>>", err);
+
+                        this.message.warning('Receipt Failed');
+                    });
                 });
-        });
+
+        // });
+        return of(this.receiptN);
     }
 
     async updatePolicy(policy: Policy): Promise<void> {
@@ -102,68 +117,29 @@ export class AccountService {
             });
     }
 
-    async updateReceipt(receipt: IReceiptModel): Promise<void> {
-        return this.receiptCollection
-            .doc(`${receipt.id}`)
-            .update(receipt)
-            .then((res) => {
-                this.message.warning('Receipt Status Updateted');
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+    updateReceipt(receipt: IReceiptModel):Observable<any> {
+
+       return this.http.put(`https://payment-api.savenda-flosure.com/receipt/${receipt.ID}`, receipt);
     }
 
-    getReciepts(): Observable<IReceiptModel[]> {
-        return this.receipts;
+    getReciepts(): Observable<any> {
+        return this.http.get<any>('https://payment-api.savenda-flosure.com/receipt');
+    }
+
+    getReciept(id): Observable<any> {
+        return this.http.get<any>(`https://payment-api.savenda-flosure.com/receipt/${id}`);
     }
 
     getPolicies(): Observable<Policy[]> {
         return this.policies;
     }
 
-    countGenerator(numb: string | number) {
-        if (numb <= 99999) {
-            numb = ('0000' + numb).slice(-5);
-        }
-        return numb;
+
+    generateID(id) {
+        this.router.navigateByUrl('/flosure/accounts/view-receipt/' + id);
+        // this.isConfirmLoading = true;
+        // this.generateDocuments();
     }
 
-    // Genereating quote number
-    generateReceiptNumber(brokerCode: string, totalReceipts: number) {
-        const brokerCod = brokerCode;
-        const today = new Date();
-        const dateString: string =
-            today.getFullYear().toString().substr(-2) +
-            ('0' + (today.getMonth() + 1)).slice(-2) +
-            +('0' + today.getDate()).slice(-2);
-        const count = this.countGenerator(totalReceipts);
-        return 'RCPT' + brokerCode + dateString + count;
-    }
 
-    generateReceipt(dto: IReceiptDTO): Observable<IAmazonS3Result> {
-        return this.http.post<IAmazonS3Result>(
-            'https://flosure-pdf-service.herokuapp.com/reciept',
-            dto
-        );
-    }
-
-    getPDF(uri: string): Observable<Blob> {
-        return this.http.get(uri, { responseType: 'blob' });
-    }
-
-    printPDF(uri: string) {
-        this.http
-            .get(uri, { responseType: 'blob' as 'json' })
-            .subscribe((res) => {
-                const myBlobPart: BlobPart = res as BlobPart;
-                const file = new Blob([myBlobPart], {
-                    type: 'your media type',
-                });
-                const fileURL = URL.createObjectURL(file);
-                console.log(fileURL);
-                window.open(fileURL);
-                this.url = fileURL;
-            });
-    }
 }
