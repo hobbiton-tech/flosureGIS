@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 @Component({
     selector: 'app-quotes',
     templateUrl: './quotes.component.html',
-    styleUrls: ['./quotes.component.scss'],
+    styleUrls: ['./quotes.component.scss']
 })
 export class QuotesComponent implements OnInit {
     quotesList: MotorQuotationModel[];
@@ -22,8 +22,8 @@ export class QuotesComponent implements OnInit {
         this.isOkLoading = true;
         setTimeout(() => {
             this.isOkLoading = false;
-        }, 4000);
-        this.quoteServise.getMotorQuotations().subscribe((quotes) => {
+        }, 3000);
+        this.quoteServise.getMotorQuotations().subscribe(quotes => {
             this.quotesList = quotes;
             this.quotesCount = quotes.length;
             console.log('======= Quote List =======');
@@ -45,7 +45,7 @@ export class QuotesComponent implements OnInit {
             this.displayQuotesList = this.quotesList;
         }
 
-        this.displayQuotesList = this.quotesList.filter((quote) => {
+        this.displayQuotesList = this.quotesList.filter(quote => {
             return (
                 quote.quoteNumber.toLowerCase().includes(value.toLowerCase()) ||
                 quote.clientCode.toLowerCase().includes(value.toLowerCase()) ||

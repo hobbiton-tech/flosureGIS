@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Policy } from '../models/policy.model';
 import {
     AngularFirestore,
-    AngularFirestoreCollection,
+    AngularFirestoreCollection
 } from '@angular/fire/firestore';
 import 'firebase/firestore';
 import { filter, first } from 'rxjs/operators';
@@ -15,12 +15,12 @@ import { HttpClient } from '@angular/common/http';
 import {
     DebitNote,
     CreditNote,
-    CoverNote,
+    CoverNote
 } from '../documents/models/documents.model';
+import { IRequisitionModel } from 'src/app/accounts/components/models/requisition.model';
+import { AccountService } from 'src/app/accounts/services/account.service';
 
-const BASE_URL = 'https://www.flosure-api.com';
-
-// const BASE_URL = 'https://www.flosure-api.com';
+const BASE_URL = 'https://flosure-postgres-db.herokuapp.com';
 
 interface IDebitNoteResult {
     invoiceNumber: string;
@@ -35,7 +35,7 @@ interface ICoverNoteResult {
 }
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
 export class PoliciesService {
     private policiesCollection: AngularFirestoreCollection<Policy>;
@@ -46,7 +46,8 @@ export class PoliciesService {
     constructor(
         private firebase: AngularFirestore,
         private msg: NzMessageService,
-        private http: HttpClient
+        private http: HttpClient,
+        private accountsService: AccountService
     ) {
         this.policiesCollection = firebase.collection<Policy>('policies');
         this.policies = this.policiesCollection.valueChanges();
@@ -64,63 +65,47 @@ export class PoliciesService {
             insuranceType = 'THP';
         }
 
-        return this.http.post<Policy>(
-            'https://www.flosure-api.com/policy',
-            policy
-        );
+        return this.http.post<Policy>(`${BASE_URL}/policy`, policy);
     }
 
     // getPolicies(): Observable<Policy[]> {
-    //     return this.http.get<Policy[]>('https://www.flosure-api.com/policy');
+    //     return this.http.get<Policy[]>(`${BASE_URL}/policy`);
     // }
 
     // getPolicyById(policyId: string): Observable<Policy> {
     //     return this.http.get<Policy>(
-    //         `https://www.flosure-api.com/policy/${policyId}`
+    //         `${BASE_URL}/policy/${policyId}`
     //     );
     //     return this.policiesCollection.doc<Policy>(policyId).valueChanges();
     // }
 
     updatePolicy(policy: Policy): Observable<Policy> {
         console.log('POLICY NUMBER>>>>', policy);
-        return this.http.put<Policy>(
-            `https://www.flosure-api.com/policy/${policy.id}`,
-            policy
-        );
+        return this.http.put<Policy>(`${BASE_URL}/policy/${policy.id}`, policy);
     }
 
     // backup policies
     createBackupPolicy(policy: Policy): Observable<Policy> {
-        return this.http.post<Policy>(
-            'https://www.flosure-api.com/policy',
-            policy
-        );
+        return this.http.post<Policy>(`${BASE_URL}/policy`, policy);
     }
 
     getBackupPolicies(): Observable<Policy[]> {
-        return this.http.get<Policy[]>('https://www.flosure-api.com/policy');
+        return this.http.get<Policy[]>(`${BASE_URL}/policy`);
     }
 
     getBackupPolicyById(policyId: string): Observable<Policy> {
-        return this.http.get<Policy>(
-            `https://www.flosure-api.com/policy/${policyId}`
-        );
+        return this.http.get<Policy>(`${BASE_URL}/policy/${policyId}`);
         // return this.policiesCollection.doc<Policy>(policyId).valueChanges();
     }
 
     updateBackupPolicy(policy: Policy, policyId: string): Observable<Policy> {
-        console.log('policy details:');
-        console.log(policy);
-        return this.http.put<Policy>(
-            `https://www.flosure-api.com/policy/${policyId}`,
-            policy
-        );
+        return this.http.put<Policy>(`${BASE_URL}/policy/${policyId}`, policy);
     }
 
     ////////////////////////////////////////////
 
     async addPolicy(policy: Policy) {
-        this.policies.pipe(first()).subscribe(async (policies) => {
+        this.policies.pipe(first()).subscribe(async policies => {
             const today = new Date();
             policy.term = 1;
             policy.nameOfInsured = policy.client;
@@ -151,7 +136,7 @@ export class PoliciesService {
     }
 
     renewPolicy(policy: Policy) {
-        this.policies.pipe(first()).subscribe(async (policies) => {
+        this.policies.pipe(first()).subscribe(async policies => {
             const today = new Date();
             policy.client = policy.nameOfInsured;
             policy.dateOfIssue =
@@ -170,15 +155,12 @@ export class PoliciesService {
             console.log('POLICY NUMBER>>>>', policy.id);
             console.log(policy);
             this.http
-                .put<Policy>(
-                    `https://www.flosure-api.com/policy/${policy.id}`,
-                    policy
-                )
+                .put<Policy>(`${BASE_URL}/policy/${policy.id}`, policy)
                 .subscribe(
-                    (data) => {
+                    data => {
                         this.msg.success('Policy Successfully Updated');
                     },
-                    (error) => {
+                    error => {
                         this.msg.error('Failed');
                     }
                 );
@@ -201,13 +183,13 @@ export class PoliciesService {
             .collection('policies')
             .ref.where('policyNumber', '==', policyNumber)
             .get()
-            .then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
+            .then(querySnapshot => {
+                querySnapshot.forEach(doc => {
                     console.log(doc.data());
                     this.policy = doc.data();
                 });
             })
-            .catch((error) => {
+            .catch(error => {
                 console.log('Error getting documents: ', error);
             });
 
@@ -219,19 +201,17 @@ export class PoliciesService {
     }
 
     getPolicyById(policyId: string): Observable<Policy> {
-        return this.http.get<Policy>(
-            `https://www.flosure-api.com/policy/${policyId}`
-        );
+        return this.http.get<Policy>(`${BASE_URL}/policy/${policyId}`);
 
         // return this.policiesCollection.doc<Policy>(policyId).valueChanges();
     }
 
     getClientsPolicies(clientId: string): Observable<Policy[]> {
-        return this.policies.pipe(filter((policy) => clientId === clientId));
+        return this.policies.pipe(filter(policy => clientId === clientId));
     }
 
     getPolicies(): Observable<Policy[]> {
-        return this.http.get<Policy[]>('https://www.flosure-api.com/policy');
+        return this.http.get<Policy[]>(`${BASE_URL}/policy`);
         // return this.policies;
     }
 
@@ -250,7 +230,10 @@ export class PoliciesService {
         const count = this.countGenerator(totalPolicies);
         const today = new Date();
         const dateString: string =
-            today.getFullYear().toString().substr(-2) +
+            today
+                .getFullYear()
+                .toString()
+                .substr(-2) +
             ('0' + (today.getMonth() + 1)).slice(-2) +
             +('0' + today.getDate()).slice(-2);
 
@@ -284,9 +267,9 @@ export class PoliciesService {
 
         this.http
             .get<any>(
-                `https://flosure-number-generation.herokuapp.com/aplus-invoice-number/1/0/${insuranceType}`
+                `https://number-generation.flosure-api.com/aplus-invoice-number/1/0/${insuranceType}`
             )
-            .subscribe(async (res) => {
+            .subscribe(async res => {
                 debitNote.debitNoteNumber = res.data.invoice_number;
 
                 this.http
@@ -296,10 +279,10 @@ export class PoliciesService {
                     )
                     .subscribe(
                         // tslint:disable-next-line: no-shadowed-variable
-                        async (res) => {
+                        async res => {
                             console.log(res);
                         },
-                        async (err) => {
+                        async err => {
                             console.log(err);
                         }
                     );
@@ -327,50 +310,32 @@ export class PoliciesService {
     }
 
     // credit note
-    createCreditNote(policyId: string, creditNote: CreditNote, policy: Policy) {
-        console.log('create debit note method called');
-        console.log(policyId);
-        console.log('-------------------');
-        console.log(creditNote);
-        console.log('-------------------');
-        console.log(policy);
-
-        let insuranceType = '';
-        const productType = policy.risks[0].insuranceType;
-        // tslint:disable-next-line: triple-equals
-        if (productType == 'Comprehensive') {
-            insuranceType = 'MCP';
-        } else {
-            insuranceType = 'THP';
-        }
+    createCreditNote(
+        policyId: string,
+        creditNote: CreditNote,
+        policy: Policy,
+        debitNoteNumber: string,
+        requisition: IRequisitionModel
+    ) {
+        creditNote.creditNoteNumber = debitNoteNumber.replace('DR', 'CR');
 
         this.http
-            .get<any>(
-                `https://flosure-number-generation.herokuapp.com/aplus-invoice-number/1/0/${insuranceType}`
+            .post<CreditNote>(
+                `${BASE_URL}/documents/credit-note/${policyId}`,
+                creditNote
             )
-            .subscribe(async (res) => {
-                // tslint:disable-next-line: prefer-const
-                let tempCreditNoteNumber = res.data.invoice_number;
-                creditNote.creditNoteNumber = tempCreditNoteNumber.replace(
-                    'DR',
-                    'CR'
-                );
-
-                this.http
-                    .post<CreditNote>(
-                        `${BASE_URL}/documents/credit-note/${policyId}`,
-                        creditNote
-                    )
-                    .subscribe(
-                        // tslint:disable-next-line: no-shadowed-variable
-                        async (res) => {
-                            console.log(res);
-                        },
-                        async (err) => {
-                            console.log(err);
-                        }
-                    );
-            });
+            .subscribe(
+                // tslint:disable-next-line: no-shadowed-variable
+                async res => {
+                    console.log('credit note', res);
+                    this.accountsService
+                        .createRequisition(requisition, res.id)
+                        .subscribe(res => console.log('requisition', res));
+                },
+                async err => {
+                    console.log(err);
+                }
+            );
     }
 
     getCreditNotes(): Observable<CreditNote[]> {

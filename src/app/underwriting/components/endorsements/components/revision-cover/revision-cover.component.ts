@@ -13,6 +13,8 @@ export class RevisionCoverComponent implements OnInit {
     displayPoliciesList: Policy[];
     policiesCount: number = 0;
 
+    revisionOfCoverListIsLoading = false;
+
     searchString: string;
 
     constructor(
@@ -21,6 +23,11 @@ export class RevisionCoverComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        this.revisionOfCoverListIsLoading = true;
+        setTimeout(() => {
+            this.revisionOfCoverListIsLoading = false;
+        }, 3000);
+
         this.policiesService.getPolicies().subscribe(policies => {
             this.policiesList = policies;
             this.displayPoliciesList = this.policiesList;

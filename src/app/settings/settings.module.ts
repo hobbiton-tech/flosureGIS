@@ -39,73 +39,80 @@ import { LossAdjustorDetailsComponent } from './components/claim-setups/componen
 import { ServiceProviderDetailsComponent } from './components/claim-setups/components/service-provider-details/service-provider-details.component';
 import { ClaimantDetailsComponent } from './components/claim-setups/components/claimant-details/claimant-details.component';
 import { SalvageBuyerDetailsComponent } from './components/claim-setups/components/salvage-buyer-details/salvage-buyer-details.component';
+import { FinanceComponent } from './components/finance/finance.component';
+import { AddBankAccountComponent } from './components/finance/components/add-bank-account/add-bank-account.component';
+import { AddChequeLotComponent } from './components/finance/components/add-cheque-lot/add-cheque-lot.component';
 
 const routes: Routes = [
     {
         path: 'insurance-companies',
-        component: InsuranceCompaniesComponent,
+        component: InsuranceCompaniesComponent
     },
     {
         path: 'rates',
-        component: RatesComponent,
+        component: RatesComponent
     },
     {
         path: 'add-insurance-company',
-        component: AddInsuranceCompanyComponent,
+        component: AddInsuranceCompanyComponent
     },
     {
         path: 'clauses',
-        component: UnderwritingSetupsComponent,
+        component: UnderwritingSetupsComponent
     },
     {
         path: 'accounts',
-        component: AccountsComponent,
+        component: AccountsComponent
+    },
+    {
+        path: 'finance',
+        component: FinanceComponent
     },
     {
         path: 'organization-setups',
-        component: OrganizationalSetupsComponent,
+        component: OrganizationalSetupsComponent
     },
     {
         path: 'agents-setups',
-        component: AgentsComponent,
+        component: AgentsComponent
     },
     {
         path: 'add-agents',
-        component: AddAgentComponent,
+        component: AddAgentComponent
     },
     {
         path: 'product-setups',
-        component: ProductSetupsComponent,
+        component: ProductSetupsComponent
     },
     {
         path: 'warranties',
-        component: WarrantiesComponent,
+        component: WarrantiesComponent
     },
     {
         path: 'extensions',
-        component: ExtensionsComponent,
+        component: ExtensionsComponent
     },
     {
         path: 'claims',
-        component: ClaimSetupsComponent,
+        component: ClaimSetupsComponent
     },
     {
         path: 'loss-adjustor-details/:id',
-        component: LossAdjustorDetailsComponent,
+        component: LossAdjustorDetailsComponent
     },
     {
         path: 'service-provider-details/:id',
-        component: ServiceProviderDetailsComponent,
+        component: ServiceProviderDetailsComponent
     },
     {
         path: 'claimant-details/:id',
-        component: ClaimantDetailsComponent,
+        component: ClaimantDetailsComponent
     },
 
     {
         path: 'salvage-buyer-details/:id',
-        component: SalvageBuyerDetailsComponent,
-    },
+        component: SalvageBuyerDetailsComponent
+    }
 ];
 
 @NgModule({
@@ -145,14 +152,17 @@ const routes: Routes = [
         ServiceProviderDetailsComponent,
         ClaimantDetailsComponent,
         SalvageBuyerDetailsComponent,
+        FinanceComponent,
+        AddBankAccountComponent,
+        AddChequeLotComponent
     ],
     imports: [
         CommonModule,
         NgZorroAntdModule,
         FormsModule,
         ReactiveFormsModule,
-        RouterModule.forChild(routes),
+        RouterModule.forChild(routes)
     ],
-    providers: [AgentsService, ClausesService],
+    providers: [AgentsService, ClausesService]
 })
 export class SettingsModule {}

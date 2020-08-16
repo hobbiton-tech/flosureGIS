@@ -1,0 +1,173 @@
+<div style="
+        display: flex;
+        margin-bottom: 15px;
+        align-items: flex-end;
+        width: 100%;
+    ">
+    <!-- <button nz-button nzType="primary" style="margin-right: 8px;" (click)="htmlToPdf()">
+        Download
+    </button> -->
+    <button nz-button nzType="primary" [useExistingCss]="true" [printSectionId]="'requisitionPaymentPrintSection'"
+        ngxPrint>
+        Print
+    </button>
+</div>
+
+<div id="requisitionPaymentPrintSection">
+    <div class="invoice-box">
+        <table>
+            <tr>
+                <!-- <p><strong style="color: black; font-size: 20px;">PAYMENT REQUISITION VOUCHER</strong></p> -->
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <td>
+                    <img src="/assets/images/apluslogo.png" />
+                    <span style="float: right;">
+                        <p style="font-size: 12px;">
+                            A Plus General Insurance<br />
+                            Plot No. 402, Roma Park, Zambezi Road<br />
+                            P.O. Box 31700, Lusaka Zambia<br />
+                            Tel: +260 211 239865/6 - Tele/Fax:+260 211 239867<br />
+                            E-mail: info@aplusgeneral.com<br />
+                        </p>
+                    </span>
+                </td>
+            </tr>
+
+            <hr style="width:100%; height:2px; background-color: red;">
+
+            <tr class="information">
+                <td colspan="2">
+                    <p style="text-align: center;"><strong>PAYMENT REQUISITION VOUCHER</strong></p>
+
+                </td>
+            </tr>
+
+            <hr style="width:100%; height:2px; background-color: black;">
+
+            <table>
+                <tr>
+                    <td style="width: 50%;">
+                        <table>
+                            <tr>
+                                <td style="width: 36%;"><strong>P.VOUCHER # :</strong></td>
+                                <td style="width: 64%;"> {{paymentDetails ? paymentDetails.voucherNumber : '-'}}</td>
+                            </tr>
+                            <tr>
+                                <td style="width: 36%;"><strong>BRANCH :</strong></td>
+                                <td style="width: 6465%;"> {{ 'HEAD OFFICE'}}</td>
+                            </tr>
+                            <tr>
+                                <td style="width: 36%;"><strong>PAYMENT TYPE :</strong></td>
+                                <td style="width: 640%;">
+                                    {{paymentDetails ? (paymentDetails.paymentType == 'Chaque' ? 'Cheque' : paymentDetails.paymentType)  : '-'}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 36%;"><strong>CURRENCY :</strong></td>
+                                <td style="width: 640%;"> {{paymentDetails ? paymentDetails.currency : '-'}}</td>
+                            </tr>
+                            <tr>
+                                <td style="width: 36%;"><strong>PAY AMOUNT :</strong></td>
+                                <td style="width: 64%;"> {{paymentDetails ? paymentDetails.amount : '-'}}</td>
+                            </tr>
+                            <tr>
+                                <td style="width: 36%;"><strong>NARRATION :</strong></td>
+                                <td style="width: 64%;">{{paymentDetails ? paymentDetails.narrative : '-'}}</td>
+                            </tr>
+                            <tr>
+                                <td style="width: 36%;"><strong>BANK ACCOUNT :</strong></td>
+                                <td style="width: 64%;"> {{paymentDetails ? (paymentDetails.bankAccount.bank) : '-'}}
+                                    {{paymentDetails ? (paymentDetails.bankAccount.accountName) : '-'}}
+                                    {{paymentDetails ? (paymentDetails.bankAccount.accountType) : '-'}}
+                                    {{'A/C'}} {{paymentDetails ? (paymentDetails.bankAccount.accountNumber) : '-'}}</td>
+                            </tr>
+                        </table>
+                    </td>
+
+                    <td style="width: 50%;">
+                        <table>
+                            <tr>
+                                <td style="width: 40%;"><strong>REQUISITION DATE :</strong></td>
+                                <td style="width: 60%;">{{paymentDetails ? (paymentDetails.requestDate | date) : '-'}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 40%;"><strong>SOURCE :</strong></td>
+                                <td style="width: 60%;">{{'GIS'}}</td>
+                            </tr>
+                            <tr>
+                                <td style="width: 36%;"><strong>PAYEE :</strong></td>
+                                <td style="width: 640%;"> {{paymentDetails ? paymentDetails.payee : '-'}}</td>
+                            </tr>
+                            <tr>
+                                <td style="width: 40%;"><strong>PAYEE'S ADDRESS :</strong></td>
+                                <td style="width: 60%;">{{payee ? payee.address : '-'}}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <!-- <tr>
+                <tr>
+                    <td><strong>P.V # :</strong> {{paymentDetails ? paymentDetails.voucherNumber : '-'}}</td>
+                    <td style="float: right;"><strong>REQUISITION DATE :</strong>
+                        {{paymentDetails ? (paymentDetails.requestDate | date) : '-'}}
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>BRANCH :</strong> {{ 'HEAD OFFICE'}}</td>
+                    <td style="float: right;"><strong>SOURCE :</strong> {{'-'}}</td>
+                </tr>
+                <tr>
+                    <td><strong>PAYEE :</strong> {{paymentDetails ? paymentDetails.payee : '-'}}</td>
+                    <td style="float: right;"><strong>PAYEE'S ADDRESS :</strong> {{payee ? payee.address : '-'}}
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>PAY AMOUNT :</strong> {{paymentDetails ? paymentDetails.amount : '-'}}</td>
+                    <td><strong></strong></td>
+                </tr>
+                <tr>
+                    <td><strong>NARRATION :</strong> {{paymentDetails ? paymentDetails.narrative : '-'}}</td>
+                    <td><strong></strong></td>
+                </tr>
+                <tr>
+                    <td><strong>BANK ACCOUNT :</strong> {{paymentDetails ? (paymentDetails.bankAccount.bank) : '-'}}
+                        {{paymentDetails ? (paymentDetails.bankAccount.accountName) : '-'}}
+                        {{paymentDetails ? (paymentDetails.bankAccount.accountType) : '-'}}
+                        {{'A/C'}} {{paymentDetails ? (paymentDetails.bankAccount.accountNumber) : '-'}}
+                    </td>
+                    <td><strong></strong></td>
+                </tr> -->
+            </table>
+
+            <hr style="width:100%; height:2px; background-color: black;">
+
+            <tr class="information">
+                <table style="width: 100%;" nzSize="small" #paymentsTable nzFrontPagination="false"
+                    nzShowPagination="false">
+                    <tr style="font-size: 15;">
+                        <th style="border: 1px solid black;">RAISED BY</th>
+                        <th style="border: 1px solid black;">DATE</th>
+                        <th style="border: 1px solid black;">CHECKED BY</th>
+                        <th style="border: 1px solid black;">AUTHORIZED BY</th>
+                        <th style="border: 1px solid black;">SIGNED BY</th>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black;">{{paymentDetails ? paymentDetails.preparedBy : '-'}}</td>
+                        <td style="border: 1px solid black;">
+                            {{paymentDetails ? (paymentDetails.authorizationDate | date) : '-'}}
+                        </td>
+                        <td style="border: 1px solid black;">{{paymentDetails ? paymentDetails.authorizedBy : '-'}}</td>
+                        <td style="border: 1px solid black;">{{paymentDetails ? paymentDetails.authorizedBy : '-'}}</td>
+                        <td style="border: 1px solid black;">{{paymentDetails ? paymentDetails.authorizedBy : '-'}}</td>
+                    </tr>
+                </table>
+                <br />
+            </tr>
+        </table>
+    </div>
+</div>

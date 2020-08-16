@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Policy } from 'src/app/underwriting/models/policy.model';
 import { RiskModel } from 'src/app/quotes/models/quote.model';
@@ -8,20 +8,55 @@ import { Endorsement } from 'src/app/underwriting/models/endorsement.model';
 import { EndorsementService } from 'src/app/underwriting/services/endorsements.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import _ from 'lodash';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { VehicleDetailsComponent } from 'src/app/quotes/components/vehicle-details/vehicle-details.component';
+import { PremiumComputationComponent } from 'src/app/quotes/components/premium-computation/premium-computation.component';
+import { PremiumComputationDetailsComponent } from 'src/app/quotes/components/premium-computation-details/premium-computation-details.component';
+import { ExtensionsComponent } from 'src/app/quotes/components/extensions/extensions.component';
+import { DiscountsComponent } from 'src/app/quotes/components/discounts/discounts.component';
+import { TotalsViewComponent } from 'src/app/quotes/components/totals-view/totals-view.component';
+import { VehicleDetailsServiceService } from 'src/app/quotes/services/vehicle-details-service.service';
+import { VehicleDetailsModel } from 'src/app/quotes/models/vehicle-details.model';
+import {
+    PremiumComputationDetails,
+    PremiumComputation
+} from 'src/app/quotes/models/premium-computations.model';
+import { ITotalsModel } from 'src/app/quotes/models/totals.model';
+import { PremiumComputationService } from 'src/app/quotes/services/premium-computation.service';
 
 @Component({
     selector: 'app-policy-extension-details',
     templateUrl: './policy-extension-details.component.html',
     styleUrls: ['./policy-extension-details.component.scss']
 })
-export class PolicyExtensionDetailsComponent implements OnInit {
+export class PolicyExtensionDetailsComponent implements OnInit, OnDestroy {
+    riskStartDateSubcription: Subscription;
+    riskEndDateSubscription: Subscription;
+    numberOfDaysSubscription: Subscription;
+
+    // view risk modal
+    viewRiskModalVisible = false;
+
+    // loading feedback
+    policyExtensionDetailsIsLoading = false;
+
     //loading feedback
     updatingPolicy: boolean = false;
 
+    // is extended premium
+    isExtendedPremium: boolean = false;
+
     editedRisk: RiskModel;
 
+    selectedRisk: RiskModel;
+
     policyEndDate: Date;
+
+    riskEndDate: Date;
+
+    numberOfDays: number;
+
+    extendedBasicPremium: number;
 
     //policy details form
     policyExtensionDetailsForm: FormGroup;
@@ -48,10 +83,36 @@ export class PolicyExtensionDetailsComponent implements OnInit {
         private readonly router: Router,
         private policiesService: PoliciesService,
         private cdr: ChangeDetectorRef,
-        private endorsementService: EndorsementService
-    ) {}
+        private endorsementService: EndorsementService,
+        private vehicleDetailsComponent: VehicleDetailsComponent,
+        private premuimComputationsComponent: PremiumComputationComponent,
+        private premiumComputationDetailsComponent: PremiumComputationDetailsComponent,
+        private extensionsComponent: ExtensionsComponent,
+        private discountsComponent: DiscountsComponent,
+        private totalsComponent: TotalsViewComponent,
+        private vehicleDetailsService: VehicleDetailsServiceService,
+        private premiumComputationService: PremiumComputationService
+    ) {
+        // this.numberOfDaysSubscription = this.premiumComputationService.numberOfDaysChanged$.subscribe(
+        //     numberOfDays => {
+        //         console.log('nod:', numberOfDays);
+        //         this.numberOfDays = numberOfDays;
+        //         this.changeBasicPremium(numberOfDays);
+        //     }
+        // );
+        // this.riskEndDateSubscription = this.premiumComputationService.riskEndDateChanged$.subscribe(
+        //     riskEndDate => {
+        //         this.riskEndDate = riskEndDate;
+        //     }
+        // );
+    }
 
     ngOnInit(): void {
+        this.policyExtensionDetailsIsLoading = true;
+        setTimeout(() => {
+            this.policyExtensionDetailsIsLoading = false;
+        }, 3000);
+
         this.policyExtensionDetailsForm = this.formBuilder.group({
             client: ['', Validators.required],
             nameOfInsured: ['', Validators.required],
@@ -122,9 +183,59 @@ export class PolicyExtensionDetailsComponent implements OnInit {
         });
     }
 
+    // view details of the risk
+    viewRiskDetails(risk: RiskModel) {
+        const currentRiskEndDate: Date = risk.riskEndDate;
+        this.premiumComputationService.changeRiskEditMode(true);
+        this.premiumComputationService.changeExtensionMode(true);
+
+        this.selectedRisk = risk;
+        this.viewRiskModalVisible = true;
+
+        const vehicleDetails: VehicleDetailsModel = {
+            vehicleMake: risk.vehicleMake,
+            vehicleModel: risk.vehicleModel,
+            yearOfManufacture: risk.yearOfManufacture,
+            regNumber: risk.regNumber,
+            engineNumber: risk.engineNumber,
+            chassisNumber: risk.chassisNumber,
+            color: risk.color,
+            cubicCapacity: risk.cubicCapacity,
+            seatingCapacity: risk.seatingCapacity,
+            bodyType: risk.bodyType
+        };
+
+        const premiumComputationDetails: PremiumComputationDetails = {
+            insuranceType: risk.insuranceType,
+            productType: risk.productType,
+            riskStartDate: risk.riskStartDate,
+            riskEndDate: risk.riskEndDate,
+            riskQuarter: risk.riskQuarter,
+            numberOfDays: risk.numberOfDays,
+            expiryQuarter: risk.expiryQuarter
+        };
+
+        const premimuComputations: PremiumComputation = {
+            sumInsured: risk.sumInsured
+        };
+
+        const totals: ITotalsModel = {
+            basicPremium: risk.basicPremium,
+            premiumLevy: risk.premiumLevy,
+            netPremium: risk.netPremium
+        };
+
+        this.vehicleDetailsComponent.setVehicleDetails(vehicleDetails);
+        this.premiumComputationDetailsComponent.setPremiumComputationDetails(
+            premiumComputationDetails
+        );
+        this.premuimComputationsComponent.setPremiumComputations(
+            premimuComputations
+        );
+        this.totalsComponent.setTotals(totals);
+    }
+
     recieveEditedRisk(risk: RiskModel) {
-        // console.log('EVENT', $event);
-        // const editedRisk: RiskModel = $event;
         this.updateRisk(risk);
     }
 
@@ -192,5 +303,14 @@ export class PolicyExtensionDetailsComponent implements OnInit {
 
     trackByRiskId(index: number, risk: RiskModel): string {
         return risk.id;
+    }
+
+    changeBasicPremium(numberOfDays: number) {
+        // this.premiumComputationService.changeExtendedPremium(numberOfDays);
+    }
+
+    ngOnDestroy() {
+        // this.riskEndDateSubscription.unsubscribe();
+        // this.numberOfDaysSubscription.unsubscribe();
     }
 }

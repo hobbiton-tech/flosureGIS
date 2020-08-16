@@ -145,13 +145,6 @@
                             <td>{{ risk.sumInsured | number: '1.2-2' }}</td>
                             <td>{{ risk.netPremium | number: '1.2-2' }}</td>
                             <td>
-                                <!-- <button
-                                    nz-button
-                                    nzType="default"
-                                    (click)="isCertificateVisible(risk)"
-                                >
-                                    Certificate
-                                </button> -->
                                 <button nz-button nzType="default" (click)="isNewCertificateVisible(risk)">
                                     Certificate
                                 </button>
@@ -161,96 +154,6 @@
                 </nz-table>
             </div>
         </nz-card>
-        <!-- <nz-card>
-            <nz-divider
-                nzText="Policy Documents"
-                nzOrientation="left"
-            ></nz-divider>
-            <div>
-                <div nz-row [nzGutter]="8">
-                    <div nz-col [nzSpan]="6">
-                        <nz-card
-                            nzTitle="Certificate"
-                            nzHoverable
-                            (click)="isCertificatePDFVisible = true"
-                        >
-                            <div style="text-align: center;">
-                                <i
-                                    nz-icon
-                                    nzType="file-pdf"
-                                    nzTheme="outline"
-                                    style="
-                                        font-size: 24px;
-                                        margin-bottom: 15px;
-                                    "
-                                ></i>
-                                <p>Click to View</p>
-                            </div>
-                        </nz-card>
-                    </div>
-                    <div nz-col [nzSpan]="6">
-                        <nz-card
-                            nzTitle="Debit Note"
-                            nzHoverable
-                            (click)="isDebitNotePDFVisible = true"
-                        >
-                            <div style="text-align: center;">
-                                <i
-                                    nz-icon
-                                    nzType="file-pdf"
-                                    nzTheme="outline"
-                                    style="
-                                        font-size: 24px;
-                                        margin-bottom: 15px;
-                                    "
-                                ></i>
-                                <p>Click to View</p>
-                            </div>
-                        </nz-card>
-                    </div>
-                    <div nz-col [nzSpan]="6">
-                        <nz-card
-                            nzTitle="Schedule"
-                            nzHoverable
-                            (click)="isSchedulePDFVisible = true"
-                        >
-                            <div style="text-align: center;">
-                                <i
-                                    nz-icon
-                                    nzType="file-pdf"
-                                    nzTheme="outline"
-                                    style="
-                                        font-size: 24px;
-                                        margin-bottom: 15px;
-                                    "
-                                ></i>
-                                <p>Click to View</p>
-                            </div>
-                        </nz-card>
-                    </div>
-                    <div nz-col [nzSpan]="6">
-                        <nz-card
-                            nzTitle="Clauses"
-                            nzHoverable
-                            (click)="isClausesPDFVisible = true"
-                        >
-                            <div style="text-align: center;">
-                                <i
-                                    nz-icon
-                                    nzType="file-pdf"
-                                    nzTheme="outline"
-                                    style="
-                                        font-size: 24px;
-                                        margin-bottom: 15px;
-                                    "
-                                ></i>
-                                <p>Click to View</p>
-                            </div>
-                        </nz-card>
-                    </div>
-                </div>
-            </div>
-        </nz-card> -->
     </div>
 </nz-spin>
 

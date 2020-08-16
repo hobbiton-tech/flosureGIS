@@ -940,6 +940,11 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
+"@componizer/schematics@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@componizer/schematics/-/schematics-0.0.2.tgz#013528fa88b799b96d6aa21ea042961f32a0c54e"
+  integrity sha512-hQeBuvEUsFWJFGDrhyzAYFyaM2On/MyAYqFJJGmUMDOxvWUQ5uDcyH/9N/Dgu3INLMz2DHFElHSRJG5eXbTnJw==
+
 "@firebase/analytics-types@0.2.8":
   version "0.2.8"
   resolved "https://registry.yarnpkg.com/@firebase/analytics-types/-/analytics-types-0.2.8.tgz#f451b2a30f6c73af7e4c59a80e9bdc059d2486eb"

@@ -64,13 +64,34 @@ export const ProductTypeOptions = [
     { label: 'Bus/Taxi', value: 'Bus/Taxi' }
 ];
 
+// POLICY CANCELLATION TYPES
+export const CancellationTypeOptions = [
+    { label: 'Time On Risk', value: 'timeOnRisk' },
+    { label: 'Full Refund', value: 'fullRefund' }
+];
+
 //INSURANCE TYPE OPTIONS
 export const InsuranceTypeOptions = [
-    { id: '5bf2a73c-709a-4f38-9846-c260e8fffefc', label: 'Motor Comprehensive', value: 'Comprehensive' },
-    {id: 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d', label: 'Full Third Party', value: 'ThirdParty' },
-    {id: '6294cca8-8794-4751-9b82-53566eacb4b4', label: 'Act Only Cover', value: 'ActOnly' },
-    {id: '12cbe264-88b8-42e8-97e3-977bb35b6802', label: 'Third Party Fire And Theft', value: 'ThirdPartyFireAndTheft' }
-    
+    {
+        id: '5bf2a73c-709a-4f38-9846-c260e8fffefc',
+        label: 'Motor Comprehensive',
+        value: 'Comprehensive'
+    },
+    {
+        id: 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d',
+        label: 'Full Third Party',
+        value: 'ThirdParty'
+    },
+    {
+        id: '6294cca8-8794-4751-9b82-53566eacb4b4',
+        label: 'Act Only Cover',
+        value: 'ActOnly'
+    },
+    {
+        id: '12cbe264-88b8-42e8-97e3-977bb35b6802',
+        label: 'Third Party Fire And Theft',
+        value: 'ThirdPartyFireAndTheft'
+    }
 ];
 
 //LIMITS OF LIABILITY OPTIONS
@@ -92,5 +113,3 @@ export const ExcessesOptions = [
     },
     { label: 'Third Party Property Damage', value: 'ThirdPartyPropertyDamage' }
 ];
-
-//LIMITS OF LIABILITY OPTIONS

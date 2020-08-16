@@ -1,21 +1,13 @@
-<div
-    style="
+<div style="
         display: flex;
         margin-bottom: 15px;
         align-items: flex-end;
         width: 100%;
-    "
->
+    ">
     <!-- <button nz-button nzType="primary" style="margin-right: 8px;" (click)="htmlToPdf()">
         Download
     </button> -->
-    <button
-        nz-button
-        nzType="primary"
-        [useExistingCss]="true"
-        [printSectionId]="'debitPrintSection'"
-        ngxPrint
-    >
+    <button nz-button nzType="primary" [useExistingCss]="true" [printSectionId]="'debitPrintSection'" ngxPrint>
         Print
     </button>
 </div>
@@ -28,18 +20,13 @@
                     <table>
                         <tr style="border: none;">
                             <td class="title" style="border: none;">
-                                <img
-                                    src="/assets/images/apluslogo.png"
-                                    style="width: 100%; max-width: 240px;"
-                                />
+                                <img src="/assets/images/apluslogo.png" style="width: 100%; max-width: 240px;" />
                             </td>
-                            <td
-                                style="
+                            <td style="
                                     font-size: 11px;
                                     float: right !important;
                                     border: none;
-                                "
-                            >
+                                ">
                                 A Plus General Insurance<br />
                                 Plot No. 402, Roma Park, Zambezi Road<br />
                                 P.O. Box 31700, Lusaka Zambia<br />
@@ -55,11 +42,9 @@
         <hr style="width: 100%; height: 2px; background-color: black;" />
 
         <!-- <h2 class="heading">A PLUS GENERAL INSURANCE LIMITED</h2> -->
-        <P class="centerheading"
-            >SCHEDULE ATTACHING TO AND FORMING PART OF
+        <P class="centerheading">SCHEDULE ATTACHING TO AND FORMING PART OF
             <strong>{{ policy.risks[0].productType }} MOTOR</strong> CAR POLICY
-            NO. {{ policy.policyNumber }}</P
-        >
+            NO. {{ policy.policyNumber }}</P>
 
         <p>
             To form part of a valid insurance contract this Schedule must bear
@@ -73,36 +58,29 @@
                 Name Of Insured:
                 <span style="font-weight: bold;">{{
                     policy.nameOfInsured
-                }}</span
-                ><span style="float: right;"
-                    >Agency:
+                }}</span><span style="float: right;">Agency:
                     {{
                         policy.sourceOfBusiness
                             ? policy.sourceOfBusiness == 'direct'
                                 ? 'Direct'
                                 : policy.intermediaryName
                             : '-'
-                    }}<span style="font-weight: bold;"></span
-                ></span>
+                    }}<span style="font-weight: bold;"></span></span>
             </p>
             <p>
                 Address: {{ client ? client.address : 'TBA'
-                }}<span style="float: right;"
-                    >Captured by:
+                }}<span style="float: right;">Captured by:
                     {{
                         policy.sourceOfBusiness
                             ? policy.sourceOfBusiness == 'direct'
                                 ? 'info@aplusgeneral.com'
                                 : policy.user
                             : '-'
-                    }}<span style="font-weight: bold;"></span
-                ></span>
+                    }}<span style="font-weight: bold;"></span></span>
             </p>
             <p>
                 Email: {{ client ? client.email : 'TBA'
-                }}<span style="float: right;"
-                    ><span style="font-weight: bold;"></span
-                ></span>
+                }}<span style="float: right;"><span style="font-weight: bold;"></span></span>
             </p>
 
             <p>
@@ -139,12 +117,7 @@
         <br />
         <br />
 
-        <table
-            style="width: 100%;"
-            #risksTable
-            nzFrontPagination="false"
-            nzShowPagination="false"
-        >
+        <table style="width: 100%;" #risksTable nzFrontPagination="false" nzShowPagination="false">
             <tr>
                 <th>Reg No.</th>
                 <th>Make/Model</th>
@@ -167,7 +140,8 @@
                 <td>{{ getYearOfManufacture(risk) }}</td>
                 <td>{{ risk.seatingCapacity }}</td>
                 <td>{{ policyRisk.sumInsured | number: '1.2-2' }}</td>
-                <td>
+                <td>{{ risk.insuranceType }}</td>
+                <!-- <td>
                     {{
                         risk.insuranceType == 'ThirdParty'
                             ? 'Third Party'
@@ -177,7 +151,7 @@
                             ? 'Fire and Theft'
                             : 'Comprehensive'
                     }}
-                </td>
+                </td> -->
             </tr>
         </table>
         <br />
@@ -207,65 +181,61 @@
                     else standardLimit
                 "
             > -->
-                <li>
-                    <p style="font-weight: bold;">Limits of Liability</p>
-                    <p>Limits of the amount of the company's liability under</p>
-                    <p>
-                        <span *ngIf="limits.liabilityType === 'combinedLimits'; else standardLimit" style="font-weight: bold;">Combined Limits {{policy.currency}}{{comb.amount}}</span>
-                        
-                        <!-- <span style="font-weight: bold;"
+            <li>
+                <p style="font-weight: bold;">Limits of Liability</p>
+                <p>Limits of the amount of the company's liability under</p>
+                <p>
+                    <span *ngIf="limits ?  limits.liabilityType === 'combinedLimits' : ''; else standardLimit"
+                        style="font-weight: bold;">Combined Limits {{policy.currency}}{{comb.amount}}</span>
+
+                    <!-- <span style="font-weight: bold;"
                             >K{{ combinedLimits }}</span
                         > -->
 
 
-                        <ng-template #standardLimit>
-                <!-- <p style="font-weight: bold;">Limits of Liability</p>
+                    <ng-template #standardLimit>
+                        <!-- <p style="font-weight: bold;">Limits of Liability</p>
                 <p>Limit of the amount of the Company’s liability under</p> -->
 
-                <p>
-                    <span style="font-weight: bold;">Section I</span> - 3
-                    (Protection and Removal) –
-                    <span style="font-weight: bold;"
-                        >{{policy.currency}}{{ 0 | number: '1.2-2' }}</span
-                    >
-                </p>
+                        <p>
+                            <span style="font-weight: bold;">Section I</span> - 3
+                            (Protection and Removal) –
+                            <span style="font-weight: bold;">{{policy.currency}}{{ 0 | number: '1.2-2' }}</span>
+                        </p>
 
-                <p>
-                    <span style="font-weight: bold;">Section II</span> -1 (a)
-                    and 2 (a) (Liability to Third Parties – death bodily injury)
-                    in respect of any one claim or series Of claims arising out
-                    of one event:
-                    <span style="font-weight: bold;"
-                        >{{policy.currency}}{{ deathPE.amount | number: '1.2-2' }} per
-                        event / {{policy.currency}}{{
-                            deathPP.amount | number: '1.2-2'
+                        <p>
+                            <span style="font-weight: bold;">Section II</span> -1 (a)
+                            and 2 (a) (Liability to Third Parties – death bodily injury)
+                            in respect of any one claim or series Of claims arising out
+                            of one event:
+                            <span
+                                style="font-weight: bold;">{{policy.currency}}{{ deathPE ? (deathPE.amount | number: '1.2-2') : '-' }}
+                                per
+                                event / {{policy.currency}}{{
+                            deathPP ? (deathPP.amount | number: '1.2-2') : '-'
                         }}
-                        per person</span
-                    >
-                    >
+                                per person</span>
+                            >
+                        </p>
+                        <p>
+                            <span style="font-weight: bold;">Section II</span> - 1 (b)
+                            and 2 (b) (Liability to third Parties – Property Damage) in
+                            respect of any claim or series Of claims arising out of one
+                            event:
+                            <span
+                                style="font-weight: bold;">{{policy.currency}}{{ propertyD ? (propertyD.amount | number: '1.2-2') : '-' }}</span>
+                            <span>- arising from loss of use of a motor vehicle which is
+                                limited to in respect of any one claim or series of
+                                claims arising out of one Event –
+                                <span style="font-weight: bold;">NIL</span> per
+                                event</span>
+                        </p>
+                    </ng-template>
                 </p>
-                <p>
-                    <span style="font-weight: bold;">Section II</span> - 1 (b)
-                    and 2 (b) (Liability to third Parties – Property Damage) in
-                    respect of any claim or series Of claims arising out of one
-                    event:
-                    <span style="font-weight: bold;"
-                        >{{policy.currency}}{{ propertyD.amount | number: '1.2-2' }}</span
-                    >
-                    <span
-                        >- arising from loss of use of a motor vehicle which is
-                        limited to in respect of any one claim or series of
-                        claims arising out of one Event –
-                        <span style="font-weight: bold;">NIL</span> per
-                        event</span
-                    >
-                </p>
-            </ng-template>
-                    </p>
-                </li>
+            </li>
             <!-- </ng-container> -->
 
-            
+
 
             <!-- <p>Section I-10 (Medical Expenses) in respect of any one accident/any one person <span
                         style="font-weight: bold;">K{{0 | number: '1.2-2'}} /
@@ -385,38 +355,27 @@
                 <span style="font-weight: bold;">MEMO 1.RIOT AND STRIKE</span>
             </li>
             <li>
-                <span style="font-weight: bold;"
-                    >MEMO 2. THIS COVER IS SUBJECT TO PAYMENT OF FULL ANNUAL
+                <span style="font-weight: bold;">MEMO 2. THIS COVER IS SUBJECT TO PAYMENT OF FULL ANNUAL
                     PREMIUM IN THE EVENT OF A CLAIM IN ANYONE PERIOD OF
-                    INSURANCE</span
-                >
+                    INSURANCE</span>
             </li>
         </ul>
         <p>
-            <span style="font-weight: bold;"
-                >Date of Signature of Proposal and Declaration</span
-            >: AS PER COVERNOTE
+            <span style="font-weight: bold;">Date of Signature of Proposal and Declaration</span>: AS PER COVERNOTE
             <span style="font-weight: bold;">{{
-                coverNot.certificateNumber
+                coverNot ? coverNot.certificateNumber : '-'
             }}</span>
             DATED
             {{ policy.dateOfIssue | date }}
         </p>
         <p>
-            SIGNED AT:.............................................<span
-                style="text-align: center;"
-                >DATE: {{ todayDate | date }}</span
-            ><span style="float: right;"
-                >....................................................</span
-            >
+            SIGNED AT:.............................................<span style="text-align: center;">DATE:
+                {{ todayDate | date }}</span><span
+                style="float: right;">....................................................</span>
         </p>
         <p>
-            <span style="float: center;"></span
-            ><span style="float: right;"
-                ><span style="font-weight: bold;"
-                    >For /Chief Executive Officer</span
-                ></span
-            >
+            <span style="float: center;"></span><span style="float: right;"><span style="font-weight: bold;">For /Chief
+                    Executive Officer</span></span>
         </p>
     </div>
 </div>

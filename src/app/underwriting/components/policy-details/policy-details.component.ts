@@ -1,4 +1,8 @@
-import { LiabilityType, LimitsOfLiability, Excess } from './../../../quotes/models/quote.model';
+import {
+    LiabilityType,
+    LimitsOfLiability,
+    Excess
+} from './../../../quotes/models/quote.model';
 import { RiskDetailsComponent } from './../../../quotes/components/risk-details/risk-details.component';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -8,7 +12,7 @@ import { PoliciesService } from '../../services/policies.service';
 import {
     IPaymentModel,
     InstallmentsModel,
-    PlanReceipt,
+    PlanReceipt
 } from 'src/app/accounts/components/models/payment-plans.model';
 import { v4 } from 'uuid';
 import { PaymentPlanService } from 'src/app/accounts/services/payment-plan.service';
@@ -19,20 +23,21 @@ import { ClausesService } from 'src/app/settings/components/underwriting-setups/
 import {
     IPolicyClauses,
     IPolicyWording,
-    IPolicyExtension,
+    IPolicyExtension
 } from 'src/app/settings/models/underwriting/clause.model';
 import { DebitNote, CoverNote } from '../../documents/models/documents.model';
 import { ClientsService } from 'src/app/clients/services/clients.service';
 import {
     IIndividualClient,
-    ICorporateClient,
+    ICorporateClient
 } from 'src/app/clients/models/clients.model';
 import { Risks } from 'src/app/reports/model/quotation.model';
+import { IDiscounts } from 'src/app/quotes/models/discounts.model';
 
 @Component({
     selector: 'app-policy-details',
     templateUrl: './policy-details.component.html',
-    styleUrls: ['./policy-details.component.scss'],
+    styleUrls: ['./policy-details.component.scss']
 })
 export class PolicyDetailsComponent implements OnInit {
     isVisible = false;
@@ -119,7 +124,7 @@ export class PolicyDetailsComponent implements OnInit {
 
     optionList = [
         { label: 'Full Payment', value: 'fully' },
-        { label: 'Payment Plan', value: 'plan' },
+        { label: 'Payment Plan', value: 'plan' }
     ];
     selectedValue = 'fully';
     formattedDate: any;
@@ -130,35 +135,35 @@ export class PolicyDetailsComponent implements OnInit {
     excesses: any;
 
     _id: string;
-    cnd: DiscountModel;
+    cnd: IDiscounts;
     cndAmount = 0;
     receipt: IReceiptModel;
     coverNote: CoverNote;
     coverNot: CoverNote;
     coverNotes: CoverNote[] = [];
     // tslint:disable-next-line: whitespace
-    coverNotesRisks: any[] =[];
-  selectedsRisks: RiskModel[];
-  limitsOfLiablity: LimitsOfLiability[] = [];
-  limitsOfLiablityCert: LimitsOfLiability[] = [];
-  combAmount:number;
-  combInfo: string;
-  proDInfo: string;
-  propDAmounts:number;
-  deathPEInfo: string;
-  deathPEAmount:number;
-  deathPPInfo: string;
-  deathPPAmount:number;
+    coverNotesRisks: any[] = [];
+    selectedsRisks: RiskModel[];
+    limitsOfLiablity: LimitsOfLiability[] = [];
+    limitsOfLiablityCert: LimitsOfLiability[] = [];
+    combAmount: number;
+    combInfo: string;
+    proDInfo: string;
+    propDAmounts: number;
+    deathPEInfo: string;
+    deathPEAmount: number;
+    deathPPInfo: string;
+    deathPPAmount: number;
 
-  fExcexxType='';
-  fExcessAmount=0;
-  sExcessType='';
-  sExcessAmount=0;
-  tExcessType='';
-  tExcessAmount=0;
+    fExcexxType = '';
+    fExcessAmount = 0;
+    sExcessType = '';
+    sExcessAmount = 0;
+    tExcessType = '';
+    tExcessAmount = 0;
 
-  excessList: Excess[] = [];
-  excessListCert: Excess[] = [];
+    excessList: Excess[] = [];
+    excessListCert: Excess[] = [];
 
     constructor(
         private readonly router: Router,
@@ -173,7 +178,7 @@ export class PolicyDetailsComponent implements OnInit {
         this.paymentPlanForm = this.formBuilder.group({
             numberOfInstallments: ['', Validators.required],
             startDate: ['', Validators.required],
-            initialInstallmentAmount: ['', Validators.required],
+            initialInstallmentAmount: ['', Validators.required]
         });
     }
 
@@ -182,45 +187,40 @@ export class PolicyDetailsComponent implements OnInit {
         setTimeout(() => {
             this.isOkLoading = false;
         }, 3000);
-        this.route.params.subscribe((id) => {
-            this.policiesService.getPolicyById(id.id).subscribe((policy) => {
+
+        this.route.params.subscribe(id => {
+            this.policiesService.getPolicyById(id.id).subscribe(policy => {
                 console.log('CHECKING ID GET', policy);
                 this.policyData = policy;
-
-                this.policiesService.getCoverNotes().subscribe((res) => {
+                console.log('policy data: ', this.policyData);
+                this.policiesService.getCoverNotes().subscribe(res => {
                     console.log('RESULT COVER>>>>', res);
                     this.coverNotes = res;
 
-                // tslint:disable-next-line: semicolon
-                })
+                    // tslint:disable-next-line: semicolon
+                });
 
-
-
-                this.productClauseService
-                    .getPolicyClauses()
-                    .subscribe((res) => {
-                        this.clauses = res.filter(
-                            (x) => x.policyId === this.policyData.id
-                        );
-                    });
+                this.productClauseService.getPolicyClauses().subscribe(res => {
+                    this.clauses = res.filter(
+                        x => x.policyId === this.policyData.id
+                    );
+                });
 
                 this.productClauseService
                     .getPolicyExtensions()
-                    .subscribe((res) => {
+                    .subscribe(res => {
                         this.extensions = res.filter(
-                            (x) => x.policyId === this.policyData.id
+                            x => x.policyId === this.policyData.id
                         );
                     });
 
-                this.productClauseService
-                    .getPolicyWordings()
-                    .subscribe((res) => {
-                        this.wordings = res.filter(
-                            (x) => x.policyId === this.policyData.id
-                        );
-                    });
+                this.productClauseService.getPolicyWordings().subscribe(res => {
+                    this.wordings = res.filter(
+                        x => x.policyId === this.policyData.id
+                    );
+                });
 
-                this.policiesService.getDebitNotes().subscribe((debitNotes) => {
+                this.policiesService.getDebitNotes().subscribe(debitNotes => {
                     this.debitNotes = debitNotes;
 
                     console.log('debit notes');
@@ -229,12 +229,12 @@ export class PolicyDetailsComponent implements OnInit {
                     console.log('id: ', this.policyData.id);
 
                     this.singleDebitNote = debitNotes.filter(
-                        (x) => x.policy.id === this.policyData.id
+                        x => x.policy.id === this.policyData.id
                     )[0];
 
-                    this.receiptService.getReciepts().subscribe((receipts) => {
+                    this.receiptService.getReciepts().subscribe(receipts => {
                         this.receipt = receipts.filter(
-                            (x) =>
+                            x =>
                                 x.invoiceNumber ===
                                 this.singleDebitNote.debitNoteNumber
                         )[0];
@@ -245,7 +245,7 @@ export class PolicyDetailsComponent implements OnInit {
                     console.log(this.singleDebitNote);
                 });
 
-                this.clientsService.getAllClients().subscribe((clients) => {
+                this.clientsService.getAllClients().subscribe(clients => {
                     this.clientsList = [...clients[0], ...clients[1]] as Array<
                         ICorporateClient & IIndividualClient
                     >;
@@ -254,148 +254,111 @@ export class PolicyDetailsComponent implements OnInit {
                     console.log(clients);
 
                     this.client = this.clientsList.filter(
-                        (x) => x.id === this.policyData.clientCode
+                        x => x.id === this.policyData.clientCode
                     )[0] as IIndividualClient & ICorporateClient;
 
                     console.log('HERE =>>>>>', this.client);
                     this.clientNumber = this.client.phone;
                     this.clientEmail = this.client.email;
                     this.clientAddress = this.client.address;
-
-                    // console.log('policy data client:');
-                    // console.log(this.policyData.client);
-
-                    // console.log('client');
-                    // console.log(this.client);
                 });
 
                 this.risks = policy.risks;
                 console.log('GET RISKS >>>>', this.risks);
 
-
-                for(const ri of this.risks ) {
-                    if(ri.limitsOfLiability !== []) {
-                        for(const lim of ri.limitsOfLiability) {
-                            console.log("LIABILITIES<<<<", lim)
-                            if (lim.liabilityType === 'combinedLimits'){
+                for (const ri of this.risks) {
+                    if (ri.limitsOfLiability !== []) {
+                        for (const lim of ri.limitsOfLiability) {
+                            console.log('LIABILITIES<<<<', lim);
+                            if (lim.liabilityType === 'combinedLimits') {
                                 this.combAmount = lim.amount;
                                 this.combInfo = 'Combined Limits';
-  
                             }
-                            if (lim.liabilityType === 'propertyDamage'){
+                            if (lim.liabilityType === 'propertyDamage') {
                                 this.combAmount = 0;
                                 this.combInfo = '';
-                                this.proDInfo='(i) Third Party Limit for injury/ Death per person ZMW';
-  this.propDAmounts=lim.amount;
+                                this.proDInfo =
+                                    '(i) Third Party Limit for injury/ Death per person ZMW';
+                                this.propDAmounts = lim.amount;
 
-                      console.log("LIABILITIES<<<<", this.proDInfo, this.propDAmounts)          
+                                console.log(
+                                    'LIABILITIES<<<<',
+                                    this.proDInfo,
+                                    this.propDAmounts
+                                );
+                            }
+                            if (
+                                lim.liabilityType === 'deathAndInjuryPerEvent'
+                            ) {
+                                this.combAmount = 0;
+                                this.combInfo = '';
+                                this.deathPEInfo =
+                                    '(ii) Third party limit per Event';
+                                this.deathPEAmount = lim.amount;
 
+                                console.log(
+                                    'LIABILITIES<<<<',
+                                    this.deathPEInfo
+                                );
                             }
-                            if (lim.liabilityType === 'deathAndInjuryPerEvent'){
+                            if (
+                                lim.liabilityType === 'deathAndInjuryPerPerson'
+                            ) {
                                 this.combAmount = 0;
                                 this.combInfo = '';
-                                this.deathPEInfo='(ii) Third party limit per Event';
-  this.deathPEAmount=lim.amount;
-  
-  console.log("LIABILITIES<<<<", this.deathPEInfo)
-                            }
-                             if (lim.liabilityType === 'deathAndInjuryPerPerson'){
-                                this.combAmount = 0;
-                                this.combInfo = '';
-                                this.deathPPInfo='(iii)Third Party Property Damage';
-  this.deathPPAmount=lim.amount;
-  console.log("LIABILITIES<<<<", this.deathPPInfo)
+                                this.deathPPInfo =
+                                    '(iii)Third Party Property Damage';
+                                this.deathPPAmount = lim.amount;
+                                console.log(
+                                    'LIABILITIES<<<<',
+                                    this.deathPPInfo
+                                );
                             }
                         }
-
                     }
 
- 
-
-  if(ri.excesses !== []) {
-      for(const ex of ri.excesses) {
-        if (ex.excessType === 'Third Party Property Damage (TPPD ) 10% Minimum'){
-            this.fExcessAmount = ex.amount;
-            this.fExcexxType = 'Third Party Property Damage (TPPD ) 10% Minimum';
-
-        } 
-         if(ex.excessType === 'Own Damage 10% Minimum') {
-            this.sExcessAmount = ex.amount;
-            this.sExcessType = 'Own Damage 10% Minimum';
-
-        } 
-         if(ex.excessType === 'Theft Excess [15%] Minimum') {
-            this.tExcessAmount = ex.amount;
-            this.tExcessType = 'Theft Excess [15%] Minimum';
-
-        } 
-      }
-  }
-
+                    if (ri.excesses !== []) {
+                        for (const ex of ri.excesses) {
+                            if (
+                                ex.excessType ===
+                                'Third Party Property Damage (TPPD ) 10% Minimum'
+                            ) {
+                                this.fExcessAmount = ex.amount;
+                                this.fExcexxType =
+                                    'Third Party Property Damage (TPPD ) 10% Minimum';
+                            }
+                            if (ex.excessType === 'Own Damage 10% Minimum') {
+                                this.sExcessAmount = ex.amount;
+                                this.sExcessType = 'Own Damage 10% Minimum';
+                            }
+                            if (
+                                ex.excessType === 'Theft Excess [15%] Minimum'
+                            ) {
+                                this.tExcessAmount = ex.amount;
+                                this.tExcessType = 'Theft Excess [15%] Minimum';
+                            }
+                        }
+                    }
                 }
 
+                this.limitsOfLiablity = this.risks[0].limitsOfLiability;
+                this.limitsOfLiablityCert = this.risks[0].limitsOfLiability;
+                this.excessList = this.risks[0].excesses;
+                this.excessListCert = this.risks[0].excesses;
 
-                this.limitsOfLiablity = this.risks[0].limitsOfLiability
-                this.limitsOfLiablityCert = this.risks[0].limitsOfLiability
-                this.excessList = this.risks[0].excesses
-                this.excessListCert = this.risks[0].excesses
-                
                 // this.discounts = risk.discounts;
-                this.policiesService.getCoverNotes().subscribe((res) => {
-                   this.coverNotesRisks =  this.coverNotesRisks.concat(...res, ...this.risks);
-                   console.log('COMBINE>>>>', this.coverNotesRisks);
+                this.policiesService.getCoverNotes().subscribe(res => {
+                    this.coverNotesRisks = this.coverNotesRisks.concat(
+                        ...res,
+                        ...this.risks
+                    );
 
-                    
-                   for (const r of this.risks ) {
-                    this.coverNot = res.filter((x) => x.policyId === r.id)[0];
-
-                    // this.excessListCert = r.excesses
-                    // console.log('Excess>>>>', this.excessListCert);
-                    // this.limitsOfLiablityCert = r.limitsOfLiability
-
+                    for (const r of this.risks) {
+                        this.coverNot = res.filter(x => x.policyId === r.id)[0];
                     }
                 });
 
-
                 this.policyRisk = policy.risks[0];
-                // this.loading =
-
-                // limits Of Liability
-                // this.deathAndInjuryPerPerson = policy.risks[0].limitsOfLiability.filter(
-                //     (x) => x.liabilityType === 'deathAndInjuryPerPerson'
-                // )[0].amount;
-                // this.deathAndInjuryPerEvent = policy.risks[0].limitsOfLiability.filter(
-                //     (x) => x.liabilityType === 'deathAndInjuryPerEvent'
-                // )[0].amount;
-                // this.propertyDamage = policy.risks[0].limitsOfLiability.filter(
-                //     (x) => x.liabilityType === 'propertyDamage'
-                // )[0].amount;
-                // this.combinedLimits = policy.risks[0].limitsOfLiability.filter(
-                //     (x) => x.liabilityType === 'combinedLimits'
-                // )[0].amount;
-
-
-                
-
-
-
-                //excesses
-                // this.below21Years = policy.risks[0].excesses.filter(
-                //     (x) => x.excessType === 'below21Years'
-                // )[0].amount;
-                // this.over70Years = policy.risks[0].excesses.filter(
-                //     (x) => x.excessType === 'over70Years'
-                // )[0].amount;
-                // this.noLicence = policy.risks[0].excesses.filter(
-                //     (x) => x.excessType === 'noLicence'
-                // )[0].amount;
-                // this.careLessDriving = policy.risks[0].excesses.filter(
-                //     (x) => x.excessType === 'careLessDriving'
-                // )[0].amount;
-
-                // this.otherEndorsement = policy.risks[0].excesses.filter(
-                //     (x) => x.excessType === 'otherEndorsement'
-                // )[0].amount;
 
                 const doo = new Date(policy.endDate);
                 const nd = new Date(
@@ -403,9 +366,6 @@ export class PolicyDetailsComponent implements OnInit {
                 );
 
                 this.clientName = policy.client;
-                // if(this.client.phone === undefined) { this.clientNumber = ''; } else {}
-                // if(this.client.email === null || undefined) { this.clientEmail = ''; } else {}
-                // if(this.clientAddress === null || undefined) { this.clientAddress = ''; } else {}
 
                 this.agency = 'Direct'; // TODO: Track this guy too
                 this.coverForm = policy.startDate.toString();
@@ -513,7 +473,7 @@ export class PolicyDetailsComponent implements OnInit {
             dateOfIssue: ['', Validators.required],
             expiryDate: ['', Validators.required],
             quarter: ['', Validators.required],
-            town: ['', Validators.required],
+            town: ['', Validators.required]
         });
 
         // set values of fields
@@ -584,7 +544,7 @@ export class PolicyDetailsComponent implements OnInit {
             let policyCount = 0;
             const policyPlan: Policy[] = [];
             policyPlan.push({
-                ...policyData,
+                ...policyData
             });
 
             pAmount = pAmount + policyData.netPremium;
@@ -597,7 +557,7 @@ export class PolicyDetailsComponent implements OnInit {
             console.log(this.policyUpdate);
             this.policiesService
                 .updatePolicy(this.policyUpdate)
-                .subscribe((res) => {
+                .subscribe(res => {
                     console.log('policy update>>>>', this.policyUpdate);
                 });
 
@@ -631,7 +591,7 @@ export class PolicyDetailsComponent implements OnInit {
                     installmentAmount: iAmount,
                     installmentDate: this.formattedDate,
                     balance: iAmount,
-                    installmentStatus: 'UnPaid',
+                    installmentStatus: 'UnPaid'
                 });
             }
 
@@ -658,7 +618,7 @@ export class PolicyDetailsComponent implements OnInit {
                 amountOutstanding: dAmount,
                 installments: installment,
                 startDate: pDate,
-                endDate: this.formattedeDate,
+                endDate: this.formattedeDate
             };
 
             console.log('..........Payment Plan..........');
@@ -679,7 +639,7 @@ export class PolicyDetailsComponent implements OnInit {
                 receiptType: 'Premium Payment',
                 sumInDigits: this.paymentPlanForm.controls
                     .initialInstallmentAmount.value,
-                todayDate: new Date(),
+                todayDate: new Date()
             };
 
             const planReceipt: PlanReceipt[] = [];
@@ -689,7 +649,7 @@ export class PolicyDetailsComponent implements OnInit {
                 allocationStatus: 'Unallocated',
                 sumInDigits: this.paymentPlanForm.controls
                     .initialInstallmentAmount.value,
-                policyNumber: '',
+                policyNumber: ''
             });
 
             plan.planReceipt = planReceipt;
@@ -710,7 +670,7 @@ export class PolicyDetailsComponent implements OnInit {
             console.log(this.policyUpdate);
             this.policiesService
                 .updatePolicy(this.policyUpdate)
-                .subscribe((res) => {
+                .subscribe(res => {
                     console.log('policy update>>>>', this.policyUpdate);
                 });
             this.router.navigateByUrl('/flosure/accounts/receipts');
@@ -734,24 +694,25 @@ export class PolicyDetailsComponent implements OnInit {
         // tslint:disable-next-line: triple-equals
         if (this.selectedRisk.insuranceType == 'Comprehensive') {
             this.cnd = risk.discounts.filter(
-                (x) => x.discountType === 'No Claims Discount'
+                x => x.discountType === 'No Claims Discount'
             )[0];
-            console.log('RISK ID', risk.id);
 
-            this.coverNot = this.coverNotes.filter((x) => x.policyId === this.selectedRisk.id)[0];
+            this.coverNot = this.coverNotes.filter(
+                x => x.policyId === this.selectedRisk.id
+            )[0];
 
             if (this.cnd === undefined) {
                 this.cndAmount = 0;
             } else {
                 this.cndAmount = Number(this.cnd.amount);
             }
-            
 
-            console.log('CND>>>>>', this.cndAmount);
             this.isComprehensiveCertificatePdfVisible = true;
             this.isThirdPartyCertificatePdfVisible = false;
         } else {
-            this.coverNot = this.coverNotes.filter((x) => x.policyId === risk.id)[0];
+            this.coverNot = this.coverNotes.filter(
+                x => x.policyId === risk.id
+            )[0];
             this.isComprehensiveCertificatePdfVisible = false;
             this.isThirdPartyCertificatePdfVisible = true;
         }
@@ -760,7 +721,7 @@ export class PolicyDetailsComponent implements OnInit {
     }
 
     isSchedule() {
-      this.isSchedulePDFVisible = true;
+        // this.isSchedulePDFVisible = true;
         // this.selectedsRisks = risk;
         // // this.selectedRisk = this.policyRisk[0].limitsOfLiability;
         // if (this.selectedRisks[0].LiabilityType === 'combinedLimits') {

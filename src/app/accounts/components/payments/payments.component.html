@@ -1,1 +1,133 @@
-<p>payments works!</p>
+<nz-spin nzSize="large" nzTip="Payments Loading...." [nzSpinning]="paymentsIsLoading">
+    <nz-spin nzSize="large" nzTip="Approving Payment...." [nzSpinning]="isApprovingPayment">
+        <div style="margin: 10px;">
+            <div style="margin-bottom: 20px; background: #fff;">
+                <nz-page-header>
+                    <nz-page-header-title>Payments</nz-page-header-title>
+                    <!-- <nz-page-header-subtitle></nz-page-header-subtitle> -->
+                </nz-page-header>
+            </div>
+            <nz-card>
+                <nz-divider nzText="Pending Payments" nzOrientation="left"></nz-divider>
+                <div style="margin-bottom: 10px; width: 20%;">
+                    <nz-input-group [nzSuffix]="suffixIconSearch">
+                        <input type="text" nz-input placeholder="" [(ngModel)]="searchString"
+                            (ngModelChange)="searchPendingPayments($event)" />
+                    </nz-input-group>
+                    <ng-template #suffixIconSearch>
+                        <i nz-icon nzType="search"></i>
+                    </ng-template>
+                </div>
+
+                <nz-table #paymentsTable [nzData]="pendingPaymentsList" [nzSize]="'small'" [nzBordered]="true">
+                    <thead>
+                        <tr>
+                            <th [nzAlign]="columnAlignment">Vo No</th>
+                            <th [nzAlign]="columnAlignment">Date</th>
+                            <th [nzAlign]="columnAlignment">Narrative</th>
+                            <th [nzAlign]="columnAlignment">Bank Account</th>
+                            <!-- <th [nzAlign]="columnAlignment">Authorized By</th>
+                        <th [nzAlign]="columnAlignment">Authorization Date</th> -->
+                            <th [nzAlign]="columnAlignment">Prepared By</th>
+                            <th [nzAlign]="columnAlignment">Request Date</th>
+                            <th [nzAlign]="columnAlignment">Type</th>
+                            <th [nzAlign]="columnAlignment">Status</th>
+                            <th [nzAlign]="columnAlignment">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let payment of pendingPaymentsList">
+                            <td [nzAlign]="columnAlignment">{{payment.voucherNumber}}</td>
+                            <td [nzAlign]="columnAlignment">{{payment.date | date}}</td>
+                            <td [nzAlign]="columnAlignment">{{payment.narrative}}</td>
+                            <td [nzAlign]="columnAlignment">{{payment.bankAccount.bank}} {{'-'}}
+                                {{payment.bankAccount.accountName}}
+                            </td>
+                            <!-- <td [nzAlign]="columnAlignment">{{payment.authorizedBy}}</td>
+                        <td [nzAlign]="columnAlignment">{{payment.authorizationDate | date}}</td> -->
+                            <td [nzAlign]="columnAlignment">{{payment.preparedBy}}</td>
+                            <td [nzAlign]="columnAlignment">{{payment.requestDate | date}}</td>
+                            <td [nzAlign]="columnAlignment">
+                                {{payment.paymentType == 'Chaque' ? 'Cheque' : payment.paymentType}}</td>
+                            <td [nzAlign]="columnAlignment">{{payment.approvalSatus}}</td>
+                            <td [nzAlign]="columnAlignment">
+                                <button n nz-button nzType="primary" style="margin-left: 2px;" nzSize="small"
+                                    (click)="approvePayment(payment)">
+                                    Approve
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </nz-card>
+
+            <div style="margin-top: 10px;">
+                <nz-card>
+                    <nz-divider nzText="Approved Payments" nzOrientation="left"></nz-divider>
+                    <div style="margin-bottom: 10px; width: 20%;">
+                        <nz-input-group [nzSuffix]="suffixIconSearch">
+                            <input type="text" nz-input placeholder="Search by policy number, client"
+                                [(ngModel)]="searchString" (ngModelChange)="searchProcessedPayments($event)" />
+                        </nz-input-group>
+                        <ng-template #suffixIconSearch>
+                            <i nz-icon nzType="search"></i>
+                        </ng-template>
+                    </div>
+
+                    <nz-table #approvedPaymentsTable [nzData]="approvedPaymentsList" [nzSize]="'small'"
+                        [nzBordered]="true">
+                        <thead>
+                            <tr>
+                                <th [nzAlign]="columnAlignment">Vo No</th>
+                                <th [nzAlign]="columnAlignment">Date</th>
+                                <th [nzAlign]="columnAlignment">Narrative</th>
+                                <th [nzAlign]="columnAlignment">Bank Account</th>
+                                <th [nzAlign]="columnAlignment">Authorized By</th>
+                                <th [nzAlign]="columnAlignment">Authorization Date</th>
+                                <th [nzAlign]="columnAlignment">Prepared By</th>
+                                <th [nzAlign]="columnAlignment">Request Date</th>
+                                <th [nzAlign]="columnAlignment">Type</th>
+                                <th [nzAlign]="columnAlignment">Status</th>
+                                <th [nzAlign]="columnAlignment">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let payment of approvedPaymentsList">
+                                <td [nzAlign]="columnAlignment">{{payment.voucherNumber}}</td>
+                                <td [nzAlign]="columnAlignment">{{payment.date | date}}</td>
+                                <td [nzAlign]="columnAlignment">{{payment.narrative}}</td>
+                                <td [nzAlign]="columnAlignment">{{payment.bankAccount.bank}} {{'-'}}
+                                    {{payment.bankAccount.accountName}}
+                                </td>
+                                <td [nzAlign]="columnAlignment">{{payment.authorizedBy}}</td>
+                                <td [nzAlign]="columnAlignment">{{payment.authorizationDate | date}}</td>
+                                <td [nzAlign]="columnAlignment">{{payment.preparedBy}}</td>
+                                <td [nzAlign]="columnAlignment">{{payment.requestDate | date}}</td>
+                                <td [nzAlign]="columnAlignment">
+                                    {{payment.paymentType == 'Chaque' ? 'Cheque' : payment.paymentType}}</td>
+                                <td [nzAlign]="columnAlignment">{{payment.approvalSatus}}</td>
+                                <td [nzAlign]="columnAlignment">
+                                    <button n nz-button nzType="primary" style="margin-left: 2px;" nzSize="small"
+                                        (click)="viewPaymentVoucher(payment)">
+                                        Payment Voucher
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-card>
+            </div>
+        </div>
+
+        <nz-modal [(nzVisible)]="isViewPaymentRequisitionVoucherPDFVisible" nzTitle="Flosure Insurance"
+            (nzOnCancel)="isViewPaymentRequisitionVoucherPDFVisible = false"
+            (nzOnOk)="isViewPaymentRequisitionVoucherPDFVisible = false" nzWidth="900">
+
+            <nz-card style="width: 100%;" [nzBordered]="true">
+                <app-payment-requisition-voucher [paymentDetails]="requisitionPayment" [payee]="client">
+                </app-payment-requisition-voucher>
+            </nz-card>
+
+        </nz-modal>
+    </nz-spin>
+</nz-spin>

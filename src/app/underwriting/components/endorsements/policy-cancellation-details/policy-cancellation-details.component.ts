@@ -8,7 +8,28 @@ import { EndorsementService } from 'src/app/underwriting/services/endorsements.s
 import { Endorsement } from 'src/app/underwriting/models/endorsement.model';
 import * as moment from 'moment';
 import { NzMessageService } from 'ng-zorro-antd';
-import { CreditNote } from 'src/app/underwriting/documents/models/documents.model';
+import {
+    CreditNote,
+    DebitNote
+} from 'src/app/underwriting/documents/models/documents.model';
+import { VehicleDetailsModel } from 'src/app/quotes/models/vehicle-details.model';
+import {
+    PremiumComputationDetails,
+    PremiumComputation
+} from 'src/app/quotes/models/premium-computations.model';
+import { ITotalsModel } from 'src/app/quotes/models/totals.model';
+import { VehicleDetailsComponent } from 'src/app/quotes/components/vehicle-details/vehicle-details.component';
+import { PremiumComputationComponent } from 'src/app/quotes/components/premium-computation/premium-computation.component';
+import { PremiumComputationDetailsComponent } from 'src/app/quotes/components/premium-computation-details/premium-computation-details.component';
+import { ExtensionsComponent } from 'src/app/quotes/components/extensions/extensions.component';
+import { DiscountsComponent } from 'src/app/quotes/components/discounts/discounts.component';
+import { TotalsViewComponent } from 'src/app/quotes/components/totals-view/totals-view.component';
+import { VehicleDetailsServiceService } from 'src/app/quotes/services/vehicle-details-service.service';
+import { PremiumComputationService } from 'src/app/quotes/services/premium-computation.service';
+import { CancellationTypeOptions } from 'src/app/quotes/selection-options';
+import { IRequisitionModel } from 'src/app/accounts/components/models/requisition.model';
+import { v4 } from 'uuid';
+import { AccountService } from 'src/app/accounts/services/account.service';
 
 @Component({
     selector: 'app-policy-cancellation-details',
@@ -16,12 +37,26 @@ import { CreditNote } from 'src/app/underwriting/documents/models/documents.mode
     styleUrls: ['./policy-cancellation-details.component.scss']
 })
 export class PolicyCancellationDetailsComponent implements OnInit {
+    cancellationTypeOptions = CancellationTypeOptions;
+    // view risk modal
+    viewRiskModalVisible = false;
+
+    // loading feedback
+    policyCancellationDetailsIsLoading = false;
+
     //loading feedback
     cancellingPolicy: boolean = false;
     editedRisk: RiskModel;
+    selectedRisk: RiskModel;
 
     //policy details form
     policyCancellationDetailsForm: FormGroup;
+
+    // cancellation type form
+    policyCancellationTypeForm: FormGroup;
+
+    // cancellation type
+    selectedCancellationType = { label: 'Time On Risk', value: 'timeOnRisk' };
 
     //endorsement form
     endorsementForm: FormGroup;
@@ -39,6 +74,9 @@ export class PolicyCancellationDetailsComponent implements OnInit {
 
     //creditNote
     creditNotes: CreditNote[];
+
+    // policy debit note
+    debitNote: DebitNote;
 
     // For Modal
     clientName: string;
@@ -67,10 +105,24 @@ export class PolicyCancellationDetailsComponent implements OnInit {
         private policiesService: PoliciesService,
         private msg: NzMessageService,
         private readonly router: Router,
-        private endorsementService: EndorsementService
+        private endorsementService: EndorsementService,
+        private vehicleDetailsComponent: VehicleDetailsComponent,
+        private premuimComputationsComponent: PremiumComputationComponent,
+        private premiumComputationDetailsComponent: PremiumComputationDetailsComponent,
+        private extensionsComponent: ExtensionsComponent,
+        private discountsComponent: DiscountsComponent,
+        private totalsComponent: TotalsViewComponent,
+        private vehicleDetailsService: VehicleDetailsServiceService,
+        private premiumComputationService: PremiumComputationService,
+        private accountsService: AccountService
     ) {}
 
     ngOnInit(): void {
+        this.policyCancellationDetailsIsLoading = true;
+        setTimeout(() => {
+            this.policyCancellationDetailsIsLoading = false;
+        }, 3000);
+
         this.policyCancellationDetailsForm = this.formBuilder.group({
             client: ['', Validators.required],
             nameOfInsured: ['', Validators.required],
@@ -86,6 +138,11 @@ export class PolicyCancellationDetailsComponent implements OnInit {
             expiryDate: ['', Validators.required],
             quarter: ['', Validators.required],
             town: ['', Validators.required]
+        });
+
+        this.policyCancellationTypeForm = this.formBuilder.group({
+            selectedCancellationType: [''],
+            premium: ['', Validators.required]
         });
 
         this.endorsementForm = this.formBuilder.group({
@@ -115,6 +172,14 @@ export class PolicyCancellationDetailsComponent implements OnInit {
                 this.totalAmount = policy.netPremium.toString();
                 this.issueDate = policy.dateOfIssue.toString();
                 this.issueTime = policy.dateOfIssue.toString();
+
+                // debit note
+                this.policiesService.getDebitNotes().subscribe(debitNotes => {
+                    this.debitNote = debitNotes.filter(
+                        debitNotePolicy =>
+                            debitNotePolicy.policy.id == this.policyData.id
+                    )[0];
+                });
 
                 this.isCancelledPolicy = this.policyData.status === 'Cancelled';
 
@@ -161,6 +226,76 @@ export class PolicyCancellationDetailsComponent implements OnInit {
         this.viewRiskFormModalVisible = true;
     }
 
+    // view details of the risk
+    viewRiskDetails(risk: RiskModel) {
+        this.premiumComputationService.changeRiskEditMode(true);
+        this.premiumComputationService.changeExtensionMode(false);
+        this.selectedRisk = risk;
+        this.viewRiskModalVisible = true;
+
+        const vehicleDetails: VehicleDetailsModel = {
+            vehicleMake: risk.vehicleMake,
+            vehicleModel: risk.vehicleModel,
+            yearOfManufacture: risk.yearOfManufacture,
+            regNumber: risk.regNumber,
+            engineNumber: risk.engineNumber,
+            chassisNumber: risk.chassisNumber,
+            color: risk.color,
+            cubicCapacity: risk.cubicCapacity,
+            seatingCapacity: risk.seatingCapacity,
+            bodyType: risk.bodyType
+        };
+
+        const premiumComputationDetails: PremiumComputationDetails = {
+            insuranceType: risk.insuranceType,
+            productType: risk.productType,
+            riskStartDate: risk.riskStartDate,
+            riskEndDate: risk.riskEndDate,
+            riskQuarter: risk.riskQuarter,
+            numberOfDays: risk.numberOfDays,
+            expiryQuarter: risk.expiryQuarter
+        };
+
+        const premimuComputations: PremiumComputation = {
+            sumInsured: risk.sumInsured
+        };
+
+        const totals: ITotalsModel = {
+            basicPremium: risk.basicPremium,
+            premiumLevy: risk.premiumLevy,
+            netPremium: risk.netPremium
+        };
+
+        this.vehicleDetailsComponent.setVehicleDetails(vehicleDetails);
+        this.premiumComputationDetailsComponent.setPremiumComputationDetails(
+            premiumComputationDetails
+        );
+        this.premuimComputationsComponent.setPremiumComputations(
+            premimuComputations
+        );
+        this.totalsComponent.setTotals(totals);
+    }
+
+    handleCreditNotePremium() {
+        if (
+            this.policyCancellationTypeForm.get('selectedCancellationType')
+                .value == 'timeOnRisk'
+        ) {
+            console.log('here');
+            const premium = this.policyCancellationBalance();
+            this.policyCancellationTypeForm
+                .get('premium')
+                .setValue(premium.toFixed(2));
+        } else if (
+            this.policyCancellationTypeForm.get('selectedCancellationType')
+                .value == 'fullRefund'
+        ) {
+            this.policyCancellationTypeForm
+                .get('premium')
+                .setValue(this.policyData.netPremium);
+        }
+    }
+
     //calculate number of days between two dates and returns requisition amount
     policyCancellationBalance(): number {
         const todayDate = new Date();
@@ -182,7 +317,6 @@ export class PolicyCancellationDetailsComponent implements OnInit {
     //endorse policy
     endorsePolicy() {
         this.cancellingPolicy = true;
-        console.log('endorse policy clicked!!');
 
         const endorsement: Endorsement = {
             ...this.endorsementForm.value,
@@ -203,7 +337,25 @@ export class PolicyCancellationDetailsComponent implements OnInit {
         const creditNote: CreditNote = {
             remarks: this.endorsementForm.get('remark').value,
             dateCreated: new Date(),
-            dateUpdated: new Date()
+            dateUpdated: new Date(),
+            creditNoteAmount: this.creditNoteAmount = this.policyCancellationTypeForm.get(
+                'premium'
+            ).value
+        };
+
+        const requisition: IRequisitionModel = {
+            id: v4(),
+            policyNumber: this.policyData.id,
+            requisitionNumber: 'REQ-000000',
+            payee: this.policyData.client,
+            cancellationDate: new Date(),
+            dateCreated: new Date(),
+            approvalStatus: 'Pending',
+            paymentType: 'PYMT',
+            currency: this.policyData.currency,
+            amount: this.creditNoteAmount = this.policyCancellationTypeForm.get(
+                'premium'
+            ).value
         };
 
         this.endorsementService
@@ -214,20 +366,25 @@ export class PolicyCancellationDetailsComponent implements OnInit {
 
         this.policiesService.updatePolicy(policy).subscribe(policy => {
             res => {
-                // this.router.navigateByUrl(
-                // '/flosure/underwriting/endorsements/view-endorsements'
+                console.log(res);
             };
 
             this.policiesService.createCreditNote(
                 this.policyData.id,
                 creditNote,
-                this.policyData
+                this.policyData,
+                this.debitNote.debitNoteNumber,
+                requisition
             );
-
+            this.router.navigateByUrl(
+                '/flosure/underwriting/endorsements/cancellation-cover'
+            );
             this.msg.success('Cancellation Successful');
             this.cancellingPolicy = false;
         });
 
-        this.creditNoteAmount = this.policyCancellationBalance();
+        this.creditNoteAmount = this.policyCancellationTypeForm.get(
+            'premium'
+        ).value;
     }
 }

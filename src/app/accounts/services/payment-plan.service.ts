@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import {
     AngularFirestore,
     AngularFirestoreCollection,
-    AngularFirestoreDocument,
+    AngularFirestoreDocument
 } from '@angular/fire/firestore';
 
 import * as _ from 'lodash';
@@ -21,7 +21,7 @@ interface IReceiptNumberResult {
 }
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
 export class PaymentPlanService implements Resolve<any> {
     private paymentPlansCollection: AngularFirestoreCollection<IPaymentModel>;
@@ -58,15 +58,15 @@ export class PaymentPlanService implements Resolve<any> {
     }
 
     async addPaymentPlan(paymentPlan: IPaymentModel) {
-        this.paymentPlans.pipe(first()).subscribe(async (paymentPlans) => {
+        this.paymentPlans.pipe(first()).subscribe(async paymentPlans => {
             await this.paymentPlansCollection
                 .doc(paymentPlan.id)
                 .set(paymentPlan)
-                .then((mess) => {
+                .then(mess => {
                     console.log('------PAYMENT PLAN DATA-------');
                     console.log(paymentPlan);
                 })
-                .catch((err) => {
+                .catch(err => {
                     console.log(err);
                 });
         });
@@ -76,10 +76,10 @@ export class PaymentPlanService implements Resolve<any> {
         return this.paymentPlansCollection
             .doc(`${paymentPlan.id}`)
             .update(paymentPlan)
-            .then((res) => {
+            .then(res => {
                 console.log(res);
             })
-            .catch((err) => {
+            .catch(err => {
                 console.log(err);
             });
     }
@@ -92,12 +92,12 @@ export class PaymentPlanService implements Resolve<any> {
         receipt: IReceiptModel,
         paymentPlan: IPaymentModel
     ): Promise<void> {
-        this.receipts.pipe(first()).subscribe(async (receipts) => {
+        this.receipts.pipe(first()).subscribe(async receipts => {
             this.http
                 .get<IReceiptNumberResult>(
-                    'https://flosure-rates-api.herokuapp.com/savenda-receipts/1'
+                    'https://number-generation.flosure-api.com/aplus-receipt-number/1'
                 )
-                .subscribe(async (res) => {
+                .subscribe(async res => {
                     receipt.receiptNumber = res.receiptNumber;
                     console.log('/////////////////////');
 
@@ -106,7 +106,7 @@ export class PaymentPlanService implements Resolve<any> {
                     //     res.receiptNumber;
 
                     this.rcptNumber = paymentPlan.planReceipt.filter(
-                        (rcpt) => rcpt.id === receipt.id
+                        rcpt => rcpt.id === receipt.id
                     )[0];
 
                     this.rcptNumber.receiptNumber = res.receiptNumber;
@@ -114,17 +114,17 @@ export class PaymentPlanService implements Resolve<any> {
                     await this.receiptCollection
                         .doc(receipt.id)
                         .set(receipt)
-                        .then(async (mess) => {
+                        .then(async mess => {
                             await this.paymentPlansCollection
                                 .doc(paymentPlan.id)
                                 .set(paymentPlan)
-                                .then((mes) => {
+                                .then(mes => {
                                     console.log(
                                         '------PAYMENT PLAN DATA-------'
                                     );
                                     console.log(paymentPlan);
                                 })
-                                .catch((err) => {
+                                .catch(err => {
                                     console.log(err);
                                 });
                             this.generateID(receipt.id);
@@ -132,7 +132,7 @@ export class PaymentPlanService implements Resolve<any> {
                                 'Receipt Successfully created'
                             );
                         })
-                        .catch((err) => {
+                        .catch(err => {
                             this.message.warning('Receipt Failed');
                             console.log(err);
                         });
@@ -156,19 +156,19 @@ export class PaymentPlanService implements Resolve<any> {
         receipt: IReceiptModel,
         paymentPlan: IPaymentModel
     ): Promise<void> {
-        this.receipts.pipe(first()).subscribe(async (receipts) => {
+        this.receipts.pipe(first()).subscribe(async receipts => {
             this.http
                 .get<IReceiptNumberResult>(
-                    'https://flosure-rates-api.herokuapp.com/savenda-receipts/1'
+                    'https://number-generation.flosure-api.com/aplus-receipt-number/1'
                 )
-                .subscribe(async (res) => {
+                .subscribe(async res => {
                     receipt.receiptNumber = res.receiptNumber;
                     console.log(res.receiptNumber);
                     // paymentPlan.planReceipt[0].receiptNumber =
                     //     res.receiptNumber;
 
                     this.rcptNumber = paymentPlan.planReceipt.filter(
-                        (rcpt) => rcpt.id === receipt.id
+                        rcpt => rcpt.id === receipt.id
                     )[0];
 
                     this.rcptNumber.receiptNumber = res.receiptNumber;
@@ -176,7 +176,7 @@ export class PaymentPlanService implements Resolve<any> {
                     await this.receiptCollection
                         .doc(receipt.id)
                         .set(receipt)
-                        .then(async (mess) => {
+                        .then(async mess => {
                             this.message.success(
                                 'Receipt Successfully created'
                             );
@@ -184,16 +184,16 @@ export class PaymentPlanService implements Resolve<any> {
                             await this.paymentPlansCollection
                                 .doc(`${paymentPlan.id}`)
                                 .update(paymentPlan)
-                                .then((result) => {
+                                .then(result => {
                                     console.log(result);
                                 })
-                                .catch((err) => {
+                                .catch(err => {
                                     console.log(err);
                                 });
 
                             this.generateID(receipt.id);
                         })
-                        .catch((err) => {
+                        .catch(err => {
                             this.message.warning('Receipt Failed');
                             console.log(err);
                         });
@@ -206,7 +206,7 @@ export class PaymentPlanService implements Resolve<any> {
     generateReceiptNumber(): Promise<any> {
         return this.http
             .get<any>(
-                'https://flosure-rates-api.herokuapp.com/savenda-receipts/1'
+                'https://number-generation.flosure-api.com/aplus-receipt-number/1'
             )
             .toPromise();
     }

@@ -462,7 +462,7 @@
                     transform="translate(27 137)"
                 >
                     <tspan x="0" y="0">
-                        CERTIFICATE NO: {{coverNot.certificateNumber}}
+                        CERTIFICATE NO: {{coverNot ? coverNot.certificateNumber : '-'}}
                     </tspan>
                 </text>
                 <text
@@ -694,11 +694,11 @@
                 >
                     <tspan x="0" y="0" xml:space="preserve"></tspan>
                     <tspan x="0" y="10" xml:space="preserve">
-                        Cover Note Receipt No.: {{ receipt.receiptNumber }}
+                        Cover Note Receipt No.: {{ receipt ? receipt.receiptNumber : '-' }}
                     </tspan>
                     <tspan x="0" y="25" xml:space="preserve">
                         Amount Paid in {{ policy.currency }} :{{
-                            receipt.sumInDigits
+                            receipt ? receipt.sumInDigits : '-'
                         }}
                     </tspan>
                 </text>
@@ -721,7 +721,7 @@
         >
             <tspan x="0" y="0">Third Party Limits of Liability</tspan>
         </text>
-        <text *ngIf="limitsOfLiablity[0].liabilityType ==='combinedLimits'"
+        <text *ngIf="limitsOfLiablity[0] ? (limitsOfLiablity[0].liabilityType ==='combinedLimits') : '-'"
             id="Third_Party_Property_Damage"
             data-name="Third Party Property Damage"
             class="cls-18"
@@ -729,37 +729,37 @@
         >
             <tspan x="0" y="0">
 
-                Combined Limit {{policy.currency}} {{limitsOfLiablity[0].amount}}
+                Combined Limit {{policy.currency}} {{limitsOfLiablity[0] ? limitsOfLiablity[0].amount : '-'}}
             </tspan>
         </text>
-        <text *ngIf="limitsOfLiablity[0].liabilityType !=='combinedLimits'"
+        <text *ngIf="limitsOfLiablity[0] ? (limitsOfLiablity[0].liabilityType !=='combinedLimits') : '-'"
             id="Third_Party_Property_Damage"
             data-name="Third Party Property Damage"
             class="cls-18"
             transform="translate(298 360)"
         >
             <tspan x="0" y="0">
-                (i) Third Party Limit for injury/ Death per person {{policy.currency}} {{limitsOfLiablity[0].amount}}
+                (i) Third Party Limit for injury/ Death per person {{policy.currency}} {{limitsOfLiablity[0] ? limitsOfLiablity[0].amount : '-'}}
             </tspan>
         </text>
-        <text *ngIf="limitsOfLiablity[0].liabilityType !=='combinedLimits'"
+        <text *ngIf="limitsOfLiablity[0] ? (limitsOfLiablity[0].liabilityType !=='combinedLimits') : '-'"
             id="Third_Party_Injury_and_Death"
             data-name="Third Party Injury and Death"
             class="cls-18"
             transform="translate(298 375)"
         >
             <tspan x="0" y="0">
-                (ii) Third party limit per Event {{policy.currency}} {{limitsOfLiablity[1].amount}}
+                (ii) Third party limit per Event {{policy.currency}} {{limitsOfLiablity[1] ? limitsOfLiablity[1].amount : '-'}}
             </tspan>
         </text>
-        <text *ngIf="limitsOfLiablity[0].liabilityType !=='combinedLimits'"
+        <text *ngIf="limitsOfLiablity[0] ? (limitsOfLiablity[0].liabilityType !=='combinedLimits') : '-'"
             id="Third_Party_Bodily_Injury_Death_per_Event"
             data-name="Third Party Bodily Injury / Death per Event"
             class="cls-18"
             transform="translate(298 390)"
         >
             <tspan x="0" y="0">
-                (iii)Third Party Property Damage {{policy.currency}} {{limitsOfLiablity[2].amount}}
+                (iii)Third Party Property Damage {{policy.currency}} {{limitsOfLiablity[2] ? limitsOfLiablity[2].amount : '-'}}
             </tspan>
         </text>
 

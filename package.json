@@ -20,6 +20,7 @@
     "@angular/platform-browser": "~9.0.2",
     "@angular/platform-browser-dynamic": "~9.0.2",
     "@angular/router": "~9.0.2",
+    "@componizer/schematics": "^0.0.2",
     "@types/chance": "^1.0.8",
     "@types/faker": "^4.1.9",
     "@types/html2canvas": "^0.0.35",

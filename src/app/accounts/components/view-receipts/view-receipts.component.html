@@ -391,7 +391,7 @@
                                             ><FONT SIZE="2"
                                                 >Source of Business:
                                                 {{
-                                                    receipt.sourceOfBusiness
+                                                    receipt.sourceOfBusiness.toLocaleUpperCase()
                                                 }}</FONT
                                             ></FONT
                                         ></P
@@ -415,7 +415,7 @@
                                 </TD>
                                 <ng-container
                                     *ngIf="
-                                        receipt.sourceOfBusiness !== 'Direct'
+                                        receipt.sourceOfBusiness !== 'direct'
                                     "
                                 >
                                     <TD
@@ -465,7 +465,7 @@
                                             ><FONT SIZE="2"
                                                 >Payment Method:
                                                 {{
-                                                    receipt.paymentMethod
+                                                    receipt.paymentMethod.toLocaleUpperCase()
                                                 }}</FONT
                                             ></FONT
                                         ></P
@@ -524,7 +524,7 @@
                                               toWords(
                                                   receipt.sumInDigits
                                                       | number: '1.2-2'
-                                              )
+                                              ).toLocaleUpperCase()
                                           }}</FONT
                                       ></FONT
                                   ></P

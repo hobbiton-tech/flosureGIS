@@ -17,23 +17,31 @@ import { DirectClientComponent } from './components/receipts/components/direct-c
 import { BrokerClientComponent } from './components/receipts/components/broker-client/broker-client.component';
 import { AgentClientComponent } from './components/receipts/components/agent-client/agent-client.component';
 import { SalesRepresentativeClientComponent } from './components/receipts/components/sales-representative-client/sales-representative-client.component';
+import { RequisitionsComponent } from './components/requisitions/requisitions.component';
+import { RequisitionPaymentComponent } from './components/requisitions/components/requisition-payment/requisition-payment.component';
+import { PaymentRequisitionVoucherComponent } from './components/payments/documents/payment-requisition-voucher/payment-requisition-voucher.component';
+import { NgxPrintModule } from 'ngx-print';
 
 const routes: Routes = [
     {
         path: 'generate-receipts',
-        component: ReceiptsGenerationComponent,
+        component: ReceiptsGenerationComponent
     },
     {
         path: 'receipts',
-        component: ReceiptsComponent,
+        component: ReceiptsComponent
+    },
+    {
+        path: 'requisitions',
+        component: RequisitionsComponent
     },
     {
         path: 'payments',
-        component: PaymentsComponent,
+        component: PaymentsComponent
     },
     {
         path: 'payment-plan',
-        component: PaymentPlanComponent,
+        component: PaymentPlanComponent
     },
     // {
     //     path: 'payment-plan/:id',
@@ -41,28 +49,28 @@ const routes: Routes = [
     // },
     {
         path: 'payment-plan/:id',
-        component: PaymentPlanPolicyInstallmentsComponent,
+        component: PaymentPlanPolicyInstallmentsComponent
     },
     {
         path: 'view-receipt/:id',
-        component: ViewReceiptsComponent,
+        component: ViewReceiptsComponent
     },
     {
         path: 'direct-client',
-        component: DirectClientComponent,
+        component: DirectClientComponent
     },
     {
         path: 'broker',
-        component: BrokerClientComponent,
+        component: BrokerClientComponent
     },
     {
         path: 'agent',
-        component: AgentClientComponent,
+        component: AgentClientComponent
     },
     {
         path: 'sales-representative',
-        component: SalesRepresentativeClientComponent,
-    },
+        component: SalesRepresentativeClientComponent
+    }
 ];
 
 @NgModule({
@@ -79,6 +87,9 @@ const routes: Routes = [
         BrokerClientComponent,
         AgentClientComponent,
         SalesRepresentativeClientComponent,
+        RequisitionsComponent,
+        RequisitionPaymentComponent,
+        PaymentRequisitionVoucherComponent
     ],
     imports: [
         CommonModule,
@@ -87,7 +98,8 @@ const routes: Routes = [
         PdfViewerModule,
         FormsModule,
         ReactiveFormsModule,
+        NgxPrintModule
     ],
-    providers: [AccountService],
+    providers: [AccountService]
 })
 export class AccountsModule {}

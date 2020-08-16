@@ -1,6 +1,6 @@
 import {
     AngularFirestore,
-    AngularFirestoreCollection,
+    AngularFirestoreCollection
 } from '@angular/fire/firestore';
 import 'firebase/firestore';
 import { Endorsement } from '../models/endorsement.model';
@@ -11,10 +11,10 @@ import { v4 } from 'uuid';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-const BASE_URL = 'https://www.flosure-api.com';
+const BASE_URL = 'https://flosure-postgres-db.herokuapp.com';
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
 export class EndorsementService {
     private endorsementsCollection: AngularFirestoreCollection<Endorsement>;
@@ -29,7 +29,7 @@ export class EndorsementService {
     }
 
     async addEndorsement(endorsement: Endorsement) {
-        this.endorsements.pipe(first()).subscribe(async (endorsements) => {
+        this.endorsements.pipe(first()).subscribe(async endorsements => {
             endorsement.id = v4();
             this.endorsementsCollection.doc(endorsement.id).set(endorsement);
         });
@@ -85,23 +85,19 @@ export class EndorsementService {
         policyId: string,
         endorsement: Endorsement
     ): Observable<Endorsement> {
-        console.log('endorsement: ');
-        console.log(endorsement);
         return this.http.post<Endorsement>(
-            `https://www.flosure-api.com/endorsement/${policyId}`,
+            `${BASE_URL}/endorsement/${policyId}`,
 
             endorsement
         );
     }
     getEndorsements(): Observable<Endorsement[]> {
-        return this.http.get<Endorsement[]>(
-            'https://www.flosure-api.com/endorsement'
-        );
+        return this.http.get<Endorsement[]>(`${BASE_URL}/endorsement`);
     }
 
     getEndorsementById(endorsementId: string): Observable<Endorsement> {
         return this.http.get<Endorsement>(
-            `https://www.flosure-api.com/endorsement/${endorsementId}`
+            `${BASE_URL}/endorsement/${endorsementId}`
         );
     }
 
@@ -110,7 +106,7 @@ export class EndorsementService {
         endorsementId: string
     ): Observable<Endorsement> {
         return this.http.put<Endorsement>(
-            `https://www.flosure-api.com/endorsement/${endorsementId}`,
+            `${BASE_URL}/endorsement/${endorsementId}`,
 
             endorsement
         );

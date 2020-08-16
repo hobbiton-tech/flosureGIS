@@ -31,7 +31,7 @@ import { EditCancellationComponent } from './components/endorsements/components/
 import { PolicyCancellationDetailsComponent } from './components/endorsements/policy-cancellation-details/policy-cancellation-details.component';
 import { PolicyExtensionDetailsComponent } from './components/endorsements/policy-extension-details/policy-extension-details.component';
 import { PolicyRevisionDetailsComponent } from './components/endorsements/policy-revision-details/policy-revision-details.component';
-import { ViewRiskComponent } from './components/endorsements/policy-revision-details/view-risk/view-risk.component';
+// import { ViewRiskComponent } from './components/endorsements/policy-revision-details/view-risk/view-risk.component';
 import { AddRiskComponent } from './components/endorsements/policy-revision-details/add-risk/add-risk.component';
 // tslint:disable-next-line: max-line-length
 import { ViewExtensionRiskComponent } from './components/endorsements/policy-extension-details/view-extension-risk/view-extension-risk.component';
@@ -45,87 +45,87 @@ import { IntermediaryDetailsComponent } from './components/endorsements/intermed
 import { PolicyWordingComponent } from './documents/policy-wording/policy-wording.component';
 import { PolicyComprehensiveCertificateComponent } from './documents/policy-comprehensive-certificate/policy-comprehensive-certificate';
 import { PolicyThirdpartyCertificateComponent } from './documents/policy-thirdparty-certificate/policy-thirdparty-certificate.component';
+import { QuotesModule } from '../quotes/quotes.module';
 // tslint:disable-next-line: max-line-length
-
 
 const routes: Routes = [
     {
         path: 'endorsements',
-        component: EndorsementsComponent,
+        component: EndorsementsComponent
     },
     {
         path: 'endorsements/revision-cover',
-        component: RevisionCoverComponent,
+        component: RevisionCoverComponent
     },
     {
         path: 'endorsements/view-endorsements',
-        component: ViewEndorsementsComponent,
+        component: ViewEndorsementsComponent
     },
     {
         path: 'endorsements/extension-cover',
-        component: ExtensionCoverComponent,
+        component: ExtensionCoverComponent
     },
     {
         path: 'endorsements/cancellation-cover',
-        component: CancellationCoverComponent,
+        component: CancellationCoverComponent
     },
     {
         path: 'endorsements/edit-policy',
-        component: EditPolicyComponent,
+        component: EditPolicyComponent
     },
     {
         path: 'endorsements/edit-cancellation',
-        component: EditCancellationComponent,
+        component: EditCancellationComponent
     },
     {
         path: 'endorsements/edit-extension',
-        component: EditExtensionComponent,
+        component: EditExtensionComponent
     },
     {
         path: 'policies',
-        component: PoliciesComponent,
+        component: PoliciesComponent
     },
     {
         path: 'policy-details',
-        component: PolicyDetailsComponent,
+        component: PolicyDetailsComponent
     },
     {
         path: 'policy-revision-details/:id',
-        component: PolicyRevisionDetailsComponent,
+        component: PolicyRevisionDetailsComponent
     },
     {
         path: 'policy-extension-details/:id',
-        component: PolicyExtensionDetailsComponent,
+        component: PolicyExtensionDetailsComponent
     },
     {
         path: 'policy-cancellation-details/:id',
-        component: PolicyCancellationDetailsComponent,
+        component: PolicyCancellationDetailsComponent
     },
     {
         path: 'backup-policy-details/:id',
-        component: BackupPolicyDetailsComponent,
+        component: BackupPolicyDetailsComponent
     },
     {
         path: 'policy-details/:id',
         component: PolicyDetailsComponent,
-        resolve: PolicyDetailsResolver,
+        resolve: PolicyDetailsResolver
     },
     {
         path: 'policy-renewal-list',
-        component: PolicyRenewalsComponent,
+        component: PolicyRenewalsComponent
     },
     {
         path: 'policy-renewal-details/:id',
-        component: PolicyRenewalsDetailsComponent,
+        component: PolicyRenewalsDetailsComponent
     },
     {
         path: 'intermediary-view/:id',
-        component: IntermediaryDetailsComponent,
+        component: IntermediaryDetailsComponent
     },
     {
         path: 'policy-wording/:id',
-        component: PolicyWordingComponent,
-    },
+        component: PolicyWordingComponent
+    }
 ];
 
 @NgModule({
@@ -149,7 +149,7 @@ const routes: Routes = [
         PolicyCancellationDetailsComponent,
         PolicyExtensionDetailsComponent,
         PolicyRevisionDetailsComponent,
-        ViewRiskComponent,
+        // ViewRiskComponent,
         AddRiskComponent,
         ViewExtensionRiskComponent,
         ViewCancellationRiskComponent,
@@ -161,7 +161,6 @@ const routes: Routes = [
         PolicyComprehensiveCertificateComponent,
         PolicyThirdpartyCertificateComponent,
         PolicyScheduleCombinedDocumentComponent
-
     ],
     imports: [
         CommonModule,
@@ -171,7 +170,8 @@ const routes: Routes = [
         RouterModule.forChild(routes),
         PdfViewerModule,
         NgxPrintModule,
+        QuotesModule
     ],
-    providers: [PolicyDetailsResolver, PoliciesService, EndorsementService],
+    providers: [PolicyDetailsResolver, PoliciesService, EndorsementService]
 })
 export class UnderWritingModule {}

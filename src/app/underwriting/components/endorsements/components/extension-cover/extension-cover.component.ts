@@ -12,6 +12,8 @@ export class ExtensionCoverComponent implements OnInit {
     policiesList: Policy[];
     displayPoliciesList: Policy[];
 
+    extensionOfCoverListIsLoading = false;
+
     searchString: string;
 
     constructor(
@@ -20,6 +22,11 @@ export class ExtensionCoverComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        this.extensionOfCoverListIsLoading = true;
+        setTimeout(() => {
+            this.extensionOfCoverListIsLoading = false;
+        }, 3000);
+
         this.policiesService.getPolicies().subscribe(policies => {
             this.policiesList = policies;
             this.displayPoliciesList = this.policiesList;

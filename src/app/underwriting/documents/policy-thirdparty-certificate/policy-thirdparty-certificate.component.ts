@@ -1,9 +1,13 @@
-
 import { Risks } from './../../../reports/model/quotation.model';
 import { Component, OnInit, Input } from '@angular/core';
 import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import { RiskModel, ITimestamp, Excess, LimitsOfLiability } from 'src/app/quotes/models/quote.model';
+import {
+    RiskModel,
+    ITimestamp,
+    Excess,
+    LimitsOfLiability
+} from 'src/app/quotes/models/quote.model';
 import { Policy } from '../../models/policy.model';
 import moment from 'moment';
 import { IReceiptModel } from 'src/app/accounts/components/models/receipts.model';
@@ -12,22 +16,21 @@ import { CoverNote } from '../models/documents.model';
 @Component({
     selector: 'app-policy-thirdparty-certificate',
     templateUrl: './policy-thirdparty-certificate.component.html',
-    styleUrls: ['./policy-thirdparty-certificate.component.scss'],
+    styleUrls: ['./policy-thirdparty-certificate.component.scss']
 })
 export class PolicyThirdpartyCertificateComponent implements OnInit {
     @Input()
     clientName: string;
 
-
     @Input()
     excessListCert: Excess[];
 
     @Input()
-    excessList: Excess[]; 
+    excessList: Excess[];
 
     @Input()
     limitsOfLiablityCert: LimitsOfLiability[];
-    
+
     @Input()
     limitsOfLiablity: LimitsOfLiability[];
 
@@ -80,34 +83,34 @@ export class PolicyThirdpartyCertificateComponent implements OnInit {
     policy: Policy;
 
     @Input()
-    combInfo:string;
+    combInfo: string;
     @Input()
-    combAmount:number;
+    combAmount: number;
     @Input()
-    proDInfo:string;
+    proDInfo: string;
     @Input()
-    propDAmount:number;
+    propDAmount: number;
     @Input()
-    deathPEInfo:string;
+    deathPEInfo: string;
     @Input()
-    deathPEAmount:number;
+    deathPEAmount: number;
     @Input()
-    deathPPInfo:string;
+    deathPPInfo: string;
     @Input()
-    deathPPAmount:number;
+    deathPPAmount: number;
 
     @Input()
-    fExcexxType:string;
+    fExcexxType: string;
     @Input()
-    fExcessAmount:number;
+    fExcessAmount: number;
     @Input()
-    sExcessType:string;
+    sExcessType: string;
     @Input()
-    sExcessAmount:number;
+    sExcessAmount: number;
     @Input()
-    tExcessType:string;
+    tExcessType: string;
     @Input()
-    tExcessAmount:number;
+    tExcessAmount: number;
 
     subTotal: number;
 
@@ -136,11 +139,9 @@ export class PolicyThirdpartyCertificateComponent implements OnInit {
 
     getExcessess() {
         // for( const ex of this.excessListCert) {
-            
         //     if (ex.excessType ==='Third Party Property Damage (TPPD ) 10% Minimum') {
         //         this.firstExcess = ex;
         //         console.log("TTTTTTT<<<", this.firstExcess);
-                
         //     }
         //     // if (ex.excessType ==='Own Damage 10% Minimum') {
         //     //     this.secondExcess = ex;
@@ -155,7 +156,7 @@ export class PolicyThirdpartyCertificateComponent implements OnInit {
 
     // getLimit() {
     //     for(const lim of this.limitsOfLiablityCert) {
-            
+
     //         this.limits = lim
     //         if( lim.liabilityType === 'combinedLimits') {
     //             this.co = false;
@@ -191,9 +192,10 @@ export class PolicyThirdpartyCertificateComponent implements OnInit {
     //     }
     // }
 
-
     getYearOfManufacture(risk: RiskModel) {
-        const year: string = moment(risk.yearOfManufacture).year().toString();
+        const year: string = moment(risk.yearOfManufacture)
+            .year()
+            .toString();
         return year;
     }
     htmlToPdf() {
@@ -209,19 +211,19 @@ export class PolicyThirdpartyCertificateComponent implements OnInit {
         const options = {
             scale: 1.32,
             allowTaint: true,
-            onclone: (doc) => {
+            onclone: doc => {
                 doc.querySelector('div').style.transform = 'none';
             },
             background: 'white',
             height: div.clientHeight,
-            width: div.clientWidth,
+            width: div.clientWidth
         };
 
-        html2canvas(div, options).then((canvas) => {
+        html2canvas(div, options).then(canvas => {
             // Initialize JSPDF
             const doc = new jsPDF({
                 unit: 'px',
-                format: 'a4',
+                format: 'a4'
             });
             // Converting canvas to Image
             const imgData = canvas.toDataURL('image/PNG');
@@ -245,9 +247,9 @@ export class PolicyThirdpartyCertificateComponent implements OnInit {
         });
     }
 
-    convertRiskDate(risk: RiskModel): number {
-        return (risk.riskStartDate as ITimestamp).seconds * 1000;
-    }
+    // convertRiskDate(risk: RiskModel): number {
+    //     return (risk.riskStartDate as ITimestamp).seconds * 1000;
+    // }
 
     sumArray(items, prop) {
         // tslint:disable-next-line: only-arrow-functions

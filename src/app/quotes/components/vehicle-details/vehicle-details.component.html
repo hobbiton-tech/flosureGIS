@@ -1,0 +1,201 @@
+<div>
+    <form nz-form [formGroup]="vehicleDetailsForm">
+        <div nz-row nzGutter="0">
+            <div nz-col nzSpan="8">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10" nzFor="vehicleMake" nzRequired>
+                        Vehicle Make
+                    </nz-form-label>
+                    <nz-form-control nzSpan="10">
+                        <!-- <nz-select nzPlaceHolder="Select vehicle make" nzAllowClear nzShowSearch nzServerSearch
+                            formControlName="vehicleMake" (nzOnSearch)="
+                                onVehicleMakeSearch(
+                                    $event
+                                )
+                            ">
+                            <ng-container *ngFor="
+                                    let o of vehicleMakeOptionList
+                                ">
+                                <nz-option *ngIf="
+                                        !isVehicleMakeLoading
+                                    " [nzValue]="o" [nzLabel]="o"></nz-option>
+                            </ng-container>
+                            <nz-option *ngIf="
+                                    isVehicleMakeLoading
+                                " nzDisabled nzCustomContent>
+                                <i nz-icon nzType="loading" class="loading-icon"></i>
+                                Loading Data...
+                            </nz-option>
+                        </nz-select> -->
+                        <input nz-input formControlName="vehicleMake" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10" nzFor="vehicleModel" nzRequired>
+                        Vehicle Model
+                    </nz-form-label>
+                    <nz-form-control nzSpan="10">
+                        <!-- <nz-select nzPlaceHolder="Select vehicle model" nzAllowClear nzShowSearch nzServerSearch
+                            formControlName="vehicleModel" (nzOnSearch)="
+                                onVehicleModelSearch(
+                                    $event
+                                )
+                            ">
+                            <ng-container *ngFor="
+                                    let o of vehicleModelOptionList
+                                ">
+                                <nz-option *ngIf="
+                                        !isVehicleModelLoading
+                                    " [nzValue]="o" [nzLabel]="o"></nz-option>
+                            </ng-container>
+                            <nz-option *ngIf="
+                                    isVehicleModelLoading
+                                " nzDisabled nzCustomContent>
+                                <i nz-icon nzType="loading" class="loading-icon"></i>
+                                Loading Data...
+                            </nz-option>
+                        </nz-select> -->
+                        <input nz-input formControlName="vehicleModel" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzRequired nzSpan="10">Year Of Manf</nz-form-label>
+                    <nz-form-control nzSpan="10">
+                        <input nz-input formControlName="yearOfManufacture" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10" nzFor="regNumber" nzRequired>Reg Number
+                    </nz-form-label>
+                    <nz-form-control nzSpan="10" nzHasFeedback [nzErrorTip]="
+                            compRegNumberErrorTp
+                        ">
+                        <input nz-input name="regNumber" formControlName="regNumber" type="text" id="regNumber" />
+                        <ng-template #compRegNumberErrorTp let-control>
+                            <ng-container *ngIf="
+                                    control.hasError(
+                                        'required'
+                                    )
+                                ">
+                                Please input your
+                                Registration Number!
+                            </ng-container>
+                            <ng-container *ngIf="
+                                    control.hasError(
+                                        'duplicated'
+                                    )
+                                ">
+                                The Registration
+                                Number already
+                                exists on an active
+                                policy!
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10" nzFor="engineNumber">Engine Number
+                    </nz-form-label>
+                    <nz-form-control nzSpan="10" nzHasFeedback [nzErrorTip]="
+                            compEngineNumberErrorTp
+                        ">
+                        <input nz-input name="engineNumber" formControlName="engineNumber" type="text"
+                            id="engineNumber" />
+                        <ng-template #compEngineNumberErrorTp let-control>
+                            <!-- <ng-container *ngIf="
+                                    control.hasError(
+                                        'required'
+                                    )
+                                ">
+                                Please input Engine
+                                Number!
+                            </ng-container> -->
+                            <ng-container *ngIf="
+                                    control.hasError(
+                                        'duplicated'
+                                    )
+                                ">
+                                The Engine Number
+                                already exists on an
+                                active policy!
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10" nzFor="chassisNumber" nzRequired>
+                        Chassis Number
+                    </nz-form-label>
+                    <nz-form-control nzSpan="10" nzHasFeedback [nzErrorTip]="
+                            compChassisNumberErrorTp
+                        ">
+                        <input nz-input name="chassisNumber" formControlName="chassisNumber" type="text"
+                            id="chassisNumber" />
+                        <ng-template #compChassisNumberErrorTp let-control>
+                            <ng-container *ngIf="
+                                    control.hasError(
+                                        'required'
+                                    )
+                                ">
+                                Please input Chassis
+                                Number!
+                            </ng-container>
+                            <ng-container *ngIf="
+                                    control.hasError(
+                                        'duplicated'
+                                    )
+                                ">
+                                The Chassis Number
+                                already exists on an
+                                active policy!
+                            </ng-container>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10" nzFor="color" nzRequired>Color
+                    </nz-form-label>
+                    <nz-form-control nzSpan="10">
+                        <input nz-input name="color" formControlName="color" type="text" id="color" />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10" nzFor="cubicCapacity" nzRequired>
+                        Cubic Capacity
+                    </nz-form-label>
+                    <nz-form-control nzSpan="10">
+                        <input nz-input name="cubicCapacity" formControlName="cubicCapacity" type="text"
+                            id="cubicCapacity" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10" nzFor="seatingCapacity" nzRequired>
+                        Seating Capacity
+                    </nz-form-label>
+                    <nz-form-control nzSpan="10">
+                        <input nz-input name="seatingCapacity" formControlName="seatingCapacity" type="text"
+                            id="seatingCapacity" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzSpan="10" nzRequired>Body Type</nz-form-label>
+                    <nz-form-control nzSpan="10">
+                        <nz-select formControlName="bodyType">
+                            <nz-option *ngFor="
+                                    let bodyType of vehicleBodyType
+                                " [nzValue]="
+                                    bodyType.value
+                                " [nzLabel]="
+                                    bodyType.label
+                                "></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+    </form>
+</div>

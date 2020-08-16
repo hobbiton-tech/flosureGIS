@@ -12,26 +12,30 @@ import {
     ILimit,
     IExccess,
     IWarranty,
-    IExclusion,
+    IExclusion
 } from 'src/app/settings/models/underwriting/clause.model';
 import {
     AngularFirestore,
-    AngularFirestoreCollection,
+    AngularFirestoreCollection
 } from '@angular/fire/firestore';
 import 'firebase/firestore';
 import { filter, first } from 'rxjs/operators';
 import { NzMessageService } from 'ng-zorro-antd';
+import {
+    IExtensionValueModel,
+    IExtensions
+} from 'src/app/quotes/models/extensions.model';
 
 const BASE_URL = 'https://flosure-api.azurewebsites.net';
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
 export class ClausesService {
     private clauseCollection: AngularFirestoreCollection<IClause>;
     clauses: Observable<IClause[]>;
 
-    private extensionCollection: AngularFirestoreCollection<IExtension>;
-    extensions: Observable<IExtension[]>;
+    private extensionCollection: AngularFirestoreCollection<IExtensions>;
+    extensions: Observable<IExtensions[]>;
 
     private wordingCollection: AngularFirestoreCollection<IWording>;
     wordings: Observable<IWording[]>;
@@ -67,7 +71,7 @@ export class ClausesService {
         this.clauseCollection = firebase.collection<IClause>('clauses');
         this.clauses = this.clauseCollection.valueChanges();
 
-        this.extensionCollection = firebase.collection<IExtension>(
+        this.extensionCollection = firebase.collection<IExtensions>(
             'extensions'
         );
         this.extensions = this.extensionCollection.valueChanges();
@@ -120,10 +124,10 @@ export class ClausesService {
         await this.clauseCollection
             .doc(clause.id)
             .set(clause)
-            .then((mess) => {
+            .then(mess => {
                 this.message.success('Clause Successfully created');
             })
-            .catch((err) => {
+            .catch(err => {
                 this.message.warning('Clause Failed');
                 console.log(err);
             });
@@ -133,10 +137,10 @@ export class ClausesService {
         return this.clauseCollection
             .doc(`${clause.id}`)
             .update(clause)
-            .then((res) => {
+            .then(res => {
                 console.log(res);
             })
-            .catch((err) => {
+            .catch(err => {
                 console.log(err);
             });
     }
@@ -150,10 +154,10 @@ export class ClausesService {
         await this.extensionCollection
             .doc(extension.id)
             .set(extension)
-            .then((mess) => {
+            .then(mess => {
                 this.message.success('Extension Successfully created');
             })
-            .catch((err) => {
+            .catch(err => {
                 this.message.warning('Extension Failed');
                 console.log(err);
             });
@@ -163,15 +167,15 @@ export class ClausesService {
         return this.extensionCollection
             .doc(`${extension.id}`)
             .update(extension)
-            .then((res) => {
+            .then(res => {
                 console.log(res);
             })
-            .catch((err) => {
+            .catch(err => {
                 console.log(err);
             });
     }
 
-    getExtensions(): Observable<IExtension[]> {
+    getExtensions(): Observable<IExtensions[]> {
         return this.extensions;
     }
 
@@ -180,12 +184,12 @@ export class ClausesService {
         await this.limitsCollection
             .doc(limit.id)
             .set(limit)
-            .then((mess) => {
+            .then(mess => {
                 this.message.success(
                     'Limits & Liabilities Successfuly Created'
                 );
             })
-            .catch((err) => {
+            .catch(err => {
                 this.message.warning('Failed to Create');
                 console.log(err);
             });
@@ -195,10 +199,10 @@ export class ClausesService {
         return this.limitsCollection
             .doc(`${limit.id}`)
             .update(limit)
-            .then((res) => {
+            .then(res => {
                 console.log(res);
             })
-            .catch((err) => {
+            .catch(err => {
                 console.log(err);
             });
     }
@@ -212,10 +216,10 @@ export class ClausesService {
         await this.warrantiesCollection
             .doc(warranty.id)
             .set(warranty)
-            .then((mess) => {
+            .then(mess => {
                 this.message.success('Warranty Successfuly Created');
             })
-            .catch((err) => {
+            .catch(err => {
                 this.message.warning('Failed to Create Warranty');
                 console.log(err);
             });
@@ -225,10 +229,10 @@ export class ClausesService {
         return this.warrantiesCollection
             .doc(`${warranty.id}`)
             .update(warranty)
-            .then((res) => {
+            .then(res => {
                 console.log(res);
             })
-            .catch((err) => {
+            .catch(err => {
                 console.log(err);
             });
     }
@@ -242,10 +246,10 @@ export class ClausesService {
         await this.wordingCollection
             .doc(wording.id)
             .set(wording)
-            .then((mess) => {
+            .then(mess => {
                 this.message.success('Wording Successfully created');
             })
-            .catch((err) => {
+            .catch(err => {
                 this.message.warning('Extension Failed');
                 console.log(err);
             });
@@ -255,10 +259,10 @@ export class ClausesService {
         return this.wordingCollection
             .doc(`${wording.id}`)
             .update(wording)
-            .then((res) => {
+            .then(res => {
                 console.log(res);
             })
-            .catch((err) => {
+            .catch(err => {
                 console.log(err);
             });
     }
@@ -272,11 +276,11 @@ export class ClausesService {
         await this.clausePolicyCollection
             .doc(clause.id)
             .set(clause)
-            .then((mess) => {
+            .then(mess => {
                 // this.message.success('Clause Successfully created');
                 console.log(mess);
             })
-            .catch((err) => {
+            .catch(err => {
                 // this.message.warning('Clause Failed');
                 console.log(err);
             });
@@ -286,10 +290,10 @@ export class ClausesService {
         return this.clausePolicyCollection
             .doc(`${clause.id}`)
             .update(clause)
-            .then((res) => {
+            .then(res => {
                 console.log(res);
             })
-            .catch((err) => {
+            .catch(err => {
                 console.log(err);
             });
     }
@@ -303,11 +307,11 @@ export class ClausesService {
         await this.extensionPolicyCollection
             .doc(extension.id)
             .set(extension)
-            .then((mess) => {
+            .then(mess => {
                 // this.message.success('Extension Successfully created');
                 console.log(mess);
             })
-            .catch((err) => {
+            .catch(err => {
                 // this.message.warning('Extension Failed');
                 console.log(err);
             });
@@ -317,10 +321,10 @@ export class ClausesService {
         return this.extensionPolicyCollection
             .doc(`${extension.id}`)
             .update(extension)
-            .then((res) => {
+            .then(res => {
                 console.log(res);
             })
-            .catch((err) => {
+            .catch(err => {
                 console.log(err);
             });
     }
@@ -334,11 +338,11 @@ export class ClausesService {
         await this.wordingPolicyCollection
             .doc(wording.id)
             .set(wording)
-            .then((mess) => {
+            .then(mess => {
                 // this.message.success('Wording Successfully created');
                 console.log(mess);
             })
-            .catch((err) => {
+            .catch(err => {
                 // this.message.warning('Extension Failed');
                 console.log(err);
             });
@@ -348,10 +352,10 @@ export class ClausesService {
         return this.wordingPolicyCollection
             .doc(`${wording.id}`)
             .update(wording)
-            .then((res) => {
+            .then(res => {
                 console.log(res);
             })
-            .catch((err) => {
+            .catch(err => {
                 console.log(err);
             });
     }
@@ -365,10 +369,10 @@ export class ClausesService {
         await this.exccessesCollection
             .doc(exccess.id)
             .set(exccess)
-            .then((mess) => {
+            .then(mess => {
                 this.message.success('Exccesses Successfuly Created');
             })
-            .catch((err) => {
+            .catch(err => {
                 this.message.warning('Failed to Create Exccesses');
                 console.log(err);
             });
@@ -378,10 +382,10 @@ export class ClausesService {
         return this.exccessesCollection
             .doc(`${exccess.id}`)
             .update(exccess)
-            .then((res) => {
+            .then(res => {
                 console.log(res);
             })
-            .catch((err) => {
+            .catch(err => {
                 console.log(err);
             });
     }
@@ -395,10 +399,10 @@ export class ClausesService {
         await this.exclusionsCollection
             .doc(exclusion.id)
             .set(exclusion)
-            .then((mess) => {
+            .then(mess => {
                 this.message.success('Exclusion Successfuly Created');
             })
-            .catch((err) => {
+            .catch(err => {
                 this.message.warning('Failed to Create Exclusion');
                 console.log(err);
             });
@@ -408,10 +412,10 @@ export class ClausesService {
         return this.exclusionsCollection
             .doc(`${exclusion.id}`)
             .update(exclusion)
-            .then((res) => {
+            .then(res => {
                 console.log(res);
             })
-            .catch((err) => {
+            .catch(err => {
                 console.log(err);
             });
     }

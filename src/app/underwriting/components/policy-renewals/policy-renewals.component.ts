@@ -7,9 +7,12 @@ import _ from 'lodash';
 @Component({
     selector: 'app-policy-renewals',
     templateUrl: './policy-renewals.component.html',
-    styleUrls: ['./policy-renewals.component.scss'],
+    styleUrls: ['./policy-renewals.component.scss']
 })
 export class PolicyRenewalsComponent implements OnInit {
+    // loading feedback
+    policyRenewalsDetailsIsLoading = false;
+
     policiesList: Policy[];
     displayPoliciesList: Policy[];
     policiesCount = 0;
@@ -24,17 +27,22 @@ export class PolicyRenewalsComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.policiesService.getPolicies().subscribe((policies) => {
+        this.policyRenewalsDetailsIsLoading = true;
+        setTimeout(() => {
+            this.policyRenewalsDetailsIsLoading = false;
+        }, 3000);
+
+        this.policiesService.getPolicies().subscribe(policies => {
             this.policiesList = _.filter(
                 policies,
-                (x) =>
+                x =>
                     x.receiptStatus === 'Receipted' &&
                     x.paymentPlan === 'Created'
             );
 
             this.policiesCount = _.filter(
                 policies,
-                (x) =>
+                x =>
                     x.receiptStatus === 'Receipted' &&
                     x.paymentPlan === 'Created'
             ).length;
@@ -52,7 +60,7 @@ export class PolicyRenewalsComponent implements OnInit {
     search(value: string): void {
         if (value === '' || !value) {
             // this.displayPoliciesList = this.policiesList
-            this.displayPoliciesList = this.policiesList.filter((policy) => {
+            this.displayPoliciesList = this.policiesList.filter(policy => {
                 return (
                     policy.policyNumber
                         .toLowerCase()

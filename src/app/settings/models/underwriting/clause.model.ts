@@ -31,6 +31,7 @@ export interface IExtension {
     heading: string;
     productId?: string;
     description: string;
+    value?: string;
 }
 
 export interface IPolicyClauses {

@@ -1,0 +1,24 @@
+<nz-modal [(nzVisible)]="isVisible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter"
+    (nzOnCancel)="handleCancel()">
+    <ng-template #modalTitle>
+        Upload Risks
+    </ng-template>
+
+    <ng-template #modalContent>
+        <nz-upload nzType="drag" [nzMultiple]="true" [nzLimit]="2"
+            nzAction="https://flosure-pdf-service.herokuapp.com/risks-uploads" (nzChange)="handleChange($event)">
+            <p class="ant-upload-drag-icon">
+                <i nz-icon nzType="inbox"></i>
+            </p>
+            <p class="ant-upload-text">
+                Click or drag file to this area to upload
+            </p>
+        </nz-upload>
+    </ng-template>
+
+    <ng-template #modalFooter>
+        <button nz-button nzType="default" (click)="handleDownloadTemplate()">
+            Download Template
+        </button>
+    </ng-template>
+</nz-modal>

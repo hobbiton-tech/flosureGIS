@@ -20,6 +20,20 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { WarrantiesComponent } from './components/warranties/warranties.component';
 import { ClausesComponent } from './components/clauses/clauses.component';
 import { PerilsComponent } from './components/perils/perils.component';
+import { LimitsOfLiabilityComponent } from './components/limits-of-liability/limits-of-liability.component';
+import { VehicleDetailsComponent } from './components/vehicle-details/vehicle-details.component';
+import { DiscountsComponent } from './components/discounts/discounts.component';
+import { ExtensionsComponent } from './components/extensions/extensions.component';
+import { ExcessesComponent } from './components/excesses/excesses.component';
+import { PremiumComputationDetailsComponent } from './components/premium-computation-details/premium-computation-details.component';
+import { ViewRiskComponent } from './components/view-risk/view-risk.component';
+import { ExtensionsViewComponent } from './components/extensions-view/extensions-view.component';
+import { PremiumComputationComponent } from './components/premium-computation/premium-computation.component';
+import { TotalsViewComponent } from './components/totals-view/totals-view.component';
+import { DiscountsViewComponent } from './components/discounts-view/discounts-view.component';
+import { FleetUploadComponent } from './components/fleet-upload/fleet-upload.component';
+import { PremiumComputationService } from './services/premium-computation.service';
+import { VehicleDetailsServiceService } from './services/vehicle-details-service.service';
 const routes: Routes = [
     {
         path: 'create-quote',
@@ -47,6 +61,18 @@ const routes: Routes = [
         WarrantiesComponent,
         ClausesComponent,
         PerilsComponent,
+        LimitsOfLiabilityComponent,
+        VehicleDetailsComponent,
+        DiscountsComponent,
+        ExtensionsComponent,
+        ExcessesComponent,
+        PremiumComputationDetailsComponent,
+        ViewRiskComponent,
+        ExtensionsViewComponent,
+        PremiumComputationComponent,
+        TotalsViewComponent,
+        DiscountsViewComponent,
+        FleetUploadComponent
     ],
     imports: [
         CommonModule,
@@ -59,7 +85,34 @@ const routes: Routes = [
         NgxPrintModule,
         NzDatePickerModule
     ],
-    exports: [QuotesComponent, CreateQuoteComponent],
-    providers: [QuotesService]
+    exports: [
+        QuotesComponent,
+        CreateQuoteComponent,
+        ViewRiskComponent,
+        VehicleDetailsComponent,
+        LimitsOfLiabilityComponent,
+        DiscountsComponent,
+        ExtensionsComponent,
+        ExcessesComponent,
+        PremiumComputationDetailsComponent,
+        ExtensionsViewComponent,
+        PremiumComputationComponent,
+        TotalsViewComponent,
+        DiscountsViewComponent,
+        FleetUploadComponent
+    ],
+    providers: [
+        QuotesService,
+        VehicleDetailsComponent,
+        PremiumComputationComponent,
+        PremiumComputationDetailsComponent,
+        TotalsViewComponent,
+        ExtensionsComponent,
+        DiscountsComponent,
+        LimitsOfLiabilityComponent,
+        ExcessesComponent,
+        PremiumComputationService,
+        VehicleDetailsServiceService
+    ]
 })
 export class QuotesModule {}

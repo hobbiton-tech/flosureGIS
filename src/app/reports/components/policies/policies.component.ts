@@ -7,7 +7,7 @@ import * as XLSX from 'xlsx';
 import {
     IAgent,
     IBroker,
-    ISalesRepresentative,
+    ISalesRepresentative
 } from 'src/app/settings/components/agents/models/agents.model';
 import { QuotesService } from 'src/app/quotes/services/quotes.service';
 import { map, filter, tap } from 'rxjs/operators';
@@ -37,7 +37,7 @@ interface IFormatIntermediaryReport
 @Component({
     selector: 'app-policies',
     templateUrl: './policies.component.html',
-    styleUrls: ['./policies.component.scss'],
+    styleUrls: ['./policies.component.scss']
 })
 export class PoliciesComponent implements OnInit {
     clientList: MotorQuotationModel;
@@ -86,9 +86,6 @@ export class PoliciesComponent implements OnInit {
     isCommissionEarnedStatementVisible = false;
     isIntermediaryStatementForClientsVisible = false;
 
-
-   
-
     //
     //   data: AOA = [
     //     [1, 2],
@@ -117,7 +114,7 @@ export class PoliciesComponent implements OnInit {
     ) {
         this.dateForm = this.formBuilder.group({
             fromDate: ['', Validators.required],
-            toDate: ['', Validators.required],
+            toDate: ['', Validators.required]
         });
     }
     handleOk(): void {
@@ -141,7 +138,7 @@ export class PoliciesComponent implements OnInit {
         this.isVisible = true;
     }
     showDebtorsAgeAnalysisModal() {
-        this.isDebtorsAgeAnalysisReportVisible = true
+        this.isDebtorsAgeAnalysisReportVisible = true;
     }
     showAgentBrokerStatementModal() {
         this.isAgentBrokerStatementReportVisible = true;
@@ -167,42 +164,39 @@ export class PoliciesComponent implements OnInit {
 
         console.log('this->', t, f);
 
-        this.policiesService.getPolicies().subscribe((policies) => {
+        this.policiesService.getPolicies().subscribe(policies => {
             this.displayDirectClientStatements = policies;
             console.log('Policy--->', this.displayDirectClientStatements);
         });
 
+        this.agentsService.getAllIntermediaries().subscribe(intermediaries => {
+            this.intermediariesList = [
+                ...intermediaries[0],
+                ...intermediaries[1],
+                ...intermediaries[2]
+            ] as Array<IAgent & IBroker & ISalesRepresentative>;
 
-        this.agentsService
-            .getAllIntermediaries()
-            .subscribe((intermediaries) => {
-                this.intermediariesList = [
-                    ...intermediaries[0],
-                    ...intermediaries[1],
-                    ...intermediaries[2],
-                ] as Array<IAgent & IBroker & ISalesRepresentative>;
+            this.displayIntermediariesList = this.intermediariesList;
+            // console.log('=========>', this.displayInt ermediariesList);
 
-                this.displayIntermediariesList = this.intermediariesList;
-                // console.log('=========>', this.displayInt ermediariesList);
+            this.formatIntermediaryReport = this.displayIntermediariesList.map(
+                i => ({
+                    ...i,
+                    getFullName: this.getFullName(i),
+                    getPolicyCount: this.getIntermediaryPolicyCount(i),
+                    getQuoteCount: this.getIntermediaryQuoteCount(i),
+                    getRatio: this.getRatio(i)
+                })
+            );
+            console.log('filter==>', this.formatIntermediaryReport);
+        });
 
-                this.formatIntermediaryReport = this.displayIntermediariesList.map(
-                    (i) => ({
-                        ...i,
-                        getFullName: this.getFullName(i),
-                        getPolicyCount: this.getIntermediaryPolicyCount(i),
-                        getQuoteCount: this.getIntermediaryQuoteCount(i),
-                        getRatio: this.getRatio(i),
-                    })
-                );
-                console.log('filter==>', this.formatIntermediaryReport);
-            });
-
-        this.premiumService.generateQuotationReport().subscribe((d) => {
+        this.premiumService.generateQuotationReport().subscribe(d => {
             this.displayClientList = d;
             this.displayClientList;
         });
 
-        this.premiumService.generateAnalysisReport().subscribe((d) => {
+        this.premiumService.generateAnalysisReport().subscribe(d => {
             this.displayAnalysisReport = d;
             // console.log('Hey Am Report', this.displayAnalysisReport);
         });
@@ -250,8 +244,8 @@ export class PoliciesComponent implements OnInit {
                 'Product Type',
                 'Sum Insured',
                 'Gross Premium',
-                'Status',
-            ],
+                'Status'
+            ]
         ];
         // const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(headings);
 
@@ -308,7 +302,7 @@ export class PoliciesComponent implements OnInit {
 
         // doc.addImage(img, 'PNG', 10, 10, 280, 280);
 
-        var header = function (headerData: any) {
+        var header = function(headerData: any) {
             var text = 'A Plus General Insurance',
                 xOffset =
                     doc.internal.pageSize.width / 2 -
@@ -359,8 +353,8 @@ export class PoliciesComponent implements OnInit {
                 'Product Type',
                 'Sum Insured',
                 'Gross Premium',
-                'Status',
-            ],
+                'Status'
+            ]
         ];
 
         const totalPagesExp = '{total_pages_count_string}';
@@ -369,18 +363,18 @@ export class PoliciesComponent implements OnInit {
             beforePageContent: header,
             //   afterPageContent: footer,
             margin: {
-                top: 100,
+                top: 100
             },
             head: head,
             styles: {
                 overflow: 'linebreak',
                 fontSize: 10,
                 tableWidth: 'auto',
-                columnWidth: 'auto',
+                columnWidth: 'auto'
             },
             columnStyles: {
-                1: { columnWidth: 'auto' },
-            },
+                1: { columnWidth: 'auto' }
+            }
         };
 
         // const elem = document.getElementById('table');
@@ -400,7 +394,7 @@ export class PoliciesComponent implements OnInit {
         doc.autoTable({
             html: 'Table',
             margin: { top: 80 },
-            didDrawPage: header,
+            didDrawPage: header
         });
         // autoTable(doc, { html: '#Table' });
         doc.save('intermediary' + new Date() + '.pdf');
@@ -430,7 +424,7 @@ export class PoliciesComponent implements OnInit {
         this.premiumService
             .generateQuotationReport()
             .pipe(
-                map((client) =>
+                map(client =>
                     from(client).pipe(
                         filter(
                             (d: MotorQuotationModel) =>
@@ -440,8 +434,8 @@ export class PoliciesComponent implements OnInit {
                         )
                     )
                 ),
-                tap((client) =>
-                    client.subscribe((d) => {
+                tap(client =>
+                    client.subscribe(d => {
                         this.filterPremiumReport.push(d);
                         console.log(this.filterPremiumReport);
                     })
@@ -459,10 +453,10 @@ export class PoliciesComponent implements OnInit {
     }
 
     getIntermediaryQuoteCount(intermediary: any): any {
-        this.premiumService.generateQuoteReport().subscribe((quotes) => {
+        this.premiumService.generateQuoteReport().subscribe(quotes => {
             this.quotesList = quotes;
 
-            this.filteredQuotesList = this.quotesList.filter((x) =>
+            this.filteredQuotesList = this.quotesList.filter(x =>
                 x.intermediaryName == intermediary.companyName
                     ? intermediary.companyName
                     : intermediary.contactFirstName +
@@ -480,9 +474,9 @@ export class PoliciesComponent implements OnInit {
     }
 
     getIntermediaryPolicyCount(intermediary: any): any {
-        this.policiesService.getPolicies().subscribe((policies) => {
+        this.policiesService.getPolicies().subscribe(policies => {
             this.policiesList = policies;
-            this.filteredPoliciesList = this.policiesList.filter((x) =>
+            this.filteredPoliciesList = this.policiesList.filter(x =>
                 x.intermediaryName == intermediary.companyName
                     ? intermediary.companyName
                     : intermediary.contactFirstName +
@@ -500,9 +494,9 @@ export class PoliciesComponent implements OnInit {
         let quoteNumber;
         let policyNumber;
 
-        this.policiesService.getPolicies().subscribe((policies) => {
+        this.policiesService.getPolicies().subscribe(policies => {
             this.policiesList = policies;
-            this.filteredPoliciesList = this.policiesList.filter((x) =>
+            this.filteredPoliciesList = this.policiesList.filter(x =>
                 x.intermediaryName == intermediary.companyName
                     ? intermediary.companyName
                     : intermediary.contactFirstName +
@@ -513,9 +507,9 @@ export class PoliciesComponent implements OnInit {
             quoteNumber = this.filteredQuotesList.length;
         });
 
-        this.quotationService.getMotorQuotations().subscribe((policies) => {
+        this.quotationService.getMotorQuotations().subscribe(policies => {
             this.quotesList = policies;
-            this.filteredQuotesList = this.quotesList.filter((x) =>
+            this.filteredQuotesList = this.quotesList.filter(x =>
                 x.intermediaryName == intermediary.companyName
                     ? intermediary.companyName
                     : intermediary.contactFirstName +
@@ -544,7 +538,7 @@ export class PoliciesComponent implements OnInit {
 
         // doc.addImage(img, 'PNG', 10, 10, 280, 280);
 
-        var header = function (headerData: any) {
+        var header = function(headerData: any) {
             // var subtext = 'A Plus General Insurance',
 
             // xOffset =
@@ -603,8 +597,8 @@ export class PoliciesComponent implements OnInit {
                 'Transaction amount',
                 'DR (debit side)',
                 'CR (Credit side)',
-                'Balance (cumulative balance)',
-            ],
+                'Balance (cumulative balance)'
+            ]
         ];
 
         const totalPagesExp = '{total_pages_count_string}';
@@ -613,18 +607,18 @@ export class PoliciesComponent implements OnInit {
             beforePageContent: header,
             //   afterPageContent: footer,
             margin: {
-                top: 100,
+                top: 100
             },
             head: head,
             styles: {
                 overflow: 'linebreak',
                 fontSize: 10,
                 tableWidth: 'auto',
-                columnWidth: 'auto',
+                columnWidth: 'auto'
             },
             columnStyles: {
-                1: { columnWidth: 'auto' },
-            },
+                1: { columnWidth: 'auto' }
+            }
         };
 
         // const elem = document.getElementById('table');
@@ -643,7 +637,7 @@ export class PoliciesComponent implements OnInit {
         doc.autoTable({
             html: 'Table',
             margin: { top: 80 },
-            didDrawPage: header,
+            didDrawPage: header
         });
         // autoTable(doc, { html: '#Table' });
         doc.save('quotationReport.pdf');
@@ -659,7 +653,7 @@ export class PoliciesComponent implements OnInit {
 
         // doc.addImage(img, 'PNG', 10, 10, 280, 280);
 
-        var header = function (headerData: any) {
+        var header = function(headerData: any) {
             // var subtext = 'A Plus General Insurance',
 
             // xOffset =
@@ -721,7 +715,7 @@ export class PoliciesComponent implements OnInit {
                 'Over 365 Days',
                 'Open Cash',
                 'Total Outstanding '
-            ],
+            ]
         ];
 
         const totalPagesExp = '{total_pages_count_string}';
@@ -730,18 +724,18 @@ export class PoliciesComponent implements OnInit {
             beforePageContent: header,
             //   afterPageContent: footer,
             margin: {
-                top: 100,
+                top: 100
             },
             head: head,
             styles: {
                 overflow: 'linebreak',
                 fontSize: 10,
                 tableWidth: 'auto',
-                columnWidth: 'auto',
+                columnWidth: 'auto'
             },
             columnStyles: {
-                1: { columnWidth: 'auto' },
-            },
+                1: { columnWidth: 'auto' }
+            }
         };
 
         // const elem = document.getElementById('table');
@@ -760,7 +754,7 @@ export class PoliciesComponent implements OnInit {
         doc.autoTable({
             html: 'Table',
             margin: { top: 80 },
-            didDrawPage: header,
+            didDrawPage: header
         });
         // autoTable(doc, { html: '#Table' });
         doc.save('quotationAnalysisReport.pdf');
@@ -772,7 +766,7 @@ export class PoliciesComponent implements OnInit {
         var img = new Image();
         img.src = 'assets/images/apluslogo.png';
 
-        var header = function (headerData: any) {
+        var header = function(headerData: any) {
             var text = 'Quotation Listing Report',
                 xOffset =
                     doc.internal.pageSize.width / 2 -
@@ -810,7 +804,7 @@ export class PoliciesComponent implements OnInit {
                 'DR (debit side)',
                 'CR (Credit side)',
                 'Balance (cumulative balance)'
-            ],
+            ]
         ];
 
         const totalPagesExp = '{total_pages_count_string}';
@@ -819,18 +813,18 @@ export class PoliciesComponent implements OnInit {
             beforePageContent: header,
             //   afterPageContent: footer,
             margin: {
-                top: 100,
+                top: 100
             },
             head: head,
             styles: {
                 overflow: 'linebreak',
                 fontSize: 10,
                 tableWidth: 'auto',
-                columnWidth: 'auto',
+                columnWidth: 'auto'
             },
             columnStyles: {
-                1: { columnWidth: 'auto' },
-            },
+                1: { columnWidth: 'auto' }
+            }
         };
 
         // Total page number plugin only available in jspdf v1.0+
@@ -845,7 +839,7 @@ export class PoliciesComponent implements OnInit {
         doc.autoTable({
             html: 'Table',
             margin: { top: 80 },
-            didDrawPage: header,
+            didDrawPage: header
         });
         // autoTable(doc, { html: '#Table' });
         doc.save('quotationRenewalReport.pdf');
@@ -857,7 +851,7 @@ export class PoliciesComponent implements OnInit {
         var img = new Image();
         img.src = 'assets/images/apluslogo.png';
 
-        var header = function (headerData: any) {
+        var header = function(headerData: any) {
             var text = 'Quotation Listing Report',
                 xOffset =
                     doc.internal.pageSize.width / 2 -
@@ -896,7 +890,7 @@ export class PoliciesComponent implements OnInit {
                 'Withholding tax amount',
                 'Net commission due',
                 'Cheque number'
-            ],
+            ]
         ];
 
         const totalPagesExp = '{total_pages_count_string}';
@@ -905,18 +899,18 @@ export class PoliciesComponent implements OnInit {
             beforePageContent: header,
             //   afterPageContent: footer,
             margin: {
-                top: 100,
+                top: 100
             },
             head: head,
             styles: {
                 overflow: 'linebreak',
                 fontSize: 10,
                 tableWidth: 'auto',
-                columnWidth: 'auto',
+                columnWidth: 'auto'
             },
             columnStyles: {
-                1: { columnWidth: 'auto' },
-            },
+                1: { columnWidth: 'auto' }
+            }
         };
 
         // Total page number plugin only available in jspdf v1.0+
@@ -931,7 +925,7 @@ export class PoliciesComponent implements OnInit {
         doc.autoTable({
             html: 'Table',
             margin: { top: 80 },
-            didDrawPage: header,
+            didDrawPage: header
         });
         // autoTable(doc, { html: '#Table' });
         doc.save('DebitNoteReport.pdf');
@@ -943,7 +937,7 @@ export class PoliciesComponent implements OnInit {
         var img = new Image();
         img.src = 'assets/images/apluslogo.png';
 
-        var header = function (headerData: any) {
+        var header = function(headerData: any) {
             var text = 'Quotation Listing Report',
                 xOffset =
                     doc.internal.pageSize.width / 2 -
@@ -983,8 +977,8 @@ export class PoliciesComponent implements OnInit {
                 'Gross Premium',
                 'Insurance Levy',
                 'Commission amount',
-                'Currency',
-            ],
+                'Currency'
+            ]
         ];
 
         const totalPagesExp = '{total_pages_count_string}';
@@ -993,18 +987,18 @@ export class PoliciesComponent implements OnInit {
             beforePageContent: header,
             //   afterPageContent: footer,
             margin: {
-                top: 100,
+                top: 100
             },
             head: head,
             styles: {
                 overflow: 'linebreak',
                 fontSize: 10,
                 tableWidth: 'auto',
-                columnWidth: 'auto',
+                columnWidth: 'auto'
             },
             columnStyles: {
-                1: { columnWidth: 'auto' },
-            },
+                1: { columnWidth: 'auto' }
+            }
         };
 
         // Total page number plugin only available in jspdf v1.0+
@@ -1019,7 +1013,7 @@ export class PoliciesComponent implements OnInit {
         doc.autoTable({
             html: 'Table',
             margin: { top: 80 },
-            didDrawPage: header,
+            didDrawPage: header
         });
         // autoTable(doc, { html: '#Table' });
         doc.save('quotationRenewalReport.pdf');
@@ -1031,7 +1025,7 @@ export class PoliciesComponent implements OnInit {
         var img = new Image();
         img.src = 'assets/images/apluslogo.png';
 
-        var header = function (headerData: any) {
+        var header = function(headerData: any) {
             var text = 'Quotation Listing Report',
                 xOffset =
                     doc.internal.pageSize.width / 2 -
@@ -1065,8 +1059,8 @@ export class PoliciesComponent implements OnInit {
                 'Loading',
                 'Net Premium',
                 'Insurance Levy',
-                'Premium Due',
-            ],
+                'Premium Due'
+            ]
         ];
 
         const totalPagesExp = '{total_pages_count_string}';
@@ -1075,18 +1069,18 @@ export class PoliciesComponent implements OnInit {
             beforePageContent: header,
             //   afterPageContent: footer,
             margin: {
-                top: 100,
+                top: 100
             },
             head: head,
             styles: {
                 overflow: 'linebreak',
                 fontSize: 10,
                 tableWidth: 'auto',
-                columnWidth: 'auto',
+                columnWidth: 'auto'
             },
             columnStyles: {
-                1: { columnWidth: 'auto' },
-            },
+                1: { columnWidth: 'auto' }
+            }
         };
 
         // Total page number plugin only available in jspdf v1.0+
@@ -1101,7 +1095,7 @@ export class PoliciesComponent implements OnInit {
         doc.autoTable({
             html: 'Table',
             margin: { top: 80 },
-            didDrawPage: header,
+            didDrawPage: header
         });
         // autoTable(doc, { html: '#Table' });
         doc.save('PremiumWorkingReport.pdf');
