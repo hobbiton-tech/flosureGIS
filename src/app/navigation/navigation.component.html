@@ -115,7 +115,7 @@
                 </li>
                 <li nz-submenu nzTitle="Claims" nzIcon="question-circle">
                     <ul>
-                        <li nz-menu-item nzMatchRouter nzDisabled>
+                        <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/claims/claim-transactions">
                                 Claims Listing
                             </a>
@@ -164,6 +164,12 @@
                                 Payment Plans
                             </a>
                         </li>
+
+                        <li nz-menu-item nzMatchRouter>
+                          <a routerLink="/flosure/accounts/commission-payment">
+                              Commission Payment
+                          </a>
+                      </li>
                     </ul>
                 </li>
                 <li nz-submenu nzTitle="Finance" nzIcon="dollar">
@@ -274,13 +280,16 @@
                             <a routerLink="/flosure/settings/accounts">Accounts</a>
                         </li>
                         <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/settings/accounts">Finance</a>
+                            <a routerLink="/flosure/settings/finance">Finance</a>
                         </li>
                         <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/settings/warranties">Warranties & Exclusions</a>
                         </li>
                         <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/settings/extensions">Extensions</a>
+                        </li>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/settings/claims">Claims</a>
                         </li>
                     </ul>
                 </li>

@@ -17,6 +17,8 @@ import { BrokerClientComponent } from './components/receipts/components/broker-c
 import { AgentClientComponent } from './components/receipts/components/agent-client/agent-client.component';
 import { SalesRepresentativeClientComponent } from './components/receipts/components/sales-representative-client/sales-representative-client.component';
 import { PlanReceiptComponent } from './components/receipts/components/plan-receipt/plan-receipt.component';
+import { CommissionPaymentComponent } from './components/commission-payment/commission-payment.component';
+import { PaymentPlanService } from './services/payment-plan.service';
 
 const routes: Routes = [
     {
@@ -64,6 +66,11 @@ const routes: Routes = [
     path: 'plan-receipt',
     component: PlanReceiptComponent,
   },
+
+  {
+    path: 'commission-payment',
+    component: CommissionPaymentComponent,
+  },
 ];
 
 @NgModule({
@@ -80,6 +87,7 @@ const routes: Routes = [
         AgentClientComponent,
         SalesRepresentativeClientComponent,
         PlanReceiptComponent,
+        CommissionPaymentComponent,
     ],
     imports: [
         CommonModule,
@@ -89,6 +97,6 @@ const routes: Routes = [
         FormsModule,
         ReactiveFormsModule,
     ],
-    providers: [AccountService],
+    providers: [AccountService, PaymentPlanService],
 })
 export class AccountsModule {}
