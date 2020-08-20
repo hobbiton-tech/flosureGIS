@@ -17,6 +17,8 @@ import {
     IBroker,
 } from 'src/app/settings/components/agents/models/agents.model';
 import { AgentsService } from 'src/app/settings/components/agents/services/agents.service';
+import { AllocationsService } from '../../services/allocations.service';
+import { AllocationReceipt } from '../models/allocations.model';
 
 @Component({
     selector: 'app-receipts',
@@ -32,14 +34,10 @@ export class ReceiptsComponent implements OnInit {
     unreceiptedList: Policy[];
     receiptedList: IReceiptModel[];
     brokerList: IBroker[];
-    cancelledReceiptList: IReceiptModel[];
-    receiptObj: IReceiptModel = new IReceiptModel();
     receipt: IReceiptModel;
     today = new Date();
     clientName = '';
     policy: Policy = new Policy();
-    cancelReceipt: IReceiptModel = new IReceiptModel();
-    reinstateReceipt: IReceiptModel = new IReceiptModel();
     size = 'large';
 
     recStatus = 'Receipted';
@@ -47,8 +45,6 @@ export class ReceiptsComponent implements OnInit {
     receiptNum = '';
 
     policyAmount = 0;
-
-    receiptList = [];
     cancelReceiptList = [];
 
     isVisibleBrokerReceipting = false;
@@ -64,12 +60,7 @@ export class ReceiptsComponent implements OnInit {
     // modal
     isReceiptVisible = false;
     isConfirmLoading = false;
-    showDocumentModal = false;
-    isReceiptApproved = false;
 
-    // generated PDFs
-    receiptURl = '';
-    showReceiptModal = false;
 
     optionList = [
         { label: 'Premium Payment', value: 'Premium Payment' },
@@ -94,26 +85,26 @@ export class ReceiptsComponent implements OnInit {
     selectedAgent = '';
     receiptNewCount: number;
 
+    // allocationReceipt: AllocationReceipt;
+
     constructor(
         private receiptService: AccountService,
         private formBuilder: FormBuilder,
         private message: NzMessageService,
         private router: Router,
-        private agentService: AgentsService
+        private agentService: AgentsService, private allocationService: AllocationsService, private http: HttpClient,
     ) {
         this.receiptForm = this.formBuilder.group({
-            receivedFrom: ['', Validators.required],
-            sumInDigits: ['', Validators.required],
-            paymentMethod: ['', Validators.required],
-            onBehalfOf: ['', Validators.required],
-            tpinNumber: ['4324324324324324'],
-            address: [''],
-            receiptType: ['', Validators.required],
-            narration: ['', Validators.required],
-            sumInWords: [''],
-            dateReceived: [''],
-            todayDate: [this.today],
-            remarks: [''],
+          received_from: ['', Validators.required],
+          on_behalf_of: ['', Validators.required],
+          sum_in_digits: ['', Validators.required],
+          payment_method: ['', Validators.required],
+          receipt_type: ['', Validators.required],
+          narration: ['', Validators.required],
+          date_received: [''],
+          today_date: [''],
+          remarks: [''],
+          cheq_number: [''],
         });
 
         this.cancelForm = this.formBuilder.group({
@@ -178,86 +169,68 @@ export class ReceiptsComponent implements OnInit {
             this.isOkBrokerReceiptingLoading = true;
             this._id = v4();
             const receipt: IReceiptModel = {
-                ...this.receiptForm.value,
-                on_behalf_of: this.clientName,
-                captured_by: 'this.user',
-                receipt_status: this.recStatus,
-                today_date: new Date(),
-                source_of_business: 'broker',
-                intermediary_name: this.receiptForm.controls.onBehalfOf.value,
+              received_from: this.receiptForm.controls.received_from.value,
+              payment_method: this.receiptForm.controls.payment_method.value,
+              receipt_type: this.receiptForm.controls.receipt_type.value,
+              narration: this.receiptForm.controls.narration.value,
+              date_received: new Date(),
+              remarks: this.receiptForm.controls.remarks.value,
+              cheq_number: this.receiptForm.controls.cheq_number.value,
+              on_behalf_of: this.receiptForm.controls.on_behalf_of.value.companyName,
+              captured_by: this.user,
+              receipt_status: this.recStatus,
+              sum_in_digits: this.receiptForm.controls.sum_in_digits.value,
+              today_date: new Date(),
+              invoice_number: '',
+              source_of_business: 'Broker',
+              intermediary_name: this.receiptForm.controls.on_behalf_of.value.companyName,
             };
 
-            this.receiptNum = this._id;
-            await this.receiptService
-                .addReceipt(receipt, this.policy.risks[0].insuranceType ).subscribe((mess) => {
-                    this.message.success('Receipt Successfully created');
-                    console.log(mess);
-                },
-                (err) => {
-                    this.message.warning('Receipt Failed');
-                    console.log(err);
-                });
-                // .then((mess) => {
-                //     this.message.success('Receipt Successfully created');
-                //     console.log(mess);
-                // })
-                // .catch((err) => {
-                //     this.message.warning('Receipt Failed');
-                //     console.log(err);
-                // });
-            this.receiptForm.reset();
-            this.policy.receiptStatus = 'Receipted';
-            this.policy.paymentPlan = 'Created';
-            console.log('<++++++++++++++++++CLAIN+++++++++>');
-            console.log(this.policy);
+            const allocationReceipt: AllocationReceipt = {
+              allocated_amount: 0,
+              amount: this.receiptForm.controls.sum_in_digits.value,
+              intermediary_id: this.receiptForm.controls.on_behalf_of.value.id,
+              intermediary_type: 'Broker',
+              receipt_number: '',
+              status: 'Unallocated'
+            };
 
-            await this.receiptService.updatePolicy(this.policy);
+            this.http
+            .get<any>(
+              `https://number-generation.flosure-api.com/savenda-receipt-number/1`
+            )
+            .subscribe(async (res) => {
+              receipt.receipt_number = res.data.receipt_number;
+              console.log(res.data.receipt_number);
+
+              this.http.post('https://payment-api.savenda-flosure.com/receipt', receipt).subscribe((resN: any) => {
+                  this.message.success('Receipt Successfully created');
+                  console.log('RECEIPT NUMBER<><><><>', resN);
+
+                  allocationReceipt.receipt_number = resN.data.receipt_number;
+                  this.allocationService.createAllocationReceipt(allocationReceipt).subscribe((resMess) => {}, (errMess) => {
+                    this.message.warning('Allocate Receipt Failed');
+                  });
+                  this.generateID(this._id);
+
+                },
+                err => {
+                  this.message.warning('Receipt Failed');
+                  console.log(err);
+                });
+            });
+
+            this.receiptForm.reset();
             setTimeout(() => {
                 this.isVisibleBrokerReceipting = false;
                 this.isOkBrokerReceiptingLoading = false;
             }, 3000);
-            this.generateID(this._id);
         }
     }
 
     handleCancelBrokerReceipting(): void {
         this.isVisibleBrokerReceipting = false;
     }
-    // showCancelModal(receipt: IReceiptModel) {
-    //     this.isCancelVisible = true;
-    //     this.cancelReceipt = receipt;
-    // }
-
-    // cancelCancellation() {
-    //     this.isCancelVisible = false;
-    // }
-
-    // async onCancel() {
-    //     this.cancelReceipt.receiptStatus = 'Cancelled';
-    //     this.cancelReceipt.remarks = this.cancelForm.controls.remarks.value;
-    //     console.log('<++++++++++++++++++CLAIN+++++++++>');
-    //     console.log(this.cancelReceipt);
-    //     await this.receiptService.updateReceipt(this.cancelReceipt);
-    //     this.isCancelVisible = false;
-    // }
-
-    // showReinstateModal(receipt: IReceiptModel) {
-    //     this.isReinstateVisible = true;
-    //     this.reinstateReceipt = receipt;
-    // }
-
-    // cancelReinstate() {
-    //     this.isReinstateVisible = false;
-    // }
-
-    // async onReinstate() {
-    //     this.reinstateReceipt.receiptStatus = 'Receipted';
-    //     this.reinstateReceipt.remarks = this.cancelForm.controls.remarks.value;
-    //     console.log('<++++++++++++++++++CLAIN+++++++++>');
-    //     console.log(this.reinstateReceipt);
-    //     await this.receiptService.updateReceipt(this.reinstateReceipt);
-    //     this.isReinstateVisible = false;
-    // }
 
     // pop Confirm
     cancel() {}

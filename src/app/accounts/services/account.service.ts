@@ -64,9 +64,9 @@ export class AccountService {
         // this.receipts.pipe(first()).subscribe((receipts) => {
             // receipt.id = v4();
 
-            let insuranceTyp= '';
+            let insuranceTyp = '';
             const productType = insuranceType;
-            if (productType == 'Comprehensive') {
+            if (productType === 'Comprehensive') {
                 insuranceTyp = '07001';
             } else {
                 insuranceTyp = '07002';
@@ -80,29 +80,29 @@ export class AccountService {
                     receipt.receipt_number = res.data.receipt_number;
                     console.log(res.data.receipt_number);
 
-                    this.receiptN = receipt
+                    this.receiptN = receipt;
 
-                   this.http.post('https://payment-api.savenda-flosure.com/receipt', receipt).subscribe((res: any) => {
-                        console.log("RECEIPT RESULTS", res.data);
+                    this.http.post('https://payment-api.savenda-flosure.com/receipt', receipt).subscribe((res: any) => {
+                        console.log('RECEIPT RESULTS', res.data);
                         // if(res.status === 'true') {
-                            this.message.success(
+                        this.message.success(
                                 'Receipt Successfully created'
                             );
-                            this.generateID(res.data.ID);
+                        this.generateID(res.data.ID);
                         // }
 
 
 
                     },
                     (err) => {
-                        console.log("RECEIPT ERR>>>", err);
+                        console.log('RECEIPT ERR>>>', err);
 
                         this.message.warning('Receipt Failed');
                     });
                 });
 
         // });
-        return of(this.receiptN);
+            return of(this.receiptN);
     }
 
     async updatePolicy(policy: Policy): Promise<void> {
@@ -117,7 +117,7 @@ export class AccountService {
             });
     }
 
-    updateReceipt(receipt: IReceiptModel):Observable<any> {
+    updateReceipt(receipt: IReceiptModel): Observable<any> {
 
        return this.http.put(`https://payment-api.savenda-flosure.com/receipt/${receipt.ID}`, receipt);
     }

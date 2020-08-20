@@ -285,7 +285,7 @@ export class BrokerClientComponent implements OnInit {
         console.log(this.cancelReceipt);
         this.receiptService.updateReceipt(this.cancelReceipt).subscribe((res) => {
           this.message.success('Receipt Successfully Updated');
-          this.refresh()
+          this.refresh();
         }, (err) => {
           console.log('Check ERR>>>>', err);
           this.message.warning('Receipt Failed');

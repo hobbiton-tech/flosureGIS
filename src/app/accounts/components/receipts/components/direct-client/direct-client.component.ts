@@ -217,7 +217,7 @@ export class DirectClientComponent implements OnInit {
                     this.message.success('Receipt Successfully created');
                     console.log(mess);
                   this.policeServices.updatePolicy(this.policy).subscribe((res) => {}, (err) => {
-                    console.log('Update Policy Error', err);})
+                    console.log('Update Policy Error', err); });
                 },
                 (err) => {
                     this.message.warning('Receipt Failed');

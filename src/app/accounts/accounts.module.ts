@@ -17,6 +17,7 @@ import { BrokerClientComponent } from './components/receipts/components/broker-c
 import { AgentClientComponent } from './components/receipts/components/agent-client/agent-client.component';
 import { SalesRepresentativeClientComponent } from './components/receipts/components/sales-representative-client/sales-representative-client.component';
 import { PlanReceiptComponent } from './components/receipts/components/plan-receipt/plan-receipt.component';
+import { AllocationsComponent } from './components/allocations/allocations.component';
 
 const routes: Routes = [
     {
@@ -64,6 +65,10 @@ const routes: Routes = [
     path: 'plan-receipt',
     component: PlanReceiptComponent,
   },
+  {
+    path: 'allocations',
+    component: AllocationsComponent,
+  },
 ];
 
 @NgModule({
@@ -80,6 +85,7 @@ const routes: Routes = [
         AgentClientComponent,
         SalesRepresentativeClientComponent,
         PlanReceiptComponent,
+        AllocationsComponent,
     ],
     imports: [
         CommonModule,
