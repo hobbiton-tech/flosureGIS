@@ -51,10 +51,10 @@ export const DiscountOptions = [
 
 // SOURCE OF BUSINESS OPTIONS
 export const SourceOfBusinessOptions = [
-    { label: 'Direct', value: 'direct' },
-    { label: 'Broker', value: 'broker' },
-    { label: 'Agent', value: 'agent' },
-    { label: 'Sales Representative', value: 'salesRepresentative' }
+    { label: 'Direct', value: 'Direct' },
+    { label: 'Broker', value: 'Broker' },
+    { label: 'Agent', value: 'Agent' },
+    { label: 'Sales Representative', value: 'SalesRepresentative' }
 ];
 
 // PRODUCT TYPE OPTIONS

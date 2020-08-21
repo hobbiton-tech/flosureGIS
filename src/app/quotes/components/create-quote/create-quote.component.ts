@@ -331,6 +331,8 @@ export class CreateQuoteComponent implements OnInit {
             this.clients = [...clients[0], ...clients[1]] as Array<
                 IIndividualClient & ICorporateClient
             >;
+
+            console.log('Client List>>>', this.clients);
         });
 
         this.agentsService.getAgents().subscribe(agents => {

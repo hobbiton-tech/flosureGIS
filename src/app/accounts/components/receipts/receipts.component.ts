@@ -103,10 +103,7 @@ export class ReceiptsComponent implements OnInit {
           payment_method: ['', Validators.required],
           receipt_type: ['', Validators.required],
           narration: ['', Validators.required],
-          date_received: [''],
-          today_date: [''],
-          remarks: [''],
-          cheq_number: [''],
+          cheq_number: ['']
         });
 
         this.cancelForm = this.formBuilder.group({

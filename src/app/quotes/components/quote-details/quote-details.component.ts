@@ -74,6 +74,7 @@ import { DiscountsComponent } from '../discounts/discounts.component';
 import { TotalsViewComponent } from '../totals-view/totals-view.component';
 import { VehicleDetailsServiceService } from '../../services/vehicle-details-service.service';
 import { PremiumComputationService } from '../../services/premium-computation.service';
+import { AllocationPolicy } from '../../../accounts/components/models/allocations.model';
 
 type AOA = any[][];
 
@@ -845,6 +846,19 @@ export class QuoteDetailsComponent implements OnInit {
                 user: localStorage.getItem('user'),
                 sourceOfBusiness: this.quoteData.sourceOfBusiness,
                 intermediaryName: this.quoteData.intermediaryName,
+            };
+
+            const allocationPolicy: AllocationPolicy = {
+              balance: Number(this.sumArray(this.quoteData.risks, 'netPremium')),
+              client_id: this.quoteData.clientCode,
+              client_name: this.quoteData.client,
+              commission_due: 0,
+              gross_amount: Number(this.sumArray(this.quoteData.risks, 'netPremium')),
+              intermediary_id: '',
+              net_amount_due: Number(this.sumArray(this.quoteData.risks, 'netPremium')),
+              policy_number: this.quoteNumber.replace('Q', 'P'),
+              settlements: 0,
+              status: 'Un Allocated'
             };
 
             const debitNote: DebitNote = {

@@ -60,27 +60,27 @@
                                 </nz-select>
                             </nz-form-control>
                         </nz-form-item>
-                        <div *ngIf="selectedSourceOfBusiness === 'broker'">
+                        <div *ngIf="selectedSourceOfBusiness === 'Broker'">
                             <nz-form-item>
                                 <nz-form-label [nzSpan]="7" nzFor="intermediaryName" nzRequired>Broker
                                 </nz-form-label>
                                 <nz-form-control nzSpan="17">
                                     <nz-select name="intermediaryName" formControlName="intermediaryName" nzAllowClear
                                         nzPlaceHolder="Select broker">
-                                        <nz-option *ngFor="let option of brokers" [nzValue]="option.companyName"
+                                        <nz-option *ngFor="let option of brokers" [nzValue]="option"
                                             [nzLabel]="option.companyName"></nz-option>
                                     </nz-select>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div *ngIf="selectedSourceOfBusiness === 'agent'">
+                        <div *ngIf="selectedSourceOfBusiness === 'Agent'">
                             <nz-form-item>
                                 <nz-form-label [nzSpan]="7" nzFor="intermediaryName" nzRequired>Agent
                                 </nz-form-label>
                                 <nz-form-control nzSpan="17">
                                     <nz-select name="intermediaryName" formControlName="intermediaryName" nzAllowClear
                                         nzPlaceHolder="Select agent">
-                                        <nz-option *ngFor="let option of agents" [nzValue]="option.companyName"
+                                        <nz-option *ngFor="let option of agents" [nzValue]="option"
                                             [nzLabel]="option.companyName"></nz-option>
                                     </nz-select>
                                 </nz-form-control>
@@ -88,7 +88,7 @@
                         </div>
                         <div *ngIf="
                                 selectedSourceOfBusiness ===
-                                'salesRepresentative'
+                                'SalesRepresentative'
                             ">
                             <nz-form-item>
                                 <nz-form-label [nzSpan]="7" nzFor="intermediaryName" nzRequired>Sales Representative
@@ -100,9 +100,7 @@
                                         <nz-option *ngFor="
                                                 let option of salesRepresentatives
                                             " [nzValue]="
-                                                option.contactFirstName +
-                                                ' ' +
-                                                option.contactLastName
+                                                option
                                             " [nzLabel]="
                                                 option.contactFirstName +
                                                 ' ' +
