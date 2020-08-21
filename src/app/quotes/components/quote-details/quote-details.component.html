@@ -26,7 +26,7 @@
                         View Draft Quote
                     </button>
 
-                    <button *ngIf="!isQuoteApproved" nz-button nzType="primary" (click)="showPaymentModal()">
+                    <button *ngIf="!isQuoteApproved" nz-button nzType="primary" (click)="generateDocuments()">
 
                         Covert to Policy
                     </button>
@@ -57,7 +57,8 @@
                                                       ' ' +
                                                       client.lastName
                                                     : client.companyName
-                                            " [nzLabel]="
+                                            "
+                                            [nzLabel]="
                                                 client.clientType ===
                                                 'Individual'
                                                     ? client.firstName +
@@ -66,6 +67,7 @@
                                                     : client.companyName
                                             "></nz-option>
                                         </div>
+
                                     </nz-select>
                                 </nz-form-control>
                             </nz-form-item>
@@ -232,7 +234,6 @@
                                                 <!-- TODO => combine premium computation and premium computation details components -->
                                                 <!-- premium computation -->
                                                 <app-premium-computation></app-premium-computation>
-
                                                 <!-- extensions starts here -->
                                                 <app-extensions></app-extensions>
                                                 <!-- </div> -->
@@ -263,11 +264,11 @@
                                                                 <!-- discounts view -->
                                                                 <app-discounts-view></app-discounts-view>
                                                             </nz-card>
+
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div nz-col nzSpan="8">
                                                 <div nz-col nzSpan="20" style="float: right;">
                                                     <nz-card>
@@ -287,8 +288,8 @@
                                                 <!-- limits of liability -->
                                                 <app-limits-of-liability></app-limits-of-liability>
                                             </nz-card>
-                                        </div>
 
+                                        </div>
                                         <div nz-col nzSpan="12">
                                             <nz-card>
                                                 <nz-divider nzText="Excesses" nzOrientation="left"></nz-divider>
@@ -321,6 +322,7 @@
                     <ng-template #suffixIconSearch>
                         <i nz-icon nzType="search"></i>
                     </ng-template>
+
                 </div>
                 <nz-table #risksTable [nzData]="risks" [nzSize]="'small'" [nzBordered]="true" id="risksTable">
                     <thead>
@@ -363,7 +365,6 @@
                         </tr>
                     </tbody>
                 </nz-table>
-
                 <div *ngIf="!isTabletemplate">
                     <nz-table [nzData]="risks" [nzSize]="'small'" [nzBordered]="true" id="risksTemplateTable">
                         <thead>
@@ -382,6 +383,7 @@
                         </thead>
                     </nz-table>
                 </div>
+
             </nz-card>
             <!-- Risk Details ends here -->
 
@@ -473,6 +475,7 @@
                                     </nz-option>
                                 </div>
 
+
                                 <ng-template #notShow>
                                     <nz-option [nzValue]="'fully'" [nzLabel]="'Full Payment'">
                                     </nz-option>
@@ -492,6 +495,7 @@
                                     <input nz-input formControlName="receivedFrom" name="receivedFrom" type="text"
                                         id="receivedFrom" nzRequired placeholder="Received From" />
                                     <span class="text-danger" *ngIf="
+
                                         (receiptFormControl.receivedFrom
                                             .touched ||
                                             submitted) &&
@@ -514,7 +518,6 @@
                             </nz-form-item>
                         </div>
                     </div>
-
                     <div nz-row>
                         <div nz-col [nzSpan]="12">
                             <nz-form-item>
@@ -527,6 +530,7 @@
                                         " [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
                                     </nz-select>
                                     <span class="text-danger" *ngIf="
+
                                         (receiptFormControl.receiptType
                                             .touched ||
                                             submitted) &&
@@ -551,6 +555,7 @@
                                             [nzLabel]="method.label"></nz-option>
                                     </nz-select>
                                     <span class="text-danger" *ngIf="
+
                                         (receiptFormControl.paymentMethod
                                             .touched ||
                                             submitted) &&
@@ -571,6 +576,7 @@
                                     <textarea formControlName="narration" nz-input rows="2"
                                         placeholder="Write Your Narration Here"></textarea>
                                     <span class="text-danger" *ngIf="
+
                                         (receiptFormControl.narration.touched ||
                                             submitted) &&
                                         receiptFormControl.narration.errors
@@ -638,3 +644,4 @@
         </ng-template>
     </nz-modal>
 </nz-spin>
+

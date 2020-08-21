@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import {
     AngularFirestore,
     AngularFirestoreCollection,
@@ -8,13 +8,13 @@ import {
 
 import * as _ from 'lodash';
 import { v4 } from 'uuid';
-import { PaymentPlan } from 'src/app/underwriting/models/policy.model';
+import { PaymentPlan, InsuranceType } from 'src/app/underwriting/models/policy.model';
 import { first } from 'rxjs/operators';
-import { IPaymentModel } from '../components/models/payment-plans.model';
+import { IPaymentModel, InstallmentsModel, PlanReceipt, PlanPolicy } from '../components/models/payment-plans.model';
 import { IReceiptModel } from '../components/models/receipts.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NzMessageService } from 'ng-zorro-antd';
-import { Router, Resolve } from '@angular/router';
+import { Router, Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
 interface IReceiptNumberResult {
     receiptNumber: string;
@@ -35,6 +35,10 @@ export class PaymentPlanService implements Resolve<any> {
     rcptNumber: any;
     _id: any;
 
+    basePaymentPlanUrl: 'https://payment-api.savenda-flosure.com/payment-plan';
+    baseInstallmentUrl: 'https://payment-api.savenda-flosure.com/payment-plan/installment';
+    receiptN: IReceiptModel;
+
     constructor(
         private firebase: AngularFirestore,
         private http: HttpClient,
@@ -50,13 +54,11 @@ export class PaymentPlanService implements Resolve<any> {
 
         this.receipts = this.receiptCollection.valueChanges();
     }
-    resolve(
-        route: import('@angular/router').ActivatedRouteSnapshot,
-        state: import('@angular/router').RouterStateSnapshot
-    ) {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         throw new Error('Method not implemented.');
     }
 
+<<<<<<< HEAD
     async addPaymentPlan(paymentPlan: IPaymentModel) {
         this.paymentPlans.pipe(first()).subscribe(async paymentPlans => {
             await this.paymentPlansCollection
@@ -141,6 +143,9 @@ export class PaymentPlanService implements Resolve<any> {
             // receipt.id = v4();
         });
     }
+=======
+
+>>>>>>> changa-test
 
     generateID(id) {
         console.log('++++++++++++ID++++++++++++');
@@ -151,6 +156,7 @@ export class PaymentPlanService implements Resolve<any> {
         // this.generateDocuments();
     }
 
+<<<<<<< HEAD
     // add receipt
     async addReceipt(
         receipt: IReceiptModel,
@@ -197,17 +203,135 @@ export class PaymentPlanService implements Resolve<any> {
                             this.message.warning('Receipt Failed');
                             console.log(err);
                         });
+=======
+    addReceipt(receipt: IReceiptModel, insuranceType: InsuranceType): Observable<any> {
+        let insuranceTyp = '';
+        const productType = insuranceType;
+        if (productType === 'Comprehensive') {
+                insuranceTyp = '07001';
+            } else {
+                insuranceTyp = '07002';
+            }
+
+        this.http
+                .get<any>(
+                    `https://number-generation.flosure-api.com/savenda-receipt-number/1`
+                )
+                .subscribe(async (res) => {
+                    receipt.receipt_number = res.data.receipt_number;
+                    console.log(res.data.receipt_number);
+
+                    this.receiptN = receipt;
+
+                    this.http.post('https://payment-api.savenda-flosure.com/receipt', receipt).toPromise();
+>>>>>>> changa-test
                 });
 
-            // receipt.id = v4();
-        });
+        // });
+        return of(this.receiptN);
     }
 
-    generateReceiptNumber(): Promise<any> {
+
+
+
+
+    createPaymentPlan(
+        paymentPlan: IPaymentModel
+    ): Observable<any> {
+        return this.http.post<IPaymentModel>('https://payment-api.savenda-flosure.com/payment-plan', paymentPlan);
+    }
+
+
+  updatePaymentPlan(policyPaymentPlan: PlanPolicy) {
+
+    return this.http.put(`https://payment-api.savenda-flosure.com/payment-plan/${policyPaymentPlan.ID}`, policyPaymentPlan);
+
+  }
+
+    getPaymentPlan(): Observable<any> {
+        return this.http.get<any>('https://payment-api.savenda-flosure.com/payment-plan');
+    }
+
+
+
+    getInstallments(): Observable<any> {
         return this.http
             .get<any>(
+<<<<<<< HEAD
                 'https://number-generation.flosure-api.com/aplus-receipt-number/1'
             )
             .toPromise();
+=======
+                'https://payment-api.savenda-flosure.com/installment'
+            );
     }
+
+
+    addPlanReceipt( planReceipt: PlanReceipt): Observable<any> {
+        return this.http.post<PlanReceipt>('https://payment-api.savenda-flosure.com/plan-receipt', planReceipt);
+>>>>>>> changa-test
+    }
+
+    getReceiptPlan(): Observable<any> {
+        return this.http.get<any>('https://payment-api.savenda-flosure.com/plan-receipt');
+    }
+
+
+    updatePlanReceipt(planReceipt: PlanReceipt) {
+
+        this.http.put(`https://payment-api.savenda-flosure.com/plan-receipt/${planReceipt.ID}`, planReceipt).subscribe((res) => {
+            this.message.success(
+                        'Plan Receipt Successfully Updated'
+                    );
+        },
+        (err) => {
+            console.log('Check ERR>>>>', err);
+
+            this.message.warning('Plan Receipt Failed');
+        });
+    }
+
+
+    addPlanPolicy( policyPaymentPlan: PlanPolicy): Observable<PlanPolicy> {
+        return this.http.post<PlanPolicy>('https://payment-api.savenda-flosure.com/plan-policy', policyPaymentPlan);
+    }
+
+    getPlanPolicy(): Observable<any> {
+        return this.http.get<any>('https://payment-api.savenda-flosure.com/plan-policy');
+    }
+
+
+    updatePlanPolicy(policyPaymentPlan: PlanPolicy) {
+
+        this.http.put(`https://payment-api.savenda-flosure.com/plan-policy/${policyPaymentPlan.ID}`, policyPaymentPlan).subscribe((res) => {
+            this.message.success(
+                        'Plan Receipt Successfully Updated'
+                    );
+        },
+        (err) => {
+            console.log('Check ERR>>>>', err);
+
+            this.message.warning('Plan Policy Failed');
+        });
+
+    }
+
+
+    updatePlanInstallment(policyPaymentInstallment: InstallmentsModel[]) {
+
+        const header = new HttpHeaders();
+        header.set('Access-Control-Allow-Origin', '*');
+
+        this.http.put(`https://payment-api.savenda-flosure.com/installment`, policyPaymentInstallment, { headers: header }).subscribe((res) => {
+            // this.message.success(
+            //             'Plan Receipt Successfully Updated'
+            //         );
+        },
+        (err) => {
+            console.log('Check ERR>>>>', err);
+
+            this.message.warning('Plan Policy Failed');
+        });
+    }
+
 }

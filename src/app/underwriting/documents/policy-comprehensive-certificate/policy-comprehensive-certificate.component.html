@@ -167,7 +167,7 @@
                     <image
                         width="710"
                         height="329"
-                        xlink:href="assets/images/apluslogo.png"
+                        xlink:href="assets/images/Savenda-Logo-Final.png"
                     />
                 </pattern>
                 <pattern
@@ -441,20 +441,20 @@
                     transform="translate(400 0)"
                 >
                     <tspan x="0" y="15">
-                        Plot NO. 402, Roma Park, Zambezi Road
+                        Savenda General Insurance LTD
                     </tspan>
                     <tspan x="0" y="30">
-                        P.o. Box 31700, Lusaka
+                        P.O Box 30363, Lusaka Zambia
                     </tspan>
                     <tspan x="0" y="45">
-                        cell: +260 955 770707, Fax: +260 211 239867
+                        cell: +260 977 893 878, +260 960 344 478
                     </tspan>
-                    <tspan x="0" y="60">
+                    <!-- <tspan x="0" y="60">
                         Email: info@aplusgeneral.co.zm
                     </tspan>
                     <tspan x="0" y="75">
                         www.aplusgeneral.co.zm
-                    </tspan>
+                    </tspan> -->
                 </text>
 
                 <text
@@ -579,17 +579,10 @@
                         NCD: {{ policy.currency
                         }}{{ cndAmount | number: '1.2-2' }}
                     </tspan>
-                    <tspan x="0" y="13">
-                        {{excT1}} {{excA1}}
-                    </tspan>
-                    <tspan x="0" y="23">
-                        {{excT2}} {{excA2}}
-                    </tspan>
-                    <tspan x="0" y="33">
-                        {{excT3}} {{excA3}}
-                    </tspan>
+                    <tspan x="0" y="13">{{ excT1 }} {{ excA1 }}</tspan>
+                    <tspan x="0" y="23">{{ excT2 }} {{ excA2 }}</tspan>
+                    <tspan x="0" y="33">{{ excT3 }} {{ excA3 }}</tspan>
                 </text>
-
 
                 <text
                     id="Client_Name:_Isaac_Musonda"
@@ -686,11 +679,11 @@
                 >
                     <tspan x="0" y="0" xml:space="preserve"></tspan>
                     <tspan x="0" y="10" xml:space="preserve">
-                        Cover Note Receipt No.:{{ receipt ? receipt.receiptNumber : '-' }}
+                        Cover Note Receipt No.:{{ receipt ? receipt.receipt_number : '-' }}
                     </tspan>
                     <tspan x="0" y="25" xml:space="preserve">
                         Amount Paid in {{ policy.currency }} :{{
-                            receipt ? receipt.sumInDigits : '-'
+                            receipt ? receipt.sum_in_digits : '-'
                         }}
                     </tspan>
                 </text>
@@ -703,8 +696,6 @@
                 >
                     <tspan x="0" y="0">AUTHORIZED DRIVER</tspan>
                 </text>
-
-
 
                 <text
                 id="Third_Party_Limits_of_Liability"
@@ -755,8 +746,6 @@
                     (iii)Third Party Property Damage {{policy.currency}} {{limitsOfLiablity[2] ? limitsOfLiablity[2].amount : '-'}}
                 </tspan>
             </text>
-
-
 
 
                 <text

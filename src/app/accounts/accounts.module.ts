@@ -10,17 +10,21 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { ReceiptsComponent } from './components/receipts/receipts.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PaymentPlanComponent } from './components/payment-plan/payment-plan.component';
-import { PaymentPlanPoliciesComponent } from './components/payment-plan/components/payment-plan-policies/payment-plan-policies.component';
 import { PaymentPlanPolicyInstallmentsComponent } from './components/payment-plan/components/payment-plan-policy-installments/payment-plan-policy-installments.component';
 import { ReceiptDocumentComponent } from './components/receipts/documents/receipt-document/receipt-document.component';
 import { DirectClientComponent } from './components/receipts/components/direct-client/direct-client.component';
 import { BrokerClientComponent } from './components/receipts/components/broker-client/broker-client.component';
 import { AgentClientComponent } from './components/receipts/components/agent-client/agent-client.component';
 import { SalesRepresentativeClientComponent } from './components/receipts/components/sales-representative-client/sales-representative-client.component';
+<<<<<<< HEAD
 import { RequisitionsComponent } from './components/requisitions/requisitions.component';
 import { RequisitionPaymentComponent } from './components/requisitions/components/requisition-payment/requisition-payment.component';
 import { PaymentRequisitionVoucherComponent } from './components/payments/documents/payment-requisition-voucher/payment-requisition-voucher.component';
 import { NgxPrintModule } from 'ngx-print';
+=======
+import { PlanReceiptComponent } from './components/receipts/components/plan-receipt/plan-receipt.component';
+import { AllocationsComponent } from './components/allocations/allocations.component';
+>>>>>>> changa-test
 
 const routes: Routes = [
     {
@@ -43,10 +47,6 @@ const routes: Routes = [
         path: 'payment-plan',
         component: PaymentPlanComponent
     },
-    // {
-    //     path: 'payment-plan/:id',
-    //     component: PaymentPlanPoliciesComponent,
-    // },
     {
         path: 'payment-plan/:id',
         component: PaymentPlanPolicyInstallmentsComponent
@@ -69,8 +69,22 @@ const routes: Routes = [
     },
     {
         path: 'sales-representative',
+<<<<<<< HEAD
         component: SalesRepresentativeClientComponent
     }
+=======
+        component: SalesRepresentativeClientComponent,
+    },
+
+  {
+    path: 'plan-receipt',
+    component: PlanReceiptComponent,
+  },
+  {
+    path: 'allocations',
+    component: AllocationsComponent,
+  },
+>>>>>>> changa-test
 ];
 
 @NgModule({
@@ -80,16 +94,20 @@ const routes: Routes = [
         PaymentsComponent,
         ReceiptsComponent,
         PaymentPlanComponent,
-        PaymentPlanPoliciesComponent,
         PaymentPlanPolicyInstallmentsComponent,
         ReceiptDocumentComponent,
         DirectClientComponent,
         BrokerClientComponent,
         AgentClientComponent,
         SalesRepresentativeClientComponent,
+<<<<<<< HEAD
         RequisitionsComponent,
         RequisitionPaymentComponent,
         PaymentRequisitionVoucherComponent
+=======
+        PlanReceiptComponent,
+        AllocationsComponent,
+>>>>>>> changa-test
     ],
     imports: [
         CommonModule,

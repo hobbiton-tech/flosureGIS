@@ -12,7 +12,7 @@
             <button *ngIf="isEditmode" nz-button nzType="primary" (click)="isEditmode = false">Save Changes</button>
         </nz-page-header-extra>
     </nz-page-header>
-    <!-- <nz-card style="padding: 20px"> -->
+
         <form nz-form style="margin-top: 20px;" [formGroup]="claimDetailsForm" (ngSubmit)="onSubmit()">
             <nz-card style="margin-bottom: 5px;">
           <nz-divider nzText="Claim Details" nzOrientation="left"></nz-divider>

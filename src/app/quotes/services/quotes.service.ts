@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import {
     AngularFirestore,
     AngularFirestoreCollection,
-    DocumentReference
+    DocumentReference,
 } from '@angular/fire/firestore';
 import { first } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
@@ -13,9 +13,8 @@ import { Router } from '@angular/router';
 
 // const BASE_URL = 'http://104.248.247.78:3000';
 // const BASE_URL = 'https://flosure-api.com'
-//const BASE_URL = 'https://flosure-postgres-api.herokuapp.com';
 // const BASE_URL = 'https://flosure-api.azurewebsites.net';
-const BASE_URL = 'https://flosure-postgres-db.herokuapp.com';
+const BASE_URL = 'https://savenda.flosure-api.com/quotation';
 
 export interface IQuoteDocument {
     id: string;
@@ -44,7 +43,7 @@ interface IQuoteNumberResult {
     quoteNumber: string;
 }
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class QuotesService {
     private motorQuoteCollection: AngularFirestoreCollection<
@@ -87,7 +86,7 @@ export class QuotesService {
                 .then(() => {
                     console.log(risk);
                 })
-                .catch(err => {
+                .catch((err) => {
                     console.log(err);
                 });
         });
@@ -98,12 +97,12 @@ export class QuotesService {
             .collection('risks')
             .ref.where('quoteNumber', '==', quoteNumber)
             .get()
-            .then(querySnapshot => {
-                querySnapshot.forEach(doc => {
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
                     console.log(doc.data());
                 });
             })
-            .catch(error => {
+            .catch((error) => {
                 console.log('Error getting documents: ', error);
             });
     }
@@ -121,28 +120,28 @@ export class QuotesService {
         return this.motorQuoteCollection
             .doc(`${quote.id}`)
             .update(quote)
-            .then(res => {
+            .then((res) => {
                 console.log(res);
             })
-            .catch(err => {
+            .catch((err) => {
                 console.log(err);
             });
     }
-    //postgres db
+    // postgres db
     createMotorQuotation(motorQuotation: MotorQuotationModel, count) {
         let insuranceType = '';
         const productType = motorQuotation.risks[0].insuranceType;
-        if (productType == 'Comprehensive') {
-            insuranceType = 'MCP';
+        if (productType === 'Comprehensive') {
+            insuranceType = '07001';
         } else {
-            insuranceType = 'THP';
+            insuranceType = '07002';
         }
         const quotationNumberRequest: IQuoteNumberRequest = {
-            branch: motorQuotation.branch //get from db
+            branch: motorQuotation.branch, // get from db
         };
         this.http
             .get<any>(
-                `https://number-generation.flosure-api.com/aplus-quote-number/1/0/${insuranceType}`
+                `https://number-generation.flosure-api.com/savenda-quote-number/1/${insuranceType}`
             )
             .subscribe(
                 async res => {
@@ -154,7 +153,7 @@ export class QuotesService {
                             motorQuotation
                         )
                         .subscribe(
-                            async res => {
+                            async resq => {
                                 this.msg.success(
                                     'Quotation Successfully Created'
                                 );
@@ -177,12 +176,12 @@ export class QuotesService {
     postRtsa(params) {
         console.log('PARAMS>>>>>>>', params);
         this.http
-            .post<any>(`https://rtsa-api.herokuapp.com/rtsa`, params)
+            .post<any>(`https://rtsa-api.herokuapp.com/rtsa-savenda`, params)
             .subscribe(
-                async res => {
+                async (res) => {
                     console.log(res);
                 },
-                async err => {
+                async (err) => {
                     console.log(err);
                 }
             );

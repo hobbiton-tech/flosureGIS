@@ -20,7 +20,11 @@ import {
 import { IRequisitionModel } from 'src/app/accounts/components/models/requisition.model';
 import { AccountService } from 'src/app/accounts/services/account.service';
 
-const BASE_URL = 'https://flosure-postgres-db.herokuapp.com';
+
+const BASE_URL = 'https://savenda.flosure-api.com';
+
+// const BASE_URL = 'https://savenda.flosure-api.com';
+
 
 interface IDebitNoteResult {
     invoiceNumber: string;
@@ -64,42 +68,64 @@ export class PoliciesService {
         } else {
             insuranceType = 'THP';
         }
-
-        return this.http.post<Policy>(`${BASE_URL}/policy`, policy);
+        return this.http.post<Policy>(
+            'https://savenda.flosure-api.com/policy',
+            policy
+        );
     }
 
     // getPolicies(): Observable<Policy[]> {
-    //     return this.http.get<Policy[]>(`${BASE_URL}/policy`);
+    //     return this.http.get<Policy[]>('https://savenda.flosure-api.com/policy');
+
     // }
 
     // getPolicyById(policyId: string): Observable<Policy> {
     //     return this.http.get<Policy>(
-    //         `${BASE_URL}/policy/${policyId}`
+
+    //         `https://savenda.flosure-api.com/policy/${policyId}`
+
     //     );
     //     return this.policiesCollection.doc<Policy>(policyId).valueChanges();
     // }
 
     updatePolicy(policy: Policy): Observable<Policy> {
         console.log('POLICY NUMBER>>>>', policy);
-        return this.http.put<Policy>(`${BASE_URL}/policy/${policy.id}`, policy);
+
+        return this.http.put<Policy>(
+            `https://savenda.flosure-api.com/policy/${policy.id}`,
+            policy
+        );
     }
 
     // backup policies
     createBackupPolicy(policy: Policy): Observable<Policy> {
-        return this.http.post<Policy>(`${BASE_URL}/policy`, policy);
+
+        return this.http.post<Policy>(
+            'https://savenda.flosure-api.com/policy',
+            policy
+        );
     }
 
     getBackupPolicies(): Observable<Policy[]> {
-        return this.http.get<Policy[]>(`${BASE_URL}/policy`);
+        return this.http.get<Policy[]>(`${BASE_URL}`);
     }
 
     getBackupPolicyById(policyId: string): Observable<Policy> {
-        return this.http.get<Policy>(`${BASE_URL}/policy/${policyId}`);
+        return this.http.get<Policy>(
+            `${BASE_URL}/${policyId}`
+        );
+
         // return this.policiesCollection.doc<Policy>(policyId).valueChanges();
     }
 
     updateBackupPolicy(policy: Policy, policyId: string): Observable<Policy> {
-        return this.http.put<Policy>(`${BASE_URL}/policy/${policyId}`, policy);
+
+        console.log('policy details:');
+        console.log(policy);
+        return this.http.put<Policy>(
+            `${BASE_URL}/${policyId}`,
+            policy
+        );
     }
 
     ////////////////////////////////////////////
@@ -155,7 +181,11 @@ export class PoliciesService {
             console.log('POLICY NUMBER>>>>', policy.id);
             console.log(policy);
             this.http
-                .put<Policy>(`${BASE_URL}/policy/${policy.id}`, policy)
+
+                .put<Policy>(
+                    `${BASE_URL}/${policy.id}`,
+                    policy
+                )
                 .subscribe(
                     data => {
                         this.msg.success('Policy Successfully Updated');
@@ -201,7 +231,10 @@ export class PoliciesService {
     }
 
     getPolicyById(policyId: string): Observable<Policy> {
-        return this.http.get<Policy>(`${BASE_URL}/policy/${policyId}`);
+
+        return this.http.get<Policy>(
+            `${BASE_URL}/${policyId}`
+        );
 
         // return this.policiesCollection.doc<Policy>(policyId).valueChanges();
     }
@@ -211,7 +244,9 @@ export class PoliciesService {
     }
 
     getPolicies(): Observable<Policy[]> {
-        return this.http.get<Policy[]>(`${BASE_URL}/policy`);
+
+        return this.http.get<Policy[]>(`${BASE_URL}`);
+
         // return this.policies;
     }
 

@@ -19,7 +19,11 @@ import {
 } from '../models/client.model';
 import { IAccount } from 'src/app/settings/models/organizational/account.model';
 
+<<<<<<< HEAD
 const BASE_URL = 'https://flosure-postgres-db.herokuapp.com';
+=======
+const BASE_URL = 'https://savenda.flosure-api.com';
+>>>>>>> changa-test
 
 @Injectable({
     providedIn: 'root'
@@ -181,7 +185,7 @@ export class ClientsService {
     addCorporateClient(client: ICorporateClient): Observable<ICorporateClient> {
         // this.http
         //     .get<any>(
-        //         `https://flosure-number-generation.herokuapp.com/aplus-client-number/COR`
+        //         `https://number-generation.flosure-api.com/aplus-client-number/COR`
         //     )
         //     .subscribe((res) => {
         //         console.log('Client ID>>>>>>', res.data.client_number);
@@ -194,7 +198,11 @@ export class ClientsService {
         // client.clientID = this.clientID;
         // console.log(client);
         return this.http.post<ICorporateClient>(
+<<<<<<< HEAD
             `${BASE_URL}/clients/corporate`,
+=======
+            'https://savenda.flosure-api.com/clients/corporate',
+>>>>>>> changa-test
 
             client
         );
@@ -202,13 +210,21 @@ export class ClientsService {
 
     getCorporateClients(): Observable<ICorporateClient[]> {
         return this.http.get<ICorporateClient[]>(
+<<<<<<< HEAD
             `${BASE_URL}/clients/corporate`
+=======
+            'https://savenda.flosure-api.com/clients/corporate'
+>>>>>>> changa-test
         );
     }
 
     getCorporateClient(id: string): Observable<ICorporateClient> {
         return this.http.get<ICorporateClient>(
+<<<<<<< HEAD
             `${BASE_URL}/clients/corporate/${id}`
+=======
+            `https://savenda.flosure-api.com/clients/corporate/${id}`
+>>>>>>> changa-test
         );
     }
 
@@ -217,7 +233,11 @@ export class ClientsService {
         id: string
     ): Observable<ICorporateClient> {
         return this.http.put<ICorporateClient>(
+<<<<<<< HEAD
             `${BASE_URL}/clients/corporate/${id}`,
+=======
+            `https://savenda.flosure-api.com/clients/corporate/${id}`,
+>>>>>>> changa-test
 
             client
         );
@@ -228,7 +248,7 @@ export class ClientsService {
     ): Observable<IIndividualClient> {
         // this.http
         //     .get<any>(
-        //         `https://flosure-number-generation.herokuapp.com/aplus-client-number/IND`
+        //         `https://number-generation.flosure-api.com/aplus-client-number/IND`
         //     )
         //     .subscribe((res) => {
         //         console.log('Client ID>>>>>>', res.data.client_number);
@@ -236,7 +256,11 @@ export class ClientsService {
         //     });
 
         return this.http.post<IIndividualClient>(
+<<<<<<< HEAD
             `${BASE_URL}/clients/individual`,
+=======
+            'https://savenda.flosure-api.com/clients/individual',
+>>>>>>> changa-test
 
             client
         );
@@ -244,13 +268,21 @@ export class ClientsService {
 
     getIndividualClients(): Observable<IIndividualClient[]> {
         return this.http.get<IIndividualClient[]>(
+<<<<<<< HEAD
             `${BASE_URL}/clients/individual`
+=======
+            'https://savenda.flosure-api.com/clients/individual'
+>>>>>>> changa-test
         );
     }
 
     getIndividualClient(id: string): Observable<IIndividualClient> {
         return this.http.get<IIndividualClient>(
+<<<<<<< HEAD
             `${BASE_URL}/clients/individual/${id}`
+=======
+            `https://savenda.flosure-api.com/clients/individual/${id}`
+>>>>>>> changa-test
         );
     }
 
@@ -259,7 +291,11 @@ export class ClientsService {
         id: string
     ): Observable<IIndividualClient> {
         return this.http.put<IIndividualClient>(
+<<<<<<< HEAD
             `${BASE_URL}/clients/individual/${id}`,
+=======
+            `https://savenda.flosure-api.com/clients/individual/${id}`,
+>>>>>>> changa-test
             client
         );
     }

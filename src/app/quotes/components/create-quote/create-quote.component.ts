@@ -105,15 +105,15 @@ export class CreateQuoteComponent implements OnInit {
     motorThirdPartyloadingOptions = [];
     sourceOfBusinessOptions = SourceOfBusinessOptions;
 
-    //Excess Variable
+    // Excess Variable
     excessList: IExccess[] = [];
 
     excessTHP: IExccess[] = [];
     excessAct: IExccess[] = [];
     excessFT: IExccess[] = [];
 
-    //loading feedback
-    creatingQuote: boolean = false;
+    // loading feedback
+    creatingQuote = false;
     quotesList: MotorQuotationModel[];
     displayQuotesList: MotorQuotationModel[];
     quotesCount = 0;
@@ -216,7 +216,7 @@ export class CreateQuoteComponent implements OnInit {
 
     risks: RiskModel[] = [];
 
-    //excesses
+    // excesses
     excesses: Excess[] = [];
 
     // risk upload modal
@@ -271,7 +271,7 @@ export class CreateQuoteComponent implements OnInit {
     conChasis: any[] = [];
 
     compareFn = (o1: any, o2: any) =>
-        o1 && o2 ? o1.value === o2.value : o1 === o2;
+        o1 && o2 ? o1.value === o2.value : o1 === o2
 
     log(value: { label: string; value: string }): void {
         this.selectedLoadingValue = {
@@ -285,14 +285,14 @@ export class CreateQuoteComponent implements OnInit {
             return false;
         }
         return startValue.getTime() > this.endValue.getTime();
-    };
+    }
 
     disabledEndDate = (endValue: Date): boolean => {
         if (!endValue || !this.startValue) {
             return false;
         }
         return endValue.getTime() <= this.startValue.getTime();
-    };
+    }
 
     ngOnInit(): void {
         const user = localStorage.getItem('user');
@@ -327,6 +327,7 @@ export class CreateQuoteComponent implements OnInit {
         });
 
         this.clientsService.getAllClients().subscribe(clients => {
+
             this.clients = [...clients[0], ...clients[1]] as Array<
                 IIndividualClient & ICorporateClient
             >;
@@ -354,7 +355,7 @@ export class CreateQuoteComponent implements OnInit {
             otherEndorsement: ['', Validators.required]
         });
 
-        //set defaults values for excesses
+        // set defaults values for excesses
         this.excessesForm.get('below21Years').setValue('100');
         this.excessesForm.get('over70Years').setValue('100');
         this.excessesForm.get('noLicence').setValue('120');
@@ -385,7 +386,7 @@ export class CreateQuoteComponent implements OnInit {
             return false;
         }
         return submissionValue.valueOf() < moment().add(-1, 'days');
-    };
+    }
 
     handlePolicyEndDateCalculation(): void {
         if (
@@ -422,11 +423,11 @@ export class CreateQuoteComponent implements OnInit {
                     );
                     this.quoteForm.get('endDate').setValue(nd);
 
-                    let startDate = moment(
+                    const startDate = moment(
                         this.quoteForm.get('startDate').value
                     );
-                    let endDate = moment(nd);
-                    let numberOfDays = endDate.diff(startDate, 'days');
+                    const endDate = moment(nd);
+                    const numberOfDays = endDate.diff(startDate, 'days');
                     this.quoteForm
                         .get('policyNumberOfDays')
                         .setValue(numberOfDays);
@@ -497,7 +498,7 @@ export class CreateQuoteComponent implements OnInit {
     // save risks changes after editing
     saveRisk(): void {
         console.log('save risk 2 called');
-        let index = _.findIndex(this.risks, { id: this.selectedRisk.id });
+        const index = _.findIndex(this.risks, { id: this.selectedRisk.id });
         console.log('index:', index);
 
         const vehicleDetails = this.vehicleDetailsService.getVehicleDetails();
@@ -729,9 +730,9 @@ export class CreateQuoteComponent implements OnInit {
             ...extensionDetails,
             ...discountDetails,
             ...totals,
-            limitsOfLiability: limitsOfLiability,
+            limitsOfLiability,
             LiabilityType: liabilityType,
-            excesses: excesses
+            excesses
         });
         this.risks = [...this.risks, ...risk];
 
