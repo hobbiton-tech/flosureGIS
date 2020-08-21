@@ -69,9 +69,11 @@
         <tr
           style="cursor: pointer;"
           *ngFor="let receipt of receiptsTable.data" style="cursor: pointer;"
+          [class.selected]="receipt === selectedRole"
+          (click)="showAllocationRole(receipt)"
         >
           <td>{{ receipt.receipt_number }}</td>
-          <td>{{ receipt.inte }}</td>
+          <td>{{ receipt.intermediary_name }}</td>
           <td>{{ receipt.amount | number: '1.2-2' }}</td>
           <td>{{ receipt.allocated_amount | number: '1.2-2' }}</td>
           <td>{{ receipt.status }}</td>
@@ -128,7 +130,7 @@
           *ngFor="let policy of policiesTable.data" style="cursor: pointer;"
         >
           <td>{{ policy.policy_number }}</td>
-          <td>{{ policy.inte }}</td>
+          <td>{{ policy.client_name }}</td>
           <td>{{ policy.amount | number: '1.2-2' }}</td>
           <td>{{ policy.gross_amount | number: '1.2-2' }}</td>
           <td>{{ policy.net_amount_due | number: '1.2-2' }}</td>
