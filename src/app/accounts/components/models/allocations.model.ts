@@ -6,6 +6,7 @@ export class AllocationReceipt {
   amount: number;
   allocated_amount: number;
   intermediary_type: string;
+  intermediary_name:string;
   status:string;
 }
 
@@ -16,6 +17,8 @@ export  class AllocationPolicy {
   client_id: string;
   gross_amount: number;
   net_amount_due: number;
+  intermediary_id: string;
+  client_name: string;
   settlements: number;
   balance: number;
   commission_due: number;

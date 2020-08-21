@@ -151,7 +151,7 @@ export class BrokerClientComponent implements OnInit {
           quotes,
           (x) =>
             x.receiptStatus === 'Unreceipted' &&
-            x.sourceOfBusiness === 'broker'
+            x.sourceOfBusiness === 'Broker'
         ).length;
         console.log('======= Unreceipt List =======');
         console.log(this.listofUnreceiptedReceipts);
@@ -166,7 +166,7 @@ export class BrokerClientComponent implements OnInit {
           receipts.data,
           (x) =>
             x.receipt_status === 'Receipted' &&
-            x.source_of_business === 'broker'
+            x.source_of_business === 'Broker'
         );
 
         console.log('======= Receipt List =======');
@@ -176,7 +176,7 @@ export class BrokerClientComponent implements OnInit {
           receipts.data,
           (x) =>
             x.receipt_status === 'Cancelled' &&
-            x.source_of_business === 'broker'
+            x.source_of_business === 'Broker'
         );
 
         console.log('======= Cancelled Receipt List =======');
