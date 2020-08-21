@@ -385,7 +385,11 @@
                                             ><FONT SIZE="2"
                                                 >Source of Business:
                                                 {{
+<<<<<<< HEAD
+                                                    receipt.sourceOfBusiness.toLocaleUpperCase()
+=======
                                                     receipt.source_of_business
+>>>>>>> changa-test
                                                 }}</FONT
                                             ></FONT
                                         ></P
@@ -406,7 +410,11 @@
                                 </TD>
                                 <ng-container
                                     *ngIf="
+<<<<<<< HEAD
+                                        receipt.sourceOfBusiness !== 'direct'
+=======
                                         receipt.source_of_business !== 'Direct'
+>>>>>>> changa-test
                                     "
                                 >
                                     <TD
@@ -456,7 +464,11 @@
                                             ><FONT SIZE="2"
                                                 >Payment Method:
                                                 {{
+<<<<<<< HEAD
+                                                    receipt.paymentMethod.toLocaleUpperCase()
+=======
                                                     receipt.payment_method
+>>>>>>> changa-test
                                                 }}</FONT
                                             ></FONT
                                         ></P
@@ -516,6 +528,34 @@
                                         ></P
                                     >
                                 </TD>
+<<<<<<< HEAD
+
+                                </ng-container>
+                            </TR>
+                            <TR>
+
+                              <TD
+                              WIDTH="191"
+                              HEIGHT="5"
+                              BGCOLOR="#ffffff"
+                              STYLE="border: none; padding: 0in"
+                          >
+                              <P ALIGN="LEFT"
+                                  ><FONT FACE="Arial, serif"
+                                      ><FONT SIZE="2"
+                                          >Amount in Words:
+                                          {{
+                                              toWords(
+                                                  receipt.sumInDigits
+                                                      | number: '1.2-2'
+                                              ).toLocaleUpperCase()
+                                          }}</FONT
+                                      ></FONT
+                                  ></P
+                              >
+                          </TD>
+=======
+>>>>>>> changa-test
                             </TR>
                         </TBODY>
                     </TABLE>

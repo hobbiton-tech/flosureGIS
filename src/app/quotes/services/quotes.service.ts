@@ -11,10 +11,11 @@ import { HttpClient } from '@angular/common/http';
 import { NzMessageService } from 'ng-zorro-antd';
 import { Router } from '@angular/router';
 
-const BASE_URL = 'http://104.248.247.78:3000';
+// const BASE_URL = 'http://104.248.247.78:3000';
 // const BASE_URL = 'https://flosure-api.com'
-//const BASE_URL = 'https://flosure-postgres-api.herokuapp.com';
 // const BASE_URL = 'https://flosure-api.azurewebsites.net';
+const BASE_URL = 'https://savenda.flosure-api.com/quotation';
+
 export interface IQuoteDocument {
     id: string;
     clientID: string;
@@ -126,42 +127,50 @@ export class QuotesService {
                 console.log(err);
             });
     }
-    //postgres db
+    // postgres db
     createMotorQuotation(motorQuotation: MotorQuotationModel, count) {
         let insuranceType = '';
         const productType = motorQuotation.risks[0].insuranceType;
-        if (productType == 'Comprehensive') {
+        if (productType === 'Comprehensive') {
             insuranceType = '07001';
         } else {
             insuranceType = '07002';
         }
         const quotationNumberRequest: IQuoteNumberRequest = {
-            branch: motorQuotation.branch, //get from db
+            branch: motorQuotation.branch, // get from db
         };
         this.http
             .get<any>(
                 `https://number-generation.flosure-api.com/savenda-quote-number/1/${insuranceType}`
             )
-            .subscribe(async (res) => {
-                motorQuotation.quoteNumber = res.data.quotation_number;
-                console.log('WHAT THE >>>>', motorQuotation);
-                this.http
-                    .post<MotorQuotationModel>(
-                        'https://savenda.flosure-api.com/quotation',
-                        motorQuotation
-                    )
-                    .subscribe(
-                        async (res) => {
-                            this.msg.success('Quotation Successfully Created');
-                            this.router.navigateByUrl(
-                                '/flosure/quotes/quotes-list'
-                            );
-                        },
-                        async (err) => {
-                            this.msg.error('Quotation Creation failed');
-                        }
-                    );
-            });
+            .subscribe(
+                async res => {
+                    motorQuotation.quoteNumber = res.data.quotation_number;
+                    console.log('WHAT THE >>>>', motorQuotation);
+                    this.http
+                        .post<MotorQuotationModel>(
+                            `${BASE_URL}/quotation`,
+                            motorQuotation
+                        )
+                        .subscribe(
+                            async resq => {
+                                this.msg.success(
+                                    'Quotation Successfully Created'
+                                );
+                                this.router.navigateByUrl(
+                                    '/flosure/quotes/quotes-list'
+                                );
+                            },
+                            async err => {
+                                this.msg.error('Quotation Creation failed');
+                            }
+                        );
+                },
+                async err => {
+                    console.log(err);
+                    // this.msg.error('Quotation Creation failed');
+                }
+            );
     }
 
     postRtsa(params) {
@@ -178,15 +187,13 @@ export class QuotesService {
             );
     }
     getMotorQuotations(): Observable<MotorQuotationModel[]> {
-        return this.http.get<MotorQuotationModel[]>(
-            'https://savenda.flosure-api.com/quotation'
-        );
+        return this.http.get<MotorQuotationModel[]>(`${BASE_URL}/quotation`);
     }
     getMotorQuotationById(
         quotationId: string
     ): Observable<MotorQuotationModel> {
         return this.http.get<MotorQuotationModel>(
-            `https://savenda.flosure-api.com/quotation/${quotationId}`
+            `${BASE_URL}/quotation/${quotationId}`
         );
     }
     updateMotorQuotation(
@@ -194,7 +201,7 @@ export class QuotesService {
         quotationId: string
     ): Observable<MotorQuotationModel> {
         return this.http.put<MotorQuotationModel>(
-            `https://savenda.flosure-api.com/quotation/${quotationId}`,
+            `${BASE_URL}/quotation/${quotationId}`,
             motorQuotation
         );
     }

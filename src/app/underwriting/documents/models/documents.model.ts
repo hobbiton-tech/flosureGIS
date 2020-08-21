@@ -9,11 +9,13 @@ export class DebitNote {
 }
 
 export class CreditNote {
+    id?: string;
     creditNoteNumber?: string;
     remarks: string;
     dateCreated: Date;
     dateUpdated: Date;
     policy?: Policy;
+    creditNoteAmount?: number;
 }
 
 export class CoverNote {

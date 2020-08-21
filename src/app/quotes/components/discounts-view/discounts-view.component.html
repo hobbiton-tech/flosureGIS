@@ -1,0 +1,52 @@
+<div>
+    <div *ngIf="
+        discounts ===
+            undefined ||
+        discounts.length ==
+            0
+    ">
+        <p>
+            No
+            Discount
+            added
+        </p>
+    </div>
+    <div *ngFor="
+        let discount of discounts;
+        let i = index
+    ">
+        <div>
+            <div nz-row>
+                <div nz-col nzSpan="10">
+                    <p>
+                        {{
+                        discount.discountType
+                    }}:
+                    </p>
+                </div>
+                <div nz-col nzSpan="6">
+                    <p style="
+                                margin-left: 4px;
+                            ">
+                        {{
+                        discount.amount
+                            | number
+                                : '1.2-2'
+                    }}
+                    </p>
+                </div>
+                <div nz-col nzSpan="8">
+                    <a style="
+                                float: right;
+                            " (click)="
+                        removeDiscount(
+                            discount,
+                            $event
+                        )
+                    ">Remove
+                        Discount</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -122,18 +122,8 @@
 
             <tr class="information">
                 <td colspan="2">
-                    <p
-                        style="
-                            text-align: center;
-                            background-color: skyblue;
-                            color: aliceblue;
-                        "
-                    >
-                        {{
-                            quoteData.risks[0].insuranceType == 'Comprehensive'
-                                ? 'COMPREHENSIVE'
-                                : 'THIRD PARTY'
-                        }}
+                    <p style="text-align: center; background-color: skyblue; color: aliceblue;">
+                        {{quoteData.risks ? (quoteData.risks[0].insuranceType == 'Comprehensive' ? 'COMPREHENSIVE' : 'THIRD PARTY') : '-'}}
                     </p>
                     <br />
                 </td>
@@ -226,7 +216,7 @@
                                 {{ risk.netPremium | number: '1.2-2' }}
                             </td>
                         </tr>
-                    </nz-table>
+                    </table>
                     <br />
                 </td>
             </tr>
@@ -235,52 +225,34 @@
                 <tr>
                     <td><strong>Total Sum Insured</strong></td>
                     <td><strong>:</strong></td>
-                    <td>
-                        <span>
-                            {{ quoteData.currency }}
-                            {{ totalSumInsured | number: '1.2-2' }}</span
-                        >
+                    <td><span> {{quoteData ? quoteData.currency : '-'}} {{totalSumInsured | number: '1.2-2'}}</span>
                     </td>
                 </tr>
 
                 <tr>
                     <td><strong>Rate</strong></td>
                     <td><strong>:</strong></td>
-                    <td>
-                        <span>{{ quoteData.risks[0].premiumRate }}</span>
-                    </td>
+                    <td><span>{{quoteData.risks ? quoteData.risks[0].premiumRate : '-'}}</span></td>
                 </tr>
 
                 <tr>
                     <td><strong>Basic Premium</strong></td>
                     <td><strong>:</strong></td>
-                    <td>
-                        <span>
-                            {{ quoteData.currency }}
-                            {{ totalBasicPremium | number: '1.2-2' }}</span
-                        >
+                    <td><span> {{quoteData ? quoteData.currency : '-'}}
+                            {{totalBasicPremium | number: '1.2-2'}}</span>
                     </td>
                 </tr>
 
                 <tr>
                     <td><strong>Levy @ 3%</strong></td>
                     <td><strong>:</strong></td>
-                    <td>
-                        <span>
-                            {{ quoteData.currency }}
-                            {{ totalLevy | number: '1.2-2' }}</span
-                        >
-                    </td>
+                    <td><span> {{quoteData ? quoteData.currency : '-'}} {{totalLevy | number: '1.2-2'}}</span></td>
                 </tr>
 
                 <tr>
                     <td><strong>Total Premium</strong></td>
                     <td><strong>:</strong></td>
-                    <td>
-                        <span>
-                            {{ quoteData.currency }}
-                            {{ totalNetPremium | number: '1.2-2' }}</span
-                        >
+                    <td><span> {{quoteData ? quoteData.currency : '-'}} {{totalNetPremium | number: '1.2-2'}}</span>
                     </td>
                 </tr>
 
@@ -310,11 +282,9 @@
                     <td>
                         <span>
                             <div *ngFor="let lol of limitsOfLiabilities">
-                                {{ lol.liabilityType }} {{ quoteData.currency
-                                }}{{ lol.amount }}<br />
+                                {{lol.liabilityType}} {{quoteData.currency}}{{lol.amount}}<br />
                             </div>
-                        </span>
-                    </td>
+                        </span></td>
                 </tr>
 
                 <tr>

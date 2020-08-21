@@ -21,6 +21,20 @@ import { EndorsementService } from 'src/app/underwriting/services/endorsements.s
 import { NzMessageService } from 'ng-zorro-antd';
 import { BehaviorSubject } from 'rxjs';
 import { DebitNote } from 'src/app/underwriting/documents/models/documents.model';
+import { VehicleDetailsComponent } from 'src/app/quotes/components/vehicle-details/vehicle-details.component';
+import { PremiumComputationComponent } from 'src/app/quotes/components/premium-computation/premium-computation.component';
+import { PremiumComputationDetailsComponent } from 'src/app/quotes/components/premium-computation-details/premium-computation-details.component';
+import { ExtensionsComponent } from 'src/app/quotes/components/extensions/extensions.component';
+import { DiscountsComponent } from 'src/app/quotes/components/discounts/discounts.component';
+import { TotalsViewComponent } from 'src/app/quotes/components/totals-view/totals-view.component';
+import { VehicleDetailsServiceService } from 'src/app/quotes/services/vehicle-details-service.service';
+import { VehicleDetailsModel } from 'src/app/quotes/models/vehicle-details.model';
+import {
+    PremiumComputationDetails,
+    PremiumComputation
+} from 'src/app/quotes/models/premium-computations.model';
+import { ITotalsModel } from 'src/app/quotes/models/totals.model';
+import { PremiumComputationService } from 'src/app/quotes/services/premium-computation.service';
 
 @Component({
     selector: 'app-policy-revision-details',
@@ -28,6 +42,12 @@ import { DebitNote } from 'src/app/underwriting/documents/models/documents.model
     styleUrls: ['./policy-revision-details.component.scss']
 })
 export class PolicyRevisionDetailsComponent implements OnInit {
+    // view risk modal
+    viewRiskModalVisible = false;
+
+    // loading feedback
+    policyRevisionDetailsIsLoading = false;
+
     //loading feedback
     updatingPolicy: boolean = false;
 
@@ -68,10 +88,23 @@ export class PolicyRevisionDetailsComponent implements OnInit {
         private cdr: ChangeDetectorRef,
         private msg: NzMessageService,
         private readonly router: Router,
-        private endorsementService: EndorsementService
+        private endorsementService: EndorsementService,
+        private vehicleDetailsComponent: VehicleDetailsComponent,
+        private premuimComputationsComponent: PremiumComputationComponent,
+        private premiumComputationDetailsComponent: PremiumComputationDetailsComponent,
+        private extensionsComponent: ExtensionsComponent,
+        private discountsComponent: DiscountsComponent,
+        private totalsComponent: TotalsViewComponent,
+        private vehicleDetailsService: VehicleDetailsServiceService,
+        private premiumComputationService: PremiumComputationService
     ) {}
 
     ngOnInit(): void {
+        this.policyRevisionDetailsIsLoading = true;
+        setTimeout(() => {
+            this.policyRevisionDetailsIsLoading = false;
+        }, 3000);
+
         this.policyRevisionDetailsForm = this.formBuilder.group({
             client: ['', Validators.required],
             nameOfInsured: ['', Validators.required],
@@ -142,12 +175,63 @@ export class PolicyRevisionDetailsComponent implements OnInit {
         });
     }
 
+    // view details of the risk
+    viewRiskDetails(risk: RiskModel) {
+        this.premiumComputationService.changeRiskEditMode(true);
+        this.selectedRisk = risk;
+        this.viewRiskModalVisible = true;
+
+        const vehicleDetails: VehicleDetailsModel = {
+            vehicleMake: risk.vehicleMake,
+            vehicleModel: risk.vehicleModel,
+            yearOfManufacture: risk.yearOfManufacture,
+            regNumber: risk.regNumber,
+            engineNumber: risk.engineNumber,
+            chassisNumber: risk.chassisNumber,
+            color: risk.color,
+            cubicCapacity: risk.cubicCapacity,
+            seatingCapacity: risk.seatingCapacity,
+            bodyType: risk.bodyType
+        };
+
+        const premiumComputationDetails: PremiumComputationDetails = {
+            insuranceType: risk.insuranceType,
+            productType: risk.productType,
+            riskStartDate: risk.riskStartDate,
+            riskEndDate: risk.riskEndDate,
+            riskQuarter: risk.riskQuarter,
+            numberOfDays: risk.numberOfDays,
+            expiryQuarter: risk.expiryQuarter
+        };
+
+        const premimuComputations: PremiumComputation = {
+            sumInsured: risk.sumInsured
+        };
+
+        const totals: ITotalsModel = {
+            basicPremium: risk.basicPremium,
+            premiumLevy: risk.premiumLevy,
+            netPremium: risk.netPremium
+        };
+
+        this.vehicleDetailsComponent.setVehicleDetails(vehicleDetails);
+        this.premiumComputationDetailsComponent.setPremiumComputationDetails(
+            premiumComputationDetails
+        );
+        this.premuimComputationsComponent.setPremiumComputations(
+            premimuComputations
+        );
+        this.totalsComponent.setTotals(totals);
+    }
+
     recieveEditedRisk(risk: RiskModel) {
         this.updateRisk(risk);
     }
 
     recieveAddedrisk(risk) {
-        const addedRisk: RiskModel[] = risk;
+        console.log('risk added...lll');
+        console.log(risk);
+        const addedRisk: RiskModel = risk;
         this.addRisk(addedRisk);
     }
 
@@ -155,12 +239,20 @@ export class PolicyRevisionDetailsComponent implements OnInit {
     removeRisk(id: string): void {
         this.risks = this.risks.filter(risk => risk.id !== id);
         this.displayRisks = this.risks;
+        this.updatePolicy();
     }
 
-    addRisk(risks: RiskModel[]) {
-        this.risks = [...this.risks, ...risks];
+    addRisk(risk: RiskModel) {
+        this.risks.push(risk);
         this.risks = this.risks;
         this.displayRisks = this.risks;
+        this.updatePolicy();
+    }
+
+    updatePolicy() {
+        this.policyRevisionDetailsForm
+            .get('netPremium')
+            .setValue(this.sumArray(this.risks, 'netPremium'));
     }
 
     updateRisk(risk: RiskModel) {
@@ -173,6 +265,7 @@ export class PolicyRevisionDetailsComponent implements OnInit {
 
     openAddRiskFormModal() {
         this.addRiskFormModalVisible = true;
+        this.premiumComputationService.changeRiskEditMode(false);
     }
 
     openViewRiskFormModal(risk: RiskModel) {

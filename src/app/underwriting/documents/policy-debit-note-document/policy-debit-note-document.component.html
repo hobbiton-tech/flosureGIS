@@ -1,21 +1,13 @@
-<div
-    style="
+<div style="
         display: flex;
         margin-bottom: 15px;
         align-items: flex-end;
         width: 100%;
-    "
->
+    ">
     <!-- <button nz-button nzType="primary" style="margin-right: 8px;" (click)="htmlToPdf()">
         Download
     </button> -->
-    <button
-        nz-button
-        nzType="primary"
-        [useExistingCss]="true"
-        [printSectionId]="'debitPrintSection'"
-        ngxPrint
-    >
+    <button nz-button nzType="primary" [useExistingCss]="true" [printSectionId]="'debitPrintSection'" ngxPrint>
         Print
     </button>
 </div>
@@ -26,6 +18,7 @@
                 <td colspan="6">
                     <table>
                         <tr>
+
                             <td class="title"> <img
                                 src="/assets/images/Savenda-Logo-Final.png"
                                 style="width: 100%; max-width: 100px;"
@@ -41,6 +34,7 @@
                                 Plot 20849 PSC Corporate Park, <br />
                                 P.O Box 30363, Lusaka Zambia<br />
                                 Tel: :+260 977 893 878, +260 960 344 478<br />
+
                             </td>
                         </tr>
                     </table>
@@ -66,8 +60,12 @@
                                 : '-'
                         }}
                     </p>
+<<<<<<< HEAD
+                    <span style="font-weight: bold;">TPIN:</span><span style="font-weight: bold; color: red;"></span>
+=======
                     <span style="font-weight: bold;">TPIN:</span
                     ><span style="font-weight: bold; color: red;"></span>
+>>>>>>> changa-test
                 </td>
             </tr>
         </table>
@@ -76,43 +74,33 @@
         <table>
             <tr>
                 <td>
-                    <span style="font-weight: bold;"
-                        >Insured: {{ policy.nameOfInsured }}</span
-                    >
+                    <span style="font-weight: bold;">Insured: {{ policy.nameOfInsured }}</span>
                 </td>
                 <td style="float: right !important;">
-                    <span style="font-weight: bold;"
-                        >Date:
+                    <span style="font-weight: bold;">Date:
                         {{
                             policyDebitNote
                                 ? (policyDebitNote.dateCreated | date)
                                 : '-'
-                        }}</span
-                    >
+                        }}</span>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <span style="font-weight: bold;"
-                        >Address: {{ client ? client.address : '-' }}</span
-                    >
+                    <span style="font-weight: bold;">Address: {{ client ? client.address : '-' }}</span>
                 </td>
                 <td style="float: right !important;">
-                    <span style="font-weight: bold;"
-                        >Agent:
+                    <span style="font-weight: bold;">Agent:
                         {{
                             policy.sourceOfBusiness == 'direct'
                                 ? 'Direct'
                                 : policy.intermediaryName
-                        }}</span
-                    >
+                        }}</span>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <span style="font-weight: bold;"
-                        >Telephone: {{ client ? client.phone : '-' }}</span
-                    >
+                    <span style="font-weight: bold;">Telephone: {{ client ? client.phone : '-' }}</span>
                 </td>
                 <!-- <td style="float: right !important"><span style="font-weight: bold;">Terms: </span></td> -->
             </tr>
@@ -147,30 +135,23 @@
                 <td
                     style="border: 1px solid black; border-collapse: collapse;"
                 ></td>
-
-                <td
-                    class="td2"
-                    style="border: 1px solid black; border-collapse: collapse;"
-                >
-                    {{ coverNote(risk) }}
-                </td>
+                <td class="td2" style="border: 1px solid black; border-collapse: collapse;">
+                    {{coverNotes ? coverNote(risk) : '-'}}</td>
                 <td style="border: 1px solid black;">
                     {{ risk.regNumber }}, {{ risk.vehicleMake }}
-                    {{ risk.vehicleModel }} -
-                    <ng-container *ngIf="risk.insuranceType === 'ThirdParty'">
+                    {{ risk.vehicleModel }} - {{ risk.insuranceType }}
+                    <!-- <ng-container *ngIf="risk.insuranceType === 'ThirdParty'">
                         Third Party
                     </ng-container>
                     <ng-container *ngIf="risk.insuranceType === 'ActOnly'">
                         Act Only Cover
                     </ng-container>
-                    <ng-container
-                        *ngIf="risk.insuranceType === 'Comprehensive'"
-                    >
+                    <ng-container *ngIf="risk.insuranceType === 'Comprehensive'">
                         Comprehensive
                     </ng-container>
                     <ng-container *ngIf="risk.insuranceType === 'FireAndTheft'">
                         Third Party Fire and Theft
-                    </ng-container>
+                    </ng-container> -->
                     <!-- {{ risk.insuranceType == 'ThirdParty' ? 'Third Party' : 'Comprehensive' }} -->
                 </td>
                 <td
@@ -226,21 +207,15 @@
         </p> -->
         <br />
         <p style="font-weight: bold; text-align: left;">
-            Prepared By: ................................................<span
-                style="float: right;"
-            >
-                Sign:...............................................</span
-            >
+            Prepared By: ................................................<span style="float: right;">
+                Sign:...............................................</span>
         </p>
 
         <br />
 
         <p style="font-weight: bold; text-align: left;">
-            Approved By: ................................................<span
-                style="float: right;"
-            >
-                Sign:...............................................</span
-            >
+            Approved By: ................................................<span style="float: right;">
+                Sign:...............................................</span>
         </p>
     </div>
 </div>

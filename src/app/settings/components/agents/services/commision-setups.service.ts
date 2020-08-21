@@ -6,21 +6,21 @@ import { Observable } from 'rxjs';
 // const BASE_URL = 'https://savenda.flosure-api.com';
 const BASE_URL = 'http://104.248.247.78:3000';
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
 export class CommisionSetupsService {
     constructor(private http: HttpClient) {}
 
     addCommissionSetup(dto: ICommissionSetup): Observable<ICommissionSetup> {
         return this.http.post<ICommissionSetup>(
-            'https://savenda.flosure-api.com/commission-setups',
+            `${BASE_URL}/commission-setups`,
             dto
         );
     }
 
     getCommissionSetups(): Observable<ICommissionSetup[]> {
         return this.http.get<ICommissionSetup[]>(
-            'https://savenda.flosure-api.com/commission-setups'
+            `${BASE_URL}/commission-setups`
         );
     }
 }

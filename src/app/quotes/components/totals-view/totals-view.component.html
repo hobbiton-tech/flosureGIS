@@ -1,0 +1,40 @@
+<div>
+    <nz-descriptions nzBordered nzSize="small" nzSpan="6" style="
+                        margin-top: 5px;
+                    " [nzColumn]="1" [nzBordered]="true" nzSize="middle">
+        <nz-descriptions-item nzTitle="Basic Premium">
+            {{
+                    basicPremium
+                        | number
+                            : '1.2-2'
+                }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Extension">
+            {{
+                    extensionsTotal
+                        | number
+                            : '1.2-2'
+                }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Discount">
+            {{
+                    discountsTotal
+                        | number
+                            : '1.2-2'
+                }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Levy">
+            {{
+                    levyAmount
+                        | number
+                            : '1.2-2'
+                }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Net Premium">
+            {{
+                    netPremium
+                        | number
+                            : '1.2-2'
+                }}</nz-descriptions-item>
+    </nz-descriptions>
+</div>

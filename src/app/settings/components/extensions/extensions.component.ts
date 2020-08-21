@@ -2,26 +2,27 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {
     IProduct,
-    IClass,
+    IClass
 } from '../product-setups/models/product-setups-models.model';
 import { ProductSetupsServiceService } from '../product-setups/services/product-setups-service.service';
 import {
     IExtension,
     ILimit,
-    IExccess,
+    IExccess
 } from '../../models/underwriting/clause.model';
 import { ClausesService } from '../underwriting-setups/services/clauses.service';
 import { v4 } from 'uuid';
+import { IExtensions } from 'src/app/quotes/models/extensions.model';
 
 @Component({
     selector: 'app-extensions',
     templateUrl: './extensions.component.html',
-    styleUrls: ['./extensions.component.scss'],
+    styleUrls: ['./extensions.component.scss']
 })
 export class ExtensionsComponent implements OnInit {
     classesList: IClass[];
     productsList: IProduct[] = [];
-    extensionList: IExtension[] = [];
+    extensionList: IExtensions[] = [];
     limitsList: ILimit[] = [];
     exccessesList: IExccess[] = [];
 
@@ -45,40 +46,40 @@ export class ExtensionsComponent implements OnInit {
     ) {
         this.extensionForm = formBuilder.group({
             heading: ['', Validators.required],
-            description: ['', Validators.required],
+            description: ['', Validators.required]
         });
 
         this.limitForm = formBuilder.group({
             heading: ['', Validators.required],
             description: ['', Validators.required],
-            amount: ['', Validators.required],
+            amount: ['', Validators.required]
         });
 
         this.exccessForm = formBuilder.group({
             heading: ['', Validators.required],
             description: ['', Validators.required],
-            amount: ['', Validators.required],
+            amount: ['', Validators.required]
         });
     }
 
     ngOnInit(): void {
-        this.productsService.getClasses().subscribe((res) => {
+        this.productsService.getClasses().subscribe(res => {
             this.classesList = res;
         });
 
-        this.productClausesService.getExtensions().subscribe((res) => {
+        this.productClausesService.getExtensions().subscribe(res => {
             this.extensionList = res;
         });
-        this.productClausesService.getLimits().subscribe((res) => {
+        this.productClausesService.getLimits().subscribe(res => {
             this.limitsList = res;
         });
-        this.productClausesService.getExccesses().subscribe((res) => {
+        this.productClausesService.getExccesses().subscribe(res => {
             this.exccessesList = res;
         });
     }
 
     onChange(value) {
-        this.productsService.getProducts(value.id).subscribe((res) => {
+        this.productsService.getProducts(value.id).subscribe(res => {
             this.productsList = res;
         });
     }
@@ -119,7 +120,7 @@ export class ExtensionsComponent implements OnInit {
         const extension: IExtension = {
             ...this.extensionForm.value,
             id: v4(),
-            productId: this.selectedProductId,
+            productId: this.selectedProductId
         };
         this.productClausesService.addExtension(extension);
         this.isExtensionsVisible = false;
@@ -133,7 +134,7 @@ export class ExtensionsComponent implements OnInit {
         const limit: ILimit = {
             ...this.limitForm.value,
             id: v4(),
-            productId: this.selectedProductId,
+            productId: this.selectedProductId
         };
         this.productClausesService.addLimit(limit);
         this.isLimitVisible = false;
@@ -149,7 +150,7 @@ export class ExtensionsComponent implements OnInit {
             ...this.exccessForm.value,
             id: v4(),
             productId: this.selectedProductId,
-            vehicleType: this.vehicleType,
+            vehicleType: this.vehicleType
         };
         this.productClausesService.addExccess(exccess);
         this.isExccessVisible = false;

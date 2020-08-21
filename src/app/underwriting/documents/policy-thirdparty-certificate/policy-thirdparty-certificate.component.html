@@ -462,7 +462,11 @@
                     transform="translate(27 137)"
                 >
                     <tspan x="0" y="0">
+<<<<<<< HEAD
+                        CERTIFICATE NO: {{coverNot ? coverNot.certificateNumber : '-'}}
+=======
                         CERTIFICATE NO: {{ coverNot.certificateNumber }}
+>>>>>>> changa-test
                     </tspan>
                 </text>
                 <text
@@ -691,11 +695,11 @@
                 >
                     <tspan x="0" y="0" xml:space="preserve"></tspan>
                     <tspan x="0" y="10" xml:space="preserve">
-                        Cover Note Receipt No.: {{ receipt.receipt_number }}
+                        Cover Note Receipt No.: {{ receipt ? receipt.receipt_number : '-' }}
                     </tspan>
                     <tspan x="0" y="25" xml:space="preserve">
                         Amount Paid in {{ policy.currency }} :{{
-                            receipt.sum_in_digits
+                            receipt ? receipt.sum_in_digits : '-'
                         }}
                     </tspan>
                 </text>
@@ -789,21 +793,88 @@
                         TO: {{ policyRisk.riskEndDate | date }}
                     </tspan>
                 </text>
+            <text
+            id="Third_Party_Limits_of_Liability"
+            data-name="Third Party Limits of Liability"
+            class="cls-15"
+            transform="translate(298 350)"
+        >
+            <tspan x="0" y="0">Third Party Limits of Liability</tspan>
+        </text>
+        <text *ngIf="limitsOfLiablity[0] ? (limitsOfLiablity[0].liabilityType ==='combinedLimits') : '-'"
+            id="Third_Party_Property_Damage"
+            data-name="Third Party Property Damage"
+            class="cls-18"
+            transform="translate(298 360)"
+        >
+            <tspan x="0" y="0">
 
-                <text
-                    id="Third_Party_Bodily_Injury_Death_per_Event"
-                    data-name="Third Party Bodily Injury / Death per Event"
-                    class="cls-18"
-                    transform="translate(27 460)"
-                >
-                    <tspan x="0" y="0">
-                        Cover Operative for a period Of
-                        {{ policyRisk.numberOfDays }}.Day(s)
-                    </tspan>
-                    <tspan x="0" y="16">
-                        From: {{ dateOfIssue | date: 'HH:MM:SS' }} Hours
-                    </tspan>
-                </text>
+                Combined Limit {{policy.currency}} {{limitsOfLiablity[0] ? limitsOfLiablity[0].amount : '-'}}
+            </tspan>
+        </text>
+        <text *ngIf="limitsOfLiablity[0] ? (limitsOfLiablity[0].liabilityType !=='combinedLimits') : '-'"
+            id="Third_Party_Property_Damage"
+            data-name="Third Party Property Damage"
+            class="cls-18"
+            transform="translate(298 360)"
+        >
+            <tspan x="0" y="0">
+                (i) Third Party Limit for injury/ Death per person {{policy.currency}} {{limitsOfLiablity[0] ? limitsOfLiablity[0].amount : '-'}}
+            </tspan>
+        </text>
+        <text *ngIf="limitsOfLiablity[0] ? (limitsOfLiablity[0].liabilityType !=='combinedLimits') : '-'"
+            id="Third_Party_Injury_and_Death"
+            data-name="Third Party Injury and Death"
+            class="cls-18"
+            transform="translate(298 375)"
+        >
+            <tspan x="0" y="0">
+                (ii) Third party limit per Event {{policy.currency}} {{limitsOfLiablity[1] ? limitsOfLiablity[1].amount : '-'}}
+            </tspan>
+        </text>
+        <text *ngIf="limitsOfLiablity[0] ? (limitsOfLiablity[0].liabilityType !=='combinedLimits') : '-'"
+            id="Third_Party_Bodily_Injury_Death_per_Event"
+            data-name="Third Party Bodily Injury / Death per Event"
+            class="cls-18"
+            transform="translate(298 390)"
+        >
+            <tspan x="0" y="0">
+                (iii)Third Party Property Damage {{policy.currency}} {{limitsOfLiablity[2] ? limitsOfLiablity[2].amount : '-'}}
+            </tspan>
+        </text>
+
+
+        <text
+        id=" DURATION_OF_COVER"
+        data-name=" DURATION OF COVER"
+        class="cls-18"
+        transform="translate(27 410)"
+    >
+        <tspan x="0" y="0">
+            DURATION OF COVER
+        </tspan>
+        <tspan x="0" y="16">
+            FROM: {{ ' ' + issueDate | date }}
+        </tspan>
+        <tspan x="0" y="30">
+            TO: {{ policyRisk.riskEndDate | date }}
+        </tspan>
+    </text>
+
+    <text
+        id="Third_Party_Bodily_Injury_Death_per_Event"
+        data-name="Third Party Bodily Injury / Death per Event"
+        class="cls-18"
+        transform="translate(27 460)"
+    >
+        <tspan x="0" y="0">
+            Cover Operative for a period Of
+            {{ policyRisk.numberOfDays }}.Day(s)
+        </tspan>
+        <tspan x="0" y="16">
+            From: {{ dateOfIssue | date: 'HH:MM:SS' }} Hours
+        </tspan>
+    </text>
 
                 <text
                     id="On_happening_of_an_event_giving_rise_to_a_claim_notification_must_be_done_within_48_hours_for_accidental_damage_and_24_hours_for_theft_from_the_time_of_happening_of_an_event."

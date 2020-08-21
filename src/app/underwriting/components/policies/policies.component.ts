@@ -7,7 +7,7 @@ import { PoliciesService } from '../../services/policies.service';
 @Component({
     selector: 'app-policies',
     templateUrl: './policies.component.html',
-    styleUrls: ['./policies.component.scss'],
+    styleUrls: ['./policies.component.scss']
 })
 export class PoliciesComponent implements OnInit {
     policiesList: Policy[];
@@ -29,11 +29,13 @@ export class PoliciesComponent implements OnInit {
         setTimeout(() => {
             this.isOkLoading = false;
         }, 3000);
-        this.policiesService.getPolicies().subscribe((policies) => {
+        this.policiesService.getPolicies().subscribe(policies => {
             this.policiesList = policies;
             this.policiesCount = policies.length;
 
-            this.policiesList.sort((a,b) => a.policyNumber.localeCompare(b.policyNumber));
+            this.policiesList.sort((a, b) =>
+                a.policyNumber.localeCompare(b.policyNumber)
+            );
 
             this.displayPoliciesList = this.policiesList;
         });
@@ -48,7 +50,7 @@ export class PoliciesComponent implements OnInit {
     search(value: string): void {
         if (value === '' || !value) {
             // this.displayPoliciesList = this.policiesList
-            this.displayPoliciesList = this.policiesList.filter((policy) => {
+            this.displayPoliciesList = this.policiesList.filter(policy => {
                 return (
                     policy.policyNumber
                         .toLowerCase()
@@ -56,7 +58,7 @@ export class PoliciesComponent implements OnInit {
                     policy.client
                         .toLocaleLowerCase()
                         .includes(value.toLowerCase()) ||
-                    policy.preparedBy
+                    policy.user
                         .toLocaleLowerCase()
                         .includes(value.toLowerCase())
                 );

@@ -16,48 +16,63 @@ import { DirectClientComponent } from './components/receipts/components/direct-c
 import { BrokerClientComponent } from './components/receipts/components/broker-client/broker-client.component';
 import { AgentClientComponent } from './components/receipts/components/agent-client/agent-client.component';
 import { SalesRepresentativeClientComponent } from './components/receipts/components/sales-representative-client/sales-representative-client.component';
+<<<<<<< HEAD
+import { RequisitionsComponent } from './components/requisitions/requisitions.component';
+import { RequisitionPaymentComponent } from './components/requisitions/components/requisition-payment/requisition-payment.component';
+import { PaymentRequisitionVoucherComponent } from './components/payments/documents/payment-requisition-voucher/payment-requisition-voucher.component';
+import { NgxPrintModule } from 'ngx-print';
+=======
 import { PlanReceiptComponent } from './components/receipts/components/plan-receipt/plan-receipt.component';
 import { AllocationsComponent } from './components/allocations/allocations.component';
+>>>>>>> changa-test
 
 const routes: Routes = [
     {
         path: 'generate-receipts',
-        component: ReceiptsGenerationComponent,
+        component: ReceiptsGenerationComponent
     },
     {
         path: 'receipts',
-        component: ReceiptsComponent,
+        component: ReceiptsComponent
+    },
+    {
+        path: 'requisitions',
+        component: RequisitionsComponent
     },
     {
         path: 'payments',
-        component: PaymentsComponent,
+        component: PaymentsComponent
     },
     {
         path: 'payment-plan',
-        component: PaymentPlanComponent,
+        component: PaymentPlanComponent
     },
     {
         path: 'payment-plan/:id',
-        component: PaymentPlanPolicyInstallmentsComponent,
+        component: PaymentPlanPolicyInstallmentsComponent
     },
     {
         path: 'view-receipt/:id',
-        component: ViewReceiptsComponent,
+        component: ViewReceiptsComponent
     },
     {
         path: 'direct-client',
-        component: DirectClientComponent,
+        component: DirectClientComponent
     },
     {
         path: 'broker',
-        component: BrokerClientComponent,
+        component: BrokerClientComponent
     },
     {
         path: 'agent',
-        component: AgentClientComponent,
+        component: AgentClientComponent
     },
     {
         path: 'sales-representative',
+<<<<<<< HEAD
+        component: SalesRepresentativeClientComponent
+    }
+=======
         component: SalesRepresentativeClientComponent,
     },
 
@@ -69,6 +84,7 @@ const routes: Routes = [
     path: 'allocations',
     component: AllocationsComponent,
   },
+>>>>>>> changa-test
 ];
 
 @NgModule({
@@ -84,8 +100,14 @@ const routes: Routes = [
         BrokerClientComponent,
         AgentClientComponent,
         SalesRepresentativeClientComponent,
+<<<<<<< HEAD
+        RequisitionsComponent,
+        RequisitionPaymentComponent,
+        PaymentRequisitionVoucherComponent
+=======
         PlanReceiptComponent,
         AllocationsComponent,
+>>>>>>> changa-test
     ],
     imports: [
         CommonModule,
@@ -94,7 +116,8 @@ const routes: Routes = [
         PdfViewerModule,
         FormsModule,
         ReactiveFormsModule,
+        NgxPrintModule
     ],
-    providers: [AccountService],
+    providers: [AccountService]
 })
 export class AccountsModule {}
