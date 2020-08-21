@@ -128,7 +128,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.refresh()
+        this.refresh();
     }
 
     refresh() {
@@ -186,8 +186,6 @@ export class SalesRepresentativeClientComponent implements OnInit {
       });
     }
 
-    compareFn = (o1: any, o2: any) =>
-        o1 && o2 ? o1.value === o2.value : o1 === o2;
 
     log(value): void {
         console.log('Receipts', this.listofUnreceiptedReceipts);
@@ -249,15 +247,15 @@ export class SalesRepresentativeClientComponent implements OnInit {
                 currency: this.currency,
             };
 
-          this.policy.receiptStatus = 'Receipted';
-          this.policy.paymentPlan = 'Created';
+            this.policy.receiptStatus = 'Receipted';
+            this.policy.paymentPlan = 'Created';
             this.receiptNum = this._id;
             await this.receiptService
                 .addReceipt(receipt, this.policy.risks[0].insuranceType).subscribe((mess) => {
                     this.message.success('Receipt Successfully created');
                     console.log(mess);
-                  this.policeServices.updatePolicy(this.policy).subscribe((res) => {}, (err) => {
-                    console.log('Update Policy Error', err);});
+                    this.policeServices.updatePolicy(this.policy).subscribe((res) => {}, (err) => {
+                    console.log('Update Policy Error', err); });
                 },
                 (err) => {
                     this.message.warning('Receipt Failed');
@@ -303,7 +301,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
         console.log(this.cancelReceipt);
         await this.receiptService.updateReceipt(this.cancelReceipt).subscribe((res) => {
           this.message.success('Receipt Successfully Updated');
-          this.refresh()
+          this.refresh();
         }, (err) => {
           console.log('Check ERR>>>>', err);
           this.message.warning('Receipt Failed');
@@ -327,7 +325,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
         console.log(this.reinstateReceipt);
         await this.receiptService.updateReceipt(this.reinstateReceipt).subscribe((res) => {
           this.message.success('Receipt Successfully Updated');
-          this.refresh()
+          this.refresh();
         }, (err) => {
           console.log('Check ERR>>>>', err);
           this.message.warning('Receipt Failed');

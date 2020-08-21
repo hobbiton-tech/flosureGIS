@@ -19,6 +19,7 @@ import {
 import { AgentsService } from 'src/app/settings/components/agents/services/agents.service';
 import { AllocationsService } from '../../services/allocations.service';
 import { AllocationReceipt } from '../models/allocations.model';
+import { PoliciesService } from '../../../underwriting/services/policies.service';
 
 @Component({
     selector: 'app-receipts',
@@ -89,6 +90,7 @@ export class ReceiptsComponent implements OnInit {
 
     constructor(
         private receiptService: AccountService,
+        private policiesService: PoliciesService,
         private formBuilder: FormBuilder,
         private message: NzMessageService,
         private router: Router,
@@ -122,7 +124,7 @@ export class ReceiptsComponent implements OnInit {
             console.log('===================');
             console.log(this.brokerList);
         });
-        this.receiptService.getPolicies().subscribe((quotes) => {
+        this.policiesService.getPolicies().subscribe((quotes) => {
             this.unreceiptedList = _.filter(
                 quotes,
                 (x) => x.receiptStatus === 'Unreceipted'

@@ -58,95 +58,6 @@ export class PaymentPlanService implements Resolve<any> {
         throw new Error('Method not implemented.');
     }
 
-<<<<<<< HEAD
-    async addPaymentPlan(paymentPlan: IPaymentModel) {
-        this.paymentPlans.pipe(first()).subscribe(async paymentPlans => {
-            await this.paymentPlansCollection
-                .doc(paymentPlan.id)
-                .set(paymentPlan)
-                .then(mess => {
-                    console.log('------PAYMENT PLAN DATA-------');
-                    console.log(paymentPlan);
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-        });
-    }
-
-    async updatePaymentPlan(paymentPlan: IPaymentModel): Promise<void> {
-        return this.paymentPlansCollection
-            .doc(`${paymentPlan.id}`)
-            .update(paymentPlan)
-            .then(res => {
-                console.log(res);
-            })
-            .catch(err => {
-                console.log(err);
-            });
-    }
-
-    getPaymentPlans(): Observable<IPaymentModel[]> {
-        return this.paymentPlans;
-    }
-
-    async addPaymentPlanReceipt(
-        receipt: IReceiptModel,
-        paymentPlan: IPaymentModel
-    ): Promise<void> {
-        this.receipts.pipe(first()).subscribe(async receipts => {
-            this.http
-                .get<IReceiptNumberResult>(
-                    'https://number-generation.flosure-api.com/aplus-receipt-number/1'
-                )
-                .subscribe(async res => {
-                    receipt.receiptNumber = res.receiptNumber;
-                    console.log('/////////////////////');
-
-                    console.log(res.receiptNumber);
-                    // paymentPlan.planReceipt[0].receiptNumber =
-                    //     res.receiptNumber;
-
-                    this.rcptNumber = paymentPlan.planReceipt.filter(
-                        rcpt => rcpt.id === receipt.id
-                    )[0];
-
-                    this.rcptNumber.receiptNumber = res.receiptNumber;
-
-                    await this.receiptCollection
-                        .doc(receipt.id)
-                        .set(receipt)
-                        .then(async mess => {
-                            await this.paymentPlansCollection
-                                .doc(paymentPlan.id)
-                                .set(paymentPlan)
-                                .then(mes => {
-                                    console.log(
-                                        '------PAYMENT PLAN DATA-------'
-                                    );
-                                    console.log(paymentPlan);
-                                })
-                                .catch(err => {
-                                    console.log(err);
-                                });
-                            this.generateID(receipt.id);
-                            this.message.success(
-                                'Receipt Successfully created'
-                            );
-                        })
-                        .catch(err => {
-                            this.message.warning('Receipt Failed');
-                            console.log(err);
-                        });
-                });
-
-            // receipt.id = v4();
-        });
-    }
-=======
-
->>>>>>> changa-test
-
     generateID(id) {
         console.log('++++++++++++ID++++++++++++');
         this._id = id;
@@ -156,54 +67,6 @@ export class PaymentPlanService implements Resolve<any> {
         // this.generateDocuments();
     }
 
-<<<<<<< HEAD
-    // add receipt
-    async addReceipt(
-        receipt: IReceiptModel,
-        paymentPlan: IPaymentModel
-    ): Promise<void> {
-        this.receipts.pipe(first()).subscribe(async receipts => {
-            this.http
-                .get<IReceiptNumberResult>(
-                    'https://number-generation.flosure-api.com/aplus-receipt-number/1'
-                )
-                .subscribe(async res => {
-                    receipt.receiptNumber = res.receiptNumber;
-                    console.log(res.receiptNumber);
-                    // paymentPlan.planReceipt[0].receiptNumber =
-                    //     res.receiptNumber;
-
-                    this.rcptNumber = paymentPlan.planReceipt.filter(
-                        rcpt => rcpt.id === receipt.id
-                    )[0];
-
-                    this.rcptNumber.receiptNumber = res.receiptNumber;
-
-                    await this.receiptCollection
-                        .doc(receipt.id)
-                        .set(receipt)
-                        .then(async mess => {
-                            this.message.success(
-                                'Receipt Successfully created'
-                            );
-
-                            await this.paymentPlansCollection
-                                .doc(`${paymentPlan.id}`)
-                                .update(paymentPlan)
-                                .then(result => {
-                                    console.log(result);
-                                })
-                                .catch(err => {
-                                    console.log(err);
-                                });
-
-                            this.generateID(receipt.id);
-                        })
-                        .catch(err => {
-                            this.message.warning('Receipt Failed');
-                            console.log(err);
-                        });
-=======
     addReceipt(receipt: IReceiptModel, insuranceType: InsuranceType): Observable<any> {
         let insuranceTyp = '';
         const productType = insuranceType;
@@ -224,7 +87,6 @@ export class PaymentPlanService implements Resolve<any> {
                     this.receiptN = receipt;
 
                     this.http.post('https://payment-api.savenda-flosure.com/receipt', receipt).toPromise();
->>>>>>> changa-test
                 });
 
         // });
@@ -257,11 +119,6 @@ export class PaymentPlanService implements Resolve<any> {
     getInstallments(): Observable<any> {
         return this.http
             .get<any>(
-<<<<<<< HEAD
-                'https://number-generation.flosure-api.com/aplus-receipt-number/1'
-            )
-            .toPromise();
-=======
                 'https://payment-api.savenda-flosure.com/installment'
             );
     }
@@ -269,7 +126,6 @@ export class PaymentPlanService implements Resolve<any> {
 
     addPlanReceipt( planReceipt: PlanReceipt): Observable<any> {
         return this.http.post<PlanReceipt>('https://payment-api.savenda-flosure.com/plan-receipt', planReceipt);
->>>>>>> changa-test
     }
 
     getReceiptPlan(): Observable<any> {
@@ -322,7 +178,9 @@ export class PaymentPlanService implements Resolve<any> {
         const header = new HttpHeaders();
         header.set('Access-Control-Allow-Origin', '*');
 
-        this.http.put(`https://payment-api.savenda-flosure.com/installment`, policyPaymentInstallment, { headers: header }).subscribe((res) => {
+        this.http
+          .put(`https://payment-api.savenda-flosure.com/installment`, policyPaymentInstallment, { headers: header })
+          .subscribe((res) => {
             // this.message.success(
             //             'Plan Receipt Successfully Updated'
             //         );
