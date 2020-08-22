@@ -9,6 +9,7 @@ import { UsersPermissionsComponent } from './components/users-permissions/users-
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { RolesPermissionsComponent } from 'src/app/users/components/roles-permissions.component';
 
+
 const routes: Routes = [
   {
     path: 'users-roles',
@@ -16,7 +17,7 @@ const routes: Routes = [
   },
   {
     path: 'roles-permissions',
-    component: UsersPermissionsComponent
+    component: RolesPermissionsComponent
   },
   {
     path: 'users',

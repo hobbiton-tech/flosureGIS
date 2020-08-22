@@ -56,6 +56,7 @@ export class RolesPermissionsComponent implements OnInit {
 
 
 
+
   isRolesVisible = false;
   isPermissionsVisible = false;
 
@@ -148,18 +149,18 @@ export class RolesPermissionsComponent implements OnInit {
 
 
 
-  ///EDIT  ROLES SERVICE //////
+  // ///EDIT  ROLES SERVICE //////
 
   onEditRole(value) {
     this.editRole = value;
     this.rolesForm.get('roleName').setValue(this.editRole.roleName);
-    this.rolesForm.get('Description').setValue(this.editRole.Description)
+    this.rolesForm.get('description').setValue(this.editRole.description)
     this.isRoleEidtVisible = true;
   }
 
   handleEditRoleOk() {
     this.editRole.roleName = this.rolesForm.controls.roleName.value;
-    this.editRole.Description = this.rolesForm.controls.Description.value;
+    this.editRole.description = this.rolesForm.controls.description.value;
 
     const index = this.selectedRoleValue.indexOf(this.editRole);
     this.selectedRoleValue[index] = this.editRole;
@@ -187,14 +188,14 @@ export class RolesPermissionsComponent implements OnInit {
 
   onEditPermission(value) {
     this.editPermission = value;
-    this.permissionsForm.get('permissionName').setValue(this.editPermission.permissionName);
-    this.permissionsForm.get('Description').setValue(this.editPermission.Description)
+    this.permissionsForm.get('name').setValue(this.editPermission.name);
+    this.permissionsForm.get('description').setValue(this.editPermission.description)
     this.isPermissionEditVisible = true;
   }
 
   handleEditPermissionOk() {
-    this.editPermission.permissionName = this.permissionsForm.controls.permissionName.value;
-    this.editPermission.Description = this.permissionsForm.controls.Description.value;
+    this.editPermission.name = this.permissionsForm.controls.name.value;
+    this.editPermission.description = this.permissionsForm.controls.description.value;
 
     const index = this.seletedPermissionValue.indexOf(this.editPermission);
     this.seletedPermissionValue[index] = this.editPermission;
@@ -256,23 +257,6 @@ export class RolesPermissionsComponent implements OnInit {
 
   }
 
-  // cleanFunc(value: any) {
-  //   this.permissions = this.permissions.filter((x) => x === value.roleId);
-  //   this.permssionService.getPermission().subscribe((res) => {
-  //     console.log('R>>>>', res)
-
-  //   });
-
-  // }
-  // cleanFun(value: any) {
-  //   this.permission = this.permissions.filter((x) => x.id === value.roleId)
-  //   this.permssionService.getPermission().subscribe((res) => {
-  //     console.log('R>>>>', res)
-
-  //   });
-  // }
-
-
 
   change(event): void {
     console.log(event);
@@ -324,32 +308,4 @@ export class RolesPermissionsComponent implements OnInit {
 
 
 
-  //  this.roleUpdate.subscribe(update =>
-  //           update === true
-  //               ? this.roleUpdate.getRoles().subscribe(users => {
-  //                     this.rolesList = users;
-  //                     this.displayRolesList = this.rolesList;
-  //                 })
-  //               : ''
-  //       );
-  // }
-
-  // showModal(): void {
-  //   this.isRoleVisible = true;
-  // }
-
-  // handleCancel(): void {
-  //   console.log('Button cancel clicked!');
-  //   this.isRoleVisible = false;
-  // }
-  // async submitRole() {
-
-  //   if (this.roleDetailsForm.valid || !this.roleDetailsForm.valid) {
-  //     this.addRole(this.roleDetailsForm.value).then(res => {
-  //       this.roleDetailsForm.reset();
-  //     });
-  //     const details: RolesModel = { ...this.roleDetailsForm.value }
-
-  //   }
-  // }
 }
