@@ -24,10 +24,17 @@ export class SalesRepresentativeClientComponent implements OnInit {
     reinstateForm: FormGroup;
     submitted = false;
     receiptsCount = 0;
+
     unreceiptedList: Policy[];
+
     salesRepList: ISalesRepresentative[];
+
     receiptedList: IReceiptModel[];
+    displayReceiptedList: IReceiptModel[];
+
     cancelledReceiptList: IReceiptModel[];
+    displayCancelledReceiptList: IReceiptModel[];
+
     receiptObj: IReceiptModel = new IReceiptModel();
     receipt: IReceiptModel;
     today = new Date();
@@ -98,6 +105,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
     debitnoteList: DebitNote[] = [];
     debitnote: DebitNote;
     currency: string;
+    searchString: string;
 
     constructor(
         private receiptService: AccountService,
@@ -169,6 +177,8 @@ export class SalesRepresentativeClientComponent implements OnInit {
             x.receipt_status === 'Receipted' &&
             x.source_of_business === 'salesRepresentative'
         );
+        this.displayReceiptedList = this.receiptedList;
+
 
         console.log('======= Receipt List =======');
         console.log(this.receiptedList);
@@ -179,6 +189,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
             x.receipt_status === 'Cancelled' &&
             x.source_of_business === 'salesRepresentative'
         );
+        this.displayCancelledReceiptList = this.cancelReceiptList;
 
         console.log('======= Cancelled Receipt List =======');
         console.log(this.cancelReceiptList);
@@ -366,4 +377,59 @@ export class SalesRepresentativeClientComponent implements OnInit {
     method(value) {
         this.paymentMethod = value;
     }
+
+     //Test Search Code
+
+     searchUnR(value: string): void {
+      console.log(value);
+      if (value === ' ' || !value) {
+        this.displayedListOfUnreceiptedReceipts = this.listofUnreceiptedReceipts;
+
+      }
+
+      this.displayedListOfUnreceiptedReceipts = this.listofUnreceiptedReceipts.filter((client) => {
+          return (
+            client.policyNumber.toLowerCase().includes(value.toLowerCase()) ||
+            client.client.toLowerCase().includes(value.toLowerCase())
+
+          );
+      });
+  }
+
+  searchR(value: string): void
+  {
+    console.log(value);
+    if (value === ' ' || !value)
+    {
+      this.displayReceiptedList = this.receiptedList;
+
+    }
+
+    this.displayReceiptedList = this.receiptedList.filter((receip) =>
+    {
+        return (
+          receip.receipt_number.toLowerCase().includes(value.toLowerCase()) ||
+          receip.on_behalf_of.toLowerCase().includes(value.toLowerCase())
+
+        );
+    });
+}
+
+searchCR(value: string): void
+{
+  if (value === ' ' || !value)
+  {
+      this.displayCancelledReceiptList = this.cancelReceiptList;
+  }
+
+  this.displayCancelledReceiptList = this.cancelReceiptList.filter((receip) =>
+    {
+        return (
+          receip.receipt_number.toLowerCase().includes(value.toLowerCase()) ||
+          receip.on_behalf_of.toLowerCase().includes(value.toLowerCase())
+
+        );
+    });
+
+}
 }

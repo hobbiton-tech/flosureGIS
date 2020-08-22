@@ -9,6 +9,7 @@ import _ from 'lodash';
 import { v4 } from 'uuid';
 import { PoliciesService } from 'src/app/underwriting/services/policies.service';
 import { DebitNote } from 'src/app/underwriting/documents/models/documents.model';
+import { th } from 'date-fns/locale';
 
 @Component({
     selector: 'app-direct-client',
@@ -21,9 +22,16 @@ export class DirectClientComponent implements OnInit {
     reinstateForm: FormGroup;
     submitted = false;
     receiptsCount = 0;
+
     unreceiptedList: Policy[];
+    displayUnreciptedList: Policy[];
+
     receiptedList: IReceiptModel[] = [];
+    displayReceiptedList: IReceiptModel[] = [];
+
     cancelledReceiptList: IReceiptModel[] = [];
+    displayCancelledReceiptList: IReceiptModel[] = [];
+
     receiptObj: IReceiptModel = new IReceiptModel();
     receipt: IReceiptModel;
     today = new Date();
@@ -35,6 +43,10 @@ export class DirectClientComponent implements OnInit {
     paymentMethod = '';
 
     recStatus = 'Receipted';
+    // Test Filter List
+    searchString: string;
+
+
 
     receiptNum = '';
 
@@ -112,9 +124,16 @@ export class DirectClientComponent implements OnInit {
 
     ngOnInit(): void {
         this.refresh()
+
     }
 
+
+
+
+
     refresh() {
+
+
       this.policeServices.getPolicies().subscribe((quotes) => {
         console.log('CHECK RECEIPTS>>>>', quotes);
         this.unreceiptedList = _.filter(
@@ -123,6 +142,8 @@ export class DirectClientComponent implements OnInit {
             x.receiptStatus === 'Unreceipted' &&
             x.sourceOfBusiness === 'direct'
         );
+        this.displayUnreciptedList = this.unreceiptedList;
+
         this.receiptsCount = _.filter(
           quotes,
           (x) =>
@@ -131,6 +152,7 @@ export class DirectClientComponent implements OnInit {
         ).length;
         console.log('======= Unreceipt List =======');
         console.log(this.unreceiptedList);
+
       });
 
       this.policeServices.getDebitNotes().subscribe((invoice) => {
@@ -144,7 +166,7 @@ export class DirectClientComponent implements OnInit {
             x.receipt_status === 'Receipted' &&
             x.source_of_business === 'direct'
         );
-
+        this.displayReceiptedList = this.receiptedList;
         console.log('======= Receipt List =======');
         console.log(receipts.data);
 
@@ -154,6 +176,7 @@ export class DirectClientComponent implements OnInit {
             x.receipt_status === 'Cancelled' &&
             x.source_of_business === 'direct'
         );
+        this.displayCancelledReceiptList = this.cancelReceiptList;
 
         console.log('======= Cancelled Receipt List =======');
         console.log(this.cancelReceiptList);
@@ -161,6 +184,7 @@ export class DirectClientComponent implements OnInit {
         this.receiptNewCount = receipts.length;
         console.log('Total Number of Receipts>>>>', this.receiptNewCount);
       });
+
     }
 
     showModal(unreceipted: Policy): void {
@@ -313,4 +337,60 @@ export class DirectClientComponent implements OnInit {
         console.log('ON CHANGE>>>>', value);
         this.paymentMethod = value;
     }
+
+    //Test Search Code
+
+    searchUnR(value: string): void {
+      console.log(value);
+      if (value === ' ' || !value) {
+        this.displayUnreciptedList = this.unreceiptedList;
+
+      }
+
+      this.displayUnreciptedList = this.unreceiptedList.filter((client) => {
+          return (
+            client.policyNumber.toLowerCase().includes(value.toLowerCase()) ||
+            client.client.toLowerCase().includes(value.toLowerCase())
+
+          );
+      });
+  }
+
+  searchR(value: string): void
+  {
+    console.log(value);
+    if (value === ' ' || !value)
+    {
+      this.displayReceiptedList = this.receiptedList;
+
+    }
+
+    this.displayReceiptedList = this.receiptedList.filter((receip) =>
+    {
+        return (
+          receip.receipt_number.toLowerCase().includes(value.toLowerCase()) ||
+          receip.on_behalf_of.toLowerCase().includes(value.toLowerCase())
+
+        );
+    });
+}
+
+searchCR(value: string): void
+{
+  if (value === ' ' || !value)
+  {
+      this.displayCancelledReceiptList = this.cancelReceiptList;
+  }
+
+  this.displayCancelledReceiptList = this.cancelReceiptList.filter((receip) =>
+    {
+        return (
+          receip.receipt_number.toLowerCase().includes(value.toLowerCase()) ||
+          receip.on_behalf_of.toLowerCase().includes(value.toLowerCase())
+
+        );
+    });
+
+}
+
 }
