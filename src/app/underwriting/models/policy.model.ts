@@ -31,6 +31,7 @@ export class Policy {
     paymentPlan: PaymentPlan;
     sourceOfBusiness: string;
     intermediaryName: string;
+    intermediaryId: string;
     remarks?: string;
     term: number;
     requisitionStatus?: RequisitionStatus;

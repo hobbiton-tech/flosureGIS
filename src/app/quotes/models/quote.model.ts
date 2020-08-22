@@ -6,10 +6,10 @@ import {
 import { IDiscounts } from './discounts.model';
 
 export class MotorQuotationModel {
-    id: string;
+    id?: string;
     user: string;
     client: string;
-    quoteNumber: string;
+    quoteNumber?: string;
     dateCreated: Date;
     clientCode: string;
     messageCode: string;
@@ -25,6 +25,7 @@ export class MotorQuotationModel {
     receiptStatus: ReceiptStatus;
     sourceOfBusiness: string;
     intermediaryName: string;
+    intermediaryId: string;
     quarter: string;
 }
 

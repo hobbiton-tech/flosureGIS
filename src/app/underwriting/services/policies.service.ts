@@ -245,7 +245,7 @@ export class PoliciesService {
 
     getPolicies(): Observable<Policy[]> {
 
-        return this.http.get<Policy[]>(`${BASE_URL}`);
+        return this.http.get<Policy[]>(`${BASE_URL}/policy`);
 
         // return this.policies;
     }

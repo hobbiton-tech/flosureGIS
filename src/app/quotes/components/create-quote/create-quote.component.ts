@@ -392,8 +392,8 @@ export class CreateQuoteComponent implements OnInit {
 
     handlePolicyEndDateCalculation(): void {
         if (
-            this.quoteForm.get('startDate').value != '' &&
-            this.quoteForm.get('quarter').value != ''
+            this.quoteForm.get('startDate').value !== '' &&
+            this.quoteForm.get('quarter').value !== ''
         ) {
             const request: IRateRequest = {
                 sumInsured: 0,
@@ -545,16 +545,41 @@ export class CreateQuoteComponent implements OnInit {
         } else {
             this.clientName = this.quoteForm.controls.client.value.companyName;
         }
-        console.log('Client Details>>>>>>', this.clientCode, this.clientName);
+
+
+        let intermediaryNameA = '';
+        const intType = this.quoteForm.controls.intermediaryName.value.intermediaryType;
+
+        if ( intType === 'Broker' || intType === 'Agent') {
+          intermediaryNameA = this.quoteForm.controls.intermediaryName.value.companyName;
+        } else {
+          intermediaryNameA = this.quoteForm.controls.intermediaryName.value.firstName + ' ' + this.quoteForm.controls.intermediaryName.value.lastName;
+        }
+
+        const intermediaryIdA = this.quoteForm.controls.intermediaryName.value.id;
+
+
+        console.log('Client Details>>>>>>', intermediaryNameA, intermediaryIdA);
+
         const quote: MotorQuotationModel = {
-            ...this.quoteForm.value,
+            // ...this.quoteForm.value,
+            currency: this.quoteForm.controls.currency.value,
+            startDate: this.quoteForm.controls.startDate.value,
+            messageCode: this.quoteForm.controls.messageCode.value,
+            endDate: this.quoteForm.controls.endDate.value,
+            quarter: this.quoteForm.controls.quarter.value,
+            status: 'Draft',
+            receiptStatus: 'Unreceipted',
+            sourceOfBusiness: this.quoteForm.controls.sourceOfBusiness.value,
+            intermediaryName: intermediaryNameA,
+            intermediaryId: intermediaryIdA,
             dateCreated: new Date(),
             clientCode: this.clientCode,
             client: this.clientName,
             coverCode: '',
             underwritingYear: new Date(),
             branch: '',
-            basicPremiumSubTotal: '',
+            basicPremiumSubTotal: 0,
             user: this.agentMode
                 ? this.quoteForm.get('user').value
                 : localStorage.getItem('user'),
@@ -591,6 +616,7 @@ export class CreateQuoteComponent implements OnInit {
             this.productClauseService.addPolicyWording(this.newWordingWording);
         }
 
+      console.log('Client Details>>>>>>', quote);
         await this.quoteService.createMotorQuotation(quote, this.quotesCount);
         this.creatingQuote = false;
     }

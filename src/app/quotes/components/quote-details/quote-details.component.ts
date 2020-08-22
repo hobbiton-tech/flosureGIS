@@ -75,6 +75,9 @@ import { TotalsViewComponent } from '../totals-view/totals-view.component';
 import { VehicleDetailsServiceService } from '../../services/vehicle-details-service.service';
 import { PremiumComputationService } from '../../services/premium-computation.service';
 import { AllocationPolicy } from '../../../accounts/components/models/allocations.model';
+import { AllocationsService } from '../../../accounts/services/allocations.service';
+import { CommisionSetupsService } from '../../../settings/components/agents/services/commision-setups.service';
+import { ICommissionSetup } from '../../../settings/components/agents/models/commission-setup.model';
 
 type AOA = any[][];
 
@@ -347,6 +350,7 @@ export class QuoteDetailsComponent implements OnInit {
     excessAct: IExccess[] = [];
     excessFT: IExccess[] = [];
     limitsOfLiabilities: LimitsOfLiability[] = [];
+    commission: ICommissionSetup;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -368,7 +372,9 @@ export class QuoteDetailsComponent implements OnInit {
         private discountsComponent: DiscountsComponent,
         private totalsComponent: TotalsViewComponent,
         private vehicleDetailsService: VehicleDetailsServiceService,
-        private premiumComputationService: PremiumComputationService
+        private premiumComputationService: PremiumComputationService,
+        private  allocationService: AllocationsService,
+        private commisionSetupsService: CommisionSetupsService,
     ) {
         this.receiptForm = this.formBuilder.group({
             receivedFrom: ['', Validators.required],
@@ -398,6 +404,10 @@ export class QuoteDetailsComponent implements OnInit {
                 this.quoteData = quotes.filter(
                     x => x.quoteNumber === this.quoteNumber
                 )[0];
+
+                 this.commisionSetupsService.getCommissionSetups().subscribe((commission) => {
+                   this.commission = commission.filter((x) => x.intermediaryId === this.quoteData.intermediaryId)[0];
+                 })
                 console.log('quote data: ', this.quoteData);
                 this.quotesList = quotes;
                 this.quote = this.quotesList.filter(
@@ -791,6 +801,59 @@ export class QuoteDetailsComponent implements OnInit {
         this.amount = this.sumArray(this.quoteData.risks, 'netPremium');
         this.approvingQuote = true;
 
+        const  commissionAmount = this.commission.commission * this.sumArray(this.quoteData.risks, 'netPremium')
+
+
+      // convert to policy
+        const policy: Policy = {
+        ...this.quoteDetailsForm.value,
+        nameOfInsured: this.quoteData.client,
+        clientCode: this.quoteData.clientCode,
+        policyNumber: this.quoteNumber.replace('Q', 'P'),
+        dateOfIssue: new Date(),
+        expiryDate: this.quoteData.endDate,
+        timeOfIssue: new Date(),
+        // new Date().getHours() + ':' + new Date().getMinutes(),
+        status: 'Active',
+        receiptStatus: 'Unreceipted',
+        risks: this.quoteData.risks,
+        sumInsured: this.sumArray(this.quoteData.risks, 'sumInsured'),
+        netPremium: this.sumArray(this.quoteData.risks, 'netPremium'),
+        paymentPlan: 'NotCreated',
+        underwritingYear: new Date(),
+        user: localStorage.getItem('user'),
+        sourceOfBusiness: this.quoteData.sourceOfBusiness,
+        intermediaryName: this.quoteData.intermediaryName,
+        intermediaryId: this.quoteData.intermediaryId,
+      };
+
+        const allocationPolicy: AllocationPolicy = {
+        balance: Number(this.sumArray(this.quoteData.risks, 'netPremium')) - Number(commissionAmount),
+        client_id: this.quoteData.clientCode,
+        client_name: this.quoteData.client,
+        commission_due: Number(commissionAmount),
+        gross_amount: Number(this.sumArray(this.quoteData.risks, 'netPremium')),
+        intermediary_id: this.quoteData.intermediaryId,
+        net_amount_due: Number(this.sumArray(this.quoteData.risks, 'netPremium')) - Number(commissionAmount),
+        policy_number: this.quoteNumber.replace('Q', 'P'),
+        settlements: 0,
+        status: 'Un Allocated'
+      };
+
+        const debitNote: DebitNote = {
+        remarks: '-',
+        dateCreated: new Date(),
+        dateUpdated: new Date(),
+      };
+
+        const coverNote: CoverNote = {
+        dateCreated: new Date(),
+        dateUpdated: new Date(),
+      };
+
+      // const policy = this.quoteDetailsForm.value as Policy;
+        console.log(policy);
+
         if (
             this.quote.risks[0].insuranceType === 'ThirdPartyFireAndTheft' ||
             'ThirdParty' ||
@@ -799,26 +862,6 @@ export class QuoteDetailsComponent implements OnInit {
             this.getInsuranceType = this.quote.risks[0].insuranceType;
 
             this.submitted = true;
-            // console.log('DEBIT NOTE NUMBER>>>>>', this.debitnote.debitNoteNumber);
-            // if (this.receiptForm.valid) {
-            // this.isOkLoading = true;
-            // this._id = v4();
-            // const receipt: IReceiptModel = {
-            //     id: this._id,
-            //     ...this.receiptForm.value,
-            //     onBehalfOf: this.quoteData.client,
-            //     capturedBy: localStorage.getItem('user'),
-            //     sumInDigits: this.amount,
-            //     // policyNumber: this.policyNumber,
-            //     receiptStatus: 'Receipted',
-            //     todayDate: new Date(),
-            //     // invoiceNumber: this.debitnote.debitNoteNumber,
-            //     sourceOfBusiness: this.quoteData.sourceOfBusiness,
-            //     intermediaryName: this.quoteData.intermediaryName,
-            //     currency: this.quoteData.currency,
-            // };
-
-            // this.receiptNum = this._id;
 
             // combineLatest().subscribe(async ([debit, cert]) => {
             this.quote.status = 'Approved';
@@ -826,57 +869,14 @@ export class QuoteDetailsComponent implements OnInit {
                 .updateMotorQuotation(this.quote, this.quote.id)
                 .subscribe((quotation) => (res) => console.log(res));
 
-            // convert to policy
-            const policy: Policy = {
-                ...this.quoteDetailsForm.value,
-                nameOfInsured: this.quoteData.client,
-                clientCode: this.quoteData.clientCode,
-                policyNumber: this.quoteNumber.replace('Q', 'P'),
-                dateOfIssue: new Date(),
-                expiryDate: this.quoteData.endDate,
-                timeOfIssue: new Date(),
-                // new Date().getHours() + ':' + new Date().getMinutes(),
-                status: 'Active',
-                receiptStatus: 'Unreceipted',
-                risks: this.quoteData.risks,
-                sumInsured: this.sumArray(this.quoteData.risks, 'sumInsured'),
-                netPremium: this.sumArray(this.quoteData.risks, 'netPremium'),
-                paymentPlan: 'NotCreated',
-                underwritingYear: new Date(),
-                user: localStorage.getItem('user'),
-                sourceOfBusiness: this.quoteData.sourceOfBusiness,
-                intermediaryName: this.quoteData.intermediaryName,
-            };
 
-            const allocationPolicy: AllocationPolicy = {
-              balance: Number(this.sumArray(this.quoteData.risks, 'netPremium')),
-              client_id: this.quoteData.clientCode,
-              client_name: this.quoteData.client,
-              commission_due: 0,
-              gross_amount: Number(this.sumArray(this.quoteData.risks, 'netPremium')),
-              intermediary_id: '',
-              net_amount_due: Number(this.sumArray(this.quoteData.risks, 'netPremium')),
-              policy_number: this.quoteNumber.replace('Q', 'P'),
-              settlements: 0,
-              status: 'Un Allocated'
-            };
-
-            const debitNote: DebitNote = {
-                remarks: '-',
-                dateCreated: new Date(),
-                dateUpdated: new Date(),
-            };
-
-            const coverNote: CoverNote = {
-                dateCreated: new Date(),
-                dateUpdated: new Date(),
-            };
-
-            // const policy = this.quoteDetailsForm.value as Policy;
-            console.log(policy);
 
             this.policiesService.createPolicy(policy).subscribe((res) => {
                 console.log('response:', res);
+
+                this.allocationService.createAllocationPolicy(allocationPolicy).subscribe((succ) => {}, (nSucc) => {
+                  this.message.error(nSucc);
+                });
 
                 this.policyId = res.id;
                 this.newRisks = res.risks;
@@ -956,28 +956,6 @@ export class QuoteDetailsComponent implements OnInit {
                                     console.log(err);
                                 }
                             );
-
-                        // receipt.invoice_number = res.data.invoice_number;
-                        // this.receiptService
-                        //     .addReceipt( receipt,this.quote.risks[0].insuranceType).subscribe((mess) => {
-                        //         this.message.success('Receipt Successfully created');
-                        //         console.log(mess);
-                        //     },
-                        //     (err) => {
-                        //         this.message.warning('Receipt Failed');
-                        //         console.log(err);
-                        //     });
-                        // .then((mess) => {
-                        //     this.message.success(
-                        //         'Receipt Successfully created'
-                        //     );
-
-                        //     console.log(mess);
-                        // })
-                        // .catch((err) => {
-                        //     this.message.warning('Receipt Failed');
-                        //     console.log(err);
-                        // });
                     });
 
                 for (const clause of this.clauses) {
@@ -1062,66 +1040,20 @@ export class QuoteDetailsComponent implements OnInit {
             this.getInsuranceType = this.quote.risks[0].insuranceType;
 
             this.submitted = true;
-            // console.log('DEBIT NOTE NUMBER>>>>>', this.debitnote.debitNoteNumber);
-            // if (this.receiptForm.valid) {
-            //     this.isOkLoading = true;
-            //     this._id = v4();
-            //     const receipt: IReceiptModel = {
-            //         id: this._id,
-            //         ...this.receiptForm.value,
-            //         onBehalfOf: this.quoteData.client,
-            //         capturedBy: localStorage.getItem('user'),
-            //         // policyNumber: this.policyNumber,
-            //         receiptStatus: 'Receipted',
-            //         todayDate: new Date(),
-            //         // invoiceNumber: this.debitnote.debitNoteNumber,
-            //         sourceOfBusiness: this.quoteData.sourceOfBusiness,
-            //         intermediaryName: this.quoteData.intermediaryName,
-            //         currency: this.quoteData.currency,
-            //     };
 
-            //     this.receiptNum = this._id;
-            //     console.log('Receipt>>>>', receipt);
-
-            // combineLatest().subscribe(async ([debit, cert]) => {
             this.quote.status = 'Approved';
             this.quotesService
                 .updateMotorQuotation(this.quote, this.quote.id)
                 .subscribe((quotation) => (res) => console.log(res));
 
-            // convert to policy
-            const policy: Policy = {
-                ...this.quoteDetailsForm.value,
-                nameOfInsured: this.quoteData.client,
-                policyNumber: this.quoteNumber.replace('Q', 'P'),
-                dateOfIssue: new Date(),
-                expiryDate: this.quoteData.endDate,
-                timeOfIssue: new Date(),
-                // new Date().getHours() + ':' + new Date().getMinutes(),
-                status: 'Active',
-                receiptStatus: 'Unreceipted',
-                risks: this.quoteData.risks,
-                sumInsured: this.sumArray(this.quoteData.risks, 'sumInsured'),
-                netPremium: this.sumArray(this.quoteData.risks, 'netPremium'),
-                paymentPlan: 'NotCreated',
-                underwritingYear: new Date(),
-                user: localStorage.getItem('user'),
-                sourceOfBusiness: this.quoteData.sourceOfBusiness,
-                intermediaryName: this.quoteData.intermediaryName,
-            };
 
-            const debitNote: DebitNote = {
-                remarks: '-',
-                dateCreated: new Date(),
-                dateUpdated: new Date(),
-            };
-
-            // const policy = this.quoteDetailsForm.value as Policy;
-            console.log(policy);
 
             this.policiesService.createPolicy(policy).subscribe((res) => {
-                console.log('response:', res);
-                this.policyId = res.id;
+              this.allocationService.createAllocationPolicy(allocationPolicy).subscribe((succ) => {}, (nSucc) => {
+                this.message.error(nSucc);
+              });
+              console.log('response:', res);
+              this.policyId = res.id;
 
                 // this.policiesService.createDebitNote(
                 //     res.id,
@@ -1129,15 +1061,15 @@ export class QuoteDetailsComponent implements OnInit {
                 //     res,
                 //     this.policiesCount
                 // );
-                let insuranceType = '';
-                const productType = this.getInsuranceType;
-                if (productType === 'Comprehensive') {
+              let insuranceType = '';
+              const productType = this.getInsuranceType;
+              if (productType === 'Comprehensive') {
                     insuranceType = '07001';
                 } else {
                     insuranceType = '07002';
                 }
 
-                this.http
+              this.http
                     .get<any>(
                         `https://number-generation.flosure-api.com/savenda-invoice-number/1/${insuranceType}`
                     )
@@ -1187,29 +1119,29 @@ export class QuoteDetailsComponent implements OnInit {
                         // });
                     });
 
-                for (const clause of this.clauses) {
+              for (const clause of this.clauses) {
                     clause.policyId = res.id;
                     this.productClauseService.updatePolicyClause(clause);
                 }
 
-                for (const extenstion of this.extensions) {
+              for (const extenstion of this.extensions) {
                     extenstion.policyId = res.id;
                     this.productClauseService.updatePolicyExtension(extenstion);
                 }
 
-                for (const wording of this.wordings) {
+              for (const wording of this.wordings) {
                     wording.policyId = res.id;
                     this.productClauseService.updatePolicyWording(wording);
                 }
 
-                console.log(
+              console.log(
                     'CLAUSE>>>>>>',
                     this.clauses,
                     this.extensions,
                     this.wordings
                 );
 
-                for (const risk of policy.risks) {
+              for (const risk of policy.risks) {
                     console.log('Risks>>>>', risk);
 
                     if (

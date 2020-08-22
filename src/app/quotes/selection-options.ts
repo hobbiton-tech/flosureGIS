@@ -72,10 +72,10 @@ export const CancellationTypeOptions = [
 
 // INSURANCE TYPE OPTIONS
 export const InsuranceTypeOptions = [
-    { id: 'f5e755a0-338e-4db8-a47c-5513d858bcc3', label: 'Motor Comprehensive', value: 'Comprehensive' },
-    {id: 'bacb211d-cf2c-4a5b-8631-eca6f285261e', label: 'Full Third Party', value: 'ThirdParty' },
-    {id: '4e9aadeb-3d60-4dd5-8e75-4e646a38b7d3', label: 'Act Only Cover', value: 'ActOnly' },
-    {id: 'f47c8df6-5a21-43bb-8917-5dcabec15658', label: 'Third Party Fire And Theft', value: 'ThirdPartyFireAndTheft' }
+    { id: 'b3fa196d-e5d5-416b-ae4d-a338d42bf422', label: 'Motor Comprehensive', value: 'Comprehensive' },
+    {id: '3cbdeca7-4e4f-4e21-9131-d54ba43f8bd6', label: 'Full Third Party', value: 'ThirdParty' },
+    {id: '830157ef-1d2a-4eab-b8d7-49126fcb5b3c', label: 'Act Only Cover', value: 'ActOnly' },
+    {id: '836abcd7-f80f-4d3b-a720-1945c54a2098', label: 'Third Party Fire And Theft', value: 'ThirdPartyFireAndTheft' }
 
 ];
 
