@@ -59,19 +59,19 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let unreceipted of unreceiptedTable.data">
-                            <td>{{ unreceipted.policy_number }}</td>
+                            <td>{{ unreceipted.policyNumber }}</td>
                             <td>
-                                {{ unreceipted.start_date | date }}
+                                {{ unreceipted.startDate | date }}
                             </td>
                             <td>
-                                {{ unreceipted.end_date | date }}
+                                {{ unreceipted.endDate | date }}
                             </td>
                             <td>{{ unreceipted.client }}</td>
                             <td>
-                                {{ unreceipted.net_premium | number: '1.2-2' }}
+                                {{ unreceipted.netPremium | number: '1.2-2' }}
                             </td>
                             <td>
-                                {{ unreceipted.intermediary_name }}
+                                {{ unreceipted.intermediaryName }}
                             </td>
                             <td>
                                 <nz-badge

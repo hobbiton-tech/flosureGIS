@@ -44,6 +44,21 @@
               </ng-template>
             </div>
           </div>
+          <div nz-col nzSpan="12">
+            <div style="width: 75%;">
+              <nz-select [(ngModel)]="selectedInt" (ngModelChange)="selectInt($event)" nzAllowClear nzPlaceHolder="Select a person" nzShowSearch>
+                <div *ngIf="this.selectedIntermediaryType === 'Broker'">
+                  <nz-option *ngFor="let broker of brokers" [nzLabel]="broker.companyName" [nzValue]="broker.id"></nz-option>
+                </div>
+                <div *ngIf="this.selectedIntermediaryType === 'Agent'">
+                  <nz-option *ngFor="let agent of agents" [nzLabel]="agent.companyName" [nzValue]="agent.id"></nz-option>
+                </div>
+                <div *ngIf="this.selectedIntermediaryType === 'SalesRepresentative'">
+                  <nz-option *ngFor="let salesRep of salesReps" [nzValue]="salesRep.id" [nzLabel]="salesRep.contactFirstName + ' ' + salesRep.contactLastName"></nz-option>
+                </div>
+              </nz-select>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -131,7 +146,6 @@
         >
           <td>{{ policy.policy_number }}</td>
           <td>{{ policy.client_name }}</td>
-          <td>{{ policy.amount | number: '1.2-2' }}</td>
           <td>{{ policy.gross_amount | number: '1.2-2' }}</td>
           <td>{{ policy.net_amount_due | number: '1.2-2' }}</td>
           <td>{{ policy.settlements | number: '1.2-2' }}</td>
@@ -144,6 +158,7 @@
             >
               <button
                 nz-button
+                [disabled]="policyTableActive"
                 nzType="primary"
                 (click)="showAllocationModal(policy)"
               >
@@ -156,4 +171,55 @@
       </nz-table>
     </nz-card>
   </nz-card>
+
+
+  <nz-modal [(nzVisible)]="isAllocateVisible" nzTitle="Allocate Amount" (nzOnCancel)="handleAllocateCancel()" (nzOnOk)="handleAllocationOk()">
+    <nz-card
+      style="width: 90%; margin: 0 auto;"
+      [nzBordered]="true"
+      nzTitle="Allocation Details"
+    >
+      <form [formGroup]="allocationForm" nz-form>
+        <div nz-row>
+
+          <div nz-col [nzSpan]="12">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="12" nzFor="policies"
+              >Policy</nz-form-label
+              >
+              <nz-form-control nzSpan="12">
+                <input
+                  nz-input
+                  name="policy"
+                  id="policy"
+                  formControlName="policy"
+                  readonly
+                />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="12">
+            <nz-form-item>
+              <nz-form-label
+                [nzSpan]="8"
+                nzFor="amount"
+                nzRequired
+              >Amount</nz-form-label
+              >
+              <nz-form-control [nzSpan]="16">
+                <input
+                  nz-input
+                  name="amount"
+                  type="number"
+                  id="amount"
+                  formControlName="amount"
+                  [max]="amount"
+                />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      </form>
+    </nz-card>
+  </nz-modal>
 </div>

@@ -143,7 +143,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
           quotes,
           (x) =>
             x.receiptStatus === 'Unreceipted' &&
-            x.sourceOfBusiness === 'salesRepresentative'
+            x.sourceOfBusiness === 'SalesRepresentative'
         );
 
         this.displayedListOfUnreceiptedReceipts = this.listofUnreceiptedReceipts;
@@ -152,7 +152,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
           quotes,
           (x) =>
             x.receiptStatus === 'Unreceipted' &&
-            x.sourceOfBusiness === 'salesRepresentative'
+            x.sourceOfBusiness === 'SalesRepresentative' && x.paymentPlan === 'NotCreated'
         ).length;
         console.log('======= Unreceipt List =======');
         console.log(this.listofUnreceiptedReceipts);
@@ -167,7 +167,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
           receipts.data,
           (x) =>
             x.receipt_status === 'Receipted' &&
-            x.source_of_business === 'salesRepresentative'
+            x.source_of_business === 'SalesRepresentative'
         );
 
         console.log('======= Receipt List =======');
@@ -177,7 +177,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
           receipts.data,
           (x) =>
             x.receipt_status === 'Cancelled' &&
-            x.source_of_business === 'salesRepresentative'
+            x.source_of_business === 'SalesRepresentative'
         );
 
         console.log('======= Cancelled Receipt List =======');

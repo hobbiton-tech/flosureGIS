@@ -121,13 +121,13 @@ export class DirectClientComponent implements OnInit {
           quotes,
           (x) =>
             x.receiptStatus === 'Unreceipted' &&
-            x.sourceOfBusiness === 'direct'
+            x.sourceOfBusiness === 'Direct' && x.paymentPlan === 'NotCreated'
         );
         this.receiptsCount = _.filter(
           quotes,
           (x) =>
             x.receiptStatus === 'Unreceipted' &&
-            x.sourceOfBusiness === 'direct'
+            x.sourceOfBusiness === 'Direct'
         ).length;
         console.log('======= Unreceipt List =======');
         console.log(this.unreceiptedList);
@@ -142,7 +142,7 @@ export class DirectClientComponent implements OnInit {
           receipts.data,
           (x) =>
             x.receipt_status === 'Receipted' &&
-            x.source_of_business === 'direct'
+            x.source_of_business === 'Direct'
         );
 
         console.log('======= Receipt List =======');
@@ -152,7 +152,7 @@ export class DirectClientComponent implements OnInit {
           receipts.data,
           (x) =>
             x.receipt_status === 'Cancelled' &&
-            x.source_of_business === 'direct'
+            x.source_of_business === 'Direct'
         );
 
         console.log('======= Cancelled Receipt List =======');

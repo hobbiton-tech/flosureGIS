@@ -173,7 +173,7 @@ export class ReceiptsComponent implements OnInit {
               receipt_type: this.receiptForm.controls.receipt_type.value,
               narration: this.receiptForm.controls.narration.value,
               date_received: new Date(),
-              remarks: this.receiptForm.controls.remarks.value,
+              remarks: '',
               cheq_number: this.receiptForm.controls.cheq_number.value,
               on_behalf_of: this.receiptForm.controls.on_behalf_of.value.companyName,
               captured_by: this.user,
@@ -211,7 +211,7 @@ export class ReceiptsComponent implements OnInit {
                   this.allocationService.createAllocationReceipt(allocationReceipt).subscribe((resMess) => {}, (errMess) => {
                     this.message.warning('Allocate Receipt Failed');
                   });
-                  this.generateID(this._id);
+                  this.generateID(resN.data.ID);
 
                 },
                 err => {

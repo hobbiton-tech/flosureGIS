@@ -127,7 +127,7 @@ export class BrokerClientComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.refresh()
+        this.refresh();
     }
 
     refresh() {
@@ -142,7 +142,7 @@ export class BrokerClientComponent implements OnInit {
           quotes,
           (x) =>
             x.receiptStatus === 'Unreceipted' &&
-            x.sourceOfBusiness === 'broker'
+            x.sourceOfBusiness === 'Broker' && x.paymentPlan === 'NotCreated'
         );
 
         this.displayedListOfUnreceiptedReceipts = this.listofUnreceiptedReceipts;
@@ -224,7 +224,7 @@ export class BrokerClientComponent implements OnInit {
                 receipt_type: this.receiptForm.controls.receipt_type.value,
                 narration: this.receiptForm.controls.narration.value,
                 date_received: new Date(),
-                remarks: this.receiptForm.controls.remarks.value,
+                remarks: '',
                 cheq_number: this.receiptForm.controls.cheq_number.value,
                 on_behalf_of: this.clientName,
                 captured_by: this.user,

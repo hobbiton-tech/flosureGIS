@@ -801,7 +801,7 @@ export class QuoteDetailsComponent implements OnInit {
         this.amount = this.sumArray(this.quoteData.risks, 'netPremium');
         this.approvingQuote = true;
 
-        const  commissionAmount = this.commission.commission * this.sumArray(this.quoteData.risks, 'netPremium')
+        const  commissionAmount = (this.commission.commission / 100) * this.sumArray(this.quoteData.risks, 'netPremium');
 
 
       // convert to policy
