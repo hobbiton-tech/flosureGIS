@@ -1,5 +1,5 @@
 import { RiskModel } from 'src/app/quotes/models/quote.model';
-import { DebitNote } from '../documents/models/documents.model';
+import { DebitNote, CreditNote } from '../documents/models/documents.model';
 
 export class Policy {
     id: string;
@@ -25,6 +25,7 @@ export class Policy {
     productType: ProductType;
     risks: RiskModel[];
     debitNotes: DebitNote[];
+    creditNotes?: CreditNote[];
     netPremium: number;
     underwritingYear: Date | ITimestamp;
     receiptStatus: ReceiptStatus;

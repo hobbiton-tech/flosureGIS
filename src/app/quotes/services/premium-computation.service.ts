@@ -230,6 +230,7 @@ export class PremiumComputationService {
     }
 
     changeSelectedInsuranceType(value: string) {
+        console.log(value);
         this.selectedInsuranceType.next(value);
     }
 
@@ -349,7 +350,7 @@ export class PremiumComputationService {
 
     // comprehensive and third party premium computation handling
     computePremium() {
-        if (this.selectedInsuranceType.value == 'Comprehensive') {
+        if (this.selectedInsuranceType.value == 'Motor Comprehensive') {
             this.computeComprehensivePremium();
         } else {
             this.computeThirdPartyPremium();

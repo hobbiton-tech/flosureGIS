@@ -329,7 +329,7 @@ export class PoliciesService {
                 async res => {
                     console.log('credit note', res);
                     this.accountsService
-                        .createRequisition(requisition, res.id)
+                        .createRequisition(requisition)
                         .subscribe(res => console.log('requisition', res));
                 },
                 async err => {

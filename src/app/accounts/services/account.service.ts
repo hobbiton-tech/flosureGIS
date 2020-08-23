@@ -210,11 +210,10 @@ export class AccountService {
 
     // Requisition
     createRequisition(
-        requisition: IRequisitionModel,
-        creditNoteId: string
+        requisition: IRequisitionModel
     ): Observable<IRequisitionModel> {
         return this.http.post<IRequisitionModel>(
-            `${BASE_URL}/requisition/${creditNoteId}`,
+            `${BASE_URL}/requisition/1`,
             requisition
         );
     }
