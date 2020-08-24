@@ -10,7 +10,6 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { ReceiptsComponent } from './components/receipts/receipts.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PaymentPlanComponent } from './components/payment-plan/payment-plan.component';
-import { PaymentPlanPoliciesComponent } from './components/payment-plan/components/payment-plan-policies/payment-plan-policies.component';
 import { PaymentPlanPolicyInstallmentsComponent } from './components/payment-plan/components/payment-plan-policy-installments/payment-plan-policy-installments.component';
 import { ReceiptDocumentComponent } from './components/receipts/documents/receipt-document/receipt-document.component';
 import { DirectClientComponent } from './components/receipts/components/direct-client/direct-client.component';
@@ -21,6 +20,10 @@ import { RequisitionsComponent } from './components/requisitions/requisitions.co
 import { RequisitionPaymentComponent } from './components/requisitions/components/requisition-payment/requisition-payment.component';
 import { PaymentRequisitionVoucherComponent } from './components/payments/documents/payment-requisition-voucher/payment-requisition-voucher.component';
 import { NgxPrintModule } from 'ngx-print';
+import { PlanReceiptComponent } from './components/receipts/components/plan-receipt/plan-receipt.component';
+import { CommissionPaymentComponent } from './components/commission-payment/commission-payment.component';
+import { PaymentPlanService } from './services/payment-plan.service';
+import { AllocationsComponent } from './components/allocations/allocations.component';
 
 const routes: Routes = [
     {
@@ -43,10 +46,6 @@ const routes: Routes = [
         path: 'payment-plan',
         component: PaymentPlanComponent
     },
-    // {
-    //     path: 'payment-plan/:id',
-    //     component: PaymentPlanPoliciesComponent,
-    // },
     {
         path: 'payment-plan/:id',
         component: PaymentPlanPolicyInstallmentsComponent
@@ -69,8 +68,22 @@ const routes: Routes = [
     },
     {
         path: 'sales-representative',
-        component: SalesRepresentativeClientComponent
-    }
+        component: SalesRepresentativeClientComponent,
+    },
+
+  {
+    path: 'plan-receipt',
+    component: PlanReceiptComponent,
+  },
+
+  {
+    path: 'commission-payment',
+    component: CommissionPaymentComponent,
+  },
+  {
+    path: 'allocations',
+    component: AllocationsComponent,
+  },
 ];
 
 @NgModule({
@@ -80,7 +93,6 @@ const routes: Routes = [
         PaymentsComponent,
         ReceiptsComponent,
         PaymentPlanComponent,
-        PaymentPlanPoliciesComponent,
         PaymentPlanPolicyInstallmentsComponent,
         ReceiptDocumentComponent,
         DirectClientComponent,
@@ -89,7 +101,10 @@ const routes: Routes = [
         SalesRepresentativeClientComponent,
         RequisitionsComponent,
         RequisitionPaymentComponent,
-        PaymentRequisitionVoucherComponent
+        PaymentRequisitionVoucherComponent,
+        PlanReceiptComponent,
+        CommissionPaymentComponent,
+        AllocationsComponent,
     ],
     imports: [
         CommonModule,
@@ -100,6 +115,6 @@ const routes: Routes = [
         ReactiveFormsModule,
         NgxPrintModule
     ],
-    providers: [AccountService]
+    providers: [AccountService, PaymentPlanService],
 })
 export class AccountsModule {}

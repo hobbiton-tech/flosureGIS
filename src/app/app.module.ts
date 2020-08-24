@@ -45,7 +45,7 @@ const firebaseConfig = {
     storageBucket: 'savenda-insurance.appspot.com',
     messagingSenderId: '795733102142',
     appId: '1:795733102142:web:62eaa45624e4473e35cb6f',
-    measurementId: 'G-SCN3RMBTB7'
+    measurementId: 'G-SCN3RMBTB7',
 };
 
 // const firebaseConfig = {

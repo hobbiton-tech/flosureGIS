@@ -5,6 +5,7 @@ export interface ICommissionSetup {
     id: string;
     intermediaryName: string;
     intermediaryType: IntermediaryType;
+    intermediaryId: string;
     productClass: IClass;
     productName: string;
     commission: number;

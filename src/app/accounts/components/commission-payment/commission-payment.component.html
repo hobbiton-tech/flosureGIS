@@ -1,0 +1,123 @@
+<div style="margin: 10px;">
+  <div style="margin-bottom: 10px; background: #fff;">
+
+  <nz-page-header class="site-page-header"  (nzBack)="onBack()" nzBackIcon nzTitle="Commission Payment">
+    <nz-page-header-title>Commission Payment</nz-page-header-title>
+    <nz-page-header-subtitle>Confirm payments</nz-page-header-subtitle>
+
+    <nz-page-header-extra>
+
+      <button nz-button nz-dropdown [nzDropdownMenu]="menu" >{{selectedIntermediary}}</button>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu nzSelectable>
+          <li nz-menu-item *ngFor="let int of typeOfClient" (click) ="selectInt(int)"> {{ int }}</li>
+        </ul>
+      </nz-dropdown-menu>
+
+
+
+    </nz-page-header-extra>
+
+  </nz-page-header>
+
+</div>
+
+<nz-card>
+
+  <div style="margin-bottom: 10px; width: 50%;">
+
+    <nz-input-group [nzSuffix]="suffixIconSearch">
+      <input type="text" nz-input placeholder="Search by agent name or id" />
+  </nz-input-group>
+  <ng-template #suffixIconSearch>
+      <i nz-icon nzType="search"></i>
+  </ng-template>
+  </div>
+
+  <nz-table>
+
+    <thead>
+      <tr>
+          <th>Agent Id</th>
+          <th>Agent Name</th>
+          <th>Rate</th>
+          <th>Commission Amount</th>
+          <th>Status</th>
+
+      </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="">
+
+      <!-- <td>{{  }}</td>
+      <td>{{  }}</td>
+      <td>{{  }}</td>
+      <td>{{  }}</td>
+      <td>{{  }}</td>
+      <td>{{  }}</td> -->
+      <td>
+          <button nz-button nzType="primary" nzSize="small" (click)="{}">
+              Confirm
+          </button>
+      </td>
+  </tr>
+
+  </tbody>
+
+
+  </nz-table>
+
+</nz-card>
+
+<nz-card>
+
+  <div style="margin-top: 10px; width: 50%;">
+
+    <nz-input-group [nzSuffix]="suffixIconSearch">
+      <input type="text" nz-input placeholder="Search by requisition number or client name" />
+  </nz-input-group>
+  <ng-template #suffixIconSearch>
+      <i nz-icon nzType="search"></i>
+  </ng-template>
+  </div>
+
+  <nz-table>
+
+    <thead>
+      <tr>
+          <th>Requisition Number</th>
+          <th>Amount</th>
+          <th>Client Name</th>
+
+
+      </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="">
+
+      <!-- <td>{{  }}</td>
+      <td>{{  }}</td>
+      <td>{{  }}</td>
+      <td>{{  }}</td>
+      <td>{{  }}</td>
+      <td>{{  }}</td> -->
+      <td>
+          <button nz-button nzType="primary" nzSize="small" (click)="{}">
+              Approve
+          </button>
+      </td>
+  </tr>
+
+  </tbody>
+
+
+  </nz-table>
+
+</nz-card>
+  </div>
+
+
+
+
