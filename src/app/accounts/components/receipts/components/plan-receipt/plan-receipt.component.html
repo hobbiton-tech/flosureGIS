@@ -11,6 +11,8 @@
                     type="text"
                     nz-input
                     placeholder="Search by account id, account name, bank"
+                    [(ngModel)]="searchString"
+                    (ngModelChange)="searchR($event)"
                   />
                 </nz-input-group>
                 <ng-template #suffixIconSearch>
@@ -23,7 +25,7 @@
 
         <nz-table
           #receiptTable
-          [nzData]="receiptedList"
+          [nzData]="displayReceiptedList"
           [nzSize]="'small'"
           [nzBordered]="true"
           style="background-color: white;"
@@ -138,6 +140,8 @@
                     type="text"
                     nz-input
                     placeholder="Search by account id, account name, bank"
+                    [(ngModel)]="searchString"
+                    (ngModelChange)="searchCR($event)"
                   />
                 </nz-input-group>
                 <ng-template #suffixIconSearch>
@@ -150,7 +154,7 @@
 
         <nz-table
           #cancelledReceiptTable
-          [nzData]="cancelReceiptList"
+          [nzData]="displayCancelledReceiptList"
           [nzSize]="'small'"
           [nzBordered]="true"
           style="background-color: white;"

@@ -21,6 +21,8 @@ import { RequisitionPaymentComponent } from './components/requisitions/component
 import { PaymentRequisitionVoucherComponent } from './components/payments/documents/payment-requisition-voucher/payment-requisition-voucher.component';
 import { NgxPrintModule } from 'ngx-print';
 import { PlanReceiptComponent } from './components/receipts/components/plan-receipt/plan-receipt.component';
+import { CommissionPaymentComponent } from './components/commission-payment/commission-payment.component';
+import { PaymentPlanService } from './services/payment-plan.service';
 import { AllocationsComponent } from './components/allocations/allocations.component';
 
 const routes: Routes = [
@@ -73,6 +75,11 @@ const routes: Routes = [
     path: 'plan-receipt',
     component: PlanReceiptComponent,
   },
+
+  {
+    path: 'commission-payment',
+    component: CommissionPaymentComponent,
+  },
   {
     path: 'allocations',
     component: AllocationsComponent,
@@ -96,6 +103,7 @@ const routes: Routes = [
         RequisitionPaymentComponent,
         PaymentRequisitionVoucherComponent,
         PlanReceiptComponent,
+        CommissionPaymentComponent,
         AllocationsComponent,
     ],
     imports: [
@@ -107,6 +115,6 @@ const routes: Routes = [
         ReactiveFormsModule,
         NgxPrintModule
     ],
-    providers: [AccountService]
+    providers: [AccountService, PaymentPlanService],
 })
 export class AccountsModule {}

@@ -26,8 +26,16 @@ export class AgentClientComponent implements OnInit {
     reinstateForm: FormGroup;
     submitted = false;
     receiptsCount = 0;
+    unreceiptedList: Policy[];
     agentList: IAgent[];
+
     receiptedList: IReceiptModel[];
+    displayReceiptedList: IReceiptModel[];
+
+    cancelledReceiptList: IReceiptModel[];
+    displayCancelledReceiptList: IReceiptModel[];
+
+    receiptObj: IReceiptModel = new IReceiptModel();
     receipt: IReceiptModel;
     today = new Date();
     clientName = '';
@@ -47,6 +55,7 @@ export class AgentClientComponent implements OnInit {
 
     policyAmount = 0;
     cancelReceiptList = [];
+    searchString: string;
 
     isVisible = false;
     isCancelVisible = false;
@@ -82,7 +91,7 @@ export class AgentClientComponent implements OnInit {
     selectedType = 'Direct';
     selectedAgent: any;
     listofUnreceiptedReceipts: Policy[];
-    displayedListOfUnreceiptedReceipts: Policy[];
+    displayedListOfUnreceiptedReceipts: Policy[] = [];
     sourceOfBusiness: string;
     intermediaryName: string;
     receiptNewCount: any;
@@ -144,6 +153,7 @@ export class AgentClientComponent implements OnInit {
         );
         this.displayedListOfUnreceiptedReceipts = this.listofUnreceiptedReceipts;
 
+
         this.receiptsCount = _.filter(
           quotes,
           (x) =>
@@ -173,7 +183,7 @@ export class AgentClientComponent implements OnInit {
             x.receipt_status === 'Receipted' &&
             x.source_of_business === 'Agent'
         );
-
+        this.displayReceiptedList = this.receiptedList;
         console.log('======= Receipt List =======');
         console.log(this.receiptedList);
 
@@ -183,6 +193,7 @@ export class AgentClientComponent implements OnInit {
             x.receipt_status === 'Cancelled' &&
             x.source_of_business === 'Agent'
         );
+        this.displayCancelledReceiptList = this.cancelReceiptList;
 
         console.log('======= Cancelled Receipt List =======');
         console.log(this.cancelReceiptList);
@@ -424,4 +435,59 @@ export class AgentClientComponent implements OnInit {
     method(value) {
         this.paymentMethod = value;
     }
+
+    //Test Search Code
+
+    searchUnR(value: string): void {
+      console.log(value);
+      if (value === ' ' || !value) {
+
+        this.displayedListOfUnreceiptedReceipts = this.listofUnreceiptedReceipts;
+      }
+
+      this.displayedListOfUnreceiptedReceipts = this.listofUnreceiptedReceipts.filter((client) => {
+          return (
+            client.policyNumber.toLowerCase().includes(value.toLowerCase()) ||
+            client.client.toLowerCase().includes(value.toLowerCase())
+
+          );
+      });
+  }
+
+  searchR(value: string): void
+  {
+    console.log(value);
+    if (value === ' ' || !value)
+    {
+      this.displayReceiptedList = this.receiptedList;
+
+    }
+
+    this.displayReceiptedList = this.receiptedList.filter((receip) =>
+    {
+        return (
+          receip.receipt_number.toLowerCase().includes(value.toLowerCase()) ||
+          receip.on_behalf_of.toLowerCase().includes(value.toLowerCase())
+
+        );
+    });
+}
+
+searchCR(value: string): void
+{
+  if (value === ' ' || !value)
+  {
+      this.displayCancelledReceiptList = this.cancelReceiptList;
+  }
+
+  this.displayCancelledReceiptList = this.cancelReceiptList.filter((receip) =>
+    {
+        return (
+          receip.receipt_number.toLowerCase().includes(value.toLowerCase()) ||
+          receip.on_behalf_of.toLowerCase().includes(value.toLowerCase())
+
+        );
+    });
+
+}
 }
