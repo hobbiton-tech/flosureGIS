@@ -11,6 +11,9 @@ import _ from 'lodash';
 import { v4 } from 'uuid';
 import { PoliciesService } from 'src/app/underwriting/services/policies.service';
 import { DebitNote } from 'src/app/underwriting/documents/models/documents.model';
+import { AllocationsService } from '../../../../services/allocations.service';
+import { HttpClient } from '@angular/common/http';
+import { AllocationPolicy, AllocationReceipt } from '../../../models/allocations.model';
 
 @Component({
     selector: 'app-broker-client',
@@ -56,16 +59,13 @@ export class BrokerClientComponent implements OnInit {
     isOkClientTypeLoading = false;
     agent: any;
     receiptNewCount: number;
-
-    // modal
-    isReceiptVisible = false;
     isConfirmLoading = false;
-    showDocumentModal = false;
-    isReceiptApproved = false;
 
-    // generated PDFs
-    receiptURl = '';
-    showReceiptModal = false;
+    allocationPolicy: AllocationPolicy;
+    allocationReceipt: AllocationReceipt
+
+    allocationPolicies: any[] = [];
+    allocationsReceipts: any[] = [];
 
     optionList = [
         { label: 'Premium Payment', value: 'Premium Payment' },
@@ -103,7 +103,9 @@ export class BrokerClientComponent implements OnInit {
         private message: NzMessageService,
         private router: Router,
         private agentService: AgentsService,
-        private policeServices: PoliciesService
+        private policeServices: PoliciesService,
+        private allocationsService: AllocationsService,
+        private http: HttpClient,
     ) {
         this.receiptForm = this.formBuilder.group({
             received_from: ['', Validators.required],
@@ -161,6 +163,14 @@ export class BrokerClientComponent implements OnInit {
         this.debitnoteList = invoice;
       });
 
+      this.allocationsService.getAllocationPolicy().subscribe((allocationPolicies) => {
+        this.allocationPolicies = allocationPolicies.data;
+      });
+
+      this.allocationsService.getAllocationReceipt().subscribe((allocationsReceipts) =>{
+        this.allocationsReceipts = allocationsReceipts.data;
+      })
+
       this.receiptService.getReciepts().subscribe((receipts) => {
         this.receiptedList = _.filter(
           receipts.data,
@@ -205,6 +215,7 @@ export class BrokerClientComponent implements OnInit {
         this.currency = unreceipted.currency;
         this.sourceOfBusiness = unreceipted.sourceOfBusiness;
         this.intermediaryName = unreceipted.intermediaryName;
+      this.allocationPolicy = this.allocationPolicies.filter((x) => x.policy_number === unreceipted.policyNumber)[0];
         console.log(this.policyAmount);
     }
 
@@ -237,26 +248,74 @@ export class BrokerClientComponent implements OnInit {
                 currency: this.currency,
             };
 
-            this.receiptNum = this._id;
-            await this.receiptService
-                .addReceipt( receipt, this.policy.risks[0].insuranceType ).subscribe((mess) => {
-                    this.message.success('Receipt Successfully created');
-                    console.log(mess);
-                },
-                (err) => {
-                    this.message.warning('Receipt Failed');
-                    console.log(err);
-                });
-                // .then((mess) => {
-                //     this.policy.receiptStatus = 'Receipted';
-                //     this.policy.paymentPlan = 'Created';
 
-                //     this.policeServices.updatePolicy(this.policy).subscribe();
-                // })
-                // .catch((err) => {
-                //     this.message.warning('Receipt Failed');
-                //     console.log(err);
-                // });
+          this.allocationPolicy.balance = 0;
+          this.allocationPolicy.settlements = Number(this.policy.netPremium);
+          this.allocationPolicy.status = 'Allocated'
+
+
+
+
+          this.allocationReceipt = {
+            allocated_amount: Number(this.policy.netPremium),
+            amount: Number(this.policy.netPremium),
+            intermediary_id: this.policy.intermediaryId,
+            intermediary_name: this.policy.intermediaryName,
+            intermediary_type: 'Agent',
+            receipt_number: '',
+            remaining_amount: 0,
+            status: 'Allocated'
+          }
+
+            this.receiptNum = this._id;
+
+          this.http.get<any>(
+            `https://number-generation.flosure-api.com/savenda-receipt-number/1`
+          )
+            .subscribe(async (res) => {
+              receipt.receipt_number = res.data.receipt_number;
+              console.log(res.data.receipt_number);
+
+              this.http.post('https://payment-api.savenda-flosure.com/receipt', receipt).subscribe((resN: any) => {
+                  this.message.success('Receipt Successfully created');
+                  console.log('RECEIPT NUMBER<><><><>', resN);
+
+                  this.allocationReceipt.receipt_number = resN.data.receipt_number;
+
+                  this.allocationsService.createAllocationReceipt(this.allocationReceipt).subscribe((resMess) => {
+                    console.log('Allocation Receipt Res>>>', resMess);
+                  }, (errMess) => {
+                    this.message.warning('Allocate Receipt Failed');
+                  });
+                  this.allocationsService.updateAllocationPolicy(this.allocationPolicy).subscribe((policyRes) => {
+                    console.log('Allocation Policy Res>>>', policyRes);
+                  }, (policyErr) => {
+                    this.message.error(policyErr);
+                  })
+
+                  this.policeServices.updatePolicy(this.policy).subscribe((res) => {}, (err) => {
+                    console.log('Update Policy Error', err);
+                  });
+
+                  this.generateID(resN.data.ID);
+
+                },
+                err => {
+                  this.message.warning('Receipt Failed');
+                  console.log(err);
+                });
+            });
+
+          // await this.receiptService
+            //     .addReceipt( receipt, this.policy.risks[0].insuranceType ).subscribe((mess) => {
+            //         this.message.success('Receipt Successfully created');
+            //         console.log(mess);
+            //     },
+            //     (err) => {
+            //         this.message.warning('Receipt Failed');
+            //         console.log(err);
+            //     });
+
             this.receiptForm.reset();
             setTimeout(() => {
                 this.isVisible = false;
