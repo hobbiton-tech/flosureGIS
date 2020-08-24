@@ -14,7 +14,7 @@
       <nz-page-header-extra>
         <div nz-col nzSpan="12">
 
-          <button nz-button nz-dropdown nzType="primary" [nzDropdownMenu]="menu" >Select Intermediary Type</button>
+          <button nz-button nz-dropdown nzType="primary" [nzDropdownMenu]="menu" >{{selectedIntermediaryType}}</button>
           <nz-dropdown-menu #menu="nzDropdownMenu">
             <ul nz-menu>
               <li nz-menu-item *ngFor="let int of typeOfIntermediaries" (click)="selectIntermediaryType(int)">{{int}}</li>

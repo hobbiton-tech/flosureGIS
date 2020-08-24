@@ -34,31 +34,38 @@
   </ng-template>
   </div>
 
-  <nz-table>
+  <nz-table
+    #commissionsTable
+    [nzData]="commissionPayments"
+    [nzSize]="'small'"
+    [nzBordered]="true"
+    style="background-color: white;"
+  >
 
     <thead>
       <tr>
-          <th>Agent Id</th>
           <th>Agent Name</th>
-          <th>Rate</th>
           <th>Commission Amount</th>
           <th>Status</th>
+          <th></th>
 
       </tr>
   </thead>
 
   <tbody>
-    <tr *ngFor="">
+    <tr *ngFor="let com of commissionsTable.data">
 
-      <!-- <td>{{  }}</td>
-      <td>{{  }}</td>
-      <td>{{  }}</td>
-      <td>{{  }}</td>
-      <td>{{  }}</td>
-      <td>{{  }}</td> -->
+      <td>{{ com.agent_name }}</td>
+      <td>{{ com.commission_amount }}</td>
+      <td>{{ com.status }}</td>
       <td>
-          <button nz-button nzType="primary" nzSize="small" (click)="{}">
-              Confirm
+          <button
+            nz-popconfirm
+                  nzPopconfirmTitle="Are you sure you wish to proceed"
+                  nzPopconfirmPlacement="bottom"
+                  (nzOnConfirm)="raiseReq(com)"
+                  (nzOnCancel)="cancelReq()" nz-button nzType="primary" nzSize="small">
+              Raise Requisition
           </button>
       </td>
   </tr>
@@ -70,7 +77,7 @@
 
 </nz-card>
 
-<nz-card>
+<nz-card nzTitle="Requisitions Pending Approval">
 
   <div style="margin-top: 10px; width: 50%;">
 
@@ -82,27 +89,35 @@
   </ng-template>
   </div>
 
-  <nz-table>
+  <nz-table
+    #reqsTable
+    [nzData]="displayPendingRequisitionsList"
+    [nzSize]="'small'"
+    [nzBordered]="true"
+    style="background-color: white;"
+  >
 
     <thead>
       <tr>
           <th>Requisition Number</th>
+        <th>Payee</th>
           <th>Amount</th>
-          <th>Client Name</th>
+          <th>Status</th>
+        <th>Type</th>
+        <th></th>
 
 
       </tr>
   </thead>
 
   <tbody>
-    <tr *ngFor="">
+    <tr *ngFor="let req of reqsTable.data">
 
-      <!-- <td>{{  }}</td>
-      <td>{{  }}</td>
-      <td>{{  }}</td>
-      <td>{{  }}</td>
-      <td>{{  }}</td>
-      <td>{{  }}</td> -->
+      <td>{{ req.requisitionNumber }}</td>
+      <td>{{ req.payee }}</td>
+      <td>{{ req.amount }}</td>
+      <td>{{ req.approvalStatus }}</td>
+      <td>{{ req.paymentType }}</td>
       <td>
           <button nz-button nzType="primary" nzSize="small" (click)="{}">
               Approve

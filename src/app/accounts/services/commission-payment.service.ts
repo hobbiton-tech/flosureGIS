@@ -9,26 +9,27 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class CommissionPaymentService {
-  cPayment: any;
-  cPayments: any[] = [];
-  BASEURLCPayment = '';
+  cPayment: CPaymentModel;
+  cPayments: CPaymentModel[] = [];
+  BASEURLCPayment = 'http://localhost:8022';
+
 
   constructor(private http: HttpClient,
     private message: NzMessageService,
     private router: Router) { }
 
-    createCPayment(createCPay: any[]): Observable<any>
+    createCPayment(createCPay: CPaymentModel): Observable<CPaymentModel>
     {
-      return this.http.post<CPaymentModel>(this.BASEURLCPayment, createCPay);
+      return this.http.post<CPaymentModel>(`${this.BASEURLCPayment}/commission-Processing`, createCPay);
     }
 
-    updateCPayment(cPayment: any[])
+    updateCPayment(cPayment: any)
     {
-      return this.http.put(`${this.BASEURLCPayment}/${this.cPayment}`,cPayment)
+      return this.http.put<any>(`${this.BASEURLCPayment}/commission-Processing/${cPayment.ID}`,cPayment)
     }
 
     getCPayment(): Observable<any> {
-      return this.http.get<any>(this.BASEURLCPayment);
+      return this.http.get<any>(`${this.BASEURLCPayment}/commission-Processing`);
   }
 
 

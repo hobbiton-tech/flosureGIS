@@ -6,6 +6,8 @@ import { NzMessageService } from 'ng-zorro-antd';
 import { AgentsService } from '../../../settings/components/agents/services/agents.service';
 import { IAgent, IBroker, ISalesRepresentative } from '../../../settings/components/agents/models/agents.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommissionPaymentService } from '../../services/commission-payment.service';
+import { CPaymentModel } from '../models/commission-payment.model';
 
 @Component({
   selector: 'app-allocations',
@@ -21,8 +23,13 @@ export class AllocationsComponent implements OnInit {
   allocationReceipt: AllocationReceipt;
   allocationReceiptsList: any[] = [];
 
+  commissionAmount = 0;
+
 
   allocationPolicy: AllocationPolicy;
+
+  commissionPayment: CPaymentModel;
+  commissionPayments: any[] = [];
 
   allocationPoliciesList: any[] = [];
   amount: number;
@@ -35,7 +42,12 @@ export class AllocationsComponent implements OnInit {
   isAllocateVisible = false;
   allocationForm: FormGroup;
 
-  constructor(private allocationsService: AllocationsService, private message: NzMessageService, private agentsService: AgentsService, private formBuilder: FormBuilder,) {
+  constructor(private allocationsService: AllocationsService,
+              private message: NzMessageService,
+              private agentsService: AgentsService,
+              private formBuilder: FormBuilder,
+              private commissionPaymentService: CommissionPaymentService,
+              ) {
     this.allocationForm = this.formBuilder.group({
       policy: ['', Validators.required],
       amount: ['', Validators.required],
@@ -64,6 +76,11 @@ export class AllocationsComponent implements OnInit {
       this.allocationReceiptsList = res.data.filter((x) => x.intermediary_type === this.selectedIntermediaryType);
     });
 
+
+
+    this.commissionPaymentService.getCPayment().subscribe((commissionPayments) => {
+      this.commissionPayments = commissionPayments.data;
+    });
 
 
 
@@ -131,11 +148,66 @@ export class AllocationsComponent implements OnInit {
     }
 
 
+
     if (this.allocationPolicy.balance === 0) {
       this.allocationPolicy.status = 'Allocated'
     } else if (this.allocationPolicy.balance > 0 && this.allocationPolicy.balance < this.allocationPolicy.net_amount_due) {
       this.allocationPolicy.status = ''
     }
+
+
+    if (this.commissionPayments === undefined || this.commissionPayments.length == 0) {
+      this.commissionPayment = {
+        agent_id: this.allocationPolicy.intermediary_id,
+        agent_name: this.allocationPolicy.intermediary_name,
+        commission_amount: this.allocationPolicy.commission_due,
+        paid_amount: 0,
+        remaining_amount: 0,
+        status: 'Not Paid',
+        agent_type: this.selectedIntermediaryType
+      }
+
+      this.commissionPaymentService.createCPayment(this.commissionPayment).subscribe((comm) => {}, (commErr) => {
+        this.message.error(commErr)
+      })
+    } else {
+      for (const c of this.commissionPayments) {
+
+        if (c.agent_id !== this.allocationPolicy.intermediary_id) {
+          this.commissionPayment = {
+            agent_id: this.allocationPolicy.intermediary_id,
+            agent_name: this.allocationPolicy.intermediary_name,
+            commission_amount: this.allocationPolicy.commission_due,
+            paid_amount: 0,
+            remaining_amount: 0,
+            status: 'Not Paid',
+            agent_type: this.selectedIntermediaryType
+          }
+
+
+
+
+          this.commissionPaymentService.createCPayment(this.commissionPayment).subscribe((comm) => {}, (commErr) => {
+            this.message.error(commErr)
+          })
+          break
+        }
+
+        if (c.agent_id ===  this.allocationPolicy.intermediary_id && c.status === 'Not Paid') {
+          // this.commissionAmount = this.commissionAmount + c.commission_amount;
+          c.commission_amount = Number(c.commission_amount + this.allocationPolicy.commission_due);
+
+          console.log("checking C>>>", c);
+
+          this.commissionPaymentService.updateCPayment(c).subscribe((commP) => {}, (comPErr) => {
+            this.message.error(comPErr)
+          });
+
+          break
+        }
+      }
+    }
+
 
     this.allocationsService.updateAllocationReceipt(this.allocationReceipt).subscribe((receipt) => {
       this.allocationsService.updateAllocationPolicy(this.allocationPolicy).subscribe((policy) => {
