@@ -192,7 +192,8 @@ export class ReceiptsComponent implements OnInit {
               intermediary_name: this.receiptForm.controls.on_behalf_of.value.companyName,
               intermediary_type: 'Broker',
               receipt_number: '',
-              status: 'Unallocated'
+              status: 'Unallocated',
+              remaining_amount: this.receiptForm.controls.sum_in_digits.value
             };
 
             this.http

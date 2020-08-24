@@ -8,6 +8,7 @@ export class AllocationReceipt {
   intermediary_type: string;
   intermediary_name:string;
   status:string;
+  remaining_amount: number;
 }
 
 

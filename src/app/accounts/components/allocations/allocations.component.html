@@ -76,6 +76,7 @@
           <th>Intermediary Name</th>
           <th>Receipted Amount</th>
           <th>Allocated Amount</th>
+          <th>Remaining Amount</th>
           <th>Status</th>
         </tr>
         </thead>
@@ -91,6 +92,7 @@
           <td>{{ receipt.intermediary_name }}</td>
           <td>{{ receipt.amount | number: '1.2-2' }}</td>
           <td>{{ receipt.allocated_amount | number: '1.2-2' }}</td>
+          <td>{{ receipt.remaining_amount | number: '1.2-2' }}</td>
           <td>{{ receipt.status }}</td>
         </tr>
         </tbody>
@@ -173,7 +175,7 @@
   </nz-card>
 
 
-  <nz-modal [(nzVisible)]="isAllocateVisible" nzTitle="Allocate Amount" (nzOnCancel)="handleAllocateCancel()" (nzOnOk)="handleAllocationOk()">
+  <nz-modal [nzWidth]="1000" [(nzVisible)]="isAllocateVisible" nzTitle="Allocate Amount" (nzOnCancel)="handleAllocateCancel()" (nzOnOk)="handleAllocationOk()">
     <nz-card
       style="width: 90%; margin: 0 auto;"
       [nzBordered]="true"

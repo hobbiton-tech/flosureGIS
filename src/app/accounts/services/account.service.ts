@@ -119,7 +119,7 @@ export class AccountService {
                         this.message.success(
                                 'Receipt Successfully created'
                             );
-                        this.generateID(res.data.ID);
+                        // this.generateID(res.data.ID);
                         // }
 
 

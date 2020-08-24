@@ -96,6 +96,7 @@ export class AllocationsComponent implements OnInit {
 
   showAllocationModal(value) {
     this.isAllocateVisible = true;
+    this.allocationPolicy = value
     this.allocationForm
       .get('policy')
       .setValue(value.policy_number);
@@ -117,6 +118,34 @@ export class AllocationsComponent implements OnInit {
 
   handleAllocationOk() {
     this.isAllocateVisible = false;
+
+    this.allocationReceipt.remaining_amount = this.allocationReceipt.remaining_amount - this.allocationForm.controls.amount.value;
+    this.allocationReceipt.allocated_amount = this.allocationReceipt.allocated_amount + this.allocationForm.controls.amount.value;
+    this.allocationPolicy.balance = this.allocationPolicy.balance - this.allocationForm.controls.amount.value;
+    this.allocationPolicy.settlements = this.allocationPolicy.settlements + this.allocationForm.controls.amount.value;
+
+    if (this.allocationReceipt.remaining_amount === 0) {
+      this.allocationReceipt.status = 'Allocated'
+    } else if (this.allocationReceipt.remaining_amount > 0 && this.allocationReceipt.remaining_amount < this.allocationReceipt.amount) {
+      this.allocationReceipt.status = 'Partially Allocated'
+    }
+
+
+    if (this.allocationPolicy.balance === 0) {
+      this.allocationPolicy.status = 'Allocated'
+    } else if (this.allocationPolicy.balance > 0 && this.allocationPolicy.balance < this.allocationPolicy.net_amount_due) {
+      this.allocationPolicy.status = ''
+    }
+
+    this.allocationsService.updateAllocationReceipt(this.allocationReceipt).subscribe((receipt) => {
+      this.allocationsService.updateAllocationPolicy(this.allocationPolicy).subscribe((policy) => {
+        this.message.success('Allocated Successfully')
+      }, (error) => {
+        this.message.error(error);
+      });
+    }, (err) => {
+      this.message.error(err);
+    });
   }
 
 }
