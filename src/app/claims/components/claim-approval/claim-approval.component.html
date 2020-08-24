@@ -1,0 +1,117 @@
+<nz-spin nzSize="large" nzTip="Requisitions Loading...." [nzSpinning]="claimApprovalIsLoading">
+    <div style="margin: 10px;">
+        <div style="margin-bottom: 20px; background: #fff;">
+            <nz-page-header>
+                <nz-page-header-title>Claims Approval</nz-page-header-title>
+            </nz-page-header>
+        </div>
+
+        <nz-card>
+            <nz-divider nzText="Pending Claims" nzOrientation="left"></nz-divider>
+            <div style="margin-bottom: 10px; width: 20%;">
+                <nz-input-group [nzSuffix]="suffixIconSearch">
+                    <input type="text" nz-input placeholder="Search by policy number, client"
+                        [(ngModel)]="searchPendingClaimsString" (ngModelChange)="searchPendingClaims($event)" />
+                </nz-input-group>
+                <ng-template #suffixIconSearch>
+                    <i nz-icon nzType="search"></i>
+                </ng-template>
+            </div>
+
+            <nz-table #pendingRequisitionsTable [nzData]="" [nzSize]="'small'" [nzBordered]="true">
+                <thead>
+                    <tr>
+                        <th [nzAlign]="columnAlignment">Policy Number</th>
+                        <th [nzAlign]="columnAlignment">Req No</th>
+                        <th [nzAlign]="columnAlignment">Payee</th>
+                        <th [nzAlign]="columnAlignment">Cancellation Date</th>
+                        <th [nzAlign]="columnAlignment">Amount</th>
+                        <th [nzAlign]="columnAlignment">Currency</th>
+                        <th [nzAlign]="columnAlignment">Approval Status</th>
+                        <th [nzAlign]="columnAlignment">Type</th>
+                        <!-- <th [nzAlign]="columnAlignment">Authorized By</th> -->
+                        <!-- <th [nzAlign]="columnAlignment">Authorization Date</th> -->
+                        <th [nzAlign]="columnAlignment">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="">
+                        <td [nzAlign]="columnAlignment">{{''}}</td>
+                        <td [nzAlign]="columnAlignment">{{''}}</td>
+                        <td [nzAlign]="columnAlignment">{{''}}</td>
+                        <td [nzAlign]="columnAlignment">{{''}}</td>
+                        <td [nzAlign]="columnAlignment">{{''}}</td>
+                        <td [nzAlign]="columnAlignment">{{''}}</td>
+                        <td [nzAlign]="columnAlignment">{{''}}</td>
+                        <td [nzAlign]="columnAlignment">{{''}}</td>
+                        <!-- <td [nzAlign]="columnAlignment">{{requisition.authorizedBy ? requisition.authorisedBy : '-'}}
+                </td> -->
+                        <!-- <td [nzAlign]="columnAlignment">
+                    {{requisition.authorisationDate ? (requisition.authorizationDate | date) : '-'}}</td> -->
+                        <td [nzAlign]="columnAlignment">
+                            <button n nz-button nzType="primary" style="margin-left: 2px;" nzSize="small" *ngIf="">
+                                Approve
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </nz-card>
+
+        <div style="margin-top: 10px;">
+            <nz-card>
+                <nz-divider nzText="Approved Claims" nzOrientation="left"></nz-divider>
+                <div style="margin-bottom: 10px; width: 20%;">
+                    <nz-input-group [nzSuffix]="suffixIconSearch">
+                        <input type="text" nz-input placeholder="Search by policy number, client"
+                            [(ngModel)]="searchApprovedClaimsString" (ngModelChange)="searchApprovedClaims($event)" />
+                    </nz-input-group>
+                    <ng-template #suffixIconSearch>
+                        <i nz-icon nzType="search"></i>
+                    </ng-template>
+                </div>
+
+                <nz-table #approvedRequisitionsTable [nzData]="" [nzSize]="'small'" [nzBordered]="true">
+                    <thead>
+                        <tr>
+                            <th [nzAlign]="columnAlignment">Policy Number</th>
+                            <th [nzAlign]="columnAlignment">Vo No</th>
+                            <th [nzAlign]="columnAlignment">Payee</th>
+                            <th [nzAlign]="columnAlignment">Cancellation Date</th>
+                            <th [nzAlign]="columnAlignment">Amount</th>
+                            <th [nzAlign]="columnAlignment">Currency</th>
+                            <th [nzAlign]="columnAlignment">Approval Status</th>
+                            <th [nzAlign]="columnAlignment">Type</th>
+                            <th [nzAlign]="columnAlignment">Authorized By</th>
+                            <th [nzAlign]="columnAlignment">Authorization Date</th>
+                            <th [nzAlign]="columnAlignment">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="">
+                            <td [nzAlign]="columnAlignment">{{''}}</td>
+                            <td [nzAlign]="columnAlignment">{{''}}</td>
+                            <td [nzAlign]="columnAlignment">{{''}}</td>
+                            <td [nzAlign]="columnAlignment">{{''}}</td>
+                            <td [nzAlign]="columnAlignment">{{''}}</td>
+                            <td [nzAlign]="columnAlignment">{{''}}</td>
+                            <td [nzAlign]="columnAlignment">{{''}}</td>
+                            <td [nzAlign]="columnAlignment">{{''}}</td>
+                            <td [nzAlign]="columnAlignment">
+                                {{'-'}}
+                            </td>
+                            <td [nzAlign]="columnAlignment">
+                                {{'-'}}
+                            </td>
+                            <td [nzAlign]="columnAlignment">
+                                <button n nz-button nzType="primary" style="margin-left: 2px;" nzSize="small" *ngIf="">
+                                    Process
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </nz-card>
+        </div>
+    </div>
+</nz-spin>

@@ -1,0 +1,105 @@
+<nz-modal [(nzVisible)]="isAddServiceProviderModalVisible" nzTitle="Add Service Provider"
+    [nzContent]="serviceProviderContent" (nzOnCancel)="closeAddServiceProviderModal()"
+    (nzOnOk)="closeAddServiceProviderModal()" nzWidth="85%">
+
+    <ng-template #serviceProviderContent>
+        <div>
+            <form nz-form [formGroup]="serviceProviderDetailsForm">
+                <div nz-row>
+                    <div nz-col nzSpan="8">
+                        <nz-form-item>
+                            <nz-form-label nzRequired nzSpan="10">Company Name</nz-form-label>
+                            <nz-form-control nzSpan="10">
+                                <input nz-input formControlName="name" />
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label nzRequired nzSpan="10">Phone</nz-form-label>
+                            <nz-form-control nzSpan="10">
+                                <input nz-input formControlName="phone" />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="8">
+                        <nz-form-item>
+                            <nz-form-label nzSpan="10">TPIN No</nz-form-label>
+                            <nz-form-control nzSpan="10">
+                                <input nz-input formControlName="tPin" />
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label nzSpan="10">Email</nz-form-label>
+                            <nz-form-control nzSpan="10">
+                                <input nz-input formControlName="emailAddress" />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="8">
+                        <nz-form-item>
+                            <nz-form-label nzRequired nzSpan="10">Type</nz-form-label>
+                            <nz-form-control nzSpan="10">
+                                <nz-select nzPlaceHolder="Select type" formControlName="type">
+                                    <nz-option *ngFor="let type of serviceProviderTypeOptions" [nzValue]="type.value"
+                                        [nzLabel]="type.label">
+                                    </nz-option>
+                                </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label nzRequired nzSpan="10">Address</nz-form-label>
+                            <nz-form-control nzSpan="10">
+                                <input nz-input formControlName="physicalAddress" />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+                <nz-divider nzText="Contact Person Details" nzOrientation="left"></nz-divider>
+                <div nz-row>
+                    <div nz-col nzSpan="8">
+                        <nz-form-item>
+                            <nz-form-label nzSpan="10">First Name</nz-form-label>
+                            <nz-form-control nzSpan="10">
+                                <input nz-input formControlName="representativeFirsName" />
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label nzSpan="10">Email</nz-form-label>
+                            <nz-form-control nzSpan="10">
+                                <input nz-input formControlName="representativeEmail" />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="8">
+                        <nz-form-item>
+                            <nz-form-label nzSpan="10">Last Name</nz-form-label>
+                            <nz-form-control nzSpan="10">
+                                <input nz-input formControlName="representativeLastName" />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="8">
+                        <nz-form-item>
+                            <nz-form-label nzRequired nzSpan="10">Phone</nz-form-label>
+                            <nz-form-control nzSpan="10">
+                                <input nz-input formControlName="representativePhone" />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+
+                <div style="
+                    text-align: center;
+                    margin-top: 10px;
+                    margin-bottom: 10px;
+                ">
+                    <button nz-button nzType="primary" (click)="addServiceProvider()">
+                        Add Service Provider
+                    </button>
+                    <button style="margin-left: 15px;" nz-button nzType="default">
+                        Reset Form
+                    </button>
+                </div>
+            </form>
+        </div>
+    </ng-template>
+</nz-modal>

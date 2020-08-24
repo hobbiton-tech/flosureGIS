@@ -14,7 +14,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { AccountsComponent } from './components/accounts/accounts.component';
 import { InsuranceCompaniesComponent } from './components/insurance-companies/insurance-companies.component';
-import { AddInsuranceCompanyComponent } from './components/insurance-companies/components/add-insurance-company/add-insurance-company.component';
+// import { AddInsuranceCompanyComponent } from './components/insurance-companies/components/add-insurance-company/add-insurance-company.component';
 import { RatesComponent } from './components/rates/rates.component';
 import { AddRateComponent } from './components/rates/components/add-rate/add-rate.component';
 import { AgentsComponent } from './components/agents/agents.component';
@@ -42,6 +42,9 @@ import { SalvageBuyerDetailsComponent } from './components/claim-setups/componen
 import { FinanceComponent } from './components/finance/finance.component';
 import { AddBankAccountComponent } from './components/finance/components/add-bank-account/add-bank-account.component';
 import { AddChequeLotComponent } from './components/finance/components/add-cheque-lot/add-cheque-lot.component';
+import { ClaimsSetupsComponent } from './components/claims-setups/claims-setups.component';
+import { AddServiceProviderComponent } from './components/claims-setups/components/add-service-provider/add-service-provider.component';
+import { AddInsuranceCompanyComponent } from './components/claims-setups/components/add-insurance-company/add-insurance-company.component';
 
 const routes: Routes = [
     {
@@ -52,10 +55,10 @@ const routes: Routes = [
         path: 'rates',
         component: RatesComponent
     },
-    {
-        path: 'add-insurance-company',
-        component: AddInsuranceCompanyComponent
-    },
+    // {
+    //     path: 'add-insurance-company',
+    //     component: AddInsuranceCompanyComponent
+    // },
     {
         path: 'clauses',
         component: UnderwritingSetupsComponent
@@ -94,7 +97,7 @@ const routes: Routes = [
     },
     {
         path: 'claims',
-        component: ClaimSetupsComponent
+        component: ClaimsSetupsComponent
     },
     {
         path: 'loss-adjustor-details/:id',
@@ -154,7 +157,10 @@ const routes: Routes = [
         SalvageBuyerDetailsComponent,
         FinanceComponent,
         AddBankAccountComponent,
-        AddChequeLotComponent
+        AddChequeLotComponent,
+        ClaimsSetupsComponent,
+        AddServiceProviderComponent,
+        AddInsuranceCompanyComponent
     ],
     imports: [
         CommonModule,

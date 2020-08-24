@@ -9,7 +9,7 @@ import { IChequeModel } from '../../models/cheque.model';
     styleUrls: ['./finance.component.scss']
 })
 export class FinanceComponent implements OnInit {
-    financeSetupsIsLoading = true;
+    financeSetupsIsLoading = false;
 
     // add bank account modal
     isAddBankAccountModalVisible = false;

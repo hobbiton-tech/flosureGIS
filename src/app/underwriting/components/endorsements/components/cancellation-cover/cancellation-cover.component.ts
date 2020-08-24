@@ -73,6 +73,8 @@ export class CancellationCoverComponent implements OnInit {
     // requisition number
     reqNumber: string;
 
+    policy: Policy;
+
     constructor(
         private readonly router: Router,
         private readonly policiesService: PoliciesService,
@@ -150,62 +152,53 @@ export class CancellationCoverComponent implements OnInit {
 
     raiseRequisition(policy: Policy) {
         this.isRaisingRequisition = true;
-        // policy credit note
-        this.policiesService.getCreditNotes().subscribe(creditNotes => {
-            this.creditNote = creditNotes.filter(
-                creditNotePolicy => creditNotePolicy.policy.id == policy.id
-            )[0];
 
-            // temporary
-
-            // this.accountsService.getRequisitions().subscribe(requisitions => {
-            //     this.reqNumber = this.accountsService.generateRequisitionID(
-            //         requisitions.length
-            //     );
-            // });
-
-            console.log('credit note', this.creditNote);
+        this.policiesService.getPolicyById(policy.id).subscribe(policy => {
+            const requisition: IRequisitionModel = {
+                id: v4(),
+                policyNumber: policy.policyNumber,
+                requisitionNumber: this.reqNumber,
+                payee: policy.client,
+                cancellationDate: policy.creditNotes[0].dateCreated,
+                dateCreated: new Date(),
+                approvalStatus: 'Pending',
+                paymentType: 'PYMT',
+                currency: policy.currency,
+                amount: policy.creditNotes[0].creditNoteAmount,
+                paymentStatus: 'UnProcessed',
+                creditNote: policy.creditNotes[0],
+                claim: null
+            };
 
             const policyUpdate: Policy = {
                 ...policy,
                 requisitionStatus: 'Raised'
             };
 
-            const requisition: IRequisitionModel = {
-                id: v4(),
-                policyNumber: policy.policyNumber,
-                requisitionNumber: this.reqNumber,
-                payee: policy.client,
-                cancellationDate: this.creditNote.dateCreated,
-                dateCreated: new Date(),
-                approvalStatus: 'Pending',
-                paymentType: 'PYMT',
-                currency: policy.currency,
-                amount: this.creditNote.creditNoteAmount,
-                paymentStatus: 'UnProcessed'
-            };
+            this.accountsService.createRequisition(requisition).subscribe(
+                res => {
+                    console.log(res);
+                    this.msg.success('Requisition Raised Successfully');
+                    this.isRaisingRequisition = false;
+                    this.router.navigateByUrl('/flosure/accounts/requisitions');
+                },
 
-            this.accountsService
-                .createRequisition(requisition, this.creditNote.id)
-                .subscribe(
-                    res => {
-                        console.log(res);
-                        this.msg.success('Requisition Raised Successfully');
-                        this.isRaisingRequisition = false;
-                        this.router.navigateByUrl(
-                            '/flosure/accounts/requisitions'
-                        );
-                    },
-
-                    err => {
-                        console.log(err);
-                        this.msg.error('Failed to raise Requisition');
-                        this.isRaisingRequisition = false;
-                    }
-                );
+                err => {
+                    console.log(err);
+                    this.msg.error('Failed to raise Requisition');
+                    this.isRaisingRequisition = false;
+                }
+            );
 
             this.policiesService.updatePolicy(policyUpdate);
         });
+
+        // policy credit note
+        // this.policiesService.getCreditNotes().subscribe(creditNotes => {
+        //     this.creditNote = creditNotes.filter(
+        //         x => x.policy.id == policy.id
+        //     )[0];
+        // });
     }
 
     viewPolicyDetails(policy: Policy): void {

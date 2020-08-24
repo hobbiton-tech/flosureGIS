@@ -1,0 +1,89 @@
+<nz-modal [(nzVisible)]="isLossQuantumModalVisible" [nzTitle]="documentTitle" [nzContent]="lossQuantumContent"
+    (nzOnCancel)="closeLossQuantumModal()" (nzOnOk)="closeLossQuantumModal()" nzWidth="85%">
+
+    <ng-template #lossQuantumContent>
+        <nz-spin nzSize="large" nzTip="Processing Claim...." [nzSpinning]="isProcessing">
+            <form nz-form [formGroup]="lossQuantumForm">
+                <div nz-row>
+                    <div nz-col nzSpan="12">
+                        <nz-form-item>
+                            <nz-form-label nzSpan="8" nzRequired>Loss Type</nz-form-label>
+                            <nz-form-control nzSpan="15">
+                                <nz-select nzPlaceHolder="Select Loss Type" formControlName="lossType"
+                                    (ngModelChange)="changeSelectedLossType($event)">
+                                    <nz-option *ngFor="let loss of lossTypeOptions" [nzValue]="loss.value"
+                                        [nzLabel]="loss.label">
+                                    </nz-option>
+                                </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="12">
+                        <div *ngIf="selectedLossType == 'Total Loss'">
+                            <nz-form-item>
+                                <nz-form-label nzSpan="8" nzRequired>Salvage Reserve</nz-form-label>
+                                <nz-form-control nzSpan="15">
+                                    <nz-input-group nzPrefix="{{currentClaim.policy.currency == 'ZMW' ? 'K' : '$'}}">
+                                        <input type="number" nz-input formControlName="salvageReserve" />
+                                    </nz-input-group>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                </div>
+
+                <div nz-row>
+                    <div nz-col nzSpan="12">
+                        <nz-form-item>
+                            <nz-form-label nzSpan="8" nzRequired>Loss Estimate</nz-form-label>
+                            <nz-form-control nzSpan="15">
+                                <nz-input-group nzPrefix="{{currentClaim.policy.currency == 'ZMW' ? 'K' : '$'}}">
+                                    <input type="number" nz-input formControlName="lossEstimate" />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label nzSpan="8" nzRequired>Recommendation</nz-form-label>
+                            <nz-form-control nzSpan="15">
+                                <textarea nz-input formControlName="recommendation"></textarea>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="12">
+                        <nz-form-item>
+                            <nz-form-label nzSpan="8" nzRequired>Adjusted Quantum</nz-form-label>
+                            <nz-form-control nzSpan="15">
+                                <nz-input-group nzPrefix="{{currentClaim.policy.currency == 'ZMW' ? 'K' : '$'}}">
+                                    <input type="number" nz-input formControlName="adjustedQuantum" />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label nzSpan="8">Other Insurances</nz-form-label>
+                            <nz-form-control nzSpan="15">
+                                <nz-select [nzMaxTagCount]="3" nzMode="multiple"
+                                    nzPlaceHolder="Select Other insurance Companies"
+                                    [(ngModel)]="selectedInsuranceCompanies" [ngModelOptions]="{standalone: true}"
+                                    (ngModelChange)="changeSelectedCompaniesList()">
+                                    <nz-option *ngFor="let company of insuranceCompanies"
+                                        [nzLabel]="company.companyName" [nzValue]="company"></nz-option>
+                                </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+                <nz-form-item>
+                    <nz-form-control>
+                        <div style="text-align: center; margin-top: 10px">
+
+                            <button nz-button nzType="primary" style="margin-right: 8px"
+                                (click)="processClaim()">Process</button>
+                            <button nz-button nzType="default">Reset Form</button>
+                        </div>
+                    </nz-form-control>
+                </nz-form-item>
+            </form>
+        </nz-spin>
+    </ng-template>
+
+</nz-modal>

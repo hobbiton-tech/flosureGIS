@@ -14,7 +14,7 @@ import { PoliciesService } from 'src/app/underwriting/services/policies.service'
 import { Router, ActivatedRoute } from '@angular/router';
 import { QuotesService } from '../../services/quotes.service';
 import { ClientsService } from 'src/app/clients/services/clients.service';
-import { ITimestamp } from 'src/app/claims/models/claim.model';
+// import { ITimestamp } from 'src/app/claims/models/claim.model';
 import { IDebitNoteDTO } from '../../models/debit-note.dto';
 import { ICertificateDTO } from '../../models/certificate.dto';
 import { combineLatest, BehaviorSubject, Observable } from 'rxjs';
@@ -778,11 +778,11 @@ export class QuoteDetailsComponent implements OnInit {
         this.isConfirmLoading = false;
     }
 
-    getEndDateTimeStamp(quote: MotorQuotationModel): number {
-        if (!this.quotesLoading) {
-            return (quote.endDate as ITimestamp).seconds;
-        }
-    }
+    // getEndDateTimeStamp(quote: MotorQuotationModel): number {
+    //     if (!this.quotesLoading) {
+    //         return (quote.endDate as ITimestamp).seconds;
+    //     }
+    // }
 
     handleCancel(): void {
         this.isVisible = false;

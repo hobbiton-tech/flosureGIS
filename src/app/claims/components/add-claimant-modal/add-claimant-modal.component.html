@@ -1,0 +1,103 @@
+<nz-modal [(nzVisible)]="isAddClaimantModalVisible" nzTitle="Add Claimant" [nzContent]="claimantDetailsContent"
+    (nzOnCancel)="closeAddClaimantModal()" (nzOnOk)="closeAddClaimantModal()" nzWidth="85%">
+
+    <ng-template #claimantDetailsContent>
+        <nz-spin nzSize="large" nzTip="Adding Claimant...." [nzSpinning]="isAddingClaimant">
+            <form nz-form [formGroup]="claimantDetailsForm">
+                <div nz-row>
+                    <div nz-col nzSpan="8">
+                        <nz-form-item>
+                            <nz-form-label nzSpan="8" nzRequired>First Name</nz-form-label>
+                            <nz-form-control nzSpan="15">
+                                <nz-input-group>
+                                    <input nz-input formControlName="firstName" />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label nzSpan="8">Gender</nz-form-label>
+                            <nz-form-control nzSpan="15">
+                                <nz-select nzPlaceHolder="Select Gender" formControlName="gender">
+                                    <nz-option *ngFor="let gender of genderTypeOptions" [nzValue]="gender.value"
+                                        [nzLabel]="gender.label">
+                                    </nz-option>
+                                </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label nzSpan="8" nzRequired>Phone</nz-form-label>
+                            <nz-form-control nzSpan="15">
+                                <nz-input-group>
+                                    <input nz-input formControlName="phone" />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="8">
+                        <nz-form-item>
+                            <nz-form-label nzSpan="8">Middle Name</nz-form-label>
+                            <nz-form-control nzSpan="15">
+                                <nz-input-group>
+                                    <input nz-input formControlName="middleName" />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label nzSpan="8">ID Type</nz-form-label>
+                            <nz-form-control nzSpan="15">
+                                <nz-select nzPlaceHolder="Select ID type" formControlName="idType">
+                                    <nz-option *ngFor="let idType of idTypeOptions" [nzValue]="idType.value"
+                                        [nzLabel]="idType.label">
+                                    </nz-option>
+                                </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label nzSpan="8">Email</nz-form-label>
+                            <nz-form-control nzSpan="15">
+                                <nz-input-group>
+                                    <input nz-input formControlName="email" />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="8">
+                        <nz-form-item>
+                            <nz-form-label nzSpan="8" nzRequired>Last Name</nz-form-label>
+                            <nz-form-control nzSpan="15">
+                                <nz-input-group>
+                                    <input nz-input formControlName="lastName" />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label nzSpan="8">ID Number</nz-form-label>
+                            <nz-form-control nzSpan="15">
+                                <nz-input-group>
+                                    <input nz-input formControlName="idNumber" />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label nzSpan="8" nzRequired>Address</nz-form-label>
+                            <nz-form-control nzSpan="15">
+                                <textarea nz-input formControlName="physicalAddress"></textarea>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+
+                <nz-form-item>
+                    <nz-form-control>
+                        <div style="text-align: center; margin-top: 10px">
+
+                            <button nz-button nzType="primary" style="margin-right: 8px" (click)="addClaimant()">Add
+                                Claimant</button>
+                            <button nz-button nzType="default">Reset Form</button>
+                        </div>
+                    </nz-form-control>
+                </nz-form-item>
+            </form>
+        </nz-spin>
+    </ng-template>
+</nz-modal>
