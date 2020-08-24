@@ -1,3 +1,6 @@
+import { Claim } from 'src/app/claims/models/claim.model';
+import { CreditNote } from 'src/app/underwriting/documents/models/documents.model';
+
 export class IRequisitionModel {
     id: string;
     policyNumber: string;
@@ -13,6 +16,8 @@ export class IRequisitionModel {
     authorizedBy?: string;
     authorizationDate?: Date;
     paymentStatus?: PaymentStatus;
+    claim?: Claim;
+    creditNote?: CreditNote;
 }
 
 export type ApprovalStatus = 'Approved' | 'Pending';

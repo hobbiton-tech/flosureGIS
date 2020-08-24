@@ -22,6 +22,7 @@ import { environment } from '../environments/environment';
 import 'firebase/storage';
 
 import { SlackService } from './slack.service';
+import { NzListModule } from 'ng-zorro-antd/list';
 
 registerLocaleData(en);
 
@@ -71,8 +72,9 @@ const firebaseConfig = {
         AngularFireModule.initializeApp(firebaseConfig),
         AngularFireDatabaseModule,
         AngularFireStorageModule,
+        NzListModule
     ],
     providers: [{ provide: NZ_I18N, useValue: en_US }, SlackService],
-    bootstrap: [AppComponent],
+    bootstrap: [AppComponent]
 })
 export class AppModule {}

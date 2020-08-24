@@ -1,0 +1,58 @@
+<nz-modal [(nzVisible)]="isClaimApprovalModalVisible" [nzContent]="claimApprovalContent"
+    (nzOnCancel)="closeClaimApprovalModal()" (nzOnOk)="closeClaimApprovalModal()" nzWidth="50%">
+
+
+    <ng-template #claimApprovalContent>
+        <nz-spin nzSize="large" nzTip="Cancelling Claim...." [nzSpinning]="isCancellingClaim">
+            <nz-spin nzSize="large" nzTip="Approving Claim...." [nzSpinning]="isApprovingClaim">
+                <nz-card>
+                    <nz-descriptions nzTitle="Claim Status" nzSize="small">
+                        <nz-descriptions-item nzTitle="Risk Under Policy">
+                            <nz-tag nzColor="blue" *ngIf="isClaimRiskUnderPolicy==true">YES</nz-tag>
+                            <nz-tag [nzColor]="'red'" *ngIf="isClaimRiskUnderPolicy==false">NO</nz-tag>
+                        </nz-descriptions-item>
+                        <!-- <nz-descriptions-item nzTitle="Loss Date Within Policy Period">
+                    <nz-tag nzColor="success" *ngIf="isClaimLossDateUnderPolicyPeriod==true">YES</nz-tag>
+                    <nz-tag [nzColor]="'red'" *ngIf="isClaimLossDateUnderPolicyPeriod==false">NO</nz-tag>
+                </nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Premium Fully Paid">
+                    <nz-tag nzColor="success" *ngIf="isClaimPolicyPremiumFullyPaid==true">YES</nz-tag>
+                    <nz-tag [nzColor]="'red'" *ngIf="isClaimPolicyPremiumFullyPaid==false">NO</nz-tag>
+                </nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Claim Fully Documented">
+                    <nz-tag nzColor="success" *ngIf="isClaimFullyDocumented==true">YES</nz-tag>
+                    <nz-tag [nzColor]="'red'" *ngIf="isClaimFullyDocumented==false">NO</nz-tag>
+                </nz-descriptions-item> -->
+
+                    </nz-descriptions>
+                    <nz-descriptions nzSize="small">
+                        <nz-descriptions-item nzTitle="Loss Date Within Policy Period">
+                            <nz-tag nzColor="blue" *ngIf="isClaimLossDateUnderPolicyPeriod==true">YES</nz-tag>
+                            <nz-tag [nzColor]="'red'" *ngIf="isClaimLossDateUnderPolicyPeriod==false">NO</nz-tag>
+                        </nz-descriptions-item>
+                    </nz-descriptions>
+                    <nz-descriptions nzSize="small">
+                        <nz-descriptions-item nzTitle="Premium Fully Paid">
+                            <nz-tag nzColor="blue" *ngIf="isClaimPolicyPremiumFullyPaid==true">YES</nz-tag>
+                            <nz-tag [nzColor]="'red'" *ngIf="isClaimPolicyPremiumFullyPaid==false">NO</nz-tag>
+                        </nz-descriptions-item>
+                    </nz-descriptions>
+                    <nz-descriptions nzSize="small">
+                        <nz-descriptions-item nzTitle="Claim Fully Documented">
+                            <nz-tag nzColor="blue" *ngIf="isClaimFullyDocumented==true">YES</nz-tag>
+                            <nz-tag [nzColor]="'red'" *ngIf="isClaimFullyDocumented==false">NO</nz-tag>
+                        </nz-descriptions-item>
+                    </nz-descriptions>
+                </nz-card>
+
+
+                <div style="text-align: center; margin-top: 20px">
+
+                    <button nz-button nzType="primary" style="margin-right: 8px"
+                        (click)="approveClaim()">Approve</button>
+                    <button nz-button nzType="danger" (click)="cancelClaim()">Cancel</button>
+                </div>
+            </nz-spin>
+        </nz-spin>
+    </ng-template>
+</nz-modal>

@@ -1,0 +1,23 @@
+<div>
+    <nz-card>
+        <nz-divider nzText="Damage Photos" nzOrientation="left"></nz-divider>
+
+        <ul nz-list [nzDataSource]="data" nzBordered nzSize="large">
+            <li nz-list-item *ngFor="let item of data" nzNoFlex>
+
+                <ul nz-list-item-actions>
+                    <a (click)="openPhotoUploadModal(item)" style="float: right;"
+                        *ngIf="!photoUploads.includes(item)">upload</a>
+                    <a (click)="viewPhotoUpload(item)" style="float: right;"
+                        *ngIf="photoUploads.includes(item)">view</a>
+                </ul>
+                {{ item }}
+                <i nz-icon [nzType]="'check-circle'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#52c41a'"
+                    *ngIf="photoUploads.includes(item)" style="margin-left: 10px;"></i>
+            </li>
+        </ul>
+    </nz-card>
+</div>
+
+<app-photo-upload-modal [isViewPhotoUploadModalVisible]="isPhotoUploadModalVisible"
+    (closeViewPhotoUploadModal)="isPhotoUploadModalVisible=false"></app-photo-upload-modal>

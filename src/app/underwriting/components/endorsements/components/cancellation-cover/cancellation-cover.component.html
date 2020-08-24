@@ -103,7 +103,8 @@
                                 </button>
                             </div>
                             <div *ngIf="policy.status == 'Cancelled'">
-                                <button nz-button nzType="primary" nzSize="small" (click)="raiseRequisition(policy)"
+                                <button nz-button nzType="primary" nzSize="small" nz-popconfirm
+                                    nzTitle="Raise Requisition?" (nzOnConfirm)="raiseRequisition(policy)"
                                     *ngIf="policy.RequisitionStatus != 'Raised'">
                                     Raise Requisition
                                 </button>

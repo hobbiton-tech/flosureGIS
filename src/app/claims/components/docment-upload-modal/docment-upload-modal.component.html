@@ -1,0 +1,14 @@
+<nz-modal [(nzVisible)]="isViewDocumentUploadModalVisible" [nzTitle]="documentTitle" [nzContent]="documentUploadContent"
+    (nzOnCancel)="closeDocumentUploadModal()" (nzOnOk)="closeDocumentUploadModal()" nzWidth="50%">
+
+    <ng-template #documentUploadContent>
+        <nz-spin nzSize="large" nzTip="Uploading Document...." [nzSpinning]="isUploading">
+            <nz-upload nzType="drag" (nzChange)="onFileSelected($event)">
+                <p class="ant-upload-drag-icon">
+                    <i nz-icon nzType="inbox"></i>
+                </p>
+                <p class="ant-upload-text">Click or drag file to this area to upload</p>
+            </nz-upload>
+        </nz-spin>
+    </ng-template>
+</nz-modal>

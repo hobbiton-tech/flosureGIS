@@ -355,7 +355,8 @@ export class PolicyCancellationDetailsComponent implements OnInit {
             currency: this.policyData.currency,
             amount: this.creditNoteAmount = this.policyCancellationTypeForm.get(
                 'premium'
-            ).value
+            ).value,
+            creditNote: creditNote
         };
 
         this.endorsementService

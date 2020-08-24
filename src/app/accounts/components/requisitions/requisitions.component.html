@@ -52,7 +52,8 @@
                             {{requisition.authorisationDate ? (requisition.authorizationDate | date) : '-'}}</td> -->
                             <td [nzAlign]="columnAlignment">
                                 <button n nz-button nzType="primary" style="margin-left: 2px;" nzSize="small"
-                                    (click)="approveRequisition(requisition)" *ngIf="!isApprovingRequisition">
+                                    (nzOnConfirm)="approveRequisition(requisition)" nz-popconfirm
+                                    nzTitle="Approve Requisition?" *ngIf="!isApprovingRequisition">
                                     Approve
                                 </button>
                             </td>

@@ -7,16 +7,19 @@ import { finalize } from 'rxjs/operators';
 import { ClaimsService } from '../../services/claims-service.service';
 import { Peril } from '../../models/peril.model';
 import { PerilService } from '../../services/peril-service.service';
-import { IDocument } from '../../models/claim.model';
+import { Location } from '@angular/common';
 
 import * as _ from 'lodash';
+import { ClaimsProcessingServiceService } from '../../services/claims-processing-service.service';
 
 @Component({
     selector: 'app-claim-details',
     templateUrl: './claim-details.component.html',
-    styleUrls: ['./claim-details.component.scss'],
+    styleUrls: ['./claim-details.component.scss']
 })
 export class ClaimDetailsComponent implements OnInit {
+    isClaimDetailLoading: boolean = false;
+
     claimDetailsForm: FormGroup;
     perilsList: Peril[];
 
@@ -43,13 +46,25 @@ export class ClaimDetailsComponent implements OnInit {
         private formBuilder: FormBuilder,
         private claimsService: ClaimsService,
         private perilService: PerilService,
-        private storage: AngularFireStorage
+        private storage: AngularFireStorage,
+        private claimProcessingService: ClaimsProcessingServiceService,
+        private location: Location
     ) {}
 
     ngOnInit(): void {
+        this.isClaimDetailLoading = true;
+        setTimeout(() => {
+            this.isClaimDetailLoading = false;
+        }, 3000);
+
         //get claimId from parameters
-        this.router.params.subscribe((param) => {
+        this.router.params.subscribe(param => {
             this.claimId = param.id;
+        });
+
+        this.router.data.subscribe(data => {
+            this.claimData = data.claim;
+            console.log(this.claimData);
         });
 
         this.claimDetailsForm = this.formBuilder.group({
@@ -61,39 +76,24 @@ export class ClaimDetailsComponent implements OnInit {
             lossDate: [``, Validators.required],
             notificationDate: [``, Validators.required],
             status: 'resolved',
-            document: [``, Validators.required],
+            document: [``, Validators.required]
         });
 
-        this.claimsService.getClaims().subscribe((claims) => {
-            this.claimsList = claims.filter((x) => x.claimId === this.claimId);
+        // this.claimsService.getClaims().subscribe(claims => {
+        //     this.claimsList = claims.filter(x => x.id === this.claimId);
 
-            this.claimData = claims.filter(
-                (x) => x.claimId === this.claimId
-            )[0];
+        //     this.claimData = claims.filter(x => x.id === this.claimId)[0];
+        //     this.claimProcessingService.changeClaim(this.claimData);
 
-            this.claimDetailsForm
-                .get('serviceProvider')
-                .setValue(this.claimData.serviceProvider);
-            this.claimDetailsForm
-                .get('serviceProviderType')
-                .setValue(this.claimData.serviceType);
-            this.claimDetailsForm
-                .get('claimDescription')
-                .setValue(this.claimData.claimDescription);
-            this.claimDetailsForm.get('risk').setValue(this.claimData.risk);
-            this.claimDetailsForm
-                .get('activity')
-                .setValue(this.claimData.activity);
-            //this.claimDetailsForm.get('lossDate').setValue(this.claimData.lossDate);
-            //this.claimDetailsForm.get('notificationDate').setValue(this.claimData.notificationDate);
-        });
+        //     console.log(this.claimData);
+        // });
 
         //populate perils list
-        this.perilService.getPerils().subscribe((perils) => {
-            this.perilsList = perils.filter(
-                (x) => x.claimId === this.claimData.claimId
-            );
-        });
+        // this.perilService.getPerils().subscribe(perils => {
+        //     this.perilsList = perils.filter(
+        //         x => x.claimId === this.claimData.id
+        //     );
+        // });
     }
 
     //cliam details form submission
@@ -105,15 +105,15 @@ export class ClaimDetailsComponent implements OnInit {
             .snapshotChanges()
             .pipe(
                 finalize(() => {
-                    fileRef.getDownloadURL().subscribe((url) => {
+                    fileRef.getDownloadURL().subscribe(url => {
                         this.url = url;
 
                         const claim = this.claimDetailsForm.value as Claim;
-                        claim.document = { url: url, name: name };
-                        this.claimsService.updateClaimDoc(
-                            this.claimData.claimId,
-                            claim
-                        );
+                        // claim.document = { url: url, name: name };
+                        // this.claimsService.updateClaimDoc(
+                        //     this.claimData.id,
+                        //     claim
+                        // );
                     });
                 })
             )
@@ -130,7 +130,8 @@ export class ClaimDetailsComponent implements OnInit {
         this.addPerilFormDrawerVisible = true;
     }
 
-    intimateClaim(): void {
-        this.route.navigateByUrl('/flosure/claims/claim-transactions');
+    navigateBack(): void {
+        // this.route.navigateByUrl('/flosure/claims/claim-transactions');
+        this.location.back();
     }
 }
