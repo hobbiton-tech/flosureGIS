@@ -86,8 +86,8 @@ export class PolicyDebitNoteDocumentComponent implements OnInit {
     }
 
     coverNote(value) {
-        this.coverN = this.coverNotes.filter((x)=> x.policyId === value.id)[0]
-        return this.coverN.certificateNumber;
+        this.coverN = this.coverNotes.filter(x => x.policyId === value.id)[0];
+        return this.coverN ? this.coverN.certificateNumber : null;
     }
 
     htmlToPdf(quality = 1) {

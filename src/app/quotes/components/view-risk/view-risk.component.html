@@ -1,0 +1,185 @@
+<!-- Risk Deatils Modal starts here-->
+<nz-modal [(nzVisible)]="isViewRiskModalVisible" [nzTitle]="riskTitle" [nzContent]="riskContent"
+    (nzOnCancel)="closeRiskDetails()" (nzOnOk)="closeRiskDetails()" nzWidth="85%">
+    <ng-template #riskTitle>
+        Risk Details
+    </ng-template>
+
+    <ng-template #riskContent>
+        <div nz-row nzGutter="0" style="margin-bottom: 30px;">
+            <div nz-col nzSpan="12"></div>
+            <div nz-col nzSpan="12">
+                <div *ngIf="!isQuoteApproved && !isExtension">
+                    <nz-form-item>
+                        <button style="float: right;" *ngIf="isRiskDetailsEditmode" nz-button nzType="primary"
+                            (click)="riskEditModeOn()">
+                            Edit Risk
+                        </button>
+
+                        <button style="float: right;" *ngIf="!isRiskDetailsEditmode" nz-button nzType="primary"
+                            (click)="saveRisk()">
+                            Save Changes
+                        </button>
+                    </nz-form-item>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comprehensive Risk Details start here -->
+        <div *ngIf="selectedValue?.value === 'Comprehensive'">
+            <!-- vehicle details -->
+            <app-vehicle-details></app-vehicle-details>
+
+            <div style="margin-top: 15px;">
+                <nz-divider nzText="Premium Computation" nzOrientation="left"></nz-divider>
+
+                <!-- premium computation details -->
+                <app-premium-computation-details></app-premium-computation-details>
+                <!-- end of premium computation details -->
+
+                <nz-divider nzOrientation="left"> </nz-divider>
+                <div nz-row nzGutter="0">
+                    <div nz-col nzSpan="8">
+                        <!-- premium computation -->
+                        <app-premium-computation></app-premium-computation>
+
+                        <!-- extensions starts here -->
+                        <app-extensions></app-extensions>
+                        <!-- extensions end here -->
+
+                        <!-- Discount Starts here -->
+                        <app-discounts></app-discounts>
+                        <!-- Discount Ends here -->
+                    </div>
+
+                    <div nz-col nzSpan="8">
+                        <div nz-col nzSpan="24">
+                            <nz-card>
+                                <nz-divider nzText="Extensions" nzOrientation="left"></nz-divider>
+                                <!-- extensions view -->
+                                <app-extensions-view></app-extensions-view>
+                            </nz-card>
+
+                            <div nz-col nzSpan="24">
+                                <div style="margin-top: 5px;">
+                                    <nz-card>
+                                        <nz-divider nzText="Discount" nzOrientation="left"></nz-divider>
+                                        <!-- discounts view -->
+                                        <app-discounts-view></app-discounts-view>
+                                    </nz-card>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div nz-col nzSpan="8">
+                        <div nz-col nzSpan="20" style="float: right;">
+                            <nz-card>
+                                <!-- totals view -->
+                                <app-totals-view></app-totals-view>
+                            </nz-card>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <nz-divider nzText="Schedule" nzOrientation="left"></nz-divider>
+
+            <div nz-row nzGutter="10">
+                <div nz-col nzSpan="12">
+                    <nz-card>
+                        <!-- limits of liability -->
+                        <app-limits-of-liability></app-limits-of-liability>
+                    </nz-card>
+                </div>
+
+                <div nz-col nzSpan="12">
+                    <nz-card>
+                        <nz-divider nzText="Excesses" nzOrientation="left"></nz-divider>
+                        <!-- excesses -->
+                        <app-excesses></app-excesses>
+                    </nz-card>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comprehensive risk details end here -->
+
+        <!-- Third party risk details start here -->
+        <div *ngIf="
+            selectedValue?.value === 'ThirdParty' ||
+            selectedValue?.value === 'ActOnly' ||
+            selectedValue?.value === 'ThirdPartyFireAndTheft'
+        ">
+            <!-- vehicle details -->
+            <app-vehicle-details></app-vehicle-details>
+
+            <div style="margin-top: 15px;">
+                <nz-divider nzText="Premium Computation" nzOrientation="left"></nz-divider>
+                <div nz-row nzGutter="0">
+                    <div nz-col nzSpan="8">
+                        <!-- premium computation -->
+                        <app-premium-computation></app-premium-computation>
+
+                        <!-- extensions starts here -->
+                        <app-extensions></app-extensions>
+                        <!-- extensions end here -->
+
+                        <!-- Discount Starts here -->
+                        <app-discounts></app-discounts>
+                        <!-- Discount Ends here -->
+                    </div>
+
+                    <div nz-col nzSpan="8">
+                        <div nz-col nzSpan="24">
+                            <nz-card>
+                                <nz-divider nzText="Extensions" nzOrientation="left"></nz-divider>
+                                <!-- extensions view -->
+                                <app-extensions-view></app-extensions-view>
+                            </nz-card>
+
+                            <div nz-col nzSpan="24">
+                                <div style="margin-top: 5px;">
+                                    <nz-card>
+                                        <nz-divider nzText="Discount" nzOrientation="left"></nz-divider>
+                                        <!-- discounts view -->
+                                        <app-discounts-view></app-discounts-view>
+                                    </nz-card>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div nz-col nzSpan="8">
+                        <div nz-col nzSpan="20" style="float: right;">
+                            <nz-card>
+                                <!-- totals view -->
+                                <app-totals-view></app-totals-view>
+                            </nz-card>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <nz-divider nzText="Schedule" nzOrientation="left"></nz-divider>
+
+            <div nz-row nzGutter="10">
+                <div nz-col nzSpan="12">
+                    <nz-card>
+                        <!-- limits of liability -->
+                        <app-limits-of-liability></app-limits-of-liability>
+                    </nz-card>
+                </div>
+
+                <div nz-col nzSpan="12">
+                    <nz-card>
+                        <nz-divider nzText="Excesses" nzOrientation="left"></nz-divider>
+                        <!-- excesses -->
+                        <app-excesses></app-excesses>
+                    </nz-card>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</nz-modal>
+<!-- Risk Deatils Modal ends here-->

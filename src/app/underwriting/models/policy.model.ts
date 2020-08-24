@@ -31,8 +31,10 @@ export class Policy {
     paymentPlan: PaymentPlan;
     sourceOfBusiness: string;
     intermediaryName: string;
+    intermediaryId: string;
     remarks?: string;
     term: number;
+    requisitionStatus?: RequisitionStatus;
 }
 
 export interface ITimestamp {
@@ -43,10 +45,11 @@ export interface ITimestamp {
 export type Currency = 'ZMW' | 'Dollar';
 export type ProductType = 'Private' | 'Commercial' | 'Bus/Taxi';
 export type PolicyStatus = 'Lapsed' | 'Active' | 'Cancelled' | 'Expired';
-export type InsuranceType = | 'ThirdParty'
-| 'Comprehensive'
-| 'ThirdPartyFireAndTheft'
-| 'ActOnly';
+export type InsuranceType =
+    | 'ThirdParty'
+    | 'Comprehensive'
+    | 'ThirdPartyFireAndTheft'
+    | 'ActOnly';
 export type ReceiptStatus = 'Unreceipted' | 'Receipted';
 export type PaymentPlan = 'Created' | 'NotCreated';
 export type SourceOfBusinessType =
@@ -54,3 +57,5 @@ export type SourceOfBusinessType =
     | 'Broker'
     | 'Agent'
     | 'Sales Representative';
+
+export type RequisitionStatus = 'Raised' | 'UnRaised';

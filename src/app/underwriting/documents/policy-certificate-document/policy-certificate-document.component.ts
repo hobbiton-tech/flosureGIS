@@ -100,7 +100,7 @@ export class PolicyCertificateDocumentComponent implements OnInit {
         });
     }
 
-    convertRiskDate(risk: RiskModel): number {
-        return (risk.riskStartDate as ITimestamp).seconds * 1000;
-    }
+    // convertRiskDate(risk: RiskModel): number {
+    //     return (risk.riskStartDate as ITimestamp).seconds * 1000;
+    // }
 }

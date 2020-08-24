@@ -123,8 +123,7 @@ export class DirectClientComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.refresh()
-
+        this.refresh();
     }
 
 
@@ -140,7 +139,7 @@ export class DirectClientComponent implements OnInit {
           quotes,
           (x) =>
             x.receiptStatus === 'Unreceipted' &&
-            x.sourceOfBusiness === 'direct'
+            x.sourceOfBusiness === 'Direct' && x.paymentPlan === 'NotCreated'
         );
         this.displayUnreciptedList = this.unreceiptedList;
 
@@ -148,7 +147,7 @@ export class DirectClientComponent implements OnInit {
           quotes,
           (x) =>
             x.receiptStatus === 'Unreceipted' &&
-            x.sourceOfBusiness === 'direct'
+            x.sourceOfBusiness === 'Direct'
         ).length;
         console.log('======= Unreceipt List =======');
         console.log(this.unreceiptedList);
@@ -164,7 +163,7 @@ export class DirectClientComponent implements OnInit {
           receipts.data,
           (x) =>
             x.receipt_status === 'Receipted' &&
-            x.source_of_business === 'direct'
+            x.source_of_business === 'Direct'
         );
         this.displayReceiptedList = this.receiptedList;
         console.log('======= Receipt List =======');
@@ -174,7 +173,7 @@ export class DirectClientComponent implements OnInit {
           receipts.data,
           (x) =>
             x.receipt_status === 'Cancelled' &&
-            x.source_of_business === 'direct'
+            x.source_of_business === 'Direct'
         );
         this.displayCancelledReceiptList = this.cancelReceiptList;
 
@@ -233,15 +232,15 @@ export class DirectClientComponent implements OnInit {
 
 
             this.policy.receiptStatus = 'Receipted';
-          this.policy.paymentPlan = 'Created';
+            this.policy.paymentPlan = 'Created';
 
             this.receiptNum = this._id;
             await this.receiptService
                 .addReceipt(receipt, this.policy.risks[0].insuranceType).subscribe((mess) => {
                     this.message.success('Receipt Successfully created');
                     console.log(mess);
-                  this.policeServices.updatePolicy(this.policy).subscribe((res) => {}, (err) => {
-                    console.log('Update Policy Error', err);})
+                    this.policeServices.updatePolicy(this.policy).subscribe((res) => {}, (err) => {
+                    console.log('Update Policy Error', err); });
                 },
                 (err) => {
                     this.message.warning('Receipt Failed');
@@ -285,7 +284,7 @@ export class DirectClientComponent implements OnInit {
         console.log(this.cancelReceipt);
         this.receiptService.updateReceipt(this.cancelReceipt).subscribe((res) => {
           this.message.success('Receipt Successfully Updated');
-          this.refresh()
+          this.refresh();
         }, (err) => {
           console.log('Check ERR>>>>', err);
           this.message.warning('Receipt Failed');
@@ -307,7 +306,7 @@ export class DirectClientComponent implements OnInit {
         this.reinstateReceipt.remarks = this.cancelForm.controls.remarks.value;
         console.log('<++++++++++++++++++CLAIN+++++++++>');
         console.log(this.reinstateReceipt);
-      this.receiptService.updateReceipt(this.reinstateReceipt).subscribe((res) => {
+        this.receiptService.updateReceipt(this.reinstateReceipt).subscribe((res) => {
         this.message.success('Receipt Successfully Updated');
         this.refresh();
         // const cancel: any[] = res.data.filter((x) => {

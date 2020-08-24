@@ -7,6 +7,7 @@ import {
     ITimestamp
 } from 'src/app/quotes/models/quote.model';
 import { BehaviorSubject } from 'rxjs';
+import { IDiscounts } from 'src/app/quotes/models/discounts.model';
 
 @Component({
     selector: 'app-view-backup-policy-risks',
@@ -105,7 +106,7 @@ export class ViewBackupPolicyRisksComponent implements OnInit {
     loads: LoadModel[] = [];
 
     //dicounts added
-    discounts: DiscountModel[] = [];
+    discounts: IDiscounts[] = [];
 
     // risk upload modal
     isVisible = false;
@@ -320,7 +321,7 @@ export class ViewBackupPolicyRisksComponent implements OnInit {
         this.discounts = risk.discounts;
         this.basicPremium = risk.basicPremium;
         this.premiumLoadingTotal = risk.loadingTotal;
-        this.premiumDiscount = risk.discountTotal;
+        this.premiumDiscount = risk.discountsTotal;
         this.basicPremiumLevy = risk.premiumLevy;
         this.netPremium = risk.netPremium;
     }
@@ -329,13 +330,13 @@ export class ViewBackupPolicyRisksComponent implements OnInit {
     //     return (risk.yearOfManufacture as ITimestamp).seconds * 1000;
     // }
 
-    getStartDateTimeStamp(risk: RiskModel): number {
-        return (risk.riskStartDate as ITimestamp).seconds * 1000;
-    }
+    // getStartDateTimeStamp(risk: RiskModel): number {
+    //     return (risk.riskStartDate as ITimestamp).seconds * 1000;
+    // }
 
-    getEndDateTimeStamp(risk: RiskModel): number {
-        return (risk.riskEndDate as ITimestamp).seconds * 1000;
-    }
+    // getEndDateTimeStamp(risk: RiskModel): number {
+    //     return (risk.riskEndDate as ITimestamp).seconds * 1000;
+    // }
 
     handleOk(): void {
         this.closeViewRiskFormVisible.emit();

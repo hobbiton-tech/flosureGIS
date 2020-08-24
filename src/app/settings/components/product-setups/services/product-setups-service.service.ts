@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 const BASE_URL = 'https://savenda.flosure-api.com';
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
 export class ProductSetupsServiceService {
     constructor(private http: HttpClient) {}
@@ -34,32 +34,27 @@ export class ProductSetupsServiceService {
 
     addClass(dto: IClass): Observable<IClass> {
         return this.http.post<IClass>(
-            'https://savenda.flosure-api.com/class',
+            `${BASE_URL}/class`,
 
             dto
         );
     }
 
     getClasses(): Observable<IClass[]> {
-        return this.http.get<IClass[]>('https://savenda.flosure-api.com/class');
+        return this.http.get<IClass[]>(`${BASE_URL}/class`);
     }
 
     addProduct(dto: IProduct, id: string): Observable<IProduct> {
-        return this.http.post<IProduct>(
-            `https://savenda.flosure-api.com/product/${id}`,
-            dto
-        );
+        return this.http.post<IProduct>(`${BASE_URL}/product/${id}`, dto);
     }
 
     getProducts(id: string): Observable<IProduct[]> {
         return this.http.get<IProduct[]>(
-            `https://savenda.flosure-api.com/product/class-products/${id}`
+            `${BASE_URL}/product/class-products/${id}`
         );
     }
 
     getProductsNo(): Observable<IProduct[]> {
-        return this.http.get<IProduct[]>(
-            `https://savenda.flosure-api.com/product/class-products`
-        );
+        return this.http.get<IProduct[]>(`${BASE_URL}/product/class-products`);
     }
 }

@@ -1,0 +1,107 @@
+<div>
+    <div *ngIf="!isRiskEditMode">
+        <nz-form-item>
+            <nz-form-label [nzSpan]="10" nzFor="load">Add Discount
+            </nz-form-label>
+            <nz-form-control nzSpan="9">
+                <nz-select name="load" nzPlaceHolder="Select Discount" [(ngModel)]="
+                        selectedDiscountValue
+                    " nzAllowClear style="
+                                width: 100%;
+                            " [ngModelOptions]="{
+                        standalone: true
+                    }" nzLabel="select discount">
+                    <nz-option *ngFor="
+                            let option of discountOptions
+                        " [nzValue]="
+                            option
+                        " [nzLabel]="
+                            option.label
+                        "></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+    </div>
+
+
+    <div *ngIf="selectedDiscountValue">
+        <nz-form-item>
+            <nz-form-label nzSpan="10">Discount Input
+                Type</nz-form-label>
+            <nz-form-control nzSpan="9">
+                <nz-select [(ngModel)]="
+                            selectedDiscountInputTypeValue
+                        " nzAllowClear nzPlaceHolder="Select input type" [ngModelOptions]="{
+                            standalone: true
+                        }">
+                    <nz-option nzValue="rate" nzLabel="Rate">
+                    </nz-option>
+                    <nz-option nzValue="amount" nzLabel="Amount">
+                    </nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+        <div *ngIf=" selectedDiscountValue &&
+                selectedDiscountInputTypeValue ==
+                    'amount'
+                ">
+            <nz-form-item>
+                <nz-form-label nzSpan="10" nzRequired>Amount
+                </nz-form-label>
+                <nz-form-control nzSpan="9">
+                    <input nz-input nzPlaceHolder="" name="DiscountAmount" [(ngModel)]="
+                                discountAmount
+                            " [ngModelOptions]="{
+                                standalone: true
+                            }" type="number" />
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div *ngIf="
+            selectedDiscountInputTypeValue ==
+                    'rate'
+                ">
+            <nz-form-item>
+                <nz-form-label [nzSpan]="10" nzFor="premiumDiscountRate">
+                    Rate
+                </nz-form-label>
+                <nz-form-control nzSpan="9">
+                    <nz-input-group nzCompact>
+                        <input nz-input disabled="true" value="%" style="
+                                            width: 30%;
+                                        " />
+                        <input nz-input nzPlaceHolder="" name="premiumDiscountRate" [(ngModel)]="
+                                    premiumDiscountRate
+                                " style="
+                                            width: 70%;
+                                        " [ngModelOptions]="{
+                                    standalone: true
+                                }" type="number" />
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <nz-form-item>
+            <nz-form-control [nzXs]="{
+                        span: 24,
+                        offset: 4
+                    }" [nzSm]="{
+                        span: 20,
+                        offset: 10
+                    }">
+                <button nz-button nzType="primary" [nzLoading]="
+                            computeDiscountIsLoading
+                        " (click)="
+                        selectedDiscountInputTypeValue ===
+                            'rate'
+                                ? handleDiscount(
+                                    selectedDiscountValue.label
+                                  )
+                                : addDiscountAmount(selectedDiscountValue.label)
+                        ">
+                    Add Discount
+                </button>
+            </nz-form-control>
+        </nz-form-item>
+    </div>
+</div>

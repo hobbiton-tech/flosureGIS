@@ -66,7 +66,7 @@
                                 *ngFor="
                                     let intermediary of intermediaryTable.data
                                 "
-                                
+
                             >
                                 <td>
                                     {{
@@ -220,32 +220,34 @@
                     <form [formGroup]="commissionSetupForm">
                         <div>
                             <nz-form-item>
-                                <nz-form-label
-                                    [nzSpan]="10"
-                                    nzFor="intermediaryName"
-                                    >Intermediary Name
-                                </nz-form-label>
+<!--                                <nz-form-label-->
+<!--                                    [nzSpan]="10"-->
+<!--                                    nzFor="intermediaryName"-->
+<!--                                    >Intermediary Name-->
+<!--                                </nz-form-label>-->
                                 <nz-form-control nzSpan="10">
-                                    <nz-select
-                                        nzPlaceHolder="Select intermediary name"
-                                        style="width: 100%;"
-                                        formControlName="intermediaryName"
-                                        [nzDisabled]="!isEditmode"
-                                    >
-                                        <div
-                                            *ngFor="
-                                                let intermediary of intermediariesList
-                                            "
-                                        >
-                                            <nz-option
-                                                [nzValue]="
-                                                    selectedIntermediary ? (selectedIntermediary.companyName ? selectedIntermediary.companyName : selectedIntermediary.contactFirstName + ' ' + selectedIntermediary.contactLastName) : ''
-                                                "
-                                                [nzLabel]="selectedIntermediary ? (selectedIntermediary.companyName ? selectedIntermediary.companyName : selectedIntermediary.contactFirstName + ' ' + selectedIntermediary.contactLastName) : ''"
-                                            >
-                                            </nz-option>
-                                        </div>
-                                    </nz-select>
+
+                                  <input nz-input formControlName="intermediaryName" [hidden]="true" />
+<!--                                    <nz-select-->
+<!--                                        nzPlaceHolder="Select intermediary name"-->
+<!--                                        style="width: 100%;"-->
+<!--                                        -->
+<!--                                        [nzDisabled]="!isEditmode"-->
+<!--                                    >-->
+<!--                                        <div-->
+<!--                                            *ngFor="-->
+<!--                                                let intermediary of intermediariesList-->
+<!--                                            "-->
+<!--                                        >-->
+<!--                                            <nz-option-->
+<!--                                                [nzValue]="-->
+<!--                                                    selectedIntermediary-->
+<!--                                                "-->
+<!--                                                [nzLabel]="selectedIntermediary ? (selectedIntermediary.companyName ? selectedIntermediary.companyName : selectedIntermediary.contactFirstName + ' ' + selectedIntermediary.contactLastName) : ''"-->
+<!--                                            >-->
+<!--                                            </nz-option>-->
+<!--                                        </div>-->
+<!--                                    </nz-select>-->
                                 </nz-form-control>
                             </nz-form-item>
                         </div>

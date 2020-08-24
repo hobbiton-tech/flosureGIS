@@ -11,8 +11,8 @@ import { NzMessageService } from 'ng-zorro-antd';
     styleUrls: ['./add-product.component.scss']
 })
 export class AddProductComponent implements OnInit {
-    //loading feedback
-    addingProduct: boolean = false;
+    // loading feedback
+    addingProduct = false;
 
     @Input()
     isAddProductFormDrawerVisible: boolean;
@@ -20,15 +20,15 @@ export class AddProductComponent implements OnInit {
     @Output()
     closeAddProductFormDrawerVisible: EventEmitter<any> = new EventEmitter();
 
-    update: boolean = true;
+    update = true;
 
-    //product details form
+    // product details form
     productForm: FormGroup;
 
-    //classId
+    // classId
     classId: string;
 
-    //ProductId
+    // ProductId
     productId: string;
 
     classesList: IClass[];
@@ -82,7 +82,7 @@ export class AddProductComponent implements OnInit {
     }
 
     submitProduct() {
-        for (let i in this.productForm.controls) {
+        for (const i in this.productForm.controls) {
             this.productForm.controls[i].markAsDirty();
             this.productForm.controls[i].updateValueAndValidity();
         }

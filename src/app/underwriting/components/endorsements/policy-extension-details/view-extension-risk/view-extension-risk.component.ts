@@ -9,6 +9,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { Policy } from 'src/app/underwriting/models/policy.model';
 import * as moment from 'moment';
+import { IDiscounts } from 'src/app/quotes/models/discounts.model';
 
 @Component({
     selector: 'app-view-extension-risk',
@@ -122,7 +123,7 @@ export class ViewExtensionRiskComponent implements OnInit {
     loads: LoadModel[] = [];
 
     //dicounts added
-    discounts: DiscountModel[] = [];
+    discounts: IDiscounts[] = [];
 
     // risk upload modal
     isVisible = false;
@@ -352,13 +353,13 @@ export class ViewExtensionRiskComponent implements OnInit {
                 .get('chassisNumber')
                 .setValue(risk.chassisNumber);
             this.riskDetailsForm.get('productType').setValue(risk.productType);
-            this.riskDetailsForm
-                .get('riskStartDate')
-                .setValue(this.getStartDateTimeStamp(risk));
+            // this.riskDetailsForm
+            //     .get('riskStartDate')
+            //     .setValue(this.getStartDateTimeStamp(risk));
             this.riskDetailsForm.get('riskQuarter').setValue(risk.riskQuarter);
-            this.riskDetailsForm
-                .get('riskEndDate')
-                .setValue(this.getEndDateTimeStamp(risk));
+            // this.riskDetailsForm
+            //     .get('riskEndDate')
+            //     .setValue(this.getEndDateTimeStamp(risk));
             this.riskDetailsForm.get('color').setValue(risk.color);
         }
 
@@ -370,7 +371,7 @@ export class ViewExtensionRiskComponent implements OnInit {
         this.discounts = risk.discounts;
         this.basicPremium = risk.basicPremium;
         this.premiumLoadingTotal = risk.loadingTotal;
-        this.premiumDiscount = risk.discountTotal;
+        this.premiumDiscount = risk.discountsTotal;
         this.basicPremiumLevy = risk.premiumLevy;
         this.netPremium = risk.netPremium;
     }
@@ -444,13 +445,13 @@ export class ViewExtensionRiskComponent implements OnInit {
     //     return (risk.yearOfManufacture as ITimestamp).seconds * 1000;
     // }
 
-    getStartDateTimeStamp(risk: RiskModel): number {
-        return (risk.riskStartDate as ITimestamp).seconds * 1000;
-    }
+    // getStartDateTimeStamp(risk: RiskModel): number {
+    //     return (risk.riskStartDate as ITimestamp).seconds * 1000;
+    // }
 
-    getEndDateTimeStamp(risk: RiskModel): number {
-        return (risk.riskEndDate as ITimestamp).seconds * 1000;
-    }
+    // getEndDateTimeStamp(risk: RiskModel): number {
+    //     return (risk.riskEndDate as ITimestamp).seconds * 1000;
+    // }
 
     handleOk(): void {
         this.closeViewRiskFormVisible.emit();
@@ -494,7 +495,6 @@ export class ViewExtensionRiskComponent implements OnInit {
 
         if (moment(riskEnd).isSameOrAfter(this.policyEndDate)) {
             return false;
-            
         } else {
             this.riskDetailsForm.get('riskEndDate').markAsDirty;
             return true;

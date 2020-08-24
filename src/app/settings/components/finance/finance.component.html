@@ -1,0 +1,104 @@
+<nz-spin nzSize="large" nzTip="Finance Setups Loading...." [nzSpinning]="financeSetupsIsLoading">
+    <div style="margin: 10px;">
+        <div style="margin-bottom: 20px; background: #fff;">
+            <nz-page-header>
+                <nz-page-header-title>Finance Setups</nz-page-header-title>
+            </nz-page-header>
+        </div>
+
+        <nz-card>
+            <nz-divider nzText="Bank Accounts" nzOrientation="left"></nz-divider>
+            <div nz-row [nzGutter]="24">
+                <div nz-col nzSpan="12">
+                    <div style="margin-bottom: 10px; width: 60%;">
+                        <nz-input-group [nzSuffix]="suffixIconSearch">
+                            <input type="text" nz-input placeholder="" [(ngModel)]="searchString"
+                                (ngModelChange)="searchBankAccounts($event)" />
+                        </nz-input-group>
+                        <ng-template #suffixIconSearch>
+                            <i nz-icon nzType="search"></i>
+                        </ng-template>
+                    </div>
+                </div>
+
+                <div nz-col nzSpan="12">
+                    <button nz-button nzType="primary" style="float: right;" (click)="addBankAccount()">Add New Bank
+                        Account</button>
+                </div>
+            </div>
+
+            <nz-table #bankAccountsTable [nzData]="displayBankAccountsList" [nzSize]="'small'" [nzBordered]="true">
+                <thead>
+                    <tr>
+                        <th>Bank</th>
+                        <th>Branch</th>
+                        <th>Account Name</th>
+                        <th>Account No</th>
+                        <th>Account Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let bank of bankAccountsTable.data" style="cursor: pointer;">
+                        <td>{{bank.bank}}</td>
+                        <td>{{bank.branch}}</td>
+                        <td>{{bank.accountName}}</td>
+                        <td>{{bank.accountNumber}}</td>
+                        <td>{{bank.accountType}}</td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </nz-card>
+
+        <div style="margin-top: 10px;">
+            <nz-card>
+                <nz-divider nzText="Cheque Setups" nzOrientation="left"></nz-divider>
+                <div nz-row [nzGutter]="24">
+                    <div nz-col nzSpan="12">
+                        <div style="margin-bottom: 10px; width: 60%;">
+                            <nz-input-group [nzSuffix]="suffixIconSearch">
+                                <input type="text" nz-input placeholder="" [(ngModel)]="searchChequeString"
+                                    (ngModelChange)="searchCheques($event)" />
+                            </nz-input-group>
+                            <ng-template #suffixIconSearch>
+                                <i nz-icon nzType="search"></i>
+                            </ng-template>
+                        </div>
+                    </div>
+
+                    <div nz-col nzSpan="12">
+                        <button nz-button nzType="primary" style="float: right;" (click)="addChequeLot()">New Cheque
+                            Lot</button>
+                    </div>
+                </div>
+
+                <nz-table #chequeTable [nzData]="displayChequeList" [nzSize]="'small'" [nzBordered]="true">
+                    <thead>
+                        <tr>
+                            <th>Bank Account</th>
+                            <th>Lot</th>
+                            <th>Cheque From</th>
+                            <th>Cheque To</th>
+                            <th>Next Cheque</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let cheque of chequeTable.data" style="cursor: pointer;">
+                            <td>{{cheque.bankAccount.bank}} {{cheque.bankAccount.accountName}}</td>
+                            <td>{{cheque.chequeLot}}</td>
+                            <td>{{cheque.chequeFrom}}</td>
+                            <td>{{cheque.chequeTo}}</td>
+                            <td>{{cheque.chequeNextCount + 1}}</td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </nz-card>
+        </div>
+    </div>
+
+    <app-add-bank-account [isAddBankAccountModalVisible]="isAddBankAccountModalVisible"
+        (closeAddBankAccountModalEmitter)="isAddBankAccountModalVisible=false"></app-add-bank-account>
+
+    <app-add-cheque-lot [isAddChequeLotModalVisible]="isAddChequeLotModalVisible"
+        (closeAddChequeLotModalEmitter)="isAddChequeLotModalVisible=false"></app-add-cheque-lot>
+
+</nz-spin>

@@ -29,8 +29,8 @@ import { HttpClient } from '@angular/common/http';
     styleUrls: ['./create-client.component.scss'],
 })
 export class CreateClientComponent implements OnInit, AfterViewInit {
-    //feedback loading
-    creatingClient: boolean = false;
+    // feedback loading
+    creatingClient = false;
     defaultDate = new Date();
     individualClients: IIndividualClient[] = [];
     corporateClients: ICorporateClient[] = [];
@@ -146,7 +146,7 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
                     observer.complete();
                 });
             }, 1000);
-        });
+        })
 
     companyRegAsyncValidator = (control: FormControl) =>
         new Observable((observer: Observer<ValidationErrors | null>) => {
@@ -174,7 +174,7 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
                     observer.complete();
                 });
             }, 1000);
-        });
+        })
 
     ngAfterViewInit(): void {
         this.selectedClientType = 'Corporate';
@@ -209,7 +209,7 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
 
                 console.log(client);
                 await this.clientsService.addIndividualClient(client).subscribe(
-                    async (res) => {
+                    async (resa) => {
                         this.creatingClient = false;
                         this.msg.success('Client Created successfully');
                         this.router.navigateByUrl(
@@ -243,7 +243,7 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
                 client.clientID = this.clientID;
                 console.log(client);
                 await this.clientsService.addCorporateClient(client).subscribe(
-                    async (res) => {
+                    async (resb) => {
                         this.creatingClient = true;
                         this.msg.success('Client Created successfully');
                         this.router.navigateByUrl(
@@ -265,7 +265,7 @@ export class CreateClientComponent implements OnInit, AfterViewInit {
 
     submitIndividualClient(): void {
         console.log('Submittingbbb');
-        for (let i in this.individualClientForm.controls) {
+        for (const i in this.individualClientForm.controls) {
             /// validation;
             this.individualClientForm.controls[i].markAsDirty();
             this.individualClientForm.controls[i].updateValueAndValidity();

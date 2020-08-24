@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
-    styleUrls: ['./dashboard.component.scss'],
+    styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
     clientsCount = 0;
@@ -46,50 +46,49 @@ export class DashboardComponent implements OnInit {
 
     ngOnInit(): void {
         // Using reduce to combine all the clients.
-        this.clientsService.getAllClients().subscribe((clients) => {
+        this.clientsService.getAllClients().subscribe(clients => {
             const combined = [clients[0], clients[1]].reduce(
                 (x, y) => [...x, ...y],
                 []
             );
 
             this.clientsCount = combined.length;
-            
+
             this.clientsLoading = false;
         });
-        this.claims.getClaims().subscribe((claims) => {
+        this.claims.getClaims().subscribe(claims => {
             console.log('SOME', claims);
             this.claimsCount = claims.length;
             this.claimsLoading = false;
         });
-        this.policiesService.getPolicies().subscribe((policies) => {
+        this.policiesService.getPolicies().subscribe(policies => {
             this.policiesCount = policies.length;
             this.totalPolicies = policies.length;
-            
-            
+
             this.activePolices = _.filter(
                 policies,
-                (x) => x.status === 'Active'
+                x => x.status === 'Active'
             ).length;
             this.inactivePolicies = _.filter(
                 policies,
-                (x) => x.status === 'Expired'
+                x => x.status === 'Expired'
             ).length;
             this.policiesLoading = false;
         });
 
-        this.policiesService.getPolicies().subscribe((activePolices) => {
+        this.policiesService.getPolicies().subscribe(activePolices => {
             this.activePoliciesList = _.filter(
                 activePolices,
-                (x) => x.status === 'Active'
+                x => x.status === 'Active'
             );
             this.displayActivePoliciesList = this.activePoliciesList;
             console.log(this.activePoliciesList);
         });
 
-        this.policiesService.getPolicies().subscribe((expiredPolices) => {
+        this.policiesService.getPolicies().subscribe(expiredPolices => {
             this.expiredPoliciesList = _.filter(
                 expiredPolices,
-                (x) => x.status === 'Expired'
+                x => x.status === 'Expired'
             );
             this.displayExpiredPoliciesList = this.expiredPoliciesList;
             console.log(this.expiredPoliciesList);
@@ -107,11 +106,21 @@ export class DashboardComponent implements OnInit {
             this.displayActivePoliciesList = this.activePoliciesList;
         }
 
-        this.displayActivePoliciesList = this.activePoliciesList.filter(policy => {   
-            return (policy.policyNumber.toLowerCase().includes(value.toLowerCase())
-            || policy.client.toLocaleLowerCase().includes(value.toLowerCase()) 
-            || policy.preparedBy.toLocaleLowerCase().includes(value.toLowerCase()));
-        });
+        this.displayActivePoliciesList = this.activePoliciesList.filter(
+            policy => {
+                return (
+                    policy.policyNumber
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    policy.client
+                        .toLocaleLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    policy.user
+                        .toLocaleLowerCase()
+                        .includes(value.toLowerCase())
+                );
+            }
+        );
     }
 
     searchExpiredPolicies(value: string): void {
@@ -119,10 +128,20 @@ export class DashboardComponent implements OnInit {
             this.displayActivePoliciesList = this.activePoliciesList;
         }
 
-        this.displayExpiredPoliciesList = this.expiredPoliciesList.filter(policy => {   
-            return (policy.policyNumber.toLowerCase().includes(value.toLowerCase())
-            || policy.client.toLocaleLowerCase().includes(value.toLowerCase()) 
-            || policy.preparedBy.toLocaleLowerCase().includes(value.toLowerCase()));
-        });
+        this.displayExpiredPoliciesList = this.expiredPoliciesList.filter(
+            policy => {
+                return (
+                    policy.policyNumber
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    policy.client
+                        .toLocaleLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    policy.user
+                        .toLocaleLowerCase()
+                        .includes(value.toLowerCase())
+                );
+            }
+        );
     }
 }

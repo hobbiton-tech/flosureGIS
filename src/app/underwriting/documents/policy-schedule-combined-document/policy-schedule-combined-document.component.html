@@ -168,25 +168,17 @@
                 <th>Insurance Provided</th>
             </tr>
             <tr *ngFor="let risk of policy.risks">
-                <td>{{ risk.regNumber }}</td>
-                <td>{{ risk.vehicleMake }}/{{ risk.vehicleModel }}</td>
-                <td>{{ risk.engineNumber }}</td>
-                <td>{{ risk.chassisNumber }}</td>
-                <td>{{ risk.cubicCapacity }}</td>
-                <td>{{ getYearOfManufacture(risk) }}</td>
-                <td>{{ risk.seatingCapacity }}</td>
-                <td>{{ risk.estimatedValue ? risk.estimatedValue : 'TBA' }}</td>
-                <td>
-                    {{
-                        risk.insuranceType == 'ThirdParty'
-                            ? 'Third Party'
-                            : risk.insuranceType == 'ActOnly'
-                            ? 'Act Only'
-                            : risk.insuranceType == 'ThirdPartyFireAndTheft'
-                            ? 'Fire and Theft'
-                            : 'Comprehensive'
-                    }}
-                </td>
+                <td>{{risk.regNumber}}</td>
+                <td>{{risk.vehicleMake}}/{{risk.vehicleModel}}</td>
+                <td>{{risk.engineNumber}}</td>
+                <td>{{risk.chassisNumber}}</td>
+                <td>{{risk.cubicCapacity}}</td>
+                <td>{{getYearOfManufacture(risk)}}</td>
+                <td>{{risk.seatingCapacity}}</td>
+                <td>{{risk.estimatedValue ? risk.estimatedValue : 'TBA'}}</td>
+                <td>{{risk.insuranceType}}</td>
+                <!-- <td>{{risk.insuranceType == 'ThirdParty' ? 'Third Party' : (risk.insuranceType == 'ActOnly' ? 'Act Only' : (risk.insuranceType == 'ThirdPartyFireAndTheft' ? 'Fire and Theft' : 'Comprehensive'))}}
+                </td> -->
             </tr>
         </table>
         <br />
@@ -208,59 +200,35 @@
                 Where the insurance Provided is “Third Party” Sections I of this
                 Policy is cancelled
             </li>
-            <li
-                *ngIf="
-                    policy.risks[0].limitsOfLiability[0].liabilityType[0] ===
-                    'combinedLimits'
-                "
-            >
+            <li *ngIf="policy.risks[0].limitsOfLiability[0].liabilityType[0] === 'combinedLimits'">
                 <p style="font-weight: bold;">Limits of Liability</p>
                 <p>Limits of the amount of the company's liability under</p>
-                <p>
-                    <span style="font-weight: bold;">Combined</span>Risk :
-                    <span style="font-weight: bold;"
-                        >K{{ combinedLimits }}</span
-                    >
-                </p>
+                <p><span style="font-weight: bold;">Combined</span>Risk : <span
+                        style="font-weight: bold;">K{{combinedLimits}}</span></p>
+
+
             </li>
 
-            <li
-                *ngIf="
-                    policy.risks[0].limitsOfLiability[0].liabilityType[0] !==
-                    'combinedLimits'
-                "
-            >
+            <li *ngIf="policy.risks[0].limitsOfLiability[0].liabilityType[0] !== 'combinedLimits'">
                 <p>Limit of the amount of the Company’s liability under</p>
-                <p>
-                    <span style="font-weight: bold;">Section II</span> -1 (a)
-                    and 2 (a) (Liability to Third Parties – death bodily injury)
-                    in respect of any one claim or series Of claims arising out
-                    of one event:
-                    <span style="font-weight: bold;"
-                        >K{{ deathAndInjuryPerEvent | number: '1.2-2' }} per
-                        event / K{{
-                            deathAndInjuryPerPerson | number: '1.2-2'
-                        }}
-                        per person</span
-                    >
-                </p>
-                <p>
-                    <span style="font-weight: bold;">Section II</span> - 1 (b)
-                    and 2 (b) (Liability to third Parties – Property Damage) in
-                    respect of any claim or series Of claims arising out of one
-                    event:
-                    <span style="font-weight: bold;"
-                        >K{{ propertyDamage | number: '1.2-2' }}</span
-                    >
-                    <span
-                        >- arising from loss of use of a motor vehicle which is
-                        limited to in respect of any one claim or series of
-                        claims arising out of one Event –
-                        <span style="font-weight: bold;">NIL</span> per
-                        event</span
-                    >
-                </p>
+                <p><span style="font-weight: bold;">Section II</span> -1 (a) and 2 (a) (Liability to Third Parties –
+                    death bodily injury) in respect of any one
+                    claim or series
+                    Of claims arising out of one event: <span
+                        style="font-weight: bold;">K{{deathAndInjuryPerEvent | number: '1.2-2'}} per event /
+                        K{{deathAndInjuryPerPerson | number: '1.2-2'}} per
+                        person</span></p>
+                <p><span style="font-weight: bold;">Section II</span> - 1 (b) and 2 (b) (Liability to third Parties –
+                    Property Damage) in respect of any claim
+                    or series
+                    Of claims arising out of one event: <span
+                        style="font-weight: bold;">K{{propertyDamage | number: '1.2-2'}}</span>
+                    <span>- arising from loss of use of a motor vehicle which is limited to in respect of any one claim
+                        or series of claims arising out of one
+                        Event – <span style="font-weight: bold;">NIL</span> per event</span></p>
+
             </li>
+
 
             <!---
             <li>
