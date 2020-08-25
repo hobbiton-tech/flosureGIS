@@ -46,7 +46,7 @@ export class AgentClientComponent implements OnInit {
     reinstateReceipt: IReceiptModel = new IReceiptModel();
     size = 'large';
     allocationPolicy: AllocationPolicy;
-    allocationReceipt: AllocationReceipt
+    allocationReceipt: AllocationReceipt;
 
   allocationPolicies: any[] = [];
     allocationsReceipts: any[] = [];
@@ -138,7 +138,7 @@ export class AgentClientComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.refresh()
+        this.refresh();
     }
 
 
@@ -173,7 +173,7 @@ export class AgentClientComponent implements OnInit {
         this.allocationPolicies = allocationPolicies.data;
       });
 
-      this.allocationsService.getAllocationReceipt().subscribe((allocationsReceipts) =>{
+      this.allocationsService.getAllocationReceipt().subscribe((allocationsReceipts) => {
         this.allocationsReceipts = allocationsReceipts.data;
       });
 
@@ -211,7 +211,7 @@ export class AgentClientComponent implements OnInit {
     }
 
     compareFn = (o1: any, o2: any) =>
-        o1 && o2 ? o1.value === o2.value : o1 === o2;
+        o1 && o2 ? o1.value === o2.value : o1 === o2
 
     log(value): void {
         console.log('Receipts', this.listofUnreceiptedReceipts);
@@ -270,14 +270,14 @@ export class AgentClientComponent implements OnInit {
 
 
 
-          this.allocationPolicy.balance = 0;
-          this.allocationPolicy.settlements = Number(this.policy.netPremium);
-          this.allocationPolicy.status = 'Allocated';
+            this.allocationPolicy.balance = 0;
+            this.allocationPolicy.settlements = Number(this.policy.netPremium);
+            this.allocationPolicy.status = 'Allocated';
 
 
 
 
-          this.allocationReceipt = {
+            this.allocationReceipt = {
             allocated_amount: Number(this.policy.netPremium),
             amount: Number(this.policy.netPremium),
             intermediary_id: this.policy.intermediaryId,
@@ -286,16 +286,16 @@ export class AgentClientComponent implements OnInit {
             receipt_number: '',
             remaining_amount: 0,
             status: 'Allocated'
-          }
+          };
 
 
-          this.policy.receiptStatus = 'Receipted';
-          this.policy.paymentPlan = 'Created';
+            this.policy.receiptStatus = 'Receipted';
+            this.policy.paymentPlan = 'Created';
             this.receiptNum = this._id;
 
 
-          if (this.commissionPayments === undefined || this.commissionPayments.length == 0) {
-            this.commissionPayment = {
+            if (this.commissionPayments === undefined || this.commissionPayments === null || this.commissionPayments.length === 0) {
+            const commissionPayment = {
               agent_id: this.policy.intermediaryId,
               agent_name: this.policy.intermediaryName,
               commission_amount: this.allocationPolicy.commission_due,
@@ -303,11 +303,13 @@ export class AgentClientComponent implements OnInit {
               remaining_amount: 0,
               status: 'Not Paid',
               agent_type: 'Agent'
-            }
+            };
 
-            this.commissionPaymentService.createCPayment(this.commissionPayment).subscribe((comm) => {}, (commErr) => {
-              this.message.error(commErr)
-            })
+            this.commissionPaymentService.createCPayment(commissionPayment).subscribe((comm) => {
+              console.log('Commission Payment>>>', comm);
+            }, (commErr) => {
+              this.message.error(commErr);
+            });
           } else {
             for (const c of this.commissionPayments) {
 
@@ -320,34 +322,31 @@ export class AgentClientComponent implements OnInit {
                   remaining_amount: 0,
                   status: 'Not Paid',
                   agent_type: 'Agent'
-                }
-
-
-
+                };
 
                 this.commissionPaymentService.createCPayment(this.commissionPayment).subscribe((comm) => {}, (commErr) => {
-                  this.message.error(commErr)
-                })
-                break
+                  this.message.error(commErr);
+                });
+                break;
               }
 
               if (c.agent_id ===  this.policy.intermediaryId && c.status === 'Not Paid') {
                 // this.commissionAmount = this.commissionAmount + c.commission_amount;
                 c.commission_amount = Number(c.commission_amount + this.allocationPolicy.commission_due);
 
-                console.log("checking C>>>", c);
+                console.log('checking C>>>', c);
 
                 this.commissionPaymentService.updateCPayment(c).subscribe((commP) => {}, (comPErr) => {
-                  this.message.error(comPErr)
+                  this.message.error(comPErr);
                 });
 
-                break
+                break;
               }
             }
           }
 
 
-          this.http.get<any>(
+            this.http.get<any>(
               `https://number-generation.flosure-api.com/savenda-receipt-number/1`
             )
             .subscribe(async (res) => {
@@ -369,9 +368,9 @@ export class AgentClientComponent implements OnInit {
                     console.log('Allocation Policy Res>>>', policyRes);
                   }, (policyErr) => {
                     this.message.error(policyErr);
-                  })
+                  });
 
-                  this.policeServices.updatePolicy(this.policy).subscribe((res) => {}, (err) => {
+                  this.policeServices.updatePolicy(this.policy).subscribe((resP) => {}, (err) => {
                     console.log('Update Policy Error', err);
                   });
 
@@ -433,7 +432,7 @@ export class AgentClientComponent implements OnInit {
         console.log(this.cancelReceipt);
         this.receiptService.updateReceipt(this.cancelReceipt).subscribe((res) => {
           this.message.success('Receipt Successfully Updated');
-          this.refresh()
+          this.refresh();
         }, (err) => {
           console.log('Check ERR>>>>', err);
           this.message.warning('Receipt Failed');
@@ -458,7 +457,7 @@ export class AgentClientComponent implements OnInit {
 
         this.receiptService.updateReceipt(this.reinstateReceipt).subscribe((res) => {
           this.message.success('Receipt Successfully Updated');
-          this.refresh()
+          this.refresh();
         }, (err) => {
           console.log('Check ERR>>>>', err);
           this.message.warning('Receipt Failed');
@@ -498,7 +497,7 @@ export class AgentClientComponent implements OnInit {
         this.paymentMethod = value;
     }
 
-    //Test Search Code
+    // Test Search Code
 
     searchUnR(value: string): void {
       console.log(value);
@@ -516,17 +515,14 @@ export class AgentClientComponent implements OnInit {
       });
   }
 
-  searchR(value: string): void
-  {
+  searchR(value: string): void {
     console.log(value);
-    if (value === ' ' || !value)
-    {
+    if (value === ' ' || !value) {
       this.displayReceiptedList = this.receiptedList;
 
     }
 
-    this.displayReceiptedList = this.receiptedList.filter((receip) =>
-    {
+    this.displayReceiptedList = this.receiptedList.filter((receip) => {
         return (
           receip.receipt_number.toLowerCase().includes(value.toLowerCase()) ||
           receip.on_behalf_of.toLowerCase().includes(value.toLowerCase())
@@ -535,15 +531,12 @@ export class AgentClientComponent implements OnInit {
     });
 }
 
-searchCR(value: string): void
-{
-  if (value === ' ' || !value)
-  {
+searchCR(value: string): void {
+  if (value === ' ' || !value) {
       this.displayCancelledReceiptList = this.cancelReceiptList;
   }
 
-  this.displayCancelledReceiptList = this.cancelReceiptList.filter((receip) =>
-    {
+  this.displayCancelledReceiptList = this.cancelReceiptList.filter((receip) => {
         return (
           receip.receipt_number.toLowerCase().includes(value.toLowerCase()) ||
           receip.on_behalf_of.toLowerCase().includes(value.toLowerCase())

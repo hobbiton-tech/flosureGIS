@@ -233,7 +233,7 @@ export class PoliciesService {
     getPolicyById(policyId: string): Observable<Policy> {
 
         return this.http.get<Policy>(
-            `${BASE_URL}/${policyId}`
+            `${BASE_URL}/policy/${policyId}`
         );
 
         // return this.policiesCollection.doc<Policy>(policyId).valueChanges();

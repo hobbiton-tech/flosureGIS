@@ -24,6 +24,7 @@ export class AllocationsComponent implements OnInit {
 
   allocationReceipt: AllocationReceipt;
   allocationReceiptsList: any[] = [];
+  inAllocationReceiptsList: any[] = [];
 
   commissionAmount = 0;
 
@@ -32,8 +33,10 @@ export class AllocationsComponent implements OnInit {
 
   commissionPayment: CPaymentModel;
   commissionPayments: any[] = [];
+  inCommissionPayments: any[] = [];
 
   allocationPoliciesList: any[] = [];
+  inAllocationPoliciesList: any[] = [];
   amount: number;
   selectedRole: any;
    brokers: IBroker[] = [];
@@ -79,21 +82,24 @@ export class AllocationsComponent implements OnInit {
       this.salesReps = salesReps;
     });
     this.allocationsService.getAllocationReceipt().subscribe((res) => {
-      this.allocationReceiptsList = res.data.filter((x) => x.intermediary_type === this.selectedIntermediaryType);
+      this.inAllocationReceiptsList = res.data.filter((x) => x.intermediary_type === this.selectedIntermediaryType);
+      this.allocationReceiptsList = this.inAllocationReceiptsList;
     });
 
 
     this.policeServices.getPolicies().subscribe((policies) => {
-      this.policies = policies.filter((x) => x.paymentPlan === 'NotCreated' && x.receiptStatus === 'Unreceipted')
-    })
+      this.policies = policies.filter((x) => x.paymentPlan === 'NotCreated' && x.receiptStatus === 'Unreceipted');
+    });
     this.commissionPaymentService.getCPayment().subscribe((commissionPayments) => {
-      this.commissionPayments = commissionPayments.data;
+      this.inCommissionPayments = commissionPayments.data;
+      this.commissionPayments = this.inCommissionPayments;
     });
 
 
 
     this.allocationsService.getAllocationPolicy().subscribe((res) => {
-      this.allocationPoliciesList = res.data;
+      this.inAllocationPoliciesList = res.data;
+      this.allocationPoliciesList = this.inAllocationPoliciesList;
     });
   }
 
@@ -121,7 +127,7 @@ export class AllocationsComponent implements OnInit {
 
   showAllocationModal(value) {
     this.isAllocateVisible = true;
-    this.allocationPolicy = value
+    this.allocationPolicy = value;
     this.allocationForm
       .get('policy')
       .setValue(value.policy_number);
@@ -132,9 +138,10 @@ export class AllocationsComponent implements OnInit {
 
   selectInt(value) {
     this.selectedInt = value;
-    this.allocationReceiptsList = this.allocationReceiptsList.filter((x) => x.intermediary_id === value);
+    console.log('Check Agent>>>', this.selectedInt);
+    this.allocationReceiptsList = this.inAllocationReceiptsList.filter((x) => x.intermediary_id === this.selectedInt);
 
-    this.allocationPoliciesList = this.allocationPoliciesList.filter((x) => x.intermediary_id === value );
+    this.allocationPoliciesList = this.inAllocationPoliciesList.filter((x) => x.intermediary_id === this.selectedInt );
   }
 
   handleAllocateCancel() {
@@ -148,15 +155,21 @@ export class AllocationsComponent implements OnInit {
 
 
 
-    this.allocationReceipt.remaining_amount = this.allocationReceipt.remaining_amount - this.allocationForm.controls.amount.value;
+    if (this.checked) {
+      this.allocationReceipt.remaining_amount = this.allocationReceipt.remaining_amount - this.allocationPolicy.gross_amount;
+    } else {
+      this.allocationReceipt.remaining_amount = this.allocationReceipt.remaining_amount - this.allocationForm.controls.amount.value;
+    }
+
+
     this.allocationReceipt.allocated_amount = this.allocationReceipt.allocated_amount + this.allocationForm.controls.amount.value;
     this.allocationPolicy.balance = this.allocationPolicy.balance - this.allocationForm.controls.amount.value;
     this.allocationPolicy.settlements = this.allocationPolicy.settlements + this.allocationForm.controls.amount.value;
 
     if (this.allocationReceipt.remaining_amount === 0) {
-      this.allocationReceipt.status = 'Allocated'
+      this.allocationReceipt.status = 'Allocated';
     } else if (this.allocationReceipt.remaining_amount > 0 && this.allocationReceipt.remaining_amount < this.allocationReceipt.amount) {
-      this.allocationReceipt.status = 'Partially Allocated'
+      this.allocationReceipt.status = 'Partially Allocated';
     }
 
 
@@ -167,11 +180,11 @@ export class AllocationsComponent implements OnInit {
       this.policy.receiptStatus = 'Receipted';
       this.policy.paymentPlan = 'Created';
     } else if (this.allocationPolicy.balance > 0 && this.allocationPolicy.balance < this.allocationPolicy.net_amount_due) {
-      this.allocationPolicy.status = ''
+      this.allocationPolicy.status = '';
     }
 
     if (this.checked) {
-      if (this.commissionPayments === undefined || this.commissionPayments.length == 0) {
+      if (this.commissionPayments === undefined || this.commissionPayments.length === 0) {
         this.commissionPayment = {
           agent_id: this.allocationPolicy.intermediary_id,
           agent_name: this.allocationPolicy.intermediary_name,
@@ -180,11 +193,11 @@ export class AllocationsComponent implements OnInit {
           remaining_amount: 0,
           status: 'Not Paid',
           agent_type: this.selectedIntermediaryType
-        }
+        };
 
         this.commissionPaymentService.createCPayment(this.commissionPayment).subscribe((comm) => {}, (commErr) => {
-          this.message.error(commErr)
-        })
+          this.message.error(commErr);
+        });
       } else {
         for (const c of this.commissionPayments) {
 
@@ -197,28 +210,28 @@ export class AllocationsComponent implements OnInit {
               remaining_amount: 0,
               status: 'Not Paid',
               agent_type: this.selectedIntermediaryType
-            }
+            };
 
 
 
 
             this.commissionPaymentService.createCPayment(this.commissionPayment).subscribe((comm) => {}, (commErr) => {
-              this.message.error(commErr)
-            })
-            break
+              this.message.error(commErr);
+            });
+            break;
           }
 
           if (c.agent_id ===  this.allocationPolicy.intermediary_id && c.status === 'Not Paid') {
             // this.commissionAmount = this.commissionAmount + c.commission_amount;
             c.commission_amount = Number(c.commission_amount + this.allocationPolicy.commission_due);
 
-            console.log("checking C>>>", c);
+            console.log('checking C>>>', c);
 
             this.commissionPaymentService.updateCPayment(c).subscribe((commP) => {}, (comPErr) => {
-              this.message.error(comPErr)
+              this.message.error(comPErr);
             });
 
-            break
+            break;
           }
         }
       }
@@ -229,10 +242,10 @@ export class AllocationsComponent implements OnInit {
 
     this.allocationsService.updateAllocationReceipt(this.allocationReceipt).subscribe((receipt) => {
       this.allocationsService.updateAllocationPolicy(this.allocationPolicy).subscribe((policy) => {
-        this.message.success('Allocated Successfully')
-        this.policeServices.updatePolicy(this.policy).subscribe((policy) => {}, (policyErr) => {
+        this.message.success('Allocated Successfully');
+        this.policeServices.updatePolicy(this.policy).subscribe((iPolicy) => {}, (policyErr) => {
           this.message.error(policyErr);
-        })
+        });
       }, (error) => {
         this.message.error(error);
       });
@@ -243,7 +256,7 @@ export class AllocationsComponent implements OnInit {
 
 
 log(value) {
-  console.log("What is There>>>", value);
+  console.log('What is There>>>', value);
   this.checked = value;
 }
 
