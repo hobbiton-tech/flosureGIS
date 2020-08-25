@@ -15,6 +15,8 @@ import { DebitNote } from 'src/app/underwriting/documents/models/documents.model
 import { AllocationPolicy, AllocationReceipt } from '../../../models/allocations.model';
 import { AllocationsService } from '../../../../services/allocations.service';
 import { HttpClient } from '@angular/common/http';
+import { CommissionPaymentService } from '../../../../services/commission-payment.service';
+import { CPaymentModel } from '../../../models/commission-payment.model';
 
 @Component({
     selector: 'app-sales-representative-client',
@@ -106,6 +108,8 @@ export class SalesRepresentativeClientComponent implements OnInit {
     debitnote: DebitNote;
     currency: string;
     searchString: string;
+  commissionPayments: any[] = [];
+  commissionPayment: CPaymentModel;
 
     constructor(
         private receiptService: AccountService,
@@ -116,6 +120,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
         private agentService: AgentsService,
         private allocationsService: AllocationsService,
         private http: HttpClient,
+        private commissionPaymentService: CommissionPaymentService,
     ) {
         this.receiptForm = this.formBuilder.group({
             received_from: ['', Validators.required],
@@ -178,7 +183,11 @@ export class SalesRepresentativeClientComponent implements OnInit {
 
       this.allocationsService.getAllocationReceipt().subscribe((allocationsReceipts) =>{
         this.allocationsReceipts = allocationsReceipts.data;
-      })
+      });
+
+      this.commissionPaymentService.getCPayment().subscribe((commissionPayments) => {
+        this.commissionPayments = commissionPayments.data;
+      });
 
       this.receiptService.getReciepts().subscribe((receipts) => {
         this.receiptedList = _.filter(
@@ -291,6 +300,62 @@ export class SalesRepresentativeClientComponent implements OnInit {
             this.policy.receiptStatus = 'Receipted';
             this.policy.paymentPlan = 'Created';
             this.receiptNum = this._id;
+
+
+
+
+          if (this.commissionPayments === undefined || this.commissionPayments.length == 0) {
+            this.commissionPayment = {
+              agent_id: this.policy.intermediaryId,
+              agent_name: this.policy.intermediaryName,
+              commission_amount: this.allocationPolicy.commission_due,
+              paid_amount: 0,
+              remaining_amount: 0,
+              status: 'Not Paid',
+              agent_type: 'Agent'
+            }
+
+            this.commissionPaymentService.createCPayment(this.commissionPayment).subscribe((comm) => {}, (commErr) => {
+              this.message.error(commErr)
+            })
+          } else {
+            for (const c of this.commissionPayments) {
+
+              if (c.agent_id !== this.allocationPolicy.intermediary_id) {
+                this.commissionPayment = {
+                  agent_id: this.policy.intermediaryId,
+                  agent_name: this.policy.intermediaryName,
+                  commission_amount: this.allocationPolicy.commission_due,
+                  paid_amount: 0,
+                  remaining_amount: 0,
+                  status: 'Not Paid',
+                  agent_type: 'Agent'
+                }
+
+
+
+
+                this.commissionPaymentService.createCPayment(this.commissionPayment).subscribe((comm) => {}, (commErr) => {
+                  this.message.error(commErr)
+                })
+                break
+              }
+
+              if (c.agent_id ===  this.policy.intermediaryId && c.status === 'Not Paid') {
+                // this.commissionAmount = this.commissionAmount + c.commission_amount;
+                c.commission_amount = Number(c.commission_amount + this.allocationPolicy.commission_due);
+
+                console.log("checking C>>>", c);
+
+                this.commissionPaymentService.updateCPayment(c).subscribe((commP) => {}, (comPErr) => {
+                  this.message.error(comPErr)
+                });
+
+                break
+              }
+            }
+          }
+
 
 
 

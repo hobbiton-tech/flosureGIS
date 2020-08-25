@@ -4,6 +4,9 @@ import { CommissionPaymentService } from '../../services/commission-payment.serv
 import { IRequisitionModel } from '../models/requisition.model';
 import { AccountService } from '../../services/account.service';
 import { NzMessageService } from 'ng-zorro-antd';
+import { AgentsService } from '../../../settings/components/agents/services/agents.service';
+import { Claim } from '../../../claims/models/claim.model';
+import { BehaviorSubject } from 'rxjs';
 
 
 @Component({
@@ -23,12 +26,17 @@ export class CommissionPaymentComponent implements OnInit {
   pendingRequisitionsList: IRequisitionModel[] = [];
   displayPendingRequisitionsList: IRequisitionModel[] = [];
 
+  isApprovingRequisition = false;
+
+  requisitionApprovalUpdate = new BehaviorSubject<boolean>(false);
+
 
 
 
   constructor( private commissionPaymentService: CommissionPaymentService,
                private accountsService: AccountService,
                private msg: NzMessageService,
+               private agentsService: AgentsService,
              ) { }
 
   ngOnInit(): void {
@@ -64,7 +72,7 @@ export class CommissionPaymentComponent implements OnInit {
   raiseReq(value) {
 
     const req: IRequisitionModel = {
-      amount: 0,
+      amount: value.commission_amount,
       approvalStatus: 'Pending',
       cancellationDate: new Date(),
       currency: 'ZMW',
@@ -76,22 +84,56 @@ export class CommissionPaymentComponent implements OnInit {
       id: ''
     }
 
-    this.accountsService.createRequisition(req, '').subscribe((req) => {
-        value.status = "Requisition Raised"
-        this.commissionPaymentService.updateCPayment(value).subscribe((comm) => {}, (comErr) => {
-          this.msg.error(comErr)
+    this.accountsService.generateReqNumber().subscribe((reqNum: any) => {
+      req.requisitionNumber = reqNum.data.requisition_number;
+      this.accountsService.createRequisition(req).subscribe((req) => {
+          value.status = "Requisition Raised"
+          this.commissionPaymentService.updateCPayment(value).subscribe((comm) => {
+            this.refresh();
+          }, (comErr) => {
+            this.msg.error(comErr)
+          })
+          this.msg.success('Requisition Successfully Raised')
+
+        },
+        (error) => {
+          this.msg.error(error)
         })
-      this.msg.success('Requisition Successfully Raised')
-      },
-      (error) => {
-        this.msg.error(error)
-      })
-
-
-
+    })
   }
 
   cancelReq() {}
+
+  approveRequisition(requisition: IRequisitionModel) {
+    this.isApprovingRequisition = true;
+    const req: IRequisitionModel = {
+      ...requisition,
+      requisitionNumber: requisition.requisitionNumber.replace(
+        'REQ',
+        'VOU'
+      ),
+      approvalStatus: 'Approved',
+      authorizationDate: new Date(),
+      authorizedBy: localStorage.getItem('user')
+    };
+
+    this.accountsService.updateRequisition(requisition.id, req).subscribe(
+      res => {
+        console.log(res);
+
+        this.requisitionApprovalUpdate.next(true);
+        this.msg.success('Requisition Approved');
+        this.isApprovingRequisition = false;
+        this.refresh();
+      },
+
+      err => {
+        console.log(err);
+        this.msg.error('Requisition Approval failed');
+        this.isApprovingRequisition = false;
+      }
+    );
+  }
 
 //   showModal(): void {
 //     this.isVisible = true;

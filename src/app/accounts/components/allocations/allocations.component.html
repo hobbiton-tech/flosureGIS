@@ -221,6 +221,16 @@
             </nz-form-item>
           </div>
         </div>
+        <div nz-row>
+          <div nz-col [nzSpan]="12">
+            <nz-form-item>
+              <nz-form-control [nzSpan]="12">
+              <label  nz-checkbox [(ngModel)]="checked" [ngModelOptions]="{standalone: true}" (ngModelChange)="log($event)">Commission Incl</label>
+              </nz-form-control>
+            </nz-form-item>
+
+          </div>
+        </div>
       </form>
     </nz-card>
   </nz-modal>

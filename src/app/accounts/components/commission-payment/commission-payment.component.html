@@ -59,14 +59,17 @@
       <td>{{ com.commission_amount }}</td>
       <td>{{ com.status }}</td>
       <td>
+        <div *ngIf="com.status === 'Not Paid'">
           <button
             nz-popconfirm
-                  nzPopconfirmTitle="Are you sure you wish to proceed"
-                  nzPopconfirmPlacement="bottom"
-                  (nzOnConfirm)="raiseReq(com)"
-                  (nzOnCancel)="cancelReq()" nz-button nzType="primary" nzSize="small">
-              Raise Requisition
+            nzPopconfirmTitle="Are you sure you wish to proceed"
+            nzPopconfirmPlacement="bottom"
+            (nzOnConfirm)="raiseReq(com)"
+            (nzOnCancel)="cancelReq()" nz-button nzType="primary" nzSize="small">
+            Raise Requisition
           </button>
+        </div>
+
       </td>
   </tr>
 
@@ -119,8 +122,9 @@
       <td>{{ req.approvalStatus }}</td>
       <td>{{ req.paymentType }}</td>
       <td>
-          <button nz-button nzType="primary" nzSize="small" (click)="{}">
-              Approve
+          <button nz-button nzType="primary" nzSize="small"(nzOnConfirm)="approveRequisition(req)" nz-popconfirm
+                  nzTitle="Approve Requisition?" *ngIf="!isApprovingRequisition">
+            Approve
           </button>
       </td>
   </tr>

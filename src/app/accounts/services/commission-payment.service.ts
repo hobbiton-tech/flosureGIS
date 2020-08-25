@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 export class CommissionPaymentService {
   cPayment: CPaymentModel;
   cPayments: CPaymentModel[] = [];
-  BASEURLCPayment = 'http://localhost:8022';
+  BASEURLCPayment = 'https://payment-api.savenda-flosure.com/';
 
 
   constructor(private http: HttpClient,

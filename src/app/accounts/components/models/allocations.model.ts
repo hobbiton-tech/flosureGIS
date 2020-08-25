@@ -25,6 +25,7 @@ export  class AllocationPolicy {
   balance: number;
   commission_due: number;
   commission_rate: number;
+  commission_included?: string;
   status:string;
 }
 

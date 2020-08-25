@@ -213,6 +213,8 @@ export class AccountService {
         );
     }
 
+
+
     // temporary TO BE generated from api
     generateRequisitionID(totalRequisitions: number) {
         const count = this.countGenerator(totalRequisitions);
@@ -233,5 +235,9 @@ export class AccountService {
       numb = ('0000' + numb).slice(-5);
     }
     return numb;
+  }
+
+  generateReqNumber() {
+      return this.http.get('https://number-generation.flosure-api.com/savenda-requisition-number');
   }
 }

@@ -8,6 +8,8 @@ import { IAgent, IBroker, ISalesRepresentative } from '../../../settings/compone
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommissionPaymentService } from '../../services/commission-payment.service';
 import { CPaymentModel } from '../models/commission-payment.model';
+import { PoliciesService } from '../../../underwriting/services/policies.service';
+import { Policy } from '../../../underwriting/models/policy.model';
 
 @Component({
   selector: 'app-allocations',
@@ -41,12 +43,16 @@ export class AllocationsComponent implements OnInit {
    policyTableActive = true;
   isAllocateVisible = false;
   allocationForm: FormGroup;
+  checked = false;
+  policies: Policy[] = [];
+  policy: Policy;
 
   constructor(private allocationsService: AllocationsService,
               private message: NzMessageService,
               private agentsService: AgentsService,
               private formBuilder: FormBuilder,
               private commissionPaymentService: CommissionPaymentService,
+              private policeServices: PoliciesService,
               ) {
     this.allocationForm = this.formBuilder.group({
       policy: ['', Validators.required],
@@ -77,7 +83,9 @@ export class AllocationsComponent implements OnInit {
     });
 
 
-
+    this.policeServices.getPolicies().subscribe((policies) => {
+      this.policies = policies.filter((x) => x.paymentPlan === 'NotCreated' && x.receiptStatus === 'Unreceipted')
+    })
     this.commissionPaymentService.getCPayment().subscribe((commissionPayments) => {
       this.commissionPayments = commissionPayments.data;
     });
@@ -136,6 +144,10 @@ export class AllocationsComponent implements OnInit {
   handleAllocationOk() {
     this.isAllocateVisible = false;
 
+    this.policy = this.policies.filter((x) => x.policyNumber === this.allocationForm.controls.policy.value)[0];
+
+
+
     this.allocationReceipt.remaining_amount = this.allocationReceipt.remaining_amount - this.allocationForm.controls.amount.value;
     this.allocationReceipt.allocated_amount = this.allocationReceipt.allocated_amount + this.allocationForm.controls.amount.value;
     this.allocationPolicy.balance = this.allocationPolicy.balance - this.allocationForm.controls.amount.value;
@@ -149,69 +161,78 @@ export class AllocationsComponent implements OnInit {
 
 
 
-    if (this.allocationPolicy.balance === 0) {
-      this.allocationPolicy.status = 'Allocated'
+    if (this.allocationPolicy.balance === 0.00) {
+      this.allocationPolicy.status = 'Allocated';
+      console.log('Check Policy>>>>', this.policy);
+      this.policy.receiptStatus = 'Receipted';
+      this.policy.paymentPlan = 'Created';
     } else if (this.allocationPolicy.balance > 0 && this.allocationPolicy.balance < this.allocationPolicy.net_amount_due) {
       this.allocationPolicy.status = ''
     }
 
-
-    if (this.commissionPayments === undefined || this.commissionPayments.length == 0) {
-      this.commissionPayment = {
-        agent_id: this.allocationPolicy.intermediary_id,
-        agent_name: this.allocationPolicy.intermediary_name,
-        commission_amount: this.allocationPolicy.commission_due,
-        paid_amount: 0,
-        remaining_amount: 0,
-        status: 'Not Paid',
-        agent_type: this.selectedIntermediaryType
-      }
-
-      this.commissionPaymentService.createCPayment(this.commissionPayment).subscribe((comm) => {}, (commErr) => {
-        this.message.error(commErr)
-      })
-    } else {
-      for (const c of this.commissionPayments) {
-
-        if (c.agent_id !== this.allocationPolicy.intermediary_id) {
-          this.commissionPayment = {
-            agent_id: this.allocationPolicy.intermediary_id,
-            agent_name: this.allocationPolicy.intermediary_name,
-            commission_amount: this.allocationPolicy.commission_due,
-            paid_amount: 0,
-            remaining_amount: 0,
-            status: 'Not Paid',
-            agent_type: this.selectedIntermediaryType
-          }
-
-
-
-
-          this.commissionPaymentService.createCPayment(this.commissionPayment).subscribe((comm) => {}, (commErr) => {
-            this.message.error(commErr)
-          })
-          break
+    if (this.checked) {
+      if (this.commissionPayments === undefined || this.commissionPayments.length == 0) {
+        this.commissionPayment = {
+          agent_id: this.allocationPolicy.intermediary_id,
+          agent_name: this.allocationPolicy.intermediary_name,
+          commission_amount: this.allocationPolicy.commission_due,
+          paid_amount: 0,
+          remaining_amount: 0,
+          status: 'Not Paid',
+          agent_type: this.selectedIntermediaryType
         }
 
-        if (c.agent_id ===  this.allocationPolicy.intermediary_id && c.status === 'Not Paid') {
-          // this.commissionAmount = this.commissionAmount + c.commission_amount;
-          c.commission_amount = Number(c.commission_amount + this.allocationPolicy.commission_due);
+        this.commissionPaymentService.createCPayment(this.commissionPayment).subscribe((comm) => {}, (commErr) => {
+          this.message.error(commErr)
+        })
+      } else {
+        for (const c of this.commissionPayments) {
 
-          console.log("checking C>>>", c);
+          if (c.agent_id !== this.allocationPolicy.intermediary_id) {
+            this.commissionPayment = {
+              agent_id: this.allocationPolicy.intermediary_id,
+              agent_name: this.allocationPolicy.intermediary_name,
+              commission_amount: this.allocationPolicy.commission_due,
+              paid_amount: 0,
+              remaining_amount: 0,
+              status: 'Not Paid',
+              agent_type: this.selectedIntermediaryType
+            }
 
-          this.commissionPaymentService.updateCPayment(c).subscribe((commP) => {}, (comPErr) => {
-            this.message.error(comPErr)
-          });
 
-          break
+
+
+            this.commissionPaymentService.createCPayment(this.commissionPayment).subscribe((comm) => {}, (commErr) => {
+              this.message.error(commErr)
+            })
+            break
+          }
+
+          if (c.agent_id ===  this.allocationPolicy.intermediary_id && c.status === 'Not Paid') {
+            // this.commissionAmount = this.commissionAmount + c.commission_amount;
+            c.commission_amount = Number(c.commission_amount + this.allocationPolicy.commission_due);
+
+            console.log("checking C>>>", c);
+
+            this.commissionPaymentService.updateCPayment(c).subscribe((commP) => {}, (comPErr) => {
+              this.message.error(comPErr)
+            });
+
+            break
+          }
         }
       }
     }
+
+
 
 
     this.allocationsService.updateAllocationReceipt(this.allocationReceipt).subscribe((receipt) => {
       this.allocationsService.updateAllocationPolicy(this.allocationPolicy).subscribe((policy) => {
         this.message.success('Allocated Successfully')
+        this.policeServices.updatePolicy(this.policy).subscribe((policy) => {}, (policyErr) => {
+          this.message.error(policyErr);
+        })
       }, (error) => {
         this.message.error(error);
       });
@@ -219,5 +240,11 @@ export class AllocationsComponent implements OnInit {
       this.message.error(err);
     });
   }
+
+
+log(value) {
+  console.log("What is There>>>", value);
+  this.checked = value;
+}
 
 }
