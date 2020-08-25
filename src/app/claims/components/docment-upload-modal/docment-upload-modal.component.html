@@ -1,5 +1,5 @@
 <nz-modal [(nzVisible)]="isViewDocumentUploadModalVisible" [nzTitle]="documentTitle" [nzContent]="documentUploadContent"
-    (nzOnCancel)="closeDocumentUploadModal()" (nzOnOk)="closeDocumentUploadModal()" nzWidth="50%">
+    [nzFooter]="null" (nzOnCancel)="closeDocumentUploadModal()" (nzOnOk)="closeDocumentUploadModal()" nzWidth="50%">
 
     <ng-template #documentUploadContent>
         <nz-spin nzSize="large" nzTip="Uploading Document...." [nzSpinning]="isUploading">

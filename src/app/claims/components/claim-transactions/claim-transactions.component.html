@@ -32,9 +32,9 @@
   </div>
   <nz-card>
     <nz-card>
-      <div style="margin-bottom: 10px; width: 50%">
+      <div style="margin-bottom: 10px; width: 25%">
         <nz-input-group [nzSuffix]="suffixIconSearch">
-          <input type="text" nz-input placeholder="Search by Client, ClaimID, Policy Number, Status"
+          <input type="text" nz-input placeholder="Search by Claim Number, Client, Policy Number, Status"
             [(ngModel)]="searchString" (ngModelChange)="search($event)" />
         </nz-input-group>
         <ng-template #suffixIconSearch>
@@ -66,7 +66,15 @@
             <td [nzAlign]="columnAlignment">{{claim.policy.policyNumber}}</td>
             <td [nzAlign]="columnAlignment">{{claim.lossDate | date}}</td>
             <td [nzAlign]="columnAlignment">{{claim.notificationDate | date}}</td>
-            <td [nzAlign]="columnAlignment">{{claim.claimStatus}}</td>
+            <td [nzAlign]="columnAlignment">
+              <div [ngSwitch]="claim.claimStatus">
+                <nz-badge nzColor='yellow' *ngSwitchCase="'Pending'" nzText="Pending"></nz-badge>
+                <nz-badge nzColor='green' *ngSwitchCase="'Resolved'" nzText="Resolved"></nz-badge>
+                <nz-badge nzColor='red' *ngSwitchCase="'Cancelled'" nzText="Cancelled"></nz-badge>
+                <nz-badge nzColor='blue' *ngSwitchCase="'Processed'" nzText="Processed"></nz-badge>
+                <nz-badge nzColor='purple' *ngSwitchCase="'Approved'" nzText="Approved"></nz-badge>
+              </div>
+            </td>
           </tr>
         </tbody>
       </nz-table>

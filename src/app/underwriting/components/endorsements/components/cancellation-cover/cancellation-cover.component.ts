@@ -12,6 +12,7 @@ import { AccountService } from 'src/app/accounts/services/account.service';
 import { IRequisitionModel } from 'src/app/accounts/components/models/requisition.model';
 import { v4 } from 'uuid';
 import { NzMessageService } from 'ng-zorro-antd';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'app-cancellation-cover',
@@ -79,7 +80,8 @@ export class CancellationCoverComponent implements OnInit {
         private readonly router: Router,
         private readonly policiesService: PoliciesService,
         private accountsService: AccountService,
-        private msg: NzMessageService
+        private msg: NzMessageService,
+        private http: HttpClient
     ) {}
 
     ngOnInit(): void {
@@ -154,43 +156,57 @@ export class CancellationCoverComponent implements OnInit {
         this.isRaisingRequisition = true;
 
         this.policiesService.getPolicyById(policy.id).subscribe(policy => {
-            const requisition: IRequisitionModel = {
-                id: v4(),
-                policyNumber: policy.policyNumber,
-                requisitionNumber: this.reqNumber,
-                payee: policy.client,
-                cancellationDate: policy.creditNotes[0].dateCreated,
-                dateCreated: new Date(),
-                approvalStatus: 'Pending',
-                paymentType: 'PYMT',
-                currency: policy.currency,
-                amount: policy.creditNotes[0].creditNoteAmount,
-                paymentStatus: 'UnProcessed',
-                creditNote: policy.creditNotes[0],
-                claim: null
-            };
+            this.http
+                .get<any>(
+                    `https://number-generation.flosure-api.com/aplus-requisition-number`
+                )
+                .subscribe(async res => {
+                    const requisitionNumber = res.data.requisition_number;
 
-            const policyUpdate: Policy = {
-                ...policy,
-                requisitionStatus: 'Raised'
-            };
+                    const requisition: IRequisitionModel = {
+                        id: v4(),
+                        policyNumber: policy.policyNumber,
+                        requisitionNumber: requisitionNumber,
+                        payee: policy.client,
+                        cancellationDate: policy.creditNotes[0].dateCreated,
+                        dateCreated: new Date(),
+                        approvalStatus: 'Pending',
+                        paymentType: 'PYMT',
+                        currency: policy.currency,
+                        amount: policy.creditNotes[0].creditNoteAmount,
+                        paymentStatus: 'UnProcessed',
+                        creditNote: policy.creditNotes[0],
+                        claim: null
+                    };
 
-            this.accountsService.createRequisition(requisition).subscribe(
-                res => {
-                    console.log(res);
-                    this.msg.success('Requisition Raised Successfully');
-                    this.isRaisingRequisition = false;
-                    this.router.navigateByUrl('/flosure/accounts/requisitions');
-                },
+                    const policyUpdate: Policy = {
+                        ...policy,
+                        requisitionStatus: 'Raised'
+                    };
 
-                err => {
-                    console.log(err);
-                    this.msg.error('Failed to raise Requisition');
-                    this.isRaisingRequisition = false;
-                }
-            );
+                    this.accountsService
+                        .createRequisition(requisition)
+                        .subscribe(
+                            res => {
+                                console.log(res);
+                                this.msg.success(
+                                    'Requisition Raised Successfully'
+                                );
+                                this.isRaisingRequisition = false;
+                                this.router.navigateByUrl(
+                                    '/flosure/accounts/requisitions'
+                                );
+                            },
 
-            this.policiesService.updatePolicy(policyUpdate);
+                            err => {
+                                console.log(err);
+                                this.msg.error('Failed to raise Requisition');
+                                this.isRaisingRequisition = false;
+                            }
+                        );
+
+                    this.policiesService.updatePolicy(policyUpdate);
+                });
         });
 
         // policy credit note

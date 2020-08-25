@@ -59,20 +59,19 @@ export class PolicyRenewalsComponent implements OnInit {
 
     search(value: string): void {
         if (value === '' || !value) {
-            // this.displayPoliciesList = this.policiesList
-            this.displayPoliciesList = this.policiesList.filter(policy => {
-                return (
-                    policy.policyNumber
-                        .toLowerCase()
-                        .includes(value.toLowerCase()) ||
-                    policy.client
-                        .toLocaleLowerCase()
-                        .includes(value.toLowerCase()) ||
-                    policy.preparedBy
-                        .toLocaleLowerCase()
-                        .includes(value.toLowerCase())
-                );
-            });
+            this.displayPoliciesList = this.policiesList;
         }
+        this.displayPoliciesList = this.policiesList.filter(policy => {
+            return (
+                policy.policyNumber
+                    .toLowerCase()
+                    .includes(value.toLowerCase()) ||
+                policy.client
+                    .toLocaleLowerCase()
+                    .includes(value.toLowerCase()) ||
+                policy.user.toLocaleLowerCase().includes(value.toLowerCase()) ||
+                policy.status.toLocaleLowerCase().includes(value.toLowerCase())
+            );
+        });
     }
 }

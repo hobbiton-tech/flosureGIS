@@ -67,44 +67,48 @@ export class ClaimApprovalModalComponent implements OnInit {
     }
 
     checkClaimApproval() {
-        if (this.currentClaim.policy.risks.includes(this.currentClaim.risk)) {
-            console.log('1: Yes');
-            this.isClaimRiskUnderPolicy = true;
-        } else {
-            console.log('1: No');
-            this.isClaimRiskUnderPolicy = false;
-        }
+        if (this.currentClaim) {
+            if (
+                this.currentClaim.policy.risks.includes(this.currentClaim.risk)
+            ) {
+                console.log('1: Yes');
+                this.isClaimRiskUnderPolicy = true;
+            } else {
+                console.log('1: No');
+                this.isClaimRiskUnderPolicy = false;
+            }
 
-        if (
-            moment(this.currentClaim.lossDate).isBetween(
-                this.currentClaim.risk.riskStartDate,
-                this.currentClaim.risk.riskEndDate,
-                'days',
-                '[]'
-            )
-        ) {
-            this.isClaimLossDateUnderPolicyPeriod = true;
-        } else {
-            this.isClaimLossDateUnderPolicyPeriod = false;
-        }
+            if (
+                moment(this.currentClaim.lossDate).isBetween(
+                    this.currentClaim.risk.riskStartDate,
+                    this.currentClaim.risk.riskEndDate,
+                    'days',
+                    '[]'
+                )
+            ) {
+                this.isClaimLossDateUnderPolicyPeriod = true;
+            } else {
+                this.isClaimLossDateUnderPolicyPeriod = false;
+            }
 
-        if (this.currentClaim.policy.paymentPlan != 'Created') {
-            this.isClaimPolicyPremiumFullyPaid = true;
-        } else {
-            this.isClaimPolicyPremiumFullyPaid = false;
-        }
+            if (this.currentClaim.policy.paymentPlan != 'Created') {
+                this.isClaimPolicyPremiumFullyPaid = true;
+            } else {
+                this.isClaimPolicyPremiumFullyPaid = false;
+            }
 
-        if (
-            this.currentClaim.documentUploads.filter(
-                x => x.documentType == 'Drivers License'
-            ).length > 0 &&
-            this.currentClaim.documentUploads.filter(
-                x => x.documentType == 'Claim Form'
-            ).length > 0
-        ) {
-            this.isClaimFullyDocumented = true;
-        } else {
-            this.isClaimFullyDocumented = false;
+            if (
+                this.currentClaim.documentUploads.filter(
+                    x => x.documentType == 'Drivers License'
+                ).length > 0 &&
+                this.currentClaim.documentUploads.filter(
+                    x => x.documentType == 'Claim Form'
+                ).length > 0
+            ) {
+                this.isClaimFullyDocumented = true;
+            } else {
+                this.isClaimFullyDocumented = false;
+            }
         }
     }
 

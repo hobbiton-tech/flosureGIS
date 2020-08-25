@@ -44,8 +44,8 @@
                                 <nz-form-item>
                                     <nz-form-label nzSpan="8" nzRequired>Client</nz-form-label>
                                     <nz-form-control nzSpan="15">
-                                        <nz-select nzPlaceHolder="Select Client" (ngModelChange)="handleClientChange()"
-                                            formControlName="client">
+                                        <nz-select nzShowSearch nzPlaceHolder="Select Client"
+                                            (ngModelChange)="handleClientChange()" formControlName="client">
                                             <nz-option *ngFor="let client of displayClientList" [nzValue]="client"
                                                 [nzLabel]="client.clientType == 'Individual' ? (client.firstName + ' ' + client.lastName) : client.companyName ">
                                             </nz-option>
@@ -55,7 +55,7 @@
                                 <nz-form-item>
                                     <nz-form-label nzSpan="8" nzRequired>Loss Estimate</nz-form-label>
                                     <nz-form-control nzSpan="15">
-                                        <input nz-input formControlName="lossEstimate" />
+                                        <input nz-input formControlName="lossEstimate" type="number" />
                                     </nz-form-control>
                                 </nz-form-item>
                                 <nz-form-item>
@@ -87,7 +87,7 @@
                                     <nz-form-item>
                                         <nz-form-label nzSpan="7" nzRequired>Claimant</nz-form-label>
                                         <nz-form-control nzSpan="16">
-                                            <nz-select formControlName="claimant"
+                                            <nz-select formControlName="claimant" nzShowSearch
                                                 (ngModelChange)="handleClaimantChange()">
                                                 <nz-option *ngFor="let claimant of displayClaimantsList"
                                                     [nzValue]="claimant"
@@ -101,7 +101,7 @@
                                     <nz-form-item>
                                         <nz-form-label nzSpan="7" nzRequired>Policy number</nz-form-label>
                                         <nz-form-control nzSpan="16">
-                                            <nz-select nzPlaceHolder="Select risk" formControlName="policy"
+                                            <nz-select nzPlaceHolder="Select risk" formControlName="policy" nzShowSearch
                                                 (ngModelChange)="handlePolicyChange()">
                                                 <nz-option *ngFor="let policy of displayPoliciesList" [nzValue]="policy"
                                                     [nzLabel]="policy.policyNumber"></nz-option>
@@ -110,7 +110,7 @@
                                     </nz-form-item>
                                     <nz-form-label nzSpan="7" nzRequired>Risk ID</nz-form-label>
                                     <nz-form-control nzSpan="16">
-                                        <nz-select nzPlaceHolder="Select activity" formControlName="risk"
+                                        <nz-select nzPlaceHolder="Select activity" formControlName="risk" nzShowSearch
                                             (ngModelChange)="handleRiskChange()">
                                             <nz-option *ngFor="let risk of displayRisksList" [nzValue]="risk"
                                                 [nzLabel]="risk.regNumber"></nz-option>
