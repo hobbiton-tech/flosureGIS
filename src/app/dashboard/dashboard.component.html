@@ -8,6 +8,7 @@
                 </ng-template>
             </nz-card>
         </div>
+
         <div nz-col [nzSpan]="8">
             <nz-card [nzTitle]="'Pending Claims'" [nzExtra]="pClaims" [nzHoverable]="true">
                 <nz-statistic [nzValueTemplate]="claimsStats"></nz-statistic>
@@ -16,6 +17,7 @@
                 </ng-template>
             </nz-card>
         </div>
+
         <div nz-col [nzSpan]="8">
             <nz-card [nzTitle]="'Active Policies'" [nzExtra]="aPolicies" [nzHoverable]="true">
                 <nz-statistic [nzValueTemplate]="activePolicy"></nz-statistic>
@@ -25,6 +27,7 @@
             </nz-card>
         </div>
     </div>
+
     <div nz-row [nzGutter]="8" style="padding-top: 10px;">
         <div nz-col [nzSpan]="8">
             <nz-card [nzTitle]="'Expired Policies'" [nzExtra]="ePolicies" [nzHoverable]="true">
@@ -53,7 +56,7 @@
         <nz-card>
             <nz-tabset>
                 <nz-tab nzTitle="Active Policies">
-                    <div style="margin-bottom: 10px; width: 50%;">
+                    <div style="margin-bottom: 10px; width: 25%;">
                         <nz-input-group [nzSuffix]="suffixIconSearch">
                             <input type="text" nz-input placeholder="Search by client, policy number, agent"
                                 [(ngModel)]="searchString" (ngModelChange)="searchActivePolicies($event)" />
@@ -97,7 +100,7 @@
                     </nz-table>
                 </nz-tab>
                 <nz-tab nzTitle="Expiring Policies">
-                    <div style="margin-bottom: 10px; width: 50%;">
+                    <div style="margin-bottom: 10px; width: 25%;">
                         <nz-input-group [nzSuffix]="suffixIconSearch">
                             <input type="text" nz-input placeholder="Search by client, policy number, agent"
                                 [(ngModel)]="searchString" (ngModelChange)="searchExpiredPolicies($event)" />

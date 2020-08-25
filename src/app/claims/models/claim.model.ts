@@ -40,4 +40,5 @@ export type ClaimStatus =
     | 'Processed'
     | 'Approved';
 export type ThirdPartyFault = 'At Fault' | 'Not At Fault';
+
 export type ThirdPartyInsured = 'Insured' | 'Not Insured';
