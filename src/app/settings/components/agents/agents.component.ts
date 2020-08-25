@@ -30,10 +30,10 @@ export class AgentsComponent implements OnInit {
     intermediaryUpdate = new BehaviorSubject<boolean>(false);
     commissionUpdate = new BehaviorSubject<boolean>(false);
 
-    //edit table commission setup form
+    // edit table commission setup form
     isEditmode = false;
 
-    //commission setupsform
+    // commission setupsform
     commissionSetupForm: FormGroup;
 
     totalIntermediaries = 0;
@@ -47,19 +47,19 @@ export class AgentsComponent implements OnInit {
     commissionsList: ICommissionSetup[] = [];
     displayCommissionList: ICommissionSetup[] = [];
 
-    //filtered commission list based on intermediary name
+    // filtered commission list based on intermediary name
     intermediaryNameCommissionList: ICommissionSetup[] = [];
 
     classesList: IClass[] = [];
     productsList: IProduct[] = [];
 
-    //selected class
+    // selected class
     selectedClass: IClass;
 
-    //single class
+    // single class
     singleClass: IClass;
 
-    //selected commission setup
+    // selected commission setup
     selectedCommissionSetup: ICommissionSetup;
 
     selectedProduct: IProduct;
@@ -169,11 +169,7 @@ export class AgentsComponent implements OnInit {
         this.commissionSetupForm
             .get('intermediaryName')
             .setValue(
-                this.selectedIntermediary.companyName
-                    ? this.selectedIntermediary.companyName
-                    : this.selectedIntermediary.contactFirstName +
-                          ' ' +
-                          this.selectedIntermediary.contactLastName
+                this.selectedIntermediary
             );
         this.commissionSetupForm
             .get('intermediaryType')
@@ -186,7 +182,7 @@ export class AgentsComponent implements OnInit {
     changeSelectedCommission(commissionSetup: ICommissionSetup) {
         this.selectedCommissionSetup = commissionSetup;
 
-        //fill commission form
+        // fill commission form
         // this.commissionSetupForm
         //     .get('intermediaryName')
         //     .setValue(this.selectedCommissionSetup.intermediaryName);
@@ -212,7 +208,7 @@ export class AgentsComponent implements OnInit {
         this.addProductCommissionFormDrawerVisible = true;
     }
 
-    //filters commissions list based on selected intermediary and selected class
+    // filters commissions list based on selected intermediary and selected class
     filterCommissionList() {
         console.log('filter commission lost called here..');
         // this.loadProducts();
@@ -233,7 +229,7 @@ export class AgentsComponent implements OnInit {
             });
     }
 
-    //loads products based on selected class
+    // loads products based on selected class
     loadProducts() {
         this.productSetupsService.getClasses().subscribe(classes => {
             this.selectedClass = classes.filter(
@@ -268,17 +264,31 @@ export class AgentsComponent implements OnInit {
         // }
 
         if (this.commissionSetupForm.valid || !this.commissionSetupForm.valid) {
-            console.log(this.commissionSetupForm.value);
-            this.addCommissionSetup(this.commissionSetupForm.value).then(
+
+
+            let intName = '';
+
+            if ( this.commissionSetupForm.controls.intermediaryName.value.intermediaryType === 'Broker' || this.commissionSetupForm.controls.intermediaryName.value.intermediaryType === 'Agent') {
+              intName = this.commissionSetupForm.controls.intermediaryName.value.companyName;
+            } else {
+              intName = this.commissionSetupForm.controls.intermediaryName.value.firstName + ' ' + this.commissionSetupForm.controls.intermediaryName.value.lastName;
+            }
+
+            const commission: ICommissionSetup = {
+              ...this.commissionSetupForm.value,
+              intermediaryId: this.commissionSetupForm.controls.intermediaryName.value.id,
+              intermediaryName: intName
+            };
+            this.addCommissionSetup(commission).then(
                 res => {
-                    //put some feedback here
+                    // put some feedback here
                     this.isEditmode = false;
                 }
             );
         }
     }
 
-    //make commission setup form visible
+    // make commission setup form visible
     editCommissionSetupsForm() {
         this.isEditmode = true;
     }

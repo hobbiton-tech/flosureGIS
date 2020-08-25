@@ -11,6 +11,8 @@
                                         type="text"
                                         nz-input
                                         placeholder="Search by type, account type"
+                                        [(ngModel)]="searchString"
+                                        (ngModelChange)="searchUnR($event)"
                                     />
                                 </nz-input-group>
                                 <ng-template #suffixIconSearch>
@@ -124,7 +126,7 @@
                                         >
                                             <input
                                                 nz-input
-                                                formControlName="receivedFrom"
+                                                formControlName="received_from"
                                                 name="receivedFrom"
                                                 type="text"
                                                 id="receivedFrom"
@@ -135,10 +137,10 @@
                                                 class="text-danger"
                                                 *ngIf="
                                                     (receiptFormControl
-                                                        .receivedFrom.touched ||
+                                                        .received_from.touched ||
                                                         submitted) &&
                                                     receiptFormControl
-                                                        .receivedFrom.errors
+                                                        .received_from.errors
                                                         ?.required
                                                 "
                                             >
@@ -196,7 +198,7 @@
                                         <nz-form-control nzSpan="18">
                                             <nz-select
                                                 name="receiptType"
-                                                formControlName="receiptType"
+                                                formControlName="receipt_type"
                                                 nzAllowClear
                                                 nzPlaceHolder="Choose"
                                             >
@@ -212,10 +214,10 @@
                                                 class="text-danger"
                                                 *ngIf="
                                                     (receiptFormControl
-                                                        .receiptType.touched ||
+                                                        .receipt_type.touched ||
                                                         submitted) &&
                                                     receiptFormControl
-                                                        .receiptType.errors
+                                                        .receipt_type.errors
                                                         ?.required
                                                 "
                                             >
@@ -235,7 +237,7 @@
                                         <nz-form-control [nzSpan]="16">
                                             <nz-select
                                                 name="paymentMethod"
-                                                formControlName="paymentMethod"
+                                                formControlName="payment_method"
                                                 (ngModelChange)="method($event)"
                                                 nzAllowClear
                                                 nzPlaceHolder="Choose payment Method"
@@ -252,11 +254,11 @@
                                                 class="text-danger"
                                                 *ngIf="
                                                     (receiptFormControl
-                                                        .paymentMethod
+                                                        .payment_method
                                                         .touched ||
                                                         submitted) &&
                                                     receiptFormControl
-                                                        .paymentMethod.errors
+                                                        .payment_method.errors
                                                         ?.required
                                                 "
                                             >
@@ -311,7 +313,7 @@
                                         <nz-form-control [nzSpan]="16">
                                             <input
                                                 nz-input
-                                                formControlName="cheqNumber"
+                                                formControlName="cheq_number"
                                                 name="cheqNumber"
                                                 type="text"
                                                 id="cheqNumber"
@@ -352,6 +354,8 @@
                                         type="text"
                                         nz-input
                                         placeholder="Search by account id, account name, bank"
+                                        [(ngModel)]="searchString"
+                                        (ngModelChange)="searchR($event)"
                                     />
                                 </nz-input-group>
                                 <ng-template #suffixIconSearch>
@@ -364,7 +368,7 @@
 
                 <nz-table
                     #receiptTable
-                    [nzData]="receiptedList"
+                    [nzData]="displayReceiptedList"
                     [nzSize]="'small'"
                     [nzBordered]="true"
                     style="background-color: white;"
@@ -385,18 +389,18 @@
                             *ngFor="let receipt of receiptTable.data"
                             class="table-row"
                         >
-                            <td>{{ receipt.receiptNumber }}</td>
+                            <td>{{ receipt.receipt_number }}</td>
                             <td>{{ receipt.onBehalfOf }}</td>
                             <td>
-                                {{ receipt.sumInDigits | number: '1.2-2' }}
+                                {{ receipt.sum_in_digits | number: '1.2-2' }}
                             </td>
-                            <td>{{ receipt.receiptType }}</td>
+                            <td>{{ receipt.receipt_type }}</td>
                             <td>
-                                {{ receipt.intermediaryName }}
+                                {{ receipt.intermediary_name }}
                             </td>
 
                             <td>
-                                {{ receipt.todayDate.seconds * 1000 | date }}
+                                {{ receipt.today_date | date }}
                             </td>
                             <td>
                                 <button
@@ -404,7 +408,7 @@
                                     nzType="default"
                                     nzSize="small"
                                     [nzLoading]="isConfirmLoading"
-                                    (click)="generateID(receipt.id)"
+                                    (click)="generateID(receipt.ID)"
                                 >
                                     View
                                 </button>
@@ -483,6 +487,8 @@
                                         type="text"
                                         nz-input
                                         placeholder="Search by account id, account name, bank"
+                                        [(ngModel)]="searchString"
+                                        (ngModelChange)="searchCR($event)"
                                     />
                                 </nz-input-group>
                                 <ng-template #suffixIconSearch>
@@ -495,7 +501,7 @@
 
                 <nz-table
                     #cancelledReceiptTable
-                    [nzData]="cancelReceiptList"
+                    [nzData]="displayCancelledReceiptList"
                     [nzSize]="'small'"
                     [nzBordered]="true"
                     style="background-color: white;"
@@ -516,18 +522,18 @@
                             *ngFor="let receipt of cancelledReceiptTable.data"
                             class="table-row"
                         >
-                            <td>{{ receipt.receiptNumber }}</td>
+                            <td>{{ receipt.receipt_number }}</td>
                             <td>{{ receipt.onBehalfOf }}</td>
                             <td>
-                                {{ receipt.sumInDigits | number: '1.2-2' }}
+                                {{ receipt.sum_in_digits | number: '1.2-2' }}
                             </td>
-                            <td>{{ receipt.receiptType }}</td>
+                            <td>{{ receipt.receipt_type }}</td>
                             <td>
-                                {{ receipt.intermediaryName }}
+                                {{ receipt.intermediary_name }}
                             </td>
 
                             <td>
-                                {{ receipt.todayDate.seconds * 1000 | date }}
+                                {{ receipt.today_date | date }}
                             </td>
 
                             <td>
@@ -536,7 +542,7 @@
                                     nzType="default"
                                     nzSize="small"
                                     [nzLoading]="isConfirmLoading"
-                                    (click)="generateID(receipt.id)"
+                                    (click)="generateID(receipt.ID)"
                                 >
                                     View
                                 </button>

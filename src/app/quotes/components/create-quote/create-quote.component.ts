@@ -105,15 +105,15 @@ export class CreateQuoteComponent implements OnInit {
     motorThirdPartyloadingOptions = [];
     sourceOfBusinessOptions = SourceOfBusinessOptions;
 
-    //Excess Variable
+    // Excess Variable
     excessList: IExccess[] = [];
 
     excessTHP: IExccess[] = [];
     excessAct: IExccess[] = [];
     excessFT: IExccess[] = [];
 
-    //loading feedback
-    creatingQuote: boolean = false;
+    // loading feedback
+    creatingQuote = false;
     quotesList: MotorQuotationModel[];
     displayQuotesList: MotorQuotationModel[];
     quotesCount = 0;
@@ -216,7 +216,7 @@ export class CreateQuoteComponent implements OnInit {
 
     risks: RiskModel[] = [];
 
-    //excesses
+    // excesses
     excesses: Excess[] = [];
 
     // risk upload modal
@@ -271,7 +271,7 @@ export class CreateQuoteComponent implements OnInit {
     conChasis: any[] = [];
 
     compareFn = (o1: any, o2: any) =>
-        o1 && o2 ? o1.value === o2.value : o1 === o2;
+        o1 && o2 ? o1.value === o2.value : o1 === o2
 
     log(value: { label: string; value: string }): void {
         this.selectedLoadingValue = {
@@ -285,14 +285,14 @@ export class CreateQuoteComponent implements OnInit {
             return false;
         }
         return startValue.getTime() > this.endValue.getTime();
-    };
+    }
 
     disabledEndDate = (endValue: Date): boolean => {
         if (!endValue || !this.startValue) {
             return false;
         }
         return endValue.getTime() <= this.startValue.getTime();
-    };
+    }
 
     ngOnInit(): void {
         const user = localStorage.getItem('user');
@@ -327,9 +327,12 @@ export class CreateQuoteComponent implements OnInit {
         });
 
         this.clientsService.getAllClients().subscribe(clients => {
+
             this.clients = [...clients[0], ...clients[1]] as Array<
                 IIndividualClient & ICorporateClient
             >;
+
+            console.log('Client List>>>', this.clients);
         });
 
         this.agentsService.getAgents().subscribe(agents => {
@@ -354,7 +357,7 @@ export class CreateQuoteComponent implements OnInit {
             otherEndorsement: ['', Validators.required]
         });
 
-        //set defaults values for excesses
+        // set defaults values for excesses
         this.excessesForm.get('below21Years').setValue('100');
         this.excessesForm.get('over70Years').setValue('100');
         this.excessesForm.get('noLicence').setValue('120');
@@ -385,12 +388,12 @@ export class CreateQuoteComponent implements OnInit {
             return false;
         }
         return submissionValue.valueOf() < moment().add(-1, 'days');
-    };
+    }
 
     handlePolicyEndDateCalculation(): void {
         if (
-            this.quoteForm.get('startDate').value != '' &&
-            this.quoteForm.get('quarter').value != ''
+            this.quoteForm.get('startDate').value !== '' &&
+            this.quoteForm.get('quarter').value !== ''
         ) {
             const request: IRateRequest = {
                 sumInsured: 0,
@@ -422,11 +425,11 @@ export class CreateQuoteComponent implements OnInit {
                     );
                     this.quoteForm.get('endDate').setValue(nd);
 
-                    let startDate = moment(
+                    const startDate = moment(
                         this.quoteForm.get('startDate').value
                     );
-                    let endDate = moment(nd);
-                    let numberOfDays = endDate.diff(startDate, 'days');
+                    const endDate = moment(nd);
+                    const numberOfDays = endDate.diff(startDate, 'days');
                     this.quoteForm
                         .get('policyNumberOfDays')
                         .setValue(numberOfDays);
@@ -497,7 +500,7 @@ export class CreateQuoteComponent implements OnInit {
     // save risks changes after editing
     saveRisk(): void {
         console.log('save risk 2 called');
-        let index = _.findIndex(this.risks, { id: this.selectedRisk.id });
+        const index = _.findIndex(this.risks, { id: this.selectedRisk.id });
         console.log('index:', index);
 
         const vehicleDetails = this.vehicleDetailsService.getVehicleDetails();
@@ -542,16 +545,41 @@ export class CreateQuoteComponent implements OnInit {
         } else {
             this.clientName = this.quoteForm.controls.client.value.companyName;
         }
-        console.log('Client Details>>>>>>', this.clientCode, this.clientName);
+
+
+        let intermediaryNameA = '';
+        const intType = this.quoteForm.controls.intermediaryName.value.intermediaryType;
+
+        if ( intType === 'Broker' || intType === 'Agent') {
+          intermediaryNameA = this.quoteForm.controls.intermediaryName.value.companyName;
+        } else {
+          intermediaryNameA = this.quoteForm.controls.intermediaryName.value.firstName + ' ' + this.quoteForm.controls.intermediaryName.value.lastName;
+        }
+
+        const intermediaryIdA = this.quoteForm.controls.intermediaryName.value.id;
+
+
+        console.log('Client Details>>>>>>', intermediaryNameA, intermediaryIdA);
+
         const quote: MotorQuotationModel = {
-            ...this.quoteForm.value,
+            // ...this.quoteForm.value,
+            currency: this.quoteForm.controls.currency.value,
+            startDate: this.quoteForm.controls.startDate.value,
+            messageCode: this.quoteForm.controls.messageCode.value,
+            endDate: this.quoteForm.controls.endDate.value,
+            quarter: this.quoteForm.controls.quarter.value,
+            status: 'Draft',
+            receiptStatus: 'Unreceipted',
+            sourceOfBusiness: this.quoteForm.controls.sourceOfBusiness.value,
+            intermediaryName: intermediaryNameA,
+            intermediaryId: intermediaryIdA,
             dateCreated: new Date(),
             clientCode: this.clientCode,
             client: this.clientName,
             coverCode: '',
             underwritingYear: new Date(),
             branch: '',
-            basicPremiumSubTotal: '',
+            basicPremiumSubTotal: 0,
             user: this.agentMode
                 ? this.quoteForm.get('user').value
                 : localStorage.getItem('user'),
@@ -588,6 +616,7 @@ export class CreateQuoteComponent implements OnInit {
             this.productClauseService.addPolicyWording(this.newWordingWording);
         }
 
+      console.log('Client Details>>>>>>', quote);
         await this.quoteService.createMotorQuotation(quote, this.quotesCount);
         this.creatingQuote = false;
     }
@@ -729,9 +758,9 @@ export class CreateQuoteComponent implements OnInit {
             ...extensionDetails,
             ...discountDetails,
             ...totals,
-            limitsOfLiability: limitsOfLiability,
+            limitsOfLiability,
             LiabilityType: liabilityType,
-            excesses: excesses
+            excesses
         });
         this.risks = [...this.risks, ...risk];
 

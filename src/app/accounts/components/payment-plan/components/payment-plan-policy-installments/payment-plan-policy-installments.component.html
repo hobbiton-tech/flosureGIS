@@ -41,50 +41,27 @@
                             [nzColumn]="1"
                             [nzBordered]="true"
                             nzSize="middle"
-                            *ngIf="clientType === 'Corporate'"
                         >
                             <nz-descriptions-item nzTitle="Client Name">
-                                {{ clientN.companyName }}
+                                {{ client.clientType === 'Individual'
+                                ? capitalize(client.firstName + ' ' + client.lastName)
+                                : capitalize(client.companyName) }}
                             </nz-descriptions-item>
-                            <nz-descriptions-item nzTitle="Registration Number">
-                                {{ clientN.registrationNumber }}
+                             <nz-descriptions-item nzTitle="Registration Number">
+                                {{ client.clientType === 'Individual'
+                                ? client.idNumber
+                                : client.registrationNumber}}
                             </nz-descriptions-item>
                             <nz-descriptions-item nzTitle="Address">
-                                {{ clientN.address }}
+                                {{ client.address }}
                             </nz-descriptions-item>
                             <nz-descriptions-item nzTitle="Email">
-                                {{ clientN.email }}
+                                {{ client.email }}
                             </nz-descriptions-item>
                             <nz-descriptions-item nzTitle="Phone Number">
-                                {{ clientN.phone }}</nz-descriptions-item
+                                {{ client.phone }}</nz-descriptions-item
                             >
-                        </nz-descriptions>
 
-                        <nz-descriptions
-                            nzBordered
-                            nzSize="small"
-                            nzSpan="6"
-                            style="margin-top: 5px;"
-                            [nzColumn]="1"
-                            [nzBordered]="true"
-                            nzSize="middle"
-                            *ngIf="clientType === 'Individual'"
-                        >
-                            <nz-descriptions-item nzTitle="Client Name">
-                                {{ clientI.firstName }}{{ clientI.lastName }}
-                            </nz-descriptions-item>
-                            <nz-descriptions-item nzTitle="Registration Number">
-                                {{ clientI.idNumber }}
-                            </nz-descriptions-item>
-                            <nz-descriptions-item nzTitle="Address">
-                                {{ clientI.address }}
-                            </nz-descriptions-item>
-                            <nz-descriptions-item nzTitle="Email">
-                                {{ clientI.email }}
-                            </nz-descriptions-item>
-                            <nz-descriptions-item nzTitle="Phone Number">
-                                {{ clientI.phone }}</nz-descriptions-item
-                            >
                         </nz-descriptions>
                     </nz-card>
                 </div>
@@ -101,31 +78,31 @@
                         >
                             <nz-descriptions-item nzTitle="Total Premium">
                                 {{
-                                    paymentPlanData.totalPremium
+                                    paymentPlan.total_premium
                                         | number: '1.2-2'
                                 }}
                             </nz-descriptions-item>
                             <nz-descriptions-item nzTitle="Amount Paid">
                                 {{
-                                    paymentPlanData.amountPaid | number: '1.2-2'
+                                    paymentPlan.amount_paid | number: '1.2-2'
                                 }}
                             </nz-descriptions-item>
                             <nz-descriptions-item nzTitle="Amount Outstanding">
                                 {{
-                                    paymentPlanData.amountOutstanding
+                                    paymentPlan.amount_outstanding
                                         | number: '1.2-2'
                                 }}
                             </nz-descriptions-item>
                             <nz-descriptions-item
                                 nzTitle="Remaining Installments"
                             >
-                                {{ paymentPlanData.remainingInstallments }}
+                                {{ paymentPlan.remaining_installments }}
                             </nz-descriptions-item>
                             <nz-descriptions-item
                                 nzTitle="Number of Paid Installments"
                             >
                                 {{
-                                    paymentPlanData.numberOfPaidInstallments
+                                    paymentPlan.number_of_paid_installments
                                 }}</nz-descriptions-item
                             >
                         </nz-descriptions>
@@ -162,7 +139,6 @@
                             <thead>
                                 <tr>
                                     <th>Receipt Number</th>
-                                    <th>Client</th>
                                     <th>Amount</th>
                                     <th>Status</th>
                                     <th></th>
@@ -171,21 +147,22 @@
                             <tbody>
                                 <tr
                                     *ngFor="let receipt of receiptTable.data"
+                                    (click)="showAllocationRole(receipt)"
+                                    [class.selected]="receipt === selectedRole"
                                     style="cursor: pointer;"
                                 >
-                                    <td>{{ receipt.receiptNumber }}</td>
-                                    <td>{{ receipt.onBehalfOf }}</td>
+                                    <td>{{ receipt.receipt_number }}</td>
                                     <td>
                                         {{
-                                            receipt.sumInDigits
+                                            receipt.amount
                                                 | number: '1.2-2'
                                         }}
                                     </td>
-                                    <td>{{ receipt.allocationStatus }}</td>
+                                    <td>{{ receipt.allocation_status }}</td>
                                     <td>
-                                        <div
+                                        <!-- <div
                                             *ngIf="
-                                                receipt.allocationStatus !==
+                                                receipt.allocation_status !==
                                                 'Allocated'
                                             "
                                         >
@@ -198,7 +175,7 @@
                                             >
                                                 Allocate
                                             </button>
-                                        </div>
+                                        </div> -->
                                     </td>
                                 </tr>
                             </tbody>
@@ -226,7 +203,7 @@
 
                     <nz-table
                         #policiesTable
-                        [nzData]="displayPoliciesList"
+                        [nzData]="policyPlan"
                         [nzSize]="'small'"
                         [nzBordered]="true"
                     >
@@ -235,10 +212,11 @@
                                 <th>Policy Number</th>
                                 <th>Cover From</th>
                                 <th>Cover To</th>
-                                <th>Client Name</th>
                                 <th>Premium</th>
                                 <th>Allocated Amount</th>
+                                <th>Balance </th>
                                 <th>Status</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -246,29 +224,29 @@
                                 *ngFor="let policy of policiesTable.data"
                                 style="cursor: pointer;"
                             >
-                                <td>{{ policy.policyNumber }}</td>
-                                <td>{{ policy.startDate | date }}</td>
-                                <td>{{ policy.endDate | date }}</td>
-                                <td>{{ policy.client }}</td>
-                                <td>{{ policy.netPremium }}</td>
-                                <td>{{ policy.allocatedAmount }}</td>
-                                <td>{{ policy.allocationStatus }}</td>
-                                <!--<td>
+                                <td>{{ policy.policy_number }}</td>
+                                <td>{{ policy.start_date | date }}</td>
+                                <td>{{ policy.end_date | date }}</td>
+                                <td>{{ policy.net_premium | number: '1.2-2'}}</td>
+                                <td>{{ policy.allocation_amount | number: '1.2-2'}}</td>
+                                <td>{{ policy.balance | number: '1.2-2'}}</td>
+                                <td>{{ policy.allocation_status }}</td>
+                                <td>
                                      <div
                                         *ngIf="
-                                            policy.allocationStatus !==
+                                            policy.allocation_status !==
                                             'Allocated'
                                         "
                                     >
                                         <button
                                             nz-button
                                             nzType="primary"
-                                            (click)="showAllocationModal()"
+                                            (click)="showAllocationModal(policy)"
                                         >
                                             Allocate
                                         </button>
                                     </div>
-                                </td> -->
+                                </td>
                             </tr>
                         </tbody>
                     </nz-table>
@@ -291,6 +269,7 @@
                 <thead>
                     <tr>
                         <th>Installment Amount</th>
+                      <th>Paid Amount</th>
                         <th>Installment Date</th>
                         <th>Actual Paid Date</th>
                         <th>Balance</th>
@@ -307,19 +286,26 @@
                     >
                         <td>
                             {{
-                                paymentPlanPolicyInstallment.installmentAmount
+                                paymentPlanPolicyInstallment.installment_amount
                                     | number: '1.2-2'
                             }}
                         </td>
+
+                      <td>
+                        {{
+                        paymentPlanPolicyInstallment.amount_paid
+                          | number: '1.2-2'
+                        }}
+                      </td>
                         <td>
                             {{
-                                paymentPlanPolicyInstallment.installmentDate
+                                paymentPlanPolicyInstallment.installment_date
                                     | date: 'dd/MM/yyyy'
                             }}
                         </td>
                         <td>
                             {{
-                                paymentPlanPolicyInstallment.actualPaidDate
+                                paymentPlanPolicyInstallment.actual_paid_date
                                     | date: 'dd/MM/yyyy'
                             }}
                         </td>
@@ -330,12 +316,12 @@
                             }}
                         </td>
                         <td>
-                            {{ paymentPlanPolicyInstallment.installmentStatus }}
+                            {{ paymentPlanPolicyInstallment.installment_status }}
                         </td>
                         <td>
                             <div
                                 *ngIf="
-                                    paymentPlanPolicyInstallment.installmentStatus !==
+                                    paymentPlanPolicyInstallment.installment_status !==
                                     'Fully Paid'
                                 "
                             >
@@ -382,7 +368,7 @@
                             >
                                 <input
                                     nz-input
-                                    formControlName="receivedFrom"
+                                    formControlName="received_from"
                                     name="receivedFrom"
                                     type="text"
                                     id="receivedFrom"
@@ -409,7 +395,7 @@
                         <nz-form-item>
                             <nz-form-label
                                 [nzSpan]="8"
-                                nzFor="sumInDigits"
+                                nzFor="sum_in_digits"
                                 nzRequired
                                 >Amount</nz-form-label
                             >
@@ -419,7 +405,7 @@
                                     name="sumInDigits"
                                     type="number"
                                     id="sumInDigits"
-                                    formControlName="sumInDigits"
+                                    formControlName="sum_in_digits"
                                 />
 
                                 <!-- <span
@@ -452,7 +438,7 @@
                             <nz-form-control nzSpan="18">
                                 <nz-select
                                     name="receiptType"
-                                    formControlName="receiptType"
+                                    formControlName="receipt_type"
                                     nzAllowClear
                                     nzPlaceHolder="Choose"
                                 >
@@ -488,7 +474,7 @@
                             <nz-form-control [nzSpan]="16">
                                 <nz-select
                                     name="paymentMethod"
-                                    formControlName="paymentMethod"
+                                    formControlName="payment_method"
                                     nzAllowClear
                                     nzPlaceHolder="Choose payment Method"
                                 >
@@ -519,17 +505,23 @@
                         <nz-form-item>
                             <nz-form-label
                                 [nzSpan]="6"
-                                nzFor="narration"
+                                nzFor="currency"
                                 nzRequired
                                 >Narration</nz-form-label
                             >
                             <nz-form-control nzSpan="18">
-                                <textarea
-                                    formControlName="narration"
-                                    nz-input
-                                    rows="2"
-                                    placeholder="Write Your Narration Here"
-                                ></textarea>
+                              <nz-select
+                                name="paymentMethod"
+                                formControlName="currency"
+                                nzAllowClear
+                                nzPlaceHolder="Choose Currency"
+                              >
+                                <nz-option
+                                  *ngFor="let currency of currencyList"
+                                  [nzValue]="currency.value"
+                                  [nzLabel]="currency.label"
+                                ></nz-option>
+                              </nz-select>
                                 <!-- <span
                                     class="text-danger"
                                     *ngIf="
@@ -544,6 +536,35 @@
                             </nz-form-control>
                         </nz-form-item>
                     </div>
+                  <div nz-col [nzSpan]="12">
+                    <nz-form-item>
+                      <nz-form-label
+                        [nzSpan]="6"
+                        nzFor="narration"
+                        nzRequired
+                      >Narration</nz-form-label
+                      >
+                      <nz-form-control nzSpan="18">
+                                <textarea
+                                  formControlName="narration"
+                                  nz-input
+                                  rows="2"
+                                  placeholder="Write Your Narration Here"
+                                ></textarea>
+                        <!-- <span
+                            class="text-danger"
+                            *ngIf="
+                                (receiptFormControl.narration.touched ||
+                                    submitted) &&
+                                receiptFormControl.narration.errors
+                                    ?.required
+                            "
+                        >
+                            Please enter your Narration!
+                        </span> -->
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
                 </div>
             </form>
         </nz-card>
@@ -564,41 +585,6 @@
         >
             <form [formGroup]="allocationForm" nz-form>
                 <div nz-row>
-                    <div nz-col [nzSpan]="12">
-                        <nz-form-item>
-                            <nz-form-label
-                                [nzSpan]="8"
-                                nzFor="sumInDigits"
-                                nzRequired
-                                >Amount</nz-form-label
-                            >
-                            <nz-form-control [nzSpan]="16">
-                                <input
-                                    nz-input
-                                    name="sumInDigits"
-                                    type="number"
-                                    id="sumInDigits"
-                                    formControlName="sumInDigits"
-                                    placeholder="{{ amount }}"
-                                    readonly
-                                />
-                                <!--
-                                <span
-                                    class="text-danger"
-                                    *ngIf="
-                                        (receiptFormControl.sumInDigits
-                                            .touched ||
-                                            submitted) &&
-                                        receiptFormControl.sumInDigits.errors
-                                            ?.required
-                                    "
-                                >
-                                    Please enter sum in digits!
-                                </span>
-                              -->
-                            </nz-form-control>
-                        </nz-form-item>
-                    </div>
 
                     <div nz-col [nzSpan]="12">
                         <nz-form-item>
@@ -606,18 +592,88 @@
                                 >Policy</nz-form-label
                             >
                             <nz-form-control nzSpan="12">
+                                <input
+                                    nz-input
+                                    name="policy"
+                                    id="policy"
+                                    formControlName="policy"
+                                    readonly
+                                />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label
+                                [nzSpan]="8"
+                                nzFor="amount"
+                                nzRequired
+                                >Amount</nz-form-label
+                            >
+                            <nz-form-control [nzSpan]="16">
+                                <input
+                                    nz-input
+                                    name="amount"
+                                    type="number"
+                                    id="amount"
+                                    formControlName="amount"
+                                    [max]="amount"
+                                />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+            </form>
+        </nz-card>
+    </nz-modal>
+
+    <nz-modal
+        [(nzVisible)]="isPolicyVisible"
+        nzTitle="Add Policy Form"
+        (nzOnCancel)="handlePolicyCancel()"
+        (nzOnOk)="handleAddPolicyOk()"
+        [nzOkLoading]="isOkLoading"
+        [nzWidth]="'1200'"
+    >
+        <nz-card
+            style="width: 50%; margin: 0 auto;"
+            [nzBordered]="true"
+            nzTitle="Choose Policy"
+        >
+            <form [formGroup]="policyForm" nz-form>
+                <div nz-row>
+                    <div nz-col [nzSpan]="24">
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="12" nzFor="policies"
+                                >Policy</nz-form-label
+                            >
+                            <nz-form-control nzSpan="12">
                                 <nz-select
-                                    formControlName="policies"
-                                    [(ngModel)]="selectedPolicies"
-                                    nzMode="multiple"
-                                    nzPlaceHolder="Please select"
+                                    style="width: 200px;"
+                                    formControlName="policy"
+                                    placeHolder="Please select"
                                 >
                                     <nz-option
-                                        *ngFor="let option of listOfPolicies"
+                                        *ngFor="let option of policies"
                                         [nzLabel]="option.policyNumber"
                                         [nzValue]="option"
                                     ></nz-option>
                                 </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="12" nzFor="policies"
+                                >Additional Installments</nz-form-label
+                            >
+                            <nz-form-control nzSpan="12">
+                                <input
+                                    nz-input
+                                    style="width: 200px;"
+                                    name="number_of_installments"
+                                    type="number"
+                                    id="number_of_installments"
+                                    formControlName="number_of_installments"
+                                />
                             </nz-form-control>
                         </nz-form-item>
                     </div>

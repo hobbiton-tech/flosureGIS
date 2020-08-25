@@ -167,7 +167,7 @@
                     <image
                         width="710"
                         height="329"
-                        xlink:href="assets/images/apluslogo.png"
+                        xlink:href="assets/images/Savenda-Logo-Final.png"
                     />
                 </pattern>
                 <pattern
@@ -368,7 +368,7 @@
                 >
                     <tspan x="0" y="0">Expiry Date:</tspan>
                     <tspan class="cls-11" y="0">
-                        {{  policyRisk.riskEndDate | date }}
+                        {{ policyRisk.riskEndDate | date }}
                     </tspan>
                 </text>
                 <text
@@ -771,7 +771,9 @@
                     transform="translate(395 319)"
                 >
                     <!-- TODO: CHECK!! -->
-                    <tspan x="0" y="0">{{getYearOfManufacture(policyRisk)}}</tspan>
+                    <tspan x="0" y="0">
+                        {{ getYearOfManufacture(policyRisk) }}
+                    </tspan>
                 </text>
                 <text id="Gold" class="cls-18" transform="translate(508 319)">
                     <tspan x="0" y="0">{{ policyRisk.color }}</tspan>

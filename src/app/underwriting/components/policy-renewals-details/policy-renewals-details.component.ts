@@ -94,7 +94,7 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
     // loading feedback
     policyRenewalDetailsIsLoading = false;
 
-    //modals
+    // modals
     addRiskFormModalVisible = false;
     viewRiskFormModalVisible = false;
 
@@ -114,7 +114,7 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
     policyUpdate: Policy = new Policy();
     isLoading = false;
 
-    //endorsement form
+    // endorsement form
     endorsementForm: FormGroup;
 
     paymentPlan = 'NotCreated';
@@ -240,21 +240,21 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
     switchLoading = false;
 
     compareFn = (o1: any, o2: any) =>
-        o1 && o2 ? o1.value === o2.value : o1 === o2;
+        o1 && o2 ? o1.value === o2.value : o1 === o2
 
     disabledStartDate = (startValue: Date): boolean => {
         if (!startValue || !this.endValue) {
             return false;
         }
         return startValue.getTime() > this.endValue.getTime();
-    };
+    }
 
     disabledEndDate = (endValue: Date): boolean => {
         if (!endValue || !this.startValue) {
             return false;
         }
         return endValue.getTime() <= this.startValue.getTime();
-    };
+    }
     ngOnInit(): void {
         this.policyRenewalDetailsIsLoading = true;
         setTimeout(() => {
@@ -431,7 +431,7 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
             this.netPremium = this.netPremium + policyData.netPremium;
             // this.policyPlan = policyPlan;
             this.policyUpdate.paymentPlan = 'Created';
-            this.receiptService.updatePolicy(this.policyUpdate);
+            this.policiesService.updatePolicy(this.policyUpdate);
 
             const eDate = new Date(
                 this.paymentPlanForm.controls.startDate.value
@@ -459,12 +459,12 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
                 iDate.setMonth(iDate.getMonth() + 1);
                 this.formattedDate = iDate;
 
-                installment.push({
-                    installmentAmount: iAmount,
-                    installmentDate: this.formattedDate,
-                    balance: iAmount,
-                    installmentStatus: 'UnPaid'
-                });
+                // installment.push({
+                //     installmentAmount: iAmount,
+                //     installmentDate: this.formattedDate,
+                //     balance: iAmount,
+                //     installmentStatus: 'UnPaid',
+                // });
             }
 
             // Payment Plan
@@ -498,37 +498,32 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
 
             this._id = v4();
             const receipt: IReceiptModel = {
-                id: this._id,
-                paymentMethod: '',
-                receivedFrom: this.paymentPlanForm.controls.clientName.value,
-                onBehalfOf: this.paymentPlanForm.controls.clientName.value,
-                capturedBy: 'charles malama',
-                policyNumber: '',
-                receiptStatus: 'Receipted',
+                payment_method: '',
+                received_from: this.paymentPlanForm.controls.clientName.value,
+                on_behalf_of: this.paymentPlanForm.controls.clientName.value,
+                captured_by: 'charles malama',
+                receipt_status: 'Receipted',
                 narration: 'Payment Plan',
-                receiptType: 'Premium Payment',
-                sumInDigits: this.paymentPlanForm.controls
+                receipt_type: 'Premium Payment',
+                sum_in_digits: this.paymentPlanForm.controls
                     .initialInstallmentAmount.value,
-                todayDate: new Date()
+                today_date: new Date(),
             };
 
             const planReceipt: PlanReceipt[] = [];
             planReceipt.push({
-                id: this._id,
-                onBehalfOf: this.paymentPlanForm.controls.clientName.value,
-                allocationStatus: 'Unallocated',
-                sumInDigits: this.paymentPlanForm.controls
+                allocation_status: 'Unallocated',
+                amount: this.paymentPlanForm.controls
                     .initialInstallmentAmount.value,
-                policyNumber: ''
             });
 
-            plan.planReceipt = planReceipt;
+            // plan.planReceipt = planReceipt;
             console.log('=====================');
 
             console.log(receipt, plan);
 
             // add payment plan
-            this.paymentPlanService.addPaymentPlanReceipt(receipt, plan);
+            // this.paymentPlanService.addPaymentPlanReceipt(receipt, plan);
 
             // add payment plan
             // this.paymentPlanService.addPaymentPlan(plan);
@@ -548,8 +543,8 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
 
     handlePolicyEndDateCalculation(): void {
         if (
-            this.policyDetailsForm.get('startDate').value != '' &&
-            this.policyDetailsForm.get('quarter').value != ''
+            this.policyDetailsForm.get('startDate').value !== '' &&
+            this.policyDetailsForm.get('quarter').value !== ''
         ) {
             const request: IRateRequest = {
                 sumInsured: 0,
@@ -795,7 +790,7 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
     }
 
     updateRisk(risk: RiskModel) {
-        var riskIndex = _.findIndex(this.risks, {
+        const riskIndex = _.findIndex(this.risks, {
             id: risk.id
         });
 

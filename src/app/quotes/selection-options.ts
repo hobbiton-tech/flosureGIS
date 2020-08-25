@@ -1,4 +1,4 @@
-//VEHICLE BODY TYPE
+// VEHICLE BODY TYPE
 export const VehicleBodyType = [
     { label: 'SEDAN', value: 'SEDAN' },
     { label: 'VAN', value: 'VAN' },
@@ -6,7 +6,7 @@ export const VehicleBodyType = [
     { label: 'SUV', value: 'SUV' }
 ];
 
-//MOTOR COMPREHENSIVE LOADING OPTIONS
+// MOTOR COMPREHENSIVE LOADING OPTIONS
 export const MotorComprehensiveLoadingOptions = [
     {
         label: 'Increased Third Party Limit',
@@ -33,7 +33,7 @@ export const MotorComprehensiveLoadingOptions = [
     { label: 'Permanent Disability', value: 'permanentDisability' }
 ];
 
-//MOTOR THIRD PARTY LOADING OPTIONS
+// MOTOR THIRD PARTY LOADING OPTIONS
 export const MotorThirdPartyLoadingOptions = [
     {
         label: 'Increased Third Party Limit',
@@ -41,7 +41,7 @@ export const MotorThirdPartyLoadingOptions = [
     }
 ];
 
-//DISCOUNT OPTIONS
+// DISCOUNT OPTIONS
 export const DiscountOptions = [
     { label: 'No claims dicount', value: 'noClaimsDiscount' },
     { label: 'Loyalty Discount', value: 'loyaltyDiscount' },
@@ -49,15 +49,15 @@ export const DiscountOptions = [
     { label: 'Low Term Agreement', value: 'lowTermAgreementDiscount' }
 ];
 
-//SOURCE OF BUSINESS OPTIONS
+// SOURCE OF BUSINESS OPTIONS
 export const SourceOfBusinessOptions = [
-    { label: 'Direct', value: 'direct' },
-    { label: 'Broker', value: 'broker' },
-    { label: 'Agent', value: 'agent' },
-    { label: 'Sales Representative', value: 'salesRepresentative' }
+    { label: 'Direct', value: 'Direct' },
+    { label: 'Broker', value: 'Broker' },
+    { label: 'Agent', value: 'Agent' },
+    { label: 'Sales Representative', value: 'SalesRepresentative' }
 ];
 
-//PRODUCT TYPE OPTIONS
+// PRODUCT TYPE OPTIONS
 export const ProductTypeOptions = [
     { label: 'Private', value: 'Private' },
     { label: 'Commercial', value: 'Commercial' },
@@ -70,37 +70,22 @@ export const CancellationTypeOptions = [
     { label: 'Full Refund', value: 'fullRefund' }
 ];
 
-//INSURANCE TYPE OPTIONS
+// INSURANCE TYPE OPTIONS
 export const InsuranceTypeOptions = [
-    {
-        id: '5bf2a73c-709a-4f38-9846-c260e8fffefc',
-        label: 'Motor Comprehensive',
-        value: 'Comprehensive'
-    },
-    {
-        id: 'c40dcacc-b3fa-43fb-bb13-ac1e24bd657d',
-        label: 'Full Third Party',
-        value: 'ThirdParty'
-    },
-    {
-        id: '6294cca8-8794-4751-9b82-53566eacb4b4',
-        label: 'Act Only Cover',
-        value: 'ActOnly'
-    },
-    {
-        id: '12cbe264-88b8-42e8-97e3-977bb35b6802',
-        label: 'Third Party Fire And Theft',
-        value: 'ThirdPartyFireAndTheft'
-    }
+    { id: 'b3fa196d-e5d5-416b-ae4d-a338d42bf422', label: 'Motor Comprehensive', value: 'Comprehensive' },
+    {id: '3cbdeca7-4e4f-4e21-9131-d54ba43f8bd6', label: 'Full Third Party', value: 'ThirdParty' },
+    {id: '830157ef-1d2a-4eab-b8d7-49126fcb5b3c', label: 'Act Only Cover', value: 'ActOnly' },
+    {id: '836abcd7-f80f-4d3b-a720-1945c54a2098', label: 'Third Party Fire And Theft', value: 'ThirdPartyFireAndTheft' }
+
 ];
 
-//LIMITS OF LIABILITY OPTIONS
+// LIMITS OF LIABILITY OPTIONS
 export const LimitsOfLiabilityOptions = [
     { label: 'Combined', value: 'combinedLimits' },
     { label: 'Standard', value: 'standardLimits' }
 ];
 
-//EXCESSES OPTIONS
+// EXCESSES OPTIONS
 export const ExcessesOptions = [
     { label: 'Collision And Fire', value: 'CollisionAndFire' },
     {
