@@ -315,15 +315,8 @@ export class FinanceSetupsComponent implements OnInit {
         this.onBranchSelected.emit(this.selectedBranchValue);
     }
 
-    onChangeBank(bank) {
-        console.log("PEEEEEEEE>>>>", bank);
-        this.selectedBankId = bank.bankId;
-        this.bank_name = bank.bank_name;
-
-        this.branchList = this.branches.filter((x) => x.bankId === bank.id);
-        console.log("FIlt>>>>", bank.id, this.branches, this.branchList);
-    }
-    bankChange(value) {
+  
+    bankChange(value: any) {
         console.log("value....", value);
         this.selectedBankId = value.bankId;
         this.bank_name = value.bank_name;
@@ -403,23 +396,15 @@ export class FinanceSetupsComponent implements OnInit {
         this.description = bank.description;
     }
 
-    // this.selectedRoleId = role.rId;
-    // this.roleName = role.roleName;
-    // this.description = role.description;
+    
+    // bankChanged(value: any) {
+    //     console.log("PRODUCT TYPE<<<<<", value);
+    //     this.selectedBankId = value.id;
+    //     this.bank_name = value.bank_name;
 
-    // // rId.replace(/\s/g, "");
-
-    // this.permissionsList = this.permissions.filter((x) => x.rId === role.id);
-    // console.log('FIlt>>>>', role.id, this.permissions, this.permissionsList);
-
-    bankChanged(value: any) {
-        console.log("PRODUCT TYPE<<<<<", value);
-        this.selectedBankId = value.id;
-        this.bank_name = value.bank_name;
-
-        this.branchList = this.branches.filter((x) => x.bankId === value.id);
-        console.log("FIlt>>>>", value.id, this.branches, this.branchList);
-    }
+    //     this.branchList = this.branches.filter((x) => x.bankId === value.id);
+    //     console.log("FIlt>>>>", value.id, this.branches, this.branchList);
+    // }
 
     onSelectPaymentMethod(paymentMethod) {
         console.log("PEEEEEEEE>>>>", paymentMethod);

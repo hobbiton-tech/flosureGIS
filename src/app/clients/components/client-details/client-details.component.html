@@ -786,7 +786,7 @@
                             <nz-form-label nzSpan="7">Bank</nz-form-label>
                             <nz-form-control nzSpan="16">
                                 <nz-select
-                                    [nzPlaceHolder]="client.bank"
+                                    [nzPlaceHolder]="banks"
                                     [nzDisabled]="!isEditmode"
                                     (ngModelChange)="bankChange($event)"
                                     name="bank"
@@ -804,7 +804,7 @@
                             <nz-form-label nzSpan="7">Branch</nz-form-label>
                             <nz-form-control nzSpan="16">
                                 <nz-select
-                                    [nzPlaceHolder]="client.branch"
+                                    [nzPlaceHolder]="branches"
                                     (ngModelChange)="bankChange($event)"
                                     name="branch"
                                     id="branch"
