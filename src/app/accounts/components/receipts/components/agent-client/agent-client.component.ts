@@ -104,6 +104,7 @@ export class AgentClientComponent implements OnInit {
   private receiptId: number;
   commissionPayments: any[] = [];
   commissionPayment: CPaymentModel;
+  comPayments: any[] = [];
 
     constructor(
         private receiptService: AccountService,
@@ -295,7 +296,7 @@ export class AgentClientComponent implements OnInit {
 
 
             if (this.commissionPayments === undefined || this.commissionPayments === null || this.commissionPayments.length === 0) {
-            const commissionPayment = {
+            this.commissionPayment = {
               agent_id: this.policy.intermediaryId,
               agent_name: this.policy.intermediaryName,
               commission_amount: this.allocationPolicy.commission_due,
@@ -305,15 +306,18 @@ export class AgentClientComponent implements OnInit {
               agent_type: 'Agent'
             };
 
-            this.commissionPaymentService.createCPayment(commissionPayment).subscribe((comm) => {
+            this.commissionPaymentService.createCPayment(this.commissionPayment).subscribe((comm) => {
               console.log('Commission Payment>>>', comm);
             }, (commErr) => {
               this.message.error(commErr);
             });
           } else {
-            for (const c of this.commissionPayments) {
 
-              if (c.agent_id !== this.allocationPolicy.intermediary_id) {
+              this.comPayments = this.commissionPayments.filter((x) => x.agent_id === this.policy.intermediaryId);
+              const newIndex = this.comPayments.length - 1;
+              console.log('LAST ARRAY>>>', this.comPayments, this.comPayments[0], newIndex, this.allocationPolicy.intermediary_id);
+
+              if (this.comPayments.length === 0 || this.comPayments.length === null || this.comPayments.length === undefined) {
                 this.commissionPayment = {
                   agent_id: this.policy.intermediaryId,
                   agent_name: this.policy.intermediaryName,
@@ -324,25 +328,57 @@ export class AgentClientComponent implements OnInit {
                   agent_type: 'Agent'
                 };
 
-                this.commissionPaymentService.createCPayment(this.commissionPayment).subscribe((comm) => {}, (commErr) => {
+                this.commissionPaymentService.createCPayment(this.commissionPayment).subscribe((comm) => {
+                  console.log('Allocation>>>', comm);
+                }, (commErr) => {
                   this.message.error(commErr);
                 });
-                break;
-              }
+                // tslint:disable-next-line:max-line-length
+              } else if (this.comPayments[0].agent_id !== this.allocationPolicy.intermediary_id) {
+                this.commissionPayment = {
+                  agent_id: this.policy.intermediaryId,
+                  agent_name: this.policy.intermediaryName,
+                  commission_amount: this.allocationPolicy.commission_due,
+                  paid_amount: 0,
+                  remaining_amount: 0,
+                  status: 'Not Paid',
+                  agent_type: 'Agent'
+                };
 
-              if (c.agent_id ===  this.policy.intermediaryId && c.status === 'Not Paid') {
+                this.commissionPaymentService.createCPayment(this.commissionPayment).subscribe((comm) => {
+                  console.log('Allocation>>>', comm);
+                }, (commErr) => {
+                  this.message.error(commErr);
+                });
+                // tslint:disable-next-line:max-line-length
+              } else if (this.comPayments[0].agent_id ===  this.allocationPolicy.intermediary_id && this.comPayments[0].status === 'Not Paid') {
                 // this.commissionAmount = this.commissionAmount + c.commission_amount;
-                c.commission_amount = Number(c.commission_amount + this.allocationPolicy.commission_due);
+                // tslint:disable-next-line:max-line-length
+                this.comPayments[0].commission_amount = Number(this.comPayments[0].commission_amount + this.allocationPolicy.commission_due);
 
-                console.log('checking C>>>', c);
+                console.log('checking C>>>', this.comPayments[this.comPayments.length - 1]);
 
-                this.commissionPaymentService.updateCPayment(c).subscribe((commP) => {}, (comPErr) => {
+                this.commissionPaymentService.updateCPayment(this.comPayments[0]).subscribe((commP) => {}, (comPErr) => {
                   this.message.error(comPErr);
                 });
+                // tslint:disable-next-line:max-line-length
+              } else if (this.comPayments[0].agent_id ===  this.allocationPolicy.intermediary_id && this.comPayments[0].status !== 'Not Paid') {
+                this.commissionPayment = {
+                  agent_id: this.policy.intermediaryId,
+                  agent_name: this.policy.intermediaryName,
+                  commission_amount: this.allocationPolicy.commission_due,
+                  paid_amount: 0,
+                  remaining_amount: 0,
+                  status: 'Not Paid',
+                  agent_type: 'Agent'
+                };
 
-                break;
+                this.commissionPaymentService.createCPayment(this.commissionPayment).subscribe((comm) => {
+                  console.log('Allocation >>>', comm);
+                }, (commErr) => {
+                  this.message.error(commErr);
+                });
               }
-            }
           }
 
 

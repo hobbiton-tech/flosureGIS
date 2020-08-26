@@ -73,7 +73,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
     paymentMethod = '';
 
   allocationPolicy: AllocationPolicy;
-  allocationReceipt: AllocationReceipt
+  allocationReceipt: AllocationReceipt;
 
   allocationPolicies: any[] = [];
   allocationsReceipts: any[] = [];
@@ -110,6 +110,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
     searchString: string;
   commissionPayments: any[] = [];
   commissionPayment: CPaymentModel;
+  comPayments: any[] = [];
 
     constructor(
         private receiptService: AccountService,
@@ -181,7 +182,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
         this.allocationPolicies = allocationPolicies.data;
       });
 
-      this.allocationsService.getAllocationReceipt().subscribe((allocationsReceipts) =>{
+      this.allocationsService.getAllocationReceipt().subscribe((allocationsReceipts) => {
         this.allocationsReceipts = allocationsReceipts.data;
       });
 
@@ -245,7 +246,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
         this.currency = unreceipted.currency;
         this.sourceOfBusiness = unreceipted.sourceOfBusiness;
         this.intermediaryName = unreceipted.intermediaryName;
-      this.allocationPolicy = this.allocationPolicies.filter((x) => x.policy_number === unreceipted.policyNumber)[0];
+        this.allocationPolicy = this.allocationPolicies.filter((x) => x.policy_number === unreceipted.policyNumber)[0];
         console.log(this.policyAmount);
     }
 
@@ -279,14 +280,14 @@ export class SalesRepresentativeClientComponent implements OnInit {
             };
 
 
-          this.allocationPolicy.balance = 0;
-          this.allocationPolicy.settlements = Number(this.policy.netPremium);
-          this.allocationPolicy.status = 'Allocated'
+            this.allocationPolicy.balance = 0;
+            this.allocationPolicy.settlements = Number(this.policy.netPremium);
+            this.allocationPolicy.status = 'Allocated';
 
 
 
 
-          this.allocationReceipt = {
+            this.allocationReceipt = {
             allocated_amount: Number(this.policy.netPremium),
             amount: Number(this.policy.netPremium),
             intermediary_id: this.policy.intermediaryId,
@@ -295,7 +296,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
             receipt_number: '',
             remaining_amount: 0,
             status: 'Allocated'
-          }
+          };
 
             this.policy.receiptStatus = 'Receipted';
             this.policy.paymentPlan = 'Created';
@@ -304,7 +305,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
 
 
 
-          if (this.commissionPayments === undefined || this.commissionPayments.length == 0) {
+            if (this.commissionPayments === undefined || this.commissionPayments === null || this.commissionPayments.length === 0) {
             this.commissionPayment = {
               agent_id: this.policy.intermediaryId,
               agent_name: this.policy.intermediaryName,
@@ -313,53 +314,67 @@ export class SalesRepresentativeClientComponent implements OnInit {
               remaining_amount: 0,
               status: 'Not Paid',
               agent_type: 'Agent'
-            }
+            };
 
             this.commissionPaymentService.createCPayment(this.commissionPayment).subscribe((comm) => {}, (commErr) => {
-              this.message.error(commErr)
-            })
+              this.message.error(commErr);
+            });
           } else {
-            for (const c of this.commissionPayments) {
+            this.comPayments = this.commissionPayments.filter((x) => x.agent_id === this.policy.intermediaryId);
+            const newIndex = this.comPayments.length - 1;
+            console.log('LAST ARRAY>>>', this.comPayments, this.comPayments[0], newIndex, this.allocationPolicy.intermediary_id);
 
-              if (c.agent_id !== this.allocationPolicy.intermediary_id) {
-                this.commissionPayment = {
-                  agent_id: this.policy.intermediaryId,
-                  agent_name: this.policy.intermediaryName,
-                  commission_amount: this.allocationPolicy.commission_due,
-                  paid_amount: 0,
-                  remaining_amount: 0,
-                  status: 'Not Paid',
-                  agent_type: 'Agent'
-                }
+            if (this.comPayments[0].agent_id !== this.allocationPolicy.intermediary_id) {
+              this.commissionPayment = {
+                agent_id: this.policy.intermediaryId,
+                agent_name: this.policy.intermediaryName,
+                commission_amount: this.allocationPolicy.commission_due,
+                paid_amount: 0,
+                remaining_amount: 0,
+                status: 'Not Paid',
+                agent_type: 'Agent'
+              };
 
+              this.commissionPaymentService.createCPayment(this.commissionPayment).subscribe((comm) => {
+                console.log('Allocation>>>', comm);
+              }, (commErr) => {
+                this.message.error(commErr);
+              });
+              // tslint:disable-next-line:max-line-length
+            } else if (this.comPayments[0].agent_id ===  this.allocationPolicy.intermediary_id && this.comPayments[0].status === 'Not Paid') {
+              // this.commissionAmount = this.commissionAmount + c.commission_amount;
+              // tslint:disable-next-line:max-line-length
+              this.comPayments[0].commission_amount = Number(this.comPayments[0].commission_amount + this.allocationPolicy.commission_due);
 
+              console.log('checking C>>>', this.comPayments[this.comPayments.length - 1]);
 
+              this.commissionPaymentService.updateCPayment(this.comPayments[0]).subscribe((commP) => {}, (comPErr) => {
+                this.message.error(comPErr);
+              });
+              // tslint:disable-next-line:max-line-length
+            } else if (this.comPayments[0].agent_id ===  this.allocationPolicy.intermediary_id && this.comPayments[0].status !== 'Not Paid') {
+              this.commissionPayment = {
+                agent_id: this.policy.intermediaryId,
+                agent_name: this.policy.intermediaryName,
+                commission_amount: this.allocationPolicy.commission_due,
+                paid_amount: 0,
+                remaining_amount: 0,
+                status: 'Not Paid',
+                agent_type: 'Agent'
+              };
 
-                this.commissionPaymentService.createCPayment(this.commissionPayment).subscribe((comm) => {}, (commErr) => {
-                  this.message.error(commErr)
-                })
-                break
-              }
-
-              if (c.agent_id ===  this.policy.intermediaryId && c.status === 'Not Paid') {
-                // this.commissionAmount = this.commissionAmount + c.commission_amount;
-                c.commission_amount = Number(c.commission_amount + this.allocationPolicy.commission_due);
-
-                console.log("checking C>>>", c);
-
-                this.commissionPaymentService.updateCPayment(c).subscribe((commP) => {}, (comPErr) => {
-                  this.message.error(comPErr)
-                });
-
-                break
-              }
+              this.commissionPaymentService.createCPayment(this.commissionPayment).subscribe((comm) => {
+                console.log('Allocation >>>', comm);
+              }, (commErr) => {
+                this.message.error(commErr);
+              });
             }
           }
 
 
 
 
-          this.http.get<any>(
+            this.http.get<any>(
             `https://number-generation.flosure-api.com/savenda-receipt-number/1`
           )
             .subscribe(async (res) => {
@@ -381,7 +396,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
                     console.log('Allocation Policy Res>>>', policyRes);
                   }, (policyErr) => {
                     this.message.error(policyErr);
-                  })
+                  });
 
                   this.policeServices.updatePolicy(this.policy).subscribe((res) => {}, (err) => {
                     console.log('Update Policy Error', err);
@@ -508,7 +523,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
         this.paymentMethod = value;
     }
 
-     //Test Search Code
+     // Test Search Code
 
      searchUnR(value: string): void {
       console.log(value);
@@ -526,17 +541,14 @@ export class SalesRepresentativeClientComponent implements OnInit {
       });
   }
 
-  searchR(value: string): void
-  {
+  searchR(value: string): void {
     console.log(value);
-    if (value === ' ' || !value)
-    {
+    if (value === ' ' || !value) {
       this.displayReceiptedList = this.receiptedList;
 
     }
 
-    this.displayReceiptedList = this.receiptedList.filter((receip) =>
-    {
+    this.displayReceiptedList = this.receiptedList.filter((receip) => {
         return (
           receip.receipt_number.toLowerCase().includes(value.toLowerCase()) ||
           receip.on_behalf_of.toLowerCase().includes(value.toLowerCase())
@@ -545,15 +557,12 @@ export class SalesRepresentativeClientComponent implements OnInit {
     });
 }
 
-searchCR(value: string): void
-{
-  if (value === ' ' || !value)
-  {
+searchCR(value: string): void {
+  if (value === ' ' || !value) {
       this.displayCancelledReceiptList = this.cancelReceiptList;
   }
 
-  this.displayCancelledReceiptList = this.cancelReceiptList.filter((receip) =>
-    {
+  this.displayCancelledReceiptList = this.cancelReceiptList.filter((receip) => {
         return (
           receip.receipt_number.toLowerCase().includes(value.toLowerCase()) ||
           receip.on_behalf_of.toLowerCase().includes(value.toLowerCase())

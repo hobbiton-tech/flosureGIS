@@ -22,6 +22,7 @@ export class CommissionPaymentComponent implements OnInit {
 
   commissionPayment: CPaymentModel;
   commissionPayments: any[] = [];
+  comPayments: any[] = [];
 
   pendingRequisitionsList: IRequisitionModel[] = [];
   displayPendingRequisitionsList: IRequisitionModel[] = [];
@@ -45,7 +46,8 @@ export class CommissionPaymentComponent implements OnInit {
 
   refresh() {
     this.commissionPaymentService.getCPayment().subscribe((res) => {
-      this.commissionPayments = res.data.filter((x) => x.status !== 'Paid');
+      this.comPayments = res.data.filter((x) => x.status !== 'Paid' && x.agent_type === this.selectedIntermediary);
+      this.commissionPayments = this.comPayments;
     });
 
     this.accountsService.getRequisitions().subscribe(requisitions => {
@@ -64,8 +66,9 @@ export class CommissionPaymentComponent implements OnInit {
 
   selectInt(value) {
     this.selectedIntermediary = value;
+    console.log('Intermediary>>>', this.selectedIntermediary);
 
-    this.commissionPayments = this.commissionPayments.filter((x) => x.agent_type = this.selectedIntermediary);
+    this.refresh();
   }
 
 
@@ -82,24 +85,24 @@ export class CommissionPaymentComponent implements OnInit {
       policyNumber: '',
       requisitionNumber: '',
       id: ''
-    }
+    };
 
     this.accountsService.generateReqNumber().subscribe((reqNum: any) => {
       req.requisitionNumber = reqNum.data.requisition_number;
       this.accountsService.createRequisition(req).subscribe((req) => {
-          value.status = "Requisition Raised"
+          value.status = 'Requisition Raised';
           this.commissionPaymentService.updateCPayment(value).subscribe((comm) => {
             this.refresh();
           }, (comErr) => {
-            this.msg.error(comErr)
-          })
-          this.msg.success('Requisition Successfully Raised')
+            this.msg.error(comErr);
+          });
+          this.msg.success('Requisition Successfully Raised');
 
         },
         (error) => {
-          this.msg.error(error)
-        })
-    })
+          this.msg.error(error);
+        });
+    });
   }
 
   cancelReq() {}

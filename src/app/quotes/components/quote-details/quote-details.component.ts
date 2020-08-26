@@ -134,6 +134,7 @@ export class QuoteDetailsComponent implements OnInit {
     productTypeOptions = ProductTypeOptions;
     insuranceTypeOptions = InsuranceTypeOptions;
     limitsTypeOptions = LimitsOfLiabilityOptions;
+    commissionAmount = 0;
 
     private header = new HttpHeaders({
         'content-type': 'application/json',
@@ -351,6 +352,7 @@ export class QuoteDetailsComponent implements OnInit {
     excessFT: IExccess[] = [];
     limitsOfLiabilities: LimitsOfLiability[] = [];
     commission: ICommissionSetup;
+  allocationPolicy: AllocationPolicy;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -801,7 +803,9 @@ export class QuoteDetailsComponent implements OnInit {
         this.amount = this.sumArray(this.quoteData.risks, 'netPremium');
         this.approvingQuote = true;
 
-        const  commissionAmount = (this.commission.commission / 100) * this.sumArray(this.quoteData.risks, 'netPremium');
+        if (this.quoteData.sourceOfBusiness !== 'Direct') {
+        this.commissionAmount = (this.commission.commission / 100) * this.sumArray(this.quoteData.risks, 'netPremium');
+      }
 
 
       // convert to policy
@@ -827,20 +831,22 @@ export class QuoteDetailsComponent implements OnInit {
         intermediaryId: this.quoteData.intermediaryId,
       };
 
-        const allocationPolicy: AllocationPolicy = {
-        balance: Number(this.sumArray(this.quoteData.risks, 'netPremium')) - Number(commissionAmount),
-        client_id: this.quoteData.clientCode,
-        client_name: this.quoteData.client,
-        commission_due: Number(commissionAmount),
+        if (this.quoteData.sourceOfBusiness !== 'Direct') {
+        this.allocationPolicy = {
+          balance: Number(this.sumArray(this.quoteData.risks, 'netPremium')) - Number(this.commissionAmount),
+          client_id: this.quoteData.clientCode,
+          client_name: this.quoteData.client,
+          commission_due: Number(this.commissionAmount),
           commission_rate: Number(this.commission.commission),
-        gross_amount: Number(this.sumArray(this.quoteData.risks, 'netPremium')),
-        intermediary_id: this.quoteData.intermediaryId,
-        intermediary_name: this.quoteData.intermediaryName,
-        net_amount_due: Number(this.sumArray(this.quoteData.risks, 'netPremium')) - Number(commissionAmount),
-        policy_number: this.quoteNumber.replace('Q', 'P'),
-        settlements: 0,
-        status: 'Un Allocated'
-      };
+          gross_amount: Number(this.sumArray(this.quoteData.risks, 'netPremium')),
+          intermediary_id: this.quoteData.intermediaryId,
+          intermediary_name: this.quoteData.intermediaryName,
+          net_amount_due: Number(this.sumArray(this.quoteData.risks, 'netPremium')) - Number(this.commissionAmount),
+          policy_number: this.quoteNumber.replace('Q', 'P'),
+          settlements: 0,
+          status: 'Un Allocated'
+        };
+      }
 
         const debitNote: DebitNote = {
         remarks: '-',
@@ -876,9 +882,13 @@ export class QuoteDetailsComponent implements OnInit {
             this.policiesService.createPolicy(policy).subscribe((res) => {
                 console.log('response:', res);
 
-                this.allocationService.createAllocationPolicy(allocationPolicy).subscribe((succ) => {}, (nSucc) => {
+                if (this.quoteData.sourceOfBusiness !== 'Direct') {
+
+                this.allocationService.createAllocationPolicy(this.allocationPolicy).subscribe((succ) => {
+                }, (nSucc) => {
                   this.message.error(nSucc);
                 });
+              }
 
                 this.policyId = res.id;
                 this.newRisks = res.risks;
@@ -1051,9 +1061,13 @@ export class QuoteDetailsComponent implements OnInit {
 
 
             this.policiesService.createPolicy(policy).subscribe((res) => {
-              this.allocationService.createAllocationPolicy(allocationPolicy).subscribe((succ) => {}, (nSucc) => {
-                this.message.error(nSucc);
-              });
+
+              if (this.quoteData.sourceOfBusiness !== 'Direct') {
+                this.allocationService.createAllocationPolicy(this.allocationPolicy).subscribe((succ) => {
+                }, (nSucc) => {
+                  this.message.error(nSucc);
+                });
+              }
               console.log('response:', res);
               this.policyId = res.id;
 
