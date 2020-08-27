@@ -31,6 +31,7 @@ export class RequisitionsComponent implements OnInit {
     payee: string;
 
     searchString: string;
+    approvedSearchString: string;
 
     // requisition payment modal
     isRequisitionPaymentModalVisible = false;

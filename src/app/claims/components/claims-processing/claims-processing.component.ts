@@ -41,10 +41,14 @@ export class ClaimsProcessingComponent implements OnInit {
     isClaimPolicyPremiumFullyPaid: boolean = false;
     isClaimFullyDocumented: boolean = false;
 
+    // for modal
+    lossEstimate: number;
+
     claimsTableUpdate = new BehaviorSubject<boolean>(false);
 
     // requisition number
     reqNumber: string;
+    displayApprovedClaimsList: Claim[];
 
     constructor(
         private readonly claimsService: ClaimsService,
@@ -72,7 +76,7 @@ export class ClaimsProcessingComponent implements OnInit {
             this.displayPendingClaimList = this.pendingClaimsList;
 
             this.processedClaimsList = this.claimsList.filter(
-                x => x.claimStatus == 'Processed' || 'Approved'
+                x => x.claimStatus == 'Processed'
             );
             this.displayProcessedClaimsList = this.processedClaimsList;
         });
@@ -101,58 +105,6 @@ export class ClaimsProcessingComponent implements OnInit {
         this.claimProcessingService.changeClaim(claim);
     }
 
-    raiseRequisition(claim: Claim) {
-        this.isRaisingRequisition = true;
-        console.log(claim);
-        this.accountsService.getRequisitions().subscribe(requisitions => {
-            this.reqNumber = this.accountsService.generateRequisitionID(
-                requisitions.length
-            );
-
-            const requisition: IRequisitionModel = {
-                id: v4(),
-                policyNumber: claim.policy.policyNumber,
-                requisitionNumber: this.reqNumber,
-                payee: claim.claimant.firstName + ' ' + claim.claimant.lastName,
-                cancellationDate: claim.notificationDate,
-                dateCreated: new Date(),
-                approvalStatus: 'Pending',
-                paymentType: 'GIS-CLAIM',
-                currency: claim.policy.currency,
-                amount: claim.lossQuantum.adjustedQuantum,
-                paymentStatus: 'UnProcessed',
-                claim: claim
-            };
-
-            this.accountsService.createRequisition(requisition).subscribe(
-                res => {
-                    console.log(res);
-                    this.msg.success('Requisition Raised Successfully');
-                    this.isRaisingRequisition = false;
-                    this.router.navigateByUrl('/flosure/accounts/requisitions');
-
-                    const claimUpdate: Claim = {
-                        ...claim,
-                        isRequisitionRaised: true
-                    };
-
-                    this.claimsService
-                        .updateClaim(claimUpdate.id, claimUpdate)
-                        .subscribe(res => {
-                            console.log(res);
-                            this.claimsTableUpdate.next(true);
-                        });
-                },
-
-                err => {
-                    console.log(err);
-                    this.msg.error('Failed to raise Requisition');
-                    this.isRaisingRequisition = false;
-                }
-            );
-        });
-    }
-
     viewClaimDetails(claim: Claim): void {
         this.claimProcessingService.changeClaim(claim);
 
@@ -174,7 +126,7 @@ export class ClaimsProcessingComponent implements OnInit {
             );
 
             this.processedClaimsList = this.claimsList.filter(
-                x => x.claimStatus == 'Processed' || 'Approved'
+                x => x.claimStatus == 'Processed'
             );
             this.displayProcessedClaimsList = this.processedClaimsList.filter(
                 x => x.claimant != null
@@ -187,11 +139,6 @@ export class ClaimsProcessingComponent implements OnInit {
 
         let policyRisksRegNumbers: string[] = claim.policy.risks.map(
             x => x.regNumber
-        );
-
-        console.log(
-            'r in p:',
-            policyRisksRegNumbers.includes(claim.risk.regNumber)
         );
 
         if (policyRisksRegNumbers.includes(claim.risk.regNumber)) {
@@ -213,7 +160,7 @@ export class ClaimsProcessingComponent implements OnInit {
             this.isClaimLossDateUnderPolicyPeriod = false;
         }
 
-        if (claim.policy.paymentPlan == 'Created') {
+        if (claim.policy.receiptStatus == 'Receipted') {
             this.isClaimPolicyPremiumFullyPaid = false;
         } else {
             this.isClaimPolicyPremiumFullyPaid = true;
@@ -232,7 +179,59 @@ export class ClaimsProcessingComponent implements OnInit {
         }
     }
 
-    searchPendingClaims(value: string) {}
+    searchPendingClaims(value: string) {
+        if (value === '' || !value) {
+            this.displayPendingClaimList = this.pendingClaimsList.filter(
+                x => x.claimNumber != null
+            );
+        }
 
-    searchApprovedClaims(value: string) {}
+        this.displayPendingClaimList = this.pendingClaimsList.filter(claim => {
+            if (claim.claimNumber != null) {
+                return (
+                    claim.claimNumber
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    claim.policy.policyNumber
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    claim.claimStatus
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    claim.claimant.firstName
+                        .toLowerCase()
+                        .includes(value.toLowerCase())
+                );
+            }
+        });
+    }
+
+    searchApprovedClaims(value: string) {
+        if (value === '' || !value) {
+            this.displayProcessedClaimsList = this.processedClaimsList.filter(
+                x => x.claimNumber != null
+            );
+        }
+
+        this.displayProcessedClaimsList = this.processedClaimsList.filter(
+            claim => {
+                if (claim.claimNumber != null) {
+                    return (
+                        claim.claimNumber
+                            .toLowerCase()
+                            .includes(value.toLowerCase()) ||
+                        claim.policy.policyNumber
+                            .toLowerCase()
+                            .includes(value.toLowerCase()) ||
+                        claim.claimStatus
+                            .toLowerCase()
+                            .includes(value.toLowerCase()) ||
+                        claim.claimant.firstName
+                            .toLowerCase()
+                            .includes(value.toLowerCase())
+                    );
+                }
+            }
+        );
+    }
 }

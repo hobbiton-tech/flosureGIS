@@ -46,7 +46,15 @@
                             <td [nzAlign]="columnAlignment">{{claim.policy? (claim.policy.policyNumber) : ''}}</td>
                             <td [nzAlign]="columnAlignment">{{claim.lossDate | date}}</td>
                             <td [nzAlign]="columnAlignment">{{claim.notificationDate | date}}</td>
-                            <td [nzAlign]="columnAlignment">{{claim.claimStatus}}</td>
+                            <td [nzAlign]="columnAlignment">
+                                <div [ngSwitch]="claim.claimStatus">
+                                    <nz-badge nzColor='yellow' *ngSwitchCase="'Pending'" nzText="Pending"></nz-badge>
+                                    <nz-badge nzColor='green' *ngSwitchCase="'Resolved'" nzText="Resolved"></nz-badge>
+                                    <nz-badge nzColor='red' *ngSwitchCase="'Cancelled'" nzText="Cancelled"></nz-badge>
+                                    <nz-badge nzColor='blue' *ngSwitchCase="'Processed'" nzText="Processed"></nz-badge>
+                                    <nz-badge nzColor='purple' *ngSwitchCase="'Approved'" nzText="Approved"></nz-badge>
+                                </div>
+                            </td>
                             <td [nzAlign]="columnAlignment">
                                 <button n nz-button nzType="primary" style="margin-left: 2px;" nzSize="small"
                                     (click)="processClaim(claim)">
@@ -100,16 +108,24 @@
                                 <td [nzAlign]="columnAlignment">{{claim.policy? (claim.policy.policyNumber) : ''}}</td>
                                 <td [nzAlign]="columnAlignment">{{claim.lossDate | date}}</td>
                                 <td [nzAlign]="columnAlignment">{{claim.notificationDate | date}}</td>
-                                <td [nzAlign]="columnAlignment">{{claim.claimStatus}}</td>
+                                <td [nzAlign]="columnAlignment">
+                                    <div [ngSwitch]="claim.claimStatus">
+                                        <nz-badge nzColor='yellow' *ngSwitchCase="'Pending'" nzText="Pending">
+                                        </nz-badge>
+                                        <nz-badge nzColor='green' *ngSwitchCase="'Resolved'" nzText="Resolved">
+                                        </nz-badge>
+                                        <nz-badge nzColor='red' *ngSwitchCase="'Cancelled'" nzText="Cancelled">
+                                        </nz-badge>
+                                        <nz-badge nzColor='blue' *ngSwitchCase="'Processed'" nzText="Processed">
+                                        </nz-badge>
+                                        <nz-badge nzColor='purple' *ngSwitchCase="'Approved'" nzText="Approved">
+                                        </nz-badge>
+                                    </div>
+                                </td>
                                 <td [nzAlign]="columnAlignment">
                                     <button n nz-button nzType="primary" style="margin-left: 2px;" nzSize="small"
                                         *ngIf="claim.claimStatus == 'Processed'" (click)="openClaimApproval(claim)">
                                         Claim Approval
-                                    </button>
-                                    <button n nz-button nzType="default" style="margin-left: 2px;" nzSize="small"
-                                        *ngIf="claim.claimStatus == 'Approved'" nz-popconfirm
-                                        nzTitle="Raise Requisition?" (nzOnConfirm)="raiseRequisition(claim)">
-                                        Raise Requisition
                                     </button>
                                 </td>
                             </tr>
@@ -121,7 +137,8 @@
 
         <app-loss-quantum-modal [isLossQuantumModalVisible]="isLossQuantumModalVisible"
             (closeLossQuantumModalEmitter)="isLossQuantumModalVisible=false"
-            (closeLossQuantumModalEmitter)="claimsTableUpdate.next(true)"></app-loss-quantum-modal>
+            (closeLossQuantumModalEmitter)="claimsTableUpdate.next(true)" [lossEstimate]="lossEstimate">
+        </app-loss-quantum-modal>
 
         <app-claim-approval-modal [isClaimApprovalModalVisible]="isClaimApprovalModalVisible"
             (closeClaimApprovalModalEmitter)="isClaimApprovalModalVisible=false"

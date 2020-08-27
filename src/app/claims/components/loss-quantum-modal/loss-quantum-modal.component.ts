@@ -28,6 +28,9 @@ export class LossQuantumModalComponent implements OnInit, OnDestroy {
     @Input()
     isLossQuantumModalVisible: boolean;
 
+    @Input()
+    lossEstimate: number;
+
     @Output()
     closeLossQuantumModalEmitter: EventEmitter<any> = new EventEmitter();
 
@@ -69,9 +72,9 @@ export class LossQuantumModalComponent implements OnInit, OnDestroy {
             salvageReserve: ['']
         });
 
-        // this.lossQuantumForm
-        //     .get('lossEstimate')
-        //     .setValue(this.currentClaim.lossEstimate);
+        this.lossQuantumForm
+            .get('lossEstimate')
+            .setValue(this.currentClaim.lossEstimate);
 
         this.claimsService
             .getInsuranceCompanies()

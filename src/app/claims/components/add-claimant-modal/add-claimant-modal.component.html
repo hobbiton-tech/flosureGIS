@@ -1,5 +1,5 @@
 <nz-modal [(nzVisible)]="isAddClaimantModalVisible" nzTitle="Add Claimant" [nzContent]="claimantDetailsContent"
-    (nzOnCancel)="closeAddClaimantModal()" (nzOnOk)="closeAddClaimantModal()" nzWidth="85%">
+    [nzFooter]="null" (nzOnCancel)="closeAddClaimantModal()" (nzOnOk)="closeAddClaimantModal()" nzWidth="85%">
 
     <ng-template #claimantDetailsContent>
         <nz-spin nzSize="large" nzTip="Adding Claimant...." [nzSpinning]="isAddingClaimant">

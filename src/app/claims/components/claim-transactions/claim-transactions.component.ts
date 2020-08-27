@@ -56,19 +56,28 @@ export class ClaimTransactionsComponent implements OnInit {
 
     search(value: string): void {
         if (value === '' || !value) {
-            this.displayClaimsList = this.claimsList;
+            this.displayClaimsList = this.claimsList.filter(
+                x => x.claimNumber != null
+            );
         }
 
         this.displayClaimsList = this.claimsList.filter(claim => {
-            return (
-                claim.claimNumber.toLowerCase().includes(value.toLowerCase()) ||
-                claim.policy.policyNumber
-                    .toLocaleLowerCase()
-                    .includes(value.toLowerCase()) ||
-                claim.claimStatus
-                    .toLocaleLowerCase()
-                    .includes(value.toLowerCase())
-            );
+            if (claim.claimNumber != null) {
+                return (
+                    claim.claimNumber
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    claim.policy.policyNumber
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    claim.claimStatus
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    claim.claimant.firstName
+                        .toLowerCase()
+                        .includes(value.toLowerCase())
+                );
+            }
         });
     }
 }

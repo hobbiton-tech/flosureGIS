@@ -1,5 +1,5 @@
 <nz-modal [(nzVisible)]="isLossQuantumModalVisible" [nzTitle]="documentTitle" [nzContent]="lossQuantumContent"
-    (nzOnCancel)="closeLossQuantumModal()" (nzOnOk)="closeLossQuantumModal()" nzWidth="85%">
+    [nzFooter]="null" (nzOnCancel)="closeLossQuantumModal()" (nzOnOk)="closeLossQuantumModal()" nzWidth="85%">
 
     <ng-template #lossQuantumContent>
         <nz-spin nzSize="large" nzTip="Processing Claim...." [nzSpinning]="isProcessing">

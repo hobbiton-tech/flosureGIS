@@ -1,5 +1,5 @@
 <nz-modal [(nzVisible)]="isViewPhotoUploadModalVisible" [nzTitle]="photoTitle" [nzContent]="photoUploadContent"
-    (nzOnCancel)="closePhotoUploadModal()" (nzOnOk)="closePhotoUploadModal()" nzWidth="50%">
+    [nzFooter]="null" (nzOnCancel)="closePhotoUploadModal()" (nzOnOk)="closePhotoUploadModal()" nzWidth="50%">
 
     <ng-template #photoUploadContent>
         <nz-spin nzSize="large" nzTip="Uploading Photo...." [nzSpinning]="isUploading">
