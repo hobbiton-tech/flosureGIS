@@ -24,12 +24,12 @@ export class PerilService {
         this.perils = this.perilsCollection.valueChanges();
     }
 
-    //return all perils
+    // return all perils
     getPerils(): Observable<Peril[]> {
         return this.perils;
     }
 
-    //return all perils matching given id
+    // return all perils matching given id
     getFilteredPerils(id: string): Observable<Peril[]> {
         const result = this.perils.pipe(
             map((claim) => claim.filter((x) => x.claimId === id))
@@ -37,7 +37,7 @@ export class PerilService {
         return result;
     }
 
-    //add Peril to Perils collection
+    // add Peril to Perils collection
     addPeril(peril: Peril): void {
         this.perilsCollection.add(peril);
     }

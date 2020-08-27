@@ -10,28 +10,53 @@ import { ClaimsService } from './services/claims-service.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PerilsComponent } from './components/perils/perils.component';
 import { AddPerilsComponent } from './components/perils/components/add-perils/add-perils.component';
+import { ClaimApprovalComponent } from './components/claim-approval/claim-approval.component';
+import { DocumentUploadComponent } from './components/document-upload/document-upload.component';
+import { PhotoUploadComponent } from './components/photo-upload/photo-upload.component';
+import { ServiceProviderQuotationsComponent } from './components/service-provider-quotations/service-provider-quotations.component';
+import { NzListModule } from 'ng-zorro-antd/list';
+import { ClaimsProcessingComponent } from './components/claims-processing/claims-processing.component';
+import { DocmentUploadModalComponent } from './components/docment-upload-modal/docment-upload-modal.component';
+import { PhotoUploadModalComponent } from './components/photo-upload-modal/photo-upload-modal.component';
+import { AddServiceProviderQuoteComponent } from './components/add-service-provider-quote/add-service-provider-quote.component';
+import { LossQuantumModalComponent } from './components/loss-quantum-modal/loss-quantum-modal.component';
+import { CalimsResolverService } from './services/calims-resolver.service';
+import { ClaimApprovalModalComponent } from './components/claim-approval-modal/claim-approval-modal.component';
+import { AddClaimantModalComponent } from './components/add-claimant-modal/add-claimant-modal.component';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
 
 const routes: Routes = [
     {
         path: 'intimate-claims',
-        component: IntimateClaimComponent,
+        component: IntimateClaimComponent
     },
     {
         path: 'claim-transactions',
-        component: ClaimTransactionsComponent,
+        component: ClaimTransactionsComponent
     },
     {
         path: 'claimants',
-        component: ClaimantsComponent,
+        component: ClaimantsComponent
     },
     {
         path: 'claim-details',
-        component: ClaimDetailsComponent,
+        component: ClaimDetailsComponent
     },
     {
         path: 'claim-details/:id',
         component: ClaimDetailsComponent,
+        resolve: {
+            claim: CalimsResolverService
+        }
     },
+    {
+        path: 'claim-approval',
+        component: ClaimApprovalComponent
+    },
+    {
+        path: 'claims-processing',
+        component: ClaimsProcessingComponent
+    }
 ];
 
 @NgModule({
@@ -42,6 +67,17 @@ const routes: Routes = [
         ClaimDetailsComponent,
         PerilsComponent,
         AddPerilsComponent,
+        ClaimApprovalComponent,
+        DocumentUploadComponent,
+        PhotoUploadComponent,
+        ServiceProviderQuotationsComponent,
+        ClaimsProcessingComponent,
+        DocmentUploadModalComponent,
+        PhotoUploadModalComponent,
+        AddServiceProviderQuoteComponent,
+        LossQuantumModalComponent,
+        ClaimApprovalModalComponent,
+        AddClaimantModalComponent
     ],
     providers: [ClaimsService],
     imports: [
@@ -50,6 +86,8 @@ const routes: Routes = [
         NgZorroAntdModule,
         FormsModule,
         RouterModule.forChild(routes),
-    ],
+        NzListModule,
+        NzBadgeModule
+    ]
 })
 export class ClaimsModule {}

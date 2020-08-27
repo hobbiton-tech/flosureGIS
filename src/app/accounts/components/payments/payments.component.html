@@ -52,7 +52,7 @@
                             <td [nzAlign]="columnAlignment">{{payment.approvalSatus}}</td>
                             <td [nzAlign]="columnAlignment">
                                 <button n nz-button nzType="primary" style="margin-left: 2px;" nzSize="small"
-                                    (click)="approvePayment(payment)">
+                                    (nzOnConfirm)="approvePayment(payment)" nz-popconfirm nzTitle="Approve Payment?">
                                     Approve
                                 </button>
                             </td>

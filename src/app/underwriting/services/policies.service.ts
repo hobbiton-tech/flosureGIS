@@ -20,11 +20,9 @@ import {
 import { IRequisitionModel } from 'src/app/accounts/components/models/requisition.model';
 import { AccountService } from 'src/app/accounts/services/account.service';
 
+const BASE_URL = 'https://flosure-postgres-db.herokuapp.com';
 
-const BASE_URL = 'https://savenda.flosure-api.com';
-
-// const BASE_URL = 'https://savenda.flosure-api.com';
-
+// const BASE_URL = 'https://flosure-postgres-db.herokuapp.com';
 
 interface IDebitNoteResult {
     invoiceNumber: string;
@@ -68,21 +66,19 @@ export class PoliciesService {
         } else {
             insuranceType = 'THP';
         }
-        return this.http.post<Policy>(
-            'https://savenda.flosure-api.com/policy',
-            policy
-        );
+
+        return this.http.post<Policy>(`${BASE_URL}/policy`, policy);
     }
 
     // getPolicies(): Observable<Policy[]> {
-    //     return this.http.get<Policy[]>('https://savenda.flosure-api.com/policy');
+    //     return this.http.get<Policy[]>('https://flosure-postgres-db.herokuapp.com/policy');
 
     // }
 
     // getPolicyById(policyId: string): Observable<Policy> {
     //     return this.http.get<Policy>(
 
-    //         `https://savenda.flosure-api.com/policy/${policyId}`
+    //         `https://flosure-postgres-db.herokuapp.com/policy/${policyId}`
 
     //     );
     //     return this.policiesCollection.doc<Policy>(policyId).valueChanges();
@@ -92,16 +88,15 @@ export class PoliciesService {
         console.log('POLICY NUMBER>>>>', policy);
 
         return this.http.put<Policy>(
-            `https://savenda.flosure-api.com/policy/${policy.id}`,
+            `https://flosure-postgres-db.herokuapp.com/policy/${policy.id}`,
             policy
         );
     }
 
     // backup policies
     createBackupPolicy(policy: Policy): Observable<Policy> {
-
         return this.http.post<Policy>(
-            'https://savenda.flosure-api.com/policy',
+            'https://flosure-postgres-db.herokuapp.com/policy',
             policy
         );
     }
@@ -111,21 +106,15 @@ export class PoliciesService {
     }
 
     getBackupPolicyById(policyId: string): Observable<Policy> {
-        return this.http.get<Policy>(
-            `${BASE_URL}/${policyId}`
-        );
+        return this.http.get<Policy>(`${BASE_URL}/${policyId}`);
 
         // return this.policiesCollection.doc<Policy>(policyId).valueChanges();
     }
 
     updateBackupPolicy(policy: Policy, policyId: string): Observable<Policy> {
-
         console.log('policy details:');
         console.log(policy);
-        return this.http.put<Policy>(
-            `${BASE_URL}/${policyId}`,
-            policy
-        );
+        return this.http.put<Policy>(`${BASE_URL}/${policyId}`, policy);
     }
 
     ////////////////////////////////////////////
@@ -180,20 +169,14 @@ export class PoliciesService {
             localStorage.setItem('clientId', policy.nameOfInsured); // TODO: Need to change to client code.
             console.log('POLICY NUMBER>>>>', policy.id);
             console.log(policy);
-            this.http
-
-                .put<Policy>(
-                    `${BASE_URL}/${policy.id}`,
-                    policy
-                )
-                .subscribe(
-                    data => {
-                        this.msg.success('Policy Successfully Updated');
-                    },
-                    error => {
-                        this.msg.error('Failed');
-                    }
-                );
+            this.http.put<Policy>(`${BASE_URL}/${policy.id}`, policy).subscribe(
+                data => {
+                    this.msg.success('Policy Successfully Updated');
+                },
+                error => {
+                    this.msg.error('Failed');
+                }
+            );
 
             // this.policiesCollection
             //     .doc(policy.id)
@@ -233,7 +216,7 @@ export class PoliciesService {
     getPolicyById(policyId: string): Observable<Policy> {
 
         return this.http.get<Policy>(
-            `${BASE_URL}/${policyId}`
+            `${BASE_URL}/policy/${policyId}`
         );
 
         // return this.policiesCollection.doc<Policy>(policyId).valueChanges();
@@ -244,7 +227,6 @@ export class PoliciesService {
     }
 
     getPolicies(): Observable<Policy[]> {
-
         return this.http.get<Policy[]>(`${BASE_URL}/policy`);
 
         // return this.policies;
@@ -364,7 +346,7 @@ export class PoliciesService {
                 async res => {
                     console.log('credit note', res);
                     this.accountsService
-                        .createRequisition(requisition, res.id)
+                        .createRequisition(requisition)
                         .subscribe(res => console.log('requisition', res));
                 },
                 async err => {

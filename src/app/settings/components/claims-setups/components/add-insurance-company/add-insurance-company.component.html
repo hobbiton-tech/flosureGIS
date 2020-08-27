@@ -1,0 +1,74 @@
+<nz-modal [(nzVisible)]="isAddInsuranceCompanyModalVisible" nzTitle="Add Insurance Company"
+    [nzContent]="insuranceCompanyContent" (nzOnCancel)="closeAddInsuranceCompanyModal()"
+    (nzOnOk)="closeAddInsuranceCompanyModal()" nzWidth="85%">
+
+    <ng-template #insuranceCompanyContent>
+        <div>
+            <form nz-form [formGroup]="insuranceCompanyDetailsForm">
+                <div nz-row>
+                    <div nz-col nzSpan="8">
+                        <nz-form-item>
+                            <nz-form-label nzRequired nzSpan="10">Company Name</nz-form-label>
+                            <nz-form-control nzSpan="10">
+                                <input nz-input formControlName="companyName" />
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label nzRequired nzSpan="10">Physical Address</nz-form-label>
+                            <nz-form-control nzSpan="10">
+                                <input nz-input formControlName="physicalAddress" />
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label nzSpan="10">Postal Address</nz-form-label>
+                            <nz-form-control nzSpan="10">
+                                <input nz-input formControlName="postalAddress" />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="8">
+                        <nz-form-item>
+                            <nz-form-label nzSpan="10">Registration No</nz-form-label>
+                            <nz-form-control nzSpan="10">
+                                <input nz-input formControlName="registrationNumber" />
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label nzRequired nzSpan="10">Phone</nz-form-label>
+                            <nz-form-control nzSpan="10">
+                                <input nz-input formControlName="phone" />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="8">
+                        <nz-form-item>
+                            <nz-form-label nzSpan="10">TPIN No</nz-form-label>
+                            <nz-form-control nzSpan="10">
+                                <input nz-input formControlName="tPin" />
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label nzRequired nzSpan="10">Email</nz-form-label>
+                            <nz-form-control nzSpan="10">
+                                <input nz-input formControlName="email" />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+                <div style="
+                    text-align: center;
+                    margin-top: 10px;
+                    margin-bottom: 10px;
+                ">
+                    <button nz-button nzType="primary" (click)="addInsuranceCompany()">
+                        Add Insurance Company
+                    </button>
+                    <button style="margin-left: 15px;" nz-button nzType="default">
+                        Reset Form
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </ng-template>
+</nz-modal>

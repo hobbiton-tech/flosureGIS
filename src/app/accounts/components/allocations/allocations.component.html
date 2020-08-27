@@ -14,7 +14,7 @@
       <nz-page-header-extra>
         <div nz-col nzSpan="12">
 
-          <button nz-button nz-dropdown nzType="primary" [nzDropdownMenu]="menu" >Select Intermediary Type</button>
+          <button nz-button nz-dropdown nzType="primary" [nzDropdownMenu]="menu" >{{selectedIntermediaryType}}</button>
           <nz-dropdown-menu #menu="nzDropdownMenu">
             <ul nz-menu>
               <li nz-menu-item *ngFor="let int of typeOfIntermediaries" (click)="selectIntermediaryType(int)">{{int}}</li>
@@ -219,6 +219,16 @@
                 />
               </nz-form-control>
             </nz-form-item>
+          </div>
+        </div>
+        <div nz-row>
+          <div nz-col [nzSpan]="12">
+            <nz-form-item>
+              <nz-form-control [nzSpan]="12">
+              <label  nz-checkbox [(ngModel)]="checked" [ngModelOptions]="{standalone: true}" (ngModelChange)="log($event)">Commission Incl</label>
+              </nz-form-control>
+            </nz-form-item>
+
           </div>
         </div>
       </form>

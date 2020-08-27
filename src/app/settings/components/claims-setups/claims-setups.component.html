@@ -1,0 +1,100 @@
+<nz-spin nzSize="large" nzTip="Claims Setups Loading...." [nzSpinning]="ClaimsSetupsIsLoading">
+    <div style="margin: 10px;">
+        <div style="margin-bottom: 20px; background: #fff;">
+            <nz-page-header>
+                <nz-page-header-title>Claims Setups</nz-page-header-title>
+            </nz-page-header>
+        </div>
+
+        <nz-card>
+            <nz-divider nzText="Service Providers" nzOrientation="left"></nz-divider>
+            <div nz-row [nzGutter]="24">
+                <div nz-col nzSpan="12">
+                    <div style="margin-bottom: 10px; width: 60%;">
+                        <nz-input-group [nzSuffix]="suffixIconSearch">
+                            <input type="text" nz-input placeholder="" [(ngModel)]="searchServiceProvidersString"
+                                (ngModelChange)="searchServiceProviders($event)" />
+                        </nz-input-group>
+                        <ng-template #suffixIconSearch>
+                            <i nz-icon nzType="search"></i>
+                        </ng-template>
+                    </div>
+                </div>
+
+                <div nz-col nzSpan="12">
+                    <button nz-button nzType="primary" style="float: right;" (click)="addServiceProvider()">Add Service
+                        Provider
+                    </button>
+                </div>
+            </div>
+
+            <nz-table #serviceProvidersTable [nzData]="displayServiceProvidersList" [nzSize]="'small'"
+                [nzBordered]="true">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let serviceProvider of displayServiceProvidersList" style="cursor: pointer;">
+                        <td>{{serviceProvider.name}}</td>
+                        <td>{{serviceProvider.type}}</td>
+                        <td>{{serviceProvider.phone}}</td>
+                        <td>{{serviceProvider.emailAddress}}</td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </nz-card>
+
+        <div style="margin-top: 10px;">
+            <nz-card>
+                <nz-divider nzText="Insurance Company Setups" nzOrientation="left"></nz-divider>
+                <div nz-row [nzGutter]="24">
+                    <div nz-col nzSpan="12">
+                        <div style="margin-bottom: 10px; width: 60%;">
+                            <nz-input-group [nzSuffix]="suffixIconSearch">
+                                <input type="text" nz-input placeholder="" [(ngModel)]="searchInsuranceCompaniesString"
+                                    (ngModelChange)="searchInsuranceCompanies($event)" />
+                            </nz-input-group>
+                            <ng-template #suffixIconSearch>
+                                <i nz-icon nzType="search"></i>
+                            </ng-template>
+                        </div>
+                    </div>
+
+                    <div nz-col nzSpan="12">
+                        <button nz-button nzType="primary" style="float: right;" (click)="addInsuranceCompany()">Add
+                            Insurance Company</button>
+                    </div>
+                </div>
+
+                <nz-table #insuranceCompaniesTable [nzData]="displayInsuranceCompaniesList" [nzSize]="'small'"
+                    [nzBordered]="true">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let insuranceCompany of displayInsuranceCompaniesList" style="cursor: pointer;">
+                            <td>{{insuranceCompany.companyName}}</td>
+                            <td>{{insuranceCompany.phone}}</td>
+                            <td>{{insuranceCompany.email}}</td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </nz-card>
+        </div>
+    </div>
+
+    <app-add-service-provider [isAddServiceProviderModalVisible]="isAddServiceProviderModalVisible"
+        (closeAddServiceProviderModalEmitter)="isAddServiceProviderModalVisible=false"></app-add-service-provider>
+    <app-add-insurance-company [isAddInsuranceCompanyModalVisible]="isAddInsuranceCompanyModalVisible"
+        (closeAddInsuranceCompanyModalEmitter)="isAddInsuranceCompanyModalVisible=false"></app-add-insurance-company>
+
+</nz-spin>

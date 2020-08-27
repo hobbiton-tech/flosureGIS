@@ -9,26 +9,25 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class CommissionPaymentService {
-  cPayment: any;
-  cPayments: any[] = [];
-  BASEURLCPayment = '';
+  cPayment: CPaymentModel;
+  cPayments: CPaymentModel[] = [];
+  BASEURLCPayment = 'https://payment-api.savenda-flosure.com';
+
 
   constructor(private http: HttpClient,
-    private message: NzMessageService,
-    private router: Router) { }
+              private message: NzMessageService,
+              private router: Router) { }
 
-    createCPayment(createCPay: any[]): Observable<any>
-    {
-      return this.http.post<CPaymentModel>(this.BASEURLCPayment, createCPay);
+    createCPayment(createCPay: CPaymentModel): Observable<CPaymentModel> {
+      return this.http.post<CPaymentModel>(`${this.BASEURLCPayment}/commission-Processing`, createCPay);
     }
 
-    updateCPayment(cPayment: any[])
-    {
-      return this.http.put(`${this.BASEURLCPayment}/${this.cPayment}`,cPayment)
+    updateCPayment(cPayment: any) {
+      return this.http.put<any>(`${this.BASEURLCPayment}/commission-Processing/${cPayment.ID}`, cPayment);
     }
 
     getCPayment(): Observable<any> {
-      return this.http.get<any>(this.BASEURLCPayment);
+      return this.http.get<any>(`${this.BASEURLCPayment}/commission-Processing`);
   }
 
 

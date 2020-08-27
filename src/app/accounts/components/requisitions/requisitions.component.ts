@@ -3,6 +3,8 @@ import { IRequisitionModel } from '../models/requisition.model';
 import { AccountService } from '../../services/account.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { BehaviorSubject } from 'rxjs';
+import { Claim } from 'src/app/claims/models/claim.model';
+import { ClaimsService } from 'src/app/claims/services/claims-service.service';
 
 @Component({
     selector: 'app-requisitions',
@@ -29,13 +31,15 @@ export class RequisitionsComponent implements OnInit {
     payee: string;
 
     searchString: string;
+    approvedSearchString: string;
 
     // requisition payment modal
     isRequisitionPaymentModalVisible = false;
 
     constructor(
         private accountsService: AccountService,
-        private msg: NzMessageService
+        private msg: NzMessageService,
+        private claimsService: ClaimsService
     ) {}
 
     ngOnInit(): void {
@@ -84,6 +88,19 @@ export class RequisitionsComponent implements OnInit {
                 this.requisitionApprovalUpdate.next(true);
                 this.msg.success('Requisition Approved');
                 this.isApprovingRequisition = false;
+
+                if (requisition.paymentType == 'GIS-CLAIM') {
+                    const claimUpdate: Claim = {
+                        ...requisition.claim,
+                        claimStatus: 'Resolved'
+                    };
+
+                    this.claimsService
+                        .updateClaim(claimUpdate.id, claimUpdate)
+                        .subscribe(res => {
+                            console.log(res);
+                        });
+                }
             },
 
             err => {

@@ -1,33 +1,18 @@
-import * as faker from 'faker';
+import { IDType, GenderType } from 'src/app/clients/models/clients.model';
 
 export interface IClaimant {
-    clientName: string;
-    occuptation: string;
-    identificationNumber: string;
-    identificationType: IdentificationType;
-    address: string;
-    mobileNumber: string;
+    id?: string;
+    firstName: string;
+    middleName?: string;
+    lastName: string;
+    type: ClaimantType;
+    idNumber: string;
+    idType: IDType;
+    physicalAddress?: string;
+    postalAddress?: string;
+    phone: string;
+    email?: string;
+    gender?: GenderType;
 }
 
-export type IdentificationType = 'NRC' | 'Passport';
-
-const createClaimant = () => {
-    const claimant: IClaimant = {
-        clientName: `${faker.name.firstName()} ${faker.name.lastName()}`,
-        occuptation: faker.name.jobTitle(),
-        identificationNumber: faker.address.zipCode(),
-        identificationType: faker.random.arrayElement(['NRC', 'Passport']),
-        address: faker.name.jobArea(),
-        mobileNumber: faker.phone.phoneNumber('+260 9## ### ###'),
-    };
-
-    return claimant;
-};
-
-const generateClaimants = () => {
-    let claimants: IClaimant[] = [];
-    for (let i = 0; i < 128; i++) {
-        claimants.push(createClaimant());
-    }
-    return claimants;
-};
+export type ClaimantType = 'Insured' | 'Third Party' | 'Other';
