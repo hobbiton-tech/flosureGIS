@@ -1,1 +1,146 @@
-<p>users-permissions works!</p>
+<div style="margin: 10px;">
+  <div style="margin-bottom: 10px; background: #fff;">
+
+    <nz-page-header class="site-page-header"  (nzBack)="onBack()" nzBackIcon nzTitle="User Permissions">
+      <nz-page-header-title>User Permissions</nz-page-header-title>
+      <nz-page-header-subtitle>User Permissions</nz-page-header-subtitle>
+
+      <nz-page-header-extra>
+
+
+
+      </nz-page-header-extra>
+
+    </nz-page-header>
+
+  </div>
+
+  <nz-card>
+
+    <nz-page-header-extra>
+      <button nz-button routerLink="" nzType="primary">Create</button>
+    </nz-page-header-extra>
+
+    <div style="margin-bottom: 10px; width: 50%;">
+
+      <div nz-col [nzSpan]="15">
+      <nz-input-group [nzSuffix]="suffixIconSearch">
+        <input type="text" nz-input placeholder="Search by agent name" />
+    </nz-input-group>
+    <ng-template #suffixIconSearch>
+        <i nz-icon nzType="search"></i>
+    </ng-template>
+  </div>
+    </div>
+
+
+  <nz-table
+  #commissionsTable
+  [nzData]="displayRoles"
+  [nzSize]="'small'"
+  [nzBordered]="true"
+  style="background-color: white;"
+>
+
+
+  <thead>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Action</th>
+
+    </tr>
+</thead>
+
+<tbody>
+  <tr *ngFor="">
+
+    <!-- <td>{}</td>
+    <td>{}</td> -->
+    <td>
+      <div *ngIf="">
+        <!-- <button
+          nz-popconfirm
+          nzPopconfirmTitle="Are you sure you wish to proceed"
+          nzPopconfirmPlacement="bottom"
+          (nzOnConfirm)="{}"
+          (nzOnCancel)="{}" nz-button nzType="primary" nzSize="small">
+          Edit
+        </button> -->
+      </div>
+
+    </td>
+</tr>
+
+</tbody>
+</nz-table>
+  </nz-card>
+
+  <br>
+
+  <nz-card>
+
+    <nz-page-header-extra>
+      <button nz-button routerLink="" nzType="primary">Create</button>
+    </nz-page-header-extra>
+
+    <div style="margin-bottom: 10px; width: 50%;">
+
+      <div nz-col [nzSpan]="15">
+      <nz-input-group [nzSuffix]="suffixIconSearch">
+        <input type="text" nz-input placeholder="Search by agent name" />
+    </nz-input-group>
+    <ng-template #suffixIconSearch>
+        <i nz-icon nzType="search"></i>
+    </ng-template>
+    </div>
+
+    </div>
+
+
+  <nz-table
+  #commissionsTable
+  [nzData]="displayPermissions"
+  [nzSize]="'small'"
+  [nzBordered]="true"
+  style="background-color: white;"
+>
+
+  <thead>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Action</th>
+
+    </tr>
+</thead>
+
+<tbody>
+  <tr *ngFor="">
+
+    <!-- <td>{}</td>
+    <td>{}</td> -->
+    <td>
+      <div *ngIf="">
+        <!-- <button
+          nz-popconfirm
+          nzPopconfirmTitle="Are you sure you wish to proceed"
+          nzPopconfirmPlacement="bottom"
+          (nzOnConfirm)="{}"
+          (nzOnCancel)="{}" nz-button nzType="primary" nzSize="small">
+          Edit
+        </button> -->
+      </div>
+
+    </td>
+</tr>
+
+</tbody>
+</nz-table>
+
+  </nz-card>
+
+</div>
+
+
+
