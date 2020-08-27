@@ -14,6 +14,8 @@ import { DebitNote } from 'src/app/underwriting/documents/models/documents.model
 import { AllocationPolicy, AllocationReceipt } from '../../../models/allocations.model';
 import { AllocationsService } from '../../../../services/allocations.service';
 import { HttpClient } from '@angular/common/http';
+import { CommissionPaymentService } from '../../../../services/commission-payment.service';
+import { CPaymentModel } from '../../../models/commission-payment.model';
 
 @Component({
     selector: 'app-agent-client',
@@ -44,7 +46,7 @@ export class AgentClientComponent implements OnInit {
     reinstateReceipt: IReceiptModel = new IReceiptModel();
     size = 'large';
     allocationPolicy: AllocationPolicy;
-    allocationReceipt: AllocationReceipt
+    allocationReceipt: AllocationReceipt;
 
   allocationPolicies: any[] = [];
     allocationsReceipts: any[] = [];
@@ -100,6 +102,9 @@ export class AgentClientComponent implements OnInit {
     paymentMethod = '';
     currency: string;
   private receiptId: number;
+  commissionPayments: any[] = [];
+  commissionPayment: CPaymentModel;
+  comPayments: any[] = [];
 
     constructor(
         private receiptService: AccountService,
@@ -110,6 +115,7 @@ export class AgentClientComponent implements OnInit {
         private policeServices: PoliciesService,
         private allocationsService: AllocationsService,
         private http: HttpClient,
+        private commissionPaymentService: CommissionPaymentService,
     ) {
         this.receiptForm = this.formBuilder.group({
             received_from: ['', Validators.required],
@@ -133,7 +139,7 @@ export class AgentClientComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.refresh()
+        this.refresh();
     }
 
 
@@ -168,9 +174,13 @@ export class AgentClientComponent implements OnInit {
         this.allocationPolicies = allocationPolicies.data;
       });
 
-      this.allocationsService.getAllocationReceipt().subscribe((allocationsReceipts) =>{
+      this.allocationsService.getAllocationReceipt().subscribe((allocationsReceipts) => {
         this.allocationsReceipts = allocationsReceipts.data;
-      })
+      });
+
+      this.commissionPaymentService.getCPayment().subscribe((commissionPayments) => {
+        this.commissionPayments = commissionPayments.data;
+      });
 
       this.policeServices.getDebitNotes().subscribe((invoice) => {
         this.debitnoteList = invoice;
@@ -202,7 +212,7 @@ export class AgentClientComponent implements OnInit {
     }
 
     compareFn = (o1: any, o2: any) =>
-        o1 && o2 ? o1.value === o2.value : o1 === o2;
+        o1 && o2 ? o1.value === o2.value : o1 === o2
 
     log(value): void {
         console.log('Receipts', this.listofUnreceiptedReceipts);
@@ -237,7 +247,7 @@ export class AgentClientComponent implements OnInit {
 
     async handleOk() {
         this.submitted = true;
-        console.log('DEBIT NOTE NUMBER>>>>>', this.debitnote.debitNoteNumber);
+        console.log('DEBIT NOTE NUMBER>>>>>', this.debitnote);
         if (this.receiptForm.valid) {
             this.isOkLoading = true;
             const receipt: IReceiptModel = {
@@ -261,14 +271,14 @@ export class AgentClientComponent implements OnInit {
 
 
 
-          this.allocationPolicy.balance = 0;
-          this.allocationPolicy.settlements = Number(this.policy.netPremium);
-          this.allocationPolicy.status = 'Allocated'
+            this.allocationPolicy.balance = 0;
+            this.allocationPolicy.settlements = Number(this.policy.netPremium);
+            this.allocationPolicy.status = 'Allocated';
 
 
 
 
-          this.allocationReceipt = {
+            this.allocationReceipt = {
             allocated_amount: Number(this.policy.netPremium),
             amount: Number(this.policy.netPremium),
             intermediary_id: this.policy.intermediaryId,
@@ -277,15 +287,102 @@ export class AgentClientComponent implements OnInit {
             receipt_number: '',
             remaining_amount: 0,
             status: 'Allocated'
-          }
+          };
 
 
-          this.policy.receiptStatus = 'Receipted';
-          this.policy.paymentPlan = 'Created';
+            this.policy.receiptStatus = 'Receipted';
+            this.policy.paymentPlan = 'Created';
             this.receiptNum = this._id;
 
 
-          this.http.get<any>(
+            if (this.commissionPayments === undefined || this.commissionPayments === null || this.commissionPayments.length === 0) {
+            this.commissionPayment = {
+              agent_id: this.policy.intermediaryId,
+              agent_name: this.policy.intermediaryName,
+              commission_amount: this.allocationPolicy.commission_due,
+              paid_amount: 0,
+              remaining_amount: 0,
+              status: 'Not Paid',
+              agent_type: 'Agent'
+            };
+
+            this.commissionPaymentService.createCPayment(this.commissionPayment).subscribe((comm) => {
+              console.log('Commission Payment>>>', comm);
+            }, (commErr) => {
+              this.message.error(commErr);
+            });
+          } else {
+
+              this.comPayments = this.commissionPayments.filter((x) => x.agent_id === this.policy.intermediaryId);
+              const newIndex = this.comPayments.length - 1;
+              console.log('LAST ARRAY>>>', this.comPayments, this.comPayments[0], newIndex, this.allocationPolicy.intermediary_id);
+
+              if (this.comPayments.length === 0 || this.comPayments.length === null || this.comPayments.length === undefined) {
+                this.commissionPayment = {
+                  agent_id: this.policy.intermediaryId,
+                  agent_name: this.policy.intermediaryName,
+                  commission_amount: this.allocationPolicy.commission_due,
+                  paid_amount: 0,
+                  remaining_amount: 0,
+                  status: 'Not Paid',
+                  agent_type: 'Agent'
+                };
+
+                this.commissionPaymentService.createCPayment(this.commissionPayment).subscribe((comm) => {
+                  console.log('Allocation>>>', comm);
+                }, (commErr) => {
+                  this.message.error(commErr);
+                });
+                // tslint:disable-next-line:max-line-length
+              } else if (this.comPayments[0].agent_id !== this.allocationPolicy.intermediary_id) {
+                this.commissionPayment = {
+                  agent_id: this.policy.intermediaryId,
+                  agent_name: this.policy.intermediaryName,
+                  commission_amount: this.allocationPolicy.commission_due,
+                  paid_amount: 0,
+                  remaining_amount: 0,
+                  status: 'Not Paid',
+                  agent_type: 'Agent'
+                };
+
+                this.commissionPaymentService.createCPayment(this.commissionPayment).subscribe((comm) => {
+                  console.log('Allocation>>>', comm);
+                }, (commErr) => {
+                  this.message.error(commErr);
+                });
+                // tslint:disable-next-line:max-line-length
+              } else if (this.comPayments[0].agent_id ===  this.allocationPolicy.intermediary_id && this.comPayments[0].status === 'Not Paid') {
+                // this.commissionAmount = this.commissionAmount + c.commission_amount;
+                // tslint:disable-next-line:max-line-length
+                this.comPayments[0].commission_amount = Number(this.comPayments[0].commission_amount + this.allocationPolicy.commission_due);
+
+                console.log('checking C>>>', this.comPayments[this.comPayments.length - 1]);
+
+                this.commissionPaymentService.updateCPayment(this.comPayments[0]).subscribe((commP) => {}, (comPErr) => {
+                  this.message.error(comPErr);
+                });
+                // tslint:disable-next-line:max-line-length
+              } else if (this.comPayments[0].agent_id ===  this.allocationPolicy.intermediary_id && this.comPayments[0].status !== 'Not Paid') {
+                this.commissionPayment = {
+                  agent_id: this.policy.intermediaryId,
+                  agent_name: this.policy.intermediaryName,
+                  commission_amount: this.allocationPolicy.commission_due,
+                  paid_amount: 0,
+                  remaining_amount: 0,
+                  status: 'Not Paid',
+                  agent_type: 'Agent'
+                };
+
+                this.commissionPaymentService.createCPayment(this.commissionPayment).subscribe((comm) => {
+                  console.log('Allocation >>>', comm);
+                }, (commErr) => {
+                  this.message.error(commErr);
+                });
+              }
+          }
+
+
+            this.http.get<any>(
               `https://number-generation.flosure-api.com/savenda-receipt-number/1`
             )
             .subscribe(async (res) => {
@@ -307,9 +404,9 @@ export class AgentClientComponent implements OnInit {
                     console.log('Allocation Policy Res>>>', policyRes);
                   }, (policyErr) => {
                     this.message.error(policyErr);
-                  })
+                  });
 
-                  this.policeServices.updatePolicy(this.policy).subscribe((res) => {}, (err) => {
+                  this.policeServices.updatePolicy(this.policy).subscribe((resP) => {}, (err) => {
                     console.log('Update Policy Error', err);
                   });
 
@@ -371,7 +468,7 @@ export class AgentClientComponent implements OnInit {
         console.log(this.cancelReceipt);
         this.receiptService.updateReceipt(this.cancelReceipt).subscribe((res) => {
           this.message.success('Receipt Successfully Updated');
-          this.refresh()
+          this.refresh();
         }, (err) => {
           console.log('Check ERR>>>>', err);
           this.message.warning('Receipt Failed');
@@ -396,7 +493,7 @@ export class AgentClientComponent implements OnInit {
 
         this.receiptService.updateReceipt(this.reinstateReceipt).subscribe((res) => {
           this.message.success('Receipt Successfully Updated');
-          this.refresh()
+          this.refresh();
         }, (err) => {
           console.log('Check ERR>>>>', err);
           this.message.warning('Receipt Failed');
@@ -436,7 +533,7 @@ export class AgentClientComponent implements OnInit {
         this.paymentMethod = value;
     }
 
-    //Test Search Code
+    // Test Search Code
 
     searchUnR(value: string): void {
       console.log(value);
@@ -454,17 +551,14 @@ export class AgentClientComponent implements OnInit {
       });
   }
 
-  searchR(value: string): void
-  {
+  searchR(value: string): void {
     console.log(value);
-    if (value === ' ' || !value)
-    {
+    if (value === ' ' || !value) {
       this.displayReceiptedList = this.receiptedList;
 
     }
 
-    this.displayReceiptedList = this.receiptedList.filter((receip) =>
-    {
+    this.displayReceiptedList = this.receiptedList.filter((receip) => {
         return (
           receip.receipt_number.toLowerCase().includes(value.toLowerCase()) ||
           receip.on_behalf_of.toLowerCase().includes(value.toLowerCase())
@@ -473,15 +567,12 @@ export class AgentClientComponent implements OnInit {
     });
 }
 
-searchCR(value: string): void
-{
-  if (value === ' ' || !value)
-  {
+searchCR(value: string): void {
+  if (value === ' ' || !value) {
       this.displayCancelledReceiptList = this.cancelReceiptList;
   }
 
-  this.displayCancelledReceiptList = this.cancelReceiptList.filter((receip) =>
-    {
+  this.displayCancelledReceiptList = this.cancelReceiptList.filter((receip) => {
         return (
           receip.receipt_number.toLowerCase().includes(value.toLowerCase()) ||
           receip.on_behalf_of.toLowerCase().includes(value.toLowerCase())

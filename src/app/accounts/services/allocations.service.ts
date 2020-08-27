@@ -10,8 +10,8 @@ import { AllocationPolicy, AllocationReceipt } from '../components/models/alloca
 })
 export class AllocationsService {
 
-  BASEURLAllocationsReceipt = 'http://localhost:8022/allocation-receipt';
-  BASEURLAllocationsPolicy = 'http://localhost:8022/allocation-policy';
+  BASEURLAllocationsReceipt = 'https://payment-api.savenda-flosure.com/allocation-receipt';
+  BASEURLAllocationsPolicy = 'https://payment-api.savenda-flosure.com/allocation-policy';
 
   constructor(private http: HttpClient,
               private message: NzMessageService,

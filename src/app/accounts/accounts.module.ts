@@ -24,6 +24,8 @@ import { PlanReceiptComponent } from './components/receipts/components/plan-rece
 import { CommissionPaymentComponent } from './components/commission-payment/commission-payment.component';
 import { PaymentPlanService } from './services/payment-plan.service';
 import { AllocationsComponent } from './components/allocations/allocations.component';
+import { CommissionPaymentService } from './services/commission-payment.service';
+import { AllocationsService } from './services/allocations.service';
 
 const routes: Routes = [
     {
@@ -115,6 +117,6 @@ const routes: Routes = [
         ReactiveFormsModule,
         NgxPrintModule
     ],
-    providers: [AccountService, PaymentPlanService],
+    providers: [AccountService, PaymentPlanService, CommissionPaymentService, AllocationsService],
 })
 export class AccountsModule {}

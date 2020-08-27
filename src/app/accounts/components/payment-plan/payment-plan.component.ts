@@ -64,6 +64,7 @@ export class PaymentPlanComponent implements OnInit {
     clientId: any;
     planID: any;
     receiptID: any;
+  receiptNumber = '';
     constructor(
         private router: Router,
         private paymentPlanService: PaymentPlanService,
@@ -170,20 +171,20 @@ export class PaymentPlanComponent implements OnInit {
         // }
 
         // for (const policy of this.policyNumber) {
-        this.policyUpdate = { ...this.policyNumber};
+        this.policyUpdate = { ...this.paymentPlanForm.controls.policyNumber.value};
 
 
 
 
-        console.log('wawwawawa', this.policyNumber);
+        console.log('wawwawawa', this.paymentPlanForm.controls.policyNumber.value);
 
-        pAmount = pAmount + this.policyNumber.netPremium;
+        pAmount = pAmount + Number(this.paymentPlanForm.controls.policyNumber.value.netPremium);
         policyCount++;
 
 
-        this.clientName = this.policyNumber.client;
-        this.clientId = this.policyNumber.clientCode;
-        this.netPremium = this.netPremium + this.policyNumber.netPremium;
+        this.clientName = this.paymentPlanForm.controls.policyNumber.value.client;
+        this.clientId = this.paymentPlanForm.controls.policyNumber.value.clientCode;
+        this.netPremium = this.netPremium + this.paymentPlanForm.controls.policyNumber.value.netPremium;
             // this.policyPlan = policyPlan;
         this.policyUpdate.paymentPlan = 'Created';
         this.policyService.updatePolicy(this.policyUpdate).subscribe((res) => {
@@ -213,13 +214,13 @@ export class PaymentPlanComponent implements OnInit {
 
 
         const policyPlan: PlanPolicy = {
-            start_date: this.policyNumber.startDate,
-            end_date: this.policyNumber.endDate,
-            net_premium: Number(this.policyNumber.netPremium),
+            start_date: this.paymentPlanForm.controls.policyNumber.value.startDate,
+            end_date: this.paymentPlanForm.controls.policyNumber.value.endDate,
+            net_premium: Number(this.paymentPlanForm.controls.policyNumber.value.netPremium),
             allocation_status: 'Unallocated',
-            policy_number: this.policyNumber.policyNumber,
+            policy_number: this.paymentPlanForm.controls.policyNumber.value.policyNumber,
             allocation_amount: 0,
-            balance: Number(this.policyNumber.netPremium)
+            balance: Number(this.paymentPlanForm.controls.policyNumber.value.netPremium)
         };
 
 
@@ -247,7 +248,7 @@ export class PaymentPlanComponent implements OnInit {
                 sum_in_digits: Number(res.data.amount_paid),
                 today_date: new Date(),
               source_of_business: 'Plan-Receipt',
-              currency: this.policyNumber.currency,
+              currency: '',
             };
 
 
@@ -268,18 +269,19 @@ export class PaymentPlanComponent implements OnInit {
                 .get<any>(
                     `https://number-generation.flosure-api.com/savenda-receipt-number/1`
                 )
-                .subscribe(async (res) => {
-                    receipt.receipt_number = res.data.receipt_number;
-                    console.log(res.data.receipt_number);
+                .subscribe(async (resNum) => {
+                    receipt.receipt_number = resNum.data.receipt_number;
+                    this.receiptNumber = resNum.data.receipt_number;
+                    console.log(resNum.data.receipt_number);
 
-                    this.http.post('https://payment-api.savenda-flosure.com/receipt', receipt).subscribe((res: any) => {
+                    this.http.post('https://payment-api.savenda-flosure.com/receipt', receipt).subscribe((resRec: any) => {
                         this.message.success('Receipt Successfully created');
-                        console.log('RECEIPT NUMBER<><><><>', res);
+                        console.log('RECEIPT NUMBER<><><><>', resRec);
 
-                        planPaymentReceipt.receipt_number = res.data.receipt_number;
+                        planPaymentReceipt.receipt_number = this.receiptNumber;
                         this.paymentPlanService.addPlanReceipt(planPaymentReceipt).toPromise();
 
-                        this.receiptID = res.data.ID;
+                        this.receiptID = resRec.data.ID;
 
                     },
                         err => {
