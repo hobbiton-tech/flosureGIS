@@ -1,20 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { PaymentService } from 'src/app/settings/components/finance/services/payment.service';
 import { IRequisitionPayment } from 'src/app/settings/models/requisition-payment.model';
-import { BehaviorSubject } from 'rxjs';
-import { NzMessageService } from 'ng-zorro-antd';
-import { ClientsService } from 'src/app/clients/services/clients.service';
 import {
-    ICorporateClient,
-    IIndividualClient
+    IIndividualClient,
+    ICorporateClient
 } from 'src/app/clients/models/clients.model';
+import { BehaviorSubject } from 'rxjs';
+import { PaymentService } from 'src/app/settings/components/finance/services/payment.service';
+import { ClientsService } from 'src/app/clients/services/clients.service';
+import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({
-    selector: 'app-payments',
-    templateUrl: './payments.component.html',
-    styleUrls: ['./payments.component.scss']
+    selector: 'app-approved-payments',
+    templateUrl: './approved-payments.component.html',
+    styleUrls: ['./approved-payments.component.scss']
 })
-export class PaymentsComponent implements OnInit {
+export class ApprovedPaymentsComponent implements OnInit {
     columnAlignment = 'center';
     paymentsIsLoading = false;
     isApprovingPayment = false;
@@ -132,21 +132,24 @@ export class PaymentsComponent implements OnInit {
         });
     }
 
-    searchPendingPayments(value: string) {
+    searchPendingPayments(value: string) {}
+
+    searchProcessedPayments(value: string) {
         if (value === '' || !value) {
-            this.displayPendingPaymentsList = this.pendingPaymentsList;
+            this.displayApprovedPaymentsList = this.approvedPaymentsList;
         }
 
-        this.displayPendingPaymentsList = this.pendingPaymentsList.filter(
+        this.displayApprovedPaymentsList = this.approvedPaymentsList.filter(
             payment => {
                 return (
                     payment.voucherNumber
                         .toLowerCase()
                         .includes(value.toLowerCase()) ||
-                    payment.payee.toLowerCase().includes(value.toLowerCase())
+                    payment.approvalSatus
+                        .toLowerCase()
+                        .includes(value.toLowerCase())
                 );
             }
         );
     }
-    searchProcessedPayments(value: string) {}
 }

@@ -24,6 +24,8 @@ import { PlanReceiptComponent } from './components/receipts/components/plan-rece
 import { CommissionPaymentComponent } from './components/commission-payment/commission-payment.component';
 import { PaymentPlanService } from './services/payment-plan.service';
 import { AllocationsComponent } from './components/allocations/allocations.component';
+import { ApprovedRequisitionsComponent } from './components/requisitions/components/approved-requisitions/approved-requisitions.component';
+import { ApprovedPaymentsComponent } from './components/payments/components/approved-payments/approved-payments.component';
 
 const routes: Routes = [
     {
@@ -39,8 +41,16 @@ const routes: Routes = [
         component: RequisitionsComponent
     },
     {
+        path: 'requisitions/approved-requisitions',
+        component: ApprovedRequisitionsComponent
+    },
+    {
         path: 'payments',
         component: PaymentsComponent
+    },
+    {
+        path: 'payments/approved-payments',
+        component: ApprovedPaymentsComponent
     },
     {
         path: 'payment-plan',
@@ -68,22 +78,22 @@ const routes: Routes = [
     },
     {
         path: 'sales-representative',
-        component: SalesRepresentativeClientComponent,
+        component: SalesRepresentativeClientComponent
     },
 
-  {
-    path: 'plan-receipt',
-    component: PlanReceiptComponent,
-  },
+    {
+        path: 'plan-receipt',
+        component: PlanReceiptComponent
+    },
 
-  {
-    path: 'commission-payment',
-    component: CommissionPaymentComponent,
-  },
-  {
-    path: 'allocations',
-    component: AllocationsComponent,
-  },
+    {
+        path: 'commission-payment',
+        component: CommissionPaymentComponent
+    },
+    {
+        path: 'allocations',
+        component: AllocationsComponent
+    }
 ];
 
 @NgModule({
@@ -105,6 +115,8 @@ const routes: Routes = [
         PlanReceiptComponent,
         CommissionPaymentComponent,
         AllocationsComponent,
+        ApprovedRequisitionsComponent,
+        ApprovedPaymentsComponent
     ],
     imports: [
         CommonModule,
@@ -115,6 +127,6 @@ const routes: Routes = [
         ReactiveFormsModule,
         NgxPrintModule
     ],
-    providers: [AccountService, PaymentPlanService],
+    providers: [AccountService, PaymentPlanService]
 })
 export class AccountsModule {}

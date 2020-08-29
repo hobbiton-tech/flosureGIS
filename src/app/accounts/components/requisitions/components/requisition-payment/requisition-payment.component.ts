@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, Output, OnDestroy } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    Input,
+    Output,
+    OnDestroy,
+    ɵConsole
+} from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { EventEmitter } from '@angular/core';
 import { IRequisitionPayment } from 'src/app/settings/models/requisition-payment.model';
@@ -127,15 +134,11 @@ export class RequisitionPaymentComponent implements OnInit, OnDestroy {
             .getRequisitionById(this.requisitionId)
             .subscribe(requisition => {
                 this.requisition = requisition;
-                console.log('requisition: ', this.requisition);
             });
 
         this.bankAccountsService.getChequeRanges().subscribe(chequeRanges => {
             this.chequeList = chequeRanges;
             this.filteredChequeList = this.chequeList;
-
-            console.log('cheque list', this.chequeList);
-            console.log('filtered cheque list', this.filteredChequeList);
         });
     }
 
@@ -202,10 +205,14 @@ export class RequisitionPaymentComponent implements OnInit, OnDestroy {
             .subscribe(
                 x => {
                     console.log(x);
-                    this.accountsService.updateRequisition(
-                        this.requisitionId,
-                        requisitionUpdate
-                    );
+                    this.accountsService
+                        .updateRequisition(
+                            this.requisitionId,
+                            requisitionUpdate
+                        )
+                        .subscribe(x => {
+                            console.log('HERE: ', x);
+                        });
 
                     if (this.selectedPaymentType.value == 'Cheque') {
                         // update cheque number to next sequence
@@ -223,9 +230,10 @@ export class RequisitionPaymentComponent implements OnInit, OnDestroy {
                     this.msg.success('Payment Processed');
                     this.isPaymentProcesseing = false;
 
-                    this.router.navigateByUrl('/flosure/accounts/payments');
+                    // this.router.navigateByUrl('/flosure/accounts/payments');
 
-                    this.isRequisitionPaymentModalVisible = false;
+                    // this.isRequisitionPaymentModalVisible = false;
+                    this.closeRequisitionPaymentModal();
                 },
                 err => {
                     console.log(err);

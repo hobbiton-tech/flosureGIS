@@ -96,6 +96,7 @@ interface IQuoteNumberResult {
     styleUrls: ['./create-quote.component.scss']
 })
 export class CreateQuoteComponent implements OnInit {
+    isCreatingQuote: boolean = false;
     // view risk modal
     viewRiskModalVisible = false;
 
@@ -271,7 +272,7 @@ export class CreateQuoteComponent implements OnInit {
     conChasis: any[] = [];
 
     compareFn = (o1: any, o2: any) =>
-        o1 && o2 ? o1.value === o2.value : o1 === o2
+        o1 && o2 ? o1.value === o2.value : o1 === o2;
 
     log(value: { label: string; value: string }): void {
         this.selectedLoadingValue = {
@@ -285,14 +286,14 @@ export class CreateQuoteComponent implements OnInit {
             return false;
         }
         return startValue.getTime() > this.endValue.getTime();
-    }
+    };
 
     disabledEndDate = (endValue: Date): boolean => {
         if (!endValue || !this.startValue) {
             return false;
         }
         return endValue.getTime() <= this.startValue.getTime();
-    }
+    };
 
     ngOnInit(): void {
         const user = localStorage.getItem('user');
@@ -327,7 +328,6 @@ export class CreateQuoteComponent implements OnInit {
         });
 
         this.clientsService.getAllClients().subscribe(clients => {
-
             this.clients = [...clients[0], ...clients[1]] as Array<
                 IIndividualClient & ICorporateClient
             >;
@@ -388,7 +388,7 @@ export class CreateQuoteComponent implements OnInit {
             return false;
         }
         return submissionValue.valueOf() < moment().add(-1, 'days');
-    }
+    };
 
     handlePolicyEndDateCalculation(): void {
         if (
@@ -535,7 +535,7 @@ export class CreateQuoteComponent implements OnInit {
     deleteRow(): void {}
 
     async addQuote(): Promise<void> {
-        this.creatingQuote = true;
+        this.isCreatingQuote = true;
         this.clientCode = this.quoteForm.controls.client.value.id;
         if (this.quoteForm.controls.client.value.clientType === 'Individual') {
             this.clientName =
@@ -546,18 +546,22 @@ export class CreateQuoteComponent implements OnInit {
             this.clientName = this.quoteForm.controls.client.value.companyName;
         }
 
-
         let intermediaryNameA = '';
-        const intType = this.quoteForm.controls.intermediaryName.value.intermediaryType;
+        const intType = this.quoteForm.controls.intermediaryName.value
+            .intermediaryType;
 
-        if ( intType === 'Broker' || intType === 'Agent') {
-          intermediaryNameA = this.quoteForm.controls.intermediaryName.value.companyName;
+        if (intType === 'Broker' || intType === 'Agent') {
+            intermediaryNameA = this.quoteForm.controls.intermediaryName.value
+                .companyName;
         } else {
-          intermediaryNameA = this.quoteForm.controls.intermediaryName.value.firstName + ' ' + this.quoteForm.controls.intermediaryName.value.lastName;
+            intermediaryNameA =
+                this.quoteForm.controls.intermediaryName.value.firstName +
+                ' ' +
+                this.quoteForm.controls.intermediaryName.value.lastName;
         }
 
-        const intermediaryIdA = this.quoteForm.controls.intermediaryName.value.id;
-
+        const intermediaryIdA = this.quoteForm.controls.intermediaryName.value
+            .id;
 
         console.log('Client Details>>>>>>', intermediaryNameA, intermediaryIdA);
 
@@ -616,9 +620,8 @@ export class CreateQuoteComponent implements OnInit {
             this.productClauseService.addPolicyWording(this.newWordingWording);
         }
 
-      console.log('Client Details>>>>>>', quote);
-        await this.quoteService.createMotorQuotation(quote, this.quotesCount);
-        this.creatingQuote = false;
+        this.quoteService.createMotorQuotation(quote, this.quotesCount);
+        this.isCreatingQuote = false;
     }
 
     showModal(): void {

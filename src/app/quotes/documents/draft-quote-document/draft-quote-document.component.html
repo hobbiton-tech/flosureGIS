@@ -18,7 +18,7 @@
       <tr>
         <p><strong style="color: red; font-size: 20px;">Draft Quotation</strong></p>
         <p><strong>Quote
-          No: </strong>{{quoteNumber}}</p>
+            No: </strong>{{quoteNumber}}</p>
       </tr>
     </table>
     <table>
@@ -26,13 +26,13 @@
         <td>
           <img src="/assets/images/apluslogo.png" />
           <span style="float: right;">
-                        <p style="font-size: 12px;">
-                            Savenda General Insurance LTD<br />
-                            Plot 20849 PSC Corporate Park, <br />
-                            P.O Box 30363, Lusaka Zambia<br />
-                            Tel: :+260 977 893 878, +260 960 344 478<br />
-                        </p>
-                    </span>
+            <p style="font-size: 12px;">
+              Savenda General Insurance LTD<br />
+              Plot 20849 PSC Corporate Park, <br />
+              P.O Box 30363, Lusaka Zambia<br />
+              Tel: :+260 977 893 878, +260 960 344 478<br />
+            </p>
+          </span>
         </td>
       </tr>
 
@@ -76,13 +76,13 @@
         <tr>
           <td><strong>Agency/Contact Person</strong></td>
           <td><strong>:</strong></td>
-          <td><span>{{quoteData.sourceOfBusiness == 'direct' ? 'Direct' : quoteData.intermediaryName}}</span>
+          <td><span>{{quoteData.sourceOfBusiness == 'Direct' ? 'Direct' : quoteData.intermediaryName}}</span>
           </td>
         </tr>
         <tr>
           <td><strong>Prepared By:</strong></td>
           <td><strong>:</strong></td>
-          <td><span></span></td>
+          <td><span>{{quoteData.user}}</span></td>
         </tr>
       </table>
 
@@ -102,7 +102,7 @@
       <tr class="information">
         <td colspan="2">
           <p style="text-align: center; background-color: skyblue; color: aliceblue;">
-            {{quoteData.risks ? (quoteData.risks[0].insuranceType == 'Comprehensive' ? 'COMPREHENSIVE' : 'THIRD PARTY') : '-'}}
+            {{quoteData.risks ? (quoteData.risks[0].insuranceType == 'Motor Comprehensive' ? 'COMPREHENSIVE' : 'THIRD PARTY') : '-'}}
           </p>
           <br />
         </td>
@@ -113,10 +113,10 @@
           <td colspan="2"><strong>Description of cover</strong></td>
           <td><strong>:</strong></td>
           <td><span>Loss or damage to the insured vehicle
-                            (Political Riot
-                            and Strike excluded) and indemnity against all
-                            sums legally liable to pay to other parties for
-                            bodily injury, property damage arising from use of the Insured vehicle.</span></td>
+              (Political Riot
+              and Strike excluded) and indemnity against all
+              sums legally liable to pay to other parties for
+              bodily injury, property damage arising from use of the Insured vehicle.</span></td>
         </tr>
 
         <tr class="information">
@@ -135,7 +135,7 @@
       <tr class="information">
         <td colspan="2">
           <nz-table style="width: 100%;" nzSize="small" #risksTable [nzData]="risks" nzFrontPagination="false"
-                    nzShowPagination="false">
+            nzShowPagination="false">
       <tr style="font-size: 15;">
         <th style="border: 1px solid black;">MAKE</th>
         <th style="border: 1px solid black;">MODEL</th>
@@ -181,7 +181,7 @@
           <td><strong>Basic Premium</strong></td>
           <td><strong>:</strong></td>
           <td><span> {{quoteData ? quoteData.currency : '-'}}
-            {{totalBasicPremium | number: '1.2-2'}}</span>
+              {{totalBasicPremium | number: '1.2-2'}}</span>
           </td>
         </tr>
 
@@ -221,10 +221,10 @@
           <td><strong>Limits of Liability</strong></td>
           <td><strong>:</strong></td>
           <td><span>
-                            <div *ngFor="let lol of limitsOfLiabilities">
-                                {{lol.liabilityType}} {{quoteData.currency}}{{lol.amount}}<br />
-                            </div>
-                        </span></td>
+              <div *ngFor="let lol of limitsOfLiabilities">
+                {{lol.liabilityType}} {{quoteData.currency}}{{lol.amount}}<br />
+              </div>
+            </span></td>
         </tr>
 
         <tr>

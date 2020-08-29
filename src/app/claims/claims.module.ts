@@ -24,6 +24,7 @@ import { CalimsResolverService } from './services/calims-resolver.service';
 import { ClaimApprovalModalComponent } from './components/claim-approval-modal/claim-approval-modal.component';
 import { AddClaimantModalComponent } from './components/add-claimant-modal/add-claimant-modal.component';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { ProcessedClaimsComponent } from './components/processed-claims/processed-claims.component';
 
 const routes: Routes = [
     {
@@ -56,6 +57,10 @@ const routes: Routes = [
     {
         path: 'claims-processing',
         component: ClaimsProcessingComponent
+    },
+    {
+        path: 'claims-processing/processed-claims',
+        component: ProcessedClaimsComponent
     }
 ];
 
@@ -77,7 +82,8 @@ const routes: Routes = [
         AddServiceProviderQuoteComponent,
         LossQuantumModalComponent,
         ClaimApprovalModalComponent,
-        AddClaimantModalComponent
+        AddClaimantModalComponent,
+        ProcessedClaimsComponent
     ],
     providers: [ClaimsService],
     imports: [
