@@ -26,6 +26,8 @@ import { PaymentPlanService } from './services/payment-plan.service';
 import { AllocationsComponent } from './components/allocations/allocations.component';
 import { ApprovedRequisitionsComponent } from './components/requisitions/components/approved-requisitions/approved-requisitions.component';
 import { ApprovedPaymentsComponent } from './components/payments/components/approved-payments/approved-payments.component';
+import { CommissionPaymentService } from './services/commission-payment.service';
+import { AllocationsService } from './services/allocations.service';
 
 const routes: Routes = [
     {
@@ -127,6 +129,11 @@ const routes: Routes = [
         ReactiveFormsModule,
         NgxPrintModule
     ],
-    providers: [AccountService, PaymentPlanService]
+    providers: [
+        AccountService,
+        PaymentPlanService,
+        CommissionPaymentService,
+        AllocationsService
+    ]
 })
 export class AccountsModule {}

@@ -12,7 +12,7 @@ import {
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd';
 
-const BASE_URL = 'https://flosure-postgres-db.herokuapp.com';
+const BASE_URL = 'https://savenda.flosure-api.com';
 
 @Injectable({
     providedIn: 'root'
