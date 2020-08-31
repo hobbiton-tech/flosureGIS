@@ -7,6 +7,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { UsersRolesComponent } from './components/users-roles/users-roles.component';
 import { UsersPermissionsComponent } from './components/users-permissions/users-permissions.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
+import { UsersBranchComponent } from './components/users-branch/users-branch.component';
 
 const routes: Routes = [
     {
@@ -21,13 +22,18 @@ const routes: Routes = [
         path: 'users',
         component: UsersComponent
     },
+
+    {
+      path: 'users-branch',
+      component: UsersBranchComponent
+  },
     { path: "forgot-password", component: ForgotPasswordComponent },
 ];
 
 
 
 @NgModule({
-  declarations: [UsersComponent, UsersRolesComponent, UsersPermissionsComponent, ForgotPasswordComponent],
+  declarations: [UsersComponent, UsersRolesComponent, UsersPermissionsComponent, ForgotPasswordComponent, UsersBranchComponent],
   imports: [
     CommonModule,
     NgZorroAntdModule,
