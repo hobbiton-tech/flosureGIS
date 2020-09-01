@@ -7,9 +7,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UsersPermissionsComponent implements OnInit {
 
+  displayRoles: string;
+  displayPermissions: string;
+
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  onBack(): void {
+    console.log('onBack');
   }
 
 }

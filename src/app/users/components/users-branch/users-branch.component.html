@@ -1,9 +1,9 @@
 <div style="margin: 10px;">
   <div style="margin-bottom: 10px; background: #fff;">
 
-    <nz-page-header class="site-page-header"  (nzBack)="onBack()" nzBackIcon nzTitle="User Permissions">
-      <nz-page-header-title>User Permissions</nz-page-header-title>
-      <nz-page-header-subtitle>User Permissions</nz-page-header-subtitle>
+    <nz-page-header class="site-page-header"  (nzBack)="onBack()" nzBackIcon nzTitle="Branch and SOP">
+      <nz-page-header-title>User Branch</nz-page-header-title>
+      <nz-page-header-subtitle>User Branch</nz-page-header-subtitle>
 
       <nz-page-header-extra>
 
@@ -25,7 +25,7 @@
 
       <div nz-col [nzSpan]="15">
       <nz-input-group [nzSuffix]="suffixIconSearch">
-        <input type="text" nz-input placeholder="Search by agent name" />
+        <input type="text" nz-input placeholder="Search by branch name" />
     </nz-input-group>
     <ng-template #suffixIconSearch>
         <i nz-icon nzType="search"></i>
@@ -36,7 +36,7 @@
 
   <nz-table
   #commissionsTable
-  [nzData]="displayRoles"
+  [nzData]="displayBranch"
   [nzSize]="'small'"
   [nzBordered]="true"
   style="background-color: white;"
@@ -45,9 +45,10 @@
 
   <thead>
     <tr>
-        <th>Name</th>
+        <th>Branch Name</th>
+        <th>Branch Code</th>
         <th>Description</th>
-        <th>Action</th>
+
 
     </tr>
 </thead>
@@ -88,7 +89,7 @@
 
       <div nz-col [nzSpan]="15">
       <nz-input-group [nzSuffix]="suffixIconSearch">
-        <input type="text" nz-input placeholder="Search by agent name" />
+        <input type="text" nz-input placeholder="Search by sales point" />
     </nz-input-group>
     <ng-template #suffixIconSearch>
         <i nz-icon nzType="search"></i>
@@ -100,7 +101,7 @@
 
   <nz-table
   #commissionsTable
-  [nzData]="displayPermissions"
+  [nzData]="displaySales"
   [nzSize]="'small'"
   [nzBordered]="true"
   style="background-color: white;"
@@ -108,9 +109,9 @@
 
   <thead>
     <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Action</th>
+      <th>SOP Name</th>
+      <th>SOP Code</th>
+      <th>Description</th>
 
     </tr>
 </thead>
@@ -141,6 +142,3 @@
   </nz-card>
 
 </div>
-
-
-
