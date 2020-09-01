@@ -60,6 +60,7 @@ export class PoliciesComponent implements OnInit {
     displayPremiumProductionList: any[];
 
     dateForm: FormGroup;
+    reportForm: FormGroup;
 
     //search string when filtering clients
     searchString: string;
@@ -81,13 +82,23 @@ export class PoliciesComponent implements OnInit {
     displayIntermediaryStatementForClients: any;
 
     isVisible = false;
+    isDisplayDirectClientStatementsVisible = false;
     isDebtorsAgeAnalysisReportVisible = false;
     isAgentBrokerStatementReportVisible = false;
     isCommissionEarnedStatementVisible = false;
     isIntermediaryStatementForClientsVisible = false;
 
+    size = 'large';
+    isVisibleReportType = false;
 
    
+    typeOfReport = ['Direct Client','Debtors Age Analysis','Agent Broker Statement', 'Commission Earned Statement', 'Intermediary Statement For Clients'];
+
+    selectedType = 'Direct '; 
+
+
+    
+    reportNewCount: number;
 
     //
     //   data: AOA = [
@@ -106,6 +117,7 @@ export class PoliciesComponent implements OnInit {
     fileNameAnalysis = 'AnalysisReport.xlsx';
 
     fileLocation: string;
+    today: any;
 
     constructor(
         private cdr: ChangeDetectorRef,
@@ -119,9 +131,43 @@ export class PoliciesComponent implements OnInit {
             fromDate: ['', Validators.required],
             toDate: ['', Validators.required],
         });
-    }
+        this.reportForm = this.formBuilder.group({
+            transactionType: ['', Validators.required],
+            transactionNumber: ['', Validators.required],
+            policyNumber: ['', Validators.required],
+            insuredName: ['', Validators.required],
+            transactionAmount: ['', Validators.required],
+            debitSide: ['', Validators.required],
+            creditSide: ['', Validators.required],
+            balance: ['', Validators.required],
+            client: ['', Validators.required],
+            dateReceived: ['', Validators.required],
+            accountType: ['', Validators.required],
+            openCash: ['', Validators.required],
+            totalOutstanding: ['', Validators.required],
+            todayDate: [this.today],
+            intermediaryType: ['', Validators.required],
+            intermediaryName: ['', Validators.required],
+            transactionDate: ['', Validators.required],
+            transactionStatus: ['', Validators.required],
+            commissionBeforeTax: ['', Validators.required],
+            withHoldingTaxAmount: ['', Validators.required],
+            netCommissionDue: ['', Validators.required],
+            chequeNumber: ['', Validators.required],
+            underwriter: ['', Validators.required],
+            classOfBusiness: ['', Validators.required],
+            product: ['', Validators.required],
+            grossInsured: ['', Validators.required],
+            insuranceLevy: ['', Validators.required],
+            commissionAmount: ['', Validators.required],
+            currency: ['', Validators.required],
+            endorsementType: ['', Validators.required],
+
+        })
+    } 
     handleOk(): void {
         this.isVisible = false;
+        this.isDisplayDirectClientStatementsVisible = false;
         this.isDebtorsAgeAnalysisReportVisible = false;
         this.isAgentBrokerStatementReportVisible = false;
         this.isCommissionEarnedStatementVisible = false;
@@ -131,6 +177,7 @@ export class PoliciesComponent implements OnInit {
     handleCancel(): void {
         console.log('Button cancel clicked!');
         this.isVisible = false;
+        this.isDisplayDirectClientStatementsVisible = false;
         this.isDebtorsAgeAnalysisReportVisible = false;
         this.isAgentBrokerStatementReportVisible = false;
         this.isCommissionEarnedStatementVisible = false;
@@ -207,6 +254,8 @@ export class PoliciesComponent implements OnInit {
             // console.log('Hey Am Report', this.displayAnalysisReport);
         });
 
+       
+       
         // this.premiumService
         //     .generateQuotationReport()
         //     .pipe(
@@ -232,6 +281,12 @@ export class PoliciesComponent implements OnInit {
         // this.getIntermediaryQuoteCount(this.intermediariesList);
         // this.getIntermediaryPolicyCount(this.intermediariesList);
         // this.getRatio(this.intermediariesList);
+    }
+
+
+
+    get reportFormControl(){
+        return this.reportForm.controls;
     }
 
     downloadPremiumProductionReport() {}
@@ -1105,6 +1160,18 @@ export class PoliciesComponent implements OnInit {
         });
         // autoTable(doc, { html: '#Table' });
         doc.save('PremiumWorkingReport.pdf');
+    }
+
+    showReportTypeModal(): void {
+        this.isVisibleReportType = false;
+    }
+    
+    handleOkReportType(): void {
+        this.isVisibleReportType = false;
+    }
+
+    handleCancelReportType(): void {
+        this.isVisibleReportType = false;
     }
 
     // search(value: string): void {

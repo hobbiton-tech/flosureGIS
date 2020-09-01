@@ -1,0 +1,157 @@
+<nz-card [nzBordered]="false">
+    <nz-tabset>
+        <nz-tab nzTitle="Unreceipted">
+            <nz-card [nzBordered]="false">
+                <nz-row style="margin-bottom: 20px;" [nzGutter]="20">
+                    <div nz-col [nzSpan]="14">
+                        <form nz-form [formGroup]="dateForm">
+                            <nz-row>
+                                <div nz-col [nzSpan]="10">
+                                    <nz-form-item>
+                                        <nz-form-label
+                                            [nzSpan]="8"
+                                            nzFor="fromDate"
+                                            nzRequired
+                                            >From Date</nz-form-label
+                                        >
+                                        <nz-form-control [nzSpan]="14">
+                                            <nz-date-picker
+                                                #fromDate
+                                                formControlName="fromDate"
+                                                name="fromDate"
+                                                id="fromDate"
+                                                placeholder="From date"
+                                            ></nz-date-picker>
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                </div>
+
+                                <div nz-col [nzSpan]="10">
+                                    <nz-form-item>
+                                        <nz-form-label
+                                            [nzSpan]="8"
+                                            nzFor="toDate"
+                                            nzRequired
+                                            >End Date</nz-form-label
+                                        >
+                                        <nz-form-control [nzSpan]="14">
+                                            <nz-date-picker
+                                                #toDate
+                                                formControlName="toDate"
+                                                name="toDate"
+                                                id="toDate"
+                                                placeholder="To Date"
+                                            ></nz-date-picker>
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                </div>
+                                <div
+                                    nz-col
+                                    [nzSpan]="4"
+                                    style="float: left;"
+                                >
+                                    <nz-form-item>
+                                        <nz-form-control [nzSpan]="4">
+                                            <button
+                                                nz-button
+                                                nzType="success"
+                                            >
+                                                Submit
+                                            </button>
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                </div>
+                            </nz-row>
+                        </form>
+                    </div>
+
+                    <div nz-col [nzSpan]="3" style="float: right;">
+                        <button nz-button nzType="primary">
+                            Export EXCEL
+                        </button>
+                    </div>
+                    <div nz-col [nzSpan]="3" style="float: right;">
+                        <button
+                            nz-button
+                            (click)="
+                                downloadDirectClientStatementsPdf()
+                            "
+                            nzType="danger"
+                        >
+                            Export PDF
+                        </button>
+                    </div>
+                </nz-row>
+                <nz-row style="margin-bottom: 20px;" [nzGutter]="20">
+                    <div nz-col [nzSpan]="18">
+                        <nz-input-group [nzSuffix]="suffixIconSearch">
+                            <input
+                                type="text"
+                                nz-input
+                                placeholder="Search by client, First Name, Last Name"
+                            />
+                        </nz-input-group>
+                        <ng-template #suffixIconSearch>
+                            <i nz-icon nzType="search"></i>
+                        </ng-template>
+                    </div>
+                    <div nz-col [nzSpan]="6" style="float: right;">
+                        <nz-input-group>
+                            <nz-select
+                                nzShowSearch
+                                nzAllowClear
+                                nzPlaceHolder="Select client type."
+                            >
+                               
+                            </nz-select>
+                        </nz-input-group>
+                    </div>
+                </nz-row>
+                <nz-table
+                id="Table"
+                #reportsTable
+                [nzData]="displayDirectClientStatements"
+                [nzSize]="'small'"
+                [nzBordered]="true"
+            >
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Transaction Date</th>
+                        <th>Transaction type</th>
+                        <th>Transaction number</th>
+                        <th>Policy/claim number</th>
+                        <th>Insured name</th>
+                        <th>Transaction amount</th>
+                        <th>DR (debit side)</th>
+                        <th>CR (Credit side)</th>
+                        <th>Balance (cumulative balance)</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr
+                        *ngFor="
+                            let report of reportsTable.data;
+                            let i = index
+                        "
+                    >
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ report.transactionDate}}</td>
+                        <td>{{ report.transactionType}}</td>
+                        <td>{{ report.transactionNumber}}</td>
+                        <td>{{ report.policyNumber}}</td>
+                        <td>{{ report.insuredName}}</td>
+                        <td>{{ report.transactionAmount}}</td>
+                        <td>{{ report.Dr }}</td>
+                        <td>{{ report.Cr }}</td>
+                        <td>{{ report.balance}}</td>
+                    </tr>
+                </tbody>
+            </nz-table>
+            
+            </nz-card>
+        </nz-tab>
+    </nz-tabset>
+</nz-card>
+               
