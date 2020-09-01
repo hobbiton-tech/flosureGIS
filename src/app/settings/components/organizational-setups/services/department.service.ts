@@ -12,22 +12,22 @@ export class DepartmentService {
 
   departmentModel: DepartmentModel;
   departmentsModel: DepartmentModel[] = [];
-  BASEURLDepartment = '';
+  BASEURLDepartment = 'http://localhost:8090';
 
   constructor(private http: HttpClient,
-    private message: NzMessageService,
-    private router: Router) { }
+              private message: NzMessageService,
+              private router: Router) { }
 
     createDepartment(cDepartment: DepartmentModel): Observable<DepartmentModel> {
-      return this.http.post<DepartmentModel>(`${this.BASEURLDepartment}/user-department`, cDepartment);
+      return this.http.post<DepartmentModel>(`${this.BASEURLDepartment}/department`, cDepartment);
     }
 
-    updateDepartment(uDepartment: any) {
-      return this.http.put<any>(`${this.BASEURLDepartment}/user-department/${uDepartment.ID}`, uDepartment);
+    updateDepartment(uDepartment: DepartmentModel) {
+      return this.http.put<DepartmentModel>(`${this.BASEURLDepartment}/department/${uDepartment.ID}`, uDepartment);
     }
 
-    getDepartment(): Observable<any> {
-      return this.http.get<any>(`${this.BASEURLDepartment}/user-department`);
+    getDepartment(): Observable<DepartmentModel[]> {
+      return this.http.get<DepartmentModel[]>(`${this.BASEURLDepartment}/department`);
 
     }
 

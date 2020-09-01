@@ -17,129 +17,354 @@
 
   <nz-card>
 
-    <nz-page-header-extra>
-      <button nz-button routerLink="" nzType="primary">Create</button>
-    </nz-page-header-extra>
+    <nz-card [nzBordered]="false" nzTitle="Branches">
+      <div style="margin-bottom: 10px;">
+        <div nz-row [nzGutter]="24">
+          <div nz-col nzSpan="12">
+            <div style="width: 100%;">
+              <nz-input-group [nzSuffix]="suffixIconSearch">
+                <input
+                  type="text"
+                  nz-input
+                  placeholder="Search by branch name"
+                />
+              </nz-input-group>
+              <ng-template #suffixIconSearch>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
+            </div>
+          </div>
+          <div nz-col nzSpan="12" >
+            <div style="margin-right: 10px">
+              <nz-page-header-extra>
+                <button nz-button nzType="primary" (click)="showBranchModal()">Create</button>
+              </nz-page-header-extra>
 
-    <div style="margin-bottom: 10px; width: 50%;">
-
-      <div nz-col [nzSpan]="15">
-      <nz-input-group [nzSuffix]="suffixIconSearch">
-        <input type="text" nz-input placeholder="Search by branch name" />
-    </nz-input-group>
-    <ng-template #suffixIconSearch>
-        <i nz-icon nzType="search"></i>
-    </ng-template>
-  </div>
-    </div>
-
-
-  <nz-table
-  #commissionsTable
-  [nzData]="displayBranch"
-  [nzSize]="'small'"
-  [nzBordered]="true"
-  style="background-color: white;"
->
-
-
-  <thead>
-    <tr>
-        <th>Branch Name</th>
-        <th>Branch Code</th>
-        <th>Description</th>
-
-
-    </tr>
-</thead>
-
-<tbody>
-  <tr *ngFor="">
-
-    <!-- <td>{}</td>
-    <td>{}</td> -->
-    <td>
-      <div *ngIf="">
-        <!-- <button
-          nz-popconfirm
-          nzPopconfirmTitle="Are you sure you wish to proceed"
-          nzPopconfirmPlacement="bottom"
-          (nzOnConfirm)="{}"
-          (nzOnCancel)="{}" nz-button nzType="primary" nzSize="small">
-          Edit
-        </button> -->
+            </div>
+          </div>
+        </div>
       </div>
 
-    </td>
-</tr>
+      <nz-table
+        #branchesTable
+        [nzData]="displayBranch"
+        [nzSize]="'small'"
+        [nzBordered]="true"
+        style="background-color: white;"
+      >
 
-</tbody>
-</nz-table>
+        <thead>
+        <tr>
+          <th>Branch Name</th>
+          <th>Branch Code</th>
+          <th>Description</th>
+          <th></th>
+        </tr>
+        </thead>
 
-  </nz-card>
+        <tbody>
+        <tr
+          style="cursor: pointer;"
+          *ngFor="let branch of branchesTable.data"
+        >
+          <td>{{branch.name}}</td>
+          <td>{{branch.description}}</td>
+          <td>{{branch.branch_code}}</td>
+          <td>
+            <button
+                nz-button
+                nzType="primary"
+                (click)="editBranchModal(branch)"
+              >
+                Edit
+              </button>
+          </td>
+        </tr>
+        </tbody>
+      </nz-table>
+    </nz-card>
 
-  <br>
 
-  <nz-card>
+    <nz-card [nzBordered]="false" nzTitle="Sales Points">
+      <div style="margin-bottom: 10px;">
+        <div nz-row [nzGutter]="24">
+          <div nz-col nzSpan="12">
+            <div style="width: 100%;">
+              <nz-input-group [nzSuffix]="suffixIconSearch">
+                <input
+                  type="text"
+                  nz-input
+                  placeholder="Search by sales point name"
+                />
+              </nz-input-group>
+              <ng-template #suffixIconSearch>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
+            </div>
+          </div>
+          <div nz-col nzSpan="12" >
+            <div style="margin-right: 10px">
+              <nz-page-header-extra>
+                <button nz-button nzType="primary" (click)="showSOPModal()">Create</button>
+              </nz-page-header-extra>
 
-    <nz-page-header-extra>
-      <button nz-button routerLink="" nzType="primary">Create</button>
-    </nz-page-header-extra>
-
-    <div style="margin-bottom: 10px; width: 50%;">
-
-      <div nz-col [nzSpan]="15">
-      <nz-input-group [nzSuffix]="suffixIconSearch">
-        <input type="text" nz-input placeholder="Search by sales point" />
-    </nz-input-group>
-    <ng-template #suffixIconSearch>
-        <i nz-icon nzType="search"></i>
-    </ng-template>
-    </div>
-
-    </div>
-
-
-  <nz-table
-  #commissionsTable
-  [nzData]="displaySales"
-  [nzSize]="'small'"
-  [nzBordered]="true"
-  style="background-color: white;"
->
-
-  <thead>
-    <tr>
-      <th>SOP Name</th>
-      <th>SOP Code</th>
-      <th>Description</th>
-
-    </tr>
-</thead>
-
-<tbody>
-  <tr *ngFor="">
-
-    <!-- <td>{}</td>
-    <td>{}</td> -->
-    <td>
-      <div *ngIf="">
-        <!-- <button
-          nz-popconfirm
-          nzPopconfirmTitle="Are you sure you wish to proceed"
-          nzPopconfirmPlacement="bottom"
-          (nzOnConfirm)="{}"
-          (nzOnCancel)="{}" nz-button nzType="primary" nzSize="small">
-          Edit
-        </button> -->
+            </div>
+          </div>
+        </div>
       </div>
 
-    </td>
-</tr>
+      <nz-table
+        #sopTable
+        [nzData]="displaySales"
+        [nzSize]="'small'"
+        [nzBordered]="true"
+        style="background-color: white;"
+      >
 
-</tbody>
-</nz-table>
+        <thead>
+        <tr>
+          <th>SOP Name</th>
+          <th>SOP Code</th>
+          <th>Description</th>
+          <th></th>
+        </tr>
+        </thead>
 
+        <tbody>
+        <tr
+          style="cursor: pointer;"
+          *ngFor="let sop of sopTable.data"
+        >
+          <td>{{sop.name}}</td>
+          <td>{{sop.sop_code}}</td>
+          <td>{{sop.description}}</td>
+          <td>
+            <button
+              nz-button
+              nzType="primary"
+              (click)="editSOPModal(sop)"
+            >
+              Edit
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </nz-table>
+    </nz-card>
   </nz-card>
 
 </div>
+
+
+<nz-modal [nzWidth]="900" [(nzVisible)]="isBranchVisible" nzTitle="The first Modal" (nzOnCancel)="handleBranchCancel()" (nzOnOk)="handleBranchOk()">
+  <form [formGroup]="branchForm" nz-form>
+    <div nz-row>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item>
+          <nz-form-label
+            [nzSpan]="8"
+            nzFor="name"
+          >Branch name</nz-form-label
+          >
+          <nz-form-control
+            [nzSpan]="16"
+            nzErrorTip="Please enter Branch name!"
+          >
+            <input
+              nz-input
+              formControlName="name"
+              name="name"
+              type="text"
+              id="name"
+              nzRequired
+              placeholder="Name"
+            />
+            <span
+              class="text-danger"
+              *ngIf="(branchFormControl.name.touched || submittedBranch) && branchFormControl.name.errors?.required"
+            >Please enter Branch name!</span>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col [nzSpan]="12">
+        <nz-form-item>
+          <nz-form-label
+            [nzSpan]="8"
+            nzFor="branch_code"
+          >Branch Code</nz-form-label
+          >
+          <nz-form-control
+            [nzSpan]="16"
+            nzErrorTip="Please enter Branch Code!"
+          >
+            <input
+              nz-input
+              formControlName="branch_code"
+              name="branch_code"
+              type="number"
+              id="branch_code"
+              nzRequired
+              placeholder="Branch Code"
+            />
+            <span
+              class="text-danger"
+              *ngIf="(branchFormControl.branch_code.touched || submittedBranch) && branchFormControl.branch_code.errors?.required"
+            >Please enter Broker Code!</span>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+
+    <div nz-row>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item>
+          <nz-form-label
+            [nzSpan]="8"
+            nzFor="description"
+            nzRequired
+          >Description</nz-form-label
+          >
+          <nz-form-control [nzSpan]="16">
+            <input
+              formControlName="description"
+              nz-input
+              name="description"
+              type="text"
+              id="description"
+              placeholder="Please Enter Description"
+            />
+            <span
+              class="text-danger"
+              *ngIf="(branchFormControl.description.touched || submittedBranch) && branchFormControl.description.errors?.required"
+            >Please enter Description!
+            </span>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  </form>
+</nz-modal>
+
+
+<nz-modal [nzWidth]="900" [(nzVisible)]="isSOPVisible" nzTitle="The first Modal" (nzOnCancel)="handleSOPCancel()" (nzOnOk)="handleSOPOk()">
+  <form [formGroup]="sopForm" nz-form>
+    <div nz-row>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item>
+          <nz-form-label
+            [nzSpan]="8"
+            nzFor="sop_name"
+          >SOP Name</nz-form-label
+          >
+          <nz-form-control
+            [nzSpan]="16"
+            nzErrorTip="Please enter SOP name!"
+          >
+            <input
+              nz-input
+              formControlName="name"
+              name="sop_name"
+              type="text"
+              id="sop_name"
+              nzRequired
+              placeholder="Name"
+            />
+            <span
+              class="text-danger"
+              *ngIf="(sopFormControl.name.touched || submittedSOP) && sopFormControl.name.errors?.required"
+            >Please enter Branch name!</span>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col [nzSpan]="12">
+        <nz-form-item>
+          <nz-form-label
+            [nzSpan]="8"
+            nzFor="sop_code"
+          >SOP Code</nz-form-label
+          >
+          <nz-form-control
+            [nzSpan]="16"
+            nzErrorTip="Please enter SOP Code!"
+          >
+            <input
+              nz-input
+              formControlName="sop_code"
+              name="sop_code"
+              type="number"
+              id="sop_code"
+              nzRequired
+              placeholder="SOP Code"
+            />
+            <span
+              class="text-danger"
+              *ngIf="(sopFormControl.sop_code.touched || submittedSOP) && sopFormControl.sop_code.errors?.required"
+            >Please enter SOP Code!</span>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+
+    <div nz-row>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item>
+          <nz-form-label
+            [nzSpan]="8"
+            nzFor="sop_description"
+            nzRequired
+          >Description</nz-form-label
+          >
+          <nz-form-control [nzSpan]="16">
+            <input
+              formControlName="description"
+              nz-input
+              name="sop_description"
+              type="text"
+              id="sop_description"
+              placeholder="Please Enter Description"
+            />
+            <span
+              class="text-danger"
+              *ngIf="(sopFormControl.description.touched || submittedSOP) && sopFormControl.description.errors?.required"
+            >Please enter Description!
+            </span>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col [nzSpan]="12">
+        <nz-form-item>
+          <nz-form-label
+            [nzSpan]="8"
+            nzFor="branch_id"
+          >Branch</nz-form-label
+          >
+          <nz-form-control
+            [nzSpan]="16"
+            nzErrorTip="Please enter Branch"
+          >
+            <nz-select
+              name="branch_id"
+              formControlName="branch_id"
+              nzAllowClear
+              nzPlaceHolder="Choose Branch"
+            >
+              <nz-option
+                *ngFor="let branch of displayBranch"
+                [nzValue]=" branch.ID"
+                [nzLabel]="branch.name"
+              ></nz-option>
+            </nz-select>
+
+            <span
+              class="text-danger"
+              *ngIf="(sopFormControl.branch_id.touched || submittedSOP) && sopFormControl.branch_id.errors?.required"
+            >Please enter Branch!</span>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  </form>
+</nz-modal>

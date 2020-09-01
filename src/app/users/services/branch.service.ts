@@ -1,4 +1,4 @@
-import { BranchModel } from './../models/branch.model';
+import { BranchModel, SalesPoint } from './../models/branch.model';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NzMessageService } from 'ng-zorro-antd';
@@ -11,22 +11,35 @@ import { Observable } from 'rxjs';
 export class BranchService {
   branchModel: BranchModel;
   branchesModel: BranchModel[] = [];
-  BASEURLBranch = '';
+  BASEURLBranch = 'http://localhost:8090';
 
   constructor(private http: HttpClient,
-    private message: NzMessageService,
-    private router: Router) { }
+              private message: NzMessageService,
+              private router: Router) { }
 
     createBranch(cBranch: BranchModel): Observable<BranchModel> {
-      return this.http.post<BranchModel>(`${this.BASEURLBranch}/user-branch`, cBranch);
+      return this.http.post<BranchModel>(`${this.BASEURLBranch}/branch`, cBranch);
     }
 
-    updateBranch(uBranch: any) {
-      return this.http.put<any>(`${this.BASEURLBranch}/user-branch/${uBranch.ID}`, uBranch);
+    updateBranch(uBranch: BranchModel) {
+      return this.http.put<BranchModel>(`${this.BASEURLBranch}/branch/${uBranch.ID}`, uBranch);
     }
 
-    getBranch(): Observable<any> {
-      return this.http.get<any>(`${this.BASEURLBranch}/user-branch`);
+    getBranch(): Observable<BranchModel[]> {
+      return this.http.get<BranchModel[]>(`${this.BASEURLBranch}/branch`);
 
     }
+
+  createSOP(cSOP: SalesPoint): Observable<SalesPoint> {
+    return this.http.post<SalesPoint>(`${this.BASEURLBranch}/sales-point`, cSOP);
+  }
+
+  updateSOP(uSOP: SalesPoint) {
+    return this.http.put<SalesPoint>(`${this.BASEURLBranch}/sales-point/${uSOP.ID}`, uSOP);
+  }
+
+  getSOP(): Observable<SalesPoint> {
+    return this.http.get<SalesPoint>(`${this.BASEURLBranch}/sales-point`);
+
+  }
 }
