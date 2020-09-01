@@ -45,6 +45,7 @@ import { AddChequeLotComponent } from './components/finance/components/add-chequ
 import { ClaimsSetupsComponent } from './components/claims-setups/claims-setups.component';
 import { AddServiceProviderComponent } from './components/claims-setups/components/add-service-provider/add-service-provider.component';
 import { AddInsuranceCompanyComponent } from './components/claims-setups/components/add-insurance-company/add-insurance-company.component';
+import { DepartmentsComponent } from './components/organizational-setups/departments/departments.component';
 
 const routes: Routes = [
     {
@@ -75,6 +76,10 @@ const routes: Routes = [
         path: 'organization-setups',
         component: OrganizationalSetupsComponent
     },
+    {
+      path: 'organization-setups/departments',
+      component: DepartmentsComponent
+  },
     {
         path: 'agents-setups',
         component: AgentsComponent
@@ -116,6 +121,7 @@ const routes: Routes = [
         path: 'salvage-buyer-details/:id',
         component: SalvageBuyerDetailsComponent
     }
+
 ];
 
 @NgModule({
@@ -160,7 +166,8 @@ const routes: Routes = [
         AddChequeLotComponent,
         ClaimsSetupsComponent,
         AddServiceProviderComponent,
-        AddInsuranceCompanyComponent
+        AddInsuranceCompanyComponent,
+        DepartmentsComponent
     ],
     imports: [
         CommonModule,
