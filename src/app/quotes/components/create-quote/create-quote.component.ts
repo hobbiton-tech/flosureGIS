@@ -52,6 +52,7 @@ import { ITotalsModel } from '../../models/totals.model';
 import { LimitsOfLiabilityComponent } from '../limits-of-liability/limits-of-liability.component';
 import { ExcessesComponent } from '../excesses/excesses.component';
 import { PremiumComputationService } from '../../services/premium-computation.service';
+import * as jwt_decode from 'jwt-decode';
 
 interface IRateResult {
     sumInsured: string;
@@ -145,6 +146,10 @@ export class CreateQuoteComponent implements OnInit {
     // clauseForm: FormGroup;
     extensionForm: FormGroup;
     // wordingForm: FormGroup;
+
+  userToken: any;
+  decodedJwtData: any;
+
     constructor(
         private formBuilder: FormBuilder,
         private readonly quoteService: QuotesService,
@@ -295,7 +300,9 @@ export class CreateQuoteComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        const user = localStorage.getItem('user');
+        this.userToken = localStorage.getItem('currentUser');
+        this.decodedJwtData = jwt_decode(this.userToken);
+        console.log('Decoded>>>>>>', this.decodedJwtData);
         this.quoteForm = this.formBuilder.group({
             client: ['', Validators.required],
             messageCode: ['ewrewre', Validators.required],
@@ -304,7 +311,7 @@ export class CreateQuoteComponent implements OnInit {
             policyNumberOfDays: [''],
             endDate: [''],
             quarter: ['', Validators.required],
-            user: [user, Validators.required],
+            user: [Number(this.decodedJwtData.user_id), Validators.required],
             status: ['Draft'],
             receiptStatus: ['Unreceipted'],
             sourceOfBusiness: ['', Validators.required],
@@ -582,7 +589,7 @@ export class CreateQuoteComponent implements OnInit {
             basicPremiumSubTotal: 0,
             user: this.agentMode
                 ? this.quoteForm.get('user').value
-                : localStorage.getItem('user'),
+                : this.decodedJwtData.user_id,
             risks: this.risks
         };
 
@@ -616,7 +623,7 @@ export class CreateQuoteComponent implements OnInit {
             this.productClauseService.addPolicyWording(this.newWordingWording);
         }
 
-      console.log('Client Details>>>>>>', quote);
+        console.log('Client Details>>>>>>', quote);
         await this.quoteService.createMotorQuotation(quote, this.quotesCount);
         this.creatingQuote = false;
     }

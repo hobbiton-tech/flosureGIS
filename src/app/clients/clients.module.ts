@@ -7,19 +7,24 @@ import { ClientsListComponent } from './components/clients-list/clients-list.com
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClientDetailsComponent } from './components/client-details/client-details.component';
 import { ClientsService } from './services/clients.service';
+import { UsersRolesComponent } from '../users/components/users-roles/users-roles.component';
+import { AuthGuard } from '../users/helpers/auth.guard';
 
 const routes: Routes = [
     {
         path: 'create-client',
         component: CreateClientComponent,
+  canActivate: [AuthGuard]
     },
     {
         path: 'client-details/:id',
         component: ClientDetailsComponent,
+  canActivate: [AuthGuard]
     },
     {
         path: 'clients-list',
         component: ClientsListComponent,
+      canActivate: [AuthGuard],
     },
 ];
 

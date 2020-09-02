@@ -1,4 +1,4 @@
-import { RolesModel } from './../models/roles.model';
+import { PermissionsModel, RolesModel } from './../models/roles.model';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NzMessageService } from 'ng-zorro-antd';
@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 export class RolesService {
   roleModel: RolesModel;
   rolesModel: RolesModel[] = [];
-  BASEURLRolePayment = '';
+  BASEURLRolePermission = 'http://localhost:8090';
 
 
   constructor(private http: HttpClient,
@@ -19,15 +19,29 @@ export class RolesService {
     private router: Router) {}
 
     createRole(cRole: RolesModel): Observable<RolesModel> {
-      return this.http.post<RolesModel>(`${this.BASEURLRolePayment}/user-permissions`, cRole);
+      return this.http.post<RolesModel>(`${this.BASEURLRolePermission}/role`, cRole);
     }
 
-    updateRole(uRole: any) {
-      return this.http.put<any>(`${this.BASEURLRolePayment}/user-permissions/${uRole.ID}`, uRole);
+    updateRole(uRole: RolesModel) {
+      return this.http.put<RolesModel>(`${this.BASEURLRolePermission}/role/${uRole.ID}`, uRole);
     }
 
-    getRole(): Observable<any> {
-      return this.http.get<any>(`${this.BASEURLRolePayment}/user-permissions`);
+    getRole(): Observable<RolesModel[]> {
+      return this.http.get<RolesModel[]>(`${this.BASEURLRolePermission}/role`);
 
     }
+
+
+  createPermission(cPermission: PermissionsModel): Observable<PermissionsModel> {
+    return this.http.post<PermissionsModel>(`${this.BASEURLRolePermission}/permission`, cPermission);
+  }
+
+  updatePermission(uPermission: PermissionsModel) {
+    return this.http.put<PermissionsModel>(`${this.BASEURLRolePermission}/permission/${uPermission.ID}`, uPermission);
+  }
+
+  getPermission(): Observable<PermissionsModel[]> {
+    return this.http.get<PermissionsModel[]>(`${this.BASEURLRolePermission}/permission`);
+
+  }
 }

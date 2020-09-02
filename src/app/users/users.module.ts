@@ -8,26 +8,31 @@ import { UsersRolesComponent } from './components/users-roles/users-roles.compon
 import { UsersPermissionsComponent } from './components/users-permissions/users-permissions.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { UsersBranchComponent } from './components/users-branch/users-branch.component';
+import { AuthGuard } from './helpers/auth.guard';
 
 const routes: Routes = [
     {
         path: 'users-roles',
-        component: UsersRolesComponent
+        component: UsersRolesComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'roles-permissions',
-        component: UsersPermissionsComponent
+        component: UsersPermissionsComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'users',
-        component: UsersComponent
+        component: UsersComponent,
+      canActivate: [AuthGuard]
     },
 
     {
       path: 'users-branch',
-      component: UsersBranchComponent
+      component: UsersBranchComponent,
+      canActivate: [AuthGuard]
   },
-    { path: "forgot-password", component: ForgotPasswordComponent },
+    { path: 'forgot-password', component: ForgotPasswordComponent },
 ];
 
 

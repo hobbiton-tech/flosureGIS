@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import {} from 'firebase/app';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SlackService } from '../slack.service';
 import { HttpClient } from '@angular/common/http';
+import { AuthenticationService } from '../users/services/authentication.service';
+import { first } from 'rxjs/operators';
 
 @Component({
     selector: 'app-login',
@@ -16,6 +18,8 @@ export class LoginComponent implements OnInit {
     password: string;
     validateStatus: string;
     loginForm: FormGroup;
+  returnUrl: string;
+  error = '';
 
     geolocationPosition: Position;
 
@@ -26,8 +30,16 @@ export class LoginComponent implements OnInit {
         public auth: AngularFireAuth,
         private fb: FormBuilder,
         private slackServie: SlackService,
-        private http: HttpClient
-    ) {}
+        private http: HttpClient,
+        private formBuilder: FormBuilder,
+        private route: ActivatedRoute,
+        private authenticationService: AuthenticationService
+    ) {
+      // redirect to home if already logged in
+      if (this.authenticationService.currentUserValue) {
+        this.router.navigate(['/flosure/dashboard']);
+      }
+    }
 
     async ngOnInit(): Promise<void> {
         this.loginForm = this.fb.group({
@@ -86,39 +98,71 @@ export class LoginComponent implements OnInit {
                 }
             );
         }
+
+      // get return url from route parameters or default to '/'
+      this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/flosure/dashboard';
     }
 
-    async login(): Promise<void> {
+  // convenience getter for easy access to form fields
+  get f() { return this.loginForm.controls; }
+
+    login(): Promise<void> {
         this.isLoggingIn = true;
+      // stop here if form is invalid
+        if (this.loginForm.invalid) {
+        return;
+      }
         for (const i in this.loginForm.controls) {
             this.loginForm.controls[i].markAsDirty();
             this.loginForm.controls[i].updateValueAndValidity();
         }
         if (!this.loginForm.invalid) {
-            await this.auth
-                .signInWithEmailAndPassword(
-                    this.loginForm.controls.email.value,
-                    this.loginForm.controls.password.value
-                )
-                .then((res) => {
-                    localStorage.setItem(
-                        'user',
-                        this.loginForm.controls.email.value
-                    );
-                    this.router.navigateByUrl('/flosure/dashboard');
-                    this.slackServie.sendToSlack({
-                        event: 'Login Event',
-                        title: 'Flosure Portal Login',
-                        text: `${this.loginForm.controls.email.value} logged into the portal`,
-                    });
-                })
-                .catch((err) => {
-                    this.isLoggingIn = false;
-                    for (const i in this.loginForm.controls) {
-                        this.loginForm.controls[i].markAsDirty();
-                        this.validateStatus = 'error';
-                    }
+            // await this.auth
+            //     .signInWithEmailAndPassword(
+            //         this.loginForm.controls.email.value,
+            //         this.loginForm.controls.password.value
+            //     )
+            //     .then((res) => {
+            //         localStorage.setItem(
+            //             'user',
+            //             this.loginForm.controls.email.value
+            //         );
+            //         this.router.navigateByUrl('/flosure/dashboard');
+            //         this.slackServie.sendToSlack({
+            //             event: 'Login Event',
+            //             title: 'Flosure Portal Login',
+            //             text: `${this.loginForm.controls.email.value} logged into the portal`,
+            //         });
+            //     })
+            //     .catch((err) => {
+            //         this.isLoggingIn = false;
+            //         for (const i in this.loginForm.controls) {
+            //             this.loginForm.controls[i].markAsDirty();
+            //             this.validateStatus = 'error';
+            //         }
+            //     });
+
+
+          this.authenticationService.login(this.f.email.value, this.f.password.value)
+            .pipe(first())
+            .subscribe(
+              data => {
+                this.slackServie.sendToSlack({
+                  event: 'Login Event',
+                  title: 'Flosure Portal Login',
+                  text: `${this.loginForm.controls.email.value} logged into the portal`,
                 });
+                this.router.navigate([this.returnUrl]);
+              },
+              error => {
+                this.error = error;
+                this.isLoggingIn = false;
+                for (const i in this.loginForm.controls) {
+                  this.loginForm.controls[i].markAsDirty();
+                  this.validateStatus = 'error';
+                }
+              });
+
         }
     }
 }

@@ -7,7 +7,7 @@ import { IDiscounts } from './discounts.model';
 
 export class MotorQuotationModel {
     id?: string;
-    user: string;
+    user: number;
     client: string;
     quoteNumber?: string;
     dateCreated: Date;

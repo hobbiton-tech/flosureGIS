@@ -24,38 +24,47 @@ import { CalimsResolverService } from './services/calims-resolver.service';
 import { ClaimApprovalModalComponent } from './components/claim-approval-modal/claim-approval-modal.component';
 import { AddClaimantModalComponent } from './components/add-claimant-modal/add-claimant-modal.component';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { UsersRolesComponent } from '../users/components/users-roles/users-roles.component';
+import { AuthGuard } from '../users/helpers/auth.guard';
 
 const routes: Routes = [
     {
         path: 'intimate-claims',
-        component: IntimateClaimComponent
+        component: IntimateClaimComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'claim-transactions',
-        component: ClaimTransactionsComponent
+        component: ClaimTransactionsComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'claimants',
-        component: ClaimantsComponent
+        component: ClaimantsComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'claim-details',
-        component: ClaimDetailsComponent
+        component: ClaimDetailsComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'claim-details/:id',
         component: ClaimDetailsComponent,
         resolve: {
             claim: CalimsResolverService
-        }
+        },
+      canActivate: [AuthGuard]
     },
     {
         path: 'claim-approval',
-        component: ClaimApprovalComponent
+        component: ClaimApprovalComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'claims-processing',
-        component: ClaimsProcessingComponent
+        component: ClaimsProcessingComponent,
+      canActivate: [AuthGuard]
     }
 ];
 

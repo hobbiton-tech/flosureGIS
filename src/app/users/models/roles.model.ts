@@ -1,12 +1,12 @@
-export class RolesModel{
+export class RolesModel {
   ID?: number;
-  name: string;
+  role_name: string;
   description: string;
 }
 
-export class PermissionsModel{
+export class PermissionsModel {
   ID?: number;
   name: string;
   description: string;
-  role_id: number;
+  role_id?: number;
 }

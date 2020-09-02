@@ -5,11 +5,14 @@ import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { Routes, RouterModule } from '@angular/router';
 import { DashboardService } from './services/dashboard.service';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { UsersRolesComponent } from '../users/components/users-roles/users-roles.component';
+import { AuthGuard } from '../users/helpers/auth.guard';
 
 const routes: Routes = [
     {
         path: '',
-        component: DashboardComponent
+        component: DashboardComponent,
+      canActivate: [AuthGuard]
     }
 ];
 
