@@ -12,7 +12,7 @@
       <nz-page-header>
         <nz-page-header-title>Claims</nz-page-header-title>
         <nz-page-header-extra>
-          <button nz-button routerLink="/flosure/claims/intimate-claims" nzType="primary">Intimate Claim</button>
+          <button *ngIf="intimateCliam === isPresent.name || admin === isPresent.name" nz-button routerLink="/flosure/claims/intimate-claims" nzType="primary">Intimate Claim</button>
         </nz-page-header-extra>
         <nz-page-header-content>
           <nz-row [nzGutter]="1">

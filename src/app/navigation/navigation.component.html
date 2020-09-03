@@ -160,13 +160,13 @@
                                 Journals
                             </a>
                         </li>
-                        <li nz-menu-item nzMatchRouter>
+                        <li  *ngIf="allocation === isPresentPermission?.name || admin === isPresentPermission?.name" nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/accounts/allocations">
                                 Allocations
                             </a>
                         </li>
 
-                        <li nz-menu-item nzMatchRouter>
+                        <li  *ngIf="paymentPlan === isPresentPermission?.name || admin === isPresentPermission?.name" nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/accounts/payment-plan">
                                 Payment Plans
                             </a>
@@ -181,9 +181,9 @@
                 </li>
                 <li nz-submenu *ngIf="finance === isPresent?.role_name || admin === isPresent?.role_name" nzTitle="Finance" nzIcon="dollar">
                     <ul>
-                        <li nz-menu-item nzMatchRouter>
+                        <li *ngIf="receipting === isPresentPermission?.name || admin === isPresentPermission?.name" nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/accounts/receipts">
-                                Reciepting
+                                Receipting
                             </a>
                         </li>
                         <li nz-submenu nzTitle="Requisitions">
@@ -242,7 +242,7 @@
                         <!--                                Account Listing-->
                         <!--                            </a>-->
                         <!--                        </li>-->
-                        <li nz-menu-item nzMatchRouter>
+                        <li *ngIf="allocation === isPresentPermission?.name || admin === isPresentPermission?.name" nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/accounts/allocations">
                                 Allocations
                             </a>

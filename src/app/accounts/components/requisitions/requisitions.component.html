@@ -33,7 +33,7 @@
                             <th [nzAlign]="columnAlignment">Type</th>
                             <!-- <th [nzAlign]="columnAlignment">Authorized By</th> -->
                             <!-- <th [nzAlign]="columnAlignment">Authorization Date</th> -->
-                            <th [nzAlign]="columnAlignment">Action</th>
+                            <th *ngIf=" approve === isPresentPermission?.name || admin === isPresentPermission?.name" [nzAlign]="columnAlignment">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -50,7 +50,7 @@
                         </td> -->
                             <!-- <td [nzAlign]="columnAlignment">
                             {{requisition.authorisationDate ? (requisition.authorizationDate | date) : '-'}}</td> -->
-                            <td [nzAlign]="columnAlignment">
+                            <td  *ngIf=" approve === isPresentPermission?.name || admin === isPresentPermission?.name" [nzAlign]="columnAlignment">
                                 <button n nz-button nzType="primary" style="margin-left: 2px;" nzSize="small"
                                     (nzOnConfirm)="approveRequisition(requisition)" nz-popconfirm
                                     nzTitle="Approve Requisition?" *ngIf="!isApprovingRequisition">

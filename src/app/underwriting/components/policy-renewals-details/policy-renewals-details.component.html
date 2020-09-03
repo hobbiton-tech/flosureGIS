@@ -147,7 +147,7 @@
                     <nz-collapse>
                         <nz-collapse-panel nzHeader="Add Risk" [nzActive]="isAddRiskPanelOpen"
                             (nzActiveChange)="resetForms()">
-                            
+
                         </nz-collapse-panel>
                     </nz-collapse>
                 </div>
@@ -257,7 +257,7 @@
                 <div nz-row>
                     <div nz-col>
                         <div style="text-align: center; margin-top: 10px; margin-bottom: 10px; ">
-                            <button nz-button nzType="primary" (click)="renewPolicy()"
+                            <button *ngIf="renewPolicyPem === isPresent.name" nz-button nzType="primary" (click)="renewPolicy()"
                                 [disabled]="!policyDetailsForm.valid">
                                 Renew Policy
                             </button>

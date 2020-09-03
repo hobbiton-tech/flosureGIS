@@ -5,6 +5,10 @@ import { AccountService } from 'src/app/accounts/services/account.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { ClaimsService } from 'src/app/claims/services/claims-service.service';
 import { Claim } from 'src/app/claims/models/claim.model';
+import * as jwt_decode from 'jwt-decode';
+import { UserModel } from '../../../../../users/models/users.model';
+import { PermissionsModel } from '../../../../../users/models/roles.model';
+import { UsersService } from '../../../../../users/services/users.service';
 
 @Component({
     selector: 'app-approved-requisitions',
@@ -36,10 +40,18 @@ export class ApprovedRequisitionsComponent implements OnInit {
     // requisition payment modal
     isRequisitionPaymentModalVisible = false;
 
+  loggedIn = localStorage.getItem('currentUser');
+  user: UserModel;
+  permission: PermissionsModel;
+  isPresentPermission: PermissionsModel;
+  process = 'process';
+  admin = 'admin';
+
     constructor(
         private accountsService: AccountService,
         private msg: NzMessageService,
-        private claimsService: ClaimsService
+        private claimsService: ClaimsService,
+        private usersService: UsersService
     ) {}
 
     ngOnInit(): void {
@@ -47,6 +59,15 @@ export class ApprovedRequisitionsComponent implements OnInit {
         setTimeout(() => {
             this.requisitionsIsLoading = false;
         }, 3000);
+
+      const decodedJwtData = jwt_decode(this.loggedIn);
+      this.usersService.getUsers().subscribe((users) => {
+        this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+
+        this.isPresentPermission = this.user.Permission.find((el) => el.name === this.process ||
+          el.name === this.admin );
+
+      });
 
         this.accountsService.getRequisitions().subscribe(requisitions => {
             this.requisitionsList = requisitions;

@@ -56,7 +56,7 @@
                                 </div>
                             </td>
                             <td [nzAlign]="columnAlignment">
-                                <button n nz-button nzType="primary" style="margin-left: 2px;" nzSize="small"
+                                <button *ngIf="processClaimPem === isPresent.name || admin === isPresent.name" nz-button nzType="primary" style="margin-left: 2px;" nzSize="small"
                                     (click)="processClaim(claim)">
                                     Process
                                 </button>

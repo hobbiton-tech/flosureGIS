@@ -4,7 +4,7 @@ import * as jwt_decode from 'jwt-decode';
 import { AuthenticationService } from '../users/services/authentication.service';
 import { UsersService } from '../users/services/users.service';
 import { UserModel } from '../users/models/users.model';
-import { RolesModel } from '../users/models/roles.model';
+import { PermissionsModel, RolesModel } from '../users/models/roles.model';
 
 @Component({
     selector: 'app-navigation',
@@ -19,8 +19,13 @@ export class NavigationComponent implements OnInit {
     claim = 'claim';
     finance: 'finance';
     admin = 'admin';
+    allocation = 'allocation';
+    paymentPlan = 'payment_plan';
+    receipting = 'receipt';
   newCategory: string;
   isPresent: RolesModel;
+  permission: PermissionsModel;
+  isPresentPermission: PermissionsModel;
 
 
 
@@ -35,6 +40,10 @@ export class NavigationComponent implements OnInit {
 
         this.isPresent = this.user.Role.find((el) => el.role_name === this.underwriting || el.role_name === this.claim ||
           el.role_name === this.finance || el.role_name === this.admin);
+
+
+        this.isPresentPermission = this.user.Permission.find((el) => el.name === this.allocation || el.name === this.paymentPlan ||
+          el.name === this.admin || el.name === this.receipting);
 
         console.log('USERS>>>', this.user, this.isPresent);
       });

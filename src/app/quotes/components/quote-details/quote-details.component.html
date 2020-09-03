@@ -31,11 +31,12 @@
                       Covert to Policy
                     </button>
                   </ng-container>
-
+                  <ng-container *ngIf="editQuote === isPresent?.name || admin === isPresent?.name">
                     <button *ngIf="!isEditmode && !isQuoteApproved" nz-button nzType="primary"
                         (click)="isEditmode = true">
                         Edit Quote
                     </button>
+                  </ng-container>
                     <button *ngIf="isEditmode" nz-button nzType="primary" (click)="isEditmode = false">
                         Save Changes
                     </button>
@@ -359,10 +360,12 @@
                                     View
                                 </button>
                                 <nz-divider nzType="vertical" *ngIf="!isQuoteApproved"></nz-divider>
+                              <ng-container *ngIf="deleteRisk === isPresent?.name || admin === isPresent?.name">
                                 <button nz-button nzType="danger" nzSize="small" nz-popconfirm nzTitle="Delete Risk?"
                                     (nzOnConfirm)="removeRisk(risk.regNumber)" *ngIf="!isQuoteApproved">
                                     Delete
                                 </button>
+                              </ng-container>
                             </td>
                         </tr>
                     </tbody>

@@ -13,6 +13,10 @@ import { IRequisitionModel } from 'src/app/accounts/components/models/requisitio
 import { v4 } from 'uuid';
 import { NzMessageService } from 'ng-zorro-antd';
 import { HttpClient } from '@angular/common/http';
+import * as jwt_decode from 'jwt-decode';
+import { PermissionsModel } from '../../../../../users/models/roles.model';
+import { UserModel } from '../../../../../users/models/users.model';
+import { UsersService } from '../../../../../users/services/users.service';
 
 @Component({
     selector: 'app-cancellation-cover',
@@ -75,13 +79,21 @@ export class CancellationCoverComponent implements OnInit {
     reqNumber: string;
 
     policy: Policy;
+  permission: PermissionsModel;
+  user: UserModel;
+  isPresent: PermissionsModel;
+  admin = 'admin';
+  cancelPolicy = 'cancel_policy';
+  raiseRequisitionPem = 'raise_requisition';
+  loggedIn = localStorage.getItem('currentUser');
 
     constructor(
         private readonly router: Router,
         private readonly policiesService: PoliciesService,
         private accountsService: AccountService,
         private msg: NzMessageService,
-        private http: HttpClient
+        private http: HttpClient,
+        private  usersService: UsersService,
     ) {}
 
     ngOnInit(): void {
@@ -89,6 +101,18 @@ export class CancellationCoverComponent implements OnInit {
         setTimeout(() => {
             this.cancellationOfCoverIsLoading = false;
         }, 3000);
+
+      const decodedJwtData = jwt_decode(this.loggedIn);
+      console.log('Decoded>>>>>>', decodedJwtData);
+
+      this.usersService.getUsers().subscribe((users) => {
+        this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+
+        this.isPresent = this.user.Permission.find((el) => el.name === this.admin ||
+          el.name === this.cancelPolicy || el.name === this.raiseRequisitionPem);
+
+        console.log('USERS>>>', this.user, this.isPresent, this.admin);
+      });
 
         this.policiesService.getPolicies().subscribe(policies => {
             this.policiesList = policies;

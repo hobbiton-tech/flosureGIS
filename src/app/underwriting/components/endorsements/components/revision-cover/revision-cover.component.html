@@ -26,7 +26,7 @@
                         <th>Client Name</th>
                         <th>Approved By</th>
                         <th>Status</th>
-                        <th>Action</th>
+                        <th *ngIf="editPolicy === isPresent.name || admin === isPresent.name">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,7 +37,7 @@
                         <td>{{ policy.client }}</td>
                         <td>{{ policy.user }}</td>
                         <td>{{ policy.status }}</td>
-                        <td>
+                        <td *ngIf="editPolicy === isPresent.name">
                             <button nz-button nzType="primary" nzSize="small" (click)="viewPolicyDetails(policy)">
                                 Edit
                             </button>

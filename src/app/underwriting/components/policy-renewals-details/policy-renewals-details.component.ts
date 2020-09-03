@@ -46,6 +46,10 @@ import {
     PremiumComputation
 } from 'src/app/quotes/models/premium-computations.model';
 import { ITotalsModel } from 'src/app/quotes/models/totals.model';
+import * as jwt_decode from 'jwt-decode';
+import { PermissionsModel } from '../../../users/models/roles.model';
+import { UserModel } from '../../../users/models/users.model';
+import { UsersService } from '../../../users/services/users.service';
 
 type AOA = any[][];
 
@@ -133,29 +137,12 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
 
     isEditmode = false;
 
-    // Edit risk details
-    isRiskDetailsEditmode = false;
 
     territorialExtensionCountries: number;
 
-    // loyalty discount amount
-    loyaltyDiscountAmount: number;
-
-    addLoadIsLoading = false;
 
     // selected risk in risk table
     selectedRisk: RiskModel;
-
-    increasedThirdPartyLimitsRateType: string;
-
-    // risk being edited
-    currentRiskEdit: RiskModel;
-    premiumRateType: string;
-    riotAndStrikeRateType: string;
-    carStereoRateType: string;
-    territorialExtensionRateType: string;
-    lossOfUseDailyRateType: string;
-    premiumDiscountRateType: string;
 
     // PDFS
     isCertificatePDFVisible = false;
@@ -202,10 +189,14 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
 
     // dicounts added
     discounts: IDiscounts[] = [];
-    LevyRate = 3;
-    policyCertificateURl: string;
-    debitNoteURL: string;
     policyID: string;
+
+  permission: PermissionsModel;
+  user: UserModel;
+  isPresent: PermissionsModel;
+  admin = 'admin';
+  renewPolicyPem = 'renew_policy';
+  loggedIn = localStorage.getItem('currentUser');
 
     constructor(
         private readonly router: Router,
@@ -226,7 +217,8 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
         private extensionsComponent: ExtensionsComponent,
         private discountsComponent: DiscountsComponent,
         private totalsComponent: TotalsViewComponent,
-        private vehicleDetailsService: VehicleDetailsServiceService
+        private vehicleDetailsService: VehicleDetailsServiceService,
+        private  usersService: UsersService,
     ) {
         this.paymentPlanForm = this.formBuilder.group({
             numberOfInstallments: ['', Validators.required],
@@ -235,26 +227,6 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
         });
     }
 
-    // conditional render of agent field based on mode(agent or user)
-    agentMode = false;
-    switchLoading = false;
-
-    compareFn = (o1: any, o2: any) =>
-        o1 && o2 ? o1.value === o2.value : o1 === o2
-
-    disabledStartDate = (startValue: Date): boolean => {
-        if (!startValue || !this.endValue) {
-            return false;
-        }
-        return startValue.getTime() > this.endValue.getTime();
-    }
-
-    disabledEndDate = (endValue: Date): boolean => {
-        if (!endValue || !this.startValue) {
-            return false;
-        }
-        return endValue.getTime() <= this.startValue.getTime();
-    }
     ngOnInit(): void {
         this.policyRenewalDetailsIsLoading = true;
         setTimeout(() => {
@@ -262,6 +234,17 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
         }, 3000);
 
         this.route.params.subscribe(id => {
+
+          const decodedJwtData = jwt_decode(this.loggedIn);
+          console.log('Decoded>>>>>>', decodedJwtData);
+
+          this.usersService.getUsers().subscribe((users) => {
+            this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+
+            this.isPresent = this.user.Permission.find((el) => el.name === this.admin || el.name === this.renewPolicyPem);
+
+            console.log('USERS>>>', this.user, this.isPresent, this.admin);
+          });
             this.policiesService.getPolicyById(id.id).subscribe(policy => {
                 this.policyData = policy;
 

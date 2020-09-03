@@ -320,6 +320,8 @@ export class QuoteDetailsComponent implements OnInit {
   user: UserModel;
   isPresent: PermissionsModel;
   approveQuote = 'approve_quote';
+  editQuote = 'edit_quote';
+  deleteRisk = 'delete_risk';
   admin = 'admin';
   loggedIn = localStorage.getItem('currentUser');
 
@@ -372,21 +374,21 @@ export class QuoteDetailsComponent implements OnInit {
 
       this.route.params.subscribe(param => {
             this.quoteNumber = param.quoteNumber;
-
-            const decodedJwtData = jwt_decode(this.loggedIn);
-            console.log('Decoded>>>>>>', decodedJwtData);
-
-            this.usersService.getUsers().subscribe((users) => {
-            this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
-
-            this.isPresent = this.user.Permission.find((el) => el.name === this.admin || el.name === this.approveQuote);
-
-            console.log('USERS>>>', this.user, this.isPresent, this.admin);
-          });
             this.quotesService.getMotorQuotations().subscribe(quotes => {
                 this.quoteData = quotes.filter(
                     x => x.quoteNumber === this.quoteNumber
                 )[0];
+              const decodedJwtData = jwt_decode(this.loggedIn);
+              console.log('Decoded>>>>>>', decodedJwtData);
+
+              this.usersService.getUsers().subscribe((users) => {
+                this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+
+                this.isPresent = this.user.Permission.find((el) => el.name === this.admin || el.name === this.approveQuote ||
+                  el.name === this.editQuote || el.name === this.deleteRisk);
+
+                console.log('USERS>>>', this.user, this.isPresent, this.admin);
+              });
 
                 this.commisionSetupsService.getCommissionSetups().subscribe((commission) => {
                    this.commission = commission.filter((x) => x.intermediaryId === this.quoteData.intermediaryId)[0];

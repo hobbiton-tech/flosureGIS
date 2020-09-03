@@ -53,6 +53,9 @@ import { LimitsOfLiabilityComponent } from '../limits-of-liability/limits-of-lia
 import { ExcessesComponent } from '../excesses/excesses.component';
 import { PremiumComputationService } from '../../services/premium-computation.service';
 import * as jwt_decode from 'jwt-decode';
+import { PermissionsModel } from '../../../users/models/roles.model';
+import { UserModel } from '../../../users/models/users.model';
+import { UsersService } from '../../../users/services/users.service';
 
 interface IRateResult {
     sumInsured: string;
@@ -151,6 +154,15 @@ export class CreateQuoteComponent implements OnInit {
   userToken: any;
   decodedJwtData: any;
 
+  permission: PermissionsModel;
+  user: UserModel;
+  isPresent: PermissionsModel;
+  approveQuote = 'approve_quote';
+  editQuote = 'edit_quote';
+  deleteRisk = 'delete_risk';
+  admin = 'admin';
+  loggedIn = localStorage.getItem('currentUser');
+
     constructor(
         private formBuilder: FormBuilder,
         private readonly quoteService: QuotesService,
@@ -169,7 +181,8 @@ export class CreateQuoteComponent implements OnInit {
         private vehicleDetailsService: VehicleDetailsServiceService,
         private limitsOfLiabilityComponent: LimitsOfLiabilityComponent,
         private excessesComponent: ExcessesComponent,
-        private premiumComputationService: PremiumComputationService
+        private premiumComputationService: PremiumComputationService,
+        private  usersService: UsersService,
     ) {
         // this.clauseForm = formBuilder.group({
         //     heading: ['', Validators.required],
@@ -232,25 +245,6 @@ export class CreateQuoteComponent implements OnInit {
     // close add risk panel
     isAddRiskPanelOpen: boolean;
 
-    // Edit risk details
-    isRiskDetailsEditmode = false;
-
-    lossOfKeysAmount: number;
-    maliciousDamageAmount: number;
-    medicalExpensesAmount: number;
-    injuryAndDeathAmount: number;
-    propertyDamageAmount: number;
-    earthquakeAmount: number;
-    explosionsAmount: number;
-    financialLossAmount: number;
-    fireAndAlliedPerilsAmount: number;
-    legalExpensesAmount: number;
-    landslideAmount: number;
-    passengerLiabilityAmount: number;
-    permanentDisabilityAmount: number;
-
-    todayYear = null;
-
     // set risk tamplate table not vivible
     isTabletemplate = true;
 
@@ -259,12 +253,6 @@ export class CreateQuoteComponent implements OnInit {
 
     selectedLoadingValue: IExtension;
 
-    // motor third party rates
-    motorThirdPartyRates = {
-        pirvate: { Q1: 165, Q2: 280, Q3: 370, Q4: 464 },
-        commercial: { Q1: 199, Q2: 340, Q3: 452, Q4: 566 },
-        'bus/taxi': { Q1: 270, Q2: 464, Q3: 618, Q4: 772 }
-    };
 
     selectedSourceOfBusiness: string;
 
@@ -276,8 +264,6 @@ export class CreateQuoteComponent implements OnInit {
     concRisks: any[] = [];
     conChasis: any[] = [];
 
-    compareFn = (o1: any, o2: any) =>
-        o1 && o2 ? o1.value === o2.value : o1 === o2;
 
     log(value: { label: string; value: string }): void {
         this.selectedLoadingValue = {
@@ -286,23 +272,19 @@ export class CreateQuoteComponent implements OnInit {
         };
     }
 
-    disabledStartDate = (startValue: Date): boolean => {
-        if (!startValue || !this.endValue) {
-            return false;
-        }
-        return startValue.getTime() > this.endValue.getTime();
-    };
-
-    disabledEndDate = (endValue: Date): boolean => {
-        if (!endValue || !this.startValue) {
-            return false;
-        }
-        return endValue.getTime() <= this.startValue.getTime();
-    };
-
     ngOnInit(): void {
-        this.userToken = localStorage.getItem('currentUser');
-        this.decodedJwtData = jwt_decode(this.userToken);
+
+      const decodedJwtData = jwt_decode(this.loggedIn);
+      console.log('Decoded>>>>>>', decodedJwtData);
+
+      this.usersService.getUsers().subscribe((users) => {
+        this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+
+        this.isPresent = this.user.Permission.find((el) => el.name === this.admin || el.name === this.approveQuote ||
+          el.name === this.editQuote || el.name === this.deleteRisk);
+
+        console.log('USERS>>>', this.user, this.isPresent, this.admin);
+      });
         console.log('Decoded>>>>>>', this.decodedJwtData);
         this.quoteForm = this.formBuilder.group({
             client: ['', Validators.required],

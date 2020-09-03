@@ -8,6 +8,11 @@ import {
     ICorporateClient,
     IIndividualClient
 } from 'src/app/clients/models/clients.model';
+import * as jwt_decode from 'jwt-decode';
+import { UserModel } from '../../../users/models/users.model';
+import { PermissionsModel } from '../../../users/models/roles.model';
+import { ClaimsService } from '../../../claims/services/claims-service.service';
+import { UsersService } from '../../../users/services/users.service';
 
 @Component({
     selector: 'app-payments',
@@ -39,10 +44,18 @@ export class PaymentsComponent implements OnInit {
 
     paymentApprovalUpdate = new BehaviorSubject<boolean>(false);
 
+  loggedIn = localStorage.getItem('currentUser');
+  user: UserModel;
+  permission: PermissionsModel;
+  isPresentPermission: PermissionsModel;
+  approve = 'approve_payment';
+  admin = 'admin';
+
     constructor(
         private paymentsService: PaymentService,
         private clientsService: ClientsService,
-        private msg: NzMessageService
+        private msg: NzMessageService,
+        private usersService: UsersService
     ) {}
 
     ngOnInit(): void {
@@ -50,6 +63,17 @@ export class PaymentsComponent implements OnInit {
         setTimeout(() => {
             this.paymentsIsLoading = false;
         }, 3000);
+
+
+      const decodedJwtData = jwt_decode(this.loggedIn);
+
+      this.usersService.getUsers().subscribe((users) => {
+        this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+
+        this.isPresentPermission = this.user.Permission.find((el) => el.name === this.approve ||
+          el.name === this.admin );
+
+      });
 
         this.paymentsService.getRequisitionPayments().subscribe(payments => {
             this.paymentsList = payments;

@@ -7,6 +7,11 @@ import { NzMessageService } from 'ng-zorro-antd';
 import { AgentsService } from '../../../settings/components/agents/services/agents.service';
 import { Claim } from '../../../claims/models/claim.model';
 import { BehaviorSubject } from 'rxjs';
+import * as jwt_decode from 'jwt-decode';
+import { UserModel } from '../../../users/models/users.model';
+import { PermissionsModel } from '../../../users/models/roles.model';
+import { ClaimsService } from '../../../claims/services/claims-service.service';
+import { UsersService } from '../../../users/services/users.service';
 
 
 @Component({
@@ -31,6 +36,14 @@ export class CommissionPaymentComponent implements OnInit {
 
   requisitionApprovalUpdate = new BehaviorSubject<boolean>(false);
 
+  loggedIn = localStorage.getItem('currentUser');
+  user: UserModel;
+  permission: PermissionsModel;
+  isPresentPermission: PermissionsModel;
+  approve = 'approve_requisition';
+  raise = 'raise_requisition';
+  admin = 'admin';
+
 
 
 
@@ -38,6 +51,7 @@ export class CommissionPaymentComponent implements OnInit {
                private accountsService: AccountService,
                private msg: NzMessageService,
                private agentsService: AgentsService,
+               private usersService: UsersService
              ) { }
 
   ngOnInit(): void {
@@ -45,6 +59,16 @@ export class CommissionPaymentComponent implements OnInit {
   }
 
   refresh() {
+
+    const decodedJwtData = jwt_decode(this.loggedIn);
+
+    this.usersService.getUsers().subscribe((users) => {
+      this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+
+      this.isPresentPermission = this.user.Permission.find((el) => el.name === this.approve ||
+        el.name === this.admin ||  el.name === this.raise);
+
+    });
     this.commissionPaymentService.getCPayment().subscribe((res) => {
       this.comPayments = res.data.filter((x) => x.status !== 'Paid' && x.agent_type === this.selectedIntermediary);
       this.commissionPayments = this.comPayments;
