@@ -4,7 +4,7 @@
             <nz-page-header>
                 <nz-page-header-title>Motor Quotations</nz-page-header-title>
                 <nz-page-header-subtitle>List of all quotes</nz-page-header-subtitle>
-                <nz-page-header-extra>
+                <nz-page-header-extra *ngIf="createQuote === isPresent?.name || admin === isPresent?.name">
                     <button nz-button nzType="primary" (click)="onCreateQuoteClicked()">
                         Create new quote
                     </button>

@@ -79,6 +79,9 @@ import { AllocationPolicy } from '../../../accounts/components/models/allocation
 import { AllocationsService } from '../../../accounts/services/allocations.service';
 import { CommisionSetupsService } from '../../../settings/components/agents/services/commision-setups.service';
 import { ICommissionSetup } from '../../../settings/components/agents/models/commission-setup.model';
+import { PermissionsModel } from '../../../users/models/roles.model';
+import { UserModel } from '../../../users/models/users.model';
+import { UsersService } from '../../../users/services/users.service';
 
 type AOA = any[][];
 
@@ -148,7 +151,6 @@ export class QuoteDetailsComponent implements OnInit {
     quoteDetailsForm: FormGroup;
     riskThirdPartyForm: FormGroup;
     riskComprehensiveForm: FormGroup;
-    limitsOfLiabilityForm: FormGroup;
     excessesForm: FormGroup;
     combinedLimitsForm: FormGroup;
     clients: Array<IIndividualClient & ICorporateClient>;
@@ -171,7 +173,6 @@ export class QuoteDetailsComponent implements OnInit {
         [1, 2],
         [3, 4]
     ];
-    wopts: XLSX.WritingOptions = { bookType: 'xlsx', type: 'array' };
 
     /*name of the risks template that will be downloaded. */
     fileName = 'Risks_template.xlsx';
@@ -199,43 +200,24 @@ export class QuoteDetailsComponent implements OnInit {
     isAddRiskPanelOpen: boolean;
 
     /// Premium Computation
-    // Basic Premium
     basicPremium: number;
     basicPremiumLevy: number;
-    basicPremiumSubTotal: number;
     sumInsured: number;
     premiumRate: number;
-    premiumRateType: string;
     // Loading
     premiumLoadingTotal: number;
-    premiumLoadingsubTotal: number;
-
-    totalSumInsured: number;
-    totalBasicPremium: number;
-    totalLevy: number;
-    totalNetPremium: number;
 
     // Discount
     premiumDiscountRate: number;
-    premiumDiscountRateType: string;
     premiumDiscount: number;
-    premiumDiscountSubtotal: number;
-    // Net or total premium
     totalPremium: number;
     netPremium: number;
-
-    // Loading
-    addingLoad: boolean;
 
     // loads added to loading
     loads: LoadModel[] = [];
 
     // dicounts added
     discounts: IDiscounts[] = [];
-
-    // limits of liability
-    limitsOfLiability: LimitsOfLiability[] = [];
-
     // excesses
     excesses: Excess[] = [];
 
@@ -247,17 +229,6 @@ export class QuoteDetailsComponent implements OnInit {
     quoteLevy: number;
     quoteNetPremium: number;
 
-    // loading feedback
-    computeBasicPremiumIsLoading = false;
-    computeIncreasedThirdPartyLimitIsLoading = false;
-    computeRiotAndStrikeIsLoading = false;
-    computeCarStereoIsLoading = false;
-    computeTerritorialExtensionIsLoading = false;
-    computeLossOfUseIsLoading = false;
-    computeDiscountIsLoading = false;
-    computePremiumIsLoading = false;
-
-    addLoadIsLoading = false;
 
     status = 'Unreceipted';
 
@@ -301,15 +272,6 @@ export class QuoteDetailsComponent implements OnInit {
 
     searchString: string;
 
-    // generated PDFs
-    policyCertificateURl = '';
-    showCertModal = false;
-
-    debitNoteURL = '';
-    showDebitModal = false;
-
-    quoteURL = '';
-    showQuoteModal = false;
 
     paymentPlan = 'NotCreated';
     policiesCount: number;
@@ -347,16 +309,19 @@ export class QuoteDetailsComponent implements OnInit {
     newRisks: RiskModel[];
     // Excess Variable
     excessList: Excess[] = [];
-
-    excessTHP: IExccess[] = [];
-    excessAct: IExccess[] = [];
-    excessFT: IExccess[] = [];
     limitsOfLiabilities: LimitsOfLiability[] = [];
     commission: ICommissionSetup;
   allocationPolicy: AllocationPolicy;
 
   userToken: any;
   decodedJwtData: any;
+
+  permission: PermissionsModel;
+  user: UserModel;
+  isPresent: PermissionsModel;
+  approveQuote = 'approve_quote';
+  admin = 'admin';
+  loggedIn = localStorage.getItem('currentUser');
 
     constructor(
         private formBuilder: FormBuilder,
@@ -381,6 +346,7 @@ export class QuoteDetailsComponent implements OnInit {
         private premiumComputationService: PremiumComputationService,
         private  allocationService: AllocationsService,
         private commisionSetupsService: CommisionSetupsService,
+        private  usersService: UsersService,
     ) {
         this.receiptForm = this.formBuilder.group({
             receivedFrom: ['', Validators.required],
@@ -399,23 +365,32 @@ export class QuoteDetailsComponent implements OnInit {
     }
 
     ngOnInit(): void {
-      this.userToken = localStorage.getItem('currentUser');
-      this.decodedJwtData = jwt_decode(this.userToken);
-        this.isQuoteDetailsLoading = true;
-        setTimeout(() => {
+      this.isQuoteDetailsLoading = true;
+      setTimeout(() => {
             this.isQuoteDetailsLoading = false;
         }, 4000);
 
-        this.route.params.subscribe(param => {
+      this.route.params.subscribe(param => {
             this.quoteNumber = param.quoteNumber;
+
+            const decodedJwtData = jwt_decode(this.loggedIn);
+            console.log('Decoded>>>>>>', decodedJwtData);
+
+            this.usersService.getUsers().subscribe((users) => {
+            this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+
+            this.isPresent = this.user.Permission.find((el) => el.name === this.admin || el.name === this.approveQuote);
+
+            console.log('USERS>>>', this.user, this.isPresent, this.admin);
+          });
             this.quotesService.getMotorQuotations().subscribe(quotes => {
                 this.quoteData = quotes.filter(
                     x => x.quoteNumber === this.quoteNumber
                 )[0];
 
-                 this.commisionSetupsService.getCommissionSetups().subscribe((commission) => {
+                this.commisionSetupsService.getCommissionSetups().subscribe((commission) => {
                    this.commission = commission.filter((x) => x.intermediaryId === this.quoteData.intermediaryId)[0];
-                 })
+                 });
                 console.log('quote data: ', this.quoteData);
                 this.quotesList = quotes;
                 this.quote = this.quotesList.filter(

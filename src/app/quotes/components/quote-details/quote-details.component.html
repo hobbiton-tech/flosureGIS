@@ -25,11 +25,13 @@
                     <button *ngIf="!isQuoteApproved" nz-button nzType="primary" (click)="handleDraftQuotation()">
                         View Draft Quote
                     </button>
-
+                  <ng-container *ngIf="approveQuote === isPresent?.name || admin === isPresent?.name">
                     <button *ngIf="!isQuoteApproved" nz-button nzType="primary" (click)="generateDocuments()">
 
-                        Covert to Policy
+                      Covert to Policy
                     </button>
+                  </ng-container>
+
                     <button *ngIf="!isEditmode && !isQuoteApproved" nz-button nzType="primary"
                         (click)="isEditmode = true">
                         Edit Quote

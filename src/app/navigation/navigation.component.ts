@@ -4,6 +4,7 @@ import * as jwt_decode from 'jwt-decode';
 import { AuthenticationService } from '../users/services/authentication.service';
 import { UsersService } from '../users/services/users.service';
 import { UserModel } from '../users/models/users.model';
+import { RolesModel } from '../users/models/roles.model';
 
 @Component({
     selector: 'app-navigation',
@@ -14,6 +15,12 @@ export class NavigationComponent implements OnInit {
     isCollapsed = false;
     loggedIn = localStorage.getItem('currentUser');
     user: UserModel;
+    underwriting = 'underwriting';
+    claim = 'claim';
+    finance: 'finance';
+    admin = 'admin';
+  newCategory: string;
+  isPresent: RolesModel;
 
 
 
@@ -25,6 +32,11 @@ export class NavigationComponent implements OnInit {
 
       this.usersService.getUsers().subscribe((users) => {
         this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+
+        this.isPresent = this.user.Role.find((el) => el.role_name === this.underwriting || el.role_name === this.claim ||
+          el.role_name === this.finance || el.role_name === this.admin);
+
+        console.log('USERS>>>', this.user, this.isPresent);
       });
     }
 
