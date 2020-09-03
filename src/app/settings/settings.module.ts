@@ -45,15 +45,20 @@ import { AddChequeLotComponent } from './components/finance/components/add-chequ
 import { ClaimsSetupsComponent } from './components/claims-setups/claims-setups.component';
 import { AddServiceProviderComponent } from './components/claims-setups/components/add-service-provider/add-service-provider.component';
 import { AddInsuranceCompanyComponent } from './components/claims-setups/components/add-insurance-company/add-insurance-company.component';
+import { DepartmentsComponent } from './components/organizational-setups/departments/departments.component';
+import { UsersRolesComponent } from '../users/components/users-roles/users-roles.component';
+import { AuthGuard } from '../users/helpers/auth.guard';
 
 const routes: Routes = [
     {
         path: 'insurance-companies',
-        component: InsuranceCompaniesComponent
+        component: InsuranceCompaniesComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'rates',
-        component: RatesComponent
+        component: RatesComponent,
+      canActivate: [AuthGuard]
     },
     // {
     //     path: 'add-insurance-company',
@@ -61,47 +66,62 @@ const routes: Routes = [
     // },
     {
         path: 'clauses',
-        component: UnderwritingSetupsComponent
+        component: UnderwritingSetupsComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'accounts',
-        component: AccountsComponent
+        component: AccountsComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'finance',
-        component: FinanceComponent
+        component: FinanceComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'organization-setups',
         component: OrganizationalSetupsComponent
     },
     {
+      path: 'organization-setups/departments',
+      component: DepartmentsComponent,
+      canActivate: [AuthGuard]
+  },
+    {
         path: 'agents-setups',
-        component: AgentsComponent
+        component: AgentsComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'add-agents',
-        component: AddAgentComponent
+        component: AddAgentComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'product-setups',
-        component: ProductSetupsComponent
+        component: ProductSetupsComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'warranties',
-        component: WarrantiesComponent
+        component: WarrantiesComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'extensions',
-        component: ExtensionsComponent
+        component: ExtensionsComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'claims',
-        component: ClaimsSetupsComponent
+        component: ClaimsSetupsComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'loss-adjustor-details/:id',
-        component: LossAdjustorDetailsComponent
+        component: LossAdjustorDetailsComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'service-provider-details/:id',
@@ -109,13 +129,16 @@ const routes: Routes = [
     },
     {
         path: 'claimant-details/:id',
-        component: ClaimantDetailsComponent
+        component: ClaimantDetailsComponent,
+      canActivate: [AuthGuard]
     },
 
     {
         path: 'salvage-buyer-details/:id',
-        component: SalvageBuyerDetailsComponent
+        component: SalvageBuyerDetailsComponent,
+      canActivate: [AuthGuard]
     }
+
 ];
 
 @NgModule({
@@ -160,7 +183,8 @@ const routes: Routes = [
         AddChequeLotComponent,
         ClaimsSetupsComponent,
         AddServiceProviderComponent,
-        AddInsuranceCompanyComponent
+        AddInsuranceCompanyComponent,
+        DepartmentsComponent
     ],
     imports: [
         CommonModule,

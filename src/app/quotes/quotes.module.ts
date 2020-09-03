@@ -34,18 +34,23 @@ import { DiscountsViewComponent } from './components/discounts-view/discounts-vi
 import { FleetUploadComponent } from './components/fleet-upload/fleet-upload.component';
 import { PremiumComputationService } from './services/premium-computation.service';
 import { VehicleDetailsServiceService } from './services/vehicle-details-service.service';
+import { UsersRolesComponent } from '../users/components/users-roles/users-roles.component';
+import { AuthGuard } from '../users/helpers/auth.guard';
 const routes: Routes = [
     {
         path: 'create-quote',
-        component: CreateQuoteComponent
+        component: CreateQuoteComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'quotes-list',
-        component: QuotesComponent
+        component: QuotesComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'quote-details/:quoteNumber',
-        component: QuoteDetailsComponent
+        component: QuoteDetailsComponent,
+      canActivate: [AuthGuard]
     }
 ];
 

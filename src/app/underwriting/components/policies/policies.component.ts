@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Policy } from '../../models/policy.model';
 import { PoliciesService } from '../../services/policies.service';
+import { UsersService } from '../../../users/services/users.service';
+import { UserModel } from '../../../users/models/users.model';
 
 @Component({
     selector: 'app-policies',
@@ -14,6 +16,7 @@ export class PoliciesComponent implements OnInit {
     displayPoliciesList: Policy[];
     policiesCount = 0;
     isOkLoading = false;
+    user: UserModel;
 
     issuedBy = localStorage.getItem('user');
 
@@ -21,7 +24,8 @@ export class PoliciesComponent implements OnInit {
 
     constructor(
         private readonly route: Router,
-        private policiesService: PoliciesService
+        private policiesService: PoliciesService,
+        private usersService: UsersService
     ) {}
 
     ngOnInit(): void {
@@ -32,6 +36,11 @@ export class PoliciesComponent implements OnInit {
         this.policiesService.getPolicies().subscribe(policies => {
             this.policiesList = policies;
             this.policiesCount = policies.length;
+            for (const p of this.policiesList) {
+              this.usersService.getUsers().subscribe((users) => {
+                this.user = users.filter((x) => x.ID === p.preparedBy)[0];
+              });
+            }
 
             this.policiesList.sort((a, b) =>
                 a.policyNumber.localeCompare(b.policyNumber)

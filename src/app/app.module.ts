@@ -8,7 +8,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
@@ -23,6 +23,8 @@ import 'firebase/storage';
 
 import { SlackService } from './slack.service';
 import { NzListModule } from 'ng-zorro-antd/list';
+import { JwtInterceptor } from './users/helpers/jwt.interceptor';
+import { ErrorInterceptor } from './users/helpers/error.interceptor';
 
 registerLocaleData(en);
 
@@ -74,7 +76,11 @@ const firebaseConfig = {
         AngularFireStorageModule,
         NzListModule
     ],
-    providers: [{ provide: NZ_I18N, useValue: en_US }, SlackService],
+    providers: [{ provide: NZ_I18N, useValue: en_US },
+      SlackService,
+      { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+      { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {}

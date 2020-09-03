@@ -14,6 +14,7 @@ import { PoliciesService } from 'src/app/underwriting/services/policies.service'
 import { Router, ActivatedRoute } from '@angular/router';
 import { QuotesService } from '../../services/quotes.service';
 import { ClientsService } from 'src/app/clients/services/clients.service';
+import * as jwt_decode from 'jwt-decode';
 // import { ITimestamp } from 'src/app/claims/models/claim.model';
 import { IDebitNoteDTO } from '../../models/debit-note.dto';
 import { ICertificateDTO } from '../../models/certificate.dto';
@@ -354,6 +355,9 @@ export class QuoteDetailsComponent implements OnInit {
     commission: ICommissionSetup;
   allocationPolicy: AllocationPolicy;
 
+  userToken: any;
+  decodedJwtData: any;
+
     constructor(
         private formBuilder: FormBuilder,
         private policiesService: PoliciesService,
@@ -395,6 +399,8 @@ export class QuoteDetailsComponent implements OnInit {
     }
 
     ngOnInit(): void {
+      this.userToken = localStorage.getItem('currentUser');
+      this.decodedJwtData = jwt_decode(this.userToken);
         this.isQuoteDetailsLoading = true;
         setTimeout(() => {
             this.isQuoteDetailsLoading = false;
@@ -825,7 +831,7 @@ export class QuoteDetailsComponent implements OnInit {
         netPremium: this.sumArray(this.quoteData.risks, 'netPremium'),
         paymentPlan: 'NotCreated',
         underwritingYear: new Date(),
-        user: localStorage.getItem('user'),
+        user: Number(this.decodedJwtData.user_id),
         sourceOfBusiness: this.quoteData.sourceOfBusiness,
         intermediaryName: this.quoteData.intermediaryName,
         intermediaryId: this.quoteData.intermediaryId,
@@ -932,7 +938,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                             this.http
                                 .post<CoverNote>(
-                                    `https://flosure-postgres-db.herokuapp.com/documents/cover-note`,
+                                    `https://savenda.flosure-api.com/documents/cover-note`,
                                     coverNote
                                 )
                                 .subscribe(
@@ -957,7 +963,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                         this.http
                             .post<DebitNote>(
-                                `https://flosure-postgres-db.herokuapp.com/documents/debit-note/${this.policyId}`,
+                                `https://savenda.flosure-api.com/documents/debit-note/${this.policyId}`,
                                 debitNote
                             )
                             .subscribe(
@@ -1096,7 +1102,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                         this.http
                             .post<DebitNote>(
-                                `https://flosure-postgres-db.herokuapp.com/documents/debit-note/${this.policyId}`,
+                                `https://savenda.flosure-api.com/documents/debit-note/${this.policyId}`,
                                 debitNote
                             )
                             .subscribe(

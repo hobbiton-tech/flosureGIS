@@ -14,7 +14,7 @@ export class Policy {
     branch: string;
     insuranceCompany: string;
     currency: Currency;
-    preparedBy: string;
+    preparedBy: number;
     status: PolicyStatus;
     timeOfIssue: string | ITimestamp;
     expiryDate: Date | ITimestamp;

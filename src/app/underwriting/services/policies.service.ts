@@ -20,9 +20,9 @@ import {
 import { IRequisitionModel } from 'src/app/accounts/components/models/requisition.model';
 import { AccountService } from 'src/app/accounts/services/account.service';
 
-const BASE_URL = 'https://flosure-postgres-db.herokuapp.com';
+const BASE_URL = 'https://savenda.flosure-api.com';
 
-// const BASE_URL = 'https://flosure-postgres-db.herokuapp.com';
+// const BASE_URL = 'https://savenda.flosure-api.com';
 
 interface IDebitNoteResult {
     invoiceNumber: string;
@@ -71,14 +71,14 @@ export class PoliciesService {
     }
 
     // getPolicies(): Observable<Policy[]> {
-    //     return this.http.get<Policy[]>('https://flosure-postgres-db.herokuapp.com/policy');
+    //     return this.http.get<Policy[]>('https://savenda.flosure-api.com/policy');
 
     // }
 
     // getPolicyById(policyId: string): Observable<Policy> {
     //     return this.http.get<Policy>(
 
-    //         `https://flosure-postgres-db.herokuapp.com/policy/${policyId}`
+    //         `https://savenda.flosure-api.com/policy/${policyId}`
 
     //     );
     //     return this.policiesCollection.doc<Policy>(policyId).valueChanges();
@@ -88,7 +88,7 @@ export class PoliciesService {
         console.log('POLICY NUMBER>>>>', policy);
 
         return this.http.put<Policy>(
-            `https://flosure-postgres-db.herokuapp.com/policy/${policy.id}`,
+            `https://savenda.flosure-api.com/policy/${policy.id}`,
             policy
         );
     }
@@ -96,7 +96,7 @@ export class PoliciesService {
     // backup policies
     createBackupPolicy(policy: Policy): Observable<Policy> {
         return this.http.post<Policy>(
-            'https://flosure-postgres-db.herokuapp.com/policy',
+            'https://savenda.flosure-api.com/policy',
             policy
         );
     }
