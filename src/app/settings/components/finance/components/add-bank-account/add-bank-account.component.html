@@ -1,66 +1,69 @@
 <nz-modal [(nzVisible)]="isAddBankAccountModalVisible" nzTitle="Add Bank Account" [nzContent]="bankAccountContent"
     (nzOnCancel)="closeAddBankAccountModal()" (nzOnOk)="closeAddBankAccountModal()" nzWidth="85%">
 
+
     <ng-template #bankAccountContent>
-        <div>
-            <form nz-form [formGroup]="bankAccountDetailsForm">
-                <div nz-row>
-                    <div nz-col nzSpan="8">
-                        <nz-form-item>
-                            <nz-form-label nzRequired nzSpan="10">Bank Name</nz-form-label>
-                            <nz-form-control nzSpan="10">
-                                <input nz-input formControlName="bank" />
-                            </nz-form-control>
-                        </nz-form-item>
-                        <nz-form-item>
-                            <nz-form-label nzRequired nzSpan="10">Bank Branch</nz-form-label>
-                            <nz-form-control nzSpan="10">
-                                <input nz-input formControlName="branch" />
-                            </nz-form-control>
-                        </nz-form-item>
+        <nz-spin nzSize="large" nzTip="Adding Bank Account...." [nzSpinning]="isAddingBankAccount">
+            <div>
+                <form nz-form [formGroup]="bankAccountDetailsForm">
+                    <div nz-row>
+                        <div nz-col nzSpan="8">
+                            <nz-form-item>
+                                <nz-form-label nzRequired nzSpan="10">Bank Name</nz-form-label>
+                                <nz-form-control nzSpan="10">
+                                    <input nz-input formControlName="bank" />
+                                </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item>
+                                <nz-form-label nzRequired nzSpan="10">Bank Branch</nz-form-label>
+                                <nz-form-control nzSpan="10">
+                                    <input nz-input formControlName="branch" />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+
+                        <div nz-col nzSpan="8">
+                            <nz-form-item>
+                                <nz-form-label nzRequired nzSpan="10">Account Name</nz-form-label>
+                                <nz-form-control nzSpan="10">
+                                    <input nz-input formControlName="accountName" />
+                                </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item>
+                                <nz-form-label nzRequired nzSpan="10">Account Number</nz-form-label>
+                                <nz-form-control nzSpan="10">
+                                    <input nz-input formControlName="accountNumber" />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+
+                        <div nz-col nzSpan="8">
+                            <nz-form-item>
+                                <nz-form-label nzSpan="10" nzRequired>Account Type</nz-form-label>
+                                <nz-form-control nzSpan="10">
+                                    <nz-select formControlName="accountType">
+                                        <nz-option nzValue="ZMW" nzLabel="ZMW"></nz-option>
+                                        <nz-option nzValue="USD" nzLabel="USD"></nz-option>
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
                     </div>
 
-                    <div nz-col nzSpan="8">
-                        <nz-form-item>
-                            <nz-form-label nzRequired nzSpan="10">Account Name</nz-form-label>
-                            <nz-form-control nzSpan="10">
-                                <input nz-input formControlName="accountName" />
-                            </nz-form-control>
-                        </nz-form-item>
-                        <nz-form-item>
-                            <nz-form-label nzRequired nzSpan="10">Account Number</nz-form-label>
-                            <nz-form-control nzSpan="10">
-                                <input nz-input formControlName="accountNumber" />
-                            </nz-form-control>
-                        </nz-form-item>
-                    </div>
-
-                    <div nz-col nzSpan="8">
-                        <nz-form-item>
-                            <nz-form-label nzSpan="10" nzRequired>Account Type</nz-form-label>
-                            <nz-form-control nzSpan="10">
-                                <nz-select formControlName="accountType">
-                                    <nz-option nzValue="ZMW" nzLabel="ZMW"></nz-option>
-                                    <nz-option nzValue="USD" nzLabel="USD"></nz-option>
-                                </nz-select>
-                            </nz-form-control>
-                        </nz-form-item>
-                    </div>
-                </div>
-
-                <div style="
+                    <div style="
                     text-align: center;
                     margin-top: 10px;
                     margin-bottom: 10px;
                 ">
-                    <button nz-button nzType="primary" (click)="addBankAccount()">
-                        Add Bank Account
-                    </button>
-                    <button style="margin-left: 15px;" nz-button nzType="default">
-                        Reset Form
-                    </button>
-                </div>
-            </form>
-        </div>
+                        <button nz-button nzType="primary" (click)="addBankAccount()">
+                            Add Bank Account
+                        </button>
+                        <button style="margin-left: 15px;" nz-button nzType="default">
+                            Reset Form
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </nz-spin>
     </ng-template>
 </nz-modal>

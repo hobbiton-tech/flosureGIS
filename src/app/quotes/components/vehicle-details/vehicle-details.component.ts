@@ -79,11 +79,11 @@ export class VehicleDetailsComponent implements OnInit, OnDestroy {
             ]
         });
 
-        this.vehicleDetailsSubscription = this.vehicleDetailsService.vehicleDetailsFormChanged$.subscribe(
-            vehicleDetails => {
-                this.vehicleDetailsForm.setValue(vehicleDetails);
-            }
-        );
+        // this.vehicleDetailsSubscription = this.vehicleDetailsService.vehicleDetailsFormChanged$.subscribe(
+        //     vehicleDetails => {
+        //         this.vehicleDetailsForm.patchValue(vehicleDetails);
+        //     }
+        // );
 
         this.riskEditModeSubscription = this.premiumComputationService.riskEditModeChanged$.subscribe(
             riskEditMode => {
@@ -357,7 +357,7 @@ export class VehicleDetailsComponent implements OnInit, OnDestroy {
 
     setVehicleDetails(vehicleDetails: VehicleDetailsModel) {
         this.vehicleDetailsService.changeVehicleDetails(vehicleDetails);
-        this.vehicleDetailsForm.setValue(vehicleDetails);
+        this.vehicleDetailsForm.patchValue(vehicleDetails);
     }
 
     getVehicleDetailFormValidity() {
@@ -382,7 +382,7 @@ export class VehicleDetailsComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.vehicleDetailsSubscription.unsubscribe();
+        // this.vehicleDetailsSubscription.unsubscribe();
         this.riskEditModeSubscription.unsubscribe();
         this.resetVehicleDetailsSubscription.unsubscribe();
     }

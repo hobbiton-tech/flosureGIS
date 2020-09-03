@@ -13,9 +13,10 @@ import { NzMessageService } from 'ng-zorro-antd';
 import { Policy } from 'src/app/underwriting/models/policy.model';
 import { InsuranceType } from '../../quotes/models/quote.model';
 import { IRequisitionModel } from '../components/models/requisition.model';
-const BASE_URL = 'https://savenda.flosure-api.com';
 import { PoliciesService } from 'src/app/underwriting/services/policies.service';
 import { Router } from '@angular/router';
+
+const BASE_URL = 'https://savenda.flosure-api.com';
 
 interface IReceiptNumberResult {
     receiptNumber: string;
@@ -40,7 +41,9 @@ export class AccountService {
     constructor(
         private firebase: AngularFirestore,
         private http: HttpClient,
-        private message: NzMessageService, private policeServices: PoliciesService, private router: Router
+        private message: NzMessageService,
+        private policeServices: PoliciesService,
+        private router: Router
     ) {
         this.policyCollection = firebase.collection<Policy>('policies');
 
@@ -88,52 +91,52 @@ export class AccountService {
     }
 
     // add receipt
-     addReceipt(
-        receipt: IReceiptModel,
-        insuranceType: any
-    ): Observable<any> {
+    addReceipt(receipt: IReceiptModel, insuranceType: any): Observable<any> {
         // this.receipts.pipe(first()).subscribe((receipts) => {
-            // receipt.id = v4();
+        // receipt.id = v4();
 
-            let insuranceTyp = '';
-            const productType = insuranceType;
-            if (productType === 'Comprehensive') {
-                insuranceTyp = '07001';
-            } else {
-                insuranceTyp = '07002';
-            }
+        let insuranceTyp = '';
+        const productType = insuranceType;
+        if (productType === 'Comprehensive') {
+            insuranceTyp = '07001';
+        } else {
+            insuranceTyp = '07002';
+        }
 
-            this.http
-                .get<any>(
-                    `https://number-generation.flosure-api.com/savenda-receipt-number/1`
-                )
-                .subscribe(async (res) => {
-                    receipt.receipt_number = res.data.receipt_number;
-                    console.log(res.data.receipt_number);
+        this.http
+            .get<any>(
+                `https://number-generation.flosure-api.com/savenda-receipt-number/1`
+            )
+            .subscribe(async res => {
+                receipt.receipt_number = res.data.receipt_number;
+                console.log(res.data.receipt_number);
 
-                    this.receiptN = receipt;
+                this.receiptN = receipt;
 
-                    this.http.post('https://payment-api.savenda-flosure.com/receipt', receipt).subscribe((resa: any) => {
-                        console.log('RECEIPT RESULTS', resa.data);
-                        // if(res.status === 'true') {
-                        this.message.success(
+                this.http
+                    .post(
+                        'https://payment-api.savenda-flosure.com/receipt',
+                        receipt
+                    )
+                    .subscribe(
+                        (resa: any) => {
+                            console.log('RECEIPT RESULTS', resa.data);
+                            // if(res.status === 'true') {
+                            this.message.success(
                                 'Receipt Successfully created'
                             );
-                        // this.generateID(res.data.ID);
-                        // }
+                            // this.generateID(res.data.ID);
+                            // }
+                        },
+                        err => {
+                            console.log('RECEIPT ERR>>>', err);
 
+                            this.message.warning('Receipt Failed');
+                        }
+                    );
+            });
 
-
-                    },
-                    (err) => {
-                        console.log('RECEIPT ERR>>>', err);
-
-                        this.message.warning('Receipt Failed');
-                    });
-                });
-
-        // });
-            return of(this.receiptN);
+        return of(this.receiptN);
     }
 
     async updatePolicy(policy: Policy): Promise<void> {
@@ -149,18 +152,23 @@ export class AccountService {
     }
 
     updateReceipt(receipt: IReceiptModel): Observable<any> {
-
-       return this.http.put(`https://payment-api.savenda-flosure.com/receipt/${receipt.ID}`, receipt);
+        return this.http.put(
+            `https://payment-api.savenda-flosure.com/receipt/${receipt.ID}`,
+            receipt
+        );
     }
 
     getReciepts(): Observable<any> {
-        return this.http.get<any>('https://payment-api.savenda-flosure.com/receipt');
+        return this.http.get<any>(
+            'https://payment-api.savenda-flosure.com/receipt'
+        );
     }
 
     getReciept(id): Observable<any> {
-        return this.http.get<any>(`https://payment-api.savenda-flosure.com/receipt/${id}`);
+        return this.http.get<any>(
+            `https://payment-api.savenda-flosure.com/receipt/${id}`
+        );
     }
-
 
     generateID(id) {
         this.router.navigateByUrl('/flosure/accounts/view-receipt/' + id);
@@ -213,8 +221,6 @@ export class AccountService {
         );
     }
 
-
-
     // temporary TO BE generated from api
     generateRequisitionID(totalRequisitions: number) {
         const count = this.countGenerator(totalRequisitions);
@@ -230,14 +236,16 @@ export class AccountService {
         return 'REQ' + dateString + count;
     }
 
-  countGenerator(numb: string | number) {
-    if (numb <= 99999) {
-      numb = ('0000' + numb).slice(-5);
+    countGenerator(numb: string | number) {
+        if (numb <= 99999) {
+            numb = ('0000' + numb).slice(-5);
+        }
+        return numb;
     }
-    return numb;
-  }
 
-  generateReqNumber() {
-      return this.http.get('https://number-generation.flosure-api.com/savenda-requisition-number');
-  }
+    generateReqNumber() {
+        return this.http.get(
+            'https://number-generation.flosure-api.com/savenda-requisition-number'
+        );
+    }
 }

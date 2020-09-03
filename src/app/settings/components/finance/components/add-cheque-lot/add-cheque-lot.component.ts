@@ -67,7 +67,8 @@ export class AddChequeLotComponent implements OnInit {
                     console.log(chequeRange);
                     this.msg.success('Cheque Lot Added successfully');
                     this.isAddingChaqueRange = false;
-                    this.isAddChequeLotModalVisible = false;
+                    // this.isAddChequeLotModalVisible = false;
+                    this.closeAddChequeLotModal();
                 },
                 err => {
                     console.log(err);

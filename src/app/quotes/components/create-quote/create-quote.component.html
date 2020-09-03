@@ -1,4 +1,4 @@
-<nz-spin [nzSize]="'large'" [nzSpinning]="creatingQuote" [nzTip]="'Creating Quotation...'">
+<nz-spin [nzSize]="'large'" [nzSpinning]="isCreatingQuote" nzTip="Creating Quotation...">
     <!-- <h1>Create Quotation</h1> -->
     <div style="margin: 15px;">
         <nz-breadcrumb>
@@ -217,23 +217,19 @@
                                             <nz-card>
                                                 <nz-divider nzText="Extensions" nzOrientation="left">
                                                 </nz-divider>
-
                                                 <!-- extensions view -->
                                                 <app-extensions-view></app-extensions-view>
-
                                             </nz-card>
+                                        </div>
 
-                                            <div nz-col nzSpan="24">
-                                                <div style="
-                                                                        margin-top: 5px;
-                                                                    ">
-                                                    <nz-card>
-                                                        <nz-divider nzText="Discount" nzOrientation="left">
-                                                        </nz-divider>
-                                                        <!-- discounts view -->
-                                                        <app-discounts-view></app-discounts-view>
-                                                    </nz-card>
-                                                </div>
+                                        <div nz-col nzSpan="24">
+                                            <div style="margin-top: 5px;">
+                                                <nz-card>
+                                                    <nz-divider nzText="Discount" nzOrientation="left">
+                                                    </nz-divider>
+                                                    <!-- discounts view -->
+                                                    <app-discounts-view></app-discounts-view>
+                                                </nz-card>
                                             </div>
                                         </div>
                                     </div>

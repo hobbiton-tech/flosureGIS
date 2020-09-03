@@ -51,7 +51,8 @@ export class AddBankAccountComponent implements OnInit {
                 console.log(bankAccount);
                 this.msg.success('Bank Account added successfully');
                 this.isAddingBankAccount = false;
-                this.isAddBankAccountModalVisible = false;
+                // this.isAddBankAccountModalVisible = false;
+                this.closeAddBankAccountModal();
             },
             err => {
                 console.log(err);

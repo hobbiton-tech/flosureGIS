@@ -24,6 +24,8 @@ import { PlanReceiptComponent } from './components/receipts/components/plan-rece
 import { CommissionPaymentComponent } from './components/commission-payment/commission-payment.component';
 import { PaymentPlanService } from './services/payment-plan.service';
 import { AllocationsComponent } from './components/allocations/allocations.component';
+import { ApprovedRequisitionsComponent } from './components/requisitions/components/approved-requisitions/approved-requisitions.component';
+import { ApprovedPaymentsComponent } from './components/payments/components/approved-payments/approved-payments.component';
 import { CommissionPaymentService } from './services/commission-payment.service';
 import { AllocationsService } from './services/allocations.service';
 import { UsersRolesComponent } from '../users/components/users-roles/users-roles.component';
@@ -46,9 +48,17 @@ const routes: Routes = [
       canActivate: [AuthGuard]
     },
     {
+        path: 'requisitions/approved-requisitions',
+        component: ApprovedRequisitionsComponent
+    },
+    {
         path: 'payments',
         component: PaymentsComponent,
       canActivate: [AuthGuard]
+    },
+    {
+        path: 'payments/approved-payments',
+        component: ApprovedPaymentsComponent
     },
     {
         path: 'payment-plan',
@@ -123,6 +133,8 @@ const routes: Routes = [
         PlanReceiptComponent,
         CommissionPaymentComponent,
         AllocationsComponent,
+        ApprovedRequisitionsComponent,
+        ApprovedPaymentsComponent
     ],
     imports: [
         CommonModule,
@@ -133,6 +145,11 @@ const routes: Routes = [
         ReactiveFormsModule,
         NgxPrintModule
     ],
-    providers: [AccountService, PaymentPlanService, CommissionPaymentService, AllocationsService],
+    providers: [
+        AccountService,
+        PaymentPlanService,
+        CommissionPaymentService,
+        AllocationsService
+    ]
 })
 export class AccountsModule {}
