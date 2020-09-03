@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, Output, OnDestroy } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    Input,
+    Output,
+    OnDestroy,
+    ɵConsole
+} from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { EventEmitter } from '@angular/core';
 import { IRequisitionPayment } from 'src/app/settings/models/requisition-payment.model';
@@ -109,7 +116,6 @@ export class RequisitionPaymentComponent implements OnInit, OnDestroy {
         this.requisitionCurrencySubscription = this.accountsService.requisitionCurrencyChanged$.subscribe(
             requisitionCurrency => {
                 this.requisitionCurrency = requisitionCurrency;
-                console.log(this.requisitionCurrency);
             }
         );
     }
@@ -127,15 +133,11 @@ export class RequisitionPaymentComponent implements OnInit, OnDestroy {
             .getRequisitionById(this.requisitionId)
             .subscribe(requisition => {
                 this.requisition = requisition;
-                console.log('requisition: ', this.requisition);
             });
 
         this.bankAccountsService.getChequeRanges().subscribe(chequeRanges => {
             this.chequeList = chequeRanges;
             this.filteredChequeList = this.chequeList;
-
-            console.log('cheque list', this.chequeList);
-            console.log('filtered cheque list', this.filteredChequeList);
         });
     }
 
@@ -146,7 +148,7 @@ export class RequisitionPaymentComponent implements OnInit, OnDestroy {
     changeSelectedPaymentType() {
         const paymentType = this.requisitionPaymentForm.get('paymentType')
             .value;
-        console.log(paymentType);
+
         this.selectedPaymentType = {
             value: paymentType
         };
@@ -156,14 +158,12 @@ export class RequisitionPaymentComponent implements OnInit, OnDestroy {
         const bankDetails: IBankAccount = this.requisitionPaymentForm.get(
             'bankAccount'
         ).value;
-        console.log('form bank details', bankDetails);
 
         this.filteredChequeList = this.chequeList.filter(
             chequeRange => chequeRange.bankAccount.id == bankDetails.id
         );
-        console.log('filtered cheque list 2', this.filteredChequeList);
+
         this.chequeLots = this.filteredChequeList.map(x => x.chequeLot);
-        console.log('cheque lots', this.chequeLots);
     }
 
     changeChequeLot() {
@@ -172,7 +172,7 @@ export class RequisitionPaymentComponent implements OnInit, OnDestroy {
         this.singleChequeRange = this.filteredChequeList.filter(
             cheques => cheques.chequeLot == chequeLot
         )[0];
-        console.log('single cheque range', this.singleChequeRange);
+
         this.requisitionPaymentForm
             .get('specialInstructions')
             .setValue(this.singleChequeRange.chequeNextCount);
@@ -202,10 +202,14 @@ export class RequisitionPaymentComponent implements OnInit, OnDestroy {
             .subscribe(
                 x => {
                     console.log(x);
-                    this.accountsService.updateRequisition(
-                        this.requisitionId,
-                        requisitionUpdate
-                    );
+                    this.accountsService
+                        .updateRequisition(
+                            this.requisitionId,
+                            requisitionUpdate
+                        )
+                        .subscribe(x => {
+                            console.log(x);
+                        });
 
                     if (this.selectedPaymentType.value == 'Cheque') {
                         // update cheque number to next sequence
@@ -223,9 +227,10 @@ export class RequisitionPaymentComponent implements OnInit, OnDestroy {
                     this.msg.success('Payment Processed');
                     this.isPaymentProcesseing = false;
 
-                    this.router.navigateByUrl('/flosure/accounts/payments');
+                    // this.router.navigateByUrl('/flosure/accounts/payments');
 
-                    this.isRequisitionPaymentModalVisible = false;
+                    // this.isRequisitionPaymentModalVisible = false;
+                    this.closeRequisitionPaymentModal();
                 },
                 err => {
                     console.log(err);

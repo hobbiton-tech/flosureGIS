@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ClaimsService } from '../../services/claims-service.service';
 import { Claim } from '../../models/claim.model';
 import { ClaimsProcessingServiceService } from '../../services/claims-processing-service.service';
+import { NzTableModule } from 'ng-zorro-antd/table';
 
 @Component({
     selector: 'app-claim-transactions',

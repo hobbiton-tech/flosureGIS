@@ -120,10 +120,21 @@
                                 Claims Listing
                             </a>
                         </li>
-                        <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/claims/claims-processing">
-                                Claims Processing
-                            </a>
+
+                        <li nz-submenu nzTitle="Claims Processing">
+
+                            <ul>
+                                <li nz-menu-item nzMatchRouter>
+                                    <a routerLink="/flosure/claims/claims-processing">
+                                        Pending Claims
+                                    </a>
+                                </li>
+                                <li nz-menu-item nzMatchRouter>
+                                    <a routerLink="/flosure/claims/claims-processing/processed-claims">
+                                        Processed Claims
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                         <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/claims/claim-approval">
@@ -135,11 +146,6 @@
                                 Salvages
                             </a>
                         </li> -->
-                        <!-- <li nz-menu-item nzMatchRouter nzDisabled>
-                            <a routerLink="/flosure/claims/claimants">
-                                Editing
-                            </a>
-                        </li> -->
                     </ul>
                 </li>
                 <li nz-submenu nzTitle="Client Accounts" nzIcon="dollar">
@@ -149,11 +155,11 @@
                                 Accounts Listing
                             </a>
                         </li>
-                      <li nz-menu-item nzMatchRouter nzDisabled>
-                        <a routerLink="/flosure/accounts/receipts">
-                          Journals
-                        </a>
-                      </li>
+                        <li nz-menu-item nzMatchRouter nzDisabled>
+                            <a routerLink="/flosure/accounts/receipts">
+                                Journals
+                            </a>
+                        </li>
                         <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/accounts/allocations">
                                 Allocations
@@ -166,11 +172,11 @@
                             </a>
                         </li>
 
-<!--                        <li nz-menu-item nzMatchRouter>-->
-<!--                          <a routerLink="/flosure/accounts/commission-payment">-->
-<!--                              Commission Payment-->
-<!--                          </a>-->
-<!--                      </li>-->
+                        <!--                        <li nz-menu-item nzMatchRouter>-->
+                        <!--                          <a routerLink="/flosure/accounts/commission-payment">-->
+                        <!--                              Commission Payment-->
+                        <!--                          </a>-->
+                        <!--                      </li>-->
                     </ul>
                 </li>
                 <li nz-submenu nzTitle="Finance" nzIcon="dollar">
@@ -180,15 +186,33 @@
                                 Reciepting
                             </a>
                         </li>
-                        <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/accounts/requisitions">
-                                Requisitions
-                            </a>
+                        <li nz-submenu nzTitle="Requisitions">
+                            <ul>
+                                <li nz-menu-item nzMatchRouter>
+                                    <a routerLink="/flosure/accounts/requisitions">
+                                        Pending Requisitions
+                                    </a>
+                                </li>
+                                <li nz-menu-item nzMatchRouter>
+                                    <a routerLink="/flosure/accounts/requisitions/approved-requisitions">
+                                        Approved Requisitions
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
-                        <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/accounts/payments">
-                                Payments
-                            </a>
+                        <li nz-submenu nzTitle="Payments">
+                            <ul>
+                                <li nz-menu-item nzMatchRouter>
+                                    <a routerLink="/flosure/accounts/payments">
+                                        Pending Payments
+                                    </a>
+                                </li>
+                                <li nz-menu-item nzMatchRouter>
+                                    <a routerLink="/flosure/accounts/payments/approved-payments">
+                                        Approved Payments
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </li>
@@ -213,31 +237,31 @@
                 </li>
                 <li nz-submenu nzTitle="Intermediaries" nzIcon="reconciliation">
                     <ul>
-<!--                        <li nz-menu-item nzMatchRouter>-->
-<!--                            <a routerLink="/flosure/reports/policies">-->
-<!--                                Account Listing-->
-<!--                            </a>-->
-<!--                        </li>-->
+                        <!--                        <li nz-menu-item nzMatchRouter>-->
+                        <!--                            <a routerLink="/flosure/reports/policies">-->
+                        <!--                                Account Listing-->
+                        <!--                            </a>-->
+                        <!--                        </li>-->
                         <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/accounts/allocations">
                                 Allocations
                             </a>
                         </li>
-<!--                        <li nz-menu-item nzMatchRouter>-->
-<!--                            <a routerLink="/flosure/reports/policies">-->
-<!--                                Journals-->
-<!--                            </a>-->
-<!--                        </li>-->
+                        <!--                        <li nz-menu-item nzMatchRouter>-->
+                        <!--                            <a routerLink="/flosure/reports/policies">-->
+                        <!--                                Journals-->
+                        <!--                            </a>-->
+                        <!--                        </li>-->
                         <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/accounts/commission-payment">
                                 Commission Processing
                             </a>
                         </li>
-<!--                        <li nz-menu-item nzMatchRouter>-->
-<!--                            <a routerLink="/flosure/reports/policies">-->
-<!--                                Commission Approval-->
-<!--                            </a>-->
-<!--                        </li>-->
+                        <!--                        <li nz-menu-item nzMatchRouter>-->
+                        <!--                            <a routerLink="/flosure/reports/policies">-->
+                        <!--                                Commission Approval-->
+                        <!--                            </a>-->
+                        <!--                        </li>-->
                     </ul>
                 </li>
                 <li nz-submenu nzTitle="User Managenent" nzIcon="user">
