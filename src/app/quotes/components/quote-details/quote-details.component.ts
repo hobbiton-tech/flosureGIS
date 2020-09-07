@@ -378,11 +378,10 @@ export class QuoteDetailsComponent implements OnInit {
                 this.quoteData = quotes.filter(
                     x => x.quoteNumber === this.quoteNumber
                 )[0];
-              const decodedJwtData = jwt_decode(this.loggedIn);
-              console.log('Decoded>>>>>>', decodedJwtData);
+              this.decodedJwtData = jwt_decode(this.loggedIn);
 
               this.usersService.getUsers().subscribe((users) => {
-                this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+                this.user = users.filter((x) => x.ID === this.decodedJwtData.user_id)[0];
 
                 this.isPresent = this.user.Permission.find((el) => el.name === this.admin || el.name === this.approveQuote ||
                   el.name === this.editQuote || el.name === this.deleteRisk);

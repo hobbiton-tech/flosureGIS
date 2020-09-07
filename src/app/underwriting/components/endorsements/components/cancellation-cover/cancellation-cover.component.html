@@ -27,7 +27,7 @@
                         <th [nzAlign]="columnAlignment">Client Name</th>
                         <th [nzAlign]="columnAlignment">Approved By</th>
                         <th [nzAlign]="columnAlignment">Status</th>
-                        <th [nzAlign]="columnAlignment"  *ngIf="cancelPolicy === isPresent.name">Action</th>
+                        <th [nzAlign]="columnAlignment">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -40,12 +40,12 @@
                         <td [nzAlign]="columnAlignment">{{ policy.status }}</td>
                         <td [nzAlign]="columnAlignment">
                             <div *ngIf="policy.status == 'Active'">
-                                <button *ngIf="cancelPolicy === isPresent.name" nz-button nzType="danger" nzSize="small" (click)="viewPolicyDetails(policy)">
+                                <button *ngIf="cancelPolicy === isPresent?.name || admin === isPresent?.name" nz-button nzType="danger" nzSize="small" (click)="viewPolicyDetails(policy)">
                                     Cancel Policy
                                 </button>
                             </div>
                             <div *ngIf="policy.status == 'Cancelled'">
-                                <button *ngIf="cancelPolicy === isPresent.name || raiseRequisitionPem === isPresent.name" nz-button nzType="primary" nzSize="small" (click)="viewPolicyDetails(policy)">
+                                <button *ngIf="admin === isPresent?.name || raiseRequisitionPem === isPresent.name" nz-button nzType="primary" nzSize="small" (click)="viewPolicyDetails(policy)">
                                     Raise Requisition
                                 </button>
                             </div>

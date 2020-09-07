@@ -270,7 +270,10 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
     }
 
     capitalize(s) {
-        return s.toLowerCase().replace( /\b./g, function(a) { return a.toUpperCase(); } );
+      if (s !== null || true) {
+        return s.toLowerCase().replace( /\b./g, (a) => a.toUpperCase() );
+      } else {}
+      return null;
     }
 
 
