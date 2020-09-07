@@ -223,13 +223,13 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
           });
 
           this.paymentPlanService.getInstallments().subscribe((resPay) => {
-            this.paymentPlanPolicyInstallments = res.data.filter((x: InstallmentsModel) => x.payment_plan_id  === Number(param.id));
-            this.paymentPlanPolicyInstallmentsCount = res.data.filter((x) => x.payment_plan_id === Number(param.id)).length;
+            this.paymentPlanPolicyInstallments = resPay.data.filter((x: InstallmentsModel) => x.payment_plan_id  === Number(param.id));
+            this.paymentPlanPolicyInstallmentsCount = resPay.data.filter((x) => x.payment_plan_id === Number(param.id)).length;
             this.changeDetectorRefs.detectChanges();
           });
 
-          this.paymentPlanService.getReceiptPlan().subscribe((resPay) => {
-            this.planReceipt = res.data;
+          this.paymentPlanService.getReceiptPlan().subscribe((resRecpt) => {
+            this.planReceipt = resRecpt.data;
             this.displayReceiptsList = this.planReceipt.filter((x) => x.plan_id === Number(this.paymentPlanId));
           });
 

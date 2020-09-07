@@ -70,6 +70,10 @@ export class PaymentPlanComponent implements OnInit {
   receiptNumber = '';
   loggedIn = localStorage.getItem('currentUser');
 
+  clientDet: IIndividualClient & ICorporateClient;
+  clientList: Array<IIndividualClient & ICorporateClient>;
+  displayClientList: Array<IIndividualClient & ICorporateClient>;
+
     constructor(
         private router: Router,
         private paymentPlanService: PaymentPlanService,
@@ -104,14 +108,14 @@ export class PaymentPlanComponent implements OnInit {
       });
 
 
-        this.refresh();
-        this.clientsService.getAllClients().subscribe((clients) => {
+      this.refresh();
+      this.clientsService.getAllClients().subscribe((clients) => {
             this.clients = [...clients[0], ...clients[1]] as Array<
                 IIndividualClient & ICorporateClient
             >;
         });
 
-        this.policyService.getPolicies().subscribe((policies) => {
+      this.policyService.getPolicies().subscribe((policies) => {
             this.policies = _.filter(
                 policies,
                 (x) => x.paymentPlan === 'NotCreated'
@@ -121,8 +125,8 @@ export class PaymentPlanComponent implements OnInit {
             console.log(this.policies);
         });
 
-        console.log('-------Value--------');
-        console.log(this.selectedValue);
+      console.log('-------Value--------');
+      console.log(this.selectedValue);
     }
 
     refresh() {
@@ -372,6 +376,12 @@ export class PaymentPlanComponent implements OnInit {
 
     generateID(id) {
         this.router.navigateByUrl('/flosure/accounts/view-receipt/' + id);
+    }
+
+    clientNameMethod(value) {
+      console.log('PLAN VALUE<><><><><>', value, this.clientList);
+      this.clientDet = this.clients.find((el) => el.id === String(value));
+      return this.clientDet;
     }
 
 
