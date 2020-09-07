@@ -11,6 +11,8 @@ import {
 } from 'src/app/clients/models/clients.model';
 import moment from 'moment';
 import { CoverNote } from '../models/documents.model';
+import { UsersService } from '../../../users/services/users.service';
+import { UserModel } from '../../../users/models/users.model';
 
 @Component({
     selector: 'app-policy-schedule-document',
@@ -110,8 +112,9 @@ export class PolicyScheduleDocumentComponent implements OnInit {
     todayDate: Date;
 
     yearOfManufacture: string;
+    agent: UserModel;
 
-    constructor() {}
+    constructor(private usersService: UsersService) {}
 
     generatingPDF = false;
 
@@ -126,8 +129,12 @@ export class PolicyScheduleDocumentComponent implements OnInit {
 
 
     ngOnInit(): void {
+
+      this.usersService.getUsers().subscribe((users) => {
+        this.agent = users.find((x) => x.ID === this.policy.user);
+      });
         this.todayDate = new Date();
-        this.getLimit()
+        this.getLimit();
     }
 
     getLimit() {

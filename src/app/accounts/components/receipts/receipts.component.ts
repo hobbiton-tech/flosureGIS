@@ -20,6 +20,10 @@ import { AgentsService } from 'src/app/settings/components/agents/services/agent
 import { AllocationsService } from '../../services/allocations.service';
 import { AllocationReceipt } from '../models/allocations.model';
 import { PoliciesService } from '../../../underwriting/services/policies.service';
+import { UserModel } from '../../../users/models/users.model';
+import { ClientsService } from '../../../clients/services/clients.service';
+import { UsersService } from '../../../users/services/users.service';
+import * as jwt_decode from 'jwt-decode';
 
 @Component({
     selector: 'app-receipts',
@@ -53,7 +57,6 @@ export class ReceiptsComponent implements OnInit {
     isReinstateVisible = false;
     isOkBrokerReceiptingLoading = false;
     policyNumber = '';
-    user = '';
     _id = '';
     isVisibleClientType = false;
     isOkClientTypeLoading = false;
@@ -61,6 +64,8 @@ export class ReceiptsComponent implements OnInit {
     // modal
     isReceiptVisible = false;
     isConfirmLoading = false;
+    user: UserModel;
+  loggedIn = localStorage.getItem('currentUser');
 
 
     optionList = [
@@ -94,7 +99,10 @@ export class ReceiptsComponent implements OnInit {
         private formBuilder: FormBuilder,
         private message: NzMessageService,
         private router: Router,
-        private agentService: AgentsService, private allocationService: AllocationsService, private http: HttpClient,
+        private agentService: AgentsService,
+        private allocationService: AllocationsService,
+        private http: HttpClient,
+        private usersService: UsersService
     ) {
         this.receiptForm = this.formBuilder.group({
           received_from: ['', Validators.required],
@@ -121,6 +129,12 @@ export class ReceiptsComponent implements OnInit {
             console.log('===================');
             console.log(this.brokerList);
         });
+
+      const decodedJwtData = jwt_decode(this.loggedIn);
+
+      this.usersService.getUsers().subscribe((users) => {
+        this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+      });
         this.policiesService.getPolicies().subscribe((quotes) => {
             this.unreceiptedList = _.filter(
                 quotes,
@@ -176,7 +190,7 @@ export class ReceiptsComponent implements OnInit {
               remarks: '',
               cheq_number: this.receiptForm.controls.cheq_number.value,
               on_behalf_of: this.receiptForm.controls.on_behalf_of.value.companyName,
-              captured_by: this.user,
+              captured_by: this.user.ID,
               receipt_status: this.recStatus,
               sum_in_digits: this.receiptForm.controls.sum_in_digits.value,
               today_date: new Date(),

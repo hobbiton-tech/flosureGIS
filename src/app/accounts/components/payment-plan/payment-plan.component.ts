@@ -24,6 +24,9 @@ import { AccountService } from '../../services/account.service';
 import { IReceiptModel } from '../models/receipts.model';
 import { NzMessageService } from 'ng-zorro-antd';
 import { HttpClient } from '@angular/common/http';
+import { UserModel } from '../../../users/models/users.model';
+import * as jwt_decode from 'jwt-decode';
+import { UsersService } from '../../../users/services/users.service';
 
 @Component({
     selector: 'app-payment-plan',
@@ -60,11 +63,13 @@ export class PaymentPlanComponent implements OnInit {
     netPremium = 0;
     formattedeDate: any;
     _id: string;
-    user: string;
+    user: UserModel;
     clientId: any;
     planID: any;
     receiptID: any;
   receiptNumber = '';
+  loggedIn = localStorage.getItem('currentUser');
+
     constructor(
         private router: Router,
         private paymentPlanService: PaymentPlanService,
@@ -76,6 +81,7 @@ export class PaymentPlanComponent implements OnInit {
         private message: NzMessageService,
         private changeDetectorRefs: ChangeDetectorRef,
         private http: HttpClient,
+        private usersService: UsersService
     ) {
         this.paymentPlanForm = this.formBuilder.group({
             numberOfInstallments: ['', Validators.required],
@@ -91,7 +97,12 @@ export class PaymentPlanComponent implements OnInit {
 
     ngOnInit(): void {
 
-        this.user = localStorage.getItem('user');
+      const decodedJwtData = jwt_decode(this.loggedIn);
+
+      this.usersService.getUsers().subscribe((users) => {
+        this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+      });
+
 
         this.refresh();
         this.clientsService.getAllClients().subscribe((clients) => {
@@ -160,17 +171,6 @@ export class PaymentPlanComponent implements OnInit {
         let pAmount = 0;
 
         let policyCount = 0;
-        // policyPlan = {
-        //     start_date: policy.startDate,
-        //     end_date: policy.endDate,
-        //     net_premium: policy.netPremium,
-        //     allocation_status: 'Unallocated',
-        //     policy_number: policy.policyNumber,
-        //     allocation_amount: 0,
-        //     plan_id: res.data.ID
-        // }
-
-        // for (const policy of this.policyNumber) {
         this.policyUpdate = { ...this.paymentPlanForm.controls.policyNumber.value};
 
 
@@ -241,7 +241,7 @@ export class PaymentPlanComponent implements OnInit {
                 payment_method: '',
                 received_from: this.clientName,
                 on_behalf_of: this.clientName,
-                captured_by: this.user,
+                captured_by: this.user.ID,
                 receipt_status: 'Receipted',
                 narration: 'Payment Plan',
                 receipt_type: 'Premium Payment',

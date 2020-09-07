@@ -24,6 +24,9 @@ import {
 import * as _ from 'lodash';
 import { IClientCorporate } from 'src/app/clients/models/client.model';
 import { HttpClient } from '@angular/common/http';
+import * as jwt_decode from 'jwt-decode';
+import { UsersService } from '../../../../../users/services/users.service';
+import { UserModel } from '../../../../../users/models/users.model';
 
 @Component({
     selector: 'app-payment-plan-policy-installments',
@@ -56,15 +59,6 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
     // policy number
     policyNumber: string;
 
-    // payment plan policy data
-    paymentPlanPolicyData: Policy = new Policy();
-
-    // payment plan policy installment data
-    paymentPlanPolicyInstallmentData: InstallmentsModel = new InstallmentsModel();
-
-
-    // payment plan policies
-    paymentPlanPolicies: Policy[] = [];
 
     // payment plan policy installments
     paymentPlanPolicyInstallments: InstallmentsModel[] = [];
@@ -82,7 +76,7 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
     isReinstateVisible = false;
     isOkLoading = false;
     // policyNumber = '';
-    user = '';
+    user: UserModel;
     _id = '';
     loadingReceipt = false;
     client: any;
@@ -129,6 +123,7 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
     minInstallments: number;
     selectedRole: any;
     selectedAllocationPolicy: any;
+  loggedIn = localStorage.getItem('currentUser');
 
     constructor(
         private route: ActivatedRoute,
@@ -139,7 +134,8 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
         private message: NzMessageService,
         private router: Router,
         private clientsService: ClientsService,
-        private http: HttpClient, private changeDetectorRefs: ChangeDetectorRef
+        private http: HttpClient, private changeDetectorRefs: ChangeDetectorRef,
+        private usersService: UsersService
     ) {
         this.cancelForm = this.formBuilder.group({
             remarks: ['', Validators.required],
@@ -185,6 +181,12 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
           this.loadingReceipt = false;
         }, 3000);
 
+        const decodedJwtData = jwt_decode(this.loggedIn);
+
+        this.usersService.getUsers().subscribe((users) => {
+          this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+        });
+
 
         this.paymentPlanId = param.id;
         this.policyNumber = param.policyNumber;
@@ -210,8 +212,8 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
           });
 
 
-          this.paymentPlanService.getPlanPolicy().subscribe((res) => {
-            this.policyPlan = res.data.filter((x) => x.plan_id === Number(this.paymentPlanId));
+          this.paymentPlanService.getPlanPolicy().subscribe((resGet) => {
+            this.policyPlan = resGet.data.filter((x) => x.plan_id === Number(this.paymentPlanId));
             // this.policyPlan = res.data;
             this.policyPlan = [...this.policyPlan];
 
@@ -220,13 +222,13 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
             console.log('PAYMENT PLAN<><><><><><>', this.policyPlan);
           });
 
-          this.paymentPlanService.getInstallments().subscribe((res) => {
+          this.paymentPlanService.getInstallments().subscribe((resPay) => {
             this.paymentPlanPolicyInstallments = res.data.filter((x: InstallmentsModel) => x.payment_plan_id  === Number(param.id));
             this.paymentPlanPolicyInstallmentsCount = res.data.filter((x) => x.payment_plan_id === Number(param.id)).length;
             this.changeDetectorRefs.detectChanges();
           });
 
-          this.paymentPlanService.getReceiptPlan().subscribe((res) => {
+          this.paymentPlanService.getReceiptPlan().subscribe((resPay) => {
             this.planReceipt = res.data;
             this.displayReceiptsList = this.planReceipt.filter((x) => x.plan_id === Number(this.paymentPlanId));
           });
@@ -256,10 +258,7 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
 
     showModal(paymentPlanPolicyInstallment: InstallmentsModel): void {
         this.isVisible = true;
-        // this.clientName = unreceipted.client;
-        // this.policyNumber = unreceipted.policyNumber;
-        this.user = 'Chalres Malama';
-        // this.policy = unreceipted;
+
         this.receiptForm
             .get('sum_in_digits')
             .setValue(Number(paymentPlanPolicyInstallment.balance));
@@ -307,7 +306,7 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
                 remarks: this.receiptForm.controls.remarks.value,
                 cheq_number: this.receiptForm.controls.cheq_number.value,
                 on_behalf_of: this.clientName,
-                captured_by: this.user,
+                captured_by: this.user.ID,
                 receipt_status: this.recStatus,
                 sum_in_digits: Number(amount),
                 today_date: new Date(),
@@ -334,14 +333,14 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
                     receipt.receipt_number = res.data.receipt_number;
                     console.log(res.data.receipt_number);
 
-                    this.http.post('https://payment-api.savenda-flosure.com/receipt', receipt).subscribe((res: any) => {
+                    this.http.post('https://payment-api.savenda-flosure.com/receipt', receipt).subscribe((resRCPT: any) => {
                         this.message.success('Receipt Successfully created');
 
 
-                        plan.receipt_number = res.data.receipt_number;
+                        plan.receipt_number = resRCPT.data.receipt_number;
                         console.log('RECEIPT NUMBER<><><><>', plan);
 
-                        this.paymentPlanService.addPlanReceipt(plan).subscribe((res) => {
+                        this.paymentPlanService.addPlanReceipt(plan).subscribe((resPlan) => {
                             console.log('Change TRUE', res);
                             planReceipt.push(res.data);
 

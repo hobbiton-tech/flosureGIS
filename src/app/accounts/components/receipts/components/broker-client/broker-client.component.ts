@@ -14,6 +14,10 @@ import { DebitNote } from 'src/app/underwriting/documents/models/documents.model
 import { AllocationsService } from '../../../../services/allocations.service';
 import { HttpClient } from '@angular/common/http';
 import { AllocationPolicy, AllocationReceipt } from '../../../models/allocations.model';
+import { UserModel } from '../../../../../users/models/users.model';
+import { ClientsService } from '../../../../../clients/services/clients.service';
+import { UsersService } from '../../../../../users/services/users.service';
+import * as jwt_decode from 'jwt-decode';
 
 @Component({
     selector: 'app-broker-client',
@@ -63,7 +67,6 @@ export class BrokerClientComponent implements OnInit {
     isReinstateVisible = false;
     isOkLoading = false;
     policyNumber = '';
-    user = '';
     _id = '';
     isVisibleClientType = false;
     isOkClientTypeLoading = false;
@@ -72,7 +75,7 @@ export class BrokerClientComponent implements OnInit {
     isConfirmLoading = false;
 
     allocationPolicy: AllocationPolicy;
-    allocationReceipt: AllocationReceipt
+    allocationReceipt: AllocationReceipt;
 
     allocationPolicies: any[] = [];
     allocationsReceipts: any[] = [];
@@ -106,6 +109,8 @@ export class BrokerClientComponent implements OnInit {
     debitnoteList: DebitNote[] = [];
     debitnote: DebitNote;
     currency: string;
+    user: UserModel;
+    loggedIn = localStorage.getItem('currentUser');
 
     constructor(
         private receiptService: AccountService,
@@ -116,6 +121,7 @@ export class BrokerClientComponent implements OnInit {
         private policeServices: PoliciesService,
         private allocationsService: AllocationsService,
         private http: HttpClient,
+        private usersService: UsersService
     ) {
         this.receiptForm = this.formBuilder.group({
             received_from: ['', Validators.required],
@@ -149,6 +155,12 @@ export class BrokerClientComponent implements OnInit {
         console.log('===================');
         console.log(this.brokerList);
       });
+
+      const decodedJwtData = jwt_decode(this.loggedIn);
+
+      this.usersService.getUsers().subscribe((users) => {
+        this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+      });
       this.policeServices.getPolicies().subscribe((quotes) => {
         this.listofUnreceiptedReceipts = _.filter(
           quotes,
@@ -178,9 +190,9 @@ export class BrokerClientComponent implements OnInit {
         this.allocationPolicies = allocationPolicies.data;
       });
 
-      this.allocationsService.getAllocationReceipt().subscribe((allocationsReceipts) =>{
+      this.allocationsService.getAllocationReceipt().subscribe((allocationsReceipts) => {
         this.allocationsReceipts = allocationsReceipts.data;
-      })
+      });
 
       this.receiptService.getReciepts().subscribe((receipts) => {
         this.receiptedList = _.filter(
@@ -219,7 +231,7 @@ export class BrokerClientComponent implements OnInit {
         this.isVisible = true;
         this.clientName = unreceipted.client;
         this.policyNumber = unreceipted.policyNumber;
-        this.user = unreceipted.user;
+        // this.user = unreceipted.user;
         this.policy = unreceipted;
         this.debitnote = this.debitnoteList.filter(
             (x) => x.policy.id === unreceipted.id
@@ -228,7 +240,7 @@ export class BrokerClientComponent implements OnInit {
         this.currency = unreceipted.currency;
         this.sourceOfBusiness = unreceipted.sourceOfBusiness;
         this.intermediaryName = unreceipted.intermediaryName;
-      this.allocationPolicy = this.allocationPolicies.filter((x) => x.policy_number === unreceipted.policyNumber)[0];
+        this.allocationPolicy = this.allocationPolicies.filter((x) => x.policy_number === unreceipted.policyNumber)[0];
         console.log(this.policyAmount);
     }
 
@@ -251,7 +263,7 @@ export class BrokerClientComponent implements OnInit {
                 remarks: '',
                 cheq_number: this.receiptForm.controls.cheq_number.value,
                 on_behalf_of: this.clientName,
-                captured_by: this.user,
+                captured_by: this.user.ID,
                 receipt_status: this.recStatus,
                 sum_in_digits: Number(this.policyAmount),
                 today_date: new Date(),
@@ -262,14 +274,14 @@ export class BrokerClientComponent implements OnInit {
             };
 
 
-          this.allocationPolicy.balance = 0;
-          this.allocationPolicy.settlements = Number(this.policy.netPremium);
-          this.allocationPolicy.status = 'Allocated'
+            this.allocationPolicy.balance = 0;
+            this.allocationPolicy.settlements = Number(this.policy.netPremium);
+            this.allocationPolicy.status = 'Allocated';
 
 
 
 
-          this.allocationReceipt = {
+            this.allocationReceipt = {
             allocated_amount: Number(this.policy.netPremium),
             amount: Number(this.policy.netPremium),
             intermediary_id: this.policy.intermediaryId,
@@ -278,11 +290,11 @@ export class BrokerClientComponent implements OnInit {
             receipt_number: '',
             remaining_amount: 0,
             status: 'Allocated'
-          }
+          };
 
             this.receiptNum = this._id;
 
-          this.http.get<any>(
+            this.http.get<any>(
             `https://number-generation.flosure-api.com/savenda-receipt-number/1`
           )
             .subscribe(async (res) => {
@@ -304,7 +316,7 @@ export class BrokerClientComponent implements OnInit {
                     console.log('Allocation Policy Res>>>', policyRes);
                   }, (policyErr) => {
                     this.message.error(policyErr);
-                  })
+                  });
 
                   this.policeServices.updatePolicy(this.policy).subscribe((res) => {}, (err) => {
                     console.log('Update Policy Error', err);
@@ -381,7 +393,7 @@ export class BrokerClientComponent implements OnInit {
         console.log(this.reinstateReceipt);
         this.receiptService.updateReceipt(this.reinstateReceipt).subscribe((res) => {
           this.message.success('Receipt Successfully Updated');
-          this.refresh()
+          this.refresh();
         }, (err) => {
           console.log('Check ERR>>>>', err);
           this.message.warning('Receipt Failed');
@@ -421,7 +433,7 @@ export class BrokerClientComponent implements OnInit {
         this.paymentMethod = value;
     }
 
-     //Test Search Code
+     // Test Search Code
 
      searchUnR(value: string): void {
       console.log(value);
@@ -439,17 +451,14 @@ export class BrokerClientComponent implements OnInit {
       });
   }
 
-  searchR(value: string): void
-  {
+  searchR(value: string): void {
     console.log(value);
-    if (value === ' ' || !value)
-    {
+    if (value === ' ' || !value) {
       this.displayReceiptedList = this.receiptedList;
 
     }
 
-    this.displayReceiptedList = this.receiptedList.filter((receip) =>
-    {
+    this.displayReceiptedList = this.receiptedList.filter((receip) => {
         return (
           receip.receipt_number.toLowerCase().includes(value.toLowerCase()) ||
           receip.on_behalf_of.toLowerCase().includes(value.toLowerCase())
@@ -458,15 +467,12 @@ export class BrokerClientComponent implements OnInit {
     });
 }
 
-searchCR(value: string): void
-{
-  if (value === ' ' || !value)
-  {
+searchCR(value: string): void {
+  if (value === ' ' || !value) {
       this.displayCancelledReceiptList = this.cancelReceiptList;
   }
 
-  this.displayCancelledReceiptList = this.cancelReceiptList.filter((receip) =>
-    {
+  this.displayCancelledReceiptList = this.cancelReceiptList.filter((receip) => {
         return (
           receip.receipt_number.toLowerCase().includes(value.toLowerCase()) ||
           receip.on_behalf_of.toLowerCase().includes(value.toLowerCase())

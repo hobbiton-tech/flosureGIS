@@ -33,6 +33,9 @@ import {
 } from 'src/app/clients/models/clients.model';
 import { Risks } from 'src/app/reports/model/quotation.model';
 import { IDiscounts } from 'src/app/quotes/models/discounts.model';
+import { UserModel } from '../../../users/models/users.model';
+import { UsersService } from '../../../users/services/users.service';
+import * as jwt_decode from 'jwt-decode';
 
 @Component({
     selector: 'app-policy-details',
@@ -164,6 +167,8 @@ export class PolicyDetailsComponent implements OnInit {
 
     excessList: Excess[] = [];
     excessListCert: Excess[] = [];
+    user: UserModel;
+    loggedIn = localStorage.getItem('currentUser');
 
     constructor(
         private readonly router: Router,
@@ -173,7 +178,8 @@ export class PolicyDetailsComponent implements OnInit {
         private paymentPlanService: PaymentPlanService,
         private receiptService: AccountService,
         private productClauseService: ClausesService,
-        private clientsService: ClientsService
+        private clientsService: ClientsService,
+        private usersService: UsersService
     ) {
         this.paymentPlanForm = this.formBuilder.group({
             numberOfInstallments: ['', Validators.required],
@@ -199,6 +205,13 @@ export class PolicyDetailsComponent implements OnInit {
 
                     // tslint:disable-next-line: semicolon
                 });
+
+
+                const decodedJwtData = jwt_decode(this.loggedIn);
+
+                this.usersService.getUsers().subscribe((users) => {
+                this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+              });
 
                 this.productClauseService.getPolicyClauses().subscribe(res => {
                     this.clauses = res.filter(
@@ -424,40 +437,7 @@ export class PolicyDetailsComponent implements OnInit {
             });
         });
 
-        //         this.policiesService.getDebitNotes().subscribe((debitNotes) => {
-        //             this.debitNotes = debitNotes;
 
-        //             console.log('debit notes');
-        //             console.log(this.debitNotes);
-        //         });
-
-        //         this.clientsService.getAllClients().subscribe((clients) => {
-        //             this.clientsList = [...clients[0], ...clients[1]] as Array<
-        //                 ICorporateClient & IIndividualClient
-        //             >;
-
-        //             console.log('clients: ');
-        //             console.log(clients);
-
-        //             this.client = this.clientsList.filter((x) =>
-        //                 x.companyName
-        //                     ? x.companyName === this.policyData.client
-        //                     : x.firstName + ' ' + x.lastName === this.policyData.client
-        //             )[0] as IIndividualClient & ICorporateClient;
-
-        //             console.log('HERE =>>>>>');
-        //             console.log(
-        //                 this.clientsList.filter(
-        //                     (x) => x.firstName + ' ' + x.lastName === 'Changa Lesa'
-        //                 )[0] as IIndividualClient & ICorporateClient
-        //             );
-
-        //             // console.log('policy data client:');
-        //             // console.log(this.policyData.client);
-
-        //             // console.log('client');
-        //             // console.log(this.client);
-        //         });
 
         this.policyDetailsForm = this.formBuilder.group({
             client: ['', Validators.required],
@@ -476,54 +456,10 @@ export class PolicyDetailsComponent implements OnInit {
             town: ['', Validators.required]
         });
 
-        // set values of fields
-        // this.policiesService.getPolicies().subscribe((policies) => {
-        //     this.policyData = policies.filter(
-        //         (x) => x.policyNumber === this.policyNumber
-        //     )[0];
-        //     this.policyDetailsForm
-        //         .get('client')
-        //         .setValue(this.policyData.client);
-        //     this.policyDetailsForm
-        //         .get('nameOfInsured')
-        //         .setValue(this.policyData.nameOfInsured);
-        //     this.policyDetailsForm
-        //         .get('startDate')
-        //         .setValue(this.policyData.startDate);
-        //     this.policyDetailsForm
-        //         .get('endDate')
-        //         .setValue(this.policyData.endDate);
-        //     this.policyDetailsForm
-        //         .get('sumInsured')
-        //         .setValue(this.policyData.sumInsured);
-        //     this.policyDetailsForm
-        //         .get('netPremium')
-        //         .setValue(this.policyData.netPremium);
-        //     this.policyDetailsForm
-        //         .get('currency')
-        //         .setValue(this.policyData.currency);
-        //     this.policyDetailsForm
-        //         .get('timeOfIssue')
-        //         .setValue(this.policyData.timeOfIssue);
-        //     this.policyDetailsForm
-        //         .get('dateOfIssue')
-        //         .setValue(this.policyData.dateOfIssue);
-        //     this.policyDetailsForm
-        //         .get('expiryDate')
-        //         .setValue(this.policyData.endDate);
-        //     this.policyDetailsForm
-        //         .get('quarter')
-        //         .setValue(this.policyData.quarter);
-        // });
+
     }
 
-    // getTimeStamp(policy: Policy): number {
-    //     return (policy.startDate as ITimestamp).seconds;
-    // }
 
-    // getEndDateTimeStamp(policy: Policy): number {
-    //     return (policy.endDate as ITimestamp).seconds;
-    // }
 
     goToPoliciesList(): void {
         this.router.navigateByUrl('/flosure/underwriting/policies');
@@ -630,7 +566,7 @@ export class PolicyDetailsComponent implements OnInit {
                 on_behalf_of: policyData.client,
                 // receivedFrom: this.paymentPlanForm.controls.clientName.value,
                 // onBehalfOf: this.paymentPlanForm.controls.clientName.value,
-                captured_by: 'charles malama',
+                captured_by: this.user.ID,
                 receipt_status: 'Receipted',
                 narration: 'Payment Plan',
                 receipt_type: 'Premium Payment',

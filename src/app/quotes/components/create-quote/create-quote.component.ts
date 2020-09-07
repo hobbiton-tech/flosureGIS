@@ -100,7 +100,7 @@ interface IQuoteNumberResult {
     styleUrls: ['./create-quote.component.scss']
 })
 export class CreateQuoteComponent implements OnInit {
-    isCreatingQuote: boolean = false;
+    isCreatingQuote = false;
     // view risk modal
     viewRiskModalVisible = false;
 
@@ -200,18 +200,6 @@ export class CreateQuoteComponent implements OnInit {
 
     // conditional render of agent field based on mode(agent or user)
     agentMode = false;
-    switchLoading = false;
-
-    // loading feedback
-    computeBasicPremiumIsLoading = false;
-    computeRiotAndStrikeIsLoading = false;
-    computeCarStereoIsLoading = false;
-    computeTerritorialExtensionIsLoading = false;
-    computeLossOfUseIsLoading = false;
-    computePremiumIsLoading = false;
-    handleDiscountIsLoading = false;
-
-    addLoadIsLoading = false;
 
     motor: any;
     quoteForm: FormGroup;
@@ -274,19 +262,19 @@ export class CreateQuoteComponent implements OnInit {
 
     ngOnInit(): void {
 
-      const decodedJwtData = jwt_decode(this.loggedIn);
-      console.log('Decoded>>>>>>', decodedJwtData);
+      this.decodedJwtData = jwt_decode(this.loggedIn);
+      console.log('Decoded>>>>>>', this.decodedJwtData);
 
       this.usersService.getUsers().subscribe((users) => {
-        this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+        this.user = users.filter((x) => x.ID === this.decodedJwtData.user_id)[0];
 
         this.isPresent = this.user.Permission.find((el) => el.name === this.admin || el.name === this.approveQuote ||
           el.name === this.editQuote || el.name === this.deleteRisk);
 
         console.log('USERS>>>', this.user, this.isPresent, this.admin);
       });
-        console.log('Decoded>>>>>>', this.decodedJwtData);
-        this.quoteForm = this.formBuilder.group({
+
+      this.quoteForm = this.formBuilder.group({
             client: ['', Validators.required],
             messageCode: ['ewrewre', Validators.required],
             currency: ['', Validators.required],
@@ -301,13 +289,13 @@ export class CreateQuoteComponent implements OnInit {
             intermediaryName: ['']
         });
 
-        this.policyService.getPolicies().subscribe(res => {
+      this.policyService.getPolicies().subscribe(res => {
             for (const policy of res) {
                 this.concRisks = this.concRisks.concat(policy.risks);
             }
         });
 
-        this.quoteService.getMotorQuotations().subscribe(quotes => {
+      this.quoteService.getMotorQuotations().subscribe(quotes => {
             this.quotesList = quotes;
             this.quotesCount = quotes.length;
 
@@ -316,7 +304,7 @@ export class CreateQuoteComponent implements OnInit {
             this.lastItem = this.quotesList[this.quotesList.length - 1];
         });
 
-        this.clientsService.getAllClients().subscribe(clients => {
+      this.clientsService.getAllClients().subscribe(clients => {
             this.clients = [...clients[0], ...clients[1]] as Array<
                 IIndividualClient & ICorporateClient
             >;
@@ -324,21 +312,21 @@ export class CreateQuoteComponent implements OnInit {
             console.log('Client List>>>', this.clients);
         });
 
-        this.agentsService.getAgents().subscribe(agents => {
+      this.agentsService.getAgents().subscribe(agents => {
             this.agents = agents;
         });
 
-        this.agentsService.getBrokers().subscribe(brokers => {
+      this.agentsService.getBrokers().subscribe(brokers => {
             this.brokers = brokers;
         });
 
-        this.agentsService
+      this.agentsService
             .getSalesRepresentatives()
             .subscribe(salesRepresentatives => {
                 this.salesRepresentatives = salesRepresentatives;
             });
 
-        this.excessesForm = this.formBuilder.group({
+      this.excessesForm = this.formBuilder.group({
             below21Years: ['', Validators.required],
             over70Years: ['', Validators.required],
             noLicence: ['', Validators.required],
@@ -347,17 +335,17 @@ export class CreateQuoteComponent implements OnInit {
         });
 
         // set defaults values for excesses
-        this.excessesForm.get('below21Years').setValue('100');
-        this.excessesForm.get('over70Years').setValue('100');
-        this.excessesForm.get('noLicence').setValue('120');
-        this.excessesForm.get('careLessDriving').setValue('120');
-        this.excessesForm.get('otherEndorsement').setValue('100');
+      this.excessesForm.get('below21Years').setValue('100');
+      this.excessesForm.get('over70Years').setValue('100');
+      this.excessesForm.get('noLicence').setValue('120');
+      this.excessesForm.get('careLessDriving').setValue('120');
+      this.excessesForm.get('otherEndorsement').setValue('100');
 
-        this.productClauseService.getClauses().subscribe(res => {
+      this.productClauseService.getClauses().subscribe(res => {
             this.clauseList = res;
         });
 
-        this.productClauseService.getExtensions().subscribe(res => {
+      this.productClauseService.getExtensions().subscribe(res => {
             this.extensionList = res;
             this.motorComprehensiveloadingOptions = res;
             this.motorThirdPartyloadingOptions = res.filter(
@@ -365,11 +353,11 @@ export class CreateQuoteComponent implements OnInit {
             );
         });
 
-        this.productClauseService.getWordings().subscribe(res => {
+      this.productClauseService.getWordings().subscribe(res => {
             this.wordingList = res;
         });
 
-        this.updateEditCache();
+      this.updateEditCache();
     }
 
     disabledSubmissionDate = submissionValue => {
@@ -377,7 +365,7 @@ export class CreateQuoteComponent implements OnInit {
             return false;
         }
         return submissionValue.valueOf() < moment().add(-1, 'days');
-    };
+    }
 
     handlePolicyEndDateCalculation(): void {
         if (

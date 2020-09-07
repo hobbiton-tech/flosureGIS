@@ -339,45 +339,7 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
             remarks: ['', Validators.required]
         });
 
-        // set values of fields
-        // this.policiesService.getPolicies().subscribe((policies) => {
-        //     this.policyData = policies.filter(
-        //         (x) => x.policyNumber === this.policyNumber
-        //     )[0];
-        //     this.policyDetailsForm
-        //         .get('client')
-        //         .setValue(this.policyData.client);
-        //     this.policyDetailsForm
-        //         .get('nameOfInsured')
-        //         .setValue(this.policyData.nameOfInsured);
-        //     this.policyDetailsForm
-        //         .get('startDate')
-        //         .setValue(this.policyData.startDate);
-        //     this.policyDetailsForm
-        //         .get('endDate')
-        //         .setValue(this.policyData.endDate);
-        //     this.policyDetailsForm
-        //         .get('sumInsured')
-        //         .setValue(this.policyData.sumInsured);
-        //     this.policyDetailsForm
-        //         .get('netPremium')
-        //         .setValue(this.policyData.netPremium);
-        //     this.policyDetailsForm
-        //         .get('currency')
-        //         .setValue(this.policyData.currency);
-        //     this.policyDetailsForm
-        //         .get('timeOfIssue')
-        //         .setValue(this.policyData.timeOfIssue);
-        //     this.policyDetailsForm
-        //         .get('dateOfIssue')
-        //         .setValue(this.policyData.dateOfIssue);
-        //     this.policyDetailsForm
-        //         .get('expiryDate')
-        //         .setValue(this.policyData.endDate);
-        //     this.policyDetailsForm
-        //         .get('quarter')
-        //         .setValue(this.policyData.quarter);
-        // });
+
     }
 
     goToRenewPoliciesList(): void {
@@ -484,7 +446,7 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
                 payment_method: '',
                 received_from: this.paymentPlanForm.controls.clientName.value,
                 on_behalf_of: this.paymentPlanForm.controls.clientName.value,
-                captured_by: 'charles malama',
+                captured_by: this.user.ID,
                 receipt_status: 'Receipted',
                 narration: 'Payment Plan',
                 receipt_type: 'Premium Payment',

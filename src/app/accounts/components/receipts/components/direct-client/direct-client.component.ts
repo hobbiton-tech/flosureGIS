@@ -10,6 +10,10 @@ import { v4 } from 'uuid';
 import { PoliciesService } from 'src/app/underwriting/services/policies.service';
 import { DebitNote } from 'src/app/underwriting/documents/models/documents.model';
 import { th } from 'date-fns/locale';
+import { UserModel } from '../../../../../users/models/users.model';
+import { ClientsService } from '../../../../../clients/services/clients.service';
+import { UsersService } from '../../../../../users/services/users.service';
+import * as jwt_decode from 'jwt-decode';
 
 @Component({
     selector: 'app-direct-client',
@@ -60,17 +64,9 @@ export class DirectClientComponent implements OnInit {
     isReinstateVisible = false;
     isOkLoading = false;
     policyNumber = '';
-    user = '';
     _id = '';
-    // modal
-    isReceiptVisible = false;
-    isConfirmLoading = false;
-    showDocumentModal = false;
-    isReceiptApproved = false;
 
-    // generated PDFs
-    receiptURl = '';
-    showReceiptModal = false;
+
     optionList = [
         { label: 'Premium Payment', value: 'Premium Payment' },
         { label: 'Third Party Recovery', value: 'Third Party Recovery' },
@@ -94,13 +90,17 @@ export class DirectClientComponent implements OnInit {
     debitnoteList: DebitNote[] = [];
     debitnote: DebitNote;
     currency: string;
+  user: UserModel;
+  isConfirmLoading = false;
+  loggedIn = localStorage.getItem('currentUser');
 
     constructor(
         private receiptService: AccountService,
         private policeServices: PoliciesService,
         private formBuilder: FormBuilder,
         private message: NzMessageService,
-        private router: Router
+        private router: Router,
+        private usersService: UsersService
     ) {
         this.receiptForm = this.formBuilder.group({
             received_from: ['', Validators.required],
@@ -141,6 +141,11 @@ export class DirectClientComponent implements OnInit {
             x.receiptStatus === 'Unreceipted' &&
             x.sourceOfBusiness === 'Direct' && x.paymentPlan === 'NotCreated'
         );
+        const decodedJwtData = jwt_decode(this.loggedIn);
+
+        this.usersService.getUsers().subscribe((users) => {
+          this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+        });
         this.displayUnreciptedList = this.unreceiptedList;
 
         this.receiptsCount = _.filter(
@@ -190,7 +195,7 @@ export class DirectClientComponent implements OnInit {
         this.isVisible = true;
         this.clientName = unreceipted.client;
         this.policyNumber = unreceipted.policyNumber;
-        this.user = unreceipted.user;
+        // this.user = unreceipted.user;
         this.policy = unreceipted;
         this.debitnote = this.debitnoteList.filter(
             (x) => x.policy.id === unreceipted.id
@@ -220,7 +225,7 @@ export class DirectClientComponent implements OnInit {
                 remarks: this.receiptForm.controls.remarks.value,
                 cheq_number: this.receiptForm.controls.cheq_number.value,
                 on_behalf_of: this.clientName,
-                captured_by: this.user,
+                captured_by: this.user.ID,
                 receipt_status: this.recStatus,
                 sum_in_digits: Number(this.policyAmount),
                 today_date: new Date(),
