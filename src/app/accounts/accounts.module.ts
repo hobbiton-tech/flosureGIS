@@ -30,6 +30,7 @@ import { CommissionPaymentService } from './services/commission-payment.service'
 import { AllocationsService } from './services/allocations.service';
 import { UsersRolesComponent } from '../users/components/users-roles/users-roles.component';
 import { AuthGuard } from '../users/helpers/auth.guard';
+import { ClientStatementsComponent } from './components/statements/client-statements/client-statements.component';
 
 const routes: Routes = [
     {
@@ -112,6 +113,11 @@ const routes: Routes = [
     component: AllocationsComponent,
     canActivate: [AuthGuard],
   },
+  {
+    path: 'client-statement',
+    component: ClientStatementsComponent,
+    canActivate: [AuthGuard],
+  },
 ];
 
 @NgModule({
@@ -134,7 +140,8 @@ const routes: Routes = [
         CommissionPaymentComponent,
         AllocationsComponent,
         ApprovedRequisitionsComponent,
-        ApprovedPaymentsComponent
+        ApprovedPaymentsComponent,
+        ClientStatementsComponent
     ],
     imports: [
         CommonModule,

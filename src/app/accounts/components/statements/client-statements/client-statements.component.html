@@ -1,0 +1,90 @@
+
+<body>
+<div style="margin: 20px 20px">
+<div id='watermark'>
+  <img id='watermarkimg' src="" />
+</div>
+<div id='content'>
+  <h2 style='text-transform: uppercase; color: #ffffff'><i><u> STATEMENT</u></i></h2>
+</div>
+<div id='head'>
+  <div id='headr'>
+    <div id='logo'>
+      <img id='logo' src=""/><br>
+      <h4 style='margin-top: 5em;color: #0000FF'>Hobbiton Unit Trust</h4>
+    </div>
+    <div id='contactInfo'>
+      <fieldset style='font-size:smaller;margin-left:17em;border: solid #0000FF 1px; border-radius: 7px'>
+        <i>Physical Address</i>: No 13 Nchenja Road, Northmead, Lusaka, Zambia<br/>
+        <i>Postal Address</i>: Po Box 32350, Lusaka, Zambia<br/>
+        <i>Lusaka Tel</i>: +260 211 232 877 <br/>
+        <i>Email</i>: invest@hobbiton.co.zm<br/>
+        <i>website</i>: www.hobbiton.co.zm<br/>
+        <i>Mobile</i>: 0956 529 966<br/>
+      </fieldset>
+      <h4 style="color:#0000FF;font-size:12px;margin-left:23em"><label>Tpin:</label> <u>1004399676</u></h4>
+    </div>
+  </div>
+</div>
+
+<div id='foot'>
+  <div style='width:100%;border: solid gainsboro 1px; border-bottom: solid #0000FF 3px'>
+    <ul style='display: inline; color: #0000FF;'>
+      <li>Date Generated: <b></b></li>
+      <li>Client Name: <b>
+      </b>
+      </li>
+      <li>Statement period: <b> From   </b></li>
+      <li>Fund: <b></b></li>
+      <li>Unit Price: <b></b></li>
+    </ul>
+  </div>
+  <div style='color: #0000FF; border: solid gainsboro 1px'>
+    <b>Investment Category:   </b>
+  </div>
+  <div style='width:100%; margin-top: 2%'>
+    <table>
+      <tr>
+        <th>Date</th>
+        <th>Investments</th>
+        <th>Opening Balance</th>
+        <th>Redemptions</th>
+        <th>Closing Balance</th>
+        <th>Valuation</th>
+        <th>Charges</th>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>ZMW  DDAC Charge</td>
+      </tr>
+    </table>
+  </div>
+  <div id='maturities' style='color: #0000FF; border: solid gainsboro 1px' >
+    <b><u>Maturities:</u></b>
+    <ul>
+      <li>Matured: <b></b></li>
+    </ul>
+  </div>
+
+
+  <!--<div id='maturities' style='color: #0000FF; border: solid gainsboro 1px' >
+  <b><u>Amount After Charges:</u></b>
+  <ul>
+    @foreach($categories as $category)
+    @if($category->maturity_date <= $date && $category->category_name == $client->category_name)
+    <li>Total Amount: <b></b></li>
+    @elseif($category->maturity_date > $date)
+    <li>No Maturities Yet</li>
+    @endif
+    @endforeach
+  </ul>
+</div>-->
+  <br/>
+</div>
+</div>
+</body>

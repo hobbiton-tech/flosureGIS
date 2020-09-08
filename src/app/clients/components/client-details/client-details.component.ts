@@ -281,13 +281,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
         this.route.navigateByUrl('/flosure/claims/claim-details');
     }
 
-    getTimeStamp(client: ICorporateClient & IIndividualClient): number {
-        const date = client.dateCreated as ITimestamp;
-        return date.seconds;
-    }
-
-    getDateOfBirthTimeStamp(client: IIndividualClient): number {
-        const date = client.dateOfBirth as ITimestamp;
-        return date.seconds * 1000;
-    }
+  viewClientStatement(): void {
+    this.route.navigateByUrl('/flosure/accounts/client-statement');
+  }
 }
