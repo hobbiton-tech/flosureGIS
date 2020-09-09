@@ -150,7 +150,7 @@ export class ReceiptsComponent implements OnInit {
 
         this.receiptService.getReciepts().subscribe((receipts) => {
             this.receiptedList = _.filter(
-                receipts,
+                receipts.data,
                 (x) => x.receipt_status === 'Receipted'
             );
 
@@ -158,13 +158,13 @@ export class ReceiptsComponent implements OnInit {
             console.log(this.receiptedList);
 
             this.cancelReceiptList = _.filter(
-                receipts,
+                receipts.data,
                 (x) => x.receipt_status === 'Cancelled'
             );
 
             console.log('======= Cancelled Receipt List =======');
             console.log(this.cancelReceiptList);
-            this.receiptNewCount = receipts.length;
+            this.receiptNewCount = receipts.data.length;
         });
     }
 

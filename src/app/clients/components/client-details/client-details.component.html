@@ -48,7 +48,7 @@
             <button
               nz-button
               nzType="primary"
-              (click)="viewClientStatement()"
+              (click)="viewClientStatement(client.id)"
             >
               Client Statement
             </button>
@@ -425,7 +425,7 @@
                             <nz-form-control nzSpan="18">
                                 <input
                                     nz-input
-                                    [placeholder]="client.accountNumber"
+                                    [placeholder]="client?.accountNumber"
                                     [disabled]="!isEditmode"
                                 />
                             </nz-form-control>
@@ -467,7 +467,7 @@
             ></nz-divider>
             <nz-table
                 #policiesTable
-                [nzData]="ploicyList"
+                [nzData]="policyList"
                 [nzSize]="'small'"
                 [nzBordered]="true"
                 [nzPageSize]="3"

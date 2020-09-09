@@ -114,7 +114,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'client-statement',
+    path: 'client-statement/:id',
     component: ClientStatementsComponent,
     canActivate: [AuthGuard],
   },

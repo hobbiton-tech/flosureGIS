@@ -342,7 +342,7 @@ export class DirectClientComponent implements OnInit {
         this.paymentMethod = value;
     }
 
-    //Test Search Code
+    // Test Search Code
 
     searchUnR(value: string): void {
       console.log(value);
