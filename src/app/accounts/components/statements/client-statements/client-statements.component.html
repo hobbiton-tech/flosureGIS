@@ -85,21 +85,19 @@
         <th>Date</th>
         <th>Type</th>
         <th>Reference</th>
-<!--        <th>Policy #</th>-->
         <th>Txn Amount</th>
         <th>DR</th>
         <th>CR</th>
         <th>Balance</th>
       </tr>
-      <tr  *ngFor="let policy of policyList">
-        <td>{{policy.startDate | date}}</td>
-        <td></td>
-        <td></td>
-<!--        <td>{{policy.policyNumber}}</td>-->
-        <td>{{policy.netPremium}}</td>
-        <td></td>
-        <td></td>
-        <td></td>
+      <tr  *ngFor="let statement of this.resultList">
+        <td>{{txnDate(statement)  | date}}</td>
+        <td>{{type(statement)}}</td>
+        <td>{{ref(statement)}}</td>
+        <td>{{txnAmount(statement)  | date}}</td>
+        <td>{{dr(statement)}}</td>
+        <td>{{cr(statement)}}</td>
+        <td>{{remainingBalance(statement)}}</td>
       </tr>
     </table>
   </div>
