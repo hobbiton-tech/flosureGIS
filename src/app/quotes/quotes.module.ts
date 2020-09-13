@@ -34,6 +34,14 @@ import { DiscountsViewComponent } from './components/discounts-view/discounts-vi
 import { FleetUploadComponent } from './components/fleet-upload/fleet-upload.component';
 import { PremiumComputationService } from './services/premium-computation.service';
 import { VehicleDetailsServiceService } from './services/vehicle-details-service.service';
+import { PropertyDetailsComponent } from './components/fire-class/property-details/property-details.component';
+import { FirePremiumComputationDetailsComponent } from './components/fire-class/fire-premium-computation-details/fire-premium-computation-details.component';
+import { FireClassService } from './services/fire-class.service';
+import { FireQuotationsListComponent } from './components/fire-class/fire-quotations-list/fire-quotations-list.component';
+import { AccidentQuotationsListComponent } from './components/accident-class/accident-quotations-list/accident-quotations-list.component';
+import { AccidentPremiumComputationDetailsComponent } from './components/accident-class/accident-premium-computation-details/accident-premium-computation-details.component';
+import { AccidentProductDetailsComponent } from './components/accident-class/accident-product-details/accident-product-details.component';
+import { FireDraftQuoteDocumentComponent } from './documents/fire-class/fire-draft-quote-document/fire-draft-quote-document.component';
 const routes: Routes = [
     {
         path: 'create-quote',
@@ -42,6 +50,10 @@ const routes: Routes = [
     {
         path: 'quotes-list',
         component: QuotesComponent
+    },
+    {
+        path: 'fire-quotes-list',
+        component: FireQuotationsListComponent
     },
     {
         path: 'quote-details/:quoteNumber',
@@ -72,7 +84,14 @@ const routes: Routes = [
         PremiumComputationComponent,
         TotalsViewComponent,
         DiscountsViewComponent,
-        FleetUploadComponent
+        FleetUploadComponent,
+        PropertyDetailsComponent,
+        FirePremiumComputationDetailsComponent,
+        FireQuotationsListComponent,
+        AccidentQuotationsListComponent,
+        AccidentPremiumComputationDetailsComponent,
+        AccidentProductDetailsComponent,
+        FireDraftQuoteDocumentComponent
     ],
     imports: [
         CommonModule,
@@ -104,6 +123,7 @@ const routes: Routes = [
     providers: [
         QuotesService,
         VehicleDetailsComponent,
+        PropertyDetailsComponent,
         PremiumComputationComponent,
         PremiumComputationDetailsComponent,
         TotalsViewComponent,
@@ -112,7 +132,9 @@ const routes: Routes = [
         LimitsOfLiabilityComponent,
         ExcessesComponent,
         PremiumComputationService,
-        VehicleDetailsServiceService
+        VehicleDetailsServiceService,
+        FireClassService,
+        CreateQuoteComponent
     ]
 })
 export class QuotesModule {}

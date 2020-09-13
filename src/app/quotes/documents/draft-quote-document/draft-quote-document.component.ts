@@ -1,7 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { MotorQuotationModel, RiskModel, Excess, LimitsOfLiability } from '../../models/quote.model';
+import {
+    MotorQuotationModel,
+    RiskModel,
+    Excess,
+    LimitsOfLiability
+} from '../../models/quote.model';
 import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { IExccess } from 'src/app/settings/models/underwriting/clause.model';
 
 @Component({
     selector: 'app-draft-quote-document',
@@ -14,8 +20,6 @@ export class DraftQuoteDocumentComponent implements OnInit {
 
     @Input()
     dateCreated: string;
-
-   
 
     @Input()
     clientName: string;
@@ -57,7 +61,7 @@ export class DraftQuoteDocumentComponent implements OnInit {
     limitsOfLiabilities: LimitsOfLiability[];
 
     @Input()
-    excessList: Excess[];
+    excessList: IExccess[];
 
     @Input()
     totalSumInsured: number;

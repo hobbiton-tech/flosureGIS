@@ -1,4 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    OnDestroy,
+    ChangeDetectorRef,
+    AfterViewInit
+} from '@angular/core';
 import { PremiumComputationService } from '../../services/premium-computation.service';
 import { Subscription } from 'rxjs';
 import { ITotalsModel } from '../../models/totals.model';
@@ -40,6 +46,7 @@ export class TotalsViewComponent implements OnInit, OnDestroy {
         this.extensionsTotalSubscription = this.premiumComputationService.extensionsTotalChanged$.subscribe(
             extensionsTotal => {
                 this.extensionsTotal = extensionsTotal;
+                console.log('extensions changed, listening from totals comp');
             }
         );
         this.discountsTotalSubscription = this.premiumComputationService.discountsTotalChanged$.subscribe(

@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { IExtensions } from '../models/extensions.model';
 import { IDiscounts } from '../models/discounts.model';
-import { BehaviorSubject, Subject, Observable } from 'rxjs';
+import { BehaviorSubject, Subject, Observable, Subscription } from 'rxjs';
 import {
     ISelectedInsuranceType,
     IProductType,
@@ -13,6 +13,8 @@ import { ITimestamp } from 'src/app/underwriting/models/endorsement.model';
 import { VehicleDetailsComponent } from '../components/vehicle-details/vehicle-details.component';
 import { VehicleDetailsModel } from '../models/vehicle-details.model';
 import { VehicleDetailsServiceService } from './vehicle-details-service.service';
+import { InsuranceClassHandlerService } from 'src/app/underwriting/services/insurance-class-handler.service';
+import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
 
 interface IRateResult {
     sumInsured: string;
@@ -50,8 +52,22 @@ interface IRateRequest {
 @Injectable({
     providedIn: 'root'
 })
-export class PremiumComputationService {
-    constructor(private http: HttpClient) {}
+export class PremiumComputationService implements OnDestroy {
+    classHandlerSubscription: Subscription;
+
+    constructor(
+        private http: HttpClient,
+        private classHandler: InsuranceClassHandlerService
+    ) {
+        this.classHandlerSubscription = this.classHandler.selectedClassChanged$.subscribe(
+            currentClass => {
+                this.currentClassName = localStorage.getItem('class');
+            }
+        );
+    }
+
+    currentClass: IClass;
+    currentClassName: string;
 
     // risk details editable
     isRiskEditMode = new BehaviorSubject<boolean>(false);
@@ -230,11 +246,12 @@ export class PremiumComputationService {
     }
 
     changeSelectedInsuranceType(value: string) {
-        console.log(value);
+        console.log('insurance type:', value);
         this.selectedInsuranceType.next(value);
     }
 
     changeSelectedProductType(value: string) {
+        console.log('product type:', value);
         this.selectedProductType.next(value);
     }
 
@@ -350,15 +367,37 @@ export class PremiumComputationService {
 
     // comprehensive and third party premium computation handling
     computePremium() {
-        if (this.selectedInsuranceType.value == 'Motor Comprehensive') {
-            this.computeComprehensivePremium();
-        } else {
-            this.computeThirdPartyPremium();
+        const insuranceClass = 'Fire';
+        // check class
+
+        if (localStorage.getItem('class') == 'Fire') {
+            this.computeFirePremium();
+        }
+
+        if (localStorage.getItem('class') == 'Motor') {
+            if (this.selectedInsuranceType.value == 'Comprehensive') {
+                this.computeStandardPremium();
+            } else {
+                this.computeThirdPartyPremium();
+            }
         }
     }
 
+    // TODO: combine all similar premium computations
+    computeFirePremium() {
+        let returnedBasicPremium =
+            (this.numberOfDays.value / 365) *
+            (Number(this.premiumRate.value) / 100) *
+            Number(this.sumInsured.value);
+
+        this.basicPremium.next(
+            returnedBasicPremium + this.extendedBasicPremium
+        );
+        this.computeTotals();
+    }
+
     // comprehensive premium
-    computeComprehensivePremium() {
+    computeStandardPremium() {
         const request: IRateRequest = {
             sumInsured: Number(this.sumInsured.value),
             premiumRate: Number(this.premiumRate.value) / 100,
@@ -552,22 +591,6 @@ export class PremiumComputationService {
         return this.numberOfDaysToReturn;
     }
 
-    checkDetailsFields() {
-        // if (
-        //     this.sumInsured.value != 0 &&
-        //     this.selectedInsuranceType != null &&
-        //     this.selectedProductType != null &&
-        //     this.riskStartDate != null &&
-        //     this.riskEndDate != null &&
-        //     this.riskQuarter != null &&
-        //     this.vehicleDetailsComponent.getVehicleDetailFormValidity()
-        // ) {
-        //     this.setRiskDetailsValidity(true);
-        // } else {
-        //     this.setRiskDetailsValidity(false);
-        // }
-    }
-
     resetRiskDetails() {
         this.changeVehicleDetailsReset(true);
         this.sumInsured.next(0);
@@ -591,5 +614,9 @@ export class PremiumComputationService {
         this.premiumLevy.next(0);
         this.netPremium.next(0);
         this.extendedBasicPremium = 0;
+    }
+
+    ngOnDestroy() {
+        this.classHandlerSubscription.unsubscribe();
     }
 }

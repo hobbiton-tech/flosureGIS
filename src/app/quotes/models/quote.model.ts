@@ -4,6 +4,10 @@ import {
     ISelectedInsuranceType
 } from './premium-computations.model';
 import { IDiscounts } from './discounts.model';
+import { VehicleDetailsModel } from './vehicle-details.model';
+import { PropertyDetailsModel } from './fire-class/property-details.model';
+import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
+import { IExccess } from 'src/app/settings/models/underwriting/clause.model';
 
 export class MotorQuotationModel {
     id?: string;
@@ -27,6 +31,7 @@ export class MotorQuotationModel {
     intermediaryName: string;
     intermediaryId: string;
     quarter: string;
+    class?: IClass;
 }
 
 export class LoadModel {
@@ -39,37 +44,25 @@ export class RiskModel {
     riskStartDate: Date;
     riskEndDate: Date;
     riskQuarter: string;
-    regNumber?: string;
-    vehicleMake?: string;
-    vehicleModel?: string;
-    yearOfManufacture?: string;
-    engineNumber?: string;
-    chassisNumber?: string;
-    cubicCapacity?: string;
-    seatingCapacity?: string;
-    bodyType?: BodyType;
-    color?: string;
-    estimatedValue?: number;
     productType: string;
     insuranceType: string;
     sumInsured?: number;
     premiumRate?: number;
     basicPremium: number;
-    loads?: LoadModel[];
-    loadingTotal?: number;
     extensions?: IExtensions[];
     extensionsTotal?: number;
     discountsTotal: number;
     discounts?: IDiscounts[];
     discountSubTotal?: number;
-    discountRate?: number;
     premiumLevy: number;
     netPremium: number;
     numberOfDays: number;
-    expiryQuarter: string;
+    expiryQuarter?: string;
     limitsOfLiability?: LimitsOfLiability[];
-    excesses?: Excess[];
+    excesses?: IExccess[];
     LiabilityType?: string;
+    vehicle?: VehicleDetailsModel;
+    property?: PropertyDetailsModel;
 }
 
 export class MessageModel {

@@ -1,14 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { QuotesService } from './services/quotes.service';
 import { MotorQuotationModel } from './models/quote.model';
 import { Router } from '@angular/router';
+import { InsuranceClassHandlerService } from '../underwriting/services/insurance-class-handler.service';
+import { Subscription } from 'rxjs';
+import { IClass } from '../settings/components/product-setups/models/product-setups-models.model';
+import { StringValueToken } from 'html2canvas/dist/types/css/syntax/tokenizer';
 
 @Component({
     selector: 'app-quotes',
     templateUrl: './quotes.component.html',
     styleUrls: ['./quotes.component.scss']
 })
-export class QuotesComponent implements OnInit {
+export class QuotesComponent implements OnInit, OnDestroy {
+    classHandlerSubscription: Subscription;
+
+    currentClass: IClass;
+    currentClassName: string;
+    currentClassDisplay: string;
+
     quotesList: MotorQuotationModel[];
     displayQuotesList: MotorQuotationModel[];
     quotesCount = 0;
@@ -16,20 +26,37 @@ export class QuotesComponent implements OnInit {
 
     searchString: string;
 
-    constructor(private quoteServise: QuotesService, private router: Router) {}
+    constructor(
+        private quoteServise: QuotesService,
+        private router: Router,
+        private classHandler: InsuranceClassHandlerService
+    ) {
+        this.classHandlerSubscription = this.classHandler.selectedClassChanged$.subscribe(
+            currentClass => {
+                this.currentClass = JSON.parse(
+                    localStorage.getItem('classObject')
+                );
+                this.currentClassName = localStorage.getItem('class');
+
+                this.currentClassDisplay = currentClass.className;
+            }
+        );
+    }
 
     ngOnInit(): void {
         this.isOkLoading = true;
         setTimeout(() => {
             this.isOkLoading = false;
         }, 3000);
+
         this.quoteServise.getMotorQuotations().subscribe(quotes => {
             this.quotesList = quotes;
             this.quotesCount = quotes.length;
-            console.log('======= Quote List =======');
-            console.log(this.quotesList);
 
-            this.displayQuotesList = this.quotesList;
+            this.displayQuotesList = this.quotesList.filter(
+                x => x.class.className == localStorage.getItem('class')
+            );
+            this.quotesCount = this.displayQuotesList.length;
         });
     }
 
@@ -67,5 +94,9 @@ export class QuotesComponent implements OnInit {
 
     onCreateQuoteClicked(): void {
         this.router.navigateByUrl('/flosure/quotes/create-quote');
+    }
+
+    ngOnDestroy() {
+        this.classHandlerSubscription.unsubscribe();
     }
 }

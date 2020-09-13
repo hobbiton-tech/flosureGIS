@@ -91,21 +91,57 @@ export class LimitsOfLiabilityComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.limitsOfLiabilityForm = this.formBuilder.group({
-            deathAndInjuryPerPerson: ['', Validators.required],
-            deathAndInjuryPerEvent: ['', Validators.required],
-            propertyDamage: ['', Validators.required],
-            deathAndInjuryPerPersonPremium: ['', Validators.required],
-            deathAndInjuryPerEventPremium: ['', Validators.required],
-            propertyDamagePremium: ['', Validators.required],
-            deathAndInjuryPerPersonRate: ['', Validators.required],
-            deathAndInjuryPerEventRate: ['', Validators.required],
-            propertyDamageRate: ['', Validators.required]
+            deathAndInjuryPerPerson: [
+                { value: '', disabled: this.isRiskEditMode },
+                Validators.required
+            ],
+            deathAndInjuryPerEvent: [
+                { value: '', disabled: this.isRiskEditMode },
+                Validators.required
+            ],
+            propertyDamage: [
+                { value: '', disabled: this.isRiskEditMode },
+                Validators.required
+            ],
+            deathAndInjuryPerPersonPremium: [
+                { value: '', disabled: true },
+                Validators.required
+            ],
+            deathAndInjuryPerEventPremium: [
+                { value: '', disabled: true },
+                Validators.required
+            ],
+            propertyDamagePremium: [
+                { value: '', disabled: true },
+                Validators.required
+            ],
+            deathAndInjuryPerPersonRate: [
+                { value: '', disabled: this.isRiskEditMode },
+                Validators.required
+            ],
+            deathAndInjuryPerEventRate: [
+                { value: '', disabled: this.isRiskEditMode },
+                Validators.required
+            ],
+            propertyDamageRate: [
+                { value: '', disabled: this.isRiskEditMode },
+                Validators.required
+            ]
         });
 
         this.combinedLimitsForm = this.formBuilder.group({
-            combinedLimits: ['', Validators.required],
-            combinedLimitsPremium: ['', Validators.required],
-            combinedLimitsRate: ['', Validators.required]
+            combinedLimits: [
+                { value: '', disabled: this.isRiskEditMode },
+                Validators.required
+            ],
+            combinedLimitsPremium: [
+                { value: '', disabled: true },
+                Validators.required
+            ],
+            combinedLimitsRate: [
+                { value: '', disabled: this.isRiskEditMode },
+                Validators.required
+            ]
         });
 
         //set default values for limits of liability

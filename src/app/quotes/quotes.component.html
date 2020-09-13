@@ -2,8 +2,8 @@
     <div style="margin: 20px;">
         <div style="margin-bottom: 20px; background: #fff;">
             <nz-page-header>
-                <nz-page-header-title>Motor Quotations</nz-page-header-title>
-                <nz-page-header-subtitle>List of all quotes</nz-page-header-subtitle>
+                <nz-page-header-title>{{ currentClassDisplay ? currentClassDisplay : ''}} Quotations
+                </nz-page-header-title>
                 <nz-page-header-extra>
                     <button nz-button nzType="primary" (click)="onCreateQuoteClicked()">
                         Create new quote

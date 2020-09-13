@@ -26,11 +26,17 @@ export class ExtensionsComponent implements OnInit, OnDestroy {
     ) {
         this.extensionsTotalSubscription = this.premiumComputationService.extensionsTotalChanged$.subscribe(
             extensionsTotal => {
+                console.log(
+                    'extensions changed, listening from extensions comp'
+                );
                 this.extensionsTotal = extensionsTotal;
             }
         );
         this.extensionsListChanges = this.premiumComputationService.extensionsTotalChanged$.subscribe(
             extensions => {
+                console.log(
+                    'extensions changed, listening from extensions comp'
+                );
                 this.extensionList = this.premiumComputationService.getExtensions();
             }
         );

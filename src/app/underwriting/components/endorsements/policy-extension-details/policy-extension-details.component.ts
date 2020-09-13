@@ -23,6 +23,14 @@ import {
 } from 'src/app/quotes/models/premium-computations.model';
 import { ITotalsModel } from 'src/app/quotes/models/totals.model';
 import { PremiumComputationService } from 'src/app/quotes/services/premium-computation.service';
+import { PropertyDetailsModel } from 'src/app/quotes/models/fire-class/property-details.model';
+import { QuotesService } from 'src/app/quotes/services/quotes.service';
+import { PropertyDetailsComponent } from 'src/app/quotes/components/fire-class/property-details/property-details.component';
+import { CreateQuoteComponent } from 'src/app/quotes/components/create-quote/create-quote.component';
+import { InsuranceClassHandlerService } from 'src/app/underwriting/services/insurance-class-handler.service';
+import { DebitNote } from 'src/app/underwriting/documents/models/documents.model';
+import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'app-policy-extension-details',
@@ -33,12 +41,16 @@ export class PolicyExtensionDetailsComponent implements OnInit, OnDestroy {
     riskStartDateSubcription: Subscription;
     riskEndDateSubscription: Subscription;
     numberOfDaysSubscription: Subscription;
+    netPremiumSubscription: Subscription;
 
     // view risk modal
     viewRiskModalVisible = false;
 
     // loading feedback
     policyExtensionDetailsIsLoading = false;
+
+    vehicle: VehicleDetailsModel;
+    property: PropertyDetailsModel;
 
     //loading feedback
     updatingPolicy: boolean = false;
@@ -76,6 +88,15 @@ export class PolicyExtensionDetailsComponent implements OnInit, OnDestroy {
 
     policyRiskExtensionUpdate = new BehaviorSubject<boolean>(false);
 
+    // premium before any endorsements
+    currentPremium: number = 0;
+
+    // dynamic premium
+    newPremium: number = 0;
+
+    // debit note amount
+    debitNoteAmount: number = 0;
+
     constructor(
         private route: ActivatedRoute,
         private formBuilder: FormBuilder,
@@ -91,7 +112,12 @@ export class PolicyExtensionDetailsComponent implements OnInit, OnDestroy {
         private discountsComponent: DiscountsComponent,
         private totalsComponent: TotalsViewComponent,
         private vehicleDetailsService: VehicleDetailsServiceService,
-        private premiumComputationService: PremiumComputationService
+        private premiumComputationService: PremiumComputationService,
+        private readonly quoteService: QuotesService,
+        private propertyDetailsComponent: PropertyDetailsComponent,
+        private createQuoteComponent: CreateQuoteComponent,
+        private classHandler: InsuranceClassHandlerService,
+        private http: HttpClient
     ) {
         // this.numberOfDaysSubscription = this.premiumComputationService.numberOfDaysChanged$.subscribe(
         //     numberOfDays => {
@@ -103,6 +129,12 @@ export class PolicyExtensionDetailsComponent implements OnInit, OnDestroy {
         // this.riskEndDateSubscription = this.premiumComputationService.riskEndDateChanged$.subscribe(
         //     riskEndDate => {
         //         this.riskEndDate = riskEndDate;
+        //     }
+        // );
+        // this.netPremiumSubscription = this.premiumComputationService.netPremiumChanged$.subscribe(
+        //     netPremium => {
+        //         this.newPremium = netPremium;
+        //         this.calculateDebitNoteAmount();
         //     }
         // );
     }
@@ -138,6 +170,8 @@ export class PolicyExtensionDetailsComponent implements OnInit, OnDestroy {
         this.route.params.subscribe(id => {
             this.policiesService.getPolicyById(id['id']).subscribe(policy => {
                 this.policyData = policy;
+                this.currentPremium = this.policyData.netPremium;
+                this.classHandler.changeSelectedClass(this.policyData.class);
                 this.risks = policy.risks;
                 this.displayRisks = this.risks;
 
@@ -189,50 +223,7 @@ export class PolicyExtensionDetailsComponent implements OnInit, OnDestroy {
         this.premiumComputationService.changeRiskEditMode(true);
         this.premiumComputationService.changeExtensionMode(true);
 
-        this.selectedRisk = risk;
-        this.viewRiskModalVisible = true;
-
-        const vehicleDetails: VehicleDetailsModel = {
-            vehicleMake: risk.vehicleMake,
-            vehicleModel: risk.vehicleModel,
-            yearOfManufacture: risk.yearOfManufacture,
-            regNumber: risk.regNumber,
-            engineNumber: risk.engineNumber,
-            chassisNumber: risk.chassisNumber,
-            color: risk.color,
-            cubicCapacity: risk.cubicCapacity,
-            seatingCapacity: risk.seatingCapacity,
-            bodyType: risk.bodyType
-        };
-
-        const premiumComputationDetails: PremiumComputationDetails = {
-            insuranceType: risk.insuranceType,
-            productType: risk.productType,
-            riskStartDate: risk.riskStartDate,
-            riskEndDate: risk.riskEndDate,
-            riskQuarter: risk.riskQuarter,
-            numberOfDays: risk.numberOfDays,
-            expiryQuarter: risk.expiryQuarter
-        };
-
-        const premimuComputations: PremiumComputation = {
-            sumInsured: risk.sumInsured
-        };
-
-        const totals: ITotalsModel = {
-            basicPremium: risk.basicPremium,
-            premiumLevy: risk.premiumLevy,
-            netPremium: risk.netPremium
-        };
-
-        this.vehicleDetailsComponent.setVehicleDetails(vehicleDetails);
-        this.premiumComputationDetailsComponent.setPremiumComputationDetails(
-            premiumComputationDetails
-        );
-        this.premuimComputationsComponent.setPremiumComputations(
-            premimuComputations
-        );
-        this.totalsComponent.setTotals(totals);
+        this.createQuoteComponent.viewRiskDetails(risk);
     }
 
     recieveEditedRisk(risk: RiskModel) {
@@ -260,6 +251,10 @@ export class PolicyExtensionDetailsComponent implements OnInit, OnDestroy {
         this.updatingPolicy = true;
         console.log('endorse policy clicked!!');
 
+        const currentClassObj: IClass = JSON.parse(
+            localStorage.getItem('classObject')
+        );
+
         const endorsement: Endorsement = {
             ...this.endorsementForm.value,
             type: 'Extension_Of_Cover',
@@ -274,6 +269,14 @@ export class PolicyExtensionDetailsComponent implements OnInit, OnDestroy {
             risks: this.risks
         };
 
+        const debitNote: DebitNote = {
+            remarks: 'Policy Extension',
+            status: 'Pending',
+            debitNoteAmount: this.debitNoteAmount,
+            dateCreated: new Date(),
+            dateUpdated: new Date()
+        };
+
         this.endorsementService
             .createEndorsement(this.policyData.id, endorsement)
             .subscribe(endorsement => {
@@ -283,12 +286,32 @@ export class PolicyExtensionDetailsComponent implements OnInit, OnDestroy {
         this.policiesService.updatePolicy(policy).subscribe(policy => {
             res => {
                 console.log(res);
-                // this.router.navigateByUrl(
-                //     '/flosure/underwriting/endorsements/view-endorsements'
-                // );
+
+                this.http
+                    .get<any>(
+                        `https://number-generation.flosure-api.com/savenda-invoice-number/1/${currentClassObj.classCode}`
+                    )
+                    .subscribe(async resd => {
+                        debitNote.debitNoteNumber = resd.data.invoice_number;
+
+                        this.http
+                            .post<DebitNote>(
+                                `https://flosure-postgres-db.herokuapp.com/documents/debit-note/${this.policyData.id}`,
+                                debitNote
+                            )
+                            .subscribe(
+                                async resh => {
+                                    console.log(resh);
+                                },
+                                async err => {
+                                    console.log(err);
+                                }
+                            );
+                    });
+
+                this.msg.success('Endorsement Successful');
+                this.updatingPolicy = false;
             };
-            this.msg.success('Endorsement Successful');
-            this.updatingPolicy = false;
         });
     }
 
@@ -299,6 +322,9 @@ export class PolicyExtensionDetailsComponent implements OnInit, OnDestroy {
     updateRisksTable() {
         this.risks = this.risks;
         this.displayRisks = this.risks;
+
+        this.newPremium = this.sumArray(this.risks, 'netPremium');
+        this.calculateDebitNoteAmount();
     }
 
     trackByRiskId(index: number, risk: RiskModel): string {
@@ -309,8 +335,19 @@ export class PolicyExtensionDetailsComponent implements OnInit, OnDestroy {
         // this.premiumComputationService.changeExtendedPremium(numberOfDays);
     }
 
+    calculateDebitNoteAmount() {
+        this.debitNoteAmount = this.newPremium - this.currentPremium;
+    }
+
+    sumArray(items, prop) {
+        return items.reduce(function(a, b) {
+            return a + b[prop];
+        }, 0);
+    }
+
     ngOnDestroy() {
         // this.riskEndDateSubscription.unsubscribe();
         // this.numberOfDaysSubscription.unsubscribe();
+        this.netPremiumSubscription.unsubscribe();
     }
 }

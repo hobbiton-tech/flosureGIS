@@ -46,6 +46,9 @@ import { PolicyWordingComponent } from './documents/policy-wording/policy-wordin
 import { PolicyComprehensiveCertificateComponent } from './documents/policy-comprehensive-certificate/policy-comprehensive-certificate';
 import { PolicyThirdpartyCertificateComponent } from './documents/policy-thirdparty-certificate/policy-thirdparty-certificate.component';
 import { QuotesModule } from '../quotes/quotes.module';
+import { FirePolicyScheduleComponent } from './documents/Fire-insurance/fire-policy-schedule/fire-policy-schedule.component';
+import { FireCoverNoteComponent } from './documents/Fire-insurance/fire-cover-note/fire-cover-note.component';
+import { CreateQuoteComponent } from '../quotes/components/create-quote/create-quote.component';
 // tslint:disable-next-line: max-line-length
 
 const routes: Routes = [
@@ -160,7 +163,9 @@ const routes: Routes = [
         PolicyWordingComponent,
         PolicyComprehensiveCertificateComponent,
         PolicyThirdpartyCertificateComponent,
-        PolicyScheduleCombinedDocumentComponent
+        PolicyScheduleCombinedDocumentComponent,
+        FirePolicyScheduleComponent,
+        FireCoverNoteComponent
     ],
     imports: [
         CommonModule,
@@ -172,6 +177,11 @@ const routes: Routes = [
         NgxPrintModule,
         QuotesModule
     ],
-    providers: [PolicyDetailsResolver, PoliciesService, EndorsementService]
+    providers: [
+        PolicyDetailsResolver,
+        PoliciesService,
+        EndorsementService,
+        CreateQuoteComponent
+    ]
 })
 export class UnderWritingModule {}

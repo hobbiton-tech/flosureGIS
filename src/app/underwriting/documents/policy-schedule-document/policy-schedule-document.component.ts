@@ -1,5 +1,9 @@
 import { Risks } from './../../../reports/model/quotation.model';
-import { LimitsOfLiability, LiabilityType, Excess } from './../../../quotes/models/quote.model';
+import {
+    LimitsOfLiability,
+    LiabilityType,
+    Excess
+} from './../../../quotes/models/quote.model';
 import { Component, OnInit, Input } from '@angular/core';
 import { RiskModel } from 'src/app/quotes/models/quote.model';
 import { Policy } from '../../models/policy.model';
@@ -7,16 +11,16 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import {
     ICorporateClient,
-    IIndividualClient,
+    IIndividualClient
 } from 'src/app/clients/models/clients.model';
 import moment from 'moment';
 import { CoverNote } from '../models/documents.model';
+import { IExccess } from 'src/app/settings/models/underwriting/clause.model';
 
 @Component({
     selector: 'app-policy-schedule-document',
     templateUrl: './policy-schedule-document.component.html',
-    styleUrls: ['./policy-schedule-document.component.scss'],
-
+    styleUrls: ['./policy-schedule-document.component.scss']
 })
 export class PolicyScheduleDocumentComponent implements OnInit {
     @Input()
@@ -97,9 +101,8 @@ export class PolicyScheduleDocumentComponent implements OnInit {
     @Input()
     noLicence: number;
 
-
     @Input()
-    excessList: Excess[];
+    excessList: IExccess[];
 
     @Input()
     careLessDriving: number;
@@ -115,44 +118,44 @@ export class PolicyScheduleDocumentComponent implements OnInit {
 
     generatingPDF = false;
 
-    comb:LimitsOfLiability;
-    limits:LimitsOfLiability;
+    comb: LimitsOfLiability;
+    limits: LimitsOfLiability;
 
     deathPE: LimitsOfLiability;
 
     deathPP: LimitsOfLiability;
     propertyD: LimitsOfLiability;
 
-
-
     ngOnInit(): void {
         this.todayDate = new Date();
-        this.getLimit()
+        this.getLimit();
     }
 
     getLimit() {
-        for(const lim of this.limitsOfLiablity) {
-            this.limits = lim
-            if( lim.liabilityType === 'combinedLimits') {
-                this.comb = lim
+        for (const lim of this.limitsOfLiablity) {
+            this.limits = lim;
+            if (lim.liabilityType === 'combinedLimits') {
+                this.comb = lim;
             }
 
-            if( lim.liabilityType === 'deathAndInjuryPerEvent') {
-                this.deathPE = lim
+            if (lim.liabilityType === 'deathAndInjuryPerEvent') {
+                this.deathPE = lim;
             }
 
-            if( lim.liabilityType === 'deathAndInjuryPerPerson') {
-                this.deathPP = lim
+            if (lim.liabilityType === 'deathAndInjuryPerPerson') {
+                this.deathPP = lim;
             }
 
-            if( lim.liabilityType === 'propertyDamage') {
-                this.propertyD = lim
+            if (lim.liabilityType === 'propertyDamage') {
+                this.propertyD = lim;
             }
         }
     }
 
     getYearOfManufacture(risk: RiskModel) {
-        const year: string = moment(risk.yearOfManufacture).year().toString();
+        const year: string = moment(risk.vehicle.yearOfManufacture)
+            .year()
+            .toString();
         return year;
     }
 
@@ -162,13 +165,13 @@ export class PolicyScheduleDocumentComponent implements OnInit {
         const options = {
             background: 'white',
             height: div.clientHeight,
-            width: div.clientWidth,
+            width: div.clientWidth
         };
 
-        html2canvas(div, options).then((canvas) => {
+        html2canvas(div, options).then(canvas => {
             const doc = new jsPDF({
                 unit: 'mm',
-                format: 'a3',
+                format: 'a3'
             });
             const imgData = canvas.toDataURL('image/PNG');
             doc.addImage(imgData, 'PNG', 0, 0, 297, 420);

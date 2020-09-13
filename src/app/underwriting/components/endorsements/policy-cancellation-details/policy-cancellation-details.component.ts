@@ -30,6 +30,11 @@ import { CancellationTypeOptions } from 'src/app/quotes/selection-options';
 import { IRequisitionModel } from 'src/app/accounts/components/models/requisition.model';
 import { v4 } from 'uuid';
 import { AccountService } from 'src/app/accounts/services/account.service';
+import { PropertyDetailsModel } from 'src/app/quotes/models/fire-class/property-details.model';
+import { PropertyDetailsComponent } from 'src/app/quotes/components/fire-class/property-details/property-details.component';
+import { QuotesService } from 'src/app/quotes/services/quotes.service';
+import { CreateQuoteComponent } from 'src/app/quotes/components/create-quote/create-quote.component';
+import { InsuranceClassHandlerService } from 'src/app/underwriting/services/insurance-class-handler.service';
 
 @Component({
     selector: 'app-policy-cancellation-details',
@@ -43,6 +48,9 @@ export class PolicyCancellationDetailsComponent implements OnInit {
 
     // loading feedback
     policyCancellationDetailsIsLoading = false;
+
+    vehicle: VehicleDetailsModel;
+    property: PropertyDetailsModel;
 
     //loading feedback
     cancellingPolicy: boolean = false;
@@ -107,6 +115,7 @@ export class PolicyCancellationDetailsComponent implements OnInit {
         private readonly router: Router,
         private endorsementService: EndorsementService,
         private vehicleDetailsComponent: VehicleDetailsComponent,
+        private propertyDetailsComponent: PropertyDetailsComponent,
         private premuimComputationsComponent: PremiumComputationComponent,
         private premiumComputationDetailsComponent: PremiumComputationDetailsComponent,
         private extensionsComponent: ExtensionsComponent,
@@ -114,7 +123,10 @@ export class PolicyCancellationDetailsComponent implements OnInit {
         private totalsComponent: TotalsViewComponent,
         private vehicleDetailsService: VehicleDetailsServiceService,
         private premiumComputationService: PremiumComputationService,
-        private accountsService: AccountService
+        private accountsService: AccountService,
+        private readonly quoteService: QuotesService,
+        private createQuoteComponent: CreateQuoteComponent,
+        private classHandler: InsuranceClassHandlerService
     ) {}
 
     ngOnInit(): void {
@@ -157,6 +169,7 @@ export class PolicyCancellationDetailsComponent implements OnInit {
         this.route.params.subscribe(id => {
             this.policiesService.getPolicyById(id['id']).subscribe(policy => {
                 this.policyData = policy;
+                this.classHandler.changeSelectedClass(this.policyData.class);
                 this.risks = policy.risks;
 
                 this.policyRisk = policy.risks[0];
@@ -231,49 +244,8 @@ export class PolicyCancellationDetailsComponent implements OnInit {
         this.premiumComputationService.changeRiskEditMode(true);
         this.premiumComputationService.changeExtensionMode(false);
         this.selectedRisk = risk;
-        this.viewRiskModalVisible = true;
 
-        const vehicleDetails: VehicleDetailsModel = {
-            vehicleMake: risk.vehicleMake,
-            vehicleModel: risk.vehicleModel,
-            yearOfManufacture: risk.yearOfManufacture,
-            regNumber: risk.regNumber,
-            engineNumber: risk.engineNumber,
-            chassisNumber: risk.chassisNumber,
-            color: risk.color,
-            cubicCapacity: risk.cubicCapacity,
-            seatingCapacity: risk.seatingCapacity,
-            bodyType: risk.bodyType
-        };
-
-        const premiumComputationDetails: PremiumComputationDetails = {
-            insuranceType: risk.insuranceType,
-            productType: risk.productType,
-            riskStartDate: risk.riskStartDate,
-            riskEndDate: risk.riskEndDate,
-            riskQuarter: risk.riskQuarter,
-            numberOfDays: risk.numberOfDays,
-            expiryQuarter: risk.expiryQuarter
-        };
-
-        const premimuComputations: PremiumComputation = {
-            sumInsured: risk.sumInsured
-        };
-
-        const totals: ITotalsModel = {
-            basicPremium: risk.basicPremium,
-            premiumLevy: risk.premiumLevy,
-            netPremium: risk.netPremium
-        };
-
-        this.vehicleDetailsComponent.setVehicleDetails(vehicleDetails);
-        this.premiumComputationDetailsComponent.setPremiumComputationDetails(
-            premiumComputationDetails
-        );
-        this.premuimComputationsComponent.setPremiumComputations(
-            premimuComputations
-        );
-        this.totalsComponent.setTotals(totals);
+        this.createQuoteComponent.viewRiskDetails(risk);
     }
 
     handleCreditNotePremium() {
@@ -336,6 +308,7 @@ export class PolicyCancellationDetailsComponent implements OnInit {
 
         const creditNote: CreditNote = {
             remarks: this.endorsementForm.get('remark').value,
+            status: 'Pending',
             dateCreated: new Date(),
             dateUpdated: new Date(),
             creditNoteAmount: this.creditNoteAmount = this.policyCancellationTypeForm.get(

@@ -14,7 +14,7 @@ export class PremiumComputationDetails {
     riskEndDate: Date;
     riskQuarter: string;
     numberOfDays: number;
-    expiryQuarter: string;
+    expiryQuarter?: string;
 }
 
 export interface ISelectedInsuranceType {

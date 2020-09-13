@@ -285,7 +285,7 @@
                 >
                     <tspan x="0" y="0">Vehicle Reg No:</tspan>
                     <tspan class="cls-11" y="0">
-                        {{ policyRisk.regNumber }}
+                        {{ policyRisk.vehicle?.regNumber }}
                     </tspan>
                 </text>
                 <text
@@ -296,7 +296,7 @@
                 >
                     <tspan x="0" y="0">Make:</tspan>
                     <tspan class="cls-11" y="0">
-                        {{ policyRisk.vehicleMake }}
+                        {{ policyRisk.vehicle?.vehicleMake }}
                     </tspan>
                 </text>
                 <text
@@ -307,7 +307,7 @@
                 >
                     <tspan x="0" y="0">Model:</tspan>
                     <tspan class="cls-11" y="0">
-                        {{ policyRisk.vehicleModel }}
+                        {{ policyRisk.vehicle?.vehicleModel }}
                     </tspan>
                 </text>
                 <text
@@ -318,7 +318,7 @@
                 >
                     <tspan x="0" y="0">Color:</tspan>
                     <tspan class="cls-11" y="0">
-                        {{ ' ' + policyRisk.color }}
+                        {{ ' ' + policyRisk.vehicle?.color }}
                     </tspan>
                 </text>
                 <text
@@ -329,7 +329,7 @@
                 >
                     <tspan x="0" y="0">Engine No:</tspan>
                     <tspan class="cls-11" y="0">
-                        {{ policyRisk.engineNumber }}
+                        {{ policyRisk.vehicle?.engineNumber }}
                     </tspan>
                 </text>
                 <text
@@ -340,7 +340,7 @@
                 >
                     <tspan x="0" y="0">Chassis No:</tspan>
                     <tspan class="cls-11" y="0">
-                        {{ ' ' + policyRisk.chassisNumber }}
+                        {{ ' ' + policyRisk.vehicle?.chassisNumber }}
                     </tspan>
                 </text>
                 <text
@@ -603,8 +603,8 @@
                     transform="translate(298 137)"
                 >
                     <tspan x="0" y="0" xml:space="preserve">
-                        Make & Model: {{ policyRisk.vehicleMake }}
-                        {{ policyRisk.vehicleModel }}
+                        Make & Model: {{ policyRisk.vehicle?.vehicleMake }}
+                        {{ policyRisk.vehicle?.vehicleModel }}
                     </tspan>
                 </text>
 
@@ -615,7 +615,7 @@
                     transform="translate(302 157)"
                 >
                     <tspan x="0" y="0">
-                        Color:{{ ' ' + policyRisk.color }}
+                        Color:{{ ' ' + policyRisk.vehicle?.color }}
                     </tspan>
                 </text>
                 rec
@@ -626,7 +626,7 @@
                     transform="translate(298 177)"
                 >
                     <tspan x="0" y="0" xml:space="preserve">
-                        Year of Make: {{ getYearOfManufacture(policyRisk) }}
+                        Year of Make: {{ policyRisk.vehicle?.yearOfManufacture }}
                     </tspan>
                 </text>
 
@@ -646,7 +646,7 @@
                     transform="translate(298 217)"
                 >
                     <tspan x="0" y="0" xml:space="preserve">
-                        Chassis No: {{ ' ' + policyRisk.chassisNumber }}
+                        Chassis No: {{ ' ' + policyRisk.vehicle?.chassisNumber }}
                     </tspan>
                 </text>
 
@@ -657,7 +657,7 @@
                     transform="translate(298 237)"
                 >
                     <tspan x="0" y="0" xml:space="preserve">
-                        Engine No: {{ policyRisk.engineNumber }}
+                        Engine No: {{ policyRisk.vehicle?.engineNumber }}
                     </tspan>
                 </text>
 
@@ -668,7 +668,7 @@
                     transform="translate(298 257)"
                 >
                     <tspan x="0" y="0" xml:space="preserve">
-                        Seating Capacity: {{ policyRisk.seatingCapacity }}
+                        Seating Capacity: {{ policyRisk.vehicle?.seatingCapacity }}
                     </tspan>
                 </text>
 
@@ -679,7 +679,7 @@
                     transform="translate(298 277)"
                 >
                     <tspan x="0" y="0" xml:space="preserve">
-                        Vehicle Registration No: {{ policyRisk.regNumber }}
+                        Vehicle Registration No: {{ policyRisk.vehicle?.regNumber }}
                     </tspan>
                 </text>
 

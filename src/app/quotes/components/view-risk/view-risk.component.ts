@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output } from '@angular/core';
+import { Component, OnInit, Input, Output, OnDestroy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { EventEmitter } from '@angular/core';
 import { RiskModel } from '../../models/quote.model';
@@ -6,13 +6,20 @@ import { VehicleDetailsServiceService } from '../../services/vehicle-details-ser
 import { VehicleDetailsComponent } from '../vehicle-details/vehicle-details.component';
 import { VehicleDetailsModel } from '../../models/vehicle-details.model';
 import { PremiumComputationService } from '../../services/premium-computation.service';
+import { Subscription } from 'rxjs';
+import { InsuranceClassHandlerService } from 'src/app/underwriting/services/insurance-class-handler.service';
+import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
 
 @Component({
     selector: 'app-view-risk',
     templateUrl: './view-risk.component.html',
     styleUrls: ['./view-risk.component.scss']
 })
-export class ViewRiskComponent implements OnInit {
+export class ViewRiskComponent implements OnInit, OnDestroy {
+    classHandlerSubscription: Subscription;
+    currentClass: IClass;
+    currentClassName: string;
+
     @Input()
     isViewRiskModalVisible: boolean;
 
@@ -34,8 +41,15 @@ export class ViewRiskComponent implements OnInit {
     constructor(
         private vehicleDetailsService: VehicleDetailsServiceService,
         private premiumComputationService: PremiumComputationService,
-        private vehicleDetailsComponent: VehicleDetailsComponent
-    ) {}
+        private vehicleDetailsComponent: VehicleDetailsComponent,
+        private classHandler: InsuranceClassHandlerService
+    ) {
+        this.classHandlerSubscription = this.classHandler.selectedClassChanged$.subscribe(
+            currentClass => {
+                this.currentClassName = localStorage.getItem('class');
+            }
+        );
+    }
 
     riskComprehensiveForm: FormGroup;
     riskThirdPartyForm: FormGroup;
@@ -58,7 +72,7 @@ export class ViewRiskComponent implements OnInit {
         this.premiumComputationService.resetRiskDetails();
     }
 
-    // save risks changes after editing
+    // save risks changes after editingz
     saveRisk(): void {
         this.saveRiskEmitter.emit(true);
         this.riskEditModeOff();
@@ -82,5 +96,9 @@ export class ViewRiskComponent implements OnInit {
 
     riskExtensionModeOff() {
         this.premiumComputationService.changeExtensionMode(true);
+    }
+
+    ngOnDestroy() {
+        this.classHandlerSubscription.unsubscribe();
     }
 }

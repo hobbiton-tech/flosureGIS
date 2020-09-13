@@ -46,6 +46,12 @@ import {
     PremiumComputation
 } from 'src/app/quotes/models/premium-computations.model';
 import { ITotalsModel } from 'src/app/quotes/models/totals.model';
+import { PropertyDetailsComponent } from 'src/app/quotes/components/fire-class/property-details/property-details.component';
+import { PropertyDetailsModel } from 'src/app/quotes/models/fire-class/property-details.model';
+import { CreateQuoteComponent } from 'src/app/quotes/components/create-quote/create-quote.component';
+import { InsuranceClassHandlerService } from '../../services/insurance-class-handler.service';
+import { DebitNote } from '../../documents/models/documents.model';
+import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
 
 type AOA = any[][];
 
@@ -93,6 +99,9 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
 
     // loading feedback
     policyRenewalDetailsIsLoading = false;
+
+    vehicle: VehicleDetailsModel;
+    property: PropertyDetailsModel;
 
     // modals
     addRiskFormModalVisible = false;
@@ -226,7 +235,10 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
         private extensionsComponent: ExtensionsComponent,
         private discountsComponent: DiscountsComponent,
         private totalsComponent: TotalsViewComponent,
-        private vehicleDetailsService: VehicleDetailsServiceService
+        private vehicleDetailsService: VehicleDetailsServiceService,
+        private propertyDetailsComponent: PropertyDetailsComponent,
+        private createQuoteComponent: CreateQuoteComponent,
+        private classHandler: InsuranceClassHandlerService
     ) {
         this.paymentPlanForm = this.formBuilder.group({
             numberOfInstallments: ['', Validators.required],
@@ -240,21 +252,21 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
     switchLoading = false;
 
     compareFn = (o1: any, o2: any) =>
-        o1 && o2 ? o1.value === o2.value : o1 === o2
+        o1 && o2 ? o1.value === o2.value : o1 === o2;
 
     disabledStartDate = (startValue: Date): boolean => {
         if (!startValue || !this.endValue) {
             return false;
         }
         return startValue.getTime() > this.endValue.getTime();
-    }
+    };
 
     disabledEndDate = (endValue: Date): boolean => {
         if (!endValue || !this.startValue) {
             return false;
         }
         return endValue.getTime() <= this.startValue.getTime();
-    }
+    };
     ngOnInit(): void {
         this.policyRenewalDetailsIsLoading = true;
         setTimeout(() => {
@@ -264,6 +276,8 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
         this.route.params.subscribe(id => {
             this.policiesService.getPolicyById(id.id).subscribe(policy => {
                 this.policyData = policy;
+
+                this.classHandler.changeSelectedClass(this.policyData.class);
 
                 this.policyID = this.policyData.id;
                 this.policyNumber = this.policyData.policyNumber;
@@ -355,46 +369,6 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
             town: [''],
             remarks: ['', Validators.required]
         });
-
-        // set values of fields
-        // this.policiesService.getPolicies().subscribe((policies) => {
-        //     this.policyData = policies.filter(
-        //         (x) => x.policyNumber === this.policyNumber
-        //     )[0];
-        //     this.policyDetailsForm
-        //         .get('client')
-        //         .setValue(this.policyData.client);
-        //     this.policyDetailsForm
-        //         .get('nameOfInsured')
-        //         .setValue(this.policyData.nameOfInsured);
-        //     this.policyDetailsForm
-        //         .get('startDate')
-        //         .setValue(this.policyData.startDate);
-        //     this.policyDetailsForm
-        //         .get('endDate')
-        //         .setValue(this.policyData.endDate);
-        //     this.policyDetailsForm
-        //         .get('sumInsured')
-        //         .setValue(this.policyData.sumInsured);
-        //     this.policyDetailsForm
-        //         .get('netPremium')
-        //         .setValue(this.policyData.netPremium);
-        //     this.policyDetailsForm
-        //         .get('currency')
-        //         .setValue(this.policyData.currency);
-        //     this.policyDetailsForm
-        //         .get('timeOfIssue')
-        //         .setValue(this.policyData.timeOfIssue);
-        //     this.policyDetailsForm
-        //         .get('dateOfIssue')
-        //         .setValue(this.policyData.dateOfIssue);
-        //     this.policyDetailsForm
-        //         .get('expiryDate')
-        //         .setValue(this.policyData.endDate);
-        //     this.policyDetailsForm
-        //         .get('quarter')
-        //         .setValue(this.policyData.quarter);
-        // });
     }
 
     goToRenewPoliciesList(): void {
@@ -507,14 +481,14 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
                 receipt_type: 'Premium Payment',
                 sum_in_digits: this.paymentPlanForm.controls
                     .initialInstallmentAmount.value,
-                today_date: new Date(),
+                today_date: new Date()
             };
 
             const planReceipt: PlanReceipt[] = [];
             planReceipt.push({
                 allocation_status: 'Unallocated',
-                amount: this.paymentPlanForm.controls
-                    .initialInstallmentAmount.value,
+                amount: this.paymentPlanForm.controls.initialInstallmentAmount
+                    .value
             });
 
             // plan.planReceipt = planReceipt;
@@ -580,49 +554,8 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
     // view details of the risk
     viewRiskDetails(risk: RiskModel) {
         this.selectedRisk = risk;
-        this.viewRiskModalVisible = true;
 
-        const vehicleDetails: VehicleDetailsModel = {
-            vehicleMake: risk.vehicleMake,
-            vehicleModel: risk.vehicleModel,
-            yearOfManufacture: risk.yearOfManufacture,
-            regNumber: risk.regNumber,
-            engineNumber: risk.engineNumber,
-            chassisNumber: risk.chassisNumber,
-            color: risk.color,
-            cubicCapacity: risk.cubicCapacity,
-            seatingCapacity: risk.seatingCapacity,
-            bodyType: risk.bodyType
-        };
-
-        const premiumComputationDetails: PremiumComputationDetails = {
-            insuranceType: risk.insuranceType,
-            productType: risk.productType,
-            riskStartDate: risk.riskStartDate,
-            riskEndDate: risk.riskEndDate,
-            riskQuarter: risk.riskQuarter,
-            numberOfDays: risk.numberOfDays,
-            expiryQuarter: risk.expiryQuarter
-        };
-
-        const premimuComputations: PremiumComputation = {
-            sumInsured: risk.sumInsured
-        };
-
-        const totals: ITotalsModel = {
-            basicPremium: risk.basicPremium,
-            premiumLevy: risk.premiumLevy,
-            netPremium: risk.netPremium
-        };
-
-        this.vehicleDetailsComponent.setVehicleDetails(vehicleDetails);
-        this.premiumComputationDetailsComponent.setPremiumComputationDetails(
-            premiumComputationDetails
-        );
-        this.premuimComputationsComponent.setPremiumComputations(
-            premimuComputations
-        );
-        this.totalsComponent.setTotals(totals);
+        this.createQuoteComponent.viewRiskDetails(risk);
     }
 
     // remove risk from risks table
@@ -705,6 +638,9 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
             // console.log('CERT', cert.Location);
 
             // await this.quotesService.addQuoteDocuments()
+            const currentClassObj: IClass = JSON.parse(
+                localStorage.getItem('classObject')
+            );
 
             const endorsement: Endorsement = {
                 ...this.endorsementForm.value,
@@ -728,18 +664,50 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
                 user: localStorage.getItem('user')
             };
 
+            const debitNote: DebitNote = {
+                remarks: 'Policy renewal',
+                status: 'Pending',
+                debitNoteAmount: Number(
+                    this.sumArray(this.risks, 'netPremium')
+                ),
+                dateCreated: new Date(),
+                dateUpdated: new Date()
+            };
+
             this.policyData = policy;
 
             this.policyData.id = this.policyID;
             this.policyData.policyNumber = this.policyNumber;
 
-            console.log('POLICY>>>>', this.policyData);
-            await this.policiesService.renewPolicy(this.policyData);
+            this.policiesService.renewPolicy(this.policyData);
 
             this.endorsementService.createEndorsement(
                 this.policyData.id,
                 endorsement
             );
+
+            this.http
+                .get<any>(
+                    `https://number-generation.flosure-api.com/savenda-invoice-number/1/${currentClassObj.classCode}`
+                )
+                .subscribe(async resd => {
+                    debitNote.debitNoteNumber = resd.data.invoice_number;
+
+                    this.http
+                        .post<DebitNote>(
+                            `https://flosure-postgres-db.herokuapp.com/documents/debit-note/${this.policyData.id}`,
+                            debitNote
+                        )
+                        .subscribe(
+                            async resh => {
+                                console.log(resh);
+                            },
+                            async err => {
+                                console.log(err);
+                            }
+                        );
+                });
+
             setTimeout(() => {
                 this.loadingPolicy = false;
             }, 3000);

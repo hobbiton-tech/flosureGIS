@@ -15,6 +15,7 @@
             </nz-select>
         </nz-form-control>
     </nz-form-item>
+
     <div *ngIf="
                 selectedBasicPremiunTypeValue ==
                 'amount'
@@ -22,7 +23,7 @@
         <nz-form-item>
             <nz-form-label nzSpan="10" nzRequired>Sum
                 Insured</nz-form-label>
-            <nz-form-control nzSpan="9">
+            <nz-form-control nzSpan="12">
                 <input nz-input nzPlaceHolder="" name="sumInsured" type="number" [disabled]="isRiskEditMode"
                     [(ngModel)]="
                             sumInsured
@@ -31,10 +32,11 @@
                         }" />
             </nz-form-control>
         </nz-form-item>
+
         <nz-form-item>
             <nz-form-label nzSpan="10" nzRequired>Amount
             </nz-form-label>
-            <nz-form-control nzSpan="9">
+            <nz-form-control nzSpan="12">
                 <input nz-input nzPlaceHolder="" name="basicPremiumAmount" type="number" [disabled]="isRiskEditMode"
                     [(ngModel)]="
                             basicPremiumAmount
@@ -46,6 +48,8 @@
             </nz-form-control>
         </nz-form-item>
     </div>
+
+
     <div *ngIf="
                 selectedBasicPremiunTypeValue ==
                 'rate'
@@ -53,7 +57,7 @@
         <nz-form-item>
             <nz-form-label nzSpan="10" nzRequired>Sum
                 Insured</nz-form-label>
-            <nz-form-control nzSpan="9">
+            <nz-form-control nzSpan="12">
                 <input nz-input nzPlaceHolder="" name="sumInsured" type="number" [disabled]="isRiskEditMode"
                     [(ngModel)]="
                             sumInsured
@@ -64,10 +68,11 @@
                         " />
             </nz-form-control>
         </nz-form-item>
+
         <nz-form-item>
             <nz-form-label nzSpan="10" nzRequired>Premium
                 rate</nz-form-label>
-            <nz-form-control nzSpan="9">
+            <nz-form-control nzSpan="12">
                 <nz-input-group nzCompact>
                     <input nz-input disabled="true" value="%" style="
                                         width: 30%;

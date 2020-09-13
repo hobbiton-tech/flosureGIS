@@ -45,6 +45,9 @@ import { AddChequeLotComponent } from './components/finance/components/add-chequ
 import { ClaimsSetupsComponent } from './components/claims-setups/claims-setups.component';
 import { AddServiceProviderComponent } from './components/claims-setups/components/add-service-provider/add-service-provider.component';
 import { AddInsuranceCompanyComponent } from './components/claims-setups/components/add-insurance-company/add-insurance-company.component';
+import { LocationComponent } from './components/location-setups/components/location/location.component';
+import { AddProvinceComponent } from './components/location-setups/components/add-province/add-province.component';
+import { AddCityComponent } from './components/location-setups/components/add-city/add-city.component';
 
 const routes: Routes = [
     {
@@ -70,6 +73,10 @@ const routes: Routes = [
     {
         path: 'finance',
         component: FinanceComponent
+    },
+    {
+        path: 'location',
+        component: LocationComponent
     },
     {
         path: 'organization-setups',
@@ -160,7 +167,10 @@ const routes: Routes = [
         AddChequeLotComponent,
         ClaimsSetupsComponent,
         AddServiceProviderComponent,
-        AddInsuranceCompanyComponent
+        AddInsuranceCompanyComponent,
+        LocationComponent,
+        AddProvinceComponent,
+        AddCityComponent
     ],
     imports: [
         CommonModule,

@@ -3,14 +3,14 @@ import { ClausesService } from 'src/app/settings/components/underwriting-setups/
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {
     IWording,
-    IClause,
+    IClause
 } from 'src/app/settings/models/underwriting/clause.model';
 import { EventEmitter } from '@angular/core';
 
 @Component({
     selector: 'app-clauses',
     templateUrl: './clauses.component.html',
-    styleUrls: ['./clauses.component.scss'],
+    styleUrls: ['./clauses.component.scss']
 })
 export class ClausesComponent implements OnInit {
     clauses: any[] = [];
@@ -40,20 +40,20 @@ export class ClausesComponent implements OnInit {
     ) {
         this.wordingForm = formBuilder.group({
             heading: ['', Validators.required],
-            description: ['', Validators.required],
+            description: ['', Validators.required]
         });
         this.clauseForm = formBuilder.group({
             heading: ['', Validators.required],
-            clauseDetails: ['', Validators.required],
+            clauseDetails: ['', Validators.required]
         });
     }
 
     ngOnInit(): void {
-        this.clausesService.getClauses().subscribe((res) => {
+        this.clausesService.getClauses().subscribe(res => {
             this.clauseList = res;
         });
 
-        this.clausesService.getWordings().subscribe((res) => {
+        this.clausesService.getWordings().subscribe(res => {
             this.wordingList = res;
         });
     }
@@ -77,7 +77,7 @@ export class ClausesComponent implements OnInit {
         const wording: IWording = {
             ...this.wordingForm.value,
             id: this.editWording.id,
-            productId: this.editWording.productId,
+            productId: this.editWording.productId
         };
         this.clausesService.updateWording(wording);
 
@@ -90,7 +90,6 @@ export class ClausesComponent implements OnInit {
 
     onEditClause(value) {
         this.editClause = value;
-        console.log('Edit clause>>>>>', this.editClause);
 
         this.clauseForm.get('heading').setValue(this.editClause.heading);
         this.clauseForm
@@ -104,16 +103,14 @@ export class ClausesComponent implements OnInit {
         this.editClause.clauseDetails = this.clauseForm.controls.clauseDetails.value;
 
         const index = this.selectedClauseValue.indexOf(this.editClause);
-        console.log('index>>>>', index);
 
         this.selectedClauseValue[index] = this.editClause;
 
         const clause: IClause = {
             ...this.clauseForm.value,
             id: this.editClause.id,
-            productId: this.editClause.productId,
+            productId: this.editClause.productId
         };
-        console.log('Clause update>>>> ', clause);
 
         this.clausesService.updateClause(clause);
         this.isClauseEditVisible = false;

@@ -3,7 +3,7 @@
         <nz-form-item>
             <nz-form-label [nzSpan]="10" nzFor="load">Add Discount
             </nz-form-label>
-            <nz-form-control nzSpan="9">
+            <nz-form-control nzSpan="13">
                 <nz-select name="load" nzPlaceHolder="Select Discount" [(ngModel)]="
                         selectedDiscountValue
                     " nzAllowClear style="
@@ -25,7 +25,7 @@
 
 
     <div *ngIf="selectedDiscountValue">
-        <nz-form-item>
+        <!-- <nz-form-item>
             <nz-form-label nzSpan="10">Discount Input
                 Type</nz-form-label>
             <nz-form-control nzSpan="9">
@@ -40,7 +40,7 @@
                     </nz-option>
                 </nz-select>
             </nz-form-control>
-        </nz-form-item>
+        </nz-form-item> -->
         <div *ngIf=" selectedDiscountValue &&
                 selectedDiscountInputTypeValue ==
                     'amount'
@@ -48,7 +48,7 @@
             <nz-form-item>
                 <nz-form-label nzSpan="10" nzRequired>Amount
                 </nz-form-label>
-                <nz-form-control nzSpan="9">
+                <nz-form-control nzSpan="13">
                     <input nz-input nzPlaceHolder="" name="DiscountAmount" [(ngModel)]="
                                 discountAmount
                             " [ngModelOptions]="{

@@ -15,7 +15,7 @@
                 </div>
                 <div nz-col nzSpan="12">
                     <div style="width: 35%;">
-                        <nz-select [(ngModel)]="productClass" nzPlaceHolder="Select Product"
+                        <nz-select [(ngModel)]="productClass" nzPlaceHolder="Select Class"
                             (ngModelChange)="onChange($event)" nzAllowClear>
                             <nz-option *ngFor="let o of classesList" [nzValue]="o" [nzLabel]="o.className">
                             </nz-option>
@@ -152,7 +152,7 @@
                             <th>Heading</th>
                             <th>Description</th>
                             <th>Amount</th>
-                            <th>Vehicle Type</th>
+                            <th>Risk Category</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -278,6 +278,21 @@
 <nz-drawer [nzClosable]="false" [nzVisible]="isExccessVisible" nzPlacement="left" nzTitle="Create Excess"
     (nzOnClose)="closeExccess()" [nzWidth]="600">
     <form nz-form [formGroup]="exccessForm" (ngSubmit)="submitExccessForm()">
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Product</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating...">
+                <nz-select [(ngModel)]="selectedProduct" nzPlaceHolder="Select Product"
+                    (ngModelChange)="onSelectProduct($event)" [ngModelOptions]="{standalone: true}">
+                    <nz-option *ngFor="let product of productsList" [nzValue]="product" [nzLabel]="product.productName">
+                    </nz-option>
+                </nz-select>
+                <ng-template #exccessVTypeErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Please select your vehicle type!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
         <nz-form-item>
             <nz-form-label [nzSpan]="7" nzRequired>Heading</nz-form-label>
             <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..."

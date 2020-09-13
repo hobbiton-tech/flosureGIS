@@ -41,7 +41,7 @@
                         Combined
                         Limits:
                         <input nz-input name="combinedLimits" formControlName="combinedLimits" type="number" min="93200"
-                            [disabled]="isRiskEditMode" id="combinedLimits" (ngModelChange)="
+                            id="combinedLimits" (ngModelChange)="
                                     handleCombinedLimitsPremium()
                                 " />
                     </td>
@@ -50,14 +50,14 @@
                                     combinedLimitsRate
                                 " type="number" id="combinedLimitsRate" (ngModelChange)="
                                     handleCombinedLimitsPremium()
-                                " [disabled]="isRiskEditMode" />
+                                " />
                     </td>
                     <td>
                         Premium:
                         <input nz-input name="combinedLimitsPremium" formControlName="combinedLimitsPremium"
                             [(ngModel)]="
                                     combinedLimitsPremium
-                                " type="number" id="combinedLimitsPremium" disabled="true" />
+                                " type="number" id="combinedLimitsPremium" />
                     </td>
                 </tr>
             </form>
@@ -75,7 +75,7 @@
                         Injury Per
                         Person:
                         <input nz-input name="deathAndInjuryPerPerson" formControlName="deathAndInjuryPerPerson"
-                            [disabled]="isRiskEditMode" [(ngModel)]="
+                            [(ngModel)]="
                                     deathAndInjuryPerPerson
                                 " min="30100" type="number" id="deathAndInjuryPerPerson" (ngModelChange)="
                                     handleDeathAndInjuryPerPersonPremium()
@@ -84,7 +84,7 @@
                     <td>
                         Rate:
                         <input nz-input name="deathAndInjuryPerPersonRate" formControlName="deathAndInjuryPerPersonRate"
-                            [disabled]="isRiskEditMode" [(ngModel)]="
+                            [(ngModel)]="
                                     deathAndInjuryPerPersonRate
                                 " type="number" id="deathAndInjuryPerPersonRate" (ngModelChange)="
                                     handleDeathAndInjuryPerPersonPremium()
@@ -95,7 +95,7 @@
                         <input nz-input name="deathAndInjuryPerPersonPremium"
                             formControlName="deathAndInjuryPerPersonPremium" [(ngModel)]="
                                     deathAndInjuryPerPersonPremium
-                                " type="number" id="deathAndInjuryPerPersonPremium" disabled="true" />
+                                " type="number" id="deathAndInjuryPerPersonPremium" />
                     </td>
                 </tr>
                 <tr>
@@ -108,7 +108,7 @@
                                     deathAndInjuryPerEvent
                                 " min="60100" type="number" id="deathAndInjuryPerEvent" (ngModelChange)="
                                     handleDeathAndInjuryPerEventPremium()
-                                " [disabled]="isRiskEditMode" />
+                                " />
                     </td>
                     <td>
                         Rate:
@@ -117,14 +117,14 @@
                                     deathAndInjuryPerEventRate
                                 " type="number" id="deathAndInjuryPerEventRate" (ngModelChange)="
                                     handleDeathAndInjuryPerEventPremium()
-                                " [disabled]="isRiskEditMode" />
+                                " />
                     </td>
                     <td>
                         Premium:
                         <input nz-input name="deathAndInjuryPerEventPremium"
                             formControlName="deathAndInjuryPerEventPremium" [(ngModel)]="
                                     deathAndInjuryPerEventPremium
-                                " type="number" id="deathAndInjuryPerEventPremium" disabled="true" />
+                                " type="number" id="deathAndInjuryPerEventPremium" />
                     </td>
                 </tr>
                 <tr>
@@ -135,7 +135,7 @@
                                     propertyDamage
                                 " min="30000" type="number" id="propertyDamage" (ngModelChange)="
                                     handlePropertyDamagePremium()
-                                " [disabled]="isRiskEditMode" />
+                                " />
                     </td>
                     <td>
                         Rate:
@@ -143,14 +143,14 @@
                                     propertyDamageRate
                                 " type="number" id="propertyDamageRate" (ngModelChange)="
                                     handlePropertyDamagePremium()
-                                " [disabled]="isRiskEditMode" />
+                                " />
                     </td>
                     <td>
                         Premium:
                         <input nz-input name="propertyDamagePremium" formControlName="propertyDamagePremium"
                             [(ngModel)]="
                                     propertyDamagePremium
-                                " type="number" id="propertyDamagePremium" disabled="true" />
+                                " type="number" id="propertyDamagePremium" />
                     </td>
                 </tr>
             </form>
