@@ -11,7 +11,7 @@ import { IExccess } from 'src/app/settings/models/underwriting/clause.model';
 
 export class MotorQuotationModel {
     id?: string;
-    user: string;
+    user: number;
     client: string;
     quoteNumber?: string;
     dateCreated: Date;

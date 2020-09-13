@@ -3,6 +3,10 @@ import { Router } from '@angular/router';
 import { InsuranceClassHandlerService } from '../underwriting/services/insurance-class-handler.service';
 import { IClass } from '../settings/components/product-setups/models/product-setups-models.model';
 import { ProductSetupsServiceService } from '../settings/components/product-setups/services/product-setups-service.service';
+import * as jwt_decode from 'jwt-decode';
+import { AuthenticationService } from '../users/services/authentication.service';
+import { UsersService } from '../users/services/users.service';
+import { UserModel } from '../users/models/users.model';
 
 @Component({
     selector: 'app-navigation',
@@ -11,7 +15,8 @@ import { ProductSetupsServiceService } from '../settings/components/product-setu
 })
 export class NavigationComponent implements OnInit, OnDestroy {
     isCollapsed = false;
-    loggedIn = localStorage.getItem('user');
+    loggedIn = localStorage.getItem('currentUser');
+    user: UserModel;
 
     classesList: IClass[] = [];
 
@@ -21,13 +26,18 @@ export class NavigationComponent implements OnInit, OnDestroy {
     constructor(
         private router: Router,
         private classHandler: InsuranceClassHandlerService,
-        private productSetupsService: ProductSetupsServiceService
+        private productSetupsService: ProductSetupsServiceService,
+        public authenticationService: AuthenticationService,
+        private usersService: UsersService
     ) {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        const decodedJwtData = jwt_decode(this.loggedIn);
+        console.log('Decoded>>>>>>', decodedJwtData);
 
-    logout(): void {
-        this.router.navigateByUrl('/');
+        this.usersService.getUsers().subscribe(users => {
+            this.user = users.filter(x => x.ID === decodedJwtData.user_id)[0];
+        });
     }
 
     handleClass(insuranceClass: string) {

@@ -28,19 +28,24 @@ import { ApprovedRequisitionsComponent } from './components/requisitions/compone
 import { ApprovedPaymentsComponent } from './components/payments/components/approved-payments/approved-payments.component';
 import { CommissionPaymentService } from './services/commission-payment.service';
 import { AllocationsService } from './services/allocations.service';
+import { UsersRolesComponent } from '../users/components/users-roles/users-roles.component';
+import { AuthGuard } from '../users/helpers/auth.guard';
 
 const routes: Routes = [
     {
         path: 'generate-receipts',
-        component: ReceiptsGenerationComponent
+        component: ReceiptsGenerationComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'receipts',
-        component: ReceiptsComponent
+        component: ReceiptsComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'requisitions',
-        component: RequisitionsComponent
+        component: RequisitionsComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'requisitions/approved-requisitions',
@@ -48,7 +53,8 @@ const routes: Routes = [
     },
     {
         path: 'payments',
-        component: PaymentsComponent
+        component: PaymentsComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'payments/approved-payments',
@@ -56,46 +62,56 @@ const routes: Routes = [
     },
     {
         path: 'payment-plan',
-        component: PaymentPlanComponent
+        component: PaymentPlanComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'payment-plan/:id',
-        component: PaymentPlanPolicyInstallmentsComponent
+        component: PaymentPlanPolicyInstallmentsComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'view-receipt/:id',
-        component: ViewReceiptsComponent
+        component: ViewReceiptsComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'direct-client',
-        component: DirectClientComponent
+        component: DirectClientComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'broker',
-        component: BrokerClientComponent
+        component: BrokerClientComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'agent',
-        component: AgentClientComponent
+        component: AgentClientComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'sales-representative',
-        component: SalesRepresentativeClientComponent
+        component: SalesRepresentativeClientComponent,
+      canActivate: [AuthGuard],
     },
 
-    {
-        path: 'plan-receipt',
-        component: PlanReceiptComponent
-    },
+  {
+    path: 'plan-receipt',
+    component: PlanReceiptComponent,
+    canActivate: [AuthGuard],
+  },
 
-    {
-        path: 'commission-payment',
-        component: CommissionPaymentComponent
-    },
-    {
-        path: 'allocations',
-        component: AllocationsComponent
-    }
+  {
+    path: 'commission-payment',
+    component: CommissionPaymentComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'allocations',
+    component: AllocationsComponent,
+    canActivate: [AuthGuard],
+  },
 ];
 
 @NgModule({

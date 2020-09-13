@@ -58,6 +58,7 @@ import { FireClassService } from '../../services/fire-class.service';
 import { Subscription } from 'rxjs';
 import { InsuranceClassHandlerService } from 'src/app/underwriting/services/insurance-class-handler.service';
 import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
+import * as jwt_decode from 'jwt-decode';
 
 interface IRateResult {
     sumInsured: string;
@@ -160,6 +161,8 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
 
     currentClass: IClass;
     currentClassName: string;
+    userToken: any;
+    decodedJwtData: any;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -322,7 +325,9 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
     };
 
     ngOnInit(): void {
-        const user = localStorage.getItem('user');
+        this.userToken = localStorage.getItem('currentUser');
+        this.decodedJwtData = jwt_decode(this.userToken);
+        console.log('Decoded>>>>>>', this.decodedJwtData);
         this.quoteForm = this.formBuilder.group({
             client: ['', Validators.required],
             messageCode: ['ewrewre', Validators.required],
@@ -331,7 +336,7 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
             policyNumberOfDays: [''],
             endDate: [''],
             quarter: ['', Validators.required],
-            user: [user, Validators.required],
+            user: [Number(this.decodedJwtData.user_id), Validators.required],
             status: ['Draft'],
             receiptStatus: ['Unreceipted'],
             sourceOfBusiness: ['', Validators.required],
@@ -623,7 +628,7 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
             basicPremiumSubTotal: 0,
             user: this.agentMode
                 ? this.quoteForm.get('user').value
-                : localStorage.getItem('user'),
+                : this.decodedJwtData.user_id,
             risks: this.risks
         };
 

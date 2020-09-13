@@ -49,64 +49,80 @@ import { QuotesModule } from '../quotes/quotes.module';
 import { FirePolicyScheduleComponent } from './documents/Fire-insurance/fire-policy-schedule/fire-policy-schedule.component';
 import { FireCoverNoteComponent } from './documents/Fire-insurance/fire-cover-note/fire-cover-note.component';
 import { CreateQuoteComponent } from '../quotes/components/create-quote/create-quote.component';
+import { UsersRolesComponent } from '../users/components/users-roles/users-roles.component';
+import { AuthGuard } from '../users/helpers/auth.guard';
 // tslint:disable-next-line: max-line-length
 
 const routes: Routes = [
     {
         path: 'endorsements',
-        component: EndorsementsComponent
+        component: EndorsementsComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'endorsements/revision-cover',
-        component: RevisionCoverComponent
+        component: RevisionCoverComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'endorsements/view-endorsements',
-        component: ViewEndorsementsComponent
+        component: ViewEndorsementsComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'endorsements/extension-cover',
-        component: ExtensionCoverComponent
+        component: ExtensionCoverComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'endorsements/cancellation-cover',
-        component: CancellationCoverComponent
+        component: CancellationCoverComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'endorsements/edit-policy',
-        component: EditPolicyComponent
+        component: EditPolicyComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'endorsements/edit-cancellation',
-        component: EditCancellationComponent
+        component: EditCancellationComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'endorsements/edit-extension',
-        component: EditExtensionComponent
+        component: EditExtensionComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'policies',
-        component: PoliciesComponent
+        component: PoliciesComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'policy-details',
-        component: PolicyDetailsComponent
+        component: PolicyDetailsComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'policy-revision-details/:id',
-        component: PolicyRevisionDetailsComponent
+        component: PolicyRevisionDetailsComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'policy-extension-details/:id',
-        component: PolicyExtensionDetailsComponent
+        component: PolicyExtensionDetailsComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'policy-cancellation-details/:id',
-        component: PolicyCancellationDetailsComponent
+        component: PolicyCancellationDetailsComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'backup-policy-details/:id',
-        component: BackupPolicyDetailsComponent
+        component: BackupPolicyDetailsComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'policy-details/:id',

@@ -42,14 +42,18 @@ import { AccidentQuotationsListComponent } from './components/accident-class/acc
 import { AccidentPremiumComputationDetailsComponent } from './components/accident-class/accident-premium-computation-details/accident-premium-computation-details.component';
 import { AccidentProductDetailsComponent } from './components/accident-class/accident-product-details/accident-product-details.component';
 import { FireDraftQuoteDocumentComponent } from './documents/fire-class/fire-draft-quote-document/fire-draft-quote-document.component';
+import { UsersRolesComponent } from '../users/components/users-roles/users-roles.component';
+import { AuthGuard } from '../users/helpers/auth.guard';
 const routes: Routes = [
     {
         path: 'create-quote',
-        component: CreateQuoteComponent
+        component: CreateQuoteComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'quotes-list',
-        component: QuotesComponent
+        component: QuotesComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'fire-quotes-list',
@@ -57,7 +61,8 @@ const routes: Routes = [
     },
     {
         path: 'quote-details/:quoteNumber',
-        component: QuoteDetailsComponent
+        component: QuoteDetailsComponent,
+        canActivate: [AuthGuard]
     }
 ];
 

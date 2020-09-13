@@ -8,6 +8,9 @@ import {
 import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { IExccess } from 'src/app/settings/models/underwriting/clause.model';
+import { UserModel } from '../../../users/models/users.model';
+import { UserTrackingService } from '@angular/fire/analytics';
+import { UsersService } from '../../../users/services/users.service';
 
 @Component({
     selector: 'app-draft-quote-document',
@@ -15,6 +18,8 @@ import { IExccess } from 'src/app/settings/models/underwriting/clause.model';
     styleUrls: ['./draft-quote-document.component.scss']
 })
 export class DraftQuoteDocumentComponent implements OnInit {
+    user: UserModel;
+
     @Input()
     quoteNumber: string;
 
@@ -75,7 +80,11 @@ export class DraftQuoteDocumentComponent implements OnInit {
     @Input()
     totalNetPremium: number;
 
-    constructor() {}
+    constructor(private usersService: UsersService) {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.usersService.getUsers().subscribe(users => {
+            this.user = users.filter(x => x.ID === this.quoteData.user)[0];
+        });
+    }
 }

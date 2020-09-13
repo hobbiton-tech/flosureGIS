@@ -2,7 +2,7 @@ import { Injectable, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { UserModel } from '../models/users.model';
+import { UserModel, UserRolePermissionModel } from '../models/users.model';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase';
 import {
@@ -11,6 +11,7 @@ import {
 } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd';
+import { PermissionsModel } from '../models/roles.model';
 
 const BASE_URL = 'https://flosure-postgres-db.herokuapp.com';
 
@@ -44,31 +45,46 @@ export class UsersService {
                 /* Call the SendVerificaitonMail() function when new user sign
         up and returns promise */
 
-        // this.SendVerificationMail();
-        // this.addUser(this.userDetails);
-        this.http.post<UserModel>(
-            ' http://api.goldenlotusinsurance.com/users',
+                // this.SendVerificationMail();
+                // this.addUser(this.userDetails);
+                this.http
+                    .post<UserModel>(
+                        ' http://api.goldenlotusinsurance.com/users',
 
-            this.userDetails
-        ).subscribe();
-        const emailDetails = {
-          username: this.userDetails.email,
-          text: 'Dear ' + this.userDetails.firstName + ' ' + this.userDetails.surname + ', ' + ' your username is '
-            + this.userDetails.email + ' and your password is ' +
-            this.userDetails.password + ' for https://www.goldenlotusinsurance.com (flosure General Insurance System)',
-          subject: 'Flosure General insurance System Credentials',
-          receiver: this.userDetails.email,
-          sender: 'Flosure General Insurance System',
-          password: this.userDetails.password,
-          url: 'https://www.goldenlotusinsurance.com'
-        };
-        this.http.post<any>('https://number-generation.flosure-api.com/email', emailDetails).toPromise();
-        console.log('Password>>>>', randomstring);
-      })
-      .catch((error) => {
-        this.msg.error(error.message);
-      });
-  }
+                        this.userDetails
+                    )
+                    .subscribe();
+                const emailDetails = {
+                    username: this.userDetails.email,
+                    text:
+                        'Dear ' +
+                        this.userDetails.first_name +
+                        ' ' +
+                        this.userDetails.surname +
+                        ', ' +
+                        ' your username is ' +
+                        this.userDetails.email +
+                        ' and your password is ' +
+                        this.userDetails.password +
+                        ' for https://www.goldenlotusinsurance.com (flosure General Insurance System)',
+                    subject: 'Flosure General insurance System Credentials',
+                    receiver: this.userDetails.email,
+                    sender: 'Flosure General Insurance System',
+                    password: this.userDetails.password,
+                    url: 'https://www.goldenlotusinsurance.com'
+                };
+                this.http
+                    .post<any>(
+                        'https://number-generation.flosure-api.com/email',
+                        emailDetails
+                    )
+                    .toPromise();
+                console.log('Password>>>>', randomstring);
+            })
+            .catch(error => {
+                this.msg.error(error.message);
+            });
+    }
 
     //                     this.userDetails
     //                 )
@@ -95,19 +111,41 @@ export class UsersService {
     addUser(dto: UserModel): Observable<UserModel> {
         console.log(dto);
         return this.http.post<UserModel>(
-
             ' http://api.goldenlotusinsurance.com/users',
             dto
         );
     }
 
     getUsers(): Observable<UserModel[]> {
-        return this.http.get<UserModel[]>(' http://api.goldenlotusinsurance.com/users');
+        return this.http.get<UserModel[]>(`${BASE_URL}/user`);
     }
 
+    createUser(cUser: UserModel): Observable<UserModel> {
+        return this.http.post<UserModel>(`${BASE_URL}/register`, cUser);
+    }
+
+    updatePermission(uUser: UserModel) {
+        return this.http.put<UserModel>(`${BASE_URL}/user/${uUser.ID}`, uUser);
+    }
+
+    createUserRolePermission(
+        urp: UserRolePermissionModel
+    ): Observable<UserRolePermissionModel> {
+        return this.http.post<UserRolePermissionModel>(
+            `${BASE_URL}/user-role-permission`,
+            urp
+        );
+    }
+
+    sendEmail(emailDetails) {
+        return this.http.post<any>(
+            'https://number-generation.flosure-api.com/email',
+            emailDetails
+        );
+    }
     getSingleUser(userId: string): Observable<UserModel> {
-        return this.http.get<UserModel>(` http://api.goldenlotusinsurance.com/${userId}`);
+        return this.http.get<UserModel>(
+            ` http://api.goldenlotusinsurance.com/${userId}`
+        );
     }
-
-
 }
