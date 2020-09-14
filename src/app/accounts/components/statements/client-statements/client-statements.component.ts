@@ -51,8 +51,6 @@ export class ClientStatementsComponent implements OnInit {
     private paymentPlanService: PaymentPlanService,
     private clientsService: ClientsService,
     private policyService: PoliciesService,
-    private receiptService: AccountService,
-    private cdref: ChangeDetectorRef
   ) { }
 
 

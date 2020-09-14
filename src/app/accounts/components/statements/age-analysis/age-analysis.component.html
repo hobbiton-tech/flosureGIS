@@ -93,16 +93,16 @@
                 <th>Open Cash</th>
                 <th>Total Outstanding</th>
               </tr>
-              <tr  >
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+              <tr  *ngFor="let statement of this.transactionList">
+                <td> {{ageThirty(statement)}}</td>
+                <td>{{ageSixty(statement)}}</td>
+                <td>{{ageNinety(statement)}}</td>
+                <td>{{ageOneTwenty(statement)}}</td>
+                <td>{{ageOneEighty(statement)}}</td>
+                <td>{{ageAnnual(statement)}}</td>
+                <td>{{ageOverAnnual(statement)}}</td>
+                <td>{{ageThirty(statement)}}</td>
+                <td>{{ageThirty(statement)}}</td>
               </tr>
             </table>
           </div>
