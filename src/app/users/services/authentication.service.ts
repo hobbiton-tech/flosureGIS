@@ -12,7 +12,7 @@ export class AuthenticationService {
 
   private currentUserSubject: BehaviorSubject<UserModel>;
   public currentUser: Observable<UserModel>;
-  BaseURL = 'http://localhost:8090';
+  BaseURL = 'https://user-management.savenda-flosure.com';
 
   constructor(private http: HttpClient, private msg: NzMessageService,) {
     this.currentUserSubject = new BehaviorSubject<UserModel>(JSON.parse(localStorage.getItem('currentUser')));

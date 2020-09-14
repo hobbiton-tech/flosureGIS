@@ -75,7 +75,7 @@
                         policy.sourceOfBusiness
                             ? policy.sourceOfBusiness == 'direct'
                                 ? ''
-                                : policy.user
+                                : agent?.first_name + ' ' + agent?.surname
                             : '-'
                     }}<span style="font-weight: bold;"></span></span>
             </p>

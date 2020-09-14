@@ -7,6 +7,8 @@ import { PoliciesService } from '../underwriting/services/policies.service';
 import * as _ from 'lodash';
 import { Policy } from '../underwriting/models/policy.model';
 import { Router } from '@angular/router';
+import { UsersService } from '../users/services/users.service';
+import { UserModel } from '../users/models/users.model';
 
 @Component({
     selector: 'app-dashboard',
@@ -36,12 +38,14 @@ export class DashboardComponent implements OnInit {
 
     expiredPoliciesList: Policy[];
     displayExpiredPoliciesList: Policy[];
+    user: UserModel;
 
     constructor(
         private clientsService: ClientsService,
         private claims: ClaimsService,
         private policiesService: PoliciesService,
-        private readonly route: Router
+        private readonly route: Router,
+        private usersService: UsersService
     ) {}
 
     ngOnInit(): void {
@@ -114,9 +118,6 @@ export class DashboardComponent implements OnInit {
                         .includes(value.toLowerCase()) ||
                     policy.client
                         .toLocaleLowerCase()
-                        .includes(value.toLowerCase()) ||
-                    policy.user
-                        .toLocaleLowerCase()
                         .includes(value.toLowerCase())
                 );
             }
@@ -135,9 +136,6 @@ export class DashboardComponent implements OnInit {
                         .toLowerCase()
                         .includes(value.toLowerCase()) ||
                     policy.client
-                        .toLocaleLowerCase()
-                        .includes(value.toLowerCase()) ||
-                    policy.user
                         .toLocaleLowerCase()
                         .includes(value.toLowerCase())
                 );

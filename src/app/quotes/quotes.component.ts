@@ -6,6 +6,10 @@ import { InsuranceClassHandlerService } from '../underwriting/services/insurance
 import { Subscription } from 'rxjs';
 import { IClass } from '../settings/components/product-setups/models/product-setups-models.model';
 import { StringValueToken } from 'html2canvas/dist/types/css/syntax/tokenizer';
+import * as jwt_decode from 'jwt-decode';
+import { UsersService } from '../users/services/users.service';
+import { UserModel } from '../users/models/users.model';
+import { PermissionsModel, RolesModel } from '../users/models/roles.model';
 
 @Component({
     selector: 'app-quotes',
@@ -25,11 +29,18 @@ export class QuotesComponent implements OnInit, OnDestroy {
     isOkLoading = false;
 
     searchString: string;
+    permission: PermissionsModel;
+    user: UserModel;
+    isPresent: PermissionsModel;
+    createQuote = 'create_quote';
+    admin = 'admin';
+    loggedIn = localStorage.getItem('currentUser');
 
     constructor(
         private quoteServise: QuotesService,
         private router: Router,
-        private classHandler: InsuranceClassHandlerService
+        private classHandler: InsuranceClassHandlerService,
+      private usersService: UsersService
     ) {
         this.classHandlerSubscription = this.classHandler.selectedClassChanged$.subscribe(
             currentClass => {
@@ -58,6 +69,17 @@ export class QuotesComponent implements OnInit, OnDestroy {
             );
             this.quotesCount = this.displayQuotesList.length;
         });
+
+        const decodedJwtData = jwt_decode(this.loggedIn);
+        console.log('Decoded>>>>>>', decodedJwtData);
+
+      this.usersService.getUsers().subscribe((users) => {
+        this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+
+        this.isPresent = this.user.Permission.find((el) => el.name === this.admin || el.name === this.createQuote);
+
+        console.log('USERS>>>', this.user, this.isPresent, this.admin);
+      });
     }
 
     viewDetails(quotation: MotorQuotationModel): void {
@@ -68,7 +90,7 @@ export class QuotesComponent implements OnInit, OnDestroy {
     }
 
     search(value: string): void {
-        if (value === ' ' || !value) {
+        if (value === ' ' || !value) { } {
             this.displayQuotesList = this.quotesList;
         }
 

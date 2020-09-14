@@ -58,7 +58,7 @@
                 <nz-tab nzTitle="Active Policies">
                     <div style="margin-bottom: 10px; width: 25%;">
                         <nz-input-group [nzSuffix]="suffixIconSearch">
-                            <input type="text" nz-input placeholder="Search by client, policy number, agent"
+                            <input type="text" nz-input placeholder="Search by client, policy number"
                                 [(ngModel)]="searchString" (ngModelChange)="searchActivePolicies($event)" />
                         </nz-input-group>
                         <ng-template #suffixIconSearch>
@@ -74,7 +74,7 @@
                                 <th>Cover From</th>
                                 <th>Cover To</th>
                                 <th>Client Name</th>
-                                <th>Agent</th>
+<!--                                <th>Agent</th>-->
                                 <th>Status</th>
                             </tr>
                         </thead>
@@ -89,7 +89,7 @@
                                     {{ policy.endDate | date }}
                                 </td>
                                 <td>{{ policy.client }}</td>
-                                <td>{{ policy.user }}</td>
+<!--                                <td>{{ policy.user }}</td>-->
                                 <td>
                                     <nz-badge [nzStatus]="
                                     policy.status === 'Active' ? 'success' : 'error'" [nzText]="policy.status">

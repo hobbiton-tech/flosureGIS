@@ -34,7 +34,7 @@
                         <span>Clients</span>
                     </a>
                 </li>
-                <li nz-submenu nzTitle="Quotations" nzIcon="mail">
+                <li *ngIf="underwriting === isPresent?.role_name || admin === isPresent?.role_name" nz-submenu nzTitle="Quotations" nzIcon="mail">
                     <ul>
                         <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/quotes/quotes-list" (click)="handleClass('Motor')">
@@ -52,7 +52,7 @@
                         </li>
                     </ul>
                 </li>
-                <li nz-submenu nzTitle="Underwriting" nzIcon="edit">
+                <li nz-submenu *ngIf="underwriting === isPresent?.role_name || admin === isPresent?.role_name" nzTitle="Underwriting" nzIcon="edit">
                     <ul>
                         <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/underwriting/policies">
@@ -113,7 +113,7 @@
                         </li>
                     </ul>
                 </li>
-                <li nz-submenu nzTitle="Claims" nzIcon="question-circle">
+                <li nz-submenu *ngIf="claim === isPresent?.role_name || admin === isPresent?.role_name" nzTitle="Claims" nzIcon="question-circle">
                     <ul>
                         <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/claims/claim-transactions">
@@ -148,7 +148,7 @@
                         </li> -->
                     </ul>
                 </li>
-                <li nz-submenu nzTitle="Client Accounts" nzIcon="dollar">
+                <li nz-submenu *ngIf="finance === isPresent?.role_name || admin === isPresent?.role_name" nzTitle="Client Accounts" nzIcon="dollar">
                     <ul>
                         <li nz-menu-item nzMatchRouter nzDisabled>
                             <a routerLink="/flosure/accounts/receipts">
@@ -160,13 +160,13 @@
                                 Journals
                             </a>
                         </li>
-                        <li nz-menu-item nzMatchRouter>
+                        <li  *ngIf="allocation === isPresentPermission?.name || admin === isPresentPermission?.name" nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/accounts/allocations">
                                 Allocations
                             </a>
                         </li>
 
-                        <li nz-menu-item nzMatchRouter>
+                        <li  *ngIf="paymentPlan === isPresentPermission?.name || admin === isPresentPermission?.name" nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/accounts/payment-plan">
                                 Payment Plans
                             </a>
@@ -179,11 +179,11 @@
                         <!--                      </li>-->
                     </ul>
                 </li>
-                <li nz-submenu nzTitle="Finance" nzIcon="dollar">
+                <li nz-submenu *ngIf="finance === isPresent?.role_name || admin === isPresent?.role_name" nzTitle="Finance" nzIcon="dollar">
                     <ul>
-                        <li nz-menu-item nzMatchRouter>
+                        <li *ngIf="receipting === isPresentPermission?.name || admin === isPresentPermission?.name" nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/accounts/receipts">
-                                Reciepting
+                                Receipting
                             </a>
                         </li>
                         <li nz-submenu nzTitle="Requisitions">
@@ -219,12 +219,12 @@
                 <li nz-submenu nzTitle="Reports" nzIcon="reconciliation">
                     <ul>
 
-                        <li nz-menu-item nzMatchRouter>
+                        <li *ngIf="finance === isPresent?.role_name || admin === isPresent?.role_name" nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/reports/policies">
                                 Debtors
                             </a>
                         </li>
-                        <li nz-menu-item nzMatchRouter>
+                        <li *ngIf="claim === isPresent?.role_name || admin === isPresent?.role_name" nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/reports/claims">Claims</a>
                         </li>
 
@@ -235,14 +235,14 @@
                         </li>
                     </ul>
                 </li>
-                <li nz-submenu nzTitle="Intermediaries" nzIcon="reconciliation">
+                <li nz-submenu *ngIf="finance === isPresent?.role_name || admin === isPresent?.role_name" nzTitle="Intermediaries" nzIcon="reconciliation">
                     <ul>
                         <!--                        <li nz-menu-item nzMatchRouter>-->
                         <!--                            <a routerLink="/flosure/reports/policies">-->
                         <!--                                Account Listing-->
                         <!--                            </a>-->
                         <!--                        </li>-->
-                        <li nz-menu-item nzMatchRouter>
+                        <li *ngIf="allocation === isPresentPermission?.name || admin === isPresentPermission?.name" nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/accounts/allocations">
                                 Allocations
                             </a>
@@ -264,7 +264,7 @@
                         <!--                        </li>-->
                     </ul>
                 </li>
-                <li nz-submenu nzTitle="User Managenent" nzIcon="user">
+                <li nz-submenu  nzTitle="User Managenent" nzIcon="user">
                     <ul>
                         <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/user-management/users">
@@ -283,7 +283,7 @@
                       </li>
                     </ul>
                 </li>
-                <li nz-submenu nzTitle="Settings" nzIcon="setting" style="padding-bottom: 50px;">
+                <li nz-submenu *ngIf="admin === isPresent?.role_name" nzTitle="Settings" nzIcon="setting" style="padding-bottom: 50px;">
                     <ul>
                         <!-- <li nz-menu-item nzMatchRouter>
                             <a

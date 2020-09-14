@@ -52,6 +52,10 @@ import { CreateQuoteComponent } from 'src/app/quotes/components/create-quote/cre
 import { InsuranceClassHandlerService } from '../../services/insurance-class-handler.service';
 import { DebitNote } from '../../documents/models/documents.model';
 import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
+import * as jwt_decode from 'jwt-decode';
+import { PermissionsModel } from '../../../users/models/roles.model';
+import { UserModel } from '../../../users/models/users.model';
+import { UsersService } from '../../../users/services/users.service';
 
 type AOA = any[][];
 
@@ -142,29 +146,12 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
 
     isEditmode = false;
 
-    // Edit risk details
-    isRiskDetailsEditmode = false;
 
     territorialExtensionCountries: number;
 
-    // loyalty discount amount
-    loyaltyDiscountAmount: number;
-
-    addLoadIsLoading = false;
 
     // selected risk in risk table
     selectedRisk: RiskModel;
-
-    increasedThirdPartyLimitsRateType: string;
-
-    // risk being edited
-    currentRiskEdit: RiskModel;
-    premiumRateType: string;
-    riotAndStrikeRateType: string;
-    carStereoRateType: string;
-    territorialExtensionRateType: string;
-    lossOfUseDailyRateType: string;
-    premiumDiscountRateType: string;
 
     // PDFS
     isCertificatePDFVisible = false;
@@ -211,10 +198,14 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
 
     // dicounts added
     discounts: IDiscounts[] = [];
-    LevyRate = 3;
-    policyCertificateURl: string;
-    debitNoteURL: string;
     policyID: string;
+
+  permission: PermissionsModel;
+  user: UserModel;
+  isPresent: PermissionsModel;
+  admin = 'admin';
+  renewPolicyPem = 'renew_policy';
+  loggedIn = localStorage.getItem('currentUser');
 
     constructor(
         private readonly router: Router,
@@ -238,7 +229,8 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
         private vehicleDetailsService: VehicleDetailsServiceService,
         private propertyDetailsComponent: PropertyDetailsComponent,
         private createQuoteComponent: CreateQuoteComponent,
-        private classHandler: InsuranceClassHandlerService
+        private classHandler: InsuranceClassHandlerService,
+        private  usersService: UsersService,
     ) {
         this.paymentPlanForm = this.formBuilder.group({
             numberOfInstallments: ['', Validators.required],
@@ -274,6 +266,17 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
         }, 3000);
 
         this.route.params.subscribe(id => {
+
+          const decodedJwtData = jwt_decode(this.loggedIn);
+          console.log('Decoded>>>>>>', decodedJwtData);
+
+          this.usersService.getUsers().subscribe((users) => {
+            this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+
+            this.isPresent = this.user.Permission.find((el) => el.name === this.admin || el.name === this.renewPolicyPem);
+
+            console.log('USERS>>>', this.user, this.isPresent, this.admin);
+          });
             this.policiesService.getPolicyById(id.id).subscribe(policy => {
                 this.policyData = policy;
 
@@ -369,6 +372,7 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
             town: [''],
             remarks: ['', Validators.required]
         });
+
     }
 
     goToRenewPoliciesList(): void {
@@ -475,7 +479,7 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
                 payment_method: '',
                 received_from: this.paymentPlanForm.controls.clientName.value,
                 on_behalf_of: this.paymentPlanForm.controls.clientName.value,
-                captured_by: 'charles malama',
+                captured_by: this.user.ID,
                 receipt_status: 'Receipted',
                 narration: 'Payment Plan',
                 receipt_type: 'Premium Payment',

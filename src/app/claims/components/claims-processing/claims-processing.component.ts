@@ -9,6 +9,10 @@ import { NzMessageService } from 'ng-zorro-antd';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import moment from 'moment';
+import * as jwt_decode from 'jwt-decode';
+import { PermissionsModel } from '../../../users/models/roles.model';
+import { UserModel } from '../../../users/models/users.model';
+import { UsersService } from '../../../users/services/users.service';
 
 @Component({
     selector: 'app-claims-processing',
@@ -46,16 +50,20 @@ export class ClaimsProcessingComponent implements OnInit {
 
     claimsTableUpdate = new BehaviorSubject<boolean>(false);
 
-    // requisition number
-    reqNumber: string;
-    displayApprovedClaimsList: Claim[];
+  permission: PermissionsModel;
+  user: UserModel;
+  isPresent: PermissionsModel;
+  admin = 'admin';
+  processClaimPem = 'process_claim';
+  loggedIn = localStorage.getItem('currentUser');
 
     constructor(
         private readonly claimsService: ClaimsService,
         private claimProcessingService: ClaimsProcessingServiceService,
         private accountsService: AccountService,
         private msg: NzMessageService,
-        private readonly router: Router
+        private readonly router: Router,
+        private  usersService: UsersService,
     ) {}
 
     ngOnInit(): void {
@@ -63,6 +71,17 @@ export class ClaimsProcessingComponent implements OnInit {
         setTimeout(() => {
             this.claimProcessingIsLoading = false;
         }, 3000);
+
+      const decodedJwtData = jwt_decode(this.loggedIn);
+      console.log('Decoded>>>>>>', decodedJwtData);
+
+      this.usersService.getUsers().subscribe((users) => {
+        this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+
+        this.isPresent = this.user.Permission.find((el) => el.name === this.admin || el.name === this.processClaimPem);
+
+        console.log('USERS>>>', this.user, this.isPresent, this.admin);
+      });
 
         this.claimsService.getClaims().subscribe(claims => {
             this.claimsList = claims;

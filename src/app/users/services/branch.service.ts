@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 export class BranchService {
   branchModel: BranchModel;
   branchesModel: BranchModel[] = [];
-  BASEURLBranch = 'http://localhost:8090';
+  BASEURLBranch = 'https://user-management.savenda-flosure.com';
 
   constructor(private http: HttpClient,
               private message: NzMessageService,

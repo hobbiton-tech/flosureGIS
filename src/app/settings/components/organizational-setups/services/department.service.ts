@@ -12,7 +12,7 @@ export class DepartmentService {
 
   departmentModel: DepartmentModel;
   departmentsModel: DepartmentModel[] = [];
-  BASEURLDepartment = 'http://localhost:8090';
+  BASEURLDepartment = 'https://user-management.savenda-flosure.com';
 
   constructor(private http: HttpClient,
               private message: NzMessageService,

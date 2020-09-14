@@ -6,7 +6,7 @@ export class IReceiptModel {
     payment_method: string;
     today_date: Date;
     sum_in_digits: number;
-    captured_by: string;
+    captured_by: number;
     received_from: string;
     narration: string;
     receipt_type: string;

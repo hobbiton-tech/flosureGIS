@@ -33,7 +33,7 @@ export class ClientsListComponent implements OnInit {
 
     clientsLoading = true;
 
-    //search string when filtering clients
+    // search string when filtering clients
     searchString: string;
 
     /*name of the excel-file which will be downloaded. */
