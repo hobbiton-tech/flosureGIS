@@ -18,6 +18,7 @@ import { UserModel } from '../../../../../users/models/users.model';
 import { ClientsService } from '../../../../../clients/services/clients.service';
 import { UsersService } from '../../../../../users/services/users.service';
 import * as jwt_decode from 'jwt-decode';
+import { TransactionModel } from '../../../../../clients/models/client.model';
 
 @Component({
     selector: 'app-broker-client',
@@ -111,6 +112,8 @@ export class BrokerClientComponent implements OnInit {
     currency: string;
     user: UserModel;
     loggedIn = localStorage.getItem('currentUser');
+    clientCode: any;
+    transaction: any;
 
     constructor(
         private receiptService: AccountService,
@@ -121,7 +124,8 @@ export class BrokerClientComponent implements OnInit {
         private policeServices: PoliciesService,
         private allocationsService: AllocationsService,
         private http: HttpClient,
-        private usersService: UsersService
+        private usersService: UsersService,
+        private clientsService: ClientsService,
     ) {
         this.receiptForm = this.formBuilder.group({
             received_from: ['', Validators.required],
@@ -240,6 +244,7 @@ export class BrokerClientComponent implements OnInit {
         this.currency = unreceipted.currency;
         this.sourceOfBusiness = unreceipted.sourceOfBusiness;
         this.intermediaryName = unreceipted.intermediaryName;
+        this.clientCode = unreceipted.clientCode;
         this.allocationPolicy = this.allocationPolicies.filter((x) => x.policy_number === unreceipted.policyNumber)[0];
         console.log(this.policyAmount);
     }
@@ -286,7 +291,7 @@ export class BrokerClientComponent implements OnInit {
             amount: Number(this.policy.netPremium),
             intermediary_id: this.policy.intermediaryId,
             intermediary_name: this.policy.intermediaryName,
-            intermediary_type: 'Agent',
+            intermediary_type: 'Broker',
             receipt_number: '',
             remaining_amount: 0,
             status: 'Allocated'
@@ -320,6 +325,41 @@ export class BrokerClientComponent implements OnInit {
 
                   this.policeServices.updatePolicy(this.policy).subscribe((res) => {}, (err) => {
                     console.log('Update Policy Error', err);
+                  });
+
+
+                  this.clientsService.getTransactions().subscribe((txns: any) => {
+                    let balanceTxn = 0;
+                    console.log('DEDEDE', txns);
+                    const filterTxn = txns.data.filter((x) => x.client_id === this.clientCode);
+
+                    if (filterTxn === null || filterTxn === undefined || filterTxn === [] || filterTxn.length === 0) {
+                      balanceTxn = Number(resN.data.sum_in_digits) * -1;
+                    } else {
+                      this.transaction = filterTxn.slice(-1)[0];
+
+                      console.log('DEDEDE', this.transaction);
+
+                      balanceTxn = Number(this.transaction.balance) + Number(resN.data.sum_in_digits * -1);
+                    }
+
+
+                    const trans: TransactionModel = {
+                      balance: Number(balanceTxn),
+                      client_id: this.clientCode,
+                      cr: Number(resN.data.sum_in_digits * -1),
+                      receipt_id: resN.data.ID,
+                      dr: 0,
+                      transaction_amount: Number(resN.data.sum_in_digits * -1),
+                      transaction_date: new Date(),
+                      type: 'Receipt',
+                      reference: resN.data.receipt_number
+
+                    };
+
+                    this.clientsService.createTransaction(trans).subscribe((sucTxn) => {}, (errTxn) => {
+                      this.message.error(errTxn);
+                    });
                   });
 
                   this.generateID(resN.data.ID);

@@ -22,7 +22,7 @@ import {
     ICorporateClient,
 } from 'src/app/clients/models/clients.model';
 import * as _ from 'lodash';
-import { IClientCorporate } from 'src/app/clients/models/client.model';
+import { IClientCorporate, TransactionModel } from 'src/app/clients/models/client.model';
 import { HttpClient } from '@angular/common/http';
 import * as jwt_decode from 'jwt-decode';
 import { UsersService } from '../../../../../users/services/users.service';
@@ -124,6 +124,8 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
     selectedRole: any;
     selectedAllocationPolicy: any;
   loggedIn = localStorage.getItem('currentUser');
+  transaction: any;
+  receiptN: any;
 
     constructor(
         private route: ActivatedRoute,
@@ -537,6 +539,44 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
         this.paymentPlanService.updatePlanPolicy(this.selectedAllocationPolicy );
         this.paymentPlanService.updatePlanReceipt(this.selectedRole);
 
+        this.receiptService.getReciepts().subscribe(
+          (resRec: any) => {
+            this.receiptN = resRec.data.filter((x) => x.receipt_number === this.selectedRole.receipt_number)[0];
+
+            this.clientsService.getTransactions().subscribe((txns: any) => {
+              let balanceTxn = 0;
+              console.log('DEDEDE', txns);
+              const filterTxn = txns.data.filter((x) => x.client_id === this.paymentPlan.client_id);
+
+              if (filterTxn === null || filterTxn === undefined || filterTxn === [] || filterTxn.length === 0) {
+                balanceTxn = Number(this.selectedRole.amount) * -1;
+              } else {
+                this.transaction = filterTxn.slice(-1)[0];
+
+                console.log('DEDEDE', this.transaction);
+
+                balanceTxn = Number(this.transaction.balance) + Number(this.allocationForm.controls.amount.value * -1);
+              }
+
+
+              const trans: TransactionModel = {
+                balance: Number(balanceTxn),
+                client_id: this.paymentPlan.client_id,
+                cr: Number(this.allocationForm.controls.amount.value * -1),
+                receipt_id: this.receiptN.ID,
+                dr: 0,
+                transaction_amount: Number(this.allocationForm.controls.amount.value * -1),
+                transaction_date: new Date(),
+                type: 'Receipt',
+                reference: this.selectedRole.receipt_number
+              };
+
+              this.clientsService.createTransaction(trans).subscribe((sucTxn) => {}, (errTxn) => {
+                console.log(errTxn);
+              });
+            });
+          }
+        );
 
         // this.displayReceiptsList = [this.selectedRole]
 

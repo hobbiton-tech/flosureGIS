@@ -348,23 +348,23 @@ export class PoliciesService implements OnDestroy {
     ) {
         creditNote.creditNoteNumber = debitNoteNumber.replace('DR', 'CR');
 
-        this.http
+        return this.http
             .post<CreditNote>(
                 `${BASE_URL}/documents/credit-note/${policyId}`,
                 creditNote
-            )
-            .subscribe(
-                // tslint:disable-next-line: no-shadowed-variable
-                async res => {
-                    console.log('credit note', res);
-                    this.accountsService
-                        .createRequisition(requisition)
-                        .subscribe(res => console.log('requisition', res));
-                },
-                async err => {
-                    console.log(err);
-                }
             );
+            // .subscribe(
+            //     // tslint:disable-next-line: no-shadowed-variable
+            //     async res => {
+            //         console.log('credit note', res);
+            //         this.accountsService
+            //             .createRequisition(requisition)
+            //             .subscribe(res => console.log('requisition', res));
+            //     },
+            //     async err => {
+            //         console.log(err);
+            //     }
+            // );
     }
 
     getCreditNotes(): Observable<CreditNote[]> {

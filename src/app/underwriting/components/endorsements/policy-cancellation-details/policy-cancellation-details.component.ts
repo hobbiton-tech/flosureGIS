@@ -35,6 +35,8 @@ import { PropertyDetailsComponent } from 'src/app/quotes/components/fire-class/p
 import { QuotesService } from 'src/app/quotes/services/quotes.service';
 import { CreateQuoteComponent } from 'src/app/quotes/components/create-quote/create-quote.component';
 import { InsuranceClassHandlerService } from 'src/app/underwriting/services/insurance-class-handler.service';
+import { TransactionModel } from '../../../../clients/models/client.model';
+import { ClientsService } from '../../../../clients/services/clients.service';
 
 @Component({
     selector: 'app-policy-cancellation-details',
@@ -106,6 +108,7 @@ export class PolicyCancellationDetailsComponent implements OnInit {
     //Credit Note PDF
     isCreditNotePDFVisible = false;
     isCancelledPolicy = false;
+    transaction: any;
 
     constructor(
         private route: ActivatedRoute,
@@ -126,7 +129,8 @@ export class PolicyCancellationDetailsComponent implements OnInit {
         private accountsService: AccountService,
         private readonly quoteService: QuotesService,
         private createQuoteComponent: CreateQuoteComponent,
-        private classHandler: InsuranceClassHandlerService
+        private classHandler: InsuranceClassHandlerService,
+        private  clientsService: ClientsService,
     ) {}
 
     ngOnInit(): void {
@@ -342,14 +346,56 @@ export class PolicyCancellationDetailsComponent implements OnInit {
             res => {
                 console.log(res);
             };
-
             this.policiesService.createCreditNote(
                 this.policyData.id,
                 creditNote,
                 this.policyData,
                 this.debitNote.debitNoteNumber,
                 requisition
-            );
+            ).subscribe(
+              async res => {
+                console.log('credit note', res);
+
+                this.clientsService.getTransactions().subscribe((txns: any) => {
+                  let balanceTxn = 0;
+                  console.log('DEDEDE', txns);
+                  const filterTxn = txns.data.filter((x) => x.client_id === this.policyData.clientCode);
+
+                  if (filterTxn === null || filterTxn === undefined || filterTxn === [] || filterTxn.length === 0) {
+                    balanceTxn = Number(res.creditNoteAmount) * -1;
+                  } else {
+                    this.transaction = filterTxn.slice(-1)[0];
+
+                    console.log('DEDEDE', this.transaction);
+
+                    balanceTxn = Number(this.transaction.balance) + Number(res.creditNoteAmount * -1);
+                  }
+
+
+                  const trans: TransactionModel = {
+                    balance: Number(balanceTxn),
+                    client_id: this.policyData.clientCode,
+                    cr: Number(res.creditNoteAmount * -1),
+                    credit_note_id: res.id,
+                    dr: 0,
+                    transaction_amount: Number(res.creditNoteAmount * -1),
+                    transaction_date: new Date(),
+                    type: 'Cancellation',
+                    reference: res.creditNoteNumber
+                  };
+
+                  this.clientsService.createTransaction(trans).subscribe((sucTxn) => {}, (errTxn) => {
+                    console.log(errTxn);
+                  });
+                });
+
+                this.accountsService
+                  .createRequisition(requisition)
+                  .subscribe((req) => console.log('requisition', res));
+              },
+              async err => {
+                console.log(err);
+              });
             this.router.navigateByUrl(
                 '/flosure/underwriting/endorsements/cancellation-cover'
             );
