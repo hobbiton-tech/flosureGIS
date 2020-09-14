@@ -1,4 +1,4 @@
-import { BranchModel, SalesPoint } from './../models/branch.model';
+import { BranchModel, SalesPoint } from '../models/branch.model';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NzMessageService } from 'ng-zorro-antd';

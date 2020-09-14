@@ -1,8 +1,8 @@
 import { Policy } from '../../models/policy.model';
 
 export class DebitNote {
+    id?: string;
     debitNoteNumber?: string;
-    remarks: string;
     status: DebitNoteStatus;
     debitNoteAmount: number;
     remarks?: string;
@@ -14,7 +14,6 @@ export class DebitNote {
 export class CreditNote {
     id?: string;
     creditNoteNumber?: string;
-    remarks: string;
     status: CreditNoteStatus;
     remarks?: string;
     dateCreated?: Date;

@@ -284,4 +284,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
   viewClientStatement(id): void {
     this.route.navigateByUrl('/flosure/accounts/client-statement/'  + id );
   }
+  viewAgeAnalysis(id): void {
+    this.route.navigateByUrl('/flosure/accounts/age-analysis/'  + id );
+  }
 }

@@ -11,7 +11,7 @@ import { IPhotoUpload } from '../models/photo-upload.model';
 import { ILossQuantum } from '../models/loss-quantum.model';
 import { IInsuranceCompany } from '../models/insurance-company.model';
 
-const BASE_URL = 'https://flosure-postgres-db.herokuapp.com';
+const BASE_URL = 'https://savenda.flosure-api.com';
 
 @Injectable({
     providedIn: 'root'
@@ -256,7 +256,7 @@ export class ClaimsService {
         return number;
     }
 
-    //generate cliam ID
+    // generate cliam ID
     generateCliamID(totalClaims: number): string {
         const count = this.countGenerator(totalClaims);
         const today = new Date();
