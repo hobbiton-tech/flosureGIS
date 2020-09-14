@@ -6,30 +6,38 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class DepartmentService {
+    departmentModel: DepartmentModel;
+    departmentsModel: DepartmentModel[] = [];
+    BASEURLDepartment = 'https://user-management.savenda-flosure.com';
 
-  departmentModel: DepartmentModel;
-  departmentsModel: DepartmentModel[] = [];
-  BASEURLDepartment = 'http://localhost:8090';
+    constructor(
+        private http: HttpClient,
+        private message: NzMessageService,
+        private router: Router
+    ) {}
 
-  constructor(private http: HttpClient,
-              private message: NzMessageService,
-              private router: Router) { }
-
-    createDepartment(cDepartment: DepartmentModel): Observable<DepartmentModel> {
-      return this.http.post<DepartmentModel>(`${this.BASEURLDepartment}/department`, cDepartment);
+    createDepartment(
+        cDepartment: DepartmentModel
+    ): Observable<DepartmentModel> {
+        return this.http.post<DepartmentModel>(
+            `${this.BASEURLDepartment}/department`,
+            cDepartment
+        );
     }
 
     updateDepartment(uDepartment: DepartmentModel) {
-      return this.http.put<DepartmentModel>(`${this.BASEURLDepartment}/department/${uDepartment.ID}`, uDepartment);
+        return this.http.put<DepartmentModel>(
+            `${this.BASEURLDepartment}/department/${uDepartment.ID}`,
+            uDepartment
+        );
     }
 
     getDepartment(): Observable<DepartmentModel[]> {
-      return this.http.get<DepartmentModel[]>(`${this.BASEURLDepartment}/department`);
-
+        return this.http.get<DepartmentModel[]>(
+            `${this.BASEURLDepartment}/department`
+        );
     }
-
-
 }

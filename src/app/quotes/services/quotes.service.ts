@@ -14,11 +14,13 @@ import { VehicleDetailsModel } from '../models/vehicle-details.model';
 import { PropertyDetailsModel } from '../models/fire-class/property-details.model';
 import { InsuranceClassHandlerService } from 'src/app/underwriting/services/insurance-class-handler.service';
 import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
+import { CreateQuoteComponent } from '../components/create-quote/create-quote.component';
+import { InsuranceClassService } from './insurance-class.service';
 
 // const BASE_URL = 'http://104.248.247.78:3000';
-// const BASE_URL = 'https://savenda.flosure-api.com'
+// const BASE_URL = 'https://flosure-postgres-db.herokuapp.com'
 // const BASE_URL = 'https://flosure-api.azurewebsites.net';
-const BASE_URL = 'https://savenda.flosure-api.com';
+const BASE_URL = 'https://flosure-postgres-db.herokuapp.com';
 
 export interface IQuoteDocument {
     id: string;
@@ -71,7 +73,8 @@ export class QuotesService implements OnDestroy {
         private http: HttpClient,
         private msg: NzMessageService,
         private readonly router: Router,
-        private classHandler: InsuranceClassHandlerService
+        private classHandler: InsuranceClassHandlerService,
+        private insuranceClassService: InsuranceClassService
     ) {
         this.motorQuoteCollection = firebase.collection<MotorQuotationModel>(
             'motor_quotations'
@@ -178,6 +181,9 @@ export class QuotesService implements OnDestroy {
                                 this.msg.success(
                                     'Quotation Successfully Created'
                                 );
+                                this.insuranceClassService.changeCreatingQuoteStatus(
+                                    false
+                                );
                                 this.router.navigateByUrl(
                                     '/flosure/quotes/quotes-list'
                                 );
@@ -185,6 +191,9 @@ export class QuotesService implements OnDestroy {
                             },
                             async err => {
                                 this.msg.error('Quotation Creation failed');
+                                this.insuranceClassService.changeCreatingQuoteStatus(
+                                    false
+                                );
                             }
                         );
                 },

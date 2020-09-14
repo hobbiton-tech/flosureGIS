@@ -8,7 +8,7 @@
         </div>
 
         <div style="margin-top: 10px;">
-            <nz-table #basicTable [nzData]="displayServiceProviderQuotations">
+            <nz-table #serviceProviderQuotationsTable [nzData]="displayServiceProviderQuotations">
                 <thead>
                     <tr>
                         <th>Service Provider</th>
@@ -17,7 +17,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let quote of displayServiceProviderQuotations">
+                    <tr *ngFor="let quote of serviceProviderQuotationsTable.data">
                         <td>{{ quote.serviceProvider[0] ? quote.serviceProvider[0].name : '' }}</td>
                         <td>{{ quote.repairesDescription }}</td>
                         <td>

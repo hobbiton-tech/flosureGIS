@@ -47,6 +47,9 @@ export class InsuranceClassService {
     //risk edit mode
     isRiskEditMode = new BehaviorSubject<boolean>(false);
 
+    // creating quote status
+    isCreatingQuote = new BehaviorSubject<boolean>(false);
+
     // levy rate (TODO: set up levy rate from setups)
     levyRate = 3;
 
@@ -110,6 +113,8 @@ export class InsuranceClassService {
     netPremiumChanged$ = this.netPremium.asObservable();
 
     riskEditModeChanged$ = this.isRiskEditMode.asObservable();
+
+    isCreatingQuoteChanged$ = this.isCreatingQuote.asObservable();
 
     changeBasicPremiumAmount(value: number) {
         this.basicPremiumAmount.next(value);
@@ -182,6 +187,10 @@ export class InsuranceClassService {
 
     changeRiskEditMode(value: boolean) {
         this.isRiskEditMode.next(value);
+    }
+
+    changeCreatingQuoteStatus(value: boolean) {
+        this.isCreatingQuote.next(value);
     }
 
     // recieve extension and add to extensions list

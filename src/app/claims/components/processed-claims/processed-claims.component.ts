@@ -133,16 +133,30 @@ export class ProcessedClaimsComponent implements OnInit {
     }
 
     checkClaimApproval(claim: Claim) {
-        // const riskRegNumbers: string[] = []
+        if (claim.policy.class.className.toLowerCase() == 'motor') {
+            let policyRisksRegNumbers: string[] = claim.policy.risks.map(
+                x => x.vehicle.regNumber
+            );
 
-        let policyRisksRegNumbers: string[] = claim.policy.risks.map(
-            x => x.vehicle.regNumber
-        );
+            if (policyRisksRegNumbers.includes(claim.risk.vehicle.regNumber)) {
+                this.isClaimRiskUnderPolicy = true;
+            } else {
+                this.isClaimRiskUnderPolicy = false;
+            }
+        }
 
-        if (policyRisksRegNumbers.includes(claim.risk.vehicle.regNumber)) {
-            this.isClaimRiskUnderPolicy = true;
-        } else {
-            this.isClaimRiskUnderPolicy = false;
+        if (claim.policy.class.className.toLowerCase() == 'fire') {
+            console.log('claim :=> ', claim);
+            console.log('property :=> ', claim.policy);
+            let policyRisksId: string[] = claim.policy.risks.map(
+                x => x.property.propertyId
+            );
+
+            if (policyRisksId.includes(claim.risk.property.propertyId)) {
+                this.isClaimRiskUnderPolicy = true;
+            } else {
+                this.isClaimRiskUnderPolicy = false;
+            }
         }
 
         if (
@@ -164,16 +178,30 @@ export class ProcessedClaimsComponent implements OnInit {
             this.isClaimPolicyPremiumFullyPaid = true;
         }
 
-        if (
-            claim.documentUploads.filter(
-                x => x.documentType == 'Drivers License'
-            ).length > 0 &&
-            claim.documentUploads.filter(x => x.documentType == 'Claim Form')
-                .length > 0
-        ) {
-            this.isClaimFullyDocumented = true;
-        } else {
-            this.isClaimFullyDocumented = false;
+        if (claim.policy.class.className.toLowerCase() == 'motor') {
+            if (
+                claim.documentUploads.filter(
+                    x => x.documentType == 'Drivers License'
+                ).length > 0 &&
+                claim.documentUploads.filter(
+                    x => x.documentType == 'Claim Form'
+                ).length > 0
+            ) {
+                this.isClaimFullyDocumented = true;
+            } else {
+                this.isClaimFullyDocumented = false;
+            }
+        }
+        if (claim.policy.class.className.toLowerCase() == 'fire') {
+            if (
+                claim.documentUploads.filter(
+                    x => x.documentType == 'Claim Form'
+                ).length > 0
+            ) {
+                this.isClaimFullyDocumented = true;
+            } else {
+                this.isClaimFullyDocumented = false;
+            }
         }
     }
 

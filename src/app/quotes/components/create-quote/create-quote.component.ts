@@ -59,6 +59,7 @@ import { Subscription } from 'rxjs';
 import { InsuranceClassHandlerService } from 'src/app/underwriting/services/insurance-class-handler.service';
 import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
 import * as jwt_decode from 'jwt-decode';
+import { InsuranceClassService } from '../../services/insurance-class.service';
 
 interface IRateResult {
     sumInsured: string;
@@ -104,6 +105,7 @@ interface IQuoteNumberResult {
 })
 export class CreateQuoteComponent implements OnInit, OnDestroy {
     classHandlerSubscription: Subscription;
+    addingQuoteStatusSubscription: Subscription;
 
     isCreatingQuote: boolean = false;
     // view risk modal
@@ -185,7 +187,8 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
         private excessesComponent: ExcessesComponent,
         private premiumComputationService: PremiumComputationService,
         private fireClassService: FireClassService,
-        private classHandler: InsuranceClassHandlerService
+        private classHandler: InsuranceClassHandlerService,
+        private insuranceClassService: InsuranceClassService
     ) {
         // this.clauseForm = formBuilder.group({
         //     heading: ['', Validators.required],
@@ -203,6 +206,12 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
         this.classHandlerSubscription = this.classHandler.selectedClassChanged$.subscribe(
             currentClass => {
                 this.currentClassName = localStorage.getItem('class');
+            }
+        );
+
+        this.addingQuoteStatusSubscription = this.insuranceClassService.isCreatingQuoteChanged$.subscribe(
+            status => {
+                this.isCreatingQuote = status;
             }
         );
     }
@@ -579,7 +588,10 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
     deleteRow(): void {}
 
     async addQuote(): Promise<void> {
+        console.log('adding quote...', this.isCreatingQuote);
         this.isCreatingQuote = true;
+        console.log('adding quote...', this.isCreatingQuote);
+
         this.clientCode = this.quoteForm.controls.client.value.id;
         if (this.quoteForm.controls.client.value.clientType === 'Individual') {
             this.clientName =
@@ -668,6 +680,10 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
             this.properties
         );
 
+        // this.isCreatingQuote = false;
+    }
+
+    changeIsCreatingQuoteStatus() {
         this.isCreatingQuote = false;
     }
 
@@ -851,5 +867,6 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.classHandlerSubscription.unsubscribe();
+        this.addingQuoteStatusSubscription.unsubscribe();
     }
 }

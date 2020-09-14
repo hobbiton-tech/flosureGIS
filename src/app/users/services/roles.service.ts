@@ -6,42 +6,58 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class RolesService {
-  roleModel: RolesModel;
-  rolesModel: RolesModel[] = [];
-  BASEURLRolePermission = 'http://localhost:8090';
+    roleModel: RolesModel;
+    rolesModel: RolesModel[] = [];
+    BASEURLRolePermission = 'https://user-management.savenda-flosure.com';
 
-
-  constructor(private http: HttpClient,
-    private message: NzMessageService,
-    private router: Router) {}
+    constructor(
+        private http: HttpClient,
+        private message: NzMessageService,
+        private router: Router
+    ) {}
 
     createRole(cRole: RolesModel): Observable<RolesModel> {
-      return this.http.post<RolesModel>(`${this.BASEURLRolePermission}/role`, cRole);
+        return this.http.post<RolesModel>(
+            `${this.BASEURLRolePermission}/role`,
+            cRole
+        );
     }
 
     updateRole(uRole: RolesModel) {
-      return this.http.put<RolesModel>(`${this.BASEURLRolePermission}/role/${uRole.ID}`, uRole);
+        return this.http.put<RolesModel>(
+            `${this.BASEURLRolePermission}/role/${uRole.ID}`,
+            uRole
+        );
     }
 
     getRole(): Observable<RolesModel[]> {
-      return this.http.get<RolesModel[]>(`${this.BASEURLRolePermission}/role`);
-
+        return this.http.get<RolesModel[]>(
+            `${this.BASEURLRolePermission}/role`
+        );
     }
 
+    createPermission(
+        cPermission: PermissionsModel
+    ): Observable<PermissionsModel> {
+        return this.http.post<PermissionsModel>(
+            `${this.BASEURLRolePermission}/permission`,
+            cPermission
+        );
+    }
 
-  createPermission(cPermission: PermissionsModel): Observable<PermissionsModel> {
-    return this.http.post<PermissionsModel>(`${this.BASEURLRolePermission}/permission`, cPermission);
-  }
+    updatePermission(uPermission: PermissionsModel) {
+        return this.http.put<PermissionsModel>(
+            `${this.BASEURLRolePermission}/permission/${uPermission.ID}`,
+            uPermission
+        );
+    }
 
-  updatePermission(uPermission: PermissionsModel) {
-    return this.http.put<PermissionsModel>(`${this.BASEURLRolePermission}/permission/${uPermission.ID}`, uPermission);
-  }
-
-  getPermission(): Observable<PermissionsModel[]> {
-    return this.http.get<PermissionsModel[]>(`${this.BASEURLRolePermission}/permission`);
-
-  }
+    getPermission(): Observable<PermissionsModel[]> {
+        return this.http.get<PermissionsModel[]>(
+            `${this.BASEURLRolePermission}/permission`
+        );
+    }
 }

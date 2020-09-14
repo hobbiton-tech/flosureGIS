@@ -64,7 +64,6 @@ export class FireClassService {
         this.selectedRiskCategory.next(value);
     }
 
-    // TODO: assign types when property details model is created
     changePropertyDetails(value: PropertyDetailsModel) {
         console.log('recieved prop dets:', value);
         this.propertyDetailsForm.next(value);

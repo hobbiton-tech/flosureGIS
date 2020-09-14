@@ -864,9 +864,6 @@ export class QuoteDetailsComponent implements OnInit {
             localStorage.getItem('classObject')
         );
 
-        // const policy = this.quoteDetailsForm.value as Policy;
-        console.log(policy);
-
         if (
             this.quote.risks[0].insuranceType === 'ThirdPartyFireAndTheft' ||
             'ThirdParty' ||
@@ -884,6 +881,9 @@ export class QuoteDetailsComponent implements OnInit {
 
             this.policiesService.createPolicy(policy).subscribe(res => {
                 console.log('response:', res);
+
+                this.isQuoteApproved = true;
+                this.approvingQuote = false;
 
                 if (this.quoteData.sourceOfBusiness !== 'Direct') {
                     this.allocationService
@@ -931,7 +931,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                             this.http
                                 .post<CoverNote>(
-                                    `https://savenda.flosure-api.com/documents/cover-note`,
+                                    `https://flosure-postgres-db.herokuapp.com/documents/cover-note`,
                                     coverNote
                                 )
                                 .subscribe(
@@ -954,7 +954,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                         this.http
                             .post<DebitNote>(
-                                `https://savenda.flosure-api.com/documents/debit-note/${this.policyId}`,
+                                `https://flosure-postgres-db.herokuapp.com/documents/debit-note/${this.policyId}`,
                                 debitNote
                             )
                             .subscribe(
@@ -1020,8 +1020,6 @@ export class QuoteDetailsComponent implements OnInit {
                 }
             });
 
-            this.isQuoteApproved = true;
-            this.approvingQuote = false;
             // });
 
             // this.receiptForm.reset();
@@ -1054,6 +1052,10 @@ export class QuoteDetailsComponent implements OnInit {
                         );
                 }
                 console.log('response:', res);
+
+                this.isQuoteApproved = true;
+                this.approvingQuote = false;
+
                 this.policyId = res.id;
 
                 let insuranceType = '';
@@ -1075,7 +1077,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                         this.http
                             .post<DebitNote>(
-                                `https://savenda.flosure-api.com/documents/debit-note/${this.policyId}`,
+                                `https://flosure-postgres-db.herokuapp.com/documents/debit-note/${this.policyId}`,
                                 debitNote
                             )
                             .subscribe(
@@ -1186,8 +1188,6 @@ export class QuoteDetailsComponent implements OnInit {
                 }
             });
 
-            this.isQuoteApproved = true;
-            this.approvingQuote = false;
             // });
 
             // this.receiptForm.reset();
