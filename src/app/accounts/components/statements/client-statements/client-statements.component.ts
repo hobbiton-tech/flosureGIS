@@ -12,6 +12,7 @@ import { PaymentPlanService } from '../../../services/payment-plan.service';
 import { AccountService } from '../../../services/account.service';
 import { CreditNote, DebitNote } from '../../../../underwriting/documents/models/documents.model';
 import { concat } from 'rxjs';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-client-statements',
@@ -25,8 +26,8 @@ export class ClientStatementsComponent implements OnInit {
   clientId: any;
   today = new Date();
   period: any[] = [];
-  start: Date;
-  end: Date;
+  start: string;
+  end: string;
   policyList: Policy[] = [];
   policies: Policy[] = [];
   resultList: any[] = [];
@@ -40,6 +41,9 @@ export class ClientStatementsComponent implements OnInit {
 
   balance = 0;
 
+  resDetails: any;
+  transactionList: any;
+
   constructor(
     private readonly route: Router,
     private cdr: ChangeDetectorRef,
@@ -50,6 +54,7 @@ export class ClientStatementsComponent implements OnInit {
     private receiptService: AccountService,
     private cdref: ChangeDetectorRef
   ) { }
+
 
   ngOnInit(): void {
     this.router.params.subscribe(param => {
@@ -67,41 +72,17 @@ export class ClientStatementsComponent implements OnInit {
          this.policies = res.filter((x) => x.clientCode === this.clientId);
          this.policyList = this.policies;
 
-        this.debitNotes = [...new Set([].concat(...this.policyList.map((o) => o.debitNotes)))];
-        this.creditNotes = [...new Set([].concat(...this.policyList.map((o) => o.creditNotes)))];
+         // this.debitNotes = [...new Set([].concat(...this.policyList.map((o) => o.debitNotes)))];
+         // this.creditNotes = [...new Set([].concat(...this.policyList.map((o) => o.creditNotes)))];
+         //
+         // this.creditNoteList = this.creditNotes;
+      });
 
-        this.creditNoteList = this.creditNotes;
 
-
-
-        this.receiptService.getReciepts().subscribe((receipts) => {
-          console.log('Recepts>>>>>', receipts);
-
-          if (this.planPolicies !== null || true) {
-            if (  this.client.clientType === 'Individual') {
-              this.receipts = receipts.data.filter((x) => x.on_behalf_of === this.client.firstName + ' ' + this.client.lastName);
-            } else if (this.client.clientType === 'Corporate') {
-              this.receipts = receipts.data.filter((x) => x.on_behalf_of === this.client.companyName);
-            }
-          }
-          this.receiptList = this.receipts;
-          this.resultList = [...this.policyList, ...this.creditNotes, ...this.receiptList];
-
-          console.log('Results<><><><><?', this.resultList, this.policyList);
-        });
-
+      this.clientsService.getTransactions().subscribe((txns: any) => {
+        this.transactionList = txns.data.filter((x) => x.client_id === this.clientId);
       });
     });
-
-    // this.paymentPlanService.getPaymentPlan().subscribe((payPlan) => {
-    //   this.paymentPlanList = payPlan.data.filter((x) => x.client_id === this.clientId);
-    //
-    //   for (const p of this.paymentPlanList) {
-    //     if (this.planPolicies !== null || this.planPolicies !== undefined) {
-    //       this.planPolicies = this.planPolicies.find((el) => el.plan_id === p.id);
-    //     }
-    //   }
-    // });
 
 
   }
@@ -123,12 +104,49 @@ export class ClientStatementsComponent implements OnInit {
   getPeriod(value) {
     this.start = value[0];
     this.end = value[1];
-    this.policyList = this.policies.filter((x) => x.startDate >= this.start && x.startDate <= this.end);
-    this.creditNoteList = this.creditNotes.filter((x) => x.dateCreated >= this.start && x.dateCreated <= this.end);
-    this.receiptList = this.receipts.filter((x) => x.date_received >= this.start && x.date_received <= this.end);
-    this.resultList = [...this.policyList, ...this.creditNotes, ...this.receiptList];
+    this.balance = 0;
+
+    this.start = moment(this.start).format('YYYY-MM-DD');
+    this.end = moment(this.end).format('YYYY-MM-DD');
+
+    const tt = this.parseDate(this.end);
+    const ff = this.parseDate(this.start);
 
 
+    this.policyList = this.policies.filter((date) => {
+
+      const newDate = moment(date.startDate).format('YYYY-MM-DD');
+
+      const nn = this.parseDate(newDate);
+
+      if (newDate >= this.start && newDate <= this.end) {
+        return date;
+      }
+    });
+
+    this.receiptList = this.receipts.filter((date) => {
+
+      const newDate = moment(date.date_received).format('YYYY-MM-DD');
+      const nn = this.parseDate(newDate);
+
+      if (newDate >= this.start && newDate <= this.end) {
+        return date;
+      }
+    });
+
+    this.creditNoteList  = this.creditNotes.filter((date) => {
+
+      const newDate = moment(date.dateCreated).format('YYYY-MM-DD');
+
+      const nn = this.parseDate(newDate);
+
+      if (newDate >= this.start && newDate <= this.end) {
+        return date;
+      }
+    });
+
+    this.resultList = [...this.policyList, ...this.creditNotes, ...this.receiptList].sort().reverse();
+    this.remainingBalance(value);
   }
 
   policyType(value) {
@@ -163,11 +181,35 @@ export class ClientStatementsComponent implements OnInit {
   txnAmount(value) {
     if (value.policyNumber) {
       return value.netPremium;
-    } else if (value.creditNoteAmount) {
-      return value.dateCreated;
+    } else if (value.dateCreated) {
+      return value.creditNoteAmount;
     } else  if (value.receipt_number) {
       return value.sum_in_digits;
     }
+  }
+
+  crDRBalance(value) {
+    let cr = 0;
+    let dr = 0;
+
+    console.log('Values>>>>>', value);
+
+    if (value.policyNumber) {
+      dr = value.netPremium;
+    }
+    if (value.receipt_number) {
+      cr = value.sum_in_digits * -1;
+    }
+    if (value.creditNoteNumber) {
+      cr = value.creditNoteAmount * -1;
+    }
+
+    this.resDetails = {
+      dr,
+      cr
+    };
+
+    return this.resDetails;
   }
 
 
@@ -178,15 +220,15 @@ export class ClientStatementsComponent implements OnInit {
   }
 
 
-  ref(value) {
-    if (value.policyNumber) {
-      return value.policyNumber;
-    } else if (value.creditNoteNumber) {
-      return value.creditNoteNumber;
-    } else  if (value.receipt_number) {
-      return value.receipt_number;
-    }
-  }
+  // ref(value) {
+  //   if (value.type === Debit) {
+  //     return value.policyNumber;
+  //   } else if (value.creditNoteNumber) {
+  //     return value.creditNoteNumber;
+  //   } else  if (value.receipt_number) {
+  //     return value.receipt_number;
+  //   }
+  // }
 
 
   cr(value) {
@@ -198,22 +240,14 @@ export class ClientStatementsComponent implements OnInit {
   }
 
   remainingBalance(value) {
-    let crValue = 0;
-    let drValue = 0;
-    if (this.cr(value) === undefined || this.cr(value) === null) {
-      crValue = 0;
-    } else {
-      crValue = this.cr(value);
-    }
-
-    if (this.dr(value) === undefined || this.dr(value) === null) {
-      drValue = 0;
-    } else {
-      drValue = this.dr(value);
-    }
-    this.balance = Number(this.balance) + Number(crValue) + Number(drValue);
-    console.log('Balance>>>>', this.balance);
+    this.balance = Number(this.balance) + Number(this.crDRBalance(value).dr) + Number(this.crDRBalance(value).cr);
     return this.balance;
+  }
+
+  parseDate(input) {
+    const parts = input.match(/(\d+)/g);
+    // note parts[1]-1
+    return new Date(parts[2], parts[1] - 1, parts[0]).getTime();
   }
 
 }

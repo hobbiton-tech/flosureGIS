@@ -446,9 +446,9 @@ export class PolicyDetailsComponent implements OnInit, OnDestroy {
         });
     }
 
-    }
 
-    goToPoliciesList(): void {
+
+    goToPoliciesList() {
         this.router.navigateByUrl('/flosure/underwriting/policies');
     }
 
@@ -609,14 +609,14 @@ export class PolicyDetailsComponent implements OnInit, OnDestroy {
     isNewCertificateVisible(risk: RiskModel) {
         this.selectedRisk = risk;
 
-        let insuranceClass = 'Fire';
 
-        if (localStorage.getItem('class') == 'Fire') {
+
+        if (localStorage.getItem('class') === 'Fire') {
             this.isFireCoverNotePDFVisible = true;
         }
 
-        if (localStorage.getItem('class') == 'Motor') {
-            if (this.selectedRisk.insuranceType == 'Comprehensive') {
+        if (localStorage.getItem('class') === 'Motor') {
+            if (this.selectedRisk.insuranceType === 'Comprehensive') {
                 this.cnd = risk.discounts.filter(
                     x => x.discountType === 'No Claims Discount'
                 )[0];
@@ -653,12 +653,12 @@ export class PolicyDetailsComponent implements OnInit, OnDestroy {
     }
 
     openPolicySchedule() {
-        let insuranceClass = 'Fire';
 
-        if (localStorage.getItem('class') == 'Fire') {
+
+        if (localStorage.getItem('class') === 'Fire') {
             this.isFirePolicySchedulePDFVisible = true;
         }
-        if (localStorage.getItem('class') == 'Motor') {
+        if (localStorage.getItem('class') === 'Motor') {
             this.isSchedulePDFVisible = true;
         }
     }

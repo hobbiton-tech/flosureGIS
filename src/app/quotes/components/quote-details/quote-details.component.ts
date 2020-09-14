@@ -86,6 +86,8 @@ import { InsuranceClassHandlerService } from 'src/app/underwriting/services/insu
 import { PermissionsModel } from '../../../users/models/roles.model';
 import { UserModel } from '../../../users/models/users.model';
 import { UsersService } from '../../../users/services/users.service';
+import { CreateQuoteComponent } from '../create-quote/create-quote.component';
+import { TransactionModel } from '../../../clients/models/client.model';
 
 type AOA = any[][];
 
@@ -142,9 +144,6 @@ export class QuoteDetailsComponent implements OnInit {
     motorThirdPartyloadingOptions = MotorThirdPartyLoadingOptions;
     discountOptions = DiscountOptions;
     sourceOfBusinessOptions = SourceOfBusinessOptions;
-    productTypeOptions = ProductTypeOptions;
-    insuranceTypeOptions = InsuranceTypeOptions;
-    limitsTypeOptions = LimitsOfLiabilityOptions;
     commissionAmount = 0;
 
     private header = new HttpHeaders({
@@ -338,6 +337,9 @@ export class QuoteDetailsComponent implements OnInit {
   deleteRisk = 'delete_risk';
   admin = 'admin';
   loggedIn = localStorage.getItem('currentUser');
+  debitNoteNumber: any;
+
+  transaction: any;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -392,15 +394,15 @@ export class QuoteDetailsComponent implements OnInit {
             this.isQuoteDetailsLoading = false;
         }, 4000);
 
-      this.route.params.subscribe(param => {
+        this.route.params.subscribe(param => {
             this.quoteNumber = param.quoteNumber;
             this.quotesService.getMotorQuotations().subscribe(quotes => {
                 this.quoteData = quotes.filter(
                     x => x.quoteNumber === this.quoteNumber
                 )[0];
-              this.decodedJwtData = jwt_decode(this.loggedIn);
+                this.decodedJwtData = jwt_decode(this.loggedIn);
 
-              this.usersService.getUsers().subscribe((users) => {
+                this.usersService.getUsers().subscribe((users) => {
                 this.user = users.filter((x) => x.ID === this.decodedJwtData.user_id)[0];
 
                 this.isPresent = this.user.Permission.find((el) => el.name === this.admin || el.name === this.approveQuote ||
@@ -578,7 +580,7 @@ export class QuoteDetailsComponent implements OnInit {
     }
 
     compareFn = (o1: any, o2: any) =>
-        o1 && o2 ? o2.value === o2.value : o1 === o2;
+        o1 && o2 ? o2.value === o2.value : o1 === o2
 
     resetForms() {
         this.riskComprehensiveForm.reset();
@@ -751,11 +753,7 @@ export class QuoteDetailsComponent implements OnInit {
         this.isConfirmLoading = false;
     }
 
-    // getEndDateTimeStamp(quote: MotorQuotationModel): number {
-    //     if (!this.quotesLoading) {
-    //         return (quote.endDate as ITimestamp).seconds;
-    //     }
-    // }
+
 
     handleCancel(): void {
         this.isVisible = false;
@@ -933,14 +931,51 @@ export class QuoteDetailsComponent implements OnInit {
                     .subscribe(async resd => {
                         debitNote.debitNoteNumber = resd.data.invoice_number;
 
+
                         this.http
                             .post<DebitNote>(
                                 `https://flosure-postgres-db.herokuapp.com/documents/debit-note/${this.policyId}`,
                                 debitNote
                             )
                             .subscribe(
-                                async resh => {
-                                    console.log(resh);
+                                async (resh) => {
+
+                                  this.debitNoteNumber = resh.id;
+
+                                  this.clientsService.getTransactions().subscribe((txns: any) => {
+                                    let balanceTxn = 0;
+                                    console.log('DEDEDE', txns);
+                                    const filterTxn = txns.data.filter((x) => x.client_id === this.quoteData.clientCode);
+
+                                    if (filterTxn === null || filterTxn === undefined || filterTxn === [] || filterTxn.length === 0) {
+                                      balanceTxn = Number((resh).debitNoteAmount);
+                                    } else {
+                                      this.transaction = filterTxn.slice(-1)[0];
+
+                                      console.log('DEDEDE', this.transaction);
+
+                                      balanceTxn = Number(this.transaction.balance) + Number((resh).debitNoteAmount);
+                                    }
+
+
+                                    const trans: TransactionModel = {
+                                      balance: Number(balanceTxn),
+                                      client_id: this.quoteData.clientCode,
+                                      cr: 0,
+                                      debit_note_id: this.debitNoteNumber,
+                                      dr: Number((resh).debitNoteAmount),
+                                      transaction_amount: Number((resh).debitNoteAmount),
+                                      transaction_date: new Date(),
+                                      type: 'Debit',
+                                      reference: resd.data.invoice_number
+
+                                    };
+
+                                    this.clientsService.createTransaction(trans).subscribe((sucTxn) => {}, (errTxn) => {
+                                      this.message.error(errTxn);
+                                    });
+                                  });
+                                  console.log((resh));
                                 },
                                 async err => {
                                     console.log(err);
@@ -1063,38 +1098,51 @@ export class QuoteDetailsComponent implements OnInit {
                             )
                             .subscribe(
                                 async resk => {
-                                    console.log(resk);
+                                  this.debitNoteNumber = resk.id;
+
+                                  this.clientsService.getTransactions().subscribe((txns: any) => {
+                                    let balanceTxn = 0;
+                                    console.log('DEDEDE', txns);
+                                    const filterTxn = txns.data.filter((x) => x.client_id === this.quoteData.clientCode);
+
+                                    if (filterTxn === null || filterTxn === undefined || filterTxn === [] || filterTxn.length === 0) {
+                                      balanceTxn = Number((resk).debitNoteAmount);
+                                    } else {
+                                      this.transaction = filterTxn[filterTxn.length - 1];
+
+
+                                      console.log('TXNSNS>>>>>', filterTxn, this.transaction);
+
+                                      console.log('DEDEDE', this.transaction);
+
+                                      balanceTxn = Number(this.transaction.balance) + Number((resk).debitNoteAmount);
+                                    }
+
+
+                                    const trans: TransactionModel = {
+                                      balance: Number(balanceTxn),
+                                      client_id: this.quoteData.clientCode,
+                                      cr: 0,
+                                      debit_note_id: this.debitNoteNumber,
+                                      dr: Number((resk).debitNoteAmount),
+                                      transaction_amount: Number((resk).debitNoteAmount),
+                                      transaction_date: new Date(),
+                                      type: 'Debit',
+                                      reference: resj.data.invoice_number
+
+                                    };
+
+
+                                    this.clientsService.createTransaction(trans).subscribe((sucTxn) => {}, (errTxn) => {
+                                      this.message.error(errTxn);
+                                    });
+                                  });
+                                  console.log(resk);
                                 },
                                 async err => {
                                     console.log(err);
                                 }
                             );
-
-                        // receipt.invoice_number = res.data.invoice_number;
-                        // this.receiptService
-                        //     .addReceipt( receipt, this.quote.risks[0].insuranceType).subscribe((mess) => {
-                        //         this.message.success('Receipt Successfully created');
-                        //         console.log(mess);
-                        //     },
-                        //     (err) => {
-                        //         this.message.warning('Receipt Failed');
-                        //         console.log(err);
-                        //     });
-                        // .then((mess) => {
-                        //     console.log(
-                        //         'DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD',
-                        //         mess
-                        //     );
-                        //     this.message.success(
-                        //         'Receipt Successfully created'
-                        //     );
-
-                        //     console.log(mess);
-                        // })
-                        // .catch((err) => {
-                        //     this.message.warning('Receipt Failed');
-                        //     console.log(err);
-                        // });
                     });
 
                 for (const clause of this.clauses) {

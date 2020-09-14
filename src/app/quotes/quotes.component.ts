@@ -40,7 +40,7 @@ export class QuotesComponent implements OnInit, OnDestroy {
         private quoteServise: QuotesService,
         private router: Router,
         private classHandler: InsuranceClassHandlerService,
-      private usersService: UsersService
+        private usersService: UsersService
     ) {
         this.classHandlerSubscription = this.classHandler.selectedClassChanged$.subscribe(
             currentClass => {

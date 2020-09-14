@@ -14,6 +14,9 @@ import { UserModel } from '../../../../../users/models/users.model';
 import { ClientsService } from '../../../../../clients/services/clients.service';
 import { UsersService } from '../../../../../users/services/users.service';
 import * as jwt_decode from 'jwt-decode';
+import { AllocationsService } from '../../../../services/allocations.service';
+import { HttpClient } from '@angular/common/http';
+import { TransactionModel } from '../../../../../clients/models/client.model';
 
 @Component({
     selector: 'app-direct-client',
@@ -93,6 +96,8 @@ export class DirectClientComponent implements OnInit {
   user: UserModel;
   isConfirmLoading = false;
   loggedIn = localStorage.getItem('currentUser');
+  clientCode: any;
+  transaction: any;
 
     constructor(
         private receiptService: AccountService,
@@ -100,7 +105,9 @@ export class DirectClientComponent implements OnInit {
         private formBuilder: FormBuilder,
         private message: NzMessageService,
         private router: Router,
-        private usersService: UsersService
+        private usersService: UsersService,
+        private http: HttpClient,
+        private clientsService: ClientsService,
     ) {
         this.receiptForm = this.formBuilder.group({
             received_from: ['', Validators.required],
@@ -201,6 +208,7 @@ export class DirectClientComponent implements OnInit {
             (x) => x.policy.id === unreceipted.id
         )[0];
         this.policyAmount = unreceipted.netPremium;
+        this.clientCode = unreceipted.clientCode;
         this.currency = unreceipted.currency;
         this.sourceOfBusiness = unreceipted.sourceOfBusiness;
         this.intermediaryName = unreceipted.intermediaryName;
@@ -240,17 +248,80 @@ export class DirectClientComponent implements OnInit {
             this.policy.paymentPlan = 'Created';
 
             this.receiptNum = this._id;
-            await this.receiptService
-                .addReceipt(receipt, this.policy.risks[0].insuranceType).subscribe((mess) => {
-                    this.message.success('Receipt Successfully created');
-                    console.log(mess);
-                    this.policeServices.updatePolicy(this.policy).subscribe((res) => {}, (err) => {
-                    console.log('Update Policy Error', err); });
+            // await this.receiptService
+            //     .addReceipt(receipt, this.policy.risks[0].insuranceType).subscribe((mess) => {
+            //         this.message.success('Receipt Successfully created');
+            //         console.log('QQQQQQ', mess);
+            //         this.policeServices.updatePolicy(this.policy).subscribe((res) => {}, (err) => {
+            //         console.log('Update Policy Error', err); });
+            //     },
+            //     (err) => {
+            //         this.message.warning('Receipt Failed');
+            //         console.log(err);
+            //     });
+
+
+            this.http.get<any>(
+            `https://number-generation.flosure-api.com/savenda-receipt-number/1`
+          )
+            .subscribe(async (res) => {
+              receipt.receipt_number = res.data.receipt_number;
+              console.log(res.data.receipt_number);
+
+              this.http.post('https://payment-api.savenda-flosure.com/receipt', receipt).subscribe((resN: any) => {
+                  this.message.success('Receipt Successfully created');
+                  console.log('RECEIPT NUMBER<><><><>', resN);
+
+                  this.policeServices.updatePolicy(this.policy).subscribe((resP) => {}, (err) => {
+                    console.log('Update Policy Error', err);
+                  });
+
+
+                  this.clientsService.getTransactions().subscribe((txns: any) => {
+                    let balanceTxn = 0;
+                    console.log('DEDEDE', txns);
+                    const filterTxn = txns.data.filter((x) => x.client_id === this.clientCode);
+
+                    if (filterTxn === null || filterTxn === undefined || filterTxn === [] || filterTxn.length === 0) {
+                      balanceTxn = Number(resN.data.sum_in_digits) * -1;
+                    } else {
+                      this.transaction = filterTxn.slice(-1)[0];
+
+                      console.log('DEDEDE', this.transaction);
+
+                      balanceTxn = Number(this.transaction.balance) + Number(resN.data.sum_in_digits * -1);
+                    }
+
+
+                    const trans: TransactionModel = {
+                      balance: Number(balanceTxn),
+                      client_id: this.clientCode,
+                      cr: Number(resN.data.sum_in_digits * -1),
+                      receipt_id: resN.data.ID,
+                      dr: 0,
+                      transaction_amount: Number(resN.data.sum_in_digits * -1),
+                      transaction_date: new Date(),
+                      type: 'Receipt',
+                      reference: resN.data.receipt_number
+
+                    };
+
+                    this.clientsService.createTransaction(trans).subscribe((sucTxn) => {}, (errTxn) => {
+                      this.message.error(errTxn);
+                    });
+                  });
+
+                  this.generateID(resN.data.ID);
+
                 },
-                (err) => {
-                    this.message.warning('Receipt Failed');
-                    console.log(err);
+                err => {
+                  this.message.warning('Receipt Failed');
+                  console.log(err);
                 });
+
+
+
+            });
                 // .then((mess) => {
                 //     this.policy.receiptStatus = 'Receipted';
                 //     this.policy.paymentPlan = 'Created';

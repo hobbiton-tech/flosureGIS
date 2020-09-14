@@ -36,15 +36,15 @@
       </nz-page-header-extra>
     </nz-page-header>
     <nz-card>
-      <div style="margin-bottom: 10px;">
-        <div nz-row [nzGutter]="24">
-          <div nz-col nzSpan="12">
-            <div style="width: 75%;">
-              <nz-range-picker [ngModel]="period" (ngModelChange)="getPeriod($event)" [nzSize]="'large'"></nz-range-picker>
-            </div>
-          </div>
-        </div>
-      </div>
+<!--      <div style="margin-bottom: 10px;">-->
+<!--        <div nz-row [nzGutter]="24">-->
+<!--          <div nz-col nzSpan="12">-->
+<!--            <div style="width: 75%;">-->
+<!--              <nz-range-picker [ngModel]="period" (ngModelChange)="getPeriod($event)" [nzSize]="'large'"></nz-range-picker>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
 <div id="printSection" style="margin: 20px 20px">
 <div id='watermark'>
   <img id='watermarkimg' src="" />
@@ -76,7 +76,7 @@
         : client?.companyName }}
       </b>
       </li>
-      <li>Statement period: <b>From  {{start | date}} To {{end | date}} </b></li>
+<!--      <li>Statement period: <b>From  {{start | date}} To {{end | date}} </b></li>-->
     </ul>
   </div>
   <div style='width:100%; margin-top: 2%; font-size: 11px;'>
@@ -90,14 +90,14 @@
         <th>CR</th>
         <th>Balance</th>
       </tr>
-      <tr  *ngFor="let statement of this.resultList">
-        <td>{{txnDate(statement)  | date}}</td>
-        <td>{{type(statement)}}</td>
-        <td>{{ref(statement)}}</td>
-        <td>{{txnAmount(statement)  | date}}</td>
-        <td>{{dr(statement)}}</td>
-        <td>{{cr(statement)}}</td>
-        <td>{{remainingBalance(statement)}}</td>
+      <tr  *ngFor="let statement of this.transactionList">
+        <td>{{statement.transaction_date  | date}}</td>
+        <td>{{statement.type}}</td>
+        <td>{{statement.reference}}</td>
+        <td>{{statement.transaction_amount  | number: '1.2-2'}}</td>
+        <td>{{statement.dr  | number: '1.2-2'}}</td>
+        <td>{{statement.cr  | number: '1.2-2'}}</td>
+        <td>{{statement.balance  | number: '1.2-2'}}</td>
       </tr>
     </table>
   </div>

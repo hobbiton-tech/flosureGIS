@@ -31,6 +31,7 @@ import { AllocationsService } from './services/allocations.service';
 import { UsersRolesComponent } from '../users/components/users-roles/users-roles.component';
 import { AuthGuard } from '../users/helpers/auth.guard';
 import { ClientStatementsComponent } from './components/statements/client-statements/client-statements.component';
+import { AgeAnalysisComponent } from './components/statements/age-analysis/age-analysis.component';
 
 const routes: Routes = [
     {
@@ -118,6 +119,11 @@ const routes: Routes = [
     component: ClientStatementsComponent,
     canActivate: [AuthGuard],
   },
+  {
+    path: 'age-analysis/:id',
+    component: AgeAnalysisComponent,
+    canActivate: [AuthGuard],
+  },
 ];
 
 @NgModule({
@@ -141,7 +147,8 @@ const routes: Routes = [
         AllocationsComponent,
         ApprovedRequisitionsComponent,
         ApprovedPaymentsComponent,
-        ClientStatementsComponent
+        ClientStatementsComponent,
+        AgeAnalysisComponent
     ],
     imports: [
         CommonModule,

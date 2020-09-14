@@ -1,4 +1,6 @@
 import { ITimestamp } from 'src/app/settings/components/insurance-companies/models/insurance-company.model';
+import { IReceiptModel } from '../../accounts/components/models/receipts.model';
+import { CreditNote, DebitNote } from '../../underwriting/documents/models/documents.model';
 
 export interface IIndividualClient {
     id: string;
@@ -133,6 +135,24 @@ export interface IClientDTO {
     AccountDetails: IAccountDetails;
     CompanyDetail: ICompanyDetails[];
 }
+
+
+export interface TransactionModel {
+  ID?: number;
+  transaction_date: Date;
+  type: string;
+  transaction_amount: number;
+  cr: number;
+  dr: number;
+  balance: number;
+  receipt_id?: number;
+  debit_note_id?: string;
+  credit_note_id?: string;
+  client_id?: string;
+  reference: string;
+}
+
+
 
 export type MaritalStatus = 'Single' | 'Married';
 export type ClientType = 'Individual' | 'Corporate';
