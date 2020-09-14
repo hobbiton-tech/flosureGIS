@@ -100,8 +100,6 @@ export class PoliciesService implements OnDestroy {
     // }
 
     updatePolicy(policy: Policy): Observable<Policy> {
-        console.log('POLICY NUMBER>>>>', policy);
-
         return this.http.put<Policy>(
             `https://flosure-postgres-db.herokuapp.com/policy/${policy.id}`,
             policy
@@ -127,8 +125,6 @@ export class PoliciesService implements OnDestroy {
     }
 
     updateBackupPolicy(policy: Policy, policyId: string): Observable<Policy> {
-        console.log('policy details:');
-        console.log(policy);
         return this.http.put<Policy>(`${BASE_URL}/${policyId}`, policy);
     }
 
@@ -182,8 +178,6 @@ export class PoliciesService implements OnDestroy {
             localStorage.setItem('policyNumber', policy.policyNumber);
             localStorage.removeItem('clientId');
             localStorage.setItem('clientId', policy.nameOfInsured); // TODO: Need to change to client code.
-            console.log('POLICY NUMBER>>>>', policy.id);
-            console.log(policy);
             this.http.put<Policy>(`${BASE_URL}/${policy.id}`, policy).subscribe(
                 data => {
                     this.msg.success('Policy Successfully Updated');
@@ -278,13 +272,6 @@ export class PoliciesService implements OnDestroy {
         policy: Policy,
         count: number
     ) {
-        console.log('create debit note method called');
-        console.log(policyId);
-        console.log('-------------------');
-        console.log(debitNote);
-        console.log('-------------------');
-        console.log(policy);
-
         let insuranceType = '';
         const productType = policy.risks[0].insuranceType;
         // tslint:disable-next-line: triple-equals
