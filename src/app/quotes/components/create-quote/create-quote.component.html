@@ -180,56 +180,68 @@
                             </div>
 
                             <!-- create quote component structure -->
-                            <nz-divider nzText="Vehicle Details" nzOrientation="left">
-                            </nz-divider>
 
-                            <!-- vehicle details -->
-                            <app-vehicle-details></app-vehicle-details>
+                            <!-- unique risk details -->
+                            <app-vehicle-details *ngIf="currentClassName == 'Motor'"></app-vehicle-details>
+                            <app-property-details *ngIf="currentClassName == 'Fire'"></app-property-details>
 
                             <div style="margin-top: 15px;">
                                 <nz-divider nzText="Premium Computation" nzOrientation="left">
                                 </nz-divider>
 
-                                <!-- premium computation details -->
-                                <app-premium-computation-details></app-premium-computation-details>
-                                <!-- end of premium computation details -->
+                                <div nz-row>
+                                    <div nz-col nzSpan="18">
+                                        <!-- premium computation details -->
+                                        <app-premium-computation-details *ngIf="currentClassName == 'Motor'">
+                                        </app-premium-computation-details>
+                                        <app-fire-premium-computation-details *ngIf="currentClassName == 'Fire'">
+                                        </app-fire-premium-computation-details>
+                                        <!-- end of premium computation details -->
+                                    </div>
 
-                                <nz-divider nzOrientation="left">
-                                </nz-divider>
-
-                                <div nz-row nzGutter="0">
-                                    <div nz-col nzSpan="8">
+                                    <div nz-col nzSpan="6">
                                         <!-- TODO => combine premium computation and premium computation details components -->
                                         <!-- premium computation -->
                                         <app-premium-computation></app-premium-computation>
-
-                                        <!-- extensions starts here -->
-                                        <app-extensions></app-extensions>
-                                        <!-- </div> -->
-
-                                        <!-- Discount Starts here -->
-                                        <app-discounts></app-discounts>
-                                        <!-- Discount Ends here -->
                                     </div>
+                                </div>
 
-                                    <div nz-col nzSpan="8">
-                                        <div nz-col nzSpan="24">
-                                            <nz-card>
-                                                <nz-divider nzText="Extensions" nzOrientation="left">
-                                                </nz-divider>
-                                                <!-- extensions view -->
-                                                <app-extensions-view></app-extensions-view>
-                                            </nz-card>
+                                <!-- <nz-divider nzOrientation="left">
+                                </nz-divider> -->
+
+                                <div nz-row nzGutter="0">
+                                    <div nz-col nzSpan="16">
+
+                                        <div nz-row nzGutter="0">
+                                            <nz-divider nzText="Extensions" nzOrientation="left"></nz-divider>
+                                            <div nz-col nzSpan="8">
+                                                <!-- extensions starts here -->
+                                                <app-extensions></app-extensions>
+                                                <!-- </div> -->
+                                            </div>
+
+                                            <div nz-col nzSpan="16">
+                                                <nz-card>
+                                                    <!-- extensions view -->
+                                                    <app-extensions-view></app-extensions-view>
+                                                </nz-card>
+                                            </div>
                                         </div>
 
-                                        <div nz-col nzSpan="24">
-                                            <div style="margin-top: 5px;">
-                                                <nz-card>
-                                                    <nz-divider nzText="Discount" nzOrientation="left">
-                                                    </nz-divider>
-                                                    <!-- discounts view -->
-                                                    <app-discounts-view></app-discounts-view>
-                                                </nz-card>
+                                        <div nz-row nzGutter="0">
+                                            <nz-divider nzText="Discounts" nzOrientation="left"></nz-divider>
+                                            <div nz-col nzSpan="8">
+                                                <!-- Discount Starts here -->
+                                                <app-discounts></app-discounts>
+                                                <!-- Discount Ends here -->
+                                            </div>
+                                            <div nz-col nzSpan="16">
+                                                <div style="margin-top: 5px;">
+                                                    <nz-card>
+                                                        <!-- discounts view -->
+                                                        <app-discounts-view></app-discounts-view>
+                                                    </nz-card>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -247,21 +259,36 @@
 
                             <nz-divider nzText="Schedule" nzOrientation="left"></nz-divider>
 
-                            <div nz-row nzGutter="10">
-                                <div nz-col nzSpan="12">
-                                    <nz-card>
-                                        <!-- limits of liability -->
-                                        <app-limits-of-liability></app-limits-of-liability>
-                                    </nz-card>
-                                </div>
+                            <div *ngIf="currentClassName == 'Motor'">
+                                <div nz-row nzGutter="10">
+                                    <div nz-col nzSpan="12">
+                                        <nz-card>
+                                            <!-- limits of liability -->
+                                            <app-limits-of-liability></app-limits-of-liability>
+                                        </nz-card>
+                                    </div>
 
-                                <div nz-col nzSpan="12">
-                                    <nz-card>
-                                        <nz-divider nzText="Excesses" nzOrientation="left"></nz-divider>
-                                        <!-- excesses -->
-                                        <app-excesses></app-excesses>
-                                    </nz-card>
+                                    <div nz-col nzSpan="12">
+                                        <nz-card>
+                                            <nz-divider nzText="Excesses" nzOrientation="left"></nz-divider>
+                                            <!-- excesses -->
+                                            <app-excesses></app-excesses>
+                                        </nz-card>
+                                    </div>
                                 </div>
+                            </div>
+
+
+                            <div *ngIf="currentClassName == 'Fire'">
+                                <nz-row>
+                                    <div nz-col>
+                                        <nz-card>
+                                            <nz-divider nzText="Excesses" nzOrientation="left"></nz-divider>
+                                            <!-- excesses -->
+                                            <app-excesses></app-excesses>
+                                        </nz-card>
+                                    </div>
+                                </nz-row>
                             </div>
 
                             <div style="text-align: center; margin-top: 10px; margin-bottom: 10px;">
@@ -279,7 +306,7 @@
             </div>
 
             <!-- Risks Table Search bar and Table details start here -->
-            <div style="margin-bottom: 20px; margin-top: 20px; width: 50%;">
+            <div style="margin-bottom: 20px; margin-top: 20px; width: 25%;">
                 <nz-input-group [nzSuffix]="suffixIconSearch">
                     <input type="text" nz-input placeholder="Search by client, quotation number, agent" />
                 </nz-input-group>
@@ -291,13 +318,9 @@
                 <thead>
                     <tr>
                         <th>Insurance Type</th>
-                        <th>Registration Number</th>
-                        <th>Vehicle Make</th>
-                        <th>Vehicle Model</th>
-                        <th>Engine Number</th>
-                        <th>Chassis Number</th>
-                        <th>Color</th>
                         <th>Product Type</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
                         <th>Sum Insured</th>
                         <th>Premium</th>
                         <th>Action</th>
@@ -306,13 +329,9 @@
                 <tbody>
                     <tr *ngFor="let risk of risksTable.data; let i = index" style="cursor: pointer;">
                         <td>{{ risk.insuranceType }}</td>
-                        <td>{{ risk.regNumber }}</td>
-                        <td>{{ risk.vehicleMake }}</td>
-                        <td>{{ risk.vehicleModel }}</td>
-                        <td>{{ risk.engineNumber }}</td>
-                        <td>{{ risk.chassisNumber }}</td>
-                        <td>{{ risk.color }}</td>
                         <td>{{ risk.productType }}</td>
+                        <td>{{ risk.riskStartDate | date}}</td>
+                        <td>{{ risk.riskEndDate | date}}</td>
                         <td>{{ risk.sumInsured | number }}</td>
                         <td>{{ risk.netPremium | number: '1.2-2' }}</td>
                         <td>
@@ -330,7 +349,7 @@
                 </tbody>
             </nz-table>
 
-            <div *ngIf="!isTabletemplate">
+            <!-- <div *ngIf="!isTabletemplate">
                 <nz-table [nzData]="risks" [nzSize]="'small'" [nzBordered]="true" id="risksTemplateTable">
                     <thead>
                         <tr>
@@ -347,7 +366,7 @@
                         </tr>
                     </thead>
                 </nz-table>
-            </div>
+            </div> -->
             <!--  Risks Table Search bar and Table details ends here -->
             <nz-divider></nz-divider>
 

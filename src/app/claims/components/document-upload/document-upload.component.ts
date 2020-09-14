@@ -7,6 +7,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ClaimsService } from '../../services/claims-service.service';
 import { IDocumentUpload } from '../../models/document-upload.model';
 import { Subscription } from 'rxjs';
+import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
 
 @Component({
     selector: 'app-document-upload',
@@ -20,18 +21,24 @@ export class DocumentUploadComponent implements OnInit, OnDestroy {
 
     claim: Claim;
 
-    data = [
+    motorClassDocuments = [
         'Drivers License',
         'Claim Form',
         'Police Report',
         'Subrogation Form'
     ];
 
+    fireClassdocuments = ['Claim Form', 'Police Report', 'Subrogation Form'];
+
+    data = [];
+
     documentUploads: string[];
 
     currentClaim: Claim;
 
     downloadLink: string;
+
+    currentClass: IClass;
 
     constructor(
         private readonly route: Router,
@@ -49,11 +56,21 @@ export class DocumentUploadComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.isDocumentUploadModalVisible = false;
-        this.router.data.subscribe(data => (this.claim = data.claim));
+        this.router.data.subscribe(data => {
+            this.claim = data.claim;
+            this.currentClass = this.claim.policy.class;
+            console.log('claim policy class:=>', this.currentClass);
+
+            if (this.currentClass.className == 'Motor') {
+                this.data = this.motorClassDocuments;
+            }
+            if (this.currentClass.className == 'Fire') {
+                this.data = this.fireClassdocuments;
+            }
+        });
         this.documentUploads = this.claim.documentUploads.map(
             x => x.documentType
         );
-        console.log(this.documentUploads);
     }
 
     openDocumentUploadModal(item) {

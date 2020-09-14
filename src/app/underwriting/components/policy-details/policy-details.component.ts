@@ -4,7 +4,7 @@ import {
     Excess
 } from './../../../quotes/models/quote.model';
 import { RiskDetailsComponent } from './../../../quotes/components/risk-details/risk-details.component';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Policy, ITimestamp } from '../../models/policy.model';
@@ -23,7 +23,8 @@ import { ClausesService } from 'src/app/settings/components/underwriting-setups/
 import {
     IPolicyClauses,
     IPolicyWording,
-    IPolicyExtension
+    IPolicyExtension,
+    IExccess
 } from 'src/app/settings/models/underwriting/clause.model';
 import { DebitNote, CoverNote } from '../../documents/models/documents.model';
 import { ClientsService } from 'src/app/clients/services/clients.service';
@@ -33,6 +34,9 @@ import {
 } from 'src/app/clients/models/clients.model';
 import { Risks } from 'src/app/reports/model/quotation.model';
 import { IDiscounts } from 'src/app/quotes/models/discounts.model';
+import { Subscription } from 'rxjs';
+import { InsuranceClassHandlerService } from '../../services/insurance-class-handler.service';
+import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
 import { UserModel } from '../../../users/models/users.model';
 import { UsersService } from '../../../users/services/users.service';
 import * as jwt_decode from 'jwt-decode';
@@ -42,7 +46,9 @@ import * as jwt_decode from 'jwt-decode';
     templateUrl: './policy-details.component.html',
     styleUrls: ['./policy-details.component.scss']
 })
-export class PolicyDetailsComponent implements OnInit {
+export class PolicyDetailsComponent implements OnInit, OnDestroy {
+    classHandlerSubscription: Subscription;
+
     isVisible = false;
     policyDetailsForm: FormGroup;
     paymentPlanForm: FormGroup;
@@ -87,6 +93,8 @@ export class PolicyDetailsComponent implements OnInit {
     isDebitNotePDFVisible = false;
     isSchedulePDFVisible = false;
     isClausesPDFVisible = false;
+    isFirePolicySchedulePDFVisible = false;
+    isFireCoverNotePDFVisible = false;
 
     isNewCertificatePdfVisible = false;
     isThirdPartyCertificatePdfVisible = false;
@@ -165,8 +173,11 @@ export class PolicyDetailsComponent implements OnInit {
     tExcessType = '';
     tExcessAmount = 0;
 
-    excessList: Excess[] = [];
-    excessListCert: Excess[] = [];
+
+    excessList: IExccess[] = [];
+    excessListCert: IExccess[] = [];
+
+    currentClass: IClass;
     user: UserModel;
     loggedIn = localStorage.getItem('currentUser');
 
@@ -179,6 +190,7 @@ export class PolicyDetailsComponent implements OnInit {
         private receiptService: AccountService,
         private productClauseService: ClausesService,
         private clientsService: ClientsService,
+        private classHandler: InsuranceClassHandlerService,
         private usersService: UsersService
     ) {
         this.paymentPlanForm = this.formBuilder.group({
@@ -186,6 +198,12 @@ export class PolicyDetailsComponent implements OnInit {
             startDate: ['', Validators.required],
             initialInstallmentAmount: ['', Validators.required]
         });
+
+        this.classHandlerSubscription = this.classHandler.selectedClassChanged$.subscribe(
+            currentClass => {
+                this.currentClass = currentClass;
+            }
+        );
     }
 
     ngOnInit(): void {
@@ -196,9 +214,11 @@ export class PolicyDetailsComponent implements OnInit {
 
         this.route.params.subscribe(id => {
             this.policiesService.getPolicyById(id.id).subscribe(policy => {
-                console.log('CHECKING ID GET', policy);
                 this.policyData = policy;
-                console.log('policy data: ', this.policyData);
+                console.log('policy data:=> ', this.policyData);
+
+                this.classHandler.changeSelectedClass(this.policyData.class);
+
                 this.policiesService.getCoverNotes().subscribe(res => {
                     console.log('RESULT COVER>>>>', res);
                     this.coverNotes = res;
@@ -236,26 +256,17 @@ export class PolicyDetailsComponent implements OnInit {
                 this.policiesService.getDebitNotes().subscribe(debitNotes => {
                     this.debitNotes = debitNotes;
 
-                    console.log('debit notes');
-                    console.log(this.debitNotes);
-
-                    console.log('id: ', this.policyData.id);
-
                     this.singleDebitNote = debitNotes.filter(
                         x => x.policy.id === this.policyData.id
                     )[0];
 
                     this.receiptService.getReciepts().subscribe(receipts => {
                         this.receipt = receipts.filter(
-                            (x) =>
+                            x =>
                                 x.invoice_number ===
                                 this.singleDebitNote.debitNoteNumber
                         )[0];
-                        console.log('RECEIPTS>>>>>', this.receipt);
                     });
-
-                    console.log('Policy Debit Note:');
-                    console.log(this.singleDebitNote);
                 });
 
                 this.clientsService.getAllClients().subscribe(clients => {
@@ -263,26 +274,20 @@ export class PolicyDetailsComponent implements OnInit {
                         ICorporateClient & IIndividualClient
                     >;
 
-                    console.log('clients: ');
-                    console.log(clients);
-
                     this.client = this.clientsList.filter(
                         x => x.id === this.policyData.clientCode
                     )[0] as IIndividualClient & ICorporateClient;
 
-                    console.log('HERE =>>>>>', this.client);
                     this.clientNumber = this.client.phone;
                     this.clientEmail = this.client.email;
                     this.clientAddress = this.client.address;
                 });
 
                 this.risks = policy.risks;
-                console.log('GET RISKS >>>>', this.risks);
 
                 for (const ri of this.risks) {
                     if (ri.limitsOfLiability !== []) {
                         for (const lim of ri.limitsOfLiability) {
-                            console.log('LIABILITIES<<<<', lim);
                             if (lim.liabilityType === 'combinedLimits') {
                                 this.combAmount = lim.amount;
                                 this.combInfo = 'Combined Limits';
@@ -293,12 +298,6 @@ export class PolicyDetailsComponent implements OnInit {
                                 this.proDInfo =
                                     '(i) Third Party Limit for injury/ Death per person ZMW';
                                 this.propDAmounts = lim.amount;
-
-                                console.log(
-                                    'LIABILITIES<<<<',
-                                    this.proDInfo,
-                                    this.propDAmounts
-                                );
                             }
                             if (
                                 lim.liabilityType === 'deathAndInjuryPerEvent'
@@ -308,11 +307,6 @@ export class PolicyDetailsComponent implements OnInit {
                                 this.deathPEInfo =
                                     '(ii) Third party limit per Event';
                                 this.deathPEAmount = lim.amount;
-
-                                console.log(
-                                    'LIABILITIES<<<<',
-                                    this.deathPEInfo
-                                );
                             }
                             if (
                                 lim.liabilityType === 'deathAndInjuryPerPerson'
@@ -322,36 +316,32 @@ export class PolicyDetailsComponent implements OnInit {
                                 this.deathPPInfo =
                                     '(iii)Third Party Property Damage';
                                 this.deathPPAmount = lim.amount;
-                                console.log(
-                                    'LIABILITIES<<<<',
-                                    this.deathPPInfo
-                                );
                             }
                         }
                     }
 
-                    if (ri.excesses !== []) {
-                        for (const ex of ri.excesses) {
-                            if (
-                                ex.excessType ===
-                                'Third Party Property Damage (TPPD ) 10% Minimum'
-                            ) {
-                                this.fExcessAmount = ex.amount;
-                                this.fExcexxType =
-                                    'Third Party Property Damage (TPPD ) 10% Minimum';
-                            }
-                            if (ex.excessType === 'Own Damage 10% Minimum') {
-                                this.sExcessAmount = ex.amount;
-                                this.sExcessType = 'Own Damage 10% Minimum';
-                            }
-                            if (
-                                ex.excessType === 'Theft Excess [15%] Minimum'
-                            ) {
-                                this.tExcessAmount = ex.amount;
-                                this.tExcessType = 'Theft Excess [15%] Minimum';
-                            }
-                        }
-                    }
+                    // if (ri.excesses !== []) {
+                    //     for (const ex of ri.excesses) {
+                    //         if (
+                    //             ex.excessType ===
+                    //             'Third Party Property Damage (TPPD ) 10% Minimum'
+                    //         ) {
+                    //             this.fExcessAmount = ex.amount;
+                    //             this.fExcexxType =
+                    //                 'Third Party Property Damage (TPPD ) 10% Minimum';
+                    //         }
+                    //         if (ex.excessType === 'Own Damage 10% Minimum') {
+                    //             this.sExcessAmount = ex.amount;
+                    //             this.sExcessType = 'Own Damage 10% Minimum';
+                    //         }
+                    //         if (
+                    //             ex.excessType === 'Theft Excess [15%] Minimum'
+                    //         ) {
+                    //             this.tExcessAmount = ex.amount;
+                    //             this.tExcessType = 'Theft Excess [15%] Minimum';
+                    //         }
+                    //     }
+                    // }
                 }
 
                 this.limitsOfLiablity = this.risks[0].limitsOfLiability;
@@ -438,7 +428,6 @@ export class PolicyDetailsComponent implements OnInit {
         });
 
 
-
         this.policyDetailsForm = this.formBuilder.group({
             client: ['', Validators.required],
             nameOfInsured: ['', Validators.required],
@@ -455,11 +444,9 @@ export class PolicyDetailsComponent implements OnInit {
             quarter: ['', Validators.required],
             town: ['', Validators.required]
         });
-
-
     }
 
-
+    }
 
     goToPoliciesList(): void {
         this.router.navigateByUrl('/flosure/underwriting/policies');
@@ -572,14 +559,14 @@ export class PolicyDetailsComponent implements OnInit {
                 receipt_type: 'Premium Payment',
                 sum_in_digits: this.paymentPlanForm.controls
                     .initialInstallmentAmount.value,
-                today_date: new Date(),
+                today_date: new Date()
             };
 
             const planReceipt: PlanReceipt[] = [];
             planReceipt.push({
                 allocation_status: 'Unallocated',
-                amount: this.paymentPlanForm.controls
-                    .initialInstallmentAmount.value,
+                amount: this.paymentPlanForm.controls.initialInstallmentAmount
+                    .value
             });
 
             // plan.planReceipt = planReceipt;
@@ -621,52 +608,62 @@ export class PolicyDetailsComponent implements OnInit {
 
     isNewCertificateVisible(risk: RiskModel) {
         this.selectedRisk = risk;
-        // tslint:disable-next-line: triple-equals
-        if (this.selectedRisk.insuranceType == 'Comprehensive') {
-            this.cnd = risk.discounts.filter(
-                x => x.discountType === 'No Claims Discount'
-            )[0];
 
-            this.coverNot = this.coverNotes.filter(
-                x => x.policyId === this.selectedRisk.id
-            )[0];
+        let insuranceClass = 'Fire';
 
-            if (this.cnd === undefined) {
-                this.cndAmount = 0;
-            } else {
-                this.cndAmount = Number(this.cnd.amount);
-            }
-
-            this.isComprehensiveCertificatePdfVisible = true;
-            this.isThirdPartyCertificatePdfVisible = false;
-        } else {
-            this.coverNot = this.coverNotes.filter(
-                x => x.policyId === risk.id
-            )[0];
-            this.isComprehensiveCertificatePdfVisible = false;
-            this.isThirdPartyCertificatePdfVisible = true;
+        if (localStorage.getItem('class') == 'Fire') {
+            this.isFireCoverNotePDFVisible = true;
         }
 
-        // this.isNewCertificatePdfVisible = true;
+        if (localStorage.getItem('class') == 'Motor') {
+            if (this.selectedRisk.insuranceType == 'Comprehensive') {
+                this.cnd = risk.discounts.filter(
+                    x => x.discountType === 'No Claims Discount'
+                )[0];
+
+                this.coverNot = this.coverNotes.filter(
+                    x => x.policyId === this.selectedRisk.id
+                )[0];
+
+                if (this.cnd === undefined) {
+                    this.cndAmount = 0;
+                } else {
+                    this.cndAmount = Number(this.cnd.amount);
+                }
+
+                this.isComprehensiveCertificatePdfVisible = true;
+                this.isThirdPartyCertificatePdfVisible = false;
+            } else {
+                this.coverNot = this.coverNotes.filter(
+                    x => x.policyId === risk.id
+                )[0];
+                this.isComprehensiveCertificatePdfVisible = false;
+                this.isThirdPartyCertificatePdfVisible = true;
+            }
+        }
     }
 
-    isSchedule() {
-        // this.isSchedulePDFVisible = true;
-        // this.selectedsRisks = risk;
-        // // this.selectedRisk = this.policyRisk[0].limitsOfLiability;
-        // if (this.selectedRisks[0].LiabilityType === 'combinedLimits') {
-        //     this.isScheduleCombinedPDFVisible = true;
-        //     this.isSchedulePDFVisible = false;
-        // } else {
-        //     this.isScheduleCombinedPDFVisible = true;
-        //     this.isSchedulePDFVisible = false;
-        // }
-    }
+    isSchedule() {}
 
     sumArray(items, prop) {
         // tslint:disable-next-line: only-arrow-functions
         return items.reduce(function(a, b) {
             return a + b[prop];
         }, 0);
+    }
+
+    openPolicySchedule() {
+        let insuranceClass = 'Fire';
+
+        if (localStorage.getItem('class') == 'Fire') {
+            this.isFirePolicySchedulePDFVisible = true;
+        }
+        if (localStorage.getItem('class') == 'Motor') {
+            this.isSchedulePDFVisible = true;
+        }
+    }
+
+    ngOnDestroy() {
+        this.classHandlerSubscription.unsubscribe();
     }
 }

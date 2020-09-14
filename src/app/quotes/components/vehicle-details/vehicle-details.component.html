@@ -1,4 +1,6 @@
 <div>
+    <nz-divider nzText="Vehicle Details" nzOrientation="left">
+    </nz-divider>
     <form nz-form [formGroup]="vehicleDetailsForm">
         <div nz-row nzGutter="0">
             <div nz-col nzSpan="8">
@@ -7,26 +9,6 @@
                         Vehicle Make
                     </nz-form-label>
                     <nz-form-control nzSpan="10">
-                        <!-- <nz-select nzPlaceHolder="Select vehicle make" nzAllowClear nzShowSearch nzServerSearch
-                            formControlName="vehicleMake" (nzOnSearch)="
-                                onVehicleMakeSearch(
-                                    $event
-                                )
-                            ">
-                            <ng-container *ngFor="
-                                    let o of vehicleMakeOptionList
-                                ">
-                                <nz-option *ngIf="
-                                        !isVehicleMakeLoading
-                                    " [nzValue]="o" [nzLabel]="o"></nz-option>
-                            </ng-container>
-                            <nz-option *ngIf="
-                                    isVehicleMakeLoading
-                                " nzDisabled nzCustomContent>
-                                <i nz-icon nzType="loading" class="loading-icon"></i>
-                                Loading Data...
-                            </nz-option>
-                        </nz-select> -->
                         <input nz-input formControlName="vehicleMake" />
                     </nz-form-control>
                 </nz-form-item>
@@ -35,26 +17,6 @@
                         Vehicle Model
                     </nz-form-label>
                     <nz-form-control nzSpan="10">
-                        <!-- <nz-select nzPlaceHolder="Select vehicle model" nzAllowClear nzShowSearch nzServerSearch
-                            formControlName="vehicleModel" (nzOnSearch)="
-                                onVehicleModelSearch(
-                                    $event
-                                )
-                            ">
-                            <ng-container *ngFor="
-                                    let o of vehicleModelOptionList
-                                ">
-                                <nz-option *ngIf="
-                                        !isVehicleModelLoading
-                                    " [nzValue]="o" [nzLabel]="o"></nz-option>
-                            </ng-container>
-                            <nz-option *ngIf="
-                                    isVehicleModelLoading
-                                " nzDisabled nzCustomContent>
-                                <i nz-icon nzType="loading" class="loading-icon"></i>
-                                Loading Data...
-                            </nz-option>
-                        </nz-select> -->
                         <input nz-input formControlName="vehicleModel" />
                     </nz-form-control>
                 </nz-form-item>

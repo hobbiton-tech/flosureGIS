@@ -60,8 +60,7 @@
                                                       ' ' +
                                                       client.lastName
                                                     : client.companyName
-                                            "
-                                            [nzLabel]="
+                                            " [nzLabel]="
                                                 client.clientType ===
                                                 'Individual'
                                                     ? client.firstName +
@@ -331,13 +330,9 @@
                     <thead>
                         <tr>
                             <th>Insurance Type</th>
-                            <th>Registration Number</th>
-                            <th>Vehicle Make</th>
-                            <th>Vehicle Model</th>
-                            <th>Engine Number</th>
-                            <th>Chassis Number</th>
-                            <th>Color</th>
                             <th>Product Type</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
                             <th>Sum Insured</th>
                             <th>Premium</th>
                             <th>Action</th>
@@ -346,13 +341,9 @@
                     <tbody>
                         <tr *ngFor="let risk of risksTable.data; let i = index" style="cursor: pointer;">
                             <td>{{ risk.insuranceType }}</td>
-                            <td>{{ risk.regNumber }}</td>
-                            <td>{{ risk.vehicleMake }}</td>
-                            <td>{{ risk.vehicleModel }}</td>
-                            <td>{{ risk.engineNumber }}</td>
-                            <td>{{ risk.chassisNumber }}</td>
-                            <td>{{ risk.color }}</td>
                             <td>{{ risk.productType }}</td>
+                            <td>{{ risk.riskStartDate | date}}</td>
+                            <td>{{ risk.riskEndDate | date}}</td>
                             <td>{{ risk.sumInsured | number }}</td>
                             <td>{{ risk.netPremium | number: '1.2-2' }}</td>
                             <td>
@@ -424,10 +415,9 @@
                 </ng-template>
             </nz-modal>
 
-            <nz-modal [(nzVisible)]="isViewDraftQuotePDFVisible" nzTitle="A Plus General Insurance"
-                (nzOnCancel)="isViewDraftQuotePDFVisible = false" (nzOnOk)="isViewDraftQuotePDFVisible = false"
-                nzWidth="800">
-                <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Quote Document">
+            <nz-modal [(nzVisible)]="isViewDraftQuotePDFVisible" (nzOnCancel)="isViewDraftQuotePDFVisible = false"
+                (nzOnOk)="isViewDraftQuotePDFVisible = false" nzWidth="800">
+                <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Motor Quote Document">
                     <app-draft-quote-document [quoteNumber]="quoteNumber" [clientName]="quoteData.client"
                         [dateCreated]="quoteData.dateCreated" [basicPremium]="quoteBasicPremium"
                         [loadingAmount]="premiumLoadingTotal" [discountAmount]="quoteDiscountTotal"
@@ -437,6 +427,36 @@
                         [totalNetPremium]="quoteNetPremium" [excessList]="excessList"
                         [limitsOfLiabilities]="limitsOfLiabilities">
                     </app-draft-quote-document>
+                </nz-card>
+                <ng-template #pdfQuoteActions>
+                    <div style="display: flex;">
+                        <div style="margin-right: 8px;">
+                            <button nz-button nzSize="medium" nzType="primary">
+                                Print
+                            </button>
+                        </div>
+                        <div>
+                            <button nz-button nzSize="medium" nzType="primary">
+                                Email
+                            </button>
+                        </div>
+                    </div>
+                </ng-template>
+            </nz-modal>
+
+            <nz-modal [(nzVisible)]="isViewFireDraftQuotePDFVisible"
+                (nzOnCancel)="isViewFireDraftQuotePDFVisible = false" (nzOnOk)="isViewFireDraftQuotePDFVisible = false"
+                nzWidth="800">
+                <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Fire Quote Document">
+                    <app-fire-draft-quote-document [quoteNumber]="quoteNumber" [clientName]="quoteData.client"
+                        [dateCreated]="quoteData.dateCreated" [basicPremium]="quoteBasicPremium"
+                        [loadingAmount]="premiumLoadingTotal" [discountAmount]="quoteDiscountTotal"
+                        [totalAmount]="quoteNetPremium" [premiumLevy]="quoteLevy" [numberOfRisks]="numberOfRisks"
+                        [risks]="quoteData.risks" [quoteData]="quoteData" [totalSumInsured]="quoteSumInsured"
+                        [totalBasicPremium]="quoteBasicPremium" [totalLevy]="quoteLevy"
+                        [totalNetPremium]="quoteNetPremium" [excessList]="excessList"
+                        [limitsOfLiabilities]="limitsOfLiabilities">
+                    </app-fire-draft-quote-document>
                 </nz-card>
                 <ng-template #pdfQuoteActions>
                     <div style="display: flex;">
@@ -649,4 +669,3 @@
         </ng-template>
     </nz-modal>
 </nz-spin>
-

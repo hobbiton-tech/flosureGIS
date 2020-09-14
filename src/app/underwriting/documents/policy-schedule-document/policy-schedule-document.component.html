@@ -21,19 +21,15 @@
                         <tr style="border: none;">
                             <td class="title" style="border: none;">
 
-                                <img
-                                    src="/assets/images/Savenda-Logo-Final.png"
-                                    style="width: 100%; max-width: 100px;"
-                                />
+                                <img src="/assets/images/Savenda-Logo-Final.png"
+                                    style="width: 100%; max-width: 100px;" />
                             </td>
 
-                            <td
-                                style="
+                            <td style="
                                     font-size: 11px;
                                     float: right !important;
                                     border: none;
-                                "
-                            >
+                                ">
                                 Savenda General Insurance LTD<br />
                                 Plot 20849 PSC Corporate Park, <br />
                                 P.O Box 30363, Lusaka Zambia<br />
@@ -137,13 +133,13 @@
                 <th>Insurance Provided</th>
             </tr>
             <tr *ngFor="let risk of policy.risks">
-                <td>{{ risk.regNumber }}</td>
-                <td>{{ risk.vehicleMake }}/{{ risk.vehicleModel }}</td>
-                <td>{{ risk.engineNumber }}</td>
-                <td>{{ risk.chassisNumber }}</td>
-                <td>{{ risk.cubicCapacity }}</td>
-                <td>{{ getYearOfManufacture(risk) }}</td>
-                <td>{{ risk.seatingCapacity }}</td>
+                <td>{{ risk.vehicle?.regNumber }}</td>
+                <td>{{ risk.vehicle?.vehicleMake }}/{{ risk.vehicle?.vehicleModel }}</td>
+                <td>{{ risk.vehicle?.engineNumber }}</td>
+                <td>{{ risk.vehicle?.chassisNumber }}</td>
+                <td>{{ risk.vehicle?.cubicCapacity }}</td>
+                <td>{{ risk.vehicle?.yearOfManufacture | date }}</td>
+                <td>{{ risk.vehicle?.seatingCapacity }}</td>
                 <td>{{ policyRisk.sumInsured | number: '1.2-2' }}</td>
                 <td>{{ risk.insuranceType }}</td>
                 <!-- <td>
@@ -295,56 +291,9 @@
         </p>
         <ul style="list-style-type: none;">
             <li *ngFor="let ex of excessList">
-                {{ ex.excessType }}
-                <span style="font-weight: bold;"
-                    >{{ policy.currency }}{{ ex.amount }}</span
-                >
+                {{ ex.description }}
+                <span style="font-weight: bold;">{{ policy.currency }}{{ ex.amount }}</span>
             </li>
-            <!-- <li>
-                The insured shall be responsible for the first 10% of each and
-                every claim/loss subject to retained minimum liability of USD
-                <span style="font-weight: bold;">100</span>
-            </li>
-            <li>
-                Excess applicable on young/inexperienced drivers shall be as
-                hereunder:
-            </li>
-            <li>
-                (i) Any person below 21 years of age - 10% minimum of
-                <span style="font-weight: bold;"
-                    >USD{{ below21Years | number: '1.2-2' }}</span
-                >
-            </li>
-            <li>
-                (ii)Any person over 70 years of age 10% minimum of
-                <span style="font-weight: bold;"
-                    >USD{{ over70Years | number: '1.2-2' }}</span
-                >
-            </li>
-            <li>
-                (iii)Any Person who has not held a full drivers license for a
-                minimum period of 24 months 10% minimum of
-                <span style="font-weight: bold;"
-                    >USD{{ noLicence | number: '1.2-2' }}</span
-                >
-            </li>
-            <li>
-                (iv) Any person who has been convicted and has had a license
-                endorsed as a result of following during the previous three
-                years: >
-            </li>
-            <li>
-                (1)Careless or reckless driving - 10% minimum of
-                <span style="font-weight: bold;"
-                    >USD{{ careLessDriving | number: '1.2-2' }}</span
-                >
-            </li>
-            <li>
-                (2) Any other endorsement - 10% minimum of
-                <span style="font-weight: bold;"
-                    >USD{{ otherEndorsement | number: '1.2-2' }}</span
-                >
-            </li> -->
         </ul>
         <p><span style="font-weight: bold;">Limitations as to Use</span>:</p>
         <p>
@@ -378,7 +327,7 @@
                 style="float: right;">....................................................</span>
         </p>
         <p>
-            <span style="float: center;"></span><span style="float: right;"><span style="font-weight: bold;">For /Chief
+            <span style="float: center;"></span><span style="float: right;"><span style="font-weight: bold;">For Chief
                     Executive Officer</span></span>
         </p>
     </div>

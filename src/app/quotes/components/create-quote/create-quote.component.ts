@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { QuotesService } from '../../services/quotes.service';
@@ -52,6 +52,12 @@ import { ITotalsModel } from '../../models/totals.model';
 import { LimitsOfLiabilityComponent } from '../limits-of-liability/limits-of-liability.component';
 import { ExcessesComponent } from '../excesses/excesses.component';
 import { PremiumComputationService } from '../../services/premium-computation.service';
+import { PropertyDetailsModel } from '../../models/fire-class/property-details.model';
+import { PropertyDetailsComponent } from '../fire-class/property-details/property-details.component';
+import { FireClassService } from '../../services/fire-class.service';
+import { Subscription } from 'rxjs';
+import { InsuranceClassHandlerService } from 'src/app/underwriting/services/insurance-class-handler.service';
+import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
 import * as jwt_decode from 'jwt-decode';
 import { PermissionsModel } from '../../../users/models/roles.model';
 import { UserModel } from '../../../users/models/users.model';
@@ -99,10 +105,17 @@ interface IQuoteNumberResult {
     templateUrl: './create-quote.component.html',
     styleUrls: ['./create-quote.component.scss']
 })
-export class CreateQuoteComponent implements OnInit {
-    isCreatingQuote = false;
+
+export class CreateQuoteComponent implements OnInit, OnDestroy {
+    classHandlerSubscription: Subscription;
+
+    isCreatingQuote: boolean = false;
+
     // view risk modal
     viewRiskModalVisible = false;
+
+    vehicle: VehicleDetailsModel;
+    property: PropertyDetailsModel;
 
     // motorComprehensiveloadingOptions = MotorComprehensiveLoadingOptions;
     motorComprehensiveloadingOptions = [];
@@ -151,8 +164,10 @@ export class CreateQuoteComponent implements OnInit {
     extensionForm: FormGroup;
     // wordingForm: FormGroup;
 
-  userToken: any;
-  decodedJwtData: any;
+    currentClass: IClass;
+    currentClassName: string;
+    userToken: any;
+    decodedJwtData: any;
 
   permission: PermissionsModel;
   user: UserModel;
@@ -173,6 +188,7 @@ export class CreateQuoteComponent implements OnInit {
         private productClauseService: ClausesService,
         private policyService: PoliciesService,
         private vehicleDetailsComponent: VehicleDetailsComponent,
+        private propertyDetailsComponent: PropertyDetailsComponent,
         private premuimComputationsComponent: PremiumComputationComponent,
         private premiumComputationDetailsComponent: PremiumComputationDetailsComponent,
         private extensionsComponent: ExtensionsComponent,
@@ -182,6 +198,8 @@ export class CreateQuoteComponent implements OnInit {
         private limitsOfLiabilityComponent: LimitsOfLiabilityComponent,
         private excessesComponent: ExcessesComponent,
         private premiumComputationService: PremiumComputationService,
+        private fireClassService: FireClassService,
+        private classHandler: InsuranceClassHandlerService,
         private  usersService: UsersService,
     ) {
         // this.clauseForm = formBuilder.group({
@@ -196,6 +214,12 @@ export class CreateQuoteComponent implements OnInit {
         //     heading: ['', Validators.required],
         //     description: ['', Validators.required],
         // });
+
+        this.classHandlerSubscription = this.classHandler.selectedClassChanged$.subscribe(
+            currentClass => {
+                this.currentClassName = localStorage.getItem('class');
+            }
+        );
     }
 
     // conditional render of agent field based on mode(agent or user)
@@ -222,6 +246,8 @@ export class CreateQuoteComponent implements OnInit {
     currentRiskEdit: RiskModel;
 
     risks: RiskModel[] = [];
+    vehicles: VehicleDetailsModel[] = [];
+    properties: PropertyDetailsModel[] = [];
 
     // excesses
     excesses: Excess[] = [];
@@ -304,12 +330,22 @@ export class CreateQuoteComponent implements OnInit {
             this.lastItem = this.quotesList[this.quotesList.length - 1];
         });
 
-      this.clientsService.getAllClients().subscribe(clients => {
+
+        this.quoteService.getVehicles().subscribe(vehicles => {
+            console.log(vehicles);
+            this.vehicles.push(...vehicles);
+        });
+
+        this.quoteService.getProperties().subscribe(properties => {
+            console.log(properties);
+            this.properties.push(...properties);
+        });
+
+        this.clientsService.getAllClients().subscribe(clients => {
+
             this.clients = [...clients[0], ...clients[1]] as Array<
                 IIndividualClient & ICorporateClient
             >;
-
-            console.log('Client List>>>', this.clients);
         });
 
       this.agentsService.getAgents().subscribe(agents => {
@@ -420,21 +456,32 @@ export class CreateQuoteComponent implements OnInit {
 
     // view details of the risk
     viewRiskDetails(risk: RiskModel) {
-        this.selectedRisk = risk;
         this.viewRiskModalVisible = true;
 
-        const vehicleDetails: VehicleDetailsModel = {
-            vehicleMake: risk.vehicleMake,
-            vehicleModel: risk.vehicleModel,
-            yearOfManufacture: risk.yearOfManufacture,
-            regNumber: risk.regNumber,
-            engineNumber: risk.engineNumber,
-            chassisNumber: risk.chassisNumber,
-            color: risk.color,
-            cubicCapacity: risk.cubicCapacity,
-            seatingCapacity: risk.seatingCapacity,
-            bodyType: risk.bodyType
-        };
+        this.quoteService.getVehicles().subscribe(vehicles => {
+            this.vehicles.push(...vehicles);
+
+            const vehicle: VehicleDetailsModel = this.vehicles.filter(
+                x => x.risk.id == risk.id
+            )[0];
+
+            if (localStorage.getItem('class') == 'Motor') {
+                this.vehicleDetailsComponent.setVehicleDetails(vehicle);
+            }
+        });
+
+        this.quoteService.getProperties().subscribe(properties => {
+            this.properties.push(...properties);
+
+            const property: PropertyDetailsModel = this.properties.filter(
+                x => x.risk.id == risk.id
+            )[0];
+
+            if (localStorage.getItem('class') == 'Fire') {
+                this.propertyDetailsComponent.setPropertyDetails(property);
+            }
+        });
+        this.selectedRisk = risk;
 
         const premiumComputationDetails: PremiumComputationDetails = {
             insuranceType: risk.insuranceType,
@@ -456,10 +503,10 @@ export class CreateQuoteComponent implements OnInit {
             netPremium: risk.netPremium
         };
 
-        this.vehicleDetailsComponent.setVehicleDetails(vehicleDetails);
         this.premiumComputationDetailsComponent.setPremiumComputationDetails(
             premiumComputationDetails
         );
+
         this.premuimComputationsComponent.setPremiumComputations(
             premimuComputations
         );
@@ -476,9 +523,7 @@ export class CreateQuoteComponent implements OnInit {
 
     // save risks changes after editing
     saveRisk(): void {
-        console.log('save risk 2 called');
         const index = _.findIndex(this.risks, { id: this.selectedRisk.id });
-        console.log('index:', index);
 
         const vehicleDetails = this.vehicleDetailsService.getVehicleDetails();
         const premimuComputations = this.premuimComputationsComponent.getPremiumComputations();
@@ -500,11 +545,7 @@ export class CreateQuoteComponent implements OnInit {
             excesses: []
         };
 
-        console.log('risk');
-        console.log(risk);
-
         this.risks.splice(index, 1, risk);
-        console.log(this.risks);
 
         this.risks = this.risks;
     }
@@ -539,8 +580,6 @@ export class CreateQuoteComponent implements OnInit {
 
         const intermediaryIdA = this.quoteForm.controls.intermediaryName.value
             .id;
-
-        console.log('Client Details>>>>>>', intermediaryNameA, intermediaryIdA);
 
         const quote: MotorQuotationModel = {
             // ...this.quoteForm.value,
@@ -597,7 +636,12 @@ export class CreateQuoteComponent implements OnInit {
             this.productClauseService.addPolicyWording(this.newWordingWording);
         }
 
-        this.quoteService.createMotorQuotation(quote, this.quotesCount);
+        this.quoteService.createMotorQuotation(
+            quote,
+            this.vehicles,
+            this.properties
+        );
+
         this.isCreatingQuote = false;
     }
 
@@ -716,8 +760,12 @@ export class CreateQuoteComponent implements OnInit {
 
     // add risk to table
     addRisk() {
+        let insuranceClass = 'Fire';
         const risk: RiskModel[] = [];
+
         const vehicleDetails = this.vehicleDetailsService.getVehicleDetails();
+        const propertyDetails = this.fireClassService.getPropertyDetails();
+
         const premimuComputations = this.premuimComputationsComponent.getPremiumComputations();
         const premiumComputationDetails = this.premiumComputationDetailsComponent.getPremiumComputationDetails();
         const extensionDetails = this.extensionsComponent.getExtensions();
@@ -732,7 +780,6 @@ export class CreateQuoteComponent implements OnInit {
 
         risk.push({
             id: v4(),
-            ...vehicleDetails,
             ...premimuComputations,
             ...premiumComputationDetails,
             ...extensionDetails,
@@ -742,6 +789,23 @@ export class CreateQuoteComponent implements OnInit {
             LiabilityType: liabilityType,
             excesses
         });
+
+        if (localStorage.getItem('class') == 'Motor') {
+            this.vehicles.push({
+                id: v4(),
+                ...vehicleDetails,
+                risk: risk[0]
+            });
+        }
+
+        if (localStorage.getItem('class') == 'Fire') {
+            this.properties.push({
+                id: v4(),
+                ...propertyDetails,
+                risk: risk[0]
+            });
+        }
+
         this.risks = [...this.risks, ...risk];
 
         this.vehicleDetailsService.resetVehicleDetails();
@@ -757,5 +821,9 @@ export class CreateQuoteComponent implements OnInit {
     resetRiskDetails() {
         this.vehicleDetailsService.resetVehicleDetails();
         this.premiumComputationService.resetRiskDetails();
+    }
+
+    ngOnDestroy() {
+        this.classHandlerSubscription.unsubscribe();
     }
 }

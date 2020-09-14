@@ -46,6 +46,9 @@ import { PolicyWordingComponent } from './documents/policy-wording/policy-wordin
 import { PolicyComprehensiveCertificateComponent } from './documents/policy-comprehensive-certificate/policy-comprehensive-certificate';
 import { PolicyThirdpartyCertificateComponent } from './documents/policy-thirdparty-certificate/policy-thirdparty-certificate.component';
 import { QuotesModule } from '../quotes/quotes.module';
+import { FirePolicyScheduleComponent } from './documents/Fire-insurance/fire-policy-schedule/fire-policy-schedule.component';
+import { FireCoverNoteComponent } from './documents/Fire-insurance/fire-cover-note/fire-cover-note.component';
+import { CreateQuoteComponent } from '../quotes/components/create-quote/create-quote.component';
 import { UsersRolesComponent } from '../users/components/users-roles/users-roles.component';
 import { AuthGuard } from '../users/helpers/auth.guard';
 // tslint:disable-next-line: max-line-length
@@ -54,72 +57,72 @@ const routes: Routes = [
     {
         path: 'endorsements',
         component: EndorsementsComponent,
-      canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
     {
         path: 'endorsements/revision-cover',
         component: RevisionCoverComponent,
-      canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
     {
         path: 'endorsements/view-endorsements',
         component: ViewEndorsementsComponent,
-      canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
     {
         path: 'endorsements/extension-cover',
         component: ExtensionCoverComponent,
-      canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
     {
         path: 'endorsements/cancellation-cover',
         component: CancellationCoverComponent,
-      canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
     {
         path: 'endorsements/edit-policy',
         component: EditPolicyComponent,
-      canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
     {
         path: 'endorsements/edit-cancellation',
         component: EditCancellationComponent,
-      canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
     {
         path: 'endorsements/edit-extension',
         component: EditExtensionComponent,
-      canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
     {
         path: 'policies',
         component: PoliciesComponent,
-      canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
     {
         path: 'policy-details',
         component: PolicyDetailsComponent,
-      canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
     {
         path: 'policy-revision-details/:id',
         component: PolicyRevisionDetailsComponent,
-      canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
     {
         path: 'policy-extension-details/:id',
         component: PolicyExtensionDetailsComponent,
-      canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
     {
         path: 'policy-cancellation-details/:id',
         component: PolicyCancellationDetailsComponent,
-      canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
     {
         path: 'backup-policy-details/:id',
         component: BackupPolicyDetailsComponent,
-      canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
     {
         path: 'policy-details/:id',
@@ -176,7 +179,9 @@ const routes: Routes = [
         PolicyWordingComponent,
         PolicyComprehensiveCertificateComponent,
         PolicyThirdpartyCertificateComponent,
-        PolicyScheduleCombinedDocumentComponent
+        PolicyScheduleCombinedDocumentComponent,
+        FirePolicyScheduleComponent,
+        FireCoverNoteComponent
     ],
     imports: [
         CommonModule,
@@ -188,6 +193,11 @@ const routes: Routes = [
         NgxPrintModule,
         QuotesModule
     ],
-    providers: [PolicyDetailsResolver, PoliciesService, EndorsementService]
+    providers: [
+        PolicyDetailsResolver,
+        PoliciesService,
+        EndorsementService,
+        CreateQuoteComponent
+    ]
 })
 export class UnderWritingModule {}

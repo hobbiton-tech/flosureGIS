@@ -101,8 +101,8 @@
                                     <nz-form-item>
                                         <nz-form-label nzSpan="7" nzRequired>Policy number</nz-form-label>
                                         <nz-form-control nzSpan="16">
-                                            <nz-select nzPlaceHolder="Select risk" formControlName="policy" nzShowSearch
-                                                (ngModelChange)="handlePolicyChange()">
+                                            <nz-select nzPlaceHolder="Select Policy" formControlName="policy"
+                                                nzShowSearch (ngModelChange)="handlePolicyChange()">
                                                 <nz-option *ngFor="let policy of displayPoliciesList" [nzValue]="policy"
                                                     [nzLabel]="policy.policyNumber"></nz-option>
                                             </nz-select>
@@ -110,10 +110,16 @@
                                     </nz-form-item>
                                     <nz-form-label nzSpan="7" nzRequired>Risk ID</nz-form-label>
                                     <nz-form-control nzSpan="16">
-                                        <nz-select nzPlaceHolder="Select activity" formControlName="risk" nzShowSearch
+                                        <nz-select nzPlaceHolder="Select risk" formControlName="risk" nzShowSearch
                                             (ngModelChange)="handleRiskChange()">
-                                            <nz-option *ngFor="let risk of displayRisksList" [nzValue]="risk"
-                                                [nzLabel]="risk.regNumber"></nz-option>
+                                            <div *ngIf="currentClass?.className?.toLocaleLowerCase() == 'motor'">
+                                                <nz-option *ngFor="let risk of displayRisksList" [nzValue]="risk"
+                                                    [nzLabel]="risk.vehicle.regNumber"></nz-option>
+                                            </div>
+                                            <div *ngIf="currentClass?.className?.toLocaleLowerCase() == 'fire'">
+                                                <nz-option *ngFor="let risk of displayRisksList" [nzValue]="risk"
+                                                    [nzLabel]="risk.property.propertyId"></nz-option>
+                                            </div>
                                         </nz-select>
                                     </nz-form-control>
                                 </nz-form-item>

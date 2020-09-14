@@ -46,6 +46,12 @@ import {
     PremiumComputation
 } from 'src/app/quotes/models/premium-computations.model';
 import { ITotalsModel } from 'src/app/quotes/models/totals.model';
+import { PropertyDetailsComponent } from 'src/app/quotes/components/fire-class/property-details/property-details.component';
+import { PropertyDetailsModel } from 'src/app/quotes/models/fire-class/property-details.model';
+import { CreateQuoteComponent } from 'src/app/quotes/components/create-quote/create-quote.component';
+import { InsuranceClassHandlerService } from '../../services/insurance-class-handler.service';
+import { DebitNote } from '../../documents/models/documents.model';
+import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
 import * as jwt_decode from 'jwt-decode';
 import { PermissionsModel } from '../../../users/models/roles.model';
 import { UserModel } from '../../../users/models/users.model';
@@ -97,6 +103,9 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
 
     // loading feedback
     policyRenewalDetailsIsLoading = false;
+
+    vehicle: VehicleDetailsModel;
+    property: PropertyDetailsModel;
 
     // modals
     addRiskFormModalVisible = false;
@@ -218,6 +227,9 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
         private discountsComponent: DiscountsComponent,
         private totalsComponent: TotalsViewComponent,
         private vehicleDetailsService: VehicleDetailsServiceService,
+        private propertyDetailsComponent: PropertyDetailsComponent,
+        private createQuoteComponent: CreateQuoteComponent,
+        private classHandler: InsuranceClassHandlerService,
         private  usersService: UsersService,
     ) {
         this.paymentPlanForm = this.formBuilder.group({
@@ -227,6 +239,26 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
         });
     }
 
+    // conditional render of agent field based on mode(agent or user)
+    agentMode = false;
+    switchLoading = false;
+
+    compareFn = (o1: any, o2: any) =>
+        o1 && o2 ? o1.value === o2.value : o1 === o2;
+
+    disabledStartDate = (startValue: Date): boolean => {
+        if (!startValue || !this.endValue) {
+            return false;
+        }
+        return startValue.getTime() > this.endValue.getTime();
+    };
+
+    disabledEndDate = (endValue: Date): boolean => {
+        if (!endValue || !this.startValue) {
+            return false;
+        }
+        return endValue.getTime() <= this.startValue.getTime();
+    };
     ngOnInit(): void {
         this.policyRenewalDetailsIsLoading = true;
         setTimeout(() => {
@@ -247,6 +279,8 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
           });
             this.policiesService.getPolicyById(id.id).subscribe(policy => {
                 this.policyData = policy;
+
+                this.classHandler.changeSelectedClass(this.policyData.class);
 
                 this.policyID = this.policyData.id;
                 this.policyNumber = this.policyData.policyNumber;
@@ -338,7 +372,6 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
             town: [''],
             remarks: ['', Validators.required]
         });
-
 
     }
 
@@ -452,14 +485,14 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
                 receipt_type: 'Premium Payment',
                 sum_in_digits: this.paymentPlanForm.controls
                     .initialInstallmentAmount.value,
-                today_date: new Date(),
+                today_date: new Date()
             };
 
             const planReceipt: PlanReceipt[] = [];
             planReceipt.push({
                 allocation_status: 'Unallocated',
-                amount: this.paymentPlanForm.controls
-                    .initialInstallmentAmount.value,
+                amount: this.paymentPlanForm.controls.initialInstallmentAmount
+                    .value
             });
 
             // plan.planReceipt = planReceipt;
@@ -525,49 +558,8 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
     // view details of the risk
     viewRiskDetails(risk: RiskModel) {
         this.selectedRisk = risk;
-        this.viewRiskModalVisible = true;
 
-        const vehicleDetails: VehicleDetailsModel = {
-            vehicleMake: risk.vehicleMake,
-            vehicleModel: risk.vehicleModel,
-            yearOfManufacture: risk.yearOfManufacture,
-            regNumber: risk.regNumber,
-            engineNumber: risk.engineNumber,
-            chassisNumber: risk.chassisNumber,
-            color: risk.color,
-            cubicCapacity: risk.cubicCapacity,
-            seatingCapacity: risk.seatingCapacity,
-            bodyType: risk.bodyType
-        };
-
-        const premiumComputationDetails: PremiumComputationDetails = {
-            insuranceType: risk.insuranceType,
-            productType: risk.productType,
-            riskStartDate: risk.riskStartDate,
-            riskEndDate: risk.riskEndDate,
-            riskQuarter: risk.riskQuarter,
-            numberOfDays: risk.numberOfDays,
-            expiryQuarter: risk.expiryQuarter
-        };
-
-        const premimuComputations: PremiumComputation = {
-            sumInsured: risk.sumInsured
-        };
-
-        const totals: ITotalsModel = {
-            basicPremium: risk.basicPremium,
-            premiumLevy: risk.premiumLevy,
-            netPremium: risk.netPremium
-        };
-
-        this.vehicleDetailsComponent.setVehicleDetails(vehicleDetails);
-        this.premiumComputationDetailsComponent.setPremiumComputationDetails(
-            premiumComputationDetails
-        );
-        this.premuimComputationsComponent.setPremiumComputations(
-            premimuComputations
-        );
-        this.totalsComponent.setTotals(totals);
+        this.createQuoteComponent.viewRiskDetails(risk);
     }
 
     // remove risk from risks table
@@ -650,6 +642,9 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
             // console.log('CERT', cert.Location);
 
             // await this.quotesService.addQuoteDocuments()
+            const currentClassObj: IClass = JSON.parse(
+                localStorage.getItem('classObject')
+            );
 
             const endorsement: Endorsement = {
                 ...this.endorsementForm.value,
@@ -673,18 +668,50 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
                 user: localStorage.getItem('user')
             };
 
+            const debitNote: DebitNote = {
+                remarks: 'Policy renewal',
+                status: 'Pending',
+                debitNoteAmount: Number(
+                    this.sumArray(this.risks, 'netPremium')
+                ),
+                dateCreated: new Date(),
+                dateUpdated: new Date()
+            };
+
             this.policyData = policy;
 
             this.policyData.id = this.policyID;
             this.policyData.policyNumber = this.policyNumber;
 
-            console.log('POLICY>>>>', this.policyData);
-            await this.policiesService.renewPolicy(this.policyData);
+            this.policiesService.renewPolicy(this.policyData);
 
             this.endorsementService.createEndorsement(
                 this.policyData.id,
                 endorsement
             );
+
+            this.http
+                .get<any>(
+                    `https://number-generation.flosure-api.com/savenda-invoice-number/1/${currentClassObj.classCode}`
+                )
+                .subscribe(async resd => {
+                    debitNote.debitNoteNumber = resd.data.invoice_number;
+
+                    this.http
+                        .post<DebitNote>(
+                            `https://flosure-postgres-db.herokuapp.com/documents/debit-note/${this.policyData.id}`,
+                            debitNote
+                        )
+                        .subscribe(
+                            async resh => {
+                                console.log(resh);
+                            },
+                            async err => {
+                                console.log(err);
+                            }
+                        );
+                });
+
             setTimeout(() => {
                 this.loadingPolicy = false;
             }, 3000);

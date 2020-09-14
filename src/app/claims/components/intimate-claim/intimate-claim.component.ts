@@ -20,6 +20,7 @@ import { Policy } from 'src/app/underwriting/models/policy.model';
 import { RiskModel } from 'src/app/quotes/models/quote.model';
 import { IClaimant } from '../../models/claimant.model';
 import { NzMessageService } from 'ng-zorro-antd';
+import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
 
 @Component({
     selector: 'app-intimate-claim',
@@ -50,6 +51,8 @@ export class IntimateClaimComponent implements OnInit {
     selectedType: any;
 
     claimNumber: string;
+
+    currentClass: IClass;
 
     claimantTypeOptions = [
         { label: 'INSURED', value: 'Insured' },
@@ -103,6 +106,7 @@ export class IntimateClaimComponent implements OnInit {
         this.policiesService.getPolicies().subscribe(policies => {
             this.policiesList = policies;
             this.displayPoliciesList = this.policiesList;
+            console.log(this.policiesList);
         });
 
         this.claimService.getClaimants().subscribe(claimants => {
@@ -177,7 +181,12 @@ export class IntimateClaimComponent implements OnInit {
 
     handlePolicyChange() {
         const policy = this.intimateClaimForm.get('policy').value;
+        this.currentClass = policy.class;
         this.displayRisksList = policy.risks;
+        this.intimateClaimForm.get('risk').setValue(policy.risks[0]);
+
+        console.log('policy:=>', policy);
+        console.log('class:=>', this.currentClass);
     }
 
     reloadClaimants() {

@@ -45,6 +45,9 @@ import { AddChequeLotComponent } from './components/finance/components/add-chequ
 import { ClaimsSetupsComponent } from './components/claims-setups/claims-setups.component';
 import { AddServiceProviderComponent } from './components/claims-setups/components/add-service-provider/add-service-provider.component';
 import { AddInsuranceCompanyComponent } from './components/claims-setups/components/add-insurance-company/add-insurance-company.component';
+import { LocationComponent } from './components/location-setups/components/location/location.component';
+import { AddProvinceComponent } from './components/location-setups/components/add-province/add-province.component';
+import { AddCityComponent } from './components/location-setups/components/add-city/add-city.component';
 import { DepartmentsComponent } from './components/organizational-setups/departments/departments.component';
 import { UsersRolesComponent } from '../users/components/users-roles/users-roles.component';
 import { AuthGuard } from '../users/helpers/auth.guard';
@@ -53,12 +56,12 @@ const routes: Routes = [
     {
         path: 'insurance-companies',
         component: InsuranceCompaniesComponent,
-      canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
     {
         path: 'rates',
         component: RatesComponent,
-      canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
     // {
     //     path: 'add-insurance-company',
@@ -67,61 +70,65 @@ const routes: Routes = [
     {
         path: 'clauses',
         component: UnderwritingSetupsComponent,
-      canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
     {
         path: 'accounts',
         component: AccountsComponent,
-      canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
     {
         path: 'finance',
         component: FinanceComponent,
-      canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'location',
+        component: LocationComponent
     },
     {
         path: 'organization-setups',
         component: OrganizationalSetupsComponent
     },
     {
-      path: 'organization-setups/departments',
-      component: DepartmentsComponent,
-      canActivate: [AuthGuard]
-  },
+        path: 'organization-setups/departments',
+        component: DepartmentsComponent,
+        canActivate: [AuthGuard]
+    },
     {
         path: 'agents-setups',
         component: AgentsComponent,
-      canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
     {
         path: 'add-agents',
         component: AddAgentComponent,
-      canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
     {
         path: 'product-setups',
         component: ProductSetupsComponent,
-      canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
     {
         path: 'warranties',
         component: WarrantiesComponent,
-      canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
     {
         path: 'extensions',
         component: ExtensionsComponent,
-      canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
     {
         path: 'claims',
         component: ClaimsSetupsComponent,
-      canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
     {
         path: 'loss-adjustor-details/:id',
         component: LossAdjustorDetailsComponent,
-      canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
     {
         path: 'service-provider-details/:id',
@@ -130,15 +137,14 @@ const routes: Routes = [
     {
         path: 'claimant-details/:id',
         component: ClaimantDetailsComponent,
-      canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
 
     {
         path: 'salvage-buyer-details/:id',
         component: SalvageBuyerDetailsComponent,
-      canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     }
-
 ];
 
 @NgModule({
@@ -184,6 +190,9 @@ const routes: Routes = [
         ClaimsSetupsComponent,
         AddServiceProviderComponent,
         AddInsuranceCompanyComponent,
+        LocationComponent,
+        AddProvinceComponent,
+        AddCityComponent,
         DepartmentsComponent
     ],
     imports: [

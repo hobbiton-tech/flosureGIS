@@ -66,7 +66,8 @@
         <tr>
           <td><strong>Period Of Insurance</strong></td>
           <td><strong>:</strong></td>
-          <td><span>One year from date to be advised</span></td>
+          <td><span><strong>From: </strong> {{ quoteData?.startDate | date }} <strong>To: </strong>
+              {{quoteData?.endDate | date}}</span></td>
         </tr>
         <tr>
           <td><strong>Validity Period</strong></td>
@@ -102,7 +103,7 @@
       <tr class="information">
         <td colspan="2">
           <p style="text-align: center; background-color: skyblue; color: aliceblue;">
-            {{quoteData.risks ? (quoteData.risks[0].insuranceType == 'Motor Comprehensive' ? 'COMPREHENSIVE' : 'THIRD PARTY') : '-'}}
+            {{quoteData?.class?.className}}
           </p>
           <br />
         </td>
@@ -147,9 +148,9 @@
         <th style="border: 1px solid black;">TOTAL({{quoteData.currency}}) </th>
       </tr>
       <tr *ngFor="let risk of risksTable.data">
-        <td style="border: 1px solid black;">{{risk.vehicleMake}}</td>
-        <td style="border: 1px solid black;">{{risk.vehicleModel}}</td>
-        <td style="border: 1px solid black;">{{risk.regNumber}}</td>
+        <td style="border: 1px solid black;">{{risk?.vehicle?.vehicleMake}}</td>
+        <td style="border: 1px solid black;">{{risk?.vehicle?.vehicleModel}}</td>
+        <td style="border: 1px solid black;">{{risk?.vehicle?.regNumber}}</td>
         <td style="border: 1px solid black;">{{risk.sumInsured | number: '1.2-2'}}</td>
         <td style="border: 1px solid black;">
           {{quoteData.risks[0].insuranceType == 'Comprehensive' ? '5' : '-'}}
@@ -201,15 +202,16 @@
         <tr>
           <td><strong>Basic Excess</strong></td>
           <td><strong>:</strong></td>
-          <!-- <td><span>10% minimum K1,000.00 each claim – all other losses (Own damage and TPPD)</span></td> -->
+          <td *ngFor="let exc of excessList"><span>{{exc.description}}
+              {{' '}}{{quoteData.currency}}{{' '}}{{exc.amount}}</span></td>
         </tr>
 
-        <tr *ngFor="let exc of excessList">
+        <!-- <tr *ngFor="let exc of excessList">
           <td></td>
           <td><strong>:</strong></td>
-          <td><span>{{exc.excessType}} {{exc.amount}}</span>
+          <td><span>{{exc.description}} {{' '}}{{exc.amount}}</span>
           </td>
-        </tr>
+        </tr> -->
 
         <tr>
           <td><strong>Conditions/Warranties</strong></td>

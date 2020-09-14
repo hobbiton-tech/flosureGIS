@@ -1,0 +1,100 @@
+<div>
+    <nz-divider nzText="Risk Details" nzOrientation="left">
+    </nz-divider>
+    <form nz-form [formGroup]="propertyDetailsForm">
+        <div nz-row nzGutter="0">
+            <div nz-col nzSpan="8">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10" nzFor="propertyId" nzRequired>
+                        Risk ID
+                    </nz-form-label>
+                    <nz-form-control nzSpan="10">
+                        <input nz-input formControlName="propertyId" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10" nzFor="propertyDescription" nzRequired>
+                        Risk Description
+                    </nz-form-label>
+                    <nz-form-control nzSpan="10">
+                        <input nz-input formControlName="propertyDescription" />
+                    </nz-form-control>
+                </nz-form-item>
+                <div *ngIf="currentProduct?.toLocaleLowerCase() == 'house owners'">
+                    <nz-form-item>
+                        <nz-form-label [nzSpan]="10" nzFor="roofType" nzRequired>Roof Type
+                        </nz-form-label>
+                        <nz-form-control nzSpan="10">
+                            <nz-select formControlName="roofType">
+                                <nz-option *ngFor="
+                                    let roofType of roofTypes
+                                " [nzValue]="
+                                    roofType.value
+                                " [nzLabel]="
+                                roofType.label
+                                "></nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <div nz-col nzSpan="8">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10" nzFor="subClass">Sub Class
+                    </nz-form-label>
+                    <nz-form-control nzSpan="10">
+                        <nz-select formControlName="subClass" nzRequired (ngModelChange)="handleProductChange()">
+                            <nz-option *ngFor="
+                                    let subClass of productOptions
+                                " [nzValue]="
+                                    subClass.productName
+                                " [nzLabel]="
+                                subClass.productName
+                                "></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10" nzFor="address" nzRequired>
+                        Address
+                    </nz-form-label>
+                    <nz-form-control nzSpan="10">
+                        <input nz-input name="address" formControlName="address" type="text" id="address" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzRequired nzSpan="10">City</nz-form-label>
+                    <nz-form-control nzSpan="10">
+                        <nz-select formControlName="city">
+                            <div *ngFor="let city of cities">
+                                <nz-option [nzValue]="city" [nzLabel]="city.name">
+                                </nz-option>
+                            </div>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10" nzFor="propertyUse" nzRequired>
+                        Use of Property
+                    </nz-form-label>
+                    <nz-form-control nzSpan="10">
+                        <input nz-input name="propertyUse" formControlName="propertyUse" type="text" id="propertyUse" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzRequired nzSpan="10">Province</nz-form-label>
+                    <nz-form-control nzSpan="10">
+                        <nz-select formControlName="province" (ngModelChange)="changeCities()">
+                            <div *ngFor="let province of provinces">
+                                <nz-option [nzValue]="province" [nzLabel]="province.name">
+                                </nz-option>
+                            </div>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+    </form>
+</div>

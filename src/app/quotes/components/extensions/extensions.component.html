@@ -3,7 +3,7 @@
         <nz-form-item>
             <nz-form-label [nzSpan]="10" nzFor="extensions">Add Extension
             </nz-form-label>
-            <nz-form-control nzSpan="9">
+            <nz-form-control nzSpan="13">
                 <nz-select name="extensions" nzPlaceHolder="Select Extension" [(ngModel)]="
                             selectedExtensionValue
                         " nzAllowClear style="
@@ -26,7 +26,7 @@
     </div>
 
     <div *ngIf="selectedExtensionValue">
-        <nz-form-item>
+        <!-- <nz-form-item>
             <nz-form-label nzSpan="10">Extension Input
                 Type</nz-form-label>
             <nz-form-control nzSpan="9">
@@ -41,7 +41,7 @@
                     </nz-option>
                 </nz-select>
             </nz-form-control>
-        </nz-form-item>
+        </nz-form-item> -->
         <div *ngIf="
                 selectedExtensionInputTypeValue ==
                 'amount'
@@ -49,7 +49,7 @@
             <nz-form-item>
                 <nz-form-label nzSpan="10" nzRequired>Amount
                 </nz-form-label>
-                <nz-form-control nzSpan="9">
+                <nz-form-control nzSpan="13">
                     <input nz-input nzPlaceHolder="" type="number" name="extensionAmount" [(ngModel)]="
                             extensionAmount
                         " [ngModelOptions]="{

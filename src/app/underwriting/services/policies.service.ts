@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Injectable, OnDestroy } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { Policy } from '../models/policy.model';
 import {
     AngularFirestore,
@@ -19,6 +19,8 @@ import {
 } from '../documents/models/documents.model';
 import { IRequisitionModel } from 'src/app/accounts/components/models/requisition.model';
 import { AccountService } from 'src/app/accounts/services/account.service';
+import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
+import { InsuranceClassHandlerService } from './insurance-class-handler.service';
 
 const BASE_URL = 'https://savenda.flosure-api.com';
 
@@ -39,7 +41,10 @@ interface ICoverNoteResult {
 @Injectable({
     providedIn: 'root'
 })
-export class PoliciesService {
+export class PoliciesService implements OnDestroy {
+    classHandlerSubscription: Subscription;
+    currentClass: IClass;
+
     private policiesCollection: AngularFirestoreCollection<Policy>;
     policies: Observable<Policy[]>;
     policy: any;
@@ -49,10 +54,17 @@ export class PoliciesService {
         private firebase: AngularFirestore,
         private msg: NzMessageService,
         private http: HttpClient,
-        private accountsService: AccountService
+        private accountsService: AccountService,
+        private classHandler: InsuranceClassHandlerService
     ) {
         this.policiesCollection = firebase.collection<Policy>('policies');
         this.policies = this.policiesCollection.valueChanges();
+
+        this.classHandlerSubscription = this.classHandler.selectedClassChanged$.subscribe(
+            currentClass => {
+                this.currentClass = currentClass;
+            }
+        );
     }
 
     // postgres db
@@ -67,7 +79,10 @@ export class PoliciesService {
             insuranceType = 'THP';
         }
 
-        return this.http.post<Policy>(`${BASE_URL}/policy`, policy);
+        return this.http.post<Policy>(
+            `${BASE_URL}/policy/${this.currentClass.id}`,
+            policy
+        );
     }
 
     // getPolicies(): Observable<Policy[]> {
@@ -214,10 +229,7 @@ export class PoliciesService {
     }
 
     getPolicyById(policyId: string): Observable<Policy> {
-
-        return this.http.get<Policy>(
-            `${BASE_URL}/policy/${policyId}`
-        );
+        return this.http.get<Policy>(`${BASE_URL}/policy/${policyId}`);
 
         // return this.policiesCollection.doc<Policy>(policyId).valueChanges();
     }
@@ -406,5 +418,9 @@ export class PoliciesService {
             `${BASE_URL}/documents/cover-note/${coverNoteId}`,
             coverNote
         );
+    }
+
+    ngOnDestroy() {
+        this.classHandlerSubscription.unsubscribe();
     }
 }

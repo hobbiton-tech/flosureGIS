@@ -24,14 +24,14 @@
                     <button nz-button nzType="default" (click)="isClausesPDFVisible = true">
                         Clauses
                     </button>
-                    <button nz-button nzType="default" (click)="isSchedulePDFVisible = true">
+                    <button nz-button nzType="default" (click)="openPolicySchedule()">
                         Policy Schedule
                     </button>
 
-<!--                    <button *ngIf="policyData.paymentPlan === 'NotCreated'" nz-button nzType="primary"-->
-<!--                        (click)="showModal(policyData)">-->
-<!--                        Create Payment Plan-->
-<!--                    </button>-->
+                    <!--                    <button *ngIf="policyData.paymentPlan === 'NotCreated'" nz-button nzType="primary"-->
+                    <!--                        (click)="showModal(policyData)">-->
+                    <!--                        Create Payment Plan-->
+                    <!--                    </button>-->
                 </nz-page-header-extra>
             </nz-page-header>
         </div>
@@ -120,29 +120,22 @@
                     <thead>
                         <tr>
                             <th>Insurance Type</th>
-                            <th>Registration Number</th>
-                            <th>Vehicle Make</th>
-                            <th>Vehicle Model</th>
-                            <th>Engine Number</th>
-                            <th>Chassis Number</th>
-                            <th>Color</th>
                             <th>Product Type</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
                             <th>Sum Insured</th>
                             <th>Premium</th>
+                            <th>Action</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let risk of risksTable.data">
                             <td>{{ risk.insuranceType }}</td>
-                            <td>{{ risk.regNumber }}</td>
-                            <td>{{ risk.vehicleMake }}</td>
-                            <td>{{ risk.vehicleModel }}</td>
-                            <td>{{ risk.engineNumber }}</td>
-                            <td>{{ risk.chassisNumber }}</td>
-                            <td>{{ risk.color }}</td>
                             <td>{{ risk.productType }}</td>
-                            <td>{{ risk.sumInsured | number: '1.2-2' }}</td>
+                            <td>{{ risk.riskStartDate | date}}</td>
+                            <td>{{ risk.riskEndDate | date}}</td>
+                            <td>{{ risk.sumInsured | number }}</td>
                             <td>{{ risk.netPremium | number: '1.2-2' }}</td>
                             <td>
                                 <button nz-button nzType="default" (click)="isNewCertificateVisible(risk)">
@@ -263,6 +256,14 @@
     </nz-card>
 </nz-modal>
 
+<nz-modal style="width: 100%;" nzWidth="900" nzTitle="" [(nzVisible)]="isFireCoverNotePDFVisible"
+    (nzOnCancel)="isFireCoverNotePDFVisible = false" (nzOnOk)="isFireCoverNotePDFVisible = false">
+    <nz-card [nzBordered]="true" nzTitle="Cover Note Document">
+        <app-fire-cover-note *ngIf="!risksLoading" [policyRisk]="selectedRisk" [policy]="policyData" [client]="client">
+        </app-fire-cover-note>
+    </nz-card>
+</nz-modal>
+
 <nz-modal style="width: 100%;" nzWidth="900" nzTitle="" [(nzVisible)]="isDebitNotePDFVisible"
     (nzOnCancel)="isDebitNotePDFVisible = false" (nzOnOk)="isDebitNotePDFVisible = false">
     <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Debit Document">
@@ -290,6 +291,14 @@
             [over70Years]="over70Years" [noLicence]="noLicence" [careLessDriving]="careLessDriving"
             [otherEndorsement]="otherEndorsement" [coverNot]="coverNot" [limitsOfLiablity]="limitsOfLiablity">
         </app-policy-schedule-document>
+    </nz-card>
+</nz-modal>
+
+<nz-modal style="width: 150%;" nzTitle="" nzWidth="950" [(nzVisible)]="isFirePolicySchedulePDFVisible"
+    (nzOnCancel)="isFirePolicySchedulePDFVisible = false" (nzOnOk)="isFirePolicySchedulePDFVisible = false">
+    <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Schedule Document">
+        <app-fire-policy-schedule *ngIf="!risksLoading" [policy]="policyData" [client]="client">
+        </app-fire-policy-schedule>
     </nz-card>
 </nz-modal>
 

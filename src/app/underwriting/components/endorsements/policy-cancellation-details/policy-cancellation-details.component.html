@@ -117,13 +117,9 @@
                         <thead>
                             <tr>
                                 <th>Insurance Type</th>
-                                <th>Registration Number</th>
-                                <th>Vehicle Make</th>
-                                <th>Vehicle Model</th>
-                                <th>Engine Number</th>
-                                <th>Chassis Number</th>
-                                <th>Color</th>
                                 <th>Product Type</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
                                 <th>Sum Insured</th>
                                 <th>Premium</th>
                                 <th>Action</th>
@@ -132,14 +128,10 @@
                         <tbody>
                             <tr *ngFor="let risk of risksTable.data">
                                 <td>{{ risk.insuranceType }}</td>
-                                <td>{{ risk.regNumber }}</td>
-                                <td>{{ risk.vehicleMake }}</td>
-                                <td>{{ risk.vehicleModel }}</td>
-                                <td>{{ risk.engineNumber }}</td>
-                                <td>{{ risk.chassisNumber }}</td>
-                                <td>{{ risk.color }}</td>
                                 <td>{{ risk.productType }}</td>
-                                <td>{{ risk.sumInsured | number: '1.2-2' }}</td>
+                                <td>{{ risk.riskStartDate | date}}</td>
+                                <td>{{ risk.riskEndDate | date}}</td>
+                                <td>{{ risk.sumInsured | number }}</td>
                                 <td>{{ risk.netPremium | number: '1.2-2' }}</td>
                                 <td>
                                     <button nz-button nzType="primary" nzSize="small" (click)="viewRiskDetails(risk)">

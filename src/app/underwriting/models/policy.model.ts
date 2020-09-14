@@ -1,5 +1,6 @@
 import { RiskModel } from 'src/app/quotes/models/quote.model';
 import { DebitNote, CreditNote } from '../documents/models/documents.model';
+import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
 
 export class Policy {
     id: string;
@@ -36,6 +37,7 @@ export class Policy {
     remarks?: string;
     term: number;
     requisitionStatus?: RequisitionStatus;
+    class?: IClass;
 }
 
 export interface ITimestamp {

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { IRequisitionPayment } from 'src/app/settings/models/requisition-payment.model';
 import { Observable } from 'rxjs';
 
-const BASE_URL = 'https://savenda.flosure-api.com';
+const BASE_URL = 'https://flosure-postgres-db.herokuapp.com';
 
 @Injectable({
     providedIn: 'root'

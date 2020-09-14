@@ -1,3 +1,5 @@
+import { IProduct } from '../../components/product-setups/models/product-setups-models.model';
+
 export interface IClause {
     id: string;
     heading: string;
@@ -67,12 +69,12 @@ export interface ILimit {
 }
 
 export interface IExccess {
-    id: string;
-    heading: string;
-    productId: string;
+    id?: string;
+    heading?: string;
+    product?: IProduct;
     description: string;
-    amount: string;
-    vehicleType: string;
+    amount: number;
+    vehicleType?: string;
 }
 
 // const createClause = () => {

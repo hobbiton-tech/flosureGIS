@@ -98,7 +98,6 @@ export class FinanceComponent implements OnInit {
     }
 
     updateBankAccountsTable() {
-        console.log('high hopes!');
         this.bankAccountsService.getBankAccounts().subscribe(bankAccounts => {
             this.bankAccountsList = bankAccounts;
             this.displayBankAccountsList = this.bankAccountsList;

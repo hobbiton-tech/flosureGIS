@@ -157,10 +157,10 @@ export class ClaimsProcessingComponent implements OnInit {
         // const riskRegNumbers: string[] = []
 
         let policyRisksRegNumbers: string[] = claim.policy.risks.map(
-            x => x.regNumber
+            x => x.vehicle.regNumber
         );
 
-        if (policyRisksRegNumbers.includes(claim.risk.regNumber)) {
+        if (policyRisksRegNumbers.includes(claim.risk.vehicle.regNumber)) {
             this.isClaimRiskUnderPolicy = true;
         } else {
             this.isClaimRiskUnderPolicy = false;

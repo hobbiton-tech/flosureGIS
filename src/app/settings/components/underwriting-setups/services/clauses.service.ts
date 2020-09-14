@@ -371,6 +371,7 @@ export class ClausesService {
             .set(exccess)
             .then(mess => {
                 this.message.success('Exccesses Successfuly Created');
+                console.log(mess);
             })
             .catch(err => {
                 this.message.warning('Failed to Create Exccesses');

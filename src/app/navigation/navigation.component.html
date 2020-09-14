@@ -37,18 +37,18 @@
                 <li *ngIf="underwriting === isPresent?.role_name || admin === isPresent?.role_name" nz-submenu nzTitle="Quotations" nzIcon="mail">
                     <ul>
                         <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/quotes/quotes-list">
+                            <a routerLink="/flosure/quotes/quotes-list" (click)="handleClass('Motor')">
                                 Motor
                             </a>
                         </li>
                         <li nz-menu-item nzDisabled>
-                            <a routerLink="/flosure/quotes/create-quote">Accident</a>
+                            <a routerLink="/flosure/quotes/quotes-list" (click)="handleClass('Accident')">Accident</a>
                         </li>
                         <li nz-menu-item nzDisabled>
-                            <a routerLink="/flosure/quotes/create-quote">Marine</a>
+                            <a routerLink="/flosure/quotes/quotes-list" (click)="handleClass('Marine')">Marine</a>
                         </li>
-                        <li nz-menu-item nzDisabled>
-                            <a routerLink="/flosure/quotes/create-quote">Fire</a>
+                        <li nz-menu-item>
+                            <a routerLink="/flosure/quotes/fire-quotes-list" (click)="handleClass('Fire')">Fire</a>
                         </li>
                     </ul>
                 </li>
@@ -314,6 +314,9 @@
                         </li>
                         <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/settings/finance">Finance</a>
+                        </li>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/settings/location">Location</a>
                         </li>
                         <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/settings/warranties">Warranties & Exclusions</a>

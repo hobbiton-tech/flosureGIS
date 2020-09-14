@@ -21,6 +21,7 @@ import { IExtensions } from 'src/app/quotes/models/extensions.model';
 })
 export class ExtensionsComponent implements OnInit {
     classesList: IClass[];
+    currentClass: IClass;
     productsList: IProduct[] = [];
     extensionList: IExtensions[] = [];
     limitsList: ILimit[] = [];
@@ -37,6 +38,7 @@ export class ExtensionsComponent implements OnInit {
     isExccessVisible: boolean = false;
 
     selectedProductId: any;
+    selectedProduct: IProduct;
     vehicleType: any;
 
     constructor(
@@ -78,9 +80,13 @@ export class ExtensionsComponent implements OnInit {
         });
     }
 
-    onChange(value) {
-        this.productsService.getProducts(value.id).subscribe(res => {
-            this.productsList = res;
+    onChange(value: IClass) {
+        this.productsService.getClasses().subscribe(res => {
+            this.classesList = res;
+            this.currentClass = this.classesList.filter(
+                x => x.className == value.className
+            )[0];
+            this.productsList = this.currentClass.products;
         });
     }
 
@@ -88,7 +94,9 @@ export class ExtensionsComponent implements OnInit {
         this.vehicleType = value;
     }
 
-    onSelectProduct(product) {
+    onSelectProduct(product: IProduct) {
+        console.log(product);
+        this.selectedProduct = product;
         this.selectedProductId = product.id;
     }
 
@@ -149,7 +157,7 @@ export class ExtensionsComponent implements OnInit {
         const exccess: IExccess = {
             ...this.exccessForm.value,
             id: v4(),
-            productId: this.selectedProductId,
+            product: this.selectedProduct,
             vehicleType: this.vehicleType
         };
         this.productClausesService.addExccess(exccess);

@@ -100,6 +100,10 @@ export class ClaimTransactionsComponent implements OnInit {
                         .includes(value.toLowerCase()) ||
                     claim.claimant.firstName
                         .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    claim.lossDate
+                        .toLocaleString()
+                        .toLowerCase()
                         .includes(value.toLowerCase())
                 );
             }

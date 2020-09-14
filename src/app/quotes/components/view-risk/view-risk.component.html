@@ -27,43 +27,62 @@
 
         <!-- Comprehensive Risk Details start here -->
         <div *ngIf="selectedValue?.value === 'Comprehensive'">
-            <!-- vehicle details -->
-            <app-vehicle-details></app-vehicle-details>
+            <!-- unique details -->
+            <app-vehicle-details *ngIf="currentClassName == 'Motor'"></app-vehicle-details>
+            <app-property-details *ngIf="currentClassName == 'Fire'"></app-property-details>
 
             <div style="margin-top: 15px;">
                 <nz-divider nzText="Premium Computation" nzOrientation="left"></nz-divider>
 
-                <!-- premium computation details -->
-                <app-premium-computation-details></app-premium-computation-details>
-                <!-- end of premium computation details -->
-
-                <nz-divider nzOrientation="left"> </nz-divider>
-                <div nz-row nzGutter="0">
-                    <div nz-col nzSpan="8">
-                        <!-- premium computation -->
-                        <app-premium-computation></app-premium-computation>
-
-                        <!-- extensions starts here -->
-                        <app-extensions></app-extensions>
-                        <!-- extensions end here -->
-
-                        <!-- Discount Starts here -->
-                        <app-discounts></app-discounts>
-                        <!-- Discount Ends here -->
+                <div nz-row>
+                    <div nz-col nzSpan="18">
+                        <!-- premium computation details -->
+                        <app-premium-computation-details *ngIf="currentClassName == 'Motor'">
+                        </app-premium-computation-details>
+                        <app-fire-premium-computation-details *ngIf="currentClassName == 'Fire'">
+                        </app-fire-premium-computation-details>
+                        <!-- end of premium computation details -->
                     </div>
 
-                    <div nz-col nzSpan="8">
-                        <div nz-col nzSpan="24">
-                            <nz-card>
-                                <nz-divider nzText="Extensions" nzOrientation="left"></nz-divider>
-                                <!-- extensions view -->
-                                <app-extensions-view></app-extensions-view>
-                            </nz-card>
+                    <div nz-col nzSpan="6">
+                        <!-- TODO => combine premium computation and premium computation details components -->
+                        <!-- premium computation -->
+                        <app-premium-computation></app-premium-computation>
+                    </div>
+                </div>
 
-                            <div nz-col nzSpan="24">
+                <!-- <nz-divider nzOrientation="left">
+                    </nz-divider> -->
+
+                <div nz-row nzGutter="0">
+                    <div nz-col nzSpan="16">
+
+                        <div nz-row nzGutter="0">
+                            <nz-divider nzText="Extensions" nzOrientation="left"></nz-divider>
+                            <div nz-col nzSpan="8">
+                                <!-- extensions starts here -->
+                                <app-extensions></app-extensions>
+                                <!-- </div> -->
+                            </div>
+
+                            <div nz-col nzSpan="16">
+                                <nz-card>
+                                    <!-- extensions view -->
+                                    <app-extensions-view></app-extensions-view>
+                                </nz-card>
+                            </div>
+                        </div>
+
+                        <div nz-row nzGutter="0">
+                            <nz-divider nzText="Discounts" nzOrientation="left"></nz-divider>
+                            <div nz-col nzSpan="8">
+                                <!-- Discount Starts here -->
+                                <app-discounts></app-discounts>
+                                <!-- Discount Ends here -->
+                            </div>
+                            <div nz-col nzSpan="16">
                                 <div style="margin-top: 5px;">
                                     <nz-card>
-                                        <nz-divider nzText="Discount" nzOrientation="left"></nz-divider>
                                         <!-- discounts view -->
                                         <app-discounts-view></app-discounts-view>
                                     </nz-card>

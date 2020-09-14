@@ -16,7 +16,7 @@ import { IRequisitionModel } from '../components/models/requisition.model';
 import { PoliciesService } from 'src/app/underwriting/services/policies.service';
 import { Router } from '@angular/router';
 
-const BASE_URL = 'https://savenda.flosure-api.com';
+const BASE_URL = 'https://flosure-postgres-db.herokuapp.com';
 
 interface IReceiptNumberResult {
     receiptNumber: string;
@@ -42,7 +42,7 @@ export class AccountService {
         private firebase: AngularFirestore,
         private http: HttpClient,
         private message: NzMessageService,
-        private policeServices: PoliciesService,
+        // private policeServices: PoliciesService,
         private router: Router
     ) {
         this.policyCollection = firebase.collection<Policy>('policies');

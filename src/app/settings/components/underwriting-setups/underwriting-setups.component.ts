@@ -89,7 +89,6 @@ export class UnderwritingSetupsComponent implements OnInit {
     }
 
     onChange(value) {
-        console.log('WWWWWWWWWWW>>>>>>>>', value);
         this.productsService.getProducts(value.id).subscribe(res => {
             console.log('YEEEEEEEE>>>>', res);
 
@@ -98,7 +97,7 @@ export class UnderwritingSetupsComponent implements OnInit {
     }
 
     onSelectProduct(product) {
-        console.log('PEEEEEEEE>>>>', product);
+        console.log(product);
         this.selectedProductId = product.id;
         this.productName = product.productName;
     }
@@ -131,7 +130,6 @@ export class UnderwritingSetupsComponent implements OnInit {
             productId: this.selectedProductId
         };
         this.productClauseService.addClause(clause);
-        console.log('DDDDDDDDDD>>>>>>>', clause);
         this.isClausesVisible = false;
     }
     resetClauseForm(value) {}
@@ -143,7 +141,6 @@ export class UnderwritingSetupsComponent implements OnInit {
             productId: this.selectedProductId
         };
         this.productClauseService.addExtension(extension);
-        console.log('DDDDDDDDDD>>>>>>>', extension);
         this.isExtensionsVisible = false;
     }
     resetExtensionForm(value) {}
@@ -155,7 +152,6 @@ export class UnderwritingSetupsComponent implements OnInit {
             productId: this.selectedProductId
         };
         this.productClauseService.addWording(wording);
-        console.log('DDDDDDDDDD>>>>>>>', wording);
         this.isWordingsVisible = false;
     }
     resetWordingForm(value) {}

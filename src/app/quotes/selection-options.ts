@@ -64,19 +64,57 @@ export const ProductTypeOptions = [
     { label: 'Bus/Taxi', value: 'Bus/Taxi' }
 ];
 
+// RISK CATEGORY OPTIONS
+export const RiskCategoryOptions = [
+    { label: 'A (RESIDENTIAL)', value: 'A' },
+    { label: 'B (COMMERCIAL)', value: 'B' },
+    { label: 'C (MEGA RISK)', value: 'C' }
+];
+
+// RISK SUB CLASS OPTIONS
+export const RiskSubClassOptions = [
+    { label: 'HOUSE OWNERS', value: 'HOUSE OWNERS' },
+    { label: 'BUILDINGS COMBINED', value: 'BUILDINGS COMBINED' },
+    { label: 'BUSINESS INTERRUPTION', value: 'BUSINESS INTERRUPTION' }
+];
+
 // POLICY CANCELLATION TYPES
 export const CancellationTypeOptions = [
     { label: 'Time On Risk', value: 'timeOnRisk' },
     { label: 'Full Refund', value: 'fullRefund' }
 ];
 
+// PROPERTY ROOF TYPE OPTIONS
+export const RoofTypeOptions = [
+    { label: 'STANDARD', value: 'STANDARD' },
+    { label: 'THATCHED', value: 'THATCHED' }
+];
+
+// COVER TYPE OPTIONS
+export const CoverTypeOptions = [{ label: 'STANDARD', value: 'STANDARD' }];
+
 // INSURANCE TYPE OPTIONS
 export const InsuranceTypeOptions = [
-    { id: 'b3fa196d-e5d5-416b-ae4d-a338d42bf422', label: 'Motor Comprehensive', value: 'Comprehensive' },
-    {id: '3cbdeca7-4e4f-4e21-9131-d54ba43f8bd6', label: 'Full Third Party', value: 'ThirdParty' },
-    {id: '830157ef-1d2a-4eab-b8d7-49126fcb5b3c', label: 'Act Only Cover', value: 'ActOnly' },
-    {id: '836abcd7-f80f-4d3b-a720-1945c54a2098', label: 'Third Party Fire And Theft', value: 'ThirdPartyFireAndTheft' }
-
+    {
+        id: 'b3fa196d-e5d5-416b-ae4d-a338d42bf422',
+        label: 'Motor Comprehensive',
+        value: 'Comprehensive'
+    },
+    {
+        id: '3cbdeca7-4e4f-4e21-9131-d54ba43f8bd6',
+        label: 'Full Third Party',
+        value: 'ThirdParty'
+    },
+    {
+        id: '830157ef-1d2a-4eab-b8d7-49126fcb5b3c',
+        label: 'Act Only Cover',
+        value: 'ActOnly'
+    },
+    {
+        id: '836abcd7-f80f-4d3b-a720-1945c54a2098',
+        label: 'Third Party Fire And Theft',
+        value: 'ThirdPartyFireAndTheft'
+    }
 ];
 
 // LIMITS OF LIABILITY OPTIONS

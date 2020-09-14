@@ -3,8 +3,19 @@
             let ex of excessList
         ">
         <li>
-            {{ ex.description
-            }}{{ ex.amount }}
+            {{ ex.description}} {{' - '}} {{ ex.amount }} {{' - '}} {{' '}}<a (click)="editExcess(ex)">Edit Amount</a>
         </li>
     </div>
 </ul>
+
+<nz-modal [(nzVisible)]="isEditExcessAmountModalVisible" nzTitle="Edit Excess Amount"
+    (nzOnCancel)="isEditExcessAmountModalVisible = false" (nzOnOk)="handleExcessEditOk()">
+    <div nz-row>
+        <div nz-col>
+            <nz-form-label [nzSpan]="7">Amount</nz-form-label>
+            <nz-form-control [nzSpan]="12">
+                <input nz-input type="number" [(ngModel)]="newExcessAmount" />
+            </nz-form-control>
+        </div>
+    </div>
+</nz-modal>

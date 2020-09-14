@@ -13,6 +13,8 @@ import {
 } from '../../models/premium-computations.model';
 import { Subscription } from 'rxjs';
 import { ITimestamp } from '../../models/quote.model';
+import { InsuranceClassHandlerService } from 'src/app/underwriting/services/insurance-class-handler.service';
+import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
 
 @Component({
     selector: 'app-premium-computation-details',
@@ -29,10 +31,14 @@ export class PremiumComputationDetailsComponent implements OnInit, OnDestroy {
     riskQuarterSubscription: Subscription;
     riskEditModeSubscription: Subscription;
     riskExtensionModeSubscription: Subscription;
+    classHandlerSubscription: Subscription;
+
+    currentClass: IClass;
 
     constructor(
         private productClauseService: ClausesService,
-        private premiumComputationService: PremiumComputationService
+        private premiumComputationService: PremiumComputationService,
+        private classHandler: InsuranceClassHandlerService
     ) {
         this.riskEndDateSubscription = this.premiumComputationService.riskEndDateChanged$.subscribe(
             riskEndDate => {
@@ -81,6 +87,15 @@ export class PremiumComputationDetailsComponent implements OnInit, OnDestroy {
                 this.isExtensionMode = extensionMode;
             }
         );
+
+        this.classHandlerSubscription = this.classHandler.selectedClassChanged$.subscribe(
+            currentClass => {
+                this.currentClass = JSON.parse(
+                    localStorage.getItem('classObject')
+                );
+                this.insuranceTypeOptions = this.currentClass.products;
+            }
+        );
     }
 
     // editing mode
@@ -111,7 +126,7 @@ export class PremiumComputationDetailsComponent implements OnInit, OnDestroy {
     expiryQuarter: string;
 
     // insurance type options
-    insuranceTypeOptions = InsuranceTypeOptions;
+    insuranceTypeOptions;
 
     // product type options
     productTypeOptions = ProductTypeOptions;
@@ -264,5 +279,6 @@ export class PremiumComputationDetailsComponent implements OnInit, OnDestroy {
         this.riskQuarterSubscription.unsubscribe();
         this.riskEditModeSubscription.unsubscribe();
         this.riskExtensionModeSubscription.unsubscribe();
+        this.classHandlerSubscription.unsubscribe();
     }
 }

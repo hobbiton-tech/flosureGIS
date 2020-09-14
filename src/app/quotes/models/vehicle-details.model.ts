@@ -1,6 +1,7 @@
-import { BodyType } from './quote.model';
+import { BodyType, RiskModel } from './quote.model';
 
 export class VehicleDetailsModel {
+    id?: string;
     vehicleMake?: string;
     vehicleModel?: string;
     yearOfManufacture?: string;
@@ -11,4 +12,5 @@ export class VehicleDetailsModel {
     cubicCapacity?: string;
     seatingCapacity?: string;
     bodyType?: BodyType;
+    risk?: RiskModel;
 }

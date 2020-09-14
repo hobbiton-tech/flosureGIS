@@ -193,7 +193,7 @@ export class PolicyThirdpartyCertificateComponent implements OnInit {
     // }
 
     getYearOfManufacture(risk: RiskModel) {
-        const year: string = moment(risk.yearOfManufacture)
+        const year: string = moment(risk.vehicle.yearOfManufacture)
             .year()
             .toString();
         return year;
