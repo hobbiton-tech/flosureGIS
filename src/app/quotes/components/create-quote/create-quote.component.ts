@@ -60,6 +60,9 @@ import { InsuranceClassHandlerService } from 'src/app/underwriting/services/insu
 import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
 import * as jwt_decode from 'jwt-decode';
 import { InsuranceClassService } from '../../services/insurance-class.service';
+import { PermissionsModel } from 'src/app/users/models/roles.model';
+import { UserModel } from 'src/app/users/models/users.model';
+import { UsersService } from 'src/app/users/services/users.service';
 
 interface IRateResult {
     sumInsured: string;
@@ -108,6 +111,7 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
     addingQuoteStatusSubscription: Subscription;
 
     isCreatingQuote: boolean = false;
+
     // view risk modal
     viewRiskModalVisible = false;
 
@@ -166,6 +170,15 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
     userToken: any;
     decodedJwtData: any;
 
+    permission: PermissionsModel;
+    user: UserModel;
+    isPresent: PermissionsModel;
+    approveQuote = 'approve_quote';
+    editQuote = 'edit_quote';
+    deleteRisk = 'delete_risk';
+    admin = 'admin';
+    loggedIn = localStorage.getItem('currentUser');
+
     constructor(
         private formBuilder: FormBuilder,
         private readonly quoteService: QuotesService,
@@ -188,7 +201,8 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
         private premiumComputationService: PremiumComputationService,
         private fireClassService: FireClassService,
         private classHandler: InsuranceClassHandlerService,
-        private insuranceClassService: InsuranceClassService
+        private insuranceClassService: InsuranceClassService,
+        private usersService: UsersService
     ) {
         // this.clauseForm = formBuilder.group({
         //     heading: ['', Validators.required],
@@ -218,18 +232,6 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
 
     // conditional render of agent field based on mode(agent or user)
     agentMode = false;
-    switchLoading = false;
-
-    // loading feedback
-    computeBasicPremiumIsLoading = false;
-    computeRiotAndStrikeIsLoading = false;
-    computeCarStereoIsLoading = false;
-    computeTerritorialExtensionIsLoading = false;
-    computeLossOfUseIsLoading = false;
-    computePremiumIsLoading = false;
-    handleDiscountIsLoading = false;
-
-    addLoadIsLoading = false;
 
     motor: any;
     quoteForm: FormGroup;
@@ -265,25 +267,6 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
     // close add risk panel
     isAddRiskPanelOpen: boolean;
 
-    // Edit risk details
-    isRiskDetailsEditmode = false;
-
-    lossOfKeysAmount: number;
-    maliciousDamageAmount: number;
-    medicalExpensesAmount: number;
-    injuryAndDeathAmount: number;
-    propertyDamageAmount: number;
-    earthquakeAmount: number;
-    explosionsAmount: number;
-    financialLossAmount: number;
-    fireAndAlliedPerilsAmount: number;
-    legalExpensesAmount: number;
-    landslideAmount: number;
-    passengerLiabilityAmount: number;
-    permanentDisabilityAmount: number;
-
-    todayYear = null;
-
     // set risk tamplate table not vivible
     isTabletemplate = true;
 
@@ -291,13 +274,6 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
     quoteNumber: string;
 
     selectedLoadingValue: IExtension;
-
-    // motor third party rates
-    motorThirdPartyRates = {
-        pirvate: { Q1: 165, Q2: 280, Q3: 370, Q4: 464 },
-        commercial: { Q1: 199, Q2: 340, Q3: 452, Q4: 566 },
-        'bus/taxi': { Q1: 270, Q2: 464, Q3: 618, Q4: 772 }
-    };
 
     selectedSourceOfBusiness: string;
 
@@ -309,9 +285,6 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
     concRisks: any[] = [];
     conChasis: any[] = [];
 
-    compareFn = (o1: any, o2: any) =>
-        o1 && o2 ? o1.value === o2.value : o1 === o2;
-
     log(value: { label: string; value: string }): void {
         this.selectedLoadingValue = {
             description: 'Increased Third Party Limit',
@@ -319,24 +292,26 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
         };
     }
 
-    disabledStartDate = (startValue: Date): boolean => {
-        if (!startValue || !this.endValue) {
-            return false;
-        }
-        return startValue.getTime() > this.endValue.getTime();
-    };
-
-    disabledEndDate = (endValue: Date): boolean => {
-        if (!endValue || !this.startValue) {
-            return false;
-        }
-        return endValue.getTime() <= this.startValue.getTime();
-    };
-
     ngOnInit(): void {
-        this.userToken = localStorage.getItem('currentUser');
-        this.decodedJwtData = jwt_decode(this.userToken);
+        this.decodedJwtData = jwt_decode(this.loggedIn);
         console.log('Decoded>>>>>>', this.decodedJwtData);
+
+        this.usersService.getUsers().subscribe(users => {
+            this.user = users.filter(
+                x => x.ID === this.decodedJwtData.user_id
+            )[0];
+
+            this.isPresent = this.user.Permission.find(
+                el =>
+                    el.name === this.admin ||
+                    el.name === this.approveQuote ||
+                    el.name === this.editQuote ||
+                    el.name === this.deleteRisk
+            );
+
+            console.log('USERS>>>', this.user, this.isPresent, this.admin);
+        });
+
         this.quoteForm = this.formBuilder.group({
             client: ['', Validators.required],
             messageCode: ['ewrewre', Validators.required],

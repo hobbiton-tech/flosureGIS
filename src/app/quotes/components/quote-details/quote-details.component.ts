@@ -83,7 +83,9 @@ import { PropertyDetailsModel } from '../../models/fire-class/property-details.m
 import { PropertyDetailsComponent } from '../fire-class/property-details/property-details.component';
 import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
 import { InsuranceClassHandlerService } from 'src/app/underwriting/services/insurance-class-handler.service';
-import { CreateQuoteComponent } from '../create-quote/create-quote.component';
+import { PermissionsModel } from '../../../users/models/roles.model';
+import { UserModel } from '../../../users/models/users.model';
+import { UsersService } from '../../../users/services/users.service';
 
 type AOA = any[][];
 
@@ -156,7 +158,6 @@ export class QuoteDetailsComponent implements OnInit {
     quoteDetailsForm: FormGroup;
     riskThirdPartyForm: FormGroup;
     riskComprehensiveForm: FormGroup;
-    limitsOfLiabilityForm: FormGroup;
     excessesForm: FormGroup;
     combinedLimitsForm: FormGroup;
     clients: Array<IIndividualClient & ICorporateClient>;
@@ -179,7 +180,6 @@ export class QuoteDetailsComponent implements OnInit {
         [1, 2],
         [3, 4]
     ];
-    wopts: XLSX.WritingOptions = { bookType: 'xlsx', type: 'array' };
 
     /*name of the risks template that will be downloaded. */
     fileName = 'Risks_template.xlsx';
@@ -207,43 +207,24 @@ export class QuoteDetailsComponent implements OnInit {
     isAddRiskPanelOpen: boolean;
 
     /// Premium Computation
-    // Basic Premium
     basicPremium: number;
     basicPremiumLevy: number;
-    basicPremiumSubTotal: number;
     sumInsured: number;
     premiumRate: number;
-    premiumRateType: string;
     // Loading
     premiumLoadingTotal: number;
-    premiumLoadingsubTotal: number;
-
-    totalSumInsured: number;
-    totalBasicPremium: number;
-    totalLevy: number;
-    totalNetPremium: number;
 
     // Discount
     premiumDiscountRate: number;
-    premiumDiscountRateType: string;
     premiumDiscount: number;
-    premiumDiscountSubtotal: number;
-    // Net or total premium
     totalPremium: number;
     netPremium: number;
-
-    // Loading
-    addingLoad: boolean;
 
     // loads added to loading
     loads: LoadModel[] = [];
 
     // dicounts added
     discounts: IDiscounts[] = [];
-
-    // limits of liability
-    limitsOfLiability: LimitsOfLiability[] = [];
-
     // excesses
     excesses: Excess[] = [];
 
@@ -255,17 +236,6 @@ export class QuoteDetailsComponent implements OnInit {
     quoteLevy: number;
     quoteNetPremium: number;
 
-    // loading feedback
-    computeBasicPremiumIsLoading = false;
-    computeIncreasedThirdPartyLimitIsLoading = false;
-    computeRiotAndStrikeIsLoading = false;
-    computeCarStereoIsLoading = false;
-    computeTerritorialExtensionIsLoading = false;
-    computeLossOfUseIsLoading = false;
-    computeDiscountIsLoading = false;
-    computePremiumIsLoading = false;
-
-    addLoadIsLoading = false;
 
     status = 'Unreceipted';
 
@@ -310,15 +280,6 @@ export class QuoteDetailsComponent implements OnInit {
 
     searchString: string;
 
-    // generated PDFs
-    policyCertificateURl = '';
-    showCertModal = false;
-
-    debitNoteURL = '';
-    showDebitModal = false;
-
-    quoteURL = '';
-    showQuoteModal = false;
 
     paymentPlan = 'NotCreated';
     policiesCount: number;
@@ -369,6 +330,15 @@ export class QuoteDetailsComponent implements OnInit {
     userToken: any;
     decodedJwtData: any;
 
+  permission: PermissionsModel;
+  user: UserModel;
+  isPresent: PermissionsModel;
+  approveQuote = 'approve_quote';
+  editQuote = 'edit_quote';
+  deleteRisk = 'delete_risk';
+  admin = 'admin';
+  loggedIn = localStorage.getItem('currentUser');
+
     constructor(
         private formBuilder: FormBuilder,
         private policiesService: PoliciesService,
@@ -394,7 +364,8 @@ export class QuoteDetailsComponent implements OnInit {
         private allocationService: AllocationsService,
         private commisionSetupsService: CommisionSetupsService,
         private classHandler: InsuranceClassHandlerService,
-        private createQuoteComponent: CreateQuoteComponent
+        private createQuoteComponent: CreateQuoteComponent,
+        private  usersService: UsersService,
     ) {
         this.receiptForm = this.formBuilder.group({
             receivedFrom: ['', Validators.required],
@@ -417,16 +388,26 @@ export class QuoteDetailsComponent implements OnInit {
         this.decodedJwtData = jwt_decode(this.userToken);
         this.isQuoteDetailsLoading = true;
         setTimeout(() => {
+
             this.isQuoteDetailsLoading = false;
         }, 4000);
 
-        this.route.params.subscribe(param => {
+      this.route.params.subscribe(param => {
             this.quoteNumber = param.quoteNumber;
             this.quotesService.getMotorQuotations().subscribe(quotes => {
                 this.quoteData = quotes.filter(
                     x => x.quoteNumber === this.quoteNumber
                 )[0];
+              this.decodedJwtData = jwt_decode(this.loggedIn);
 
+              this.usersService.getUsers().subscribe((users) => {
+                this.user = users.filter((x) => x.ID === this.decodedJwtData.user_id)[0];
+
+                this.isPresent = this.user.Permission.find((el) => el.name === this.admin || el.name === this.approveQuote ||
+                  el.name === this.editQuote || el.name === this.deleteRisk);
+
+                console.log('USERS>>>', this.user, this.isPresent, this.admin);
+              });
                 this.currentClass = this.quoteData.class;
                 this.classHandler.changeSelectedClass(this.quoteData.class);
 

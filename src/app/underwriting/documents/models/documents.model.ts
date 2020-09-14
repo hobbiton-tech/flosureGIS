@@ -4,9 +4,10 @@ export class DebitNote {
     debitNoteNumber?: string;
     remarks: string;
     status: DebitNoteStatus;
-    dateCreated: Date;
-    dateUpdated: Date;
     debitNoteAmount: number;
+    remarks?: string;
+    dateCreated?: Date;
+    dateUpdated?: Date;
     policy?: Policy;
 }
 
@@ -15,8 +16,9 @@ export class CreditNote {
     creditNoteNumber?: string;
     remarks: string;
     status: CreditNoteStatus;
-    dateCreated: Date;
-    dateUpdated: Date;
+    remarks?: string;
+    dateCreated?: Date;
+    dateUpdated?: Date;
     policy?: Policy;
     creditNoteAmount?: number;
 }

@@ -52,7 +52,7 @@
                                 <td [nzAlign]="columnAlignment">{{claim.notificationDate | date}}</td>
                                 <td [nzAlign]="columnAlignment">{{claim.claimStatus}}</td>
                                 <td [nzAlign]="columnAlignment">
-                                    <button n nz-button nzType="default" style="margin-left: 2px;" nzSize="small"
+                                    <button *ngIf="raiseRequisitionPem === isPresent.name || admin === isPresent.name" nz-button nzType="default" style="margin-left: 2px;" nzSize="small"
                                         nz-popconfirm nzTitle="Raise Requisition?"
                                         (nzOnConfirm)="raiseRequisition(claim)">
                                         Raise Requisition

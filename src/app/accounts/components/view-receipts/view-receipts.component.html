@@ -22,13 +22,15 @@
                 </div>
             </ng-template>
             <nz-page-header-extra>
-                <button nz-button nzType="primary" (click)="htmlToPdf()">
+                <button nz-button nzType="primary" [useExistingCss]="true"
+                        [printSectionId]="'printSection'"
+                        ngxPrint>
                     Print
                 </button>
                 <button nz-button nzType="primary">
                     Email
                 </button>
-                <button nz-button nzType="primary">
+                <button nz-button nzType="primary" (click)="htmlToPdf()">
                     Download
                 </button>
             </nz-page-header-extra>

@@ -33,7 +33,7 @@
                                 <th [nzAlign]="columnAlignment">Loss Date</th>
                                 <th [nzAlign]="columnAlignment">Notification Date</th>
                                 <th [nzAlign]="columnAlignment">Status</th>
-                                <th [nzAlign]="columnAlignment">Action</th>
+                                <th [nzAlign]="columnAlignment" *ngIf="approveClaimPem === isPresent?.name || admin === isPresent?.name" >Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -63,8 +63,8 @@
                                         </nz-badge>
                                     </div>
                                 </td>
-                                <td [nzAlign]="columnAlignment">
-                                    <button n nz-button nzType="primary" style="margin-left: 2px;" nzSize="small"
+                                <td [nzAlign]="columnAlignment" *ngIf="approveClaimPem === isPresent?.name || admin === isPresent?.name">
+                                    <button  nz-button nzType="primary" style="margin-left: 2px;" nzSize="small"
                                         *ngIf="claim.claimStatus == 'Processed'" (click)="openClaimApproval(claim)">
                                         Claim Approval
                                     </button>

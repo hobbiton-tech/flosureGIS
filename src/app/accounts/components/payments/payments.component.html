@@ -33,7 +33,7 @@
                             <th [nzAlign]="columnAlignment">Request Date</th>
                             <th [nzAlign]="columnAlignment">Type</th>
                             <th [nzAlign]="columnAlignment">Status</th>
-                            <th [nzAlign]="columnAlignment">Action</th>
+                            <th *ngIf=" approve === isPresentPermission?.name || admin === isPresentPermission?.name" [nzAlign]="columnAlignment">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -51,7 +51,7 @@
                             <td [nzAlign]="columnAlignment">
                                 {{payment.paymentType == 'Chaque' ? 'Cheque' : payment.paymentType}}</td>
                             <td [nzAlign]="columnAlignment">{{payment.approvalSatus}}</td>
-                            <td [nzAlign]="columnAlignment">
+                            <td *ngIf=" approve === isPresentPermission?.name || admin === isPresentPermission?.name" [nzAlign]="columnAlignment">
                                 <button n nz-button nzType="primary" style="margin-left: 2px;" nzSize="small"
                                     (nzOnConfirm)="approvePayment(payment)" nz-popconfirm nzTitle="Approve Payment?">
                                     Approve

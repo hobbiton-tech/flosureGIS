@@ -69,7 +69,6 @@ export class PolicyRenewalsComponent implements OnInit {
                 policy.client
                     .toLocaleLowerCase()
                     .includes(value.toLowerCase()) ||
-                policy.user.toLocaleLowerCase().includes(value.toLowerCase()) ||
                 policy.status.toLocaleLowerCase().includes(value.toLowerCase())
             );
         });

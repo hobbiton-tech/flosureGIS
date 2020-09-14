@@ -37,6 +37,9 @@ import { IDiscounts } from 'src/app/quotes/models/discounts.model';
 import { Subscription } from 'rxjs';
 import { InsuranceClassHandlerService } from '../../services/insurance-class-handler.service';
 import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
+import { UserModel } from '../../../users/models/users.model';
+import { UsersService } from '../../../users/services/users.service';
+import * as jwt_decode from 'jwt-decode';
 
 @Component({
     selector: 'app-policy-details',
@@ -170,10 +173,13 @@ export class PolicyDetailsComponent implements OnInit, OnDestroy {
     tExcessType = '';
     tExcessAmount = 0;
 
+
     excessList: IExccess[] = [];
     excessListCert: IExccess[] = [];
 
     currentClass: IClass;
+    user: UserModel;
+    loggedIn = localStorage.getItem('currentUser');
 
     constructor(
         private readonly router: Router,
@@ -184,7 +190,8 @@ export class PolicyDetailsComponent implements OnInit, OnDestroy {
         private receiptService: AccountService,
         private productClauseService: ClausesService,
         private clientsService: ClientsService,
-        private classHandler: InsuranceClassHandlerService
+        private classHandler: InsuranceClassHandlerService,
+        private usersService: UsersService
     ) {
         this.paymentPlanForm = this.formBuilder.group({
             numberOfInstallments: ['', Validators.required],
@@ -218,6 +225,13 @@ export class PolicyDetailsComponent implements OnInit, OnDestroy {
 
                     // tslint:disable-next-line: semicolon
                 });
+
+
+                const decodedJwtData = jwt_decode(this.loggedIn);
+
+                this.usersService.getUsers().subscribe((users) => {
+                this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+              });
 
                 this.productClauseService.getPolicyClauses().subscribe(res => {
                     this.clauses = res.filter(
@@ -413,6 +427,7 @@ export class PolicyDetailsComponent implements OnInit, OnDestroy {
             });
         });
 
+
         this.policyDetailsForm = this.formBuilder.group({
             client: ['', Validators.required],
             nameOfInsured: ['', Validators.required],
@@ -429,6 +444,8 @@ export class PolicyDetailsComponent implements OnInit, OnDestroy {
             quarter: ['', Validators.required],
             town: ['', Validators.required]
         });
+    }
+
     }
 
     goToPoliciesList(): void {
@@ -536,7 +553,7 @@ export class PolicyDetailsComponent implements OnInit, OnDestroy {
                 on_behalf_of: policyData.client,
                 // receivedFrom: this.paymentPlanForm.controls.clientName.value,
                 // onBehalfOf: this.paymentPlanForm.controls.clientName.value,
-                captured_by: 'charles malama',
+                captured_by: this.user.ID,
                 receipt_status: 'Receipted',
                 narration: 'Payment Plan',
                 receipt_type: 'Premium Payment',

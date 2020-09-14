@@ -221,8 +221,8 @@
 
                     <thead>
                         <tr>
-                            <!-- <th>Client Name</th> -->
-                            <!-- <th>Client ID</th> -->
+                             <th>Client ID</th>
+                          <th>Client Name</th>
                             <th>Number of Policies</th>
                             <th>Total Premium</th>
                             <th>Initial Payment</th>
@@ -242,8 +242,11 @@
                         *ngFor="let paymentPlan of paymentPlansTable.data"
                         (click)="viewPaymentPlanDetails(paymentPlan)"
                     >
-                        <!-- <td>{{ paymentPlan.clientName }}</td> -->
-                        <!-- <td>{{ paymentPlan.client_id }}</td> -->
+                      <td>{{ clientNameMethod(paymentPlan.client_id)?.clientID}}</td>
+                      <td>{{ clientNameMethod(paymentPlan.client_id)?.clientType === 'Individual'
+                        ? clientNameMethod(paymentPlan.client_id)?.firstName + ' ' + clientNameMethod(paymentPlan.client_id)?.lastName
+                          : clientNameMethod(paymentPlan.client_id)?.companyName }}
+                      </td>
                         <td>{{ paymentPlan.number_of_policies }}</td>
                         <td>
                             {{ paymentPlan.total_premium | number: '1.2-2' }}

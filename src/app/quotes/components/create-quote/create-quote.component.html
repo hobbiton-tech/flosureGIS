@@ -343,7 +343,7 @@
                             </button>
                             <nz-divider nzType="vertical"></nz-divider>
 
-                            <button nz-button nzType="danger" nz-popconfirm nzTitle="Delete Risk?"
+                            <button *ngIf="deleteRisk === isPresent?.name || admin === isPresent?.name" nz-button nzType="danger" nz-popconfirm nzTitle="Delete Risk?"
                                 (nzOnConfirm)="removeRisk(risk)">
                                 Delete
                             </button>

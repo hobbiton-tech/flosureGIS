@@ -21,7 +21,7 @@ export class Policy {
     expiryDate: Date | ITimestamp;
     dateOfIssue: string | ITimestamp;
     quarter: string;
-    user: string;
+    user: number;
     town: string;
     productType: ProductType;
     risks: RiskModel[];

@@ -17,6 +17,10 @@ import { AllocationsService } from '../../../../services/allocations.service';
 import { HttpClient } from '@angular/common/http';
 import { CommissionPaymentService } from '../../../../services/commission-payment.service';
 import { CPaymentModel } from '../../../models/commission-payment.model';
+import * as jwt_decode from 'jwt-decode';
+import { UserModel } from '../../../../../users/models/users.model';
+import { ClientsService } from '../../../../../clients/services/clients.service';
+import { UsersService } from '../../../../../users/services/users.service';
 
 @Component({
     selector: 'app-sales-representative-client',
@@ -63,7 +67,6 @@ export class SalesRepresentativeClientComponent implements OnInit {
     isReinstateVisible = false;
     isOkLoading = false;
     policyNumber = '';
-    user = '';
     _id = '';
     isVisibleClientType = false;
     isOkClientTypeLoading = false;
@@ -111,6 +114,8 @@ export class SalesRepresentativeClientComponent implements OnInit {
   commissionPayments: any[] = [];
   commissionPayment: CPaymentModel;
   comPayments: any[] = [];
+  user: UserModel;
+  loggedIn = localStorage.getItem('currentUser');
 
     constructor(
         private receiptService: AccountService,
@@ -122,6 +127,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
         private allocationsService: AllocationsService,
         private http: HttpClient,
         private commissionPaymentService: CommissionPaymentService,
+        private usersService: UsersService
     ) {
         this.receiptForm = this.formBuilder.group({
             received_from: ['', Validators.required],
@@ -153,6 +159,11 @@ export class SalesRepresentativeClientComponent implements OnInit {
 
         console.log('===================');
         console.log(this.salesRepList);
+      });
+      const decodedJwtData = jwt_decode(this.loggedIn);
+
+      this.usersService.getUsers().subscribe((users) => {
+        this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
       });
       this.policeServices.getPolicies().subscribe((quotes) => {
         this.listofUnreceiptedReceipts = _.filter(
@@ -237,7 +248,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
         this.isVisible = true;
         this.clientName = unreceipted.client;
         this.policyNumber = unreceipted.policyNumber;
-        this.user = unreceipted.user;
+        // this.user = unreceipted.user;
         this.policy = unreceipted;
         this.debitnote = this.debitnoteList.filter(
             (x) => x.policy.id === unreceipted.id
@@ -269,7 +280,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
                 remarks: this.receiptForm.controls.remarks.value,
                 cheq_number: this.receiptForm.controls.cheq_number.value,
                 on_behalf_of: this.clientName,
-                captured_by: this.user,
+                captured_by: this.user.ID,
                 receipt_status: this.recStatus,
                 sum_in_digits: Number(this.policyAmount),
                 today_date: new Date(),

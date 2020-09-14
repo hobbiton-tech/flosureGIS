@@ -16,6 +16,8 @@ import {
 import moment from 'moment';
 import { CoverNote } from '../models/documents.model';
 import { IExccess } from 'src/app/settings/models/underwriting/clause.model';
+import { UsersService } from '../../../users/services/users.service';
+import { UserModel } from '../../../users/models/users.model';
 
 @Component({
     selector: 'app-policy-schedule-document',
@@ -113,8 +115,9 @@ export class PolicyScheduleDocumentComponent implements OnInit {
     todayDate: Date;
 
     yearOfManufacture: string;
+    agent: UserModel;
 
-    constructor() {}
+    constructor(private usersService: UsersService) {}
 
     generatingPDF = false;
 
@@ -127,6 +130,10 @@ export class PolicyScheduleDocumentComponent implements OnInit {
     propertyD: LimitsOfLiability;
 
     ngOnInit(): void {
+
+      this.usersService.getUsers().subscribe((users) => {
+        this.agent = users.find((x) => x.ID === this.policy.user);
+      });
         this.todayDate = new Date();
         this.getLimit();
     }
