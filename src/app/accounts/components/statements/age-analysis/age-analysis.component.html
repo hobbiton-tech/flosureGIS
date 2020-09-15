@@ -94,15 +94,15 @@
                 <th>Total Outstanding</th>
               </tr>
               <tr  *ngFor="let statement of this.transactionList">
-                <td> {{ageThirty(statement)}}</td>
-                <td>{{ageSixty(statement)}}</td>
-                <td>{{ageNinety(statement)}}</td>
-                <td>{{ageOneTwenty(statement)}}</td>
-                <td>{{ageOneEighty(statement)}}</td>
-                <td>{{ageAnnual(statement)}}</td>
-                <td>{{ageOverAnnual(statement)}}</td>
-                <td>{{ageThirty(statement)}}</td>
-                <td>{{ageThirty(statement)}}</td>
+                <td> {{ageThirty(statement)  | number: '1.2-2'}}</td>
+                <td>{{ageSixty(statement)  | number: '1.2-2'}}</td>
+                <td>{{ageNinety(statement)  | number: '1.2-2'}}</td>
+                <td>{{ageOneTwenty(statement)  | number: '1.2-2'}}</td>
+                <td>{{ageOneEighty(statement)  | number: '1.2-2'}}</td>
+                <td>{{ageAnnual(statement)  | number: '1.2-2'}}</td>
+                <td>{{ageOverAnnual(statement)  | number: '1.2-2'}}</td>
+                <td>{{0  | number: '1.2-2'}}</td>
+                <td>{{getTotalOutstanding(statement)  | number: '1.2-2'}}</td>
               </tr>
             </table>
           </div>
