@@ -167,8 +167,9 @@ export class AgeAnalysisComponent implements OnInit {
       const contentDataURL = canvas.toDataURL('image/png');
       const pdf = new jspdf('p', 'mm', 'a4');
       const position = 0;
+      console.log('ID', this.client);
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
-      pdf.save( `${this.client.clientID}-Account-Statement.pdf`);
+      pdf.save( `${this.client.clientID}-Age-Analysis.pdf`);
       this.generatingPDF = false;
     });
   }
