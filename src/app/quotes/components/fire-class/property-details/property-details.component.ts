@@ -14,6 +14,7 @@ import { IClass } from 'src/app/settings/components/product-setups/models/produc
 import { LocationService } from 'src/app/settings/components/location-setups/services/location.service';
 import { IProvince } from 'src/app/settings/components/location-setups/models/province.model';
 import { ICity } from 'src/app/settings/components/location-setups/models/city.model';
+import { PremiumComputationService } from 'src/app/quotes/services/premium-computation.service';
 
 @Component({
     selector: 'app-property-details',
@@ -23,6 +24,7 @@ import { ICity } from 'src/app/settings/components/location-setups/models/city.m
 export class PropertyDetailsComponent implements OnInit, OnDestroy {
     classHandlerSubscription: Subscription;
     propertyDetailsSubscription: Subscription;
+    riskEditModeSubscription: Subscription;
 
     roofTypes = RoofTypeOptions;
     coverTypes = CoverTypeOptions;
@@ -33,7 +35,8 @@ export class PropertyDetailsComponent implements OnInit, OnDestroy {
         private formBuilder: FormBuilder,
         private fireClassService: FireClassService,
         private classHandler: InsuranceClassHandlerService,
-        private locationService: LocationService
+        private locationService: LocationService,
+        private premiumComputationService: PremiumComputationService
     ) {
         this.propertyDetailsForm = this.formBuilder.group({
             propertyId: [
@@ -82,7 +85,17 @@ export class PropertyDetailsComponent implements OnInit, OnDestroy {
 
         this.propertyDetailsSubscription = this.fireClassService.propertyDetailsChanged$.subscribe(
             property => {
-                this.propertyDetials = property;
+                if (property) {
+                    this.propertyDetials = property;
+                    this.propertyDetailsForm.patchValue(property);
+                }
+            }
+        );
+
+        this.riskEditModeSubscription = this.premiumComputationService.riskEditModeChanged$.subscribe(
+            riskEditMode => {
+                this.isRiskEditMode = riskEditMode;
+                this.changeToEditable();
             }
         );
     }
@@ -108,15 +121,12 @@ export class PropertyDetailsComponent implements OnInit, OnDestroy {
     currentProduct: string;
 
     ngOnInit(): void {
-        this.propertyDetailsForm.valueChanges.subscribe(res => {
-            this.fireClassService.changePropertyDetails(
-                this.propertyDetailsForm.value
-            );
-        });
+        // this.propertyDetailsForm.valueChanges.subscribe(res => {
+        //     this.propertyDetailsForm.patchValue(this.propertyDetials);
+        // });
 
         this.locationService.getProvinces().subscribe(provinces => {
             this.provinces = provinces;
-            console.log('provinces :=> ', provinces);
         });
     }
 

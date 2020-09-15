@@ -1,5 +1,5 @@
 <nz-modal [(nzVisible)]="isAddProvinceModalVisible" nzTitle="Add Province" [nzContent]="provinceContent"
-    (nzOnCancel)="closeAddProvinceModal()" (nzOnOk)="closeAddProvinceModal()" nzWidth="50%">
+    (nzOnCancel)="closeAddProvinceModal()" (nzOnOk)="closeAddProvinceModal()">
 
 
     <ng-template #provinceContent>
@@ -7,7 +7,7 @@
             <div>
                 <form nz-form [formGroup]="provinceDetailsForm">
                     <div nz-row>
-                        <div nz-col nzSpan="8">
+                        <div nz-col nzSpan="24">
                             <nz-form-item>
                                 <nz-form-label nzRequired nzSpan="10">Name</nz-form-label>
                                 <nz-form-control nzSpan="10">

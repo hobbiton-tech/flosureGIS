@@ -48,12 +48,12 @@ export class ProcessedClaimsComponent implements OnInit {
 
     claimsTableUpdate = new BehaviorSubject<boolean>(false);
 
-  permission: PermissionsModel;
-  user: UserModel;
-  isPresent: PermissionsModel;
-  admin = 'admin';
-  approveClaimPem = 'approve_claim';
-  loggedIn = localStorage.getItem('currentUser');
+    permission: PermissionsModel;
+    user: UserModel;
+    isPresent: PermissionsModel;
+    admin = 'admin';
+    approveClaimPem = 'approve_claim';
+    loggedIn = localStorage.getItem('currentUser');
 
     constructor(
         private readonly claimsService: ClaimsService,
@@ -61,7 +61,7 @@ export class ProcessedClaimsComponent implements OnInit {
         private accountsService: AccountService,
         private msg: NzMessageService,
         private readonly router: Router,
-        private  usersService: UsersService,
+        private usersService: UsersService
     ) {}
 
     ngOnInit(): void {
@@ -70,21 +70,21 @@ export class ProcessedClaimsComponent implements OnInit {
             this.claimProcessingIsLoading = false;
         }, 3000);
 
-      const decodedJwtData = jwt_decode(this.loggedIn);
-      console.log('Decoded>>>>>>', decodedJwtData);
+        const decodedJwtData = jwt_decode(this.loggedIn);
+        console.log('Decoded>>>>>>', decodedJwtData);
 
-      this.usersService.getUsers().subscribe((users) => {
-        this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+        this.usersService.getUsers().subscribe(users => {
+            this.user = users.filter(x => x.ID === decodedJwtData.user_id)[0];
 
-        this.isPresent = this.user.Permission.find((el) => el.name === this.admin || el.name === this.approveClaimPem);
+            this.isPresent = this.user.Permission.find(
+                el => el.name === this.admin || el.name === this.approveClaimPem
+            );
 
-        console.log('USERS>>>', this.user, this.isPresent, this.admin);
-      });
+            console.log('USERS>>>', this.user, this.isPresent, this.admin);
+        });
 
         this.claimsService.getClaims().subscribe(claims => {
             this.claimsList = claims;
-
-            console.log(this.claimsList);
 
             this.pendingClaimsList = this.claimsList.filter(
                 x => x.claimStatus == 'Pending'
@@ -152,16 +152,30 @@ export class ProcessedClaimsComponent implements OnInit {
     }
 
     checkClaimApproval(claim: Claim) {
-        // const riskRegNumbers: string[] = []
+        if (claim.policy.class.className.toLowerCase() == 'motor') {
+            let policyRisksRegNumbers: string[] = claim.policy.risks.map(
+                x => x.vehicle.regNumber
+            );
 
-        let policyRisksRegNumbers: string[] = claim.policy.risks.map(
-            x => x.vehicle.regNumber
-        );
+            if (policyRisksRegNumbers.includes(claim.risk.vehicle.regNumber)) {
+                this.isClaimRiskUnderPolicy = true;
+            } else {
+                this.isClaimRiskUnderPolicy = false;
+            }
+        }
 
-        if (policyRisksRegNumbers.includes(claim.risk.vehicle.regNumber)) {
-            this.isClaimRiskUnderPolicy = true;
-        } else {
-            this.isClaimRiskUnderPolicy = false;
+        if (claim.policy.class.className.toLowerCase() == 'fire') {
+            console.log('claim :=> ', claim);
+            console.log('property :=> ', claim.policy);
+            let policyRisksId: string[] = claim.policy.risks.map(
+                x => x.property.propertyId
+            );
+
+            if (policyRisksId.includes(claim.risk.property.propertyId)) {
+                this.isClaimRiskUnderPolicy = true;
+            } else {
+                this.isClaimRiskUnderPolicy = false;
+            }
         }
 
         if (
@@ -183,16 +197,30 @@ export class ProcessedClaimsComponent implements OnInit {
             this.isClaimPolicyPremiumFullyPaid = true;
         }
 
-        if (
-            claim.documentUploads.filter(
-                x => x.documentType == 'Drivers License'
-            ).length > 0 &&
-            claim.documentUploads.filter(x => x.documentType == 'Claim Form')
-                .length > 0
-        ) {
-            this.isClaimFullyDocumented = true;
-        } else {
-            this.isClaimFullyDocumented = false;
+        if (claim.policy.class.className.toLowerCase() == 'motor') {
+            if (
+                claim.documentUploads.filter(
+                    x => x.documentType == 'Drivers License'
+                ).length > 0 &&
+                claim.documentUploads.filter(
+                    x => x.documentType == 'Claim Form'
+                ).length > 0
+            ) {
+                this.isClaimFullyDocumented = true;
+            } else {
+                this.isClaimFullyDocumented = false;
+            }
+        }
+        if (claim.policy.class.className.toLowerCase() == 'fire') {
+            if (
+                claim.documentUploads.filter(
+                    x => x.documentType == 'Claim Form'
+                ).length > 0
+            ) {
+                this.isClaimFullyDocumented = true;
+            } else {
+                this.isClaimFullyDocumented = false;
+            }
         }
     }
 

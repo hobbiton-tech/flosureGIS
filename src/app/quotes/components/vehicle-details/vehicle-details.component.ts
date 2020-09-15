@@ -79,11 +79,14 @@ export class VehicleDetailsComponent implements OnInit, OnDestroy {
             ]
         });
 
-        // this.vehicleDetailsSubscription = this.vehicleDetailsService.vehicleDetailsFormChanged$.subscribe(
-        //     vehicleDetails => {
-        //         this.vehicleDetailsForm.patchValue(vehicleDetails);
-        //     }
-        // );
+        this.vehicleDetailsSubscription = this.vehicleDetailsService.vehicleDetailsFormChanged$.subscribe(
+            vehicleDetails => {
+                if (vehicleDetails) {
+                    this.vehicleDetails = vehicleDetails;
+                    this.vehicleDetailsForm.patchValue(vehicleDetails);
+                }
+            }
+        );
 
         this.riskEditModeSubscription = this.premiumComputationService.riskEditModeChanged$.subscribe(
             riskEditMode => {
@@ -123,6 +126,9 @@ export class VehicleDetailsComponent implements OnInit, OnDestroy {
     //vehicle details form
     vehicleDetailsForm: FormGroup;
 
+    // vehicle detail
+    vehicleDetails: VehicleDetailsModel;
+
     //for vehicle details validation
     concRisks: any[] = [];
 
@@ -141,9 +147,9 @@ export class VehicleDetailsComponent implements OnInit, OnDestroy {
     isVehicleModelLoading = false;
 
     ngOnInit(): void {
-        this.vehicleDetailsForm.valueChanges.subscribe(res => {
-            this.changeVehicleDetails();
-        });
+        // this.vehicleDetailsForm.valueChanges.subscribe(res => {
+        //     this.changeVehicleDetails();
+        // });
 
         this.policyService.getPolicies().subscribe(res => {
             for (const policy of res) {

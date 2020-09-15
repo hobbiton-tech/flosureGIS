@@ -59,9 +59,10 @@ import { Subscription } from 'rxjs';
 import { InsuranceClassHandlerService } from 'src/app/underwriting/services/insurance-class-handler.service';
 import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
 import * as jwt_decode from 'jwt-decode';
-import { PermissionsModel } from '../../../users/models/roles.model';
-import { UserModel } from '../../../users/models/users.model';
-import { UsersService } from '../../../users/services/users.service';
+import { InsuranceClassService } from '../../services/insurance-class.service';
+import { PermissionsModel } from 'src/app/users/models/roles.model';
+import { UserModel } from 'src/app/users/models/users.model';
+import { UsersService } from 'src/app/users/services/users.service';
 
 interface IRateResult {
     sumInsured: string;
@@ -105,9 +106,9 @@ interface IQuoteNumberResult {
     templateUrl: './create-quote.component.html',
     styleUrls: ['./create-quote.component.scss']
 })
-
 export class CreateQuoteComponent implements OnInit, OnDestroy {
     classHandlerSubscription: Subscription;
+    addingQuoteStatusSubscription: Subscription;
 
     isCreatingQuote: boolean = false;
 
@@ -169,14 +170,14 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
     userToken: any;
     decodedJwtData: any;
 
-  permission: PermissionsModel;
-  user: UserModel;
-  isPresent: PermissionsModel;
-  approveQuote = 'approve_quote';
-  editQuote = 'edit_quote';
-  deleteRisk = 'delete_risk';
-  admin = 'admin';
-  loggedIn = localStorage.getItem('currentUser');
+    permission: PermissionsModel;
+    user: UserModel;
+    isPresent: PermissionsModel;
+    approveQuote = 'approve_quote';
+    editQuote = 'edit_quote';
+    deleteRisk = 'delete_risk';
+    admin = 'admin';
+    loggedIn = localStorage.getItem('currentUser');
 
     constructor(
         private formBuilder: FormBuilder,
@@ -200,7 +201,8 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
         private premiumComputationService: PremiumComputationService,
         private fireClassService: FireClassService,
         private classHandler: InsuranceClassHandlerService,
-        private  usersService: UsersService,
+        private insuranceClassService: InsuranceClassService,
+        private usersService: UsersService
     ) {
         // this.clauseForm = formBuilder.group({
         //     heading: ['', Validators.required],
@@ -218,6 +220,12 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
         this.classHandlerSubscription = this.classHandler.selectedClassChanged$.subscribe(
             currentClass => {
                 this.currentClassName = localStorage.getItem('class');
+            }
+        );
+
+        this.addingQuoteStatusSubscription = this.insuranceClassService.isCreatingQuoteChanged$.subscribe(
+            status => {
+                this.isCreatingQuote = status;
             }
         );
     }
@@ -267,7 +275,6 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
 
     selectedLoadingValue: IExtension;
 
-
     selectedSourceOfBusiness: string;
 
     startValue: Date | null = null;
@@ -278,7 +285,6 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
     concRisks: any[] = [];
     conChasis: any[] = [];
 
-
     log(value: { label: string; value: string }): void {
         this.selectedLoadingValue = {
             description: 'Increased Third Party Limit',
@@ -287,20 +293,26 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        this.decodedJwtData = jwt_decode(this.loggedIn);
+        console.log('Decoded>>>>>>', this.decodedJwtData);
 
-      this.decodedJwtData = jwt_decode(this.loggedIn);
-      console.log('Decoded>>>>>>', this.decodedJwtData);
+        this.usersService.getUsers().subscribe(users => {
+            this.user = users.filter(
+                x => x.ID === this.decodedJwtData.user_id
+            )[0];
 
-      this.usersService.getUsers().subscribe((users) => {
-        this.user = users.filter((x) => x.ID === this.decodedJwtData.user_id)[0];
+            this.isPresent = this.user.Permission.find(
+                el =>
+                    el.name === this.admin ||
+                    el.name === this.approveQuote ||
+                    el.name === this.editQuote ||
+                    el.name === this.deleteRisk
+            );
 
-        this.isPresent = this.user.Permission.find((el) => el.name === this.admin || el.name === this.approveQuote ||
-          el.name === this.editQuote || el.name === this.deleteRisk);
+            console.log('USERS>>>', this.user, this.isPresent, this.admin);
+        });
 
-        console.log('USERS>>>', this.user, this.isPresent, this.admin);
-      });
-
-      this.quoteForm = this.formBuilder.group({
+        this.quoteForm = this.formBuilder.group({
             client: ['', Validators.required],
             messageCode: ['ewrewre', Validators.required],
             currency: ['', Validators.required],
@@ -315,13 +327,13 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
             intermediaryName: ['']
         });
 
-      this.policyService.getPolicies().subscribe(res => {
+        this.policyService.getPolicies().subscribe(res => {
             for (const policy of res) {
                 this.concRisks = this.concRisks.concat(policy.risks);
             }
         });
 
-      this.quoteService.getMotorQuotations().subscribe(quotes => {
+        this.quoteService.getMotorQuotations().subscribe(quotes => {
             this.quotesList = quotes;
             this.quotesCount = quotes.length;
 
@@ -329,7 +341,6 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
 
             this.lastItem = this.quotesList[this.quotesList.length - 1];
         });
-
 
         this.quoteService.getVehicles().subscribe(vehicles => {
             console.log(vehicles);
@@ -342,27 +353,26 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
         });
 
         this.clientsService.getAllClients().subscribe(clients => {
-
             this.clients = [...clients[0], ...clients[1]] as Array<
                 IIndividualClient & ICorporateClient
             >;
         });
 
-      this.agentsService.getAgents().subscribe(agents => {
+        this.agentsService.getAgents().subscribe(agents => {
             this.agents = agents;
         });
 
-      this.agentsService.getBrokers().subscribe(brokers => {
+        this.agentsService.getBrokers().subscribe(brokers => {
             this.brokers = brokers;
         });
 
-      this.agentsService
+        this.agentsService
             .getSalesRepresentatives()
             .subscribe(salesRepresentatives => {
                 this.salesRepresentatives = salesRepresentatives;
             });
 
-      this.excessesForm = this.formBuilder.group({
+        this.excessesForm = this.formBuilder.group({
             below21Years: ['', Validators.required],
             over70Years: ['', Validators.required],
             noLicence: ['', Validators.required],
@@ -371,17 +381,17 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
         });
 
         // set defaults values for excesses
-      this.excessesForm.get('below21Years').setValue('100');
-      this.excessesForm.get('over70Years').setValue('100');
-      this.excessesForm.get('noLicence').setValue('120');
-      this.excessesForm.get('careLessDriving').setValue('120');
-      this.excessesForm.get('otherEndorsement').setValue('100');
+        this.excessesForm.get('below21Years').setValue('100');
+        this.excessesForm.get('over70Years').setValue('100');
+        this.excessesForm.get('noLicence').setValue('120');
+        this.excessesForm.get('careLessDriving').setValue('120');
+        this.excessesForm.get('otherEndorsement').setValue('100');
 
-      this.productClauseService.getClauses().subscribe(res => {
+        this.productClauseService.getClauses().subscribe(res => {
             this.clauseList = res;
         });
 
-      this.productClauseService.getExtensions().subscribe(res => {
+        this.productClauseService.getExtensions().subscribe(res => {
             this.extensionList = res;
             this.motorComprehensiveloadingOptions = res;
             this.motorThirdPartyloadingOptions = res.filter(
@@ -389,11 +399,11 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
             );
         });
 
-      this.productClauseService.getWordings().subscribe(res => {
+        this.productClauseService.getWordings().subscribe(res => {
             this.wordingList = res;
         });
 
-      this.updateEditCache();
+        this.updateEditCache();
     }
 
     disabledSubmissionDate = submissionValue => {
@@ -401,7 +411,7 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
             return false;
         }
         return submissionValue.valueOf() < moment().add(-1, 'days');
-    }
+    };
 
     handlePolicyEndDateCalculation(): void {
         if (
@@ -553,7 +563,10 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
     deleteRow(): void {}
 
     async addQuote(): Promise<void> {
+        console.log('adding quote...', this.isCreatingQuote);
         this.isCreatingQuote = true;
+        console.log('adding quote...', this.isCreatingQuote);
+
         this.clientCode = this.quoteForm.controls.client.value.id;
         if (this.quoteForm.controls.client.value.clientType === 'Individual') {
             this.clientName =
@@ -642,6 +655,10 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
             this.properties
         );
 
+        // this.isCreatingQuote = false;
+    }
+
+    changeIsCreatingQuoteStatus() {
         this.isCreatingQuote = false;
     }
 
@@ -825,5 +842,6 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.classHandlerSubscription.unsubscribe();
+        this.addingQuoteStatusSubscription.unsubscribe();
     }
 }

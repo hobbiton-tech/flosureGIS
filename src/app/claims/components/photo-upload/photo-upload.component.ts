@@ -41,7 +41,6 @@ export class PhotoUploadComponent implements OnInit {
         this.photoUploads = this.claim.photoUploads.map(
             x => x.photoDescription
         );
-        console.log(this.photoUploads);
     }
 
     openPhotoUploadModal(side) {

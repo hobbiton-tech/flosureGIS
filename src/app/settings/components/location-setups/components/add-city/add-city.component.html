@@ -1,5 +1,5 @@
 <nz-modal [(nzVisible)]="isAddCityModalVisible" nzTitle="Add City" [nzContent]="cityContent"
-    (nzOnCancel)="closeAddCityModal()" (nzOnOk)="closeAddCityModal()" nzWidth="50%">
+    (nzOnCancel)="closeAddCityModal()" (nzOnOk)="closeAddCityModal()">
 
 
     <ng-template #cityContent>
@@ -7,7 +7,7 @@
             <div>
                 <form nz-form [formGroup]="cityDetailsForm">
                     <div nz-row>
-                        <div nz-col nzSpan="8">
+                        <div nz-col nzSpan="24">
                             <nz-form-item>
                                 <nz-form-label nzRequired nzSpan="10">Province</nz-form-label>
                                 <nz-form-control nzSpan="10">

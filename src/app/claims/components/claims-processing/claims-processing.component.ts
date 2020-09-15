@@ -154,16 +154,30 @@ export class ClaimsProcessingComponent implements OnInit {
     }
 
     checkClaimApproval(claim: Claim) {
-        // const riskRegNumbers: string[] = []
-
         let policyRisksRegNumbers: string[] = claim.policy.risks.map(
             x => x.vehicle.regNumber
         );
 
-        if (policyRisksRegNumbers.includes(claim.risk.vehicle.regNumber)) {
-            this.isClaimRiskUnderPolicy = true;
-        } else {
-            this.isClaimRiskUnderPolicy = false;
+        let policyRisksId: string[] = claim.policy.risks.map(
+            x => x.property.propertyId
+        );
+
+        if (claim.policy.class.className.toLowerCase() == 'motor') {
+            if (policyRisksRegNumbers.includes(claim.risk.vehicle.regNumber)) {
+                this.isClaimRiskUnderPolicy = true;
+            } else {
+                this.isClaimRiskUnderPolicy = false;
+            }
+        }
+
+        if (claim.policy.class.className.toLowerCase() == 'fire') {
+            if (
+                policyRisksRegNumbers.includes(claim.risk.property.propertyId)
+            ) {
+                this.isClaimRiskUnderPolicy = true;
+            } else {
+                this.isClaimRiskUnderPolicy = false;
+            }
         }
 
         if (

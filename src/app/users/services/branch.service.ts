@@ -6,40 +6,52 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class BranchService {
-  branchModel: BranchModel;
-  branchesModel: BranchModel[] = [];
-  BASEURLBranch = 'https://user-management.savenda-flosure.com';
+    branchModel: BranchModel;
+    branchesModel: BranchModel[] = [];
+    BASEURLBranch = 'https://user-management.savenda-flosure.com';
 
-  constructor(private http: HttpClient,
-              private message: NzMessageService,
-              private router: Router) { }
+    constructor(
+        private http: HttpClient,
+        private message: NzMessageService,
+        private router: Router
+    ) {}
 
     createBranch(cBranch: BranchModel): Observable<BranchModel> {
-      return this.http.post<BranchModel>(`${this.BASEURLBranch}/branch`, cBranch);
+        return this.http.post<BranchModel>(
+            `${this.BASEURLBranch}/branch`,
+            cBranch
+        );
     }
 
     updateBranch(uBranch: BranchModel) {
-      return this.http.put<BranchModel>(`${this.BASEURLBranch}/branch/${uBranch.ID}`, uBranch);
+        return this.http.put<BranchModel>(
+            `${this.BASEURLBranch}/branch/${uBranch.ID}`,
+            uBranch
+        );
     }
 
     getBranch(): Observable<BranchModel[]> {
-      return this.http.get<BranchModel[]>(`${this.BASEURLBranch}/branch`);
-
+        return this.http.get<BranchModel[]>(`${this.BASEURLBranch}/branch`);
     }
 
-  createSOP(cSOP: SalesPoint): Observable<SalesPoint> {
-    return this.http.post<SalesPoint>(`${this.BASEURLBranch}/sales-point`, cSOP);
-  }
+    createSOP(cSOP: SalesPoint): Observable<SalesPoint> {
+        return this.http.post<SalesPoint>(
+            `${this.BASEURLBranch}/sales-point`,
+            cSOP
+        );
+    }
 
-  updateSOP(uSOP: SalesPoint) {
-    return this.http.put<SalesPoint>(`${this.BASEURLBranch}/sales-point/${uSOP.ID}`, uSOP);
-  }
+    updateSOP(uSOP: SalesPoint) {
+        return this.http.put<SalesPoint>(
+            `${this.BASEURLBranch}/sales-point/${uSOP.ID}`,
+            uSOP
+        );
+    }
 
-  getSOP(): Observable<SalesPoint> {
-    return this.http.get<SalesPoint>(`${this.BASEURLBranch}/sales-point`);
-
-  }
+    getSOP(): Observable<SalesPoint> {
+        return this.http.get<SalesPoint>(`${this.BASEURLBranch}/sales-point`);
+    }
 }

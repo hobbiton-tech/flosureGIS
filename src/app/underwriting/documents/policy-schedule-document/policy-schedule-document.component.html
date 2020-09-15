@@ -62,7 +62,7 @@
                 }}</span><span style="float: right;">Agency:
                     {{
                         policy.sourceOfBusiness
-                            ? policy.sourceOfBusiness == 'direct'
+                            ? policy.sourceOfBusiness == 'Direct'
                                 ? 'Direct'
                                 : policy.intermediaryName
                             : '-'
@@ -73,7 +73,7 @@
                 }}<span style="float: right;">Captured by:
                     {{
                         policy.sourceOfBusiness
-                            ? policy.sourceOfBusiness == 'direct'
+                            ? policy.sourceOfBusiness == 'Direct'
                                 ? ''
                                 : agent?.first_name + ' ' + agent?.surname
                             : '-'
