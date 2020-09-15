@@ -5,11 +5,18 @@
         <div nz-row nzGutter="0">
             <div nz-col nzSpan="8">
                 <nz-form-item>
-                    <nz-form-label [nzSpan]="10" nzFor="propertyId" nzRequired>
-                        Risk ID
+                    <nz-form-label [nzSpan]="10" nzFor="subClass" nzRequired>Sub Class
                     </nz-form-label>
                     <nz-form-control nzSpan="10">
-                        <input nz-input formControlName="propertyId" />
+                        <nz-select formControlName="subClass" nzRequired (ngModelChange)="handleProductChange()">
+                            <nz-option *ngFor="
+                                            let subClass of productOptions
+                                        " [nzValue]="
+                                            subClass.productName
+                                        " [nzLabel]="
+                                        subClass.productName
+                                        "></nz-option>
+                        </nz-select>
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
@@ -40,18 +47,11 @@
             </div>
             <div nz-col nzSpan="8">
                 <nz-form-item>
-                    <nz-form-label [nzSpan]="10" nzFor="subClass">Sub Class
+                    <nz-form-label [nzSpan]="10" nzFor="propertyId" nzRequired>
+                        Risk ID
                     </nz-form-label>
                     <nz-form-control nzSpan="10">
-                        <nz-select formControlName="subClass" nzRequired (ngModelChange)="handleProductChange()">
-                            <nz-option *ngFor="
-                                    let subClass of productOptions
-                                " [nzValue]="
-                                    subClass.productName
-                                " [nzLabel]="
-                                subClass.productName
-                                "></nz-option>
-                        </nz-select>
+                        <input nz-input formControlName="propertyId" />
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>

@@ -460,6 +460,14 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
         }
     }
 
+    handleDatesCalculation(): void {
+        let startDate = moment(this.quoteForm.get('startDate').value);
+        let endDate = moment(this.quoteForm.get('endDate').value);
+        let numberOfDays = endDate.diff(startDate, 'days');
+
+        this.quoteForm.get('policyNumberOfDays').setValue(numberOfDays);
+    }
+
     resetForms() {
         this.premiumComputationService.changeRiskEditMode(false);
     }

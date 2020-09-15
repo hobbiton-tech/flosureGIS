@@ -144,7 +144,8 @@
                         <nz-form-item>
                             <nz-form-label nzRequired nzSpan="7">End Date</nz-form-label>
                             <nz-form-control nzSpan="17">
-                                <nz-date-picker formControlName="endDate" nzFormat="dd-MM-yyyy">
+                                <nz-date-picker formControlName="endDate" nzFormat="dd-MM-yyyy"
+                                    (ngModelChange)="handleDatesCalculation()">
                                 </nz-date-picker>
                             </nz-form-control>
                         </nz-form-item>
@@ -343,8 +344,8 @@
                             </button>
                             <nz-divider nzType="vertical"></nz-divider>
 
-                            <button *ngIf="deleteRisk === isPresent?.name || admin === isPresent?.name" nz-button nzType="danger" nz-popconfirm nzTitle="Delete Risk?"
-                                (nzOnConfirm)="removeRisk(risk)">
+                            <button *ngIf="deleteRisk === isPresent?.name || admin === isPresent?.name" nz-button
+                                nzType="danger" nz-popconfirm nzTitle="Delete Risk?" (nzOnConfirm)="removeRisk(risk)">
                                 Delete
                             </button>
                         </td>

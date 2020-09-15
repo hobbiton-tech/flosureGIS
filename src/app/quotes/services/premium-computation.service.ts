@@ -150,6 +150,9 @@ export class PremiumComputationService implements OnDestroy {
     // extended basic premium
     extendedBasicPremium: number = 0;
 
+    // current product
+    currentProduct = new BehaviorSubject<string>(null);
+
     // observable streams
     basicPremiumAmountChanged$ = this.basicPremiumAmount.asObservable();
     sumInsuredChanged$ = this.sumInsured.asObservable();
@@ -177,6 +180,8 @@ export class PremiumComputationService implements OnDestroy {
     isExtensionChanged$ = this.isExtension.asObservable();
 
     resetVehicleDetailsChanged$ = this.resetVehicleDetails.asObservable();
+
+    currentProductChanges$ = this.currentProduct.asObservable();
 
     // methods to change respective values
     changeBasicPremiumAmount(value: number) {
@@ -291,6 +296,11 @@ export class PremiumComputationService implements OnDestroy {
 
     changeExtensionMode(value: boolean) {
         this.isExtension.next(value);
+    }
+
+    changeCurrentProduct(value: string) {
+        this.currentProduct.next(value);
+        console.log('current product:=> ', value);
     }
 
     // recieve extension and add to extensions list
