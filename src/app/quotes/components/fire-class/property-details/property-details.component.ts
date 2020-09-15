@@ -15,6 +15,7 @@ import { LocationService } from 'src/app/settings/components/location-setups/ser
 import { IProvince } from 'src/app/settings/components/location-setups/models/province.model';
 import { ICity } from 'src/app/settings/components/location-setups/models/city.model';
 import { PremiumComputationService } from 'src/app/quotes/services/premium-computation.service';
+import { ClausesService } from 'src/app/settings/components/underwriting-setups/services/clauses.service';
 
 @Component({
     selector: 'app-property-details',
@@ -36,7 +37,8 @@ export class PropertyDetailsComponent implements OnInit, OnDestroy {
         private fireClassService: FireClassService,
         private classHandler: InsuranceClassHandlerService,
         private locationService: LocationService,
-        private premiumComputationService: PremiumComputationService
+        private premiumComputationService: PremiumComputationService,
+        private productClausesService: ClausesService
     ) {
         this.propertyDetailsForm = this.formBuilder.group({
             propertyId: [
@@ -128,6 +130,10 @@ export class PropertyDetailsComponent implements OnInit, OnDestroy {
         this.locationService.getProvinces().subscribe(provinces => {
             this.provinces = provinces;
         });
+
+        this.productClausesService.getExtensions().subscribe(extensions => {
+            console.log('extensions :=> ', extensions);
+        });
     }
 
     // editable fields
@@ -155,11 +161,15 @@ export class PropertyDetailsComponent implements OnInit, OnDestroy {
 
     handleProductChange() {
         this.currentProduct = this.propertyDetailsForm.get('subClass').value;
+        this.premiumComputationService.changeCurrentProduct(
+            this.propertyDetailsForm.get('subClass').value
+        );
     }
 
     changeCities() {
         this.currentProvince = this.propertyDetailsForm.get('province').value;
         this.cities = this.currentProvince.cities;
+        this.propertyDetailsForm.get('city').setValue(this.cities[0]);
     }
 
     setPropertyDetails(propertyDetails: PropertyDetailsModel) {
