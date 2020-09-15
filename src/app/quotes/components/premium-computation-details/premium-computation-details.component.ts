@@ -199,6 +199,10 @@ export class PremiumComputationDetailsComponent implements OnInit, OnDestroy {
         this.premiumComputationService.changeSelectedInsuranceType(
             this.selectedInsuranceType
         );
+
+        this.premiumComputationService.changeCurrentProduct(
+            this.selectedInsuranceType
+        );
     }
 
     changeSelectedProductType() {

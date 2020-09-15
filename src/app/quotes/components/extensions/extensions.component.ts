@@ -9,6 +9,11 @@ import {
     IExtensions
 } from '../../models/extensions.model';
 import { Subscription } from 'rxjs';
+import {
+    IClass,
+    IProduct
+} from 'src/app/settings/components/product-setups/models/product-setups-models.model';
+import { InsuranceClassHandlerService } from 'src/app/underwriting/services/insurance-class-handler.service';
 
 @Component({
     selector: 'app-extensions',
@@ -19,30 +24,42 @@ export class ExtensionsComponent implements OnInit, OnDestroy {
     extensionsTotalSubscription: Subscription;
     extensionsListChanges: Subscription;
     riskEditModeSubscription: Subscription;
+    classHandlerSubscription: Subscription;
+    currentProductSubscription: Subscription;
 
     constructor(
         private productClauseService: ClausesService,
-        private premiumComputationService: PremiumComputationService
+        private premiumComputationService: PremiumComputationService,
+        private classHandler: InsuranceClassHandlerService
     ) {
         this.extensionsTotalSubscription = this.premiumComputationService.extensionsTotalChanged$.subscribe(
             extensionsTotal => {
-                console.log(
-                    'extensions changed, listening from extensions comp'
-                );
                 this.extensionsTotal = extensionsTotal;
             }
         );
         this.extensionsListChanges = this.premiumComputationService.extensionsTotalChanged$.subscribe(
             extensions => {
-                console.log(
-                    'extensions changed, listening from extensions comp'
-                );
                 this.extensionList = this.premiumComputationService.getExtensions();
             }
         );
         this.riskEditModeSubscription = this.premiumComputationService.riskEditModeChanged$.subscribe(
             riskEditMode => {
                 this.isRiskEditMode = riskEditMode;
+            }
+        );
+
+        this.classHandlerSubscription = this.classHandler.selectedClassChanged$.subscribe(
+            currentClass => {
+                this.currentClass = JSON.parse(
+                    localStorage.getItem('classObject')
+                );
+                this.currentProducts = this.currentClass.products;
+            }
+        );
+
+        this.currentProductSubscription = this.premiumComputationService.currentProductChanges$.subscribe(
+            currentProduct => {
+                this.currentProduct = currentProduct;
             }
         );
     }
@@ -106,6 +123,12 @@ export class ExtensionsComponent implements OnInit, OnDestroy {
     increasedThirdPartyLimitsRateType: string;
     increasedThirdPartyLimitValue: number;
 
+    currentClass: IClass;
+    currentClassName: string;
+    currentProducts: IProduct[] = [];
+    currentProduct: string;
+    singleProduct: IProduct;
+
     ngOnInit(): void {
         this.productClauseService.getExtensions().subscribe(res => {
             this.extensionList = res;
@@ -163,5 +186,7 @@ export class ExtensionsComponent implements OnInit, OnDestroy {
         this.extensionsTotalSubscription.unsubscribe();
         this.extensionsListChanges.unsubscribe();
         this.riskEditModeSubscription.unsubscribe();
+        this.currentProductSubscription.unsubscribe();
+        this.classHandlerSubscription.unsubscribe();
     }
 }

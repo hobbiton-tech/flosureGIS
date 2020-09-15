@@ -40,6 +40,7 @@ export class UnderwritingSetupsComponent implements OnInit {
 
     productsList: IProduct[] = [];
     productClass: any;
+    currentClass: IClass;
 
     isClausesVisible = false;
     isExtensionsVisible = false;
@@ -89,11 +90,15 @@ export class UnderwritingSetupsComponent implements OnInit {
     }
 
     onChange(value) {
-        this.productsService.getProducts(value.id).subscribe(res => {
-            console.log('YEEEEEEEE>>>>', res);
+        // this.productsService.getProducts(value.id).subscribe(res => {
+        //     console.log('YEEEEEEEE>>>>', res);
 
-            this.productsList = res;
-        });
+        //     this.productsList = res;
+        // });
+
+        this.currentClass = this.classesList.filter(x => x.id == value.id)[0];
+
+        this.productsList = this.currentClass.products;
     }
 
     onSelectProduct(product) {

@@ -71,6 +71,7 @@ export class ExtensionsComponent implements OnInit {
 
         this.productClausesService.getExtensions().subscribe(res => {
             this.extensionList = res;
+            console.log('extensions :=> ', res);
         });
         this.productClausesService.getLimits().subscribe(res => {
             this.limitsList = res;
