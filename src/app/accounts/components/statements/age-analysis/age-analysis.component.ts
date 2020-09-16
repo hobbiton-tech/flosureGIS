@@ -38,7 +38,7 @@ export class AgeAnalysisComponent implements OnInit {
       )[0] as IIndividualClient & ICorporateClient;
 
       this.clientsService.getTransactions().subscribe((txns: any) => {
-        this.transactionList = txns.data.filter((x) => x.client_id === this.clientId && x.balance >= 0).sort().reverse();
+        this.transactionList = txns.data.filter((x) => x.client_id === this.clientId && x.balance >= 0 || x.open_balance).sort().reverse();
         console.log('Balance', this.transactionList);
       });
     });

@@ -959,6 +959,7 @@ export class QuoteDetailsComponent implements OnInit {
 
 
                                     const trans: TransactionModel = {
+                                      open_cash: 0,
                                       balance: Number(balanceTxn),
                                       client_id: this.quoteData.clientCode,
                                       cr: 0,
@@ -1120,6 +1121,7 @@ export class QuoteDetailsComponent implements OnInit {
 
 
                                     const trans: TransactionModel = {
+                                      open_cash: 0,
                                       balance: Number(balanceTxn),
                                       client_id: this.quoteData.clientCode,
                                       cr: 0,

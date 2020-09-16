@@ -78,7 +78,7 @@ export class ClientStatementsComponent implements OnInit {
 
 
       this.clientsService.getTransactions().subscribe((txns: any) => {
-        this.transactionList = txns.data.filter((x) => x.client_id === this.clientId).sort().reverse();
+        this.transactionList = txns.data.filter((x) => x.client_id === this.clientId && x.type !== 'Open Cash').sort().reverse();
       });
     });
 

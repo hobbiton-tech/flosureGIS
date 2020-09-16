@@ -54,12 +54,12 @@ export class PolicyCancellationDetailsComponent implements OnInit {
     vehicle: VehicleDetailsModel;
     property: PropertyDetailsModel;
 
-    //loading feedback
-    cancellingPolicy: boolean = false;
+    // loading feedback
+    cancellingPolicy = false;
     editedRisk: RiskModel;
     selectedRisk: RiskModel;
 
-    //policy details form
+    // policy details form
     policyCancellationDetailsForm: FormGroup;
 
     // cancellation type form
@@ -68,10 +68,10 @@ export class PolicyCancellationDetailsComponent implements OnInit {
     // cancellation type
     selectedCancellationType = { label: 'Time On Risk', value: 'timeOnRisk' };
 
-    //endorsement form
+    // endorsement form
     endorsementForm: FormGroup;
 
-    //modals
+    // modals
     viewRiskFormModalVisible = false;
 
     policyData: Policy = new Policy();
@@ -79,10 +79,10 @@ export class PolicyCancellationDetailsComponent implements OnInit {
     risks: RiskModel[] = [];
     risksLoading = true;
 
-    //Editable fields
+    // Editable fields
     isEditmode = false;
 
-    //creditNote
+    // creditNote
     creditNotes: CreditNote[];
 
     // policy debit note
@@ -105,7 +105,7 @@ export class PolicyCancellationDetailsComponent implements OnInit {
     totalAmount: string;
     creditNoteAmount: number;
 
-    //Credit Note PDF
+    // Credit Note PDF
     isCreditNotePDFVisible = false;
     isCancelledPolicy = false;
     transaction: any;
@@ -171,7 +171,7 @@ export class PolicyCancellationDetailsComponent implements OnInit {
         });
 
         this.route.params.subscribe(id => {
-            this.policiesService.getPolicyById(id['id']).subscribe(policy => {
+            this.policiesService.getPolicyById(id.id).subscribe(policy => {
                 this.policyData = policy;
                 this.classHandler.changeSelectedClass(this.policyData.class);
                 this.risks = policy.risks;
@@ -200,7 +200,7 @@ export class PolicyCancellationDetailsComponent implements OnInit {
 
                 this.isCancelledPolicy = this.policyData.status === 'Cancelled';
 
-                //set values of  fields
+                // set values of  fields
                 this.policyCancellationDetailsForm
                     .get('client')
                     .setValue(this.policyData.client);
@@ -272,7 +272,7 @@ export class PolicyCancellationDetailsComponent implements OnInit {
         }
     }
 
-    //calculate number of days between two dates and returns requisition amount
+    // calculate number of days between two dates and returns requisition amount
     policyCancellationBalance(): number {
         const todayDate = new Date();
         const policyEndDate = this.policyData.endDate;
@@ -290,7 +290,7 @@ export class PolicyCancellationDetailsComponent implements OnInit {
         return requisitionAmount;
     }
 
-    //endorse policy
+    // endorse policy
     endorsePolicy() {
         this.cancellingPolicy = true;
 
@@ -333,7 +333,7 @@ export class PolicyCancellationDetailsComponent implements OnInit {
             amount: this.creditNoteAmount = this.policyCancellationTypeForm.get(
                 'premium'
             ).value,
-            creditNote: creditNote
+            creditNote
         };
 
         this.endorsementService
@@ -373,6 +373,7 @@ export class PolicyCancellationDetailsComponent implements OnInit {
 
 
                   const trans: TransactionModel = {
+                    open_cash: 0,
                     balance: Number(balanceTxn),
                     client_id: this.policyData.clientCode,
                     cr: Number(res.creditNoteAmount * -1),

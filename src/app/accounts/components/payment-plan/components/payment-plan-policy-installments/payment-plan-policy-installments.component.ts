@@ -47,7 +47,6 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
     clientName = '';
     recStatus = 'Receipted';
     installmentAmount = 0;
-    receiptNum = '';
     policy: Policy = new Policy();
 
     installmentsList: InstallmentsModel[];
@@ -106,13 +105,8 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
 
     displayPoliciesList: PlanPolicy[];
     displayReceiptsList: any[] = [];
-    clientI: any;
     clientType: string;
-    receiptNo: string;
-    paymentPlanReceipts: PlanReceipt[];
     rptNo: string;
-    rcpt: any;
-    listOfPolicies: any[] = [];
     amount: any;
     allocationReceipt: any;
     planReceipt: any[] = [];
@@ -126,6 +120,7 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
   loggedIn = localStorage.getItem('currentUser');
   transaction: any;
   receiptN: any;
+  transactionL: any;
 
     constructor(
         private route: ActivatedRoute,
@@ -244,6 +239,14 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
             console.log('-------POLICIES--------', this.policies);
           });
 
+
+          this.clientsService.getTransactions().subscribe((txns: any) => {
+            this.transactionL = txns.data.filter((x) => x.client_id === this.paymentPlan.client_id &&
+              x.type === 'Open Cash').slice(-1)[0];
+
+            console.log('TANS AXN', this.transactionL);
+          });
+
         });
 
 
@@ -279,7 +282,6 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
     }
 
 
-    receiptInstallment() {}
 
     // modal cancel
     handleCancel(): void {
@@ -328,6 +330,14 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
                 receipt_number: 'string'
             };
 
+            let balanceTxn = 0;
+
+
+            if (this.transactionL === null || this.transactionL === undefined || this.transactionL === 0) {
+              balanceTxn = Number(amount);
+            } else {
+              balanceTxn = Number(this.transactionL.open_balance) + Number(amount);
+            }
 
 
             this.http
@@ -357,6 +367,23 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
                                             ...planReceipt,
                                         ];
                                     }
+
+                            const transaction: TransactionModel = {
+                              balance: 0,
+                              cr: 0,
+                              dr: 0,
+                              open_cash: Number(balanceTxn),
+                              reference: '',
+                              transaction_amount: 0,
+                              transaction_date: new Date(),
+                              type: 'Open Cash',
+                              receipt_id: resRCPT.data.ID,
+                              client_id: this.client.id
+                            };
+
+                            this.clientsService.createTransaction(transaction).subscribe((sucTxn) => {}, (errTxn) => {
+                              console.log(errTxn);
+                            });
 
                         },
                         (err) => {
@@ -560,6 +587,7 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
 
 
               const trans: TransactionModel = {
+                open_cash: 0,
                 balance: Number(balanceTxn),
                 client_id: this.paymentPlan.client_id,
                 cr: Number(this.allocationForm.controls.amount.value * -1),
@@ -572,6 +600,26 @@ export class PaymentPlanPolicyInstallmentsComponent implements OnInit {
               };
 
               this.clientsService.createTransaction(trans).subscribe((sucTxn) => {}, (errTxn) => {
+                console.log(errTxn);
+              });
+
+              const openBalanceTxn = Number(this.transactionL.open_cash) - Number(this.allocationForm.controls.amount.value);
+
+
+              const transaction: TransactionModel = {
+                balance: 0,
+                cr: 0,
+                dr: 0,
+                open_cash: Number(openBalanceTxn),
+                reference: '',
+                transaction_amount: 0,
+                transaction_date: new Date(),
+                type: 'Open Cash',
+                receipt_id: this.receiptN.ID,
+                client_id: this.client.id
+              };
+
+              this.clientsService.createTransaction(transaction).subscribe((sucTxn) => {}, (errTxn) => {
                 console.log(errTxn);
               });
             });
