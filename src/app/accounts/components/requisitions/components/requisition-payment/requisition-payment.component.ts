@@ -246,5 +246,6 @@ export class RequisitionPaymentComponent implements OnInit, OnDestroy {
         this.payeeSubscription.unsubscribe();
         this.requisitionAmountSubscription.unsubscribe();
         this.requisitionIdSubscription.unsubscribe();
+        this.requisitionCurrencySubscription.unsubscribe();
     }
 }

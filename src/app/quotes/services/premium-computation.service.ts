@@ -251,12 +251,10 @@ export class PremiumComputationService implements OnDestroy {
     }
 
     changeSelectedInsuranceType(value: string) {
-        console.log('insurance type:', value);
         this.selectedInsuranceType.next(value);
     }
 
     changeSelectedProductType(value: string) {
-        console.log('product type:', value);
         this.selectedProductType.next(value);
     }
 
@@ -532,6 +530,8 @@ export class PremiumComputationService implements OnDestroy {
         startDate: Date | ITimestamp,
         quarter: string
     ): Observable<any> {
+        console.log('date', startDate);
+        console.log('quarter', quarter);
         const request: IRateRequest = {
             sumInsured: 0,
             premiumRate: 0,
@@ -550,29 +550,32 @@ export class PremiumComputationService implements OnDestroy {
             riotAndStrike: 0,
             levy: 0
         };
-        this.http
-            .post<IRateResult>(
-                `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
-                request
-            )
-            .subscribe(data => {
-                const doo = new Date(data.endDate);
-                const nd = new Date(
-                    doo.getTime() - doo.getTimezoneOffset() * -60000
-                );
-                let startDate = moment(this.dateForComputation);
-                let endDate = moment(nd);
-                let numberOfDays = endDate.diff(startDate, 'days');
-                let expiryQuarter = moment(endDate).quarter();
-                let expiryYear = moment(endDate)
-                    .year()
-                    .toString()
-                    .slice(-2);
 
-                this.riskEndDate.next(nd);
-                this.numberOfDays.next(numberOfDays);
-                this.expiryQuarter.next(expiryQuarter + '/' + expiryYear);
-            });
+        if (startDate && quarter) {
+            this.http
+                .post<IRateResult>(
+                    `https://flosure-rates-api.herokuapp.com/rates/comprehensive`,
+                    request
+                )
+                .subscribe(data => {
+                    const doo = new Date(data.endDate);
+                    const nd = new Date(
+                        doo.getTime() - doo.getTimezoneOffset() * -60000
+                    );
+                    let startDate = moment(this.dateForComputation);
+                    let endDate = moment(nd);
+                    let numberOfDays = endDate.diff(startDate, 'days');
+                    let expiryQuarter = moment(endDate).quarter();
+                    let expiryYear = moment(endDate)
+                        .year()
+                        .toString()
+                        .slice(-2);
+
+                    this.riskEndDate.next(nd);
+                    this.numberOfDays.next(numberOfDays);
+                    this.expiryQuarter.next(expiryQuarter + '/' + expiryYear);
+                });
+        }
         return this.basicPremium;
     }
 

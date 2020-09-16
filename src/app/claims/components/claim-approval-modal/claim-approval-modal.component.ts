@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    Input,
+    Output,
+    EventEmitter,
+    OnDestroy
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Claim } from '../../models/claim.model';
 import { ClaimsService } from '../../services/claims-service.service';
@@ -11,7 +18,7 @@ import { NzMessageService } from 'ng-zorro-antd';
     templateUrl: './claim-approval-modal.component.html',
     styleUrls: ['./claim-approval-modal.component.scss']
 })
-export class ClaimApprovalModalComponent implements OnInit {
+export class ClaimApprovalModalComponent implements OnInit, OnDestroy {
     isApprovingClaim: boolean = false;
     isCancellingClaim: boolean = false;
     claimSubscription: Subscription;
@@ -161,5 +168,9 @@ export class ClaimApprovalModalComponent implements OnInit {
                     this.msg.error('Failed to cancel claim');
                 }
             );
+    }
+
+    ngOnDestroy() {
+        this.claimSubscription.unsubscribe();
     }
 }

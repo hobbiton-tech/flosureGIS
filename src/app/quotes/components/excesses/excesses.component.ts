@@ -33,7 +33,6 @@ export class ExcessesComponent implements OnInit, OnDestroy {
 
         this.extensionsListChanges = premiumComputationService.extensionsTotalChanged$.subscribe(
             extensions => {
-                console.log('extensions changed, listening from excesses comp');
                 this.extensions = premiumComputationService.getExtensions();
                 this.ngOnInit();
             }
@@ -67,7 +66,6 @@ export class ExcessesComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.currentClass = JSON.parse(localStorage.getItem('classObject'));
-        console.log('current class :=>', this.currentClass);
 
         if (this.currentClass.className == 'Motor') {
             this.productClauseService.getExccesses().subscribe(res => {
@@ -81,8 +79,6 @@ export class ExcessesComponent implements OnInit, OnDestroy {
 
         if (this.currentClass.className == 'Fire') {
             this.extensions.forEach(extension => {
-                console.log('ext:=> ', extension);
-
                 const excess: IExccess = {
                     heading: extension.extensionType,
                     description: extension.extensionType,
@@ -91,14 +87,12 @@ export class ExcessesComponent implements OnInit, OnDestroy {
 
                 this.tempExcessList.push(excess);
                 this.excessList = _.uniqBy(this.tempExcessList, 'heading');
-                console.log('exesses:=> ', this.excessList);
             });
         }
     }
 
     editExcess(ex: IExccess) {
         this.isEditExcessAmountModalVisible = true;
-        console.log('excess to edit :=> ', ex);
         this.currentExcess = ex;
     }
 

@@ -142,7 +142,7 @@
         <th style="border: 1px solid black;">MODEL</th>
         <th style="border: 1px solid black;">REG NO.</th>
         <th style="border: 1px solid black;">SUM INSURED({{quoteData.currency}}) </th>
-        <th style="border: 1px solid black;">RATE(%)</th>
+        <!-- <th style="border: 1px solid black;">RATE(%)</th> -->
         <th style="border: 1px solid black;">PREMIUM({{quoteData.currency}}) </th>
         <th style="border: 1px solid black;">LEVY @3%({{quoteData.currency}}) </th>
         <th style="border: 1px solid black;">TOTAL({{quoteData.currency}}) </th>
@@ -152,9 +152,9 @@
         <td style="border: 1px solid black;">{{risk?.vehicle?.vehicleModel}}</td>
         <td style="border: 1px solid black;">{{risk?.vehicle?.regNumber}}</td>
         <td style="border: 1px solid black;">{{risk.sumInsured | number: '1.2-2'}}</td>
-        <td style="border: 1px solid black;">
+        <!-- <td style="border: 1px solid black;">
           {{quoteData.risks[0].insuranceType == 'Comprehensive' ? '5' : '-'}}
-        </td>
+        </td> -->
         <td style="border: 1px solid black;">{{risk.basicPremium | number: '1.2-2'}}</td>
         <td style="border: 1px solid black;">{{risk.premiumLevy | number: '1.2-2'}}</td>
         <td style="border: 1px solid black;">{{risk.netPremium | number: '1.2-2'}}</td>
@@ -172,11 +172,11 @@
           </td>
         </tr>
 
-        <tr>
+        <!-- <tr>
           <td><strong>Rate</strong></td>
           <td><strong>:</strong></td>
           <td><span>{{quoteData.risks ? quoteData.risks[0].premiumRate : '-'}}</span></td>
-        </tr>
+        </tr> -->
 
         <tr>
           <td><strong>Basic Premium</strong></td>

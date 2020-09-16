@@ -79,14 +79,15 @@ export class VehicleDetailsComponent implements OnInit, OnDestroy {
             ]
         });
 
-        this.vehicleDetailsSubscription = this.vehicleDetailsService.vehicleDetailsFormChanged$.subscribe(
-            vehicleDetails => {
-                if (vehicleDetails) {
-                    this.vehicleDetails = vehicleDetails;
-                    this.vehicleDetailsForm.patchValue(vehicleDetails);
-                }
-            }
-        );
+        // this.vehicleDetailsSubscription = this.vehicleDetailsService.vehicleDetailsFormChanged$.subscribe(
+        //     vehicleDetails => {
+        //         console.log('*vehicle details :=> ', vehicleDetails);
+        //         if (vehicleDetails) {
+        //             this.vehicleDetails = vehicleDetails;
+        //             this.vehicleDetailsForm.patchValue(vehicleDetails);
+        //         }
+        //     }
+        // );
 
         this.riskEditModeSubscription = this.premiumComputationService.riskEditModeChanged$.subscribe(
             riskEditMode => {
@@ -147,9 +148,12 @@ export class VehicleDetailsComponent implements OnInit, OnDestroy {
     isVehicleModelLoading = false;
 
     ngOnInit(): void {
-        // this.vehicleDetailsForm.valueChanges.subscribe(res => {
-        //     this.changeVehicleDetails();
-        // });
+        this.vehicleDetailsForm.valueChanges.subscribe(res => {
+            // this.vehicleDetailsForm.patchValue(this.vehicleDetailsForm.value);
+            this.vehicleDetailsService.changeVehicleDetails(
+                this.vehicleDetailsForm.value
+            );
+        });
 
         this.policyService.getPolicies().subscribe(res => {
             for (const policy of res) {
@@ -355,15 +359,16 @@ export class VehicleDetailsComponent implements OnInit, OnDestroy {
         this.vehicleDetailsService.changeBodyType(this.bodyType);
     }
 
-    changeVehicleDetails() {
-        this.vehicleDetailsService.changeVehicleDetails(
-            this.vehicleDetailsForm.value
-        );
-    }
+    // changeVehicleDetails() {
+    //     this.vehicleDetailsService.changeVehicleDetails(
+    //         this.vehicleDetailsForm.value
+    //     );
+    // }
 
     setVehicleDetails(vehicleDetails: VehicleDetailsModel) {
-        this.vehicleDetailsService.changeVehicleDetails(vehicleDetails);
-        this.vehicleDetailsForm.patchValue(vehicleDetails);
+        // console.log('set vehicle details:=> ', vehicleDetails);
+        // // this.vehicleDetailsService.changeVehicleDetails(vehicleDetails);
+        // this.vehicleDetailsForm.patchValue(vehicleDetails);
     }
 
     getVehicleDetailFormValidity() {

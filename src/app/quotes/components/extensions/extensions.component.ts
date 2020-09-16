@@ -60,6 +60,14 @@ export class ExtensionsComponent implements OnInit, OnDestroy {
         this.currentProductSubscription = this.premiumComputationService.currentProductChanges$.subscribe(
             currentProduct => {
                 this.currentProduct = currentProduct;
+
+                this.singleProduct = this.currentProducts.filter(
+                    x => x.productName == this.currentProduct
+                )[0];
+
+                console.log('sp:=>', this.singleProduct);
+
+                this.ngOnInit();
             }
         );
     }
@@ -91,7 +99,7 @@ export class ExtensionsComponent implements OnInit, OnDestroy {
     selectedExtensionValue: IExtension;
 
     // extension list
-    extensionList: IExtensions[] = [];
+    extensionList = [];
 
     // selected increase third party input type
     selectedIncreaseThirdPartyLimitInputTypeValue = 'amount';
@@ -130,13 +138,26 @@ export class ExtensionsComponent implements OnInit, OnDestroy {
     singleProduct: IProduct;
 
     ngOnInit(): void {
-        this.productClauseService.getExtensions().subscribe(res => {
-            this.extensionList = res;
-            this.motorComprehensiveloadingOptions = res;
-            this.motorThirdPartyloadingOptions = res.filter(
-                x => x.extensionType === 'increasedThirdPartyLimits'
-            );
-        });
+        // this.productClauseService.getExtensions().subscribe(res => {
+        //     this.extensionList = res;
+        //     console.log('there:=> ', res);
+        //     this.motorComprehensiveloadingOptions = res;
+        //     this.motorThirdPartyloadingOptions = res.filter(
+        //         x => x.extensionType === 'increasedThirdPartyLimits'
+        //     );
+        // });
+
+        if (this.singleProduct) {
+            this.productClauseService.getExtensions().subscribe(ext => {
+                console.log('exts:=> ', ext);
+                this.extensionList = ext.filter(
+                    x => x.productId == this.singleProduct.id
+                );
+                console.log('extList:=> ', this.extensionList);
+            });
+        }
+
+        console.log('over there:=> ', this.extensionList);
     }
 
     computeIncreasedThirdPartyLimit() {}
