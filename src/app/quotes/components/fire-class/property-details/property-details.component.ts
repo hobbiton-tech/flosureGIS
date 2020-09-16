@@ -85,14 +85,14 @@ export class PropertyDetailsComponent implements OnInit, OnDestroy {
             }
         );
 
-        this.propertyDetailsSubscription = this.fireClassService.propertyDetailsChanged$.subscribe(
-            property => {
-                if (property) {
-                    this.propertyDetials = property;
-                    this.propertyDetailsForm.patchValue(property);
-                }
-            }
-        );
+        // this.propertyDetailsSubscription = this.fireClassService.propertyDetailsChanged$.subscribe(
+        //     property => {
+        //         if (property) {
+        //             this.propertyDetials = property;
+        //             this.propertyDetailsForm.patchValue(property);
+        //         }
+        //     }
+        // );
 
         this.riskEditModeSubscription = this.premiumComputationService.riskEditModeChanged$.subscribe(
             riskEditMode => {
@@ -123,9 +123,13 @@ export class PropertyDetailsComponent implements OnInit, OnDestroy {
     currentProduct: string;
 
     ngOnInit(): void {
-        // this.propertyDetailsForm.valueChanges.subscribe(res => {
-        //     this.propertyDetailsForm.patchValue(this.propertyDetials);
-        // });
+        this.propertyDetailsForm.valueChanges.subscribe(res => {
+            console.log('form :=> ', this.propertyDetailsForm.value);
+            // this.propertyDetailsForm.patchValue(this.propertyDetials);
+            this.fireClassService.changePropertyDetails(
+                this.propertyDetailsForm.value
+            );
+        });
 
         this.locationService.getProvinces().subscribe(provinces => {
             this.provinces = provinces;
@@ -179,6 +183,7 @@ export class PropertyDetailsComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.classHandlerSubscription.unsubscribe();
-        this.propertyDetailsSubscription.unsubscribe();
+        // this.propertyDetailsSubscription.unsubscribe();
+        this.riskEditModeSubscription.unsubscribe();
     }
 }

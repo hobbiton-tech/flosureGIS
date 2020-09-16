@@ -18,9 +18,9 @@ import { CreateQuoteComponent } from '../components/create-quote/create-quote.co
 import { InsuranceClassService } from './insurance-class.service';
 
 // const BASE_URL = 'http://104.248.247.78:3000';
-// const BASE_URL = 'https://flosure-postgres-db.herokuapp.com'
+// const BASE_URL = 'https://savenda.flosure-api.com'
 // const BASE_URL = 'https://flosure-api.azurewebsites.net';
-const BASE_URL = 'https://flosure-postgres-db.herokuapp.com';
+const BASE_URL = 'https://savenda.flosure-api.com';
 
 export interface IQuoteDocument {
     id: string;

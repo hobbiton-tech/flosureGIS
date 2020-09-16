@@ -74,6 +74,7 @@ export class VehicleDetailsServiceService {
     }
 
     changeVehicleDetails(value: VehicleDetailsModel) {
+        console.log('*change vehicle details :=> ', value);
         this.VehicleDetailsForm.next(value);
     }
 
@@ -83,6 +84,10 @@ export class VehicleDetailsServiceService {
 
     // gets vehicle details
     getVehicleDetails() {
+        console.log(
+            '*vehicle details form (get v dets:=> ',
+            this.VehicleDetailsForm.value
+        );
         return this.VehicleDetailsForm.value;
     }
 

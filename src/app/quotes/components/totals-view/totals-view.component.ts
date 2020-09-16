@@ -46,7 +46,6 @@ export class TotalsViewComponent implements OnInit, OnDestroy {
         this.extensionsTotalSubscription = this.premiumComputationService.extensionsTotalChanged$.subscribe(
             extensionsTotal => {
                 this.extensionsTotal = extensionsTotal;
-                console.log('extensions changed, listening from totals comp');
             }
         );
         this.discountsTotalSubscription = this.premiumComputationService.discountsTotalChanged$.subscribe(

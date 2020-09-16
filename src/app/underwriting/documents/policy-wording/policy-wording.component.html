@@ -1,21 +1,13 @@
-<div
-    style="
+<div style="
         display: flex;
         margin-bottom: 15px;
         align-items: flex-end;
         width: 100%;
-    "
->
+    ">
     <!-- <button nz-button nzType="primary" style="margin-right: 8px;" (click)="htmlToPdf()">
         Download
     </button> -->
-    <button
-        nz-button
-        nzType="primary"
-        [useExistingCss]="true"
-        [printSectionId]="'wordingPrintSection'"
-        ngxPrint
-    >
+    <button nz-button nzType="primary" [useExistingCss]="true" [printSectionId]="'wordingPrintSection'" ngxPrint>
         Print
     </button>
 </div>
@@ -28,10 +20,8 @@
                     <table>
                         <tr>
                             <td class="title">
-                                <img
-                                    src="/assets/images/Savenda-Logo-Final.png"
-                                    style="width: 100%; max-width: 240px;"
-                                />
+                                <img src="/assets/images/Savenda-Logo-Final.png"
+                                    style="width: 100%; max-width: 240px;" />
                             </td>
 
                             <span style="float: right;"> </span>
@@ -57,19 +47,10 @@
                 {{ wording.description }}
             </p>
         </div>
-        <div class="bottom">
-            <p>
-                .......................................................
-            </p>
-            <p>For and on behalf of</p>
-            <p style="font-weight: bold;">
-                SAVENDA GENERAL INSURANCE
-            </p>
-        </div>
+
         <br />
         <br />
-        <br />
-        <br />
+
         <div *ngFor="let clause of policyClauses">
             <h3 id="title">{{ clause.heading }}</h3>
             <!-- <h4 class="bottom" style="font-weight: bold;">
@@ -83,6 +64,17 @@
         (Loss or Damage to the Motor Car)
     </h4> -->
             <p>{{ extension.description }}</p>
+        </div>
+        <br />
+        <br />
+        <div class="bottom">
+            <p>
+                .......................................................
+            </p>
+            <p>For and on behalf of</p>
+            <p style="font-weight: bold;">
+                SAVENDA GENERAL INSURANCE
+            </p>
         </div>
     </div>
 </div>
