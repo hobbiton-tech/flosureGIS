@@ -28,10 +28,10 @@ export interface IClass {
 }
 
 export interface IProduct {
-    id: string;
-    productName: string;
+    id?: string;
+    productName?: string;
     productCode?: number;
-    productDescription: string;
+    productDescription?: string;
     productPolicyNumberPrefix?: string;
     productClaimNumberPrefix?: string;
 }

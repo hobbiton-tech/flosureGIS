@@ -1,4 +1,4 @@
-import { Component, OnInit, Output } from '@angular/core';
+import { Component, OnInit, Output, OnDestroy } from '@angular/core';
 import { ClausesService } from 'src/app/settings/components/underwriting-setups/services/clauses.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {
@@ -6,13 +6,23 @@ import {
     IClause
 } from 'src/app/settings/models/underwriting/clause.model';
 import { EventEmitter } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { PremiumComputationService } from '../../services/premium-computation.service';
+import { InsuranceClassHandlerService } from 'src/app/underwriting/services/insurance-class-handler.service';
+import {
+    IClass,
+    IProduct
+} from 'src/app/settings/components/product-setups/models/product-setups-models.model';
 
 @Component({
     selector: 'app-clauses',
     templateUrl: './clauses.component.html',
     styleUrls: ['./clauses.component.scss']
 })
-export class ClausesComponent implements OnInit {
+export class ClausesComponent implements OnInit, OnDestroy {
+    currentProductSubscription: Subscription;
+    classHandlerSubscription: Subscription;
+
     clauses: any[] = [];
 
     wordings: any[] = [];
@@ -36,7 +46,9 @@ export class ClausesComponent implements OnInit {
 
     constructor(
         private formBuilder: FormBuilder,
-        private clausesService: ClausesService
+        private clausesService: ClausesService,
+        private premiumComputationService: PremiumComputationService,
+        private classHandler: InsuranceClassHandlerService
     ) {
         this.wordingForm = formBuilder.group({
             heading: ['', Validators.required],
@@ -46,16 +58,47 @@ export class ClausesComponent implements OnInit {
             heading: ['', Validators.required],
             clauseDetails: ['', Validators.required]
         });
+
+        this.currentProductSubscription = this.premiumComputationService.currentProductChanges$.subscribe(
+            currentProduct => {
+                this.currentProduct = currentProduct;
+
+                this.singleProduct = this.currentProducts.filter(
+                    x => x.productName == this.currentProduct
+                )[0];
+
+                console.log('sp:=>', this.singleProduct);
+
+                if (this.singleProduct) {
+                    this.ngOnInit();
+                }
+            }
+        );
     }
 
-    ngOnInit(): void {
-        this.clausesService.getClauses().subscribe(res => {
-            this.clauseList = res;
-        });
+    currentClass: IClass;
+    currentClassName: string;
+    currentProducts: IProduct[] = [];
+    currentProduct: string;
+    singleProduct: IProduct;
 
-        this.clausesService.getWordings().subscribe(res => {
-            this.wordingList = res;
-        });
+    ngOnInit(): void {
+        this.currentClass = JSON.parse(localStorage.getItem('classObject'));
+        this.currentProducts = this.currentClass.products;
+
+        if (this.singleProduct) {
+            this.clausesService.getClauses().subscribe(res => {
+                this.clauseList = res.filter(
+                    x => x.productId == this.singleProduct.id
+                );
+            });
+
+            this.clausesService.getWordings().subscribe(res => {
+                this.wordingList = res.filter(
+                    x => x.productId == this.singleProduct.id
+                );
+            });
+        }
     }
 
     onEditWording(value) {
@@ -126,5 +169,10 @@ export class ClausesComponent implements OnInit {
 
     selectWording() {
         this.onWordingSelected.emit(this.selectedWordingValue);
+    }
+
+    ngOnDestroy() {
+        this.currentProductSubscription.unsubscribe();
+        // this.classHandlerSubscription.unsubscribe();
     }
 }
