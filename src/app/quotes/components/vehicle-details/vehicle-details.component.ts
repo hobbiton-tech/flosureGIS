@@ -83,6 +83,7 @@ export class VehicleDetailsComponent implements OnInit, OnDestroy {
             vehicleDetails => {
                 if (vehicleDetails) {
                     this.vehicleDetails = vehicleDetails;
+                    console.log('NEW VD', this.vehicleDetails);
                     this.vehicleDetailsForm.patchValue(vehicleDetails);
                 }
             }

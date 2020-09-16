@@ -83,7 +83,8 @@ export class VehicleDetailsServiceService {
 
     // gets vehicle details
     getVehicleDetails() {
-        return this.VehicleDetailsForm.value;
+      console.log('Vehicle Form>>>>', this.VehicleDetailsForm.value);
+      return this.VehicleDetailsForm.value;
     }
 
     resetVehicleDetails() {
