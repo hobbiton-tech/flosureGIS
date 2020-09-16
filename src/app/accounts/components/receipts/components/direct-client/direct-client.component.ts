@@ -9,6 +9,14 @@ import _ from 'lodash';
 import { v4 } from 'uuid';
 import { PoliciesService } from 'src/app/underwriting/services/policies.service';
 import { DebitNote } from 'src/app/underwriting/documents/models/documents.model';
+import { th } from 'date-fns/locale';
+import { UserModel } from '../../../../../users/models/users.model';
+import { ClientsService } from '../../../../../clients/services/clients.service';
+import { UsersService } from '../../../../../users/services/users.service';
+import * as jwt_decode from 'jwt-decode';
+import { AllocationsService } from '../../../../services/allocations.service';
+import { HttpClient } from '@angular/common/http';
+import { TransactionModel } from '../../../../../clients/models/client.model';
 
 @Component({
     selector: 'app-direct-client',
@@ -21,9 +29,16 @@ export class DirectClientComponent implements OnInit {
     reinstateForm: FormGroup;
     submitted = false;
     receiptsCount = 0;
+
     unreceiptedList: Policy[];
+    displayUnreciptedList: Policy[];
+
     receiptedList: IReceiptModel[] = [];
+    displayReceiptedList: IReceiptModel[] = [];
+
     cancelledReceiptList: IReceiptModel[] = [];
+    displayCancelledReceiptList: IReceiptModel[] = [];
+
     receiptObj: IReceiptModel = new IReceiptModel();
     receipt: IReceiptModel;
     today = new Date();
@@ -35,6 +50,10 @@ export class DirectClientComponent implements OnInit {
     paymentMethod = '';
 
     recStatus = 'Receipted';
+    // Test Filter List
+    searchString: string;
+
+
 
     receiptNum = '';
 
@@ -48,17 +67,9 @@ export class DirectClientComponent implements OnInit {
     isReinstateVisible = false;
     isOkLoading = false;
     policyNumber = '';
-    user = '';
     _id = '';
-    // modal
-    isReceiptVisible = false;
-    isConfirmLoading = false;
-    showDocumentModal = false;
-    isReceiptApproved = false;
 
-    // generated PDFs
-    receiptURl = '';
-    showReceiptModal = false;
+
     optionList = [
         { label: 'Premium Payment', value: 'Premium Payment' },
         { label: 'Third Party Recovery', value: 'Third Party Recovery' },
@@ -82,13 +93,21 @@ export class DirectClientComponent implements OnInit {
     debitnoteList: DebitNote[] = [];
     debitnote: DebitNote;
     currency: string;
+  user: UserModel;
+  isConfirmLoading = false;
+  loggedIn = localStorage.getItem('currentUser');
+  clientCode: any;
+  transaction: any;
 
     constructor(
         private receiptService: AccountService,
         private policeServices: PoliciesService,
         private formBuilder: FormBuilder,
         private message: NzMessageService,
-        private router: Router
+        private router: Router,
+        private usersService: UsersService,
+        private http: HttpClient,
+        private clientsService: ClientsService,
     ) {
         this.receiptForm = this.formBuilder.group({
             received_from: ['', Validators.required],
@@ -111,26 +130,40 @@ export class DirectClientComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.refresh()
+        this.refresh();
     }
 
+
+
+
+
     refresh() {
+
+
       this.policeServices.getPolicies().subscribe((quotes) => {
         console.log('CHECK RECEIPTS>>>>', quotes);
         this.unreceiptedList = _.filter(
           quotes,
           (x) =>
             x.receiptStatus === 'Unreceipted' &&
-            x.sourceOfBusiness === 'direct'
+            x.sourceOfBusiness === 'Direct' && x.paymentPlan === 'NotCreated'
         );
+        const decodedJwtData = jwt_decode(this.loggedIn);
+
+        this.usersService.getUsers().subscribe((users) => {
+          this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+        });
+        this.displayUnreciptedList = this.unreceiptedList;
+
         this.receiptsCount = _.filter(
           quotes,
           (x) =>
             x.receiptStatus === 'Unreceipted' &&
-            x.sourceOfBusiness === 'direct'
+            x.sourceOfBusiness === 'Direct'
         ).length;
         console.log('======= Unreceipt List =======');
         console.log(this.unreceiptedList);
+
       });
 
       this.policeServices.getDebitNotes().subscribe((invoice) => {
@@ -142,9 +175,9 @@ export class DirectClientComponent implements OnInit {
           receipts.data,
           (x) =>
             x.receipt_status === 'Receipted' &&
-            x.source_of_business === 'direct'
+            x.source_of_business === 'Direct'
         );
-
+        this.displayReceiptedList = this.receiptedList;
         console.log('======= Receipt List =======');
         console.log(receipts.data);
 
@@ -152,8 +185,9 @@ export class DirectClientComponent implements OnInit {
           receipts.data,
           (x) =>
             x.receipt_status === 'Cancelled' &&
-            x.source_of_business === 'direct'
+            x.source_of_business === 'Direct'
         );
+        this.displayCancelledReceiptList = this.cancelReceiptList;
 
         console.log('======= Cancelled Receipt List =======');
         console.log(this.cancelReceiptList);
@@ -161,18 +195,20 @@ export class DirectClientComponent implements OnInit {
         this.receiptNewCount = receipts.length;
         console.log('Total Number of Receipts>>>>', this.receiptNewCount);
       });
+
     }
 
     showModal(unreceipted: Policy): void {
         this.isVisible = true;
         this.clientName = unreceipted.client;
         this.policyNumber = unreceipted.policyNumber;
-        this.user = unreceipted.user;
+        // this.user = unreceipted.user;
         this.policy = unreceipted;
         this.debitnote = this.debitnoteList.filter(
             (x) => x.policy.id === unreceipted.id
         )[0];
         this.policyAmount = unreceipted.netPremium;
+        this.clientCode = unreceipted.clientCode;
         this.currency = unreceipted.currency;
         this.sourceOfBusiness = unreceipted.sourceOfBusiness;
         this.intermediaryName = unreceipted.intermediaryName;
@@ -197,7 +233,7 @@ export class DirectClientComponent implements OnInit {
                 remarks: this.receiptForm.controls.remarks.value,
                 cheq_number: this.receiptForm.controls.cheq_number.value,
                 on_behalf_of: this.clientName,
-                captured_by: this.user,
+                captured_by: this.user.ID,
                 receipt_status: this.recStatus,
                 sum_in_digits: Number(this.policyAmount),
                 today_date: new Date(),
@@ -209,20 +245,83 @@ export class DirectClientComponent implements OnInit {
 
 
             this.policy.receiptStatus = 'Receipted';
-          this.policy.paymentPlan = 'Created';
+            this.policy.paymentPlan = 'Created';
 
             this.receiptNum = this._id;
-            await this.receiptService
-                .addReceipt(receipt, this.policy.risks[0].insuranceType).subscribe((mess) => {
-                    this.message.success('Receipt Successfully created');
-                    console.log(mess);
-                  this.policeServices.updatePolicy(this.policy).subscribe((res) => {}, (err) => {
-                    console.log('Update Policy Error', err); });
+            // await this.receiptService
+            //     .addReceipt(receipt, this.policy.risks[0].insuranceType).subscribe((mess) => {
+            //         this.message.success('Receipt Successfully created');
+            //         console.log('QQQQQQ', mess);
+            //         this.policeServices.updatePolicy(this.policy).subscribe((res) => {}, (err) => {
+            //         console.log('Update Policy Error', err); });
+            //     },
+            //     (err) => {
+            //         this.message.warning('Receipt Failed');
+            //         console.log(err);
+            //     });
+
+
+            this.http.get<any>(
+            `https://number-generation.flosure-api.com/savenda-receipt-number/1`
+          )
+            .subscribe(async (res) => {
+              receipt.receipt_number = res.data.receipt_number;
+              console.log(res.data.receipt_number);
+
+              this.http.post('https://payment-api.savenda-flosure.com/receipt', receipt).subscribe((resN: any) => {
+                  this.message.success('Receipt Successfully created');
+                  console.log('RECEIPT NUMBER<><><><>', resN);
+
+                  this.policeServices.updatePolicy(this.policy).subscribe((resP) => {}, (err) => {
+                    console.log('Update Policy Error', err);
+                  });
+
+
+                  this.clientsService.getTransactions().subscribe((txns: any) => {
+                    let balanceTxn = 0;
+                    console.log('DEDEDE', txns);
+                    const filterTxn = txns.data.filter((x) => x.client_id === this.clientCode);
+
+                    if (filterTxn === null || filterTxn === undefined || filterTxn === [] || filterTxn.length === 0) {
+                      balanceTxn = Number(resN.data.sum_in_digits) * -1;
+                    } else {
+                      this.transaction = filterTxn.slice(-1)[0];
+
+                      console.log('DEDEDE', this.transaction);
+
+                      balanceTxn = Number(this.transaction.balance) + Number(resN.data.sum_in_digits * -1);
+                    }
+
+
+                    const trans: TransactionModel = {
+                      balance: Number(balanceTxn),
+                      client_id: this.clientCode,
+                      cr: Number(resN.data.sum_in_digits * -1),
+                      receipt_id: resN.data.ID,
+                      dr: 0,
+                      transaction_amount: Number(resN.data.sum_in_digits * -1),
+                      transaction_date: new Date(),
+                      type: 'Receipt',
+                      reference: resN.data.receipt_number
+
+                    };
+
+                    this.clientsService.createTransaction(trans).subscribe((sucTxn) => {}, (errTxn) => {
+                      this.message.error(errTxn);
+                    });
+                  });
+
+                  this.generateID(resN.data.ID);
+
                 },
-                (err) => {
-                    this.message.warning('Receipt Failed');
-                    console.log(err);
+                err => {
+                  this.message.warning('Receipt Failed');
+                  console.log(err);
                 });
+
+
+
+            });
                 // .then((mess) => {
                 //     this.policy.receiptStatus = 'Receipted';
                 //     this.policy.paymentPlan = 'Created';
@@ -261,7 +360,7 @@ export class DirectClientComponent implements OnInit {
         console.log(this.cancelReceipt);
         this.receiptService.updateReceipt(this.cancelReceipt).subscribe((res) => {
           this.message.success('Receipt Successfully Updated');
-          this.refresh()
+          this.refresh();
         }, (err) => {
           console.log('Check ERR>>>>', err);
           this.message.warning('Receipt Failed');
@@ -283,7 +382,7 @@ export class DirectClientComponent implements OnInit {
         this.reinstateReceipt.remarks = this.cancelForm.controls.remarks.value;
         console.log('<++++++++++++++++++CLAIN+++++++++>');
         console.log(this.reinstateReceipt);
-      this.receiptService.updateReceipt(this.reinstateReceipt).subscribe((res) => {
+        this.receiptService.updateReceipt(this.reinstateReceipt).subscribe((res) => {
         this.message.success('Receipt Successfully Updated');
         this.refresh();
         // const cancel: any[] = res.data.filter((x) => {
@@ -313,4 +412,60 @@ export class DirectClientComponent implements OnInit {
         console.log('ON CHANGE>>>>', value);
         this.paymentMethod = value;
     }
+
+    // Test Search Code
+
+    searchUnR(value: string): void {
+      console.log(value);
+      if (value === ' ' || !value) {
+        this.displayUnreciptedList = this.unreceiptedList;
+
+      }
+
+      this.displayUnreciptedList = this.unreceiptedList.filter((client) => {
+          return (
+            client.policyNumber.toLowerCase().includes(value.toLowerCase()) ||
+            client.client.toLowerCase().includes(value.toLowerCase())
+
+          );
+      });
+  }
+
+  searchR(value: string): void
+  {
+    console.log(value);
+    if (value === ' ' || !value)
+    {
+      this.displayReceiptedList = this.receiptedList;
+
+    }
+
+    this.displayReceiptedList = this.receiptedList.filter((receip) =>
+    {
+        return (
+          receip.receipt_number.toLowerCase().includes(value.toLowerCase()) ||
+          receip.on_behalf_of.toLowerCase().includes(value.toLowerCase())
+
+        );
+    });
+}
+
+searchCR(value: string): void
+{
+  if (value === ' ' || !value)
+  {
+      this.displayCancelledReceiptList = this.cancelReceiptList;
+  }
+
+  this.displayCancelledReceiptList = this.cancelReceiptList.filter((receip) =>
+    {
+        return (
+          receip.receipt_number.toLowerCase().includes(value.toLowerCase()) ||
+          receip.on_behalf_of.toLowerCase().includes(value.toLowerCase())
+
+        );
+    });
+
+}
+
 }

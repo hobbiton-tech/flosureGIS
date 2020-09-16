@@ -21,16 +21,24 @@ export class PlanReceiptComponent implements OnInit {
   reinstateForm: FormGroup;
   submitted = false;
   receiptsCount = 0;
+
   receiptedList: IReceiptModel[] = [];
+  displayReceiptedList: IReceiptModel[];
+
   receipt: IReceiptModel;
   today = new Date();
   clientName = '';
+
   cancelReceipt: IReceiptModel = new IReceiptModel();
+  displayCancelledReceiptList: IReceiptModel[];
+
   reinstateReceipt: IReceiptModel = new IReceiptModel();
   size = 'large';
   paymentMethod = '';
 
   policyAmount = 0;
+
+  searchString: string;
 
   cancelReceiptList = [];
 
@@ -76,6 +84,7 @@ export class PlanReceiptComponent implements OnInit {
           x.receipt_status === 'Receipted' &&
           x.source_of_business === 'Plan-Receipt'
       );
+      this.displayReceiptedList = this.receiptedList;
 
       console.log('======= Receipt List =======');
       console.log(receipts.data);
@@ -86,6 +95,7 @@ export class PlanReceiptComponent implements OnInit {
           x.receipt_status === 'Cancelled' &&
           x.source_of_business === 'Plan-Receipt'
       );
+      this.displayCancelledReceiptList = this.cancelReceiptList;
 
       console.log('======= Cancelled Receipt List =======');
       console.log(this.cancelReceiptList);
@@ -167,5 +177,42 @@ export class PlanReceiptComponent implements OnInit {
     // this.isConfirmLoading = true;
     // this.generateDocuments();
   }
+
+  searchR(value: string): void
+  {
+    console.log(value);
+    if (value === ' ' || !value)
+    {
+      this.displayReceiptedList = this.receiptedList;
+
+    }
+
+    this.displayReceiptedList = this.receiptedList.filter((receip) =>
+    {
+        return (
+          receip.receipt_number.toLowerCase().includes(value.toLowerCase()) ||
+          receip.on_behalf_of.toLowerCase().includes(value.toLowerCase())
+
+        );
+    });
+}
+
+searchCR(value: string): void
+{
+  if (value === ' ' || !value)
+  {
+      this.displayCancelledReceiptList = this.cancelReceiptList;
+  }
+
+  this.displayCancelledReceiptList = this.cancelReceiptList.filter((receip) =>
+    {
+        return (
+          receip.receipt_number.toLowerCase().includes(value.toLowerCase()) ||
+          receip.on_behalf_of.toLowerCase().includes(value.toLowerCase())
+
+        );
+    });
+
+}
 
 }

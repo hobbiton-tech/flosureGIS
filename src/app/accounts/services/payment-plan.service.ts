@@ -3,7 +3,7 @@ import { Observable, of } from 'rxjs';
 import {
     AngularFirestore,
     AngularFirestoreCollection,
-    AngularFirestoreDocument,
+    AngularFirestoreDocument
 } from '@angular/fire/firestore';
 
 import * as _ from 'lodash';
@@ -21,7 +21,7 @@ interface IReceiptNumberResult {
 }
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
 export class PaymentPlanService implements Resolve<any> {
     private paymentPlansCollection: AngularFirestoreCollection<IPaymentModel>;
@@ -57,8 +57,6 @@ export class PaymentPlanService implements Resolve<any> {
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         throw new Error('Method not implemented.');
     }
-
-
 
     generateID(id) {
         console.log('++++++++++++ID++++++++++++');
@@ -180,7 +178,9 @@ export class PaymentPlanService implements Resolve<any> {
         const header = new HttpHeaders();
         header.set('Access-Control-Allow-Origin', '*');
 
-        this.http.put(`https://payment-api.savenda-flosure.com/installment`, policyPaymentInstallment, { headers: header }).subscribe((res) => {
+        this.http
+          .put(`https://payment-api.savenda-flosure.com/installment`, policyPaymentInstallment, { headers: header })
+          .subscribe((res) => {
             // this.message.success(
             //             'Plan Receipt Successfully Updated'
             //         );

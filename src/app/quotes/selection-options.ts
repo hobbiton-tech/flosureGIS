@@ -1,4 +1,4 @@
-//VEHICLE BODY TYPE
+// VEHICLE BODY TYPE
 export const VehicleBodyType = [
     { label: 'SEDAN', value: 'SEDAN' },
     { label: 'VAN', value: 'VAN' },
@@ -6,7 +6,7 @@ export const VehicleBodyType = [
     { label: 'SUV', value: 'SUV' }
 ];
 
-//MOTOR COMPREHENSIVE LOADING OPTIONS
+// MOTOR COMPREHENSIVE LOADING OPTIONS
 export const MotorComprehensiveLoadingOptions = [
     {
         label: 'Increased Third Party Limit',
@@ -33,7 +33,7 @@ export const MotorComprehensiveLoadingOptions = [
     { label: 'Permanent Disability', value: 'permanentDisability' }
 ];
 
-//MOTOR THIRD PARTY LOADING OPTIONS
+// MOTOR THIRD PARTY LOADING OPTIONS
 export const MotorThirdPartyLoadingOptions = [
     {
         label: 'Increased Third Party Limit',
@@ -41,7 +41,7 @@ export const MotorThirdPartyLoadingOptions = [
     }
 ];
 
-//DISCOUNT OPTIONS
+// DISCOUNT OPTIONS
 export const DiscountOptions = [
     { label: 'No claims dicount', value: 'noClaimsDiscount' },
     { label: 'Loyalty Discount', value: 'loyaltyDiscount' },
@@ -49,37 +49,81 @@ export const DiscountOptions = [
     { label: 'Low Term Agreement', value: 'lowTermAgreementDiscount' }
 ];
 
-//SOURCE OF BUSINESS OPTIONS
+// SOURCE OF BUSINESS OPTIONS
 export const SourceOfBusinessOptions = [
-    { label: 'Direct', value: 'direct' },
-    { label: 'Broker', value: 'broker' },
-    { label: 'Agent', value: 'agent' },
-    { label: 'Sales Representative', value: 'salesRepresentative' }
+    { label: 'Direct', value: 'Direct' },
+    { label: 'Broker', value: 'Broker' },
+    { label: 'Agent', value: 'Agent' },
+    { label: 'Sales Representative', value: 'SalesRepresentative' }
 ];
 
-//PRODUCT TYPE OPTIONS
+// PRODUCT TYPE OPTIONS
 export const ProductTypeOptions = [
     { label: 'Private', value: 'Private' },
     { label: 'Commercial', value: 'Commercial' },
     { label: 'Bus/Taxi', value: 'Bus/Taxi' }
 ];
 
-//INSURANCE TYPE OPTIONS
-export const InsuranceTypeOptions = [
-    { id: 'f5e755a0-338e-4db8-a47c-5513d858bcc3', label: 'Motor Comprehensive', value: 'Comprehensive' },
-    {id: 'bacb211d-cf2c-4a5b-8631-eca6f285261e', label: 'Full Third Party', value: 'ThirdParty' },
-    {id: '4e9aadeb-3d60-4dd5-8e75-4e646a38b7d3', label: 'Act Only Cover', value: 'ActOnly' },
-    {id: 'f47c8df6-5a21-43bb-8917-5dcabec15658', label: 'Third Party Fire And Theft', value: 'ThirdPartyFireAndTheft' }
-    
+// RISK CATEGORY OPTIONS
+export const RiskCategoryOptions = [
+    { label: 'A (RESIDENTIAL)', value: 'A' },
+    { label: 'B (COMMERCIAL)', value: 'B' },
+    { label: 'C (MEGA RISK)', value: 'C' }
 ];
 
-//LIMITS OF LIABILITY OPTIONS
+// RISK SUB CLASS OPTIONS
+export const RiskSubClassOptions = [
+    { label: 'HOUSE OWNERS', value: 'HOUSE OWNERS' },
+    { label: 'BUILDINGS COMBINED', value: 'BUILDINGS COMBINED' },
+    { label: 'BUSINESS INTERRUPTION', value: 'BUSINESS INTERRUPTION' }
+];
+
+// POLICY CANCELLATION TYPES
+export const CancellationTypeOptions = [
+    { label: 'Time On Risk', value: 'timeOnRisk' },
+    { label: 'Full Refund', value: 'fullRefund' }
+];
+
+// PROPERTY ROOF TYPE OPTIONS
+export const RoofTypeOptions = [
+    { label: 'STANDARD', value: 'STANDARD' },
+    { label: 'THATCHED', value: 'THATCHED' }
+];
+
+// COVER TYPE OPTIONS
+export const CoverTypeOptions = [{ label: 'STANDARD', value: 'STANDARD' }];
+
+// INSURANCE TYPE OPTIONS
+export const InsuranceTypeOptions = [
+    {
+        id: 'b3fa196d-e5d5-416b-ae4d-a338d42bf422',
+        label: 'Motor Comprehensive',
+        value: 'Comprehensive'
+    },
+    {
+        id: '3cbdeca7-4e4f-4e21-9131-d54ba43f8bd6',
+        label: 'Full Third Party',
+        value: 'ThirdParty'
+    },
+    {
+        id: '830157ef-1d2a-4eab-b8d7-49126fcb5b3c',
+        label: 'Act Only Cover',
+        value: 'ActOnly'
+    },
+    {
+        id: '836abcd7-f80f-4d3b-a720-1945c54a2098',
+        label: 'Third Party Fire And Theft',
+        value: 'ThirdPartyFireAndTheft'
+    }
+];
+
+// LIMITS OF LIABILITY OPTIONS
 export const LimitsOfLiabilityOptions = [
     { label: 'Combined', value: 'combinedLimits' },
     { label: 'Standard', value: 'standardLimits' }
 ];
 
-//EXCESSES OPTIONS
+// EXCESSES OPTIONS
 export const ExcessesOptions = [
     { label: 'Collision And Fire', value: 'CollisionAndFire' },
     {
@@ -92,5 +136,3 @@ export const ExcessesOptions = [
     },
     { label: 'Third Party Property Damage', value: 'ThirdPartyPropertyDamage' }
 ];
-
-//LIMITS OF LIABILITY OPTIONS

@@ -1,19 +1,25 @@
 import { Policy } from '../../models/policy.model';
 
 export class DebitNote {
+    id?: string;
     debitNoteNumber?: string;
-    remarks: string;
-    dateCreated: Date;
-    dateUpdated: Date;
+    status: DebitNoteStatus;
+    debitNoteAmount: number;
+    remarks?: string;
+    dateCreated?: Date;
+    dateUpdated?: Date;
     policy?: Policy;
 }
 
 export class CreditNote {
+    id?: string;
     creditNoteNumber?: string;
-    remarks: string;
-    dateCreated: Date;
-    dateUpdated: Date;
+    status: CreditNoteStatus;
+    remarks?: string;
+    dateCreated?: Date;
+    dateUpdated?: Date;
     policy?: Policy;
+    creditNoteAmount?: number;
 }
 
 export class CoverNote {
@@ -22,3 +28,6 @@ export class CoverNote {
     dateUpdated: Date;
     policyId?: string;
 }
+
+export type DebitNoteStatus = 'PaidOut' | 'Pending';
+export type CreditNoteStatus = 'PaidOut' | 'Pending';

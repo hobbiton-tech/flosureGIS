@@ -1,0 +1,92 @@
+<nz-spin nzSize="large" nzTip="Claims Loading...." [nzSpinning]="claimProcessingIsLoading">
+    <nz-spin nzSize="large" nzTip="Raising Requisition...." [nzSpinning]="isRaisingRequisition">
+        <div style="margin: 10px;">
+            <div style="margin-bottom: 20px; background: #fff;">
+                <nz-page-header>
+                    <nz-page-header-title>Processed Claims</nz-page-header-title>
+                </nz-page-header>
+            </div>
+
+            <div style="margin-top: 10px;">
+                <nz-card>
+                    <!-- <nz-divider nzOrientation="left"></nz-divider> -->
+                    <div style="margin-bottom: 10px; width: 20%;">
+                        <nz-input-group [nzSuffix]="suffixIconSearch">
+                            <input type="text" nz-input placeholder="Search by claim number, client"
+                                [(ngModel)]="searchApprovedClaimsString"
+                                (ngModelChange)="searchApprovedClaims($event)" />
+                        </nz-input-group>
+                        <ng-template #suffixIconSearch>
+                            <i nz-icon nzType="search"></i>
+                        </ng-template>
+                    </div>
+
+                    <nz-table #processedClaimsTable [nzData]="displayProcessedClaimsList" [nzSize]="'small'"
+                        [nzBordered]="true">
+                        <thead>
+                            <tr>
+                                <th [nzAlign]="columnAlignment">Claim Number</th>
+                                <th [nzAlign]="columnAlignment">Client</th>
+                                <th [nzAlign]="columnAlignment">Claimant</th>
+                                <th [nzAlign]="columnAlignment">Claimant Type</th>
+                                <th [nzAlign]="columnAlignment">Policy Number</th>
+                                <th [nzAlign]="columnAlignment">Loss Date</th>
+                                <th [nzAlign]="columnAlignment">Notification Date</th>
+                                <th [nzAlign]="columnAlignment">Status</th>
+                                <th [nzAlign]="columnAlignment" *ngIf="approveClaimPem === isPresent?.name || admin === isPresent?.name" >Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let claim of displayProcessedClaimsList">
+                                <td [nzAlign]="columnAlignment">{{claim.claimNumber}}</td>
+                                <td [nzAlign]="columnAlignment">
+                                    {{claim.client ? (claim.client.clientType == 'Individual' ? (claim.client.firstName + ' ' + claim.client.lastName) : claim.client.companyName): ''}}
+                                </td>
+                                <td [nzAlign]="columnAlignment">
+                                    {{claim.claimant ?  (claim.claimant.firstName + ' ' + claim.claimant.lastName) : ''}}
+                                </td>
+                                <td [nzAlign]="columnAlignment">{{claim.claimant ? (claim.claimant.type) : ''}}</td>
+                                <td [nzAlign]="columnAlignment">{{claim.policy? (claim.policy.policyNumber) : ''}}</td>
+                                <td [nzAlign]="columnAlignment">{{claim.lossDate | date}}</td>
+                                <td [nzAlign]="columnAlignment">{{claim.notificationDate | date}}</td>
+                                <td [nzAlign]="columnAlignment">
+                                    <div [ngSwitch]="claim.claimStatus">
+                                        <nz-badge nzColor='yellow' *ngSwitchCase="'Pending'" nzText="Pending">
+                                        </nz-badge>
+                                        <nz-badge nzColor='green' *ngSwitchCase="'Resolved'" nzText="Resolved">
+                                        </nz-badge>
+                                        <nz-badge nzColor='red' *ngSwitchCase="'Cancelled'" nzText="Cancelled">
+                                        </nz-badge>
+                                        <nz-badge nzColor='blue' *ngSwitchCase="'Processed'" nzText="Processed">
+                                        </nz-badge>
+                                        <nz-badge nzColor='purple' *ngSwitchCase="'Approved'" nzText="Approved">
+                                        </nz-badge>
+                                    </div>
+                                </td>
+                                <td [nzAlign]="columnAlignment" *ngIf="approveClaimPem === isPresent?.name || admin === isPresent?.name">
+                                    <button  nz-button nzType="primary" style="margin-left: 2px;" nzSize="small"
+                                        *ngIf="claim.claimStatus == 'Processed'" (click)="openClaimApproval(claim)">
+                                        Claim Approval
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-card>
+            </div>
+        </div>
+
+        <app-loss-quantum-modal [isLossQuantumModalVisible]="isLossQuantumModalVisible"
+            (closeLossQuantumModalEmitter)="isLossQuantumModalVisible=false"
+            (closeLossQuantumModalEmitter)="claimsTableUpdate.next(true)" [lossEstimate]="lossEstimate">
+        </app-loss-quantum-modal>
+
+        <app-claim-approval-modal [isClaimApprovalModalVisible]="isClaimApprovalModalVisible"
+            (closeClaimApprovalModalEmitter)="isClaimApprovalModalVisible=false"
+            (closeClaimApprovalModalEmitter)="claimsTableUpdate.next(true)"
+            [isClaimFullyDocumented]="isClaimFullyDocumented"
+            [isClaimLossDateUnderPolicyPeriod]="isClaimLossDateUnderPolicyPeriod"
+            [isClaimPolicyPremiumFullyPaid]="isClaimPolicyPremiumFullyPaid"
+            [isClaimRiskUnderPolicy]="isClaimRiskUnderPolicy"></app-claim-approval-modal>
+    </nz-spin>
+</nz-spin>

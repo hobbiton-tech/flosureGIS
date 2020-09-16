@@ -22,13 +22,15 @@
                 </div>
             </ng-template>
             <nz-page-header-extra>
-                <button nz-button nzType="primary" (click)="htmlToPdf()">
+                <button nz-button nzType="primary" [useExistingCss]="true"
+                        [printSectionId]="'printSection'"
+                        ngxPrint>
                     Print
                 </button>
                 <button nz-button nzType="primary">
                     Email
                 </button>
-                <button nz-button nzType="primary">
+                <button nz-button nzType="primary" (click)="htmlToPdf()">
                     Download
                 </button>
             </nz-page-header-extra>
@@ -516,6 +518,7 @@
                                         ></P
                                     >
                                 </TD>
+
                             </TR>
                         </TBODY>
                     </TABLE>
@@ -712,7 +715,6 @@
                             >
                         </tr>
                     </table>
-                    <!-- <P STYLE="margin-bottom: 0.11in"><BR /><BR /> </P>
                     <P STYLE="margin-bottom: 0.11in"><BR /><BR /> </P> -->
                     <P ALIGN="CENTER" STYLE="margin-bottom: 0in"
                         >If you have any questions about this receipt, please

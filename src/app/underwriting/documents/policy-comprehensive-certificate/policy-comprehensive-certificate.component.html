@@ -287,7 +287,7 @@
                 >
                     <tspan x="0" y="0">Vehicle Reg No:</tspan>
                     <tspan class="cls-11" y="0">
-                        {{ policyRisk.regNumber }}
+                        {{ policyRisk.vehicle?.regNumber }}
                     </tspan>
                 </text>
                 <text
@@ -298,7 +298,7 @@
                 >
                     <tspan x="0" y="0">Make:</tspan>
                     <tspan class="cls-11" y="0">
-                        {{ policyRisk.vehicleMake }}
+                        {{ policyRisk.vehicle?.vehicleMake }}
                     </tspan>
                 </text>
                 <text
@@ -309,7 +309,7 @@
                 >
                     <tspan x="0" y="0">Model:</tspan>
                     <tspan class="cls-11" y="0">
-                        {{ policyRisk.vehicleModel }}
+                        {{ policyRisk.vehicle?.vehicleModel }}
                     </tspan>
                 </text>
                 <text
@@ -320,7 +320,7 @@
                 >
                     <tspan x="0" y="0">Color:</tspan>
                     <tspan class="cls-11" y="0">
-                        {{ ' ' + policyRisk.color }}
+                        {{ ' ' + policyRisk.vehicle?.color }}
                     </tspan>
                 </text>
                 <text
@@ -331,7 +331,7 @@
                 >
                     <tspan x="0" y="0">Engine No:</tspan>
                     <tspan class="cls-11" y="0">
-                        {{ policyRisk.engineNumber }}
+                        {{ policyRisk.vehicle?.engineNumber }}
                     </tspan>
                 </text>
                 <text
@@ -342,7 +342,7 @@
                 >
                     <tspan x="0" y="0">Chassis No:</tspan>
                     <tspan class="cls-11" y="0">
-                        {{ ' ' + policyRisk.chassisNumber }}
+                        {{ ' ' + policyRisk.vehicle?.chassisNumber }}
                     </tspan>
                 </text>
                 <text
@@ -464,7 +464,7 @@
                     transform="translate(27 137)"
                 >
                     <tspan x="0" y="0">
-                        CERTIFICATE NO: {{ coverNot.certificateNumber }}
+                        CERTIFICATE NO: {{coverNot ? coverNot.certificateNumber : '-'}}
                     </tspan>
                 </text>
                 <text
@@ -591,8 +591,8 @@
                     transform="translate(298 137)"
                 >
                     <tspan x="0" y="0" xml:space="preserve">
-                        Make & Model: {{ policyRisk.vehicleMake }}
-                        {{ policyRisk.vehicleModel }}
+                        Make & Model: {{ policyRisk.vehicle?.vehicleMake }}
+                        {{ policyRisk.vehicle?.vehicleModel }}
                     </tspan>
                 </text>
 
@@ -603,7 +603,7 @@
                     transform="translate(302 157)"
                 >
                     <tspan x="0" y="0">
-                        Color:{{ ' ' + policyRisk.color }}
+                        Color:{{ ' ' + policyRisk.vehicle?.color }}
                     </tspan>
                 </text>
 
@@ -614,7 +614,7 @@
                     transform="translate(298 177)"
                 >
                     <tspan x="0" y="0" xml:space="preserve">
-                        Year of Make: {{ getYearOfManufacture(policyRisk) }}
+                        Year of Make: {{ policyRisk.vehicle?.yearOfManufacture }}
                     </tspan>
                 </text>
 
@@ -634,7 +634,7 @@
                     transform="translate(298 217)"
                 >
                     <tspan x="0" y="0" xml:space="preserve">
-                        Chassis No: {{ ' ' + policyRisk.chassisNumber }}
+                        Chassis No: {{ ' ' + policyRisk.vehicle?.chassisNumber }}
                     </tspan>
                 </text>
 
@@ -645,7 +645,7 @@
                     transform="translate(298 237)"
                 >
                     <tspan x="0" y="0" xml:space="preserve">
-                        Engine No: {{ policyRisk.engineNumber }}
+                        Engine No: {{ policyRisk.vehicle?.engineNumber }}
                     </tspan>
                 </text>
 
@@ -656,7 +656,7 @@
                     transform="translate(298 257)"
                 >
                     <tspan x="0" y="0" xml:space="preserve">
-                        Seating Capacity: {{ policyRisk.seatingCapacity }}
+                        Seating Capacity: {{ policyRisk.vehicle?.seatingCapacity }}
                     </tspan>
                 </text>
 
@@ -667,7 +667,7 @@
                     transform="translate(298 277)"
                 >
                     <tspan x="0" y="0" xml:space="preserve">
-                        Vehicle Registration No: {{ policyRisk.regNumber }}
+                        Vehicle Registration No: {{ policyRisk.vehicle?.regNumber }}
                     </tspan>
                 </text>
 
@@ -679,11 +679,11 @@
                 >
                     <tspan x="0" y="0" xml:space="preserve"></tspan>
                     <tspan x="0" y="10" xml:space="preserve">
-                        Cover Note Receipt No.:{{ receipt.receipt_number }}
+                        Cover Note Receipt No.:{{ receipt ? receipt.receipt_number : '-' }}
                     </tspan>
                     <tspan x="0" y="25" xml:space="preserve">
                         Amount Paid in {{ policy.currency }} :{{
-                            receipt.sum_in_digits
+                            receipt ? receipt.sum_in_digits : '-'
                         }}
                     </tspan>
                 </text>
@@ -698,69 +698,55 @@
                 </text>
 
                 <text
-                    id="Third_Party_Limits_of_Liability"
-                    data-name="Third Party Limits of Liability"
-                    class="cls-15"
-                    transform="translate(298 350)"
-                >
-                    <tspan x="0" y="0">Third Party Limits of Liability</tspan>
-                </text>
-                <text
-                    *ngIf="
-                        limitsOfLiablity[0].liabilityType === 'combinedLimits'
-                    "
-                    id="Third_Party_Property_Damage"
-                    data-name="Third Party Property Damage"
-                    class="cls-18"
-                    transform="translate(298 360)"
-                >
-                    <tspan x="0" y="0">
-                        Combined Limit {{ policy.currency }}
-                        {{ limitsOfLiablity[0].amount }}
-                    </tspan>
-                </text>
-                <text
-                    *ngIf="
-                        limitsOfLiablity[0].liabilityType !== 'combinedLimits'
-                    "
-                    id="Third_Party_Property_Damage"
-                    data-name="Third Party Property Damage"
-                    class="cls-18"
-                    transform="translate(298 360)"
-                >
-                    <tspan x="0" y="0">
-                        (i) Third Party Limit for injury/ Death per person
-                        {{ policy.currency }} {{ limitsOfLiablity[0].amount }}
-                    </tspan>
-                </text>
-                <text
-                    *ngIf="
-                        limitsOfLiablity[0].liabilityType !== 'combinedLimits'
-                    "
-                    id="Third_Party_Injury_and_Death"
-                    data-name="Third Party Injury and Death"
-                    class="cls-18"
-                    transform="translate(298 375)"
-                >
-                    <tspan x="0" y="0">
-                        (ii) Third party limit per Event {{ policy.currency }}
-                        {{ limitsOfLiablity[1].amount }}
-                    </tspan>
-                </text>
-                <text
-                    *ngIf="
-                        limitsOfLiablity[0].liabilityType !== 'combinedLimits'
-                    "
-                    id="Third_Party_Bodily_Injury_Death_per_Event"
-                    data-name="Third Party Bodily Injury / Death per Event"
-                    class="cls-18"
-                    transform="translate(298 390)"
-                >
-                    <tspan x="0" y="0">
-                        (iii)Third Party Property Damage {{ policy.currency }}
-                        {{ limitsOfLiablity[2].amount }}
-                    </tspan>
-                </text>
+                id="Third_Party_Limits_of_Liability"
+                data-name="Third Party Limits of Liability"
+                class="cls-15"
+                transform="translate(298 350)"
+            >
+                <tspan x="0" y="0">Third Party Limits of Liability</tspan>
+            </text>
+            <text *ngIf="limitsOfLiablity[0] ? (limitsOfLiablity[0].liabilityType ==='combinedLimits') : '-'"
+                id="Third_Party_Property_Damage"
+                data-name="Third Party Property Damage"
+                class="cls-18"
+                transform="translate(298 360)"
+            >
+                <tspan x="0" y="0">
+
+                    Combined Limit {{policy.currency}} {{limitsOfLiablity[0] ? limitsOfLiablity[0].amount : '-'}}
+                </tspan>
+            </text>
+            <text *ngIf="limitsOfLiablity[0] ? (limitsOfLiablity[0].liabilityType !=='combinedLimits') : '-'"
+                id="Third_Party_Property_Damage"
+                data-name="Third Party Property Damage"
+                class="cls-18"
+                transform="translate(298 360)"
+            >
+                <tspan x="0" y="0">
+                    (i) Third Party Limit for injury/ Death per person {{policy.currency}} {{limitsOfLiablity[0] ? limitsOfLiablity[0].amount : '-'}}
+                </tspan>
+            </text>
+            <text *ngIf="limitsOfLiablity[0] ? (limitsOfLiablity[0].liabilityType !=='combinedLimits') : '-'"
+                id="Third_Party_Injury_and_Death"
+                data-name="Third Party Injury and Death"
+                class="cls-18"
+                transform="translate(298 375)"
+            >
+                <tspan x="0" y="0">
+                    (ii) Third party limit per Event {{policy.currency}} {{limitsOfLiablity[1] ? limitsOfLiablity[1].amount : '-'}}
+                </tspan>
+            </text>
+            <text *ngIf="limitsOfLiablity[0] ? (limitsOfLiablity[0].liabilityType !=='combinedLimits') : '-'"
+                id="Third_Party_Bodily_Injury_Death_per_Event"
+                data-name="Third Party Bodily Injury / Death per Event"
+                class="cls-18"
+                transform="translate(298 390)"
+            >
+                <tspan x="0" y="0">
+                    (iii)Third Party Property Damage {{policy.currency}} {{limitsOfLiablity[2] ? limitsOfLiablity[2].amount : '-'}}
+                </tspan>
+            </text>
+
 
                 <text
                     id=" DURATION_OF_COVER"

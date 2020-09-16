@@ -1,82 +1,252 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Claim } from '../models/claim.model';
-import {
-    AngularFirestore,
-    AngularFirestoreCollection,
-    AngularFirestoreDocument,
-} from '@angular/fire/firestore';
 import 'firebase/firestore';
-import { AngularFireStorage } from '@angular/fire/storage';
-import { first, map, filter } from 'rxjs/operators';
+import { Claim } from '../models/claim.model';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { IClaimant } from '../models/claimant.model';
+import { IServiceProvider } from '../models/service-provider.model';
+import { IServiceProviderQuote } from '../models/service-provider-quote.model';
+import { IDocumentUpload } from '../models/document-upload.model';
+import { IPhotoUpload } from '../models/photo-upload.model';
+import { ILossQuantum } from '../models/loss-quantum.model';
+import { IInsuranceCompany } from '../models/insurance-company.model';
 
-import * as _ from 'lodash';
-
-// import 'firebase/firestore';
-
-import { v4 } from 'uuid';
+const BASE_URL = 'https://savenda.flosure-api.com';
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
 export class ClaimsService {
-    private claimsCollection: AngularFirestoreCollection<Claim>;
-    claims: Observable<Claim[]>;
-    claim: Observable<Claim>;
+    constructor(private http: HttpClient) {}
 
-    //documents from fire storage
-    documents: Observable<Document[]>;
-    document: Observable<Document>;
-
-    constructor(
-        private firebase: AngularFirestore,
-        private storage: AngularFireStorage
-    ) {
-        this.claimsCollection = firebase.collection<Claim>('claims');
-        this.claims = this.claimsCollection.valueChanges();
+    // claim
+    createClaim(claim: Claim): Observable<Claim> {
+        return this.http.post<Claim>(`${BASE_URL}/claim/1`, claim);
     }
-
-    async addClaim(claim: Claim): Promise<void> {
-        this.claims.pipe(first()).subscribe(async (claims) => {
-            claim.claimId = this.generateCliamID('BR20200012', claims.length);
-            //await this.claimsCollection.add(claim)
-            await this.claimsCollection.doc(claim.claimId).set(claim);
-        });
-    }
-
-    //  getPendingClaims(): Observable<Claim[]> {
-    //    return this.claimsCollection = this.firebase.collection('claims', ref => ref.where('status', '==', 'Pending'));
-    //  }
 
     getClaims(): Observable<Claim[]> {
-        return this.claims;
+        return this.http.get<Claim[]>(`${BASE_URL}/claim`);
     }
 
-    //get files from firebase storage
-    getFiles(): Observable<Document[]> {
-        return this.documents;
+    getClaimById(claimId: string): Observable<Claim> {
+        return this.http.get<Claim>(`${BASE_URL}/claim/${claimId}`);
     }
 
-    //update document field in claims collection with provided url
-    //  updateClaimDoc(claimId: string, url: string): void {
-    //    console.log(claimId);
-    //     this.firebase.collection('claims').doc(claimId).update({
-    //       document: url,
-    //       status: "resolved",
-    //     })
-    //  }
-    updateClaimDoc(claimId: string, claim: Claim): void {
-        console.log(claimId);
-        this.firebase.collection('claims').doc(claimId).update(claim);
+    updateClaim(claimId: string, claim: Claim): Observable<Claim> {
+        return this.http.put<Claim>(`${BASE_URL}/claim/${claimId}`, claim);
     }
 
-    //get single claim by cliam id
-    getClaim(id: string): Observable<Claim> {
-        // const result = this.claims.pipe(filter(map(x => _.find(y, y => y.c))));
-        const result = this.claims.pipe(
-            map((claim) => claim.find((x) => x.claimId === id))
+    // claimant
+    createClaimant(claimant: IClaimant): Observable<IClaimant> {
+        return this.http.post<IClaimant>(`${BASE_URL}/claimant/1`, claimant);
+    }
+
+    getClaimants(): Observable<IClaimant[]> {
+        return this.http.get<IClaimant[]>(`${BASE_URL}/claimant`);
+    }
+
+    getClaimantById(claimantId: string): Observable<IClaimant> {
+        return this.http.get<IClaimant>(`${BASE_URL}/claimant/${claimantId}`);
+    }
+
+    updateClaimant(
+        claimantId: string,
+        claimant: IClaimant
+    ): Observable<IClaimant> {
+        return this.http.put<IClaimant>(
+            `${BASE_URL}/claimant/${claimantId}`,
+            claimant
         );
-        return result;
+    }
+
+    // service provider
+    createServiceProvider(
+        serviceProvider: IServiceProvider
+    ): Observable<IServiceProvider> {
+        return this.http.post<IServiceProvider>(
+            `${BASE_URL}/service-provider/1`,
+            serviceProvider
+        );
+    }
+
+    getServiceProviders(): Observable<IServiceProvider[]> {
+        return this.http.get<IServiceProvider[]>(
+            `${BASE_URL}/service-provider`
+        );
+    }
+
+    getServiceProviderById(
+        serviceProviderId: string
+    ): Observable<IServiceProvider> {
+        return this.http.get<IServiceProvider>(
+            `${BASE_URL}/service-provider/${serviceProviderId}`
+        );
+    }
+
+    updateServiceProvider(
+        serviceProviderId: string,
+        serviceProvider: IServiceProvider
+    ): Observable<IServiceProvider> {
+        return this.http.put<IServiceProvider>(
+            `${BASE_URL}/service-provider/${serviceProviderId}`,
+            serviceProvider
+        );
+    }
+
+    // service provider quotations
+    createServiceProviderQuote(
+        serviceProviderQuote: IServiceProviderQuote
+    ): Observable<IServiceProviderQuote> {
+        return this.http.post<IServiceProviderQuote>(
+            `${BASE_URL}/service-provider-quotations/1`,
+            serviceProviderQuote
+        );
+    }
+
+    getServiceProvidersQuotes(): Observable<IServiceProviderQuote[]> {
+        return this.http.get<IServiceProviderQuote[]>(
+            `${BASE_URL}/service-provider-quotations`
+        );
+    }
+
+    getServiceProviderQuoteById(
+        serviceProviderQuoteId: string
+    ): Observable<IServiceProviderQuote> {
+        return this.http.get<IServiceProviderQuote>(
+            `${BASE_URL}/service-provider-quotations/${serviceProviderQuoteId}`
+        );
+    }
+
+    updateServiceProviderQuote(
+        serviceProviderQuoteId: string,
+        serviceProviderQuote: IServiceProviderQuote
+    ): Observable<IServiceProviderQuote> {
+        return this.http.put<IServiceProviderQuote>(
+            `${BASE_URL}/service-provider-quotations/${serviceProviderQuoteId}`,
+            serviceProviderQuote
+        );
+    }
+
+    // document uploads
+    createDocumentUpload(
+        documentUpload: IDocumentUpload
+    ): Observable<IDocumentUpload> {
+        return this.http.post<IDocumentUpload>(
+            `${BASE_URL}/document-upload/1`,
+            documentUpload
+        );
+    }
+
+    getDocumentUploads(): Observable<IDocumentUpload[]> {
+        return this.http.get<IDocumentUpload[]>(`${BASE_URL}/document-upload`);
+    }
+
+    getDocumentUploadById(
+        documentUploadId: string
+    ): Observable<IDocumentUpload> {
+        return this.http.get<IDocumentUpload>(
+            `${BASE_URL}/document-upload/${documentUploadId}`
+        );
+    }
+
+    updateDocumentUpload(
+        documentUploadId: string,
+        documentUpload: IDocumentUpload
+    ): Observable<IDocumentUpload> {
+        return this.http.put<IDocumentUpload>(
+            `${BASE_URL}/document-upload/${documentUploadId}`,
+            documentUpload
+        );
+    }
+
+    // photo uploads
+    createPhotoUpload(photoUpload: IPhotoUpload): Observable<IPhotoUpload> {
+        return this.http.post<IPhotoUpload>(
+            `${BASE_URL}/photo-upload`,
+            photoUpload
+        );
+    }
+
+    getPhotoUploads(): Observable<IPhotoUpload[]> {
+        return this.http.get<IPhotoUpload[]>(`${BASE_URL}/photo-upload`);
+    }
+
+    getPhotoUploadById(photoUploadId: string): Observable<IPhotoUpload> {
+        return this.http.get<IPhotoUpload>(
+            `${BASE_URL}/photo-upload/${photoUploadId}`
+        );
+    }
+
+    updatePhotoUpload(
+        photoUploadId: string,
+        photoUpload: IPhotoUpload
+    ): Observable<IPhotoUpload> {
+        return this.http.put<IPhotoUpload>(
+            `${BASE_URL}/photo-upload/${photoUploadId}`,
+            photoUpload
+        );
+    }
+
+    // loss quantum
+    createLossQuantum(lossQuantum: ILossQuantum): Observable<ILossQuantum> {
+        return this.http.post<ILossQuantum>(
+            `${BASE_URL}/loss-quantum`,
+            lossQuantum
+        );
+    }
+
+    getLossQuanta(): Observable<ILossQuantum[]> {
+        return this.http.get<ILossQuantum[]>(`${BASE_URL}/loss-quantum`);
+    }
+
+    getLossQuantumById(lossQuantumId: string): Observable<ILossQuantum> {
+        return this.http.get<ILossQuantum>(
+            `${BASE_URL}/loss-quantum/${lossQuantumId}`
+        );
+    }
+
+    updateLossQuantum(
+        lossQuantumId: string,
+        lossQuantum: ILossQuantum
+    ): Observable<ILossQuantum> {
+        return this.http.put<ILossQuantum>(
+            `${BASE_URL}/loss-quantum/${lossQuantumId}`,
+            lossQuantum
+        );
+    }
+
+    // insurance companies ??? setups??
+    createInsuranceCompany(
+        insuranceCompany: IInsuranceCompany
+    ): Observable<IInsuranceCompany> {
+        return this.http.post<IInsuranceCompany>(
+            `${BASE_URL}/insurance-company/1`,
+            insuranceCompany
+        );
+    }
+
+    getInsuranceCompanies(): Observable<IInsuranceCompany[]> {
+        return this.http.get<IInsuranceCompany[]>(
+            `${BASE_URL}/insurance-company`
+        );
+    }
+
+    getInsuranceCompanyById(
+        insuranceCompanyId: string
+    ): Observable<IInsuranceCompany> {
+        return this.http.get<IInsuranceCompany>(
+            `${BASE_URL}/insurance-company/${insuranceCompanyId}`
+        );
+    }
+
+    updateInsuranceCompany(
+        insuranceCompanyId: string,
+        insuranceCompany: IInsuranceCompany
+    ): Observable<IInsuranceCompany> {
+        return this.http.put<IInsuranceCompany>(
+            `${BASE_URL}/insurance-company/${insuranceCompanyId}`,
+            insuranceCompany
+        );
     }
 
     countGenerator(number) {
@@ -86,72 +256,18 @@ export class ClaimsService {
         return number;
     }
 
-    //generate cliam ID
-    generateCliamID(brokerName: string, totalClaims: number): string {
-        const broker_name = brokerName.substring(0, 2).toLocaleUpperCase();
+    // generate cliam ID
+    generateCliamID(totalClaims: number): string {
         const count = this.countGenerator(totalClaims);
         const today = new Date();
         const dateString: string =
-            today.getFullYear().toString().substr(-2) +
+            today
+                .getFullYear()
+                .toString()
+                .substr(-2) +
             ('0' + (today.getMonth() + 1)).slice(-2) +
             ('0' + today.getDate()).slice(-2);
 
-        return 'CL' + broker_name + dateString + count;
+        return 'CL' + dateString + count;
     }
-    // =======
-    //     private claimsCollection: AngularFirestoreCollection<Claim>;
-    // >>>>>>> bc5322423ef431a8932c5f00048a9ceff2eed018
-    //     claims: Observable<Claim[]>;
-
-    //     constructor(private firestore: AngularFirestore) {
-    //         this.claimsCollection = this.firestore.collection<Claim>('claims');
-    //         this.claims = this.claimsCollection.valueChanges();
-    //     }
-
-    //     async addClaim(claim: Claim): Promise<void> {
-    //         this.claims.pipe(first()).subscribe(async claims => {
-    //             claim.id = v4();
-    //             claim.claimId = this.generateCliamID('BR20200012', claims.length);
-
-    //             // this.claimsCollection
-    //             await this.claimsCollection.add(claim);
-    //         });
-    //     }
-
-    //     async updateClaim(id: string): Promise<void> {
-    //         const cliam = this.firestore.doc<Claim>(`claims/${id}`);
-    //     }
-
-    getClientsClaims(clientId: string): Observable<Claim[]> {
-        return this.claims.pipe(filter((claim) => clientId === clientId));
-    }
-
-    //     getClaims(): Observable<Claim[]> {
-    //         console.log(this.claims);
-    //         return this.claims;
-    //     }
-
-    //     countGenerator(number: string | number): string | number {
-    //         if (number <= 9999) {
-    //             number = ('0000' + number).slice(-5);
-    //         }
-    //         return number;
-    //     }
-
-    //     //generate cliam ID
-    //     generateCliamID(brokerName: string, totalClaims: number): string {
-    //         const broker_name = brokerName.substring(0, 2).toLocaleUpperCase();
-    //         const count = this.countGenerator(totalClaims);
-    //         const today = new Date();
-    //         const dateString: string =
-    //             today
-    //                 .getFullYear()
-    //                 .toString()
-    //                 .substr(-2) +
-    //             ('0' + (today.getMonth() + 1)).slice(-2) +
-    //             +('0' + today.getDate()).slice(-2);
-    // >>>>>>> 06e7fbebfa4286c6af3a7e117103027e84398a08
-
-    // return 'CL' + broker_name + dateString + count;
-    // }
 }

@@ -6,7 +6,7 @@
                 <div nz-col [nzSpan]="12">
                     <div style="width: 75%;">
                         <nz-input-group [nzSuffix]="suffixIconSearch">
-                            <input type="text" nz-input placeholder="Search by clause Product Code" />
+                            <input type="text" nz-input placeholder="Search by Product Name, Product Code" />
                         </nz-input-group>
                         <ng-template #suffixIconSearch>
                             <i nz-icon nzType="search"></i>
@@ -15,7 +15,7 @@
                 </div>
                 <div nz-col nzSpan="12">
                     <div style="width: 35%;">
-                        <nz-select [(ngModel)]="productClass" nzPlaceHolder="Select Product"
+                        <nz-select [(ngModel)]="productClass" nzPlaceHolder="Select Class"
                             (ngModelChange)="onChange($event)" nzAllowClear>
                             <nz-option *ngFor="let o of classesList" [nzValue]="o" [nzLabel]="o.className">
                             </nz-option>
@@ -131,6 +131,14 @@
 <nz-drawer [nzClosable]="false" [nzVisible]="isWarrantyVisible" nzPlacement="left" nzTitle="Create Warranty"
     (nzOnClose)="closeWarranty()" [nzWidth]="600">
     <form nz-form [formGroup]="warrantyForm" (ngSubmit)="submitWarrantyForm()">
+        <div>
+            <div *ngIf="!productName">
+                <nz-alert nzType="warning" nzMessage="Please Click a Product" nzShowIcon></nz-alert>
+            </div>​
+            <div *ngIf="productName">
+                <nz-alert nzType="success" nzMessage="{{productName}} is Selected" nzShowIcon></nz-alert>
+            </div>​
+        </div>
         <nz-form-item>
             <nz-form-label [nzSpan]="7" nzRequired>Heading</nz-form-label>
             <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..."
@@ -178,6 +186,14 @@
 <nz-drawer [nzClosable]="false" [nzVisible]="isExclusionVisible" nzPlacement="left" nzTitle="Create Exclusion"
     (nzOnClose)="closeExclusion()" [nzWidth]="600">
     <form nz-form [formGroup]="exclusionForm" (ngSubmit)="submitExclusionForm()">
+        <div>
+            <div *ngIf="!productName">
+                <nz-alert nzType="warning" nzMessage="Please Click a Product" nzShowIcon></nz-alert>
+            </div>​
+            <div *ngIf="productName">
+                <nz-alert nzType="success" nzMessage="{{productName}} is Selected" nzShowIcon></nz-alert>
+            </div>​
+        </div>
         <nz-form-item>
             <nz-form-label [nzSpan]="7" nzRequired>Heading</nz-form-label>
             <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..."

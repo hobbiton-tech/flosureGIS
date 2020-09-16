@@ -7,6 +7,7 @@ import {
     ITimestamp
 } from 'src/app/quotes/models/quote.model';
 import { BehaviorSubject } from 'rxjs';
+import { IDiscounts } from 'src/app/quotes/models/discounts.model';
 
 @Component({
     selector: 'app-view-backup-policy-risks',
@@ -105,7 +106,7 @@ export class ViewBackupPolicyRisksComponent implements OnInit {
     loads: LoadModel[] = [];
 
     //dicounts added
-    discounts: DiscountModel[] = [];
+    discounts: IDiscounts[] = [];
 
     // risk upload modal
     isVisible = false;
@@ -262,80 +263,78 @@ export class ViewBackupPolicyRisksComponent implements OnInit {
 
     // view details of the risk
     viewRiskDetails(risk: RiskModel) {
-        console.log('risk details: ');
-        console.log(this.riskData);
-        this.riskDetailsModalVisible = true;
-
-        if (this.selectedValue.value === 'Comprehensive') {
-            this.riskDetailsForm.get('vehicleMake').setValue(risk.vehicleMake);
-            this.riskDetailsForm
-                .get('vehicleModel')
-                .setValue(risk.vehicleModel);
-            this.riskDetailsForm
-                .get('yearOfManufacture')
-                .setValue(risk.yearOfManufacture);
-            this.riskDetailsForm.get('regNumber').setValue(risk.regNumber);
-            this.riskDetailsForm
-                .get('engineNumber')
-                .setValue(risk.engineNumber);
-            this.riskDetailsForm
-                .get('chassisNumber')
-                .setValue(risk.chassisNumber);
-            this.riskDetailsForm.get('productType').setValue(risk.productType);
-            this.riskDetailsForm
-                .get('riskStartDate')
-                .setValue(risk.riskStartDate);
-            this.riskDetailsForm.get('riskQuarter').setValue(risk.riskQuarter);
-            this.riskDetailsForm.get('riskEndDate').setValue(risk.riskEndDate);
-            this.riskDetailsForm.get('color').setValue(risk.color);
-        } else {
-            this.riskDetailsForm.get('vehicleMake').setValue(risk.vehicleMake);
-            this.riskDetailsForm
-                .get('vehicleModel')
-                .setValue(risk.vehicleModel);
-            this.riskDetailsForm
-                .get('yearOfManufacture')
-                .setValue(risk.yearOfManufacture);
-            this.riskDetailsForm.get('regNumber').setValue(risk.regNumber);
-            this.riskDetailsForm
-                .get('engineNumber')
-                .setValue(risk.engineNumber);
-            this.riskDetailsForm
-                .get('chassisNumber')
-                .setValue(risk.chassisNumber);
-            this.riskDetailsForm.get('productType').setValue(risk.productType);
-            this.riskDetailsForm
-                .get('riskStartDate')
-                .setValue(risk.riskStartDate);
-            this.riskDetailsForm.get('riskQuarter').setValue(risk.riskQuarter);
-            this.riskDetailsForm.get('riskEndDate').setValue(risk.riskEndDate);
-            this.riskDetailsForm.get('color').setValue(risk.color);
-        }
-
-        this.selectedVehicleMake = risk.vehicleMake;
-        this.selectedVehicleModel = risk.vehicleModel;
-        this.sumInsured = risk.sumInsured;
-        this.premiumRate = risk.premiumRate;
-        this.loads = risk.loads;
-        this.discounts = risk.discounts;
-        this.basicPremium = risk.basicPremium;
-        this.premiumLoadingTotal = risk.loadingTotal;
-        this.premiumDiscount = risk.discountTotal;
-        this.basicPremiumLevy = risk.premiumLevy;
-        this.netPremium = risk.netPremium;
+        // console.log('risk details: ');
+        // console.log(this.riskData);
+        // this.riskDetailsModalVisible = true;
+        // if (this.selectedValue.value === 'Comprehensive') {
+        //     this.riskDetailsForm.get('vehicleMake').setValue(risk.vehicleMake);
+        //     this.riskDetailsForm
+        //         .get('vehicleModel')
+        //         .setValue(risk.vehicleModel);
+        //     this.riskDetailsForm
+        //         .get('yearOfManufacture')
+        //         .setValue(risk.yearOfManufacture);
+        //     this.riskDetailsForm.get('regNumber').setValue(risk.regNumber);
+        //     this.riskDetailsForm
+        //         .get('engineNumber')
+        //         .setValue(risk.engineNumber);
+        //     this.riskDetailsForm
+        //         .get('chassisNumber')
+        //         .setValue(risk.chassisNumber);
+        //     this.riskDetailsForm.get('productType').setValue(risk.productType);
+        //     this.riskDetailsForm
+        //         .get('riskStartDate')
+        //         .setValue(risk.riskStartDate);
+        //     this.riskDetailsForm.get('riskQuarter').setValue(risk.riskQuarter);
+        //     this.riskDetailsForm.get('riskEndDate').setValue(risk.riskEndDate);
+        //     this.riskDetailsForm.get('color').setValue(risk.color);
+        // } else {
+        //     this.riskDetailsForm.get('vehicleMake').setValue(risk.vehicleMake);
+        //     this.riskDetailsForm
+        //         .get('vehicleModel')
+        //         .setValue(risk.vehicleModel);
+        //     this.riskDetailsForm
+        //         .get('yearOfManufacture')
+        //         .setValue(risk.yearOfManufacture);
+        //     this.riskDetailsForm.get('regNumber').setValue(risk.regNumber);
+        //     this.riskDetailsForm
+        //         .get('engineNumber')
+        //         .setValue(risk.engineNumber);
+        //     this.riskDetailsForm
+        //         .get('chassisNumber')
+        //         .setValue(risk.chassisNumber);
+        //     this.riskDetailsForm.get('productType').setValue(risk.productType);
+        //     this.riskDetailsForm
+        //         .get('riskStartDate')
+        //         .setValue(risk.riskStartDate);
+        //     this.riskDetailsForm.get('riskQuarter').setValue(risk.riskQuarter);
+        //     this.riskDetailsForm.get('riskEndDate').setValue(risk.riskEndDate);
+        //     this.riskDetailsForm.get('color').setValue(risk.color);
+        // }
+        // this.selectedVehicleMake = risk.vehicleMake;
+        // this.selectedVehicleModel = risk.vehicleModel;
+        // this.sumInsured = risk.sumInsured;
+        // this.premiumRate = risk.premiumRate;
+        // this.loads = risk.loads;
+        // this.discounts = risk.discounts;
+        // this.basicPremium = risk.basicPremium;
+        // this.premiumLoadingTotal = risk.loadingTotal;
+        // this.premiumDiscount = risk.discountsTotal;
+        // this.basicPremiumLevy = risk.premiumLevy;
+        // this.netPremium = risk.netPremium;
     }
 
     // getYearOfManfTimeStamp(risk: RiskModel): number {
     //     return (risk.yearOfManufacture as ITimestamp).seconds * 1000;
     // }
 
-    getStartDateTimeStamp(risk: RiskModel): number {
-        return (risk.riskStartDate as ITimestamp).seconds * 1000;
-    }
+    // getStartDateTimeStamp(risk: RiskModel): number {
+    //     return (risk.riskStartDate as ITimestamp).seconds * 1000;
+    // }
 
-    getEndDateTimeStamp(risk: RiskModel): number {
-        return (risk.riskEndDate as ITimestamp).seconds * 1000;
-    }
+    // getEndDateTimeStamp(risk: RiskModel): number {
+    //     return (risk.riskEndDate as ITimestamp).seconds * 1000;
+    // }
 
     handleOk(): void {
         this.closeViewRiskFormVisible.emit();

@@ -7,6 +7,20 @@ import {
     ITimestamp
 } from 'src/app/quotes/models/quote.model';
 import { BehaviorSubject } from 'rxjs';
+import { IDiscounts } from 'src/app/quotes/models/discounts.model';
+import { VehicleDetailsModel } from 'src/app/quotes/models/vehicle-details.model';
+import { PropertyDetailsModel } from 'src/app/quotes/models/fire-class/property-details.model';
+import { QuotesService } from 'src/app/quotes/services/quotes.service';
+import { VehicleDetailsComponent } from 'src/app/quotes/components/vehicle-details/vehicle-details.component';
+import { PropertyDetailsComponent } from 'src/app/quotes/components/fire-class/property-details/property-details.component';
+import { PremiumComputationComponent } from 'src/app/quotes/components/premium-computation/premium-computation.component';
+import { PremiumComputationDetailsComponent } from 'src/app/quotes/components/premium-computation-details/premium-computation-details.component';
+import {
+    PremiumComputationDetails,
+    PremiumComputation
+} from 'src/app/quotes/models/premium-computations.model';
+import { ITotalsModel } from 'src/app/quotes/models/totals.model';
+import { TotalsViewComponent } from 'src/app/quotes/components/totals-view/totals-view.component';
 
 @Component({
     selector: 'app-view-cancellation-risk',
@@ -33,6 +47,9 @@ export class ViewCancellationRiskComponent implements OnInit {
 
     // selected risk in risk table
     selectedRisk: RiskModel;
+
+    vehicle: VehicleDetailsModel;
+    property: PropertyDetailsModel;
 
     // risk being edited
     currentRiskEdit: RiskModel;
@@ -105,7 +122,7 @@ export class ViewCancellationRiskComponent implements OnInit {
     loads: LoadModel[] = [];
 
     //dicounts added
-    discounts: DiscountModel[] = [];
+    discounts: IDiscounts[] = [];
 
     // risk upload modal
     isVisible = false;
@@ -240,7 +257,15 @@ export class ViewCancellationRiskComponent implements OnInit {
 
     riskDetailsForm: FormGroup;
 
-    constructor(private formBuilder: FormBuilder) {}
+    constructor(
+        private formBuilder: FormBuilder,
+        private readonly quoteService: QuotesService,
+        private vehicleDetailsComponent: VehicleDetailsComponent,
+        private propertyDetailsComponent: PropertyDetailsComponent,
+        private premuimComputationsComponent: PremiumComputationComponent,
+        private premiumComputationDetailsComponent: PremiumComputationDetailsComponent,
+        private totalsComponent: TotalsViewComponent
+    ) {}
 
     ngOnInit(): void {
         this.riskDetailsForm = this.formBuilder.group({
@@ -262,80 +287,62 @@ export class ViewCancellationRiskComponent implements OnInit {
 
     // view details of the risk
     viewRiskDetails(risk: RiskModel) {
-        console.log('risk details: ');
-        console.log(this.riskData);
-        this.riskDetailsModalVisible = true;
+        this.selectedRisk = risk;
+        // this.riskDetailsModalVisible = true;
 
-        if (this.selectedValue.value === 'Comprehensive') {
-            this.riskDetailsForm.get('vehicleMake').setValue(risk.vehicleMake);
-            this.riskDetailsForm
-                .get('vehicleModel')
-                .setValue(risk.vehicleModel);
-            this.riskDetailsForm
-                .get('yearOfManufacture')
-                .setValue(risk.yearOfManufacture);
-            this.riskDetailsForm.get('regNumber').setValue(risk.regNumber);
-            this.riskDetailsForm
-                .get('engineNumber')
-                .setValue(risk.engineNumber);
-            this.riskDetailsForm
-                .get('chassisNumber')
-                .setValue(risk.chassisNumber);
-            this.riskDetailsForm.get('productType').setValue(risk.productType);
-            this.riskDetailsForm
-                .get('riskStartDate')
-                .setValue(risk.riskStartDate);
-            this.riskDetailsForm.get('riskQuarter').setValue(risk.riskQuarter);
-            this.riskDetailsForm.get('riskEndDate').setValue(risk.riskEndDate);
-            this.riskDetailsForm.get('color').setValue(risk.color);
-        } else {
-            this.riskDetailsForm.get('vehicleMake').setValue(risk.vehicleMake);
-            this.riskDetailsForm
-                .get('vehicleModel')
-                .setValue(risk.vehicleModel);
-            this.riskDetailsForm
-                .get('yearOfManufacture')
-                .setValue(risk.yearOfManufacture);
-            this.riskDetailsForm.get('regNumber').setValue(risk.regNumber);
-            this.riskDetailsForm
-                .get('engineNumber')
-                .setValue(risk.engineNumber);
-            this.riskDetailsForm
-                .get('chassisNumber')
-                .setValue(risk.chassisNumber);
-            this.riskDetailsForm.get('productType').setValue(risk.productType);
-            this.riskDetailsForm
-                .get('riskStartDate')
-                .setValue(risk.riskStartDate);
-            this.riskDetailsForm.get('riskQuarter').setValue(risk.riskQuarter);
-            this.riskDetailsForm.get('riskEndDate').setValue(risk.riskEndDate);
-            this.riskDetailsForm.get('color').setValue(risk.color);
-        }
+        this.quoteService.getVehicles().subscribe(vehicles => {
+            this.vehicle = vehicles.filter(x => x.risk.id == risk.id)[0];
+            this.riskDetailsModalVisible = true;
+        });
 
-        this.selectedVehicleMake = risk.vehicleMake;
-        this.selectedVehicleModel = risk.vehicleModel;
-        this.sumInsured = risk.sumInsured;
-        this.premiumRate = risk.premiumRate;
-        this.loads = risk.loads;
-        this.discounts = risk.discounts;
-        this.basicPremium = risk.basicPremium;
-        this.premiumLoadingTotal = risk.loadingTotal;
-        this.premiumDiscount = risk.discountTotal;
-        this.basicPremiumLevy = risk.premiumLevy;
-        this.netPremium = risk.netPremium;
+        this.quoteService.getProperties().subscribe(properties => {
+            this.property = properties.filter(x => x.risk.id == risk.id)[0];
+            this.riskDetailsModalVisible = true;
+        });
+
+        const premiumComputationDetails: PremiumComputationDetails = {
+            insuranceType: risk.insuranceType,
+            productType: risk.productType,
+            riskStartDate: risk.riskStartDate,
+            riskEndDate: risk.riskEndDate,
+            riskQuarter: risk.riskQuarter,
+            numberOfDays: risk.numberOfDays,
+            expiryQuarter: risk.expiryQuarter
+        };
+
+        const premimuComputations: PremiumComputation = {
+            sumInsured: risk.sumInsured
+        };
+
+        const totals: ITotalsModel = {
+            basicPremium: risk.basicPremium,
+            premiumLevy: risk.premiumLevy,
+            netPremium: risk.netPremium
+        };
+
+        this.vehicleDetailsComponent.setVehicleDetails(this.vehicle);
+        this.propertyDetailsComponent.setPropertyDetails(this.property);
+
+        this.premiumComputationDetailsComponent.setPremiumComputationDetails(
+            premiumComputationDetails
+        );
+        this.premuimComputationsComponent.setPremiumComputations(
+            premimuComputations
+        );
+        this.totalsComponent.setTotals(totals);
     }
 
     // getYearOfManfTimeStamp(risk: RiskModel): number {
     //     return (risk.yearOfManufacture as ITimestamp).seconds * 1000;
     // }
 
-    getStartDateTimeStamp(risk: RiskModel): number {
-        return (risk.riskStartDate as ITimestamp).seconds * 1000;
-    }
+    // getStartDateTimeStamp(risk: RiskModel): number {
+    //     return (risk.riskStartDate as ITimestamp).seconds * 1000;
+    // }
 
-    getEndDateTimeStamp(risk: RiskModel): number {
-        return (risk.riskEndDate as ITimestamp).seconds * 1000;
-    }
+    // getEndDateTimeStamp(risk: RiskModel): number {
+    //     return (risk.riskEndDate as ITimestamp).seconds * 1000;
+    // }
 
     handleOk(): void {
         this.closeViewRiskFormVisible.emit();

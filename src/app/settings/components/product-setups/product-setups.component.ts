@@ -9,7 +9,7 @@ import { AddPerilService } from './components/add-peril/services/add-peril.servi
 @Component({
     selector: 'app-product-setups',
     templateUrl: './product-setups.component.html',
-    styleUrls: ['./product-setups.component.scss'],
+    styleUrls: ['./product-setups.component.scss']
 })
 export class ProductSetupsComponent implements OnInit {
     classesList: IClass[] = [];
@@ -28,6 +28,9 @@ export class ProductSetupsComponent implements OnInit {
 
     // Selected product Id
     clickedProductId: any;
+
+    // Product Na,e
+    selectedProductName: any;
 
     //single class
     singleClass: IClass;
@@ -58,35 +61,34 @@ export class ProductSetupsComponent implements OnInit {
         //     console.log(x);
         // });
 
-        this.route.params.subscribe((param) => {
+        this.route.params.subscribe(param => {
             this.classId = param.classId;
         });
 
-        this.productSetupsService.getClasses().subscribe((classes) => {
+        this.productSetupsService.getClasses().subscribe(classes => {
             this.classesList = classes;
 
             this.productsList = this.classesList[0].products;
         });
 
-        this.classUpdate.subscribe((update) =>
+        this.classUpdate.subscribe(update =>
             update === true
-                ? this.productSetupsService
-                      .getClasses()
-                      .subscribe((classes) => {
-                          this.classesList = classes;
+                ? this.productSetupsService.getClasses().subscribe(classes => {
+                      this.classesList = classes;
 
-                          this.productsList = this.classesList[0].products;
-                      })
+                      this.productsList = this.classesList[0].products;
+                  })
                 : ''
         );
 
-        this.perilsService.getPerils().subscribe((res) => {
+        this.perilsService.getPerils().subscribe(res => {
             this.perilList = res;
         });
     }
 
     onSelectProduct(product) {
         this.clickedProductId = product.id;
+        this.selectedProductName = product.productName;
     }
 
     openAddClassFormDrawer() {
@@ -106,9 +108,9 @@ export class ProductSetupsComponent implements OnInit {
     }
 
     changeSelectedClass(selectedClass: IClass) {
-        this.productSetupsService.getClasses().subscribe((classes) => {
+        this.productSetupsService.getClasses().subscribe(classes => {
             this.singleClass = classes.filter(
-                (x) => x.id === selectedClass.id
+                x => x.id === selectedClass.id
             )[0];
 
             this.productsList = this.singleClass.products;

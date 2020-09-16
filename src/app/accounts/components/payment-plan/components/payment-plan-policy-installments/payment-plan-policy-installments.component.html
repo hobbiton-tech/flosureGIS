@@ -43,23 +43,23 @@
                             nzSize="middle"
                         >
                             <nz-descriptions-item nzTitle="Client Name">
-                                {{ client.clientType === 'Individual'
-                                ? capitalize(client.firstName + ' ' + client.lastName)
-                                : capitalize(client.companyName) }}
+                                {{ client?.clientType === 'Individual'
+                                ? client?.firstName + ' ' + client?.lastName
+                                : client?.companyName }}
                             </nz-descriptions-item>
                              <nz-descriptions-item nzTitle="Registration Number">
-                                {{ client.clientType === 'Individual'
-                                ? client.idNumber
-                                : client.registrationNumber}}
+                                {{ client?.clientType === 'Individual'
+                                ? client?.idNumber
+                                : client?.registrationNumber}}
                             </nz-descriptions-item>
                             <nz-descriptions-item nzTitle="Address">
-                                {{ client.address }}
+                                {{ client?.address }}
                             </nz-descriptions-item>
                             <nz-descriptions-item nzTitle="Email">
-                                {{ client.email }}
+                                {{ client?.email }}
                             </nz-descriptions-item>
                             <nz-descriptions-item nzTitle="Phone Number">
-                                {{ client.phone }}</nz-descriptions-item
+                                {{ client?.phone }}</nz-descriptions-item
                             >
 
                         </nz-descriptions>
@@ -78,31 +78,31 @@
                         >
                             <nz-descriptions-item nzTitle="Total Premium">
                                 {{
-                                    paymentPlan.total_premium
+                                    paymentPlan?.total_premium
                                         | number: '1.2-2'
                                 }}
                             </nz-descriptions-item>
                             <nz-descriptions-item nzTitle="Amount Paid">
                                 {{
-                                    paymentPlan.amount_paid | number: '1.2-2'
+                                    paymentPlan?.amount_paid | number: '1.2-2'
                                 }}
                             </nz-descriptions-item>
                             <nz-descriptions-item nzTitle="Amount Outstanding">
                                 {{
-                                    paymentPlan.amount_outstanding
+                                    paymentPlan?.amount_outstanding
                                         | number: '1.2-2'
                                 }}
                             </nz-descriptions-item>
                             <nz-descriptions-item
                                 nzTitle="Remaining Installments"
                             >
-                                {{ paymentPlan.remaining_installments }}
+                                {{ paymentPlan?.remaining_installments }}
                             </nz-descriptions-item>
                             <nz-descriptions-item
                                 nzTitle="Number of Paid Installments"
                             >
                                 {{
-                                    paymentPlan.number_of_paid_installments
+                                    paymentPlan?.number_of_paid_installments
                                 }}</nz-descriptions-item
                             >
                         </nz-descriptions>

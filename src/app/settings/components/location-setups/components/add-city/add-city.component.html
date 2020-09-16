@@ -1,0 +1,53 @@
+<nz-modal [(nzVisible)]="isAddCityModalVisible" nzTitle="Add City" [nzContent]="cityContent"
+    (nzOnCancel)="closeAddCityModal()" (nzOnOk)="closeAddCityModal()">
+
+
+    <ng-template #cityContent>
+        <nz-spin nzSize="large" nzTip="Adding City...." [nzSpinning]="isAddingCity">
+            <div>
+                <form nz-form [formGroup]="cityDetailsForm">
+                    <div nz-row>
+                        <div nz-col nzSpan="24">
+                            <nz-form-item>
+                                <nz-form-label nzRequired nzSpan="10">Province</nz-form-label>
+                                <nz-form-control nzSpan="10">
+                                    <nz-select formControlName="province">
+                                        <div *ngFor="let province of provincesList">
+                                            <nz-option [nzValue]="province" [nzLabel]="province.name">
+                                            </nz-option>
+                                        </div>
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item>
+                                <nz-form-label nzRequired nzSpan="10">Name</nz-form-label>
+                                <nz-form-control nzSpan="10">
+                                    <input nz-input formControlName="name" />
+                                </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item>
+                                <nz-form-label nzRequired nzSpan="10">Code</nz-form-label>
+                                <nz-form-control nzSpan="10">
+                                    <input nz-input formControlName="code" />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+
+                    <div style="
+                    text-align: center;
+                    margin-top: 10px;
+                    margin-bottom: 10px;
+                ">
+                        <button nz-button nzType="primary" (click)="addCity()">
+                            Add City
+                        </button>
+                        <button style="margin-left: 15px;" nz-button nzType="default">
+                            Reset Form
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </nz-spin>
+    </ng-template>
+</nz-modal>

@@ -1,0 +1,69 @@
+<nz-spin nzSize="large" nzTip="Requisitions Loading...." [nzSpinning]="requisitionsIsLoading">
+    <nz-spin nzSize="large" nzTip="Approving requisition...." [nzSpinning]="isApprovingRequisition">
+        <div style="margin: 10px;">
+            <div style="margin-bottom: 20px; background: #fff;">
+                <nz-page-header>
+                    <nz-page-header-title>Pending Requisitions</nz-page-header-title>
+                    <!-- <nz-page-header-subtitle></nz-page-header-subtitle> -->
+                </nz-page-header>
+            </div>
+            <nz-card>
+                <!-- <nz-divider nzText="Pending Requisitions" nzOrientation="left"></nz-divider> -->
+                <div style="margin-bottom: 10px; width: 20%;">
+                    <nz-input-group [nzSuffix]="suffixIconSearch">
+                        <input type="text" nz-input placeholder="Search by policy number, client"
+                            [(ngModel)]="searchString" (ngModelChange)="searchPendingRequisitions($event)" />
+                    </nz-input-group>
+                    <ng-template #suffixIconSearch>
+                        <i nz-icon nzType="search"></i>
+                    </ng-template>
+                </div>
+
+                <nz-table #pendingRequisitionsTable [nzData]="displayPendingRequisitionsList" [nzSize]="'small'"
+                    [nzBordered]="true">
+                    <thead>
+                        <tr>
+                            <th [nzAlign]="columnAlignment">Policy Number</th>
+                            <th [nzAlign]="columnAlignment">Req No</th>
+                            <th [nzAlign]="columnAlignment">Payee</th>
+                            <th [nzAlign]="columnAlignment">Date Raised</th>
+                            <th [nzAlign]="columnAlignment">Amount</th>
+                            <th [nzAlign]="columnAlignment">Currency</th>
+                            <th [nzAlign]="columnAlignment">Approval Status</th>
+                            <th [nzAlign]="columnAlignment">Type</th>
+                            <!-- <th [nzAlign]="columnAlignment">Authorized By</th> -->
+                            <!-- <th [nzAlign]="columnAlignment">Authorization Date</th> -->
+                            <th *ngIf=" approve === isPresentPermission?.name || admin === isPresentPermission?.name" [nzAlign]="columnAlignment">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let requisition of displayPendingRequisitionsList ; trackBy:trackByRequisitionId">
+                            <td [nzAlign]="columnAlignment">{{requisition.policyNumber}}</td>
+                            <td [nzAlign]="columnAlignment">{{requisition.requisitionNumber}}</td>
+                            <td [nzAlign]="columnAlignment">{{requisition.payee}}</td>
+                            <td [nzAlign]="columnAlignment">{{requisition.dateCreated | date}}</td>
+                            <td [nzAlign]="columnAlignment">{{requisition.amount}}</td>
+                            <td [nzAlign]="columnAlignment">{{requisition.currency}}</td>
+                            <td [nzAlign]="columnAlignment">{{requisition.approvalStatus}}</td>
+                            <td [nzAlign]="columnAlignment">{{requisition.paymentType}}</td>
+                            <!-- <td [nzAlign]="columnAlignment">{{requisition.authorizedBy ? requisition.authorisedBy : '-'}}
+                        </td> -->
+                            <!-- <td [nzAlign]="columnAlignment">
+                            {{requisition.authorisationDate ? (requisition.authorizationDate | date) : '-'}}</td> -->
+                            <td  *ngIf=" approve === isPresentPermission?.name || admin === isPresentPermission?.name" [nzAlign]="columnAlignment">
+                                <button n nz-button nzType="primary" style="margin-left: 2px;" nzSize="small"
+                                    (nzOnConfirm)="approveRequisition(requisition)" nz-popconfirm
+                                    nzTitle="Approve Requisition?" *ngIf="!isApprovingRequisition">
+                                    Approve
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </nz-card>
+        </div>
+
+        <app-requisition-payment [isRequisitionPaymentModalVisible]="isRequisitionPaymentModalVisible"
+            (closeRequisitionPaymentModalEmitter)="isRequisitionPaymentModalVisible=false"></app-requisition-payment>
+    </nz-spin>
+</nz-spin>

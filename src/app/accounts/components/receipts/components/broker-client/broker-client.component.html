@@ -11,6 +11,8 @@
                                         type="text"
                                         nz-input
                                         placeholder="Search by type, account type"
+                                        [(ngModel)]="searchString"
+                                        (ngModelChange)="searchUnR($event)"
                                     />
                                 </nz-input-group>
                                 <ng-template #suffixIconSearch>
@@ -59,19 +61,19 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let unreceipted of unreceiptedTable.data">
-                            <td>{{ unreceipted.policy_number }}</td>
+                            <td>{{ unreceipted.policyNumber }}</td>
                             <td>
-                                {{ unreceipted.start_date | date }}
+                                {{ unreceipted.startDate | date }}
                             </td>
                             <td>
-                                {{ unreceipted.end_date | date }}
+                                {{ unreceipted.endDate | date }}
                             </td>
                             <td>{{ unreceipted.client }}</td>
                             <td>
-                                {{ unreceipted.net_premium | number: '1.2-2' }}
+                                {{ unreceipted.netPremium | number: '1.2-2' }}
                             </td>
                             <td>
-                                {{ unreceipted.intermediary_name }}
+                                {{ unreceipted.intermediaryName }}
                             </td>
                             <td>
                                 <nz-badge
@@ -124,7 +126,7 @@
                                         >
                                             <input
                                                 nz-input
-                                                formControlName="receivedFrom"
+                                                formControlName="received_from"
                                                 name="received_from"
                                                 type="text"
                                                 id="receivedFrom"
@@ -352,6 +354,8 @@
                                         type="text"
                                         nz-input
                                         placeholder="Search by account id, account name, bank"
+                                        [(ngModel)]="searchString"
+                                        (ngModelChange)="searchR($event)"
                                     />
                                 </nz-input-group>
                                 <ng-template #suffixIconSearch>
@@ -364,7 +368,7 @@
 
                 <nz-table
                     #receiptTable
-                    [nzData]="receiptedList"
+                    [nzData]="displayReceiptedList"
                     [nzSize]="'small'"
                     [nzBordered]="true"
                     style="background-color: white;"
@@ -485,6 +489,8 @@
                                         type="text"
                                         nz-input
                                         placeholder="Search by account id, account name, bank"
+                                        [(ngModel)]="searchString"
+                                        (ngModelChange)="searchCR($event)"
                                     />
                                 </nz-input-group>
                                 <ng-template #suffixIconSearch>
@@ -497,7 +503,7 @@
 
                 <nz-table
                     #cancelledReceiptTable
-                    [nzData]="cancelReceiptList"
+                    [nzData]="displayCancelledReceiptList"
                     [nzSize]="'small'"
                     [nzBordered]="true"
                     style="background-color: white;"

@@ -1,21 +1,13 @@
-<div
-    style="
+<div style="
         display: flex;
         margin-bottom: 15px;
         align-items: flex-end;
         width: 100%;
-    "
->
+    ">
     <!-- <button nz-button nzType="primary" style="margin-right: 8px;" (click)="htmlToPdf()">
         Download
     </button> -->
-    <button
-        nz-button
-        nzType="primary"
-        [useExistingCss]="true"
-        [printSectionId]="'debitPrintSection'"
-        ngxPrint
-    >
+    <button nz-button nzType="primary" [useExistingCss]="true" [printSectionId]="'debitPrintSection'" ngxPrint>
         Print
     </button>
 </div>
@@ -28,19 +20,16 @@
                     <table>
                         <tr style="border: none;">
                             <td class="title" style="border: none;">
-                                <img
-                                    src="/assets/images/Savenda-Logo-Final.png"
-                                    style="width: 100%; max-width: 100px;"
-                                />
+
+                                <img src="/assets/images/Savenda-Logo-Final.png"
+                                    style="width: 100%; max-width: 100px;" />
                             </td>
 
-                            <td
-                                style="
+                            <td style="
                                     font-size: 11px;
                                     float: right !important;
                                     border: none;
-                                "
-                            >
+                                ">
                                 Savenda General Insurance LTD<br />
                                 Plot 20849 PSC Corporate Park, <br />
                                 P.O Box 30363, Lusaka Zambia<br />
@@ -54,11 +43,9 @@
         <hr style="width: 100%; height: 2px; background-color: black;" />
 
         <!-- <h2 class="heading">A PLUS GENERAL INSURANCE LIMITED</h2> -->
-        <P class="centerheading"
-            >SCHEDULE ATTACHING TO AND FORMING PART OF
+        <P class="centerheading">SCHEDULE ATTACHING TO AND FORMING PART OF
             <strong>{{ policy.risks[0].productType }} MOTOR</strong> CAR POLICY
-            NO. {{ policy.policyNumber }}</P
-        >
+            NO. {{ policy.policyNumber }}</P>
 
         <p>
             To form part of a valid insurance contract this Schedule must bear
@@ -72,36 +59,29 @@
                 Name Of Insured:
                 <span style="font-weight: bold;">{{
                     policy.nameOfInsured
-                }}</span
-                ><span style="float: right;"
-                    >Agency:
+                }}</span><span style="float: right;">Agency:
                     {{
                         policy.sourceOfBusiness
-                            ? policy.sourceOfBusiness == 'direct'
+                            ? policy.sourceOfBusiness == 'Direct'
                                 ? 'Direct'
                                 : policy.intermediaryName
                             : '-'
-                    }}<span style="font-weight: bold;"></span
-                ></span>
+                    }}<span style="font-weight: bold;"></span></span>
             </p>
             <p>
                 Address: {{ client ? client.address : 'TBA'
-                }}<span style="float: right;"
-                    >Captured by:
+                }}<span style="float: right;">Captured by:
                     {{
                         policy.sourceOfBusiness
-                            ? policy.sourceOfBusiness == 'direct'
+                            ? policy.sourceOfBusiness == 'Direct'
                                 ? ''
-                                : policy.user
+                                : agent?.first_name + ' ' + agent?.surname
                             : '-'
-                    }}<span style="font-weight: bold;"></span
-                ></span>
+                    }}<span style="font-weight: bold;"></span></span>
             </p>
             <p>
                 Email: {{ client ? client.email : 'TBA'
-                }}<span style="float: right;"
-                    ><span style="font-weight: bold;"></span
-                ></span>
+                }}<span style="float: right;"><span style="font-weight: bold;"></span></span>
             </p>
 
             <p>
@@ -138,12 +118,7 @@
         <br />
         <br />
 
-        <table
-            style="width: 100%;"
-            #risksTable
-            nzFrontPagination="false"
-            nzShowPagination="false"
-        >
+        <table style="width: 100%;" #risksTable nzFrontPagination="false" nzShowPagination="false">
             <tr>
                 <th>Reg No.</th>
                 <th>Make/Model</th>
@@ -158,15 +133,16 @@
                 <th>Insurance Provided</th>
             </tr>
             <tr *ngFor="let risk of policy.risks">
-                <td>{{ risk.regNumber }}</td>
-                <td>{{ risk.vehicleMake }}/{{ risk.vehicleModel }}</td>
-                <td>{{ risk.engineNumber }}</td>
-                <td>{{ risk.chassisNumber }}</td>
-                <td>{{ risk.cubicCapacity }}</td>
-                <td>{{ getYearOfManufacture(risk) }}</td>
-                <td>{{ risk.seatingCapacity }}</td>
+                <td>{{ risk.vehicle?.regNumber }}</td>
+                <td>{{ risk.vehicle?.vehicleMake }}/{{ risk.vehicle?.vehicleModel }}</td>
+                <td>{{ risk.vehicle?.engineNumber }}</td>
+                <td>{{ risk.vehicle?.chassisNumber }}</td>
+                <td>{{ risk.vehicle?.cubicCapacity }}</td>
+                <td>{{ risk.vehicle?.yearOfManufacture | date }}</td>
+                <td>{{ risk.vehicle?.seatingCapacity }}</td>
                 <td>{{ policyRisk.sumInsured | number: '1.2-2' }}</td>
-                <td>
+                <td>{{ risk.insuranceType }}</td>
+                <!-- <td>
                     {{
                         risk.insuranceType == 'ThirdParty'
                             ? 'Third Party'
@@ -176,7 +152,7 @@
                             ? 'Fire and Theft'
                             : 'Comprehensive'
                     }}
-                </td>
+                </td> -->
             </tr>
         </table>
         <br />
@@ -210,15 +186,8 @@
                 <p style="font-weight: bold;">Limits of Liability</p>
                 <p>Limits of the amount of the company's liability under</p>
                 <p>
-                    <span
-                        *ngIf="
-                            limits.liabilityType === 'combinedLimits';
-                            else standardLimit
-                        "
-                        style="font-weight: bold;"
-                        >Combined Limits {{ policy.currency
-                        }}{{ comb.amount }}</span
-                    >
+                    <span *ngIf="limits ?  limits.liabilityType === 'combinedLimits' : ''; else standardLimit"
+                        style="font-weight: bold;">Combined Limits {{policy.currency}}{{comb.amount}}</span>
 
                     <!-- <span style="font-weight: bold;"
                             >K{{ combinedLimits }}</span
@@ -229,44 +198,38 @@
                 <p>Limit of the amount of the Company’s liability under</p> -->
 
                         <p>
-                            <span style="font-weight: bold;">Section I</span> -
-                            3 (Protection and Removal) –
-                            <span style="font-weight: bold;"
-                                >{{ policy.currency
-                                }}{{ 0 | number: '1.2-2' }}</span
-                            >
+                            <span style="font-weight: bold;">Section I</span> - 3
+                            (Protection and Removal) –
+                            <span style="font-weight: bold;">{{policy.currency}}{{ 0 | number: '1.2-2' }}</span>
                         </p>
 
                         <p>
-                            <span style="font-weight: bold;">Section II</span>
-                            -1 (a) and 2 (a) (Liability to Third Parties – death
-                            bodily injury) in respect of any one claim or series
-                            Of claims arising out of one event:
-                            <span style="font-weight: bold;"
-                                >{{ policy.currency
-                                }}{{ deathPE.amount | number: '1.2-2' }} per
-                                event / {{ policy.currency
-                                }}{{ deathPP.amount | number: '1.2-2' }} per
-                                person</span
-                            >
+                            <span style="font-weight: bold;">Section II</span> -1 (a)
+                            and 2 (a) (Liability to Third Parties – death bodily injury)
+                            in respect of any one claim or series Of claims arising out
+                            of one event:
+                            <span
+                                style="font-weight: bold;">{{policy.currency}}{{ deathPE ? (deathPE.amount | number: '1.2-2') : '-' }}
+                                per
+                                event / {{policy.currency}}{{
+                            deathPP ? (deathPP.amount | number: '1.2-2') : '-'
+                        }}
+                                per person</span>
                             >
                         </p>
                         <p>
-                            <span style="font-weight: bold;">Section II</span> -
-                            1 (b) and 2 (b) (Liability to third Parties –
-                            Property Damage) in respect of any claim or series
-                            Of claims arising out of one event:
-                            <span style="font-weight: bold;"
-                                >{{ policy.currency
-                                }}{{ propertyD.amount | number: '1.2-2' }}</span
-                            >
+                            <span style="font-weight: bold;">Section II</span> - 1 (b)
+                            and 2 (b) (Liability to third Parties – Property Damage) in
+                            respect of any claim or series Of claims arising out of one
+                            event:
                             <span
-                                >- arising from loss of use of a motor vehicle
-                                which is limited to in respect of any one claim
-                                or series of claims arising out of one Event –
+                                style="font-weight: bold;">{{policy.currency}}{{ propertyD ? (propertyD.amount | number: '1.2-2') : '-' }}</span>
+                            <span>- arising from loss of use of a motor vehicle which is
+                                limited to in respect of any one claim or series of
+                                claims arising out of one Event –
                                 <span style="font-weight: bold;">NIL</span> per
-                                event</span
-                            >
+                                event</span>
+
                         </p>
                     </ng-template>
                 </p>
@@ -328,56 +291,9 @@
         </p>
         <ul style="list-style-type: none;">
             <li *ngFor="let ex of excessList">
-                {{ ex.excessType }}
-                <span style="font-weight: bold;"
-                    >{{ policy.currency }}{{ ex.amount }}</span
-                >
+                {{ ex.description }}
+                <span style="font-weight: bold;">{{ policy.currency }}{{ ex.amount }}</span>
             </li>
-            <!-- <li>
-                The insured shall be responsible for the first 10% of each and
-                every claim/loss subject to retained minimum liability of USD
-                <span style="font-weight: bold;">100</span>
-            </li>
-            <li>
-                Excess applicable on young/inexperienced drivers shall be as
-                hereunder:
-            </li>
-            <li>
-                (i) Any person below 21 years of age - 10% minimum of
-                <span style="font-weight: bold;"
-                    >USD{{ below21Years | number: '1.2-2' }}</span
-                >
-            </li>
-            <li>
-                (ii)Any person over 70 years of age 10% minimum of
-                <span style="font-weight: bold;"
-                    >USD{{ over70Years | number: '1.2-2' }}</span
-                >
-            </li>
-            <li>
-                (iii)Any Person who has not held a full drivers license for a
-                minimum period of 24 months 10% minimum of
-                <span style="font-weight: bold;"
-                    >USD{{ noLicence | number: '1.2-2' }}</span
-                >
-            </li>
-            <li>
-                (iv) Any person who has been convicted and has had a license
-                endorsed as a result of following during the previous three
-                years: >
-            </li>
-            <li>
-                (1)Careless or reckless driving - 10% minimum of
-                <span style="font-weight: bold;"
-                    >USD{{ careLessDriving | number: '1.2-2' }}</span
-                >
-            </li>
-            <li>
-                (2) Any other endorsement - 10% minimum of
-                <span style="font-weight: bold;"
-                    >USD{{ otherEndorsement | number: '1.2-2' }}</span
-                >
-            </li> -->
         </ul>
         <p><span style="font-weight: bold;">Limitations as to Use</span>:</p>
         <p>
@@ -392,38 +308,27 @@
                 <span style="font-weight: bold;">MEMO 1.RIOT AND STRIKE</span>
             </li>
             <li>
-                <span style="font-weight: bold;"
-                    >MEMO 2. THIS COVER IS SUBJECT TO PAYMENT OF FULL ANNUAL
+                <span style="font-weight: bold;">MEMO 2. THIS COVER IS SUBJECT TO PAYMENT OF FULL ANNUAL
                     PREMIUM IN THE EVENT OF A CLAIM IN ANYONE PERIOD OF
-                    INSURANCE</span
-                >
+                    INSURANCE</span>
             </li>
         </ul>
         <p>
-            <span style="font-weight: bold;"
-                >Date of Signature of Proposal and Declaration</span
-            >: AS PER COVERNOTE
+            <span style="font-weight: bold;">Date of Signature of Proposal and Declaration</span>: AS PER COVERNOTE
             <span style="font-weight: bold;">{{
-                coverNot.certificateNumber
+                coverNot ? coverNot.certificateNumber : '-'
             }}</span>
             DATED
             {{ policy.dateOfIssue | date }}
         </p>
         <p>
-            SIGNED AT:.............................................<span
-                style="text-align: center;"
-                >DATE: {{ todayDate | date }}</span
-            ><span style="float: right;"
-                >....................................................</span
-            >
+            SIGNED AT:.............................................<span style="text-align: center;">DATE:
+                {{ todayDate | date }}</span><span
+                style="float: right;">....................................................</span>
         </p>
         <p>
-            <span style="float: center;"></span
-            ><span style="float: right;"
-                ><span style="font-weight: bold;"
-                    >For /Chief Executive Officer</span
-                ></span
-            >
+            <span style="float: center;"></span><span style="float: right;"><span style="font-weight: bold;">For Chief
+                    Executive Officer</span></span>
         </p>
     </div>
 </div>

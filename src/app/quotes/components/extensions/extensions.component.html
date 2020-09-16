@@ -1,0 +1,117 @@
+<div>
+    <div *ngIf="!isRiskEditMode">
+        <nz-form-item>
+            <nz-form-label [nzSpan]="10" nzFor="extensions">Add Extension
+            </nz-form-label>
+            <nz-form-control nzSpan="13">
+                <nz-select name="extensions" nzPlaceHolder="Select Extension" [(ngModel)]="
+                            selectedExtensionValue
+                        " nzAllowClear style="
+                                    width: 100%;
+                                " [ngModelOptions]="{
+                            standalone: true
+                        }">
+                    <div *ngFor="
+                                let option of this.selectedValue.value === 'Comprehensive' ? motorComprehensiveloadingOptions : motorThirdPartyloadingOptions
+                            ">
+                        <nz-option [nzValue]="
+                                    option
+                                " [nzLabel]="
+                                    option.heading
+                                "></nz-option>
+                    </div>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+    </div>
+
+    <div *ngIf="selectedExtensionValue">
+        <!-- <nz-form-item>
+            <nz-form-label nzSpan="10">Extension Input
+                Type</nz-form-label>
+            <nz-form-control nzSpan="9">
+                <nz-select [(ngModel)]="
+                        selectedExtensionInputTypeValue
+                    " nzAllowClear nzPlaceHolder="Select input type" [ngModelOptions]="{
+                        standalone: true
+                    }">
+                    <nz-option nzValue="rate" nzLabel="Rate">
+                    </nz-option>
+                    <nz-option nzValue="amount" nzLabel="Amount">
+                    </nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item> -->
+        <div *ngIf="
+                selectedExtensionInputTypeValue ==
+                'amount'
+            ">
+            <nz-form-item>
+                <nz-form-label nzSpan="10" nzRequired>Amount
+                </nz-form-label>
+                <nz-form-control nzSpan="13">
+                    <input nz-input nzPlaceHolder="" type="number" name="extensionAmount" [(ngModel)]="
+                            extensionAmount
+                        " [ngModelOptions]="{
+                            standalone: true
+                        }" />
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div *ngIf="
+                selectedExtensionInputTypeValue ==
+                'rate'
+            ">
+            <nz-form-item>
+                <nz-form-label [nzSpan]="10" nzFor="extensionRate">
+                    Increase limit to
+                </nz-form-label>
+                <nz-form-control nzSpan="9">
+                    <input nz-input [(ngModel)]="
+                            extensionValue
+                        " [ngModelOptions]="{
+                            standalone: true
+                        }" type="number" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="10" nzFor="extensionRate">
+                    Rate
+                </nz-form-label>
+                <nz-form-control nzSpan="9">
+                    <nz-input-group nzCompact>
+                        <input nz-input disabled="true" value="%" style="
+                                            width: 30%;" />
+                        <input nz-input style="
+                                            width: 70%;
+                                        " name="extensionRate" [(ngModel)]="
+                                extensionRate
+                            " [ngModelOptions]="{
+                                standalone: true
+                            }" />
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <nz-form-item>
+            <nz-form-control [nzXs]="{
+                    span: 24,
+                    offset: 4
+                }" [nzSm]="{
+                    span: 20,
+                    offset: 10
+                }">
+                <button nz-button nzType="primary" (click)="
+                        selectedExtensionInputTypeValue ===
+                        'rate'
+                            ? computeExtension()
+                            : addExtensionAmount()
+                    " [nzLoading]="
+                        computeExtensionIsLoading
+                    ">
+                    Add Extensions
+                </button>
+            </nz-form-control>
+        </nz-form-item>
+    </div>
+</div>

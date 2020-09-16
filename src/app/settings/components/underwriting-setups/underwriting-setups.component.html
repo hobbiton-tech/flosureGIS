@@ -6,11 +6,7 @@
                 <div nz-col nzSpan="12">
                     <div style="width: 75%;">
                         <nz-input-group [nzSuffix]="suffixIconSearch">
-                            <input
-                                type="text"
-                                nz-input
-                                placeholder="Search by clause Product Code"
-                            />
+                            <input type="text" nz-input placeholder="Search by Product Name, Product Code" />
                         </nz-input-group>
                         <ng-template #suffixIconSearch>
                             <i nz-icon nzType="search"></i>
@@ -19,17 +15,9 @@
                 </div>
                 <div nz-col nzSpan="12">
                     <div style="width: 35%;">
-                        <nz-select
-                            [(ngModel)]="productClass"
-                            nzPlaceHolder="Select users"
-                            (ngModelChange)="onChange($event)"
-                            nzAllowClear
-                        >
-                            <nz-option
-                                *ngFor="let o of classesList"
-                                [nzValue]="o"
-                                [nzLabel]="o.className"
-                            ></nz-option>
+                        <nz-select [(ngModel)]="productClass" nzPlaceHolder="Select users"
+                            (ngModelChange)="onChange($event)" nzAllowClear>
+                            <nz-option *ngFor="let o of classesList" [nzValue]="o" [nzLabel]="o.className"></nz-option>
                         </nz-select>
                     </div>
                 </div>
@@ -44,11 +32,8 @@
                 </tr>
             </thead>
             <tbody>
-                <tr
-                    *ngFor="let product of productsTable.data"
-                    (click)="onSelectProduct(product)"
-                    style="cursor: pointer;"
-                >
+                <tr *ngFor="let product of productsTable.data" (click)="onSelectProduct(product)"
+                    style="cursor: pointer;">
                     <td>{{ product.productName }}</td>
                     <td>{{ product.productCode }}</td>
                     <td>{{ product.productDescription }}</td>
@@ -59,9 +44,7 @@
         <nz-divider nzType="horizontal"></nz-divider>
         <div style="margin-bottom: 10px;">
             <nz-collapse>
-                <nz-collapse-panel
-                    nzHeader="Policy Wordings and Policy Extensions"
-                >
+                <nz-collapse-panel nzHeader="Policy Wordings and Policy Extensions">
                     <div nz-row [nzGutter]="8">
                         <div nz-col [nzSpan]="12">
                             <nz-card nzTitle="Policy Wordings">
@@ -69,32 +52,20 @@
                                     <div nz-row [nzGutter]="24">
                                         <div nz-col nzSpan="12">
                                             <div style="width: 75%;">
-                                                <nz-input-group
-                                                    [nzSuffix]="
+                                                <nz-input-group [nzSuffix]="
                                                         suffixIconSearch
-                                                    "
-                                                >
-                                                    <input
-                                                        type="text"
-                                                        nz-input
-                                                        placeholder="Search by clause ID, clause type"
-                                                    />
+                                                    ">
+                                                    <input type="text" nz-input
+                                                        placeholder="Search by clause ID, clause type" />
                                                 </nz-input-group>
                                                 <ng-template #suffixIconSearch>
-                                                    <i
-                                                        nz-icon
-                                                        nzType="search"
-                                                    ></i>
+                                                    <i nz-icon nzType="search"></i>
                                                 </ng-template>
                                             </div>
                                         </div>
                                         <div nz-col nzSpan="12">
-                                            <button
-                                                nz-button
-                                                nzType="primary"
-                                                style="float: right;"
-                                                (click)="openWording()"
-                                            >
+                                            <button nz-button nzType="primary" style="float: right;"
+                                                (click)="openWording()">
                                                 Add New Wording
                                             </button>
                                         </div>
@@ -109,11 +80,9 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr
-                                            *ngFor="
+                                        <tr *ngFor="
                                                 let wording of wordingsTable.data
-                                            "
-                                        >
+                                            ">
                                             <td>{{ wording.heading }}</td>
                                             <td>{{ wording.description }}</td>
                                             <td></td>
@@ -128,41 +97,26 @@
                                     <div nz-row [nzGutter]="24">
                                         <div nz-col nzSpan="12">
                                             <div style="width: 75%;">
-                                                <nz-input-group
-                                                    [nzSuffix]="
+                                                <nz-input-group [nzSuffix]="
                                                         suffixIconSearch
-                                                    "
-                                                >
-                                                    <input
-                                                        type="text"
-                                                        nz-input
-                                                        placeholder="Search by Extension Name"
-                                                    />
+                                                    ">
+                                                    <input type="text" nz-input
+                                                        placeholder="Search by Extension Name" />
                                                 </nz-input-group>
                                                 <ng-template #suffixIconSearch>
-                                                    <i
-                                                        nz-icon
-                                                        nzType="search"
-                                                    ></i>
+                                                    <i nz-icon nzType="search"></i>
                                                 </ng-template>
                                             </div>
                                         </div>
                                         <div nz-col nzSpan="12">
-                                            <button
-                                                nz-button
-                                                nzType="primary"
-                                                style="float: right;"
-                                                (click)="openExtension()"
-                                            >
+                                            <button nz-button nzType="primary" style="float: right;"
+                                                (click)="openExtension()">
                                                 Add New Extension
                                             </button>
                                         </div>
                                     </div>
                                 </div>
-                                <nz-table
-                                    #extensionsTable
-                                    [nzData]="extensionList"
-                                >
+                                <nz-table #extensionsTable [nzData]="extensionList">
                                     <thead>
                                         <tr>
                                             <th>Heading</th>
@@ -171,11 +125,9 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr
-                                            *ngFor="
+                                        <tr *ngFor="
                                                 let extension of extensionsTable.data
-                                            "
-                                        >
+                                            ">
                                             <td>{{ extension.heading }}</td>
                                             <td>{{ extension.description }}</td>
                                             <td></td>
@@ -197,11 +149,7 @@
                 <div nz-col nzSpan="12">
                     <div style="width: 75%;">
                         <nz-input-group [nzSuffix]="suffixIconSearch">
-                            <input
-                                type="text"
-                                nz-input
-                                placeholder="Search by clause type"
-                            />
+                            <input type="text" nz-input placeholder="Search by clause type" />
                         </nz-input-group>
                         <ng-template #suffixIconSearch>
                             <i nz-icon nzType="search"></i>
@@ -209,12 +157,7 @@
                     </div>
                 </div>
                 <div nz-col nzSpan="12">
-                    <button
-                        nz-button
-                        nzType="primary"
-                        style="float: right;"
-                        (click)="openClauses()"
-                    >
+                    <button nz-button nzType="primary" style="float: right;" (click)="openClauses()">
                         Add New Clause
                     </button>
                 </div>
@@ -239,32 +182,22 @@
     </nz-card>
 </div>
 
-<nz-drawer
-    [nzClosable]="false"
-    [nzVisible]="isExtensionsVisible"
-    nzPlacement="left"
-    nzTitle="Create Extension"
-    (nzOnClose)="closeExtensions()"
-    [nzWidth]="600"
->
-    <form
-        nz-form
-        [formGroup]="extensionForm"
-        (ngSubmit)="submitExtensionForm()"
-    >
+<nz-drawer [nzClosable]="false" [nzVisible]="isExtensionsVisible" nzPlacement="left" nzTitle="Create Extension"
+    (nzOnClose)="closeExtensions()" [nzWidth]="600">
+    <form nz-form [formGroup]="extensionForm" (ngSubmit)="submitExtensionForm()">
+        <div>
+            <div *ngIf="!productName">
+                <nz-alert nzType="warning" nzMessage="Please Click a Product" nzShowIcon></nz-alert>
+            </div>​
+            <div *ngIf="productName">
+                <nz-alert nzType="success" nzMessage="{{productName}} is Selected" nzShowIcon></nz-alert>
+            </div>​
+        </div>
         <nz-form-item>
             <nz-form-label [nzSpan]="7" nzRequired>Heading</nz-form-label>
-            <nz-form-control
-                [nzSpan]="12"
-                nzHasFeedback
-                nzValidatingTip="Validating..."
-                [nzErrorTip]="extensionHeadingErrorTpl"
-            >
-                <input
-                    nz-input
-                    formControlName="heading"
-                    placeholder="Enter Heading"
-                />
+            <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..."
+                [nzErrorTip]="extensionHeadingErrorTpl">
+                <input nz-input formControlName="heading" placeholder="Enter Heading" />
                 <ng-template #extensionHeadingErrorTpl let-control>
                     <ng-container *ngIf="control.hasError('required')">
                         Please input your wording heading!
@@ -277,18 +210,9 @@
         </nz-form-item>
         <nz-form-item>
             <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
-            <nz-form-control
-                [nzSpan]="12"
-                nzHasFeedback
-                nzValidatingTip="Validating..."
-                [nzErrorTip]="extensionDeailsErrorTpl"
-            >
-                <textarea
-                    formControlName="description"
-                    nz-input
-                    rows="5"
-                    placeholder="Enter Description"
-                ></textarea>
+            <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..."
+                [nzErrorTip]="extensionDeailsErrorTpl">
+                <textarea formControlName="description" nz-input rows="5" placeholder="Enter Description"></textarea>
                 <ng-template #extensionDeailsErrorTpl let-control>
                     <ng-container *ngIf="control.hasError('required')">
                         Please input your details!
@@ -302,11 +226,7 @@
 
         <nz-form-item>
             <nz-form-control [nzOffset]="7" [nzSpan]="12">
-                <button
-                    nz-button
-                    nzType="primary"
-                    [disabled]="!extensionForm.valid"
-                >
+                <button nz-button nzType="primary" [disabled]="!extensionForm.valid">
                     Submit
                 </button>
                 <button nz-button (click)="resetExtensionForm($event)">
@@ -317,28 +237,22 @@
     </form>
 </nz-drawer>
 
-<nz-drawer
-    [nzClosable]="false"
-    [nzVisible]="isClausesVisible"
-    nzPlacement="left"
-    nzTitle="Create Clauses"
-    (nzOnClose)="closeClauses()"
-    [nzWidth]="600"
->
+<nz-drawer [nzClosable]="false" [nzVisible]="isClausesVisible" nzPlacement="left" nzTitle="Create Clauses"
+    (nzOnClose)="closeClauses()" [nzWidth]="600">
     <form nz-form [formGroup]="clauseForm" (ngSubmit)="submitClauseForm()">
+        <div>
+            <div *ngIf="!productName">
+                <nz-alert nzType="warning" nzMessage="Please Click a Product" nzShowIcon></nz-alert>
+            </div>​
+            <div *ngIf="productName">
+                <nz-alert nzType="success" nzMessage="{{productName}} is Selected" nzShowIcon></nz-alert>
+            </div>​
+        </div>
+
         <nz-form-item>
             <nz-form-label [nzSpan]="7" nzRequired>Heading</nz-form-label>
-            <nz-form-control
-                [nzSpan]="12"
-                nzHasFeedback
-                nzValidatingTip="Validating..."
-                [nzErrorTip]="clauseErrorTpl"
-            >
-                <input
-                    nz-input
-                    formControlName="heading"
-                    placeholder="Enter Heading"
-                />
+            <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="clauseErrorTpl">
+                <input nz-input formControlName="heading" placeholder="Enter Heading" />
                 <ng-template #clauseErrorTpl let-control>
                     <ng-container *ngIf="control.hasError('required')">
                         Please input your clause heading!
@@ -351,18 +265,9 @@
         </nz-form-item>
         <nz-form-item>
             <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
-            <nz-form-control
-                [nzSpan]="12"
-                nzHasFeedback
-                nzValidatingTip="Validating..."
-                [nzErrorTip]="clauseDeailsErrorTpl"
-            >
-                <textarea
-                    formControlName="clauseDetails"
-                    nz-input
-                    rows="5"
-                    placeholder="Enter Details"
-                ></textarea>
+            <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..."
+                [nzErrorTip]="clauseDeailsErrorTpl">
+                <textarea formControlName="clauseDetails" nz-input rows="5" placeholder="Enter Details"></textarea>
                 <ng-template #clauseDeailsErrorTpl let-control>
                     <ng-container *ngIf="control.hasError('required')">
                         Please input your clause details!
@@ -376,11 +281,7 @@
 
         <nz-form-item>
             <nz-form-control [nzOffset]="7" [nzSpan]="12">
-                <button
-                    nz-button
-                    nzType="primary"
-                    [disabled]="!clauseForm.valid"
-                >
+                <button nz-button nzType="primary" [disabled]="!clauseForm.valid">
                     Submit
                 </button>
                 <button nz-button (click)="resetClauseForm($event)">
@@ -391,28 +292,22 @@
     </form>
 </nz-drawer>
 
-<nz-drawer
-    [nzClosable]="false"
-    [nzVisible]="isWordingsVisible"
-    nzPlacement="left"
-    nzTitle="Create Wording"
-    (nzOnClose)="closeWordings()"
-    [nzWidth]="600"
->
+<nz-drawer [nzClosable]="false" [nzVisible]="isWordingsVisible" nzPlacement="left" nzTitle="Create Wording"
+    (nzOnClose)="closeWordings()" [nzWidth]="600">
     <form nz-form [formGroup]="wordingForm" (ngSubmit)="submitWordingForm()">
+        <div>
+            <div *ngIf="!productName">
+                <nz-alert nzType="warning" nzMessage="Please Click a Product" nzShowIcon></nz-alert>
+            </div>​
+            <div *ngIf="productName">
+                <nz-alert nzType="success" nzMessage="{{productName}} is Selected" nzShowIcon></nz-alert>
+            </div>​
+        </div>
         <nz-form-item>
             <nz-form-label [nzSpan]="7" nzRequired>Heading</nz-form-label>
-            <nz-form-control
-                [nzSpan]="12"
-                nzHasFeedback
-                nzValidatingTip="Validating..."
-                [nzErrorTip]="wordingHeadingErrorTpl"
-            >
-                <input
-                    nz-input
-                    formControlName="heading"
-                    placeholder="Enter Heading"
-                />
+            <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..."
+                [nzErrorTip]="wordingHeadingErrorTpl">
+                <input nz-input formControlName="heading" placeholder="Enter Heading" />
                 <ng-template #wordingHeadingErrorTpl let-control>
                     <ng-container *ngIf="control.hasError('required')">
                         Please input your wording heading!
@@ -425,18 +320,9 @@
         </nz-form-item>
         <nz-form-item>
             <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
-            <nz-form-control
-                [nzSpan]="12"
-                nzHasFeedback
-                nzValidatingTip="Validating..."
-                [nzErrorTip]="wordingDeailsErrorTpl"
-            >
-                <textarea
-                    formControlName="description"
-                    nz-input
-                    rows="5"
-                    placeholder="Enter Description"
-                ></textarea>
+            <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..."
+                [nzErrorTip]="wordingDeailsErrorTpl">
+                <textarea formControlName="description" nz-input rows="5" placeholder="Enter Description"></textarea>
                 <ng-template #wordingDeailsErrorTpl let-control>
                     <ng-container *ngIf="control.hasError('required')">
                         Please input your details!
@@ -450,11 +336,7 @@
 
         <nz-form-item>
             <nz-form-control [nzOffset]="7" [nzSpan]="12">
-                <button
-                    nz-button
-                    nzType="primary"
-                    [disabled]="!wordingForm.valid"
-                >
+                <button nz-button nzType="primary" [disabled]="!wordingForm.valid">
                     Submit
                 </button>
                 <button nz-button (click)="resetWordingForm($event)">

@@ -1,21 +1,13 @@
-<div
-    style="
+<div style="
         display: flex;
         margin-bottom: 15px;
         align-items: flex-end;
         width: 100%;
-    "
->
+    ">
     <!-- <button nz-button nzType="primary" style="margin-right: 8px;" (click)="htmlToPdf()">
         Download
     </button> -->
-    <button
-        nz-button
-        nzType="primary"
-        [useExistingCss]="true"
-        [printSectionId]="'debitPrintSection'"
-        ngxPrint
-    >
+    <button nz-button nzType="primary" [useExistingCss]="true" [printSectionId]="'debitPrintSection'" ngxPrint>
         Print
     </button>
 </div>
@@ -26,21 +18,19 @@
                 <td colspan="6">
                     <table>
                         <tr>
-                            <td class="title"> <img
-                                src="/assets/images/Savenda-Logo-Final.png"
-                                style="width: 100%; max-width: 100px;"
-                            /></td>
 
-                            <td
-                                style="
+                            <td class="title"> <img src="/assets/images/Savenda-Logo-Final.png"
+                                    style="width: 100%; max-width: 100px;" /></td>
+
+                            <td style="
                                     font-size: 11px;
                                     float: right !important;
-                                "
-                            >
+                                ">
                                 Savenda General Insurance LTD<br />
                                 Plot 20849 PSC Corporate Park, <br />
                                 P.O Box 30363, Lusaka Zambia<br />
                                 Tel: :+260 977 893 878, +260 960 344 478<br />
+
                             </td>
                         </tr>
                     </table>
@@ -66,8 +56,7 @@
                                 : '-'
                         }}
                     </p>
-                    <span style="font-weight: bold;">TPIN:</span
-                    ><span style="font-weight: bold; color: red;"></span>
+                    <span style="font-weight: bold;">TPIN:</span><span style="font-weight: bold; color: red;"></span>
                 </td>
             </tr>
         </table>
@@ -76,111 +65,87 @@
         <table>
             <tr>
                 <td>
-                    <span style="font-weight: bold;"
-                        >Insured: {{ policy.nameOfInsured }}</span
-                    >
+                    <span style="font-weight: bold;">Insured: {{ policy.nameOfInsured }}</span>
                 </td>
                 <td style="float: right !important;">
-                    <span style="font-weight: bold;"
-                        >Date:
+                    <span style="font-weight: bold;">Date:
                         {{
                             policyDebitNote
                                 ? (policyDebitNote.dateCreated | date)
                                 : '-'
-                        }}</span
-                    >
+                        }}</span>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <span style="font-weight: bold;"
-                        >Address: {{ client ? client.address : '-' }}</span
-                    >
+                    <span style="font-weight: bold;">Address: {{ client ? client.address : '-' }}</span>
                 </td>
                 <td style="float: right !important;">
-                    <span style="font-weight: bold;"
-                        >Agent:
+                    <span style="font-weight: bold;">Agent:
                         {{
-                            policy.sourceOfBusiness == 'direct'
+                            policy.sourceOfBusiness.toLocaleLowerCase() == 'direct'
                                 ? 'Direct'
                                 : policy.intermediaryName
-                        }}</span
-                    >
+                        }}</span>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <span style="font-weight: bold;"
-                        >Telephone: {{ client ? client.phone : '-' }}</span
-                    >
+                    <span style="font-weight: bold;">Telephone: {{ client ? client.phone : '-' }}</span>
                 </td>
                 <!-- <td style="float: right !important"><span style="font-weight: bold;">Terms: </span></td> -->
             </tr>
         </table>
         <br />
 
-        <table
-            style="width: 100%; font-size: 12px;"
-            #risksTable
-            nzFrontPagination="false"
-            nzShowPagination="false"
-        >
+        <table style="width: 100%; font-size: 12px;" #risksTable nzFrontPagination="false" nzShowPagination="false">
             <tr class="heading">
                 <th style="border: 1px solid black; border-collapse: collapse;">
                     Binder No.
                 </th>
-                <th
-                    class="td2"
-                    style="border: 1px solid black; border-collapse: collapse;"
-                >
+                <th class="td2" style="border: 1px solid black; border-collapse: collapse;">
                     Cover No.
                 </th>
                 <th style="border: 1px solid black; border-collapse: collapse;">
-                    Insured's Name & Asset
+                    Class
+                </th>
+                <th style="border: 1px solid black; border-collapse: collapse;">
+                    Product
+                </th>
+                <th style="border: 1px solid black; border-collapse: collapse;">
+                    Risk Desc
                 </th>
                 <th id="td3" style="border: 1px solid black;">
-                    Premium ({{ policy.currency == 'ZMW' ? 'K' : '$' }})
+                    Premium ({{ policy.currency == 'ZMW' ? 'ZMW' : 'USD' }})
                 </th>
             </tr>
 
             <tr *ngFor="let risk of policy.risks" class="details">
-                <td
-                    style="border: 1px solid black; border-collapse: collapse;"
-                ></td>
-
-                <td
-                    class="td2"
-                    style="border: 1px solid black; border-collapse: collapse;"
-                >
-                    {{ coverNote(risk) }}
-                </td>
+                <td style="border: 1px solid black; border-collapse: collapse;"></td>
+                <td class="td2" style="border: 1px solid black; border-collapse: collapse;">
+                    {{coverNotes ? coverNote(risk) : '-'}}</td>
                 <td style="border: 1px solid black;">
-                    {{ risk.regNumber }}, {{ risk.vehicleMake }}
-                    {{ risk.vehicleModel }} -
-                    <ng-container *ngIf="risk.insuranceType === 'ThirdParty'">
-                        Third Party
-                    </ng-container>
-                    <ng-container *ngIf="risk.insuranceType === 'ActOnly'">
-                        Act Only Cover
-                    </ng-container>
-                    <ng-container
-                        *ngIf="risk.insuranceType === 'Comprehensive'"
-                    >
-                        Comprehensive
-                    </ng-container>
-                    <ng-container *ngIf="risk.insuranceType === 'FireAndTheft'">
-                        Third Party Fire and Theft
-                    </ng-container>
-                    <!-- {{ risk.insuranceType == 'ThirdParty' ? 'Third Party' : 'Comprehensive' }} -->
+                    {{ policy.class.className }}
                 </td>
-                <td
-                    id="td3"
-                    style="border: 1px solid black; border-collapse: collapse;"
-                >
+                <td style="border: 1px solid black;" *ngIf="policy.class.className == 'Motor'">
+                    {{ risk.insuranceType }}
+                </td>
+                <td style="border: 1px solid black;" *ngIf="policy.class.className == 'Fire'">
+                    {{ risk.property.subClass }}
+                </td>
+                <td style="border: 1px solid black;" *ngIf="policy.class.className == 'Motor'">
+                    {{ risk.vehicle.regNumber }}
+                </td>
+                <td style="border: 1px solid black;" *ngIf="policy.class.className == 'Fire'">
+                    {{ risk.property.propertyId }}
+                </td>
+                <td id="td3" style="border: 1px solid black; border-collapse: collapse;">
                     {{ risk.basicPremium | number: '1.2-2' }}
                 </td>
             </tr>
             <tr>
+                <td></td>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td style="float: right !important; font-weight: bold;">
@@ -193,6 +158,8 @@
             <tr>
                 <td></td>
                 <td></td>
+                <td></td>
+                <td></td>
                 <td style="float: right !important; font-weight: bold;">
                     Insurance Levy 3%:
                 </td>
@@ -201,6 +168,8 @@
                 </td>
             </tr>
             <tr>
+                <td></td>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td style="float: right !important; font-weight: bold;">
@@ -226,21 +195,15 @@
         </p> -->
         <br />
         <p style="font-weight: bold; text-align: left;">
-            Prepared By: ................................................<span
-                style="float: right;"
-            >
-                Sign:...............................................</span
-            >
+            Prepared By: ................................................<span style="float: right;">
+                Sign:...............................................</span>
         </p>
 
         <br />
 
         <p style="font-weight: bold; text-align: left;">
-            Approved By: ................................................<span
-                style="float: right;"
-            >
-                Sign:...............................................</span
-            >
+            Approved By: ................................................<span style="float: right;">
+                Sign:...............................................</span>
         </p>
     </div>
 </div>

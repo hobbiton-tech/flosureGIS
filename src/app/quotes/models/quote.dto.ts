@@ -20,7 +20,7 @@ export interface IQuoteDTO {
     chassisNumber: string;
     color: string;
     estimatedValue?: number;
-    productType: ProductType;
+    productType?: ProductType;
     messageModelId: string;
     description: string;
     coverModelId: string;

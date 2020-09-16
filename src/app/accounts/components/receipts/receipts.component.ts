@@ -19,6 +19,11 @@ import {
 import { AgentsService } from 'src/app/settings/components/agents/services/agents.service';
 import { AllocationsService } from '../../services/allocations.service';
 import { AllocationReceipt } from '../models/allocations.model';
+import { PoliciesService } from '../../../underwriting/services/policies.service';
+import { UserModel } from '../../../users/models/users.model';
+import { ClientsService } from '../../../clients/services/clients.service';
+import { UsersService } from '../../../users/services/users.service';
+import * as jwt_decode from 'jwt-decode';
 
 @Component({
     selector: 'app-receipts',
@@ -52,7 +57,6 @@ export class ReceiptsComponent implements OnInit {
     isReinstateVisible = false;
     isOkBrokerReceiptingLoading = false;
     policyNumber = '';
-    user = '';
     _id = '';
     isVisibleClientType = false;
     isOkClientTypeLoading = false;
@@ -60,6 +64,8 @@ export class ReceiptsComponent implements OnInit {
     // modal
     isReceiptVisible = false;
     isConfirmLoading = false;
+    user: UserModel;
+  loggedIn = localStorage.getItem('currentUser');
 
 
     optionList = [
@@ -89,10 +95,14 @@ export class ReceiptsComponent implements OnInit {
 
     constructor(
         private receiptService: AccountService,
+        private policiesService: PoliciesService,
         private formBuilder: FormBuilder,
         private message: NzMessageService,
         private router: Router,
-        private agentService: AgentsService, private allocationService: AllocationsService, private http: HttpClient,
+        private agentService: AgentsService,
+        private allocationService: AllocationsService,
+        private http: HttpClient,
+        private usersService: UsersService
     ) {
         this.receiptForm = this.formBuilder.group({
           received_from: ['', Validators.required],
@@ -101,10 +111,7 @@ export class ReceiptsComponent implements OnInit {
           payment_method: ['', Validators.required],
           receipt_type: ['', Validators.required],
           narration: ['', Validators.required],
-          date_received: [''],
-          today_date: [''],
-          remarks: [''],
-          cheq_number: [''],
+          cheq_number: ['']
         });
 
         this.cancelForm = this.formBuilder.group({
@@ -122,7 +129,13 @@ export class ReceiptsComponent implements OnInit {
             console.log('===================');
             console.log(this.brokerList);
         });
-        this.receiptService.getPolicies().subscribe((quotes) => {
+
+      const decodedJwtData = jwt_decode(this.loggedIn);
+
+      this.usersService.getUsers().subscribe((users) => {
+        this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+      });
+        this.policiesService.getPolicies().subscribe((quotes) => {
             this.unreceiptedList = _.filter(
                 quotes,
                 (x) => x.receiptStatus === 'Unreceipted'
@@ -137,7 +150,7 @@ export class ReceiptsComponent implements OnInit {
 
         this.receiptService.getReciepts().subscribe((receipts) => {
             this.receiptedList = _.filter(
-                receipts,
+                receipts.data,
                 (x) => x.receipt_status === 'Receipted'
             );
 
@@ -145,13 +158,13 @@ export class ReceiptsComponent implements OnInit {
             console.log(this.receiptedList);
 
             this.cancelReceiptList = _.filter(
-                receipts,
+                receipts.data,
                 (x) => x.receipt_status === 'Cancelled'
             );
 
             console.log('======= Cancelled Receipt List =======');
             console.log(this.cancelReceiptList);
-            this.receiptNewCount = receipts.length;
+            this.receiptNewCount = receipts.data.length;
         });
     }
 
@@ -174,10 +187,10 @@ export class ReceiptsComponent implements OnInit {
               receipt_type: this.receiptForm.controls.receipt_type.value,
               narration: this.receiptForm.controls.narration.value,
               date_received: new Date(),
-              remarks: this.receiptForm.controls.remarks.value,
+              remarks: '',
               cheq_number: this.receiptForm.controls.cheq_number.value,
               on_behalf_of: this.receiptForm.controls.on_behalf_of.value.companyName,
-              captured_by: this.user,
+              captured_by: this.user.ID,
               receipt_status: this.recStatus,
               sum_in_digits: this.receiptForm.controls.sum_in_digits.value,
               today_date: new Date(),
@@ -193,7 +206,8 @@ export class ReceiptsComponent implements OnInit {
               intermediary_name: this.receiptForm.controls.on_behalf_of.value.companyName,
               intermediary_type: 'Broker',
               receipt_number: '',
-              status: 'Unallocated'
+              status: 'Unallocated',
+              remaining_amount: this.receiptForm.controls.sum_in_digits.value
             };
 
             this.http
@@ -212,7 +226,7 @@ export class ReceiptsComponent implements OnInit {
                   this.allocationService.createAllocationReceipt(allocationReceipt).subscribe((resMess) => {}, (errMess) => {
                     this.message.warning('Allocate Receipt Failed');
                   });
-                  this.generateID(this._id);
+                  this.generateID(resN.data.ID);
 
                 },
                 err => {

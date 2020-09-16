@@ -1,0 +1,64 @@
+<nz-modal [(nzVisible)]="isAddChequeLotModalVisible" nzTitle="Cheque Range Setup" [nzContent]="chequeRangeSetupContent"
+    (nzOnCancel)="closeAddChequeLotModal()" (nzOnOk)="closeAddChequeLotModal()" nzWidth="60%">
+
+
+    <ng-template #chequeRangeSetupContent>
+        <nz-spin nzSize="large" nzTip="Adding Cheque Lot...." [nzSpinning]="isAddingChaqueRange">
+            <div>
+                <form nz-form [formGroup]="chequeLotDetailsForm">
+                    <div nz-row>
+                        <div nz-col nzSpan="12">
+                            <nz-form-item>
+                                <nz-form-label nzRequired nzSpan="10">Bank Account</nz-form-label>
+                                <nz-form-control nzSpan="10">
+                                    <nz-select formControlName="bankAccount">
+                                        <div *ngFor="let bankAccount of bankAccounts">
+                                            <nz-option [nzValue]="bankAccount"
+                                                [nzLabel]="bankAccount.bank + ' ' + bankAccount.accountName + ' ' + bankAccount.accountType + ' A/C ' + bankAccount.accountNumber">
+                                            </nz-option>
+                                        </div>
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item>
+                                <nz-form-label nzRequired nzSpan="10">Cheque From</nz-form-label>
+                                <nz-form-control nzSpan="10">
+                                    <input nz-input formControlName="chequeFrom" />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+
+                        <div nz-col nzSpan="12">
+                            <nz-form-item>
+                                <nz-form-label nzRequired nzSpan="10">Lot</nz-form-label>
+                                <nz-form-control nzSpan="10">
+                                    <input nz-input formControlName="chequeLot" />
+                                </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item>
+                                <nz-form-label nzRequired nzSpan="10">Cheque To</nz-form-label>
+                                <nz-form-control nzSpan="10">
+                                    <input nz-input formControlName="chequeTo" />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+
+                    <div style="
+                    text-align: center;
+                    margin-top: 10px;
+                    margin-bottom: 10px;
+                ">
+                        <button nz-button nzType="primary" (click)="addChequeRange()" [nzLoading]="isAddingChaqueRange"
+                            [disabled]="isAddingChaqueRange">
+                            Add Cheque Lot
+                        </button>
+                        <button style="margin-left: 15px;" nz-button nzType="default">
+                            Reset Form
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </nz-spin>
+    </ng-template>
+</nz-modal>

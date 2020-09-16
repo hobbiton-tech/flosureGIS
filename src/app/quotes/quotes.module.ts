@@ -20,18 +20,49 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { WarrantiesComponent } from './components/warranties/warranties.component';
 import { ClausesComponent } from './components/clauses/clauses.component';
 import { PerilsComponent } from './components/perils/perils.component';
+import { LimitsOfLiabilityComponent } from './components/limits-of-liability/limits-of-liability.component';
+import { VehicleDetailsComponent } from './components/vehicle-details/vehicle-details.component';
+import { DiscountsComponent } from './components/discounts/discounts.component';
+import { ExtensionsComponent } from './components/extensions/extensions.component';
+import { ExcessesComponent } from './components/excesses/excesses.component';
+import { PremiumComputationDetailsComponent } from './components/premium-computation-details/premium-computation-details.component';
+import { ViewRiskComponent } from './components/view-risk/view-risk.component';
+import { ExtensionsViewComponent } from './components/extensions-view/extensions-view.component';
+import { PremiumComputationComponent } from './components/premium-computation/premium-computation.component';
+import { TotalsViewComponent } from './components/totals-view/totals-view.component';
+import { DiscountsViewComponent } from './components/discounts-view/discounts-view.component';
+import { FleetUploadComponent } from './components/fleet-upload/fleet-upload.component';
+import { PremiumComputationService } from './services/premium-computation.service';
+import { VehicleDetailsServiceService } from './services/vehicle-details-service.service';
+import { PropertyDetailsComponent } from './components/fire-class/property-details/property-details.component';
+import { FirePremiumComputationDetailsComponent } from './components/fire-class/fire-premium-computation-details/fire-premium-computation-details.component';
+import { FireClassService } from './services/fire-class.service';
+import { FireQuotationsListComponent } from './components/fire-class/fire-quotations-list/fire-quotations-list.component';
+import { AccidentQuotationsListComponent } from './components/accident-class/accident-quotations-list/accident-quotations-list.component';
+import { AccidentPremiumComputationDetailsComponent } from './components/accident-class/accident-premium-computation-details/accident-premium-computation-details.component';
+import { AccidentProductDetailsComponent } from './components/accident-class/accident-product-details/accident-product-details.component';
+import { FireDraftQuoteDocumentComponent } from './documents/fire-class/fire-draft-quote-document/fire-draft-quote-document.component';
+import { UsersRolesComponent } from '../users/components/users-roles/users-roles.component';
+import { AuthGuard } from '../users/helpers/auth.guard';
 const routes: Routes = [
     {
         path: 'create-quote',
-        component: CreateQuoteComponent
+        component: CreateQuoteComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'quotes-list',
-        component: QuotesComponent
+        component: QuotesComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'fire-quotes-list',
+        component: FireQuotationsListComponent
     },
     {
         path: 'quote-details/:quoteNumber',
-        component: QuoteDetailsComponent
+        component: QuoteDetailsComponent,
+        canActivate: [AuthGuard]
     }
 ];
 
@@ -47,6 +78,25 @@ const routes: Routes = [
         WarrantiesComponent,
         ClausesComponent,
         PerilsComponent,
+        LimitsOfLiabilityComponent,
+        VehicleDetailsComponent,
+        DiscountsComponent,
+        ExtensionsComponent,
+        ExcessesComponent,
+        PremiumComputationDetailsComponent,
+        ViewRiskComponent,
+        ExtensionsViewComponent,
+        PremiumComputationComponent,
+        TotalsViewComponent,
+        DiscountsViewComponent,
+        FleetUploadComponent,
+        PropertyDetailsComponent,
+        FirePremiumComputationDetailsComponent,
+        FireQuotationsListComponent,
+        AccidentQuotationsListComponent,
+        AccidentPremiumComputationDetailsComponent,
+        AccidentProductDetailsComponent,
+        FireDraftQuoteDocumentComponent
     ],
     imports: [
         CommonModule,
@@ -59,7 +109,37 @@ const routes: Routes = [
         NgxPrintModule,
         NzDatePickerModule
     ],
-    exports: [QuotesComponent, CreateQuoteComponent],
-    providers: [QuotesService]
+    exports: [
+        QuotesComponent,
+        CreateQuoteComponent,
+        ViewRiskComponent,
+        VehicleDetailsComponent,
+        LimitsOfLiabilityComponent,
+        DiscountsComponent,
+        ExtensionsComponent,
+        ExcessesComponent,
+        PremiumComputationDetailsComponent,
+        ExtensionsViewComponent,
+        PremiumComputationComponent,
+        TotalsViewComponent,
+        DiscountsViewComponent,
+        FleetUploadComponent
+    ],
+    providers: [
+        QuotesService,
+        VehicleDetailsComponent,
+        PropertyDetailsComponent,
+        PremiumComputationComponent,
+        PremiumComputationDetailsComponent,
+        TotalsViewComponent,
+        ExtensionsComponent,
+        DiscountsComponent,
+        LimitsOfLiabilityComponent,
+        ExcessesComponent,
+        PremiumComputationService,
+        VehicleDetailsServiceService,
+        FireClassService,
+        CreateQuoteComponent
+    ]
 })
 export class QuotesModule {}

@@ -45,7 +45,7 @@ export class PolicyCertificateDocumentComponent implements OnInit {
     ngOnInit(): void {}
 
     getYearOfManufacture(risk: RiskModel) {
-        let year: string = moment(risk.yearOfManufacture)
+        let year: string = moment(risk.vehicle.yearOfManufacture)
             .year()
             .toString();
         return year;
@@ -100,7 +100,7 @@ export class PolicyCertificateDocumentComponent implements OnInit {
         });
     }
 
-    convertRiskDate(risk: RiskModel): number {
-        return (risk.riskStartDate as ITimestamp).seconds * 1000;
-    }
+    // convertRiskDate(risk: RiskModel): number {
+    //     return (risk.riskStartDate as ITimestamp).seconds * 1000;
+    // }
 }

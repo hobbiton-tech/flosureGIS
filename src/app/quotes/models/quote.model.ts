@@ -1,13 +1,24 @@
+import { IExtensions } from './extensions.model';
+import {
+    IProductType,
+    ISelectedInsuranceType
+} from './premium-computations.model';
+import { IDiscounts } from './discounts.model';
+import { VehicleDetailsModel } from './vehicle-details.model';
+import { PropertyDetailsModel } from './fire-class/property-details.model';
+import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
+import { IExccess } from 'src/app/settings/models/underwriting/clause.model';
+
 export class MotorQuotationModel {
-    id: string;
-    user: string;
+    id?: string;
+    user: number;
     client: string;
-    quoteNumber: string;
-    dateCreated: Date | ITimestamp;
+    quoteNumber?: string;
+    dateCreated: Date;
     clientCode: string;
     messageCode: string;
     coverCode: string;
-    underwritingYear: Date | ITimestamp;
+    underwritingYear: Date;
     branch: string;
     currency: string;
     risks: RiskModel[];
@@ -18,7 +29,9 @@ export class MotorQuotationModel {
     receiptStatus: ReceiptStatus;
     sourceOfBusiness: string;
     intermediaryName: string;
+    intermediaryId: string;
     quarter: string;
+    class?: IClass;
 }
 
 export class LoadModel {
@@ -28,38 +41,28 @@ export class LoadModel {
 
 export class RiskModel {
     id: string;
-    riskStartDate: Date | ITimestamp;
-    riskEndDate: Date | ITimestamp;
-    riskQuarter: number;
-    regNumber: string;
-    vehicleMake: string;
-    vehicleModel: string;
-    yearOfManufacture: Date;
-    engineNumber: string;
-    chassisNumber: string;
-    cubicCapacity: string;
-    seatingCapacity: string;
-    bodyType: BodyType;
-    color: string;
-    estimatedValue?: number;
-    productType: ProductType;
-    insuranceType: InsuranceType;
+    riskStartDate: Date;
+    riskEndDate: Date;
+    riskQuarter: string;
+    productType: string;
+    insuranceType: string;
     sumInsured?: number;
     premiumRate?: number;
     basicPremium: number;
-    loads: LoadModel[];
-    loadingTotal: number;
-    discountTotal: number;
-    discounts: DiscountModel[];
-    discountSubTotal: number;
-    discountRate: number;
+    extensions?: IExtensions[];
+    extensionsTotal?: number;
+    discountsTotal: number;
+    discounts?: IDiscounts[];
+    discountSubTotal?: number;
     premiumLevy: number;
     netPremium: number;
     numberOfDays: number;
-    expiryQuarter: string;
-    limitsOfLiability: LimitsOfLiability[];
-    excesses: Excess[];
-  LiabilityType: string;
+    expiryQuarter?: string;
+    limitsOfLiability?: LimitsOfLiability[];
+    excesses?: IExccess[];
+    LiabilityType?: string;
+    vehicle?: VehicleDetailsModel;
+    property?: PropertyDetailsModel;
 }
 
 export class MessageModel {

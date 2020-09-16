@@ -1,0 +1,93 @@
+<div>
+    <nz-form-item>
+        <nz-form-label nzSpan="10">Basic Premium
+            Type</nz-form-label>
+        <nz-form-control nzSpan="10">
+            <nz-select [(ngModel)]="
+                        selectedBasicPremiunTypeValue
+                    " nzAllowClear nzPlaceHolder="Select input type" [nzDisabled]="isRiskEditMode" [ngModelOptions]="{
+                        standalone: true
+                    }">
+                <nz-option nzValue="rate" nzLabel="Rate">
+                </nz-option>
+                <nz-option nzValue="amount" nzLabel="Amount">
+                </nz-option>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+
+    <div *ngIf="
+                selectedBasicPremiunTypeValue ==
+                'amount'
+            ">
+        <nz-form-item>
+            <nz-form-label nzSpan="10" nzRequired>Sum
+                Insured</nz-form-label>
+            <nz-form-control nzSpan="12">
+                <input nz-input nzPlaceHolder="" name="sumInsured" type="number" [disabled]="isRiskEditMode"
+                    [(ngModel)]="
+                            sumInsured
+                        " [ngModelOptions]="{
+                            standalone: true
+                        }" />
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label nzSpan="10" nzRequired>Amount
+            </nz-form-label>
+            <nz-form-control nzSpan="12">
+                <input nz-input nzPlaceHolder="" name="basicPremiumAmount" type="number" [disabled]="isRiskEditMode"
+                    [(ngModel)]="
+                            basicPremiumAmount
+                        " [ngModelOptions]="{
+                            standalone: true
+                        }" (ngModelChange)="
+                            changeBasicPremiumAmount()
+                        " />
+            </nz-form-control>
+        </nz-form-item>
+    </div>
+
+
+    <div *ngIf="
+                selectedBasicPremiunTypeValue ==
+                'rate'
+            ">
+        <nz-form-item>
+            <nz-form-label nzSpan="10" nzRequired>Sum
+                Insured</nz-form-label>
+            <nz-form-control nzSpan="12">
+                <input nz-input nzPlaceHolder="" name="sumInsured" type="number" [disabled]="isRiskEditMode"
+                    [(ngModel)]="
+                            sumInsured
+                        " [ngModelOptions]="{
+                            standalone: true
+                        }" (ngModelChange)="
+                            changeSumInsured()
+                        " />
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label nzSpan="10" nzRequired>Premium
+                rate</nz-form-label>
+            <nz-form-control nzSpan="12">
+                <nz-input-group nzCompact>
+                    <input nz-input disabled="true" value="%" style="
+                                        width: 30%;
+                                    " />
+                    <input nz-input nzPlaceHolder="" name="premiumRate" [(ngModel)]="
+                                premiumRate
+                            " style="
+                                        width: 70%;
+                                    " [ngModelOptions]="{
+                                standalone: true
+                            }" (ngModelChange)="
+                                changePremiumRate()
+                            " readonly />
+                </nz-input-group>
+            </nz-form-control>
+        </nz-form-item>
+    </div>
+</div>

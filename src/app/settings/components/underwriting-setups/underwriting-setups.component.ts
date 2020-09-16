@@ -1,27 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import {
     IProduct,
-    IClass,
+    IClass
 } from '../product-setups/models/product-setups-models.model';
 import { ProductSetupsServiceService } from '../product-setups/services/product-setups-service.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {
     IClause,
     IExtension,
-    IWording,
+    IWording
 } from '../../models/underwriting/clause.model';
 import { ClausesService } from './services/clauses.service';
 import { v4 } from 'uuid';
+import { IExtensions } from 'src/app/quotes/models/extensions.model';
 
 @Component({
     selector: 'app-underwriting-setups',
     templateUrl: './underwriting-setups.component.html',
-    styleUrls: ['./underwriting-setups.component.scss'],
+    styleUrls: ['./underwriting-setups.component.scss']
 })
 export class UnderwritingSetupsComponent implements OnInit {
     classesList: IClass[];
     clausesList: IClause[] = [];
-    extensionList: IExtension[] = [];
+    extensionList: IExtensions[] = [];
     wordingList: IWording[] = [];
 
     clauseForm: FormGroup;
@@ -39,11 +40,13 @@ export class UnderwritingSetupsComponent implements OnInit {
 
     productsList: IProduct[] = [];
     productClass: any;
+    currentClass: IClass;
 
     isClausesVisible = false;
     isExtensionsVisible = false;
     isWordingsVisible = false;
     selectedProductId: any;
+    productName: any;
 
     constructor(
         private productsService: ProductSetupsServiceService,
@@ -52,52 +55,56 @@ export class UnderwritingSetupsComponent implements OnInit {
     ) {
         this.clauseForm = formBuilder.group({
             heading: ['', Validators.required],
-            clauseDetails: ['', Validators.required],
+            clauseDetails: ['', Validators.required]
         });
 
         this.extensionForm = formBuilder.group({
             heading: ['', Validators.required],
-            description: ['', Validators.required],
+            description: ['', Validators.required]
         });
 
         this.wordingForm = formBuilder.group({
             heading: ['', Validators.required],
-            description: ['', Validators.required],
+            description: ['', Validators.required]
         });
     }
 
     ngOnInit(): void {
-        this.productsService.getClasses().subscribe((res) => {
+        this.productsService.getClasses().subscribe(res => {
             this.classesList = res;
         });
 
-        this.productClauseService.getProducts().subscribe((res) => {
+        this.productClauseService.getProducts().subscribe(res => {
             console.log('YEEEEEEEE>>>>', res);
         });
 
-        this.productClauseService.getClauses().subscribe((res) => {
+        this.productClauseService.getClauses().subscribe(res => {
             this.clausesList = res;
         });
-        this.productClauseService.getExtensions().subscribe((res) => {
+        this.productClauseService.getExtensions().subscribe(res => {
             this.extensionList = res;
         });
-        this.productClauseService.getWordings().subscribe((res) => {
+        this.productClauseService.getWordings().subscribe(res => {
             this.wordingList = res;
         });
     }
 
     onChange(value) {
-        console.log('WWWWWWWWWWW>>>>>>>>', value);
-        this.productsService.getProducts(value.id).subscribe((res) => {
-            console.log('YEEEEEEEE>>>>', res);
+        // this.productsService.getProducts(value.id).subscribe(res => {
+        //     console.log('YEEEEEEEE>>>>', res);
 
-            this.productsList = res;
-        });
+        //     this.productsList = res;
+        // });
+
+        this.currentClass = this.classesList.filter(x => x.id == value.id)[0];
+
+        this.productsList = this.currentClass.products;
     }
 
     onSelectProduct(product) {
-        console.log('PEEEEEEEE>>>>', product);
+        console.log(product);
         this.selectedProductId = product.id;
+        this.productName = product.productName;
     }
 
     openClauses(): void {
@@ -125,10 +132,9 @@ export class UnderwritingSetupsComponent implements OnInit {
         const clause: IClause = {
             ...this.clauseForm.value,
             id: v4(),
-            productId: this.selectedProductId,
+            productId: this.selectedProductId
         };
         this.productClauseService.addClause(clause);
-        console.log('DDDDDDDDDD>>>>>>>', clause);
         this.isClausesVisible = false;
     }
     resetClauseForm(value) {}
@@ -137,10 +143,9 @@ export class UnderwritingSetupsComponent implements OnInit {
         const extension: IExtension = {
             ...this.extensionForm.value,
             id: v4(),
-            productId: this.selectedProductId,
+            productId: this.selectedProductId
         };
         this.productClauseService.addExtension(extension);
-        console.log('DDDDDDDDDD>>>>>>>', extension);
         this.isExtensionsVisible = false;
     }
     resetExtensionForm(value) {}
@@ -149,10 +154,9 @@ export class UnderwritingSetupsComponent implements OnInit {
         const wording: IWording = {
             ...this.wordingForm.value,
             id: v4(),
-            productId: this.selectedProductId,
+            productId: this.selectedProductId
         };
         this.productClauseService.addWording(wording);
-        console.log('DDDDDDDDDD>>>>>>>', wording);
         this.isWordingsVisible = false;
     }
     resetWordingForm(value) {}

@@ -1,0 +1,35 @@
+<div>
+    <nz-card>
+        <nz-divider nzText="Service Provider Quotations" nzOrientation="left"></nz-divider>
+        <div>
+            <button nz-button nzType="primary" (click)="isAddServiceProviderQuoteModalVisible=true">
+                New Quote
+            </button>
+        </div>
+
+        <div style="margin-top: 10px;">
+            <nz-table #serviceProviderQuotationsTable [nzData]="displayServiceProviderQuotations">
+                <thead>
+                    <tr>
+                        <th>Service Provider</th>
+                        <th>Damage Decription</th>
+                        <th>Quotation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let quote of serviceProviderQuotationsTable.data">
+                        <td>{{ quote.serviceProvider[0] ? quote.serviceProvider[0].name : '' }}</td>
+                        <td>{{ quote.repairesDescription }}</td>
+                        <td>
+                            <a (click)="viewDocument(quote)">view</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </nz-card>
+</div>
+
+<app-add-service-provider-quote [isAddServiceProviderQuoteVisible]="isAddServiceProviderQuoteModalVisible"
+    (closeAddServiceProviderQuoteModal)="isAddServiceProviderQuoteModalVisible=false"
+    (closeAddServiceProviderQuoteModal)="ngOnInit()"></app-add-service-provider-quote>

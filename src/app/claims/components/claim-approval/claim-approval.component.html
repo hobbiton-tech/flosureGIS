@@ -1,0 +1,68 @@
+<nz-spin nzSize="large" nzTip="Claims Loading...." [nzSpinning]="claimApprovalIsLoading">
+    <nz-spin nzSize="large" nzTip="Raising Requisition...." [nzSpinning]="isRaisingRequisition">
+        <div style="margin: 10px;">
+            <div style="margin-bottom: 20px; background: #fff;">
+                <nz-page-header>
+                    <nz-page-header-title>Approved Claims</nz-page-header-title>
+                </nz-page-header>
+            </div>
+
+            <div style="margin-top: 10px;">
+                <nz-card>
+                    <nz-divider nzText="Approved Claims" nzOrientation="left"></nz-divider>
+                    <div style="margin-bottom: 10px; width: 20%;">
+                        <nz-input-group [nzSuffix]="suffixIconSearch">
+                            <input type="text" nz-input placeholder="Search by claim number, client"
+                                [(ngModel)]="searchApprovedClaimsString"
+                                (ngModelChange)="searchApprovedClaims($event)" />
+                        </nz-input-group>
+                        <ng-template #suffixIconSearch>
+                            <i nz-icon nzType="search"></i>
+                        </ng-template>
+                    </div>
+
+                    <nz-table #processedClaimsTable [nzData]="displayApprovedClaimsList" [nzSize]="'small'"
+                        [nzBordered]="true">
+                        <thead>
+                            <tr>
+                                <th [nzAlign]="columnAlignment">Claim Number</th>
+                                <th [nzAlign]="columnAlignment">Client</th>
+                                <th [nzAlign]="columnAlignment">Claimant</th>
+                                <th [nzAlign]="columnAlignment">Claimant Type</th>
+                                <th [nzAlign]="columnAlignment">Policy Number</th>
+                                <th [nzAlign]="columnAlignment">Loss Date</th>
+                                <th [nzAlign]="columnAlignment">Notification Date</th>
+                                <th [nzAlign]="columnAlignment">Status</th>
+                                <th [nzAlign]="columnAlignment">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let claim of displayApprovedClaimsList">
+                                <td [nzAlign]="columnAlignment" (click)="viewClaimDetails(claim)"
+                                    style="cursor: pointer;">{{claim.claimNumber}}</td>
+                                <td [nzAlign]="columnAlignment">
+                                    {{claim.client ? (claim.client.clientType == 'Individual' ? (claim.client.firstName + ' ' + claim.client.lastName) : claim.client.companyName): ''}}
+                                </td>
+                                <td [nzAlign]="columnAlignment">
+                                    {{claim.claimant ?  (claim.claimant.firstName + ' ' + claim.claimant.lastName) : ''}}
+                                </td>
+                                <td [nzAlign]="columnAlignment">{{claim.claimant ? (claim.claimant.type) : ''}}</td>
+                                <td [nzAlign]="columnAlignment">{{claim.policy? (claim.policy.policyNumber) : ''}}</td>
+                                <td [nzAlign]="columnAlignment">{{claim.lossDate | date}}</td>
+                                <td [nzAlign]="columnAlignment">{{claim.notificationDate | date}}</td>
+                                <td [nzAlign]="columnAlignment">{{claim.claimStatus}}</td>
+                                <td [nzAlign]="columnAlignment">
+                                    <button *ngIf="raiseRequisitionPem === isPresent.name || admin === isPresent.name" nz-button nzType="default" style="margin-left: 2px;" nzSize="small"
+                                        nz-popconfirm nzTitle="Raise Requisition?"
+                                        (nzOnConfirm)="raiseRequisition(claim)">
+                                        Raise Requisition
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-card>
+            </div>
+        </div>
+    </nz-spin>
+</nz-spin>

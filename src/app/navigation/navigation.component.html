@@ -5,7 +5,7 @@
         </div>
         <div style="display: flex;">
             <div>
-                {{ loggedIn }}
+                {{ user?.first_name }} {{user?.surname}}
             </div>
             <div style="margin-left: 20px; font-size: 18px; cursor: pointer;">
                 <i nz-icon nzType="bell"></i>
@@ -13,7 +13,7 @@
             <div style="margin-left: 20px; font-size: 18px; cursor: pointer;">
                 <i nz-icon nzType="setting"></i>
             </div>
-            <div style="margin-left: 20px; font-size: 18px; cursor: pointer;" (click)="logout()">
+            <div style="margin-left: 20px; font-size: 18px; cursor: pointer;" (click)="authenticationService.logout()">
                 <i nz-icon nzType="logout"></i>
             </div>
         </div>
@@ -34,25 +34,25 @@
                         <span>Clients</span>
                     </a>
                 </li>
-                <li nz-submenu nzTitle="Quotations" nzIcon="mail">
+                <li *ngIf="underwriting === isPresent?.role_name || admin === isPresent?.role_name" nz-submenu nzTitle="Quotations" nzIcon="mail">
                     <ul>
                         <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/quotes/quotes-list">
+                            <a routerLink="/flosure/quotes/quotes-list" (click)="handleClass('Motor')">
                                 Motor
                             </a>
                         </li>
                         <li nz-menu-item nzDisabled>
-                            <a routerLink="/flosure/quotes/create-quote">Accident</a>
+                            <a routerLink="/flosure/quotes/quotes-list" (click)="handleClass('Accident')">Accident</a>
                         </li>
                         <li nz-menu-item nzDisabled>
-                            <a routerLink="/flosure/quotes/create-quote">Marine</a>
+                            <a routerLink="/flosure/quotes/quotes-list" (click)="handleClass('Marine')">Marine</a>
                         </li>
-                        <li nz-menu-item nzDisabled>
-                            <a routerLink="/flosure/quotes/create-quote">Fire</a>
+                        <li nz-menu-item>
+                            <a routerLink="/flosure/quotes/fire-quotes-list" (click)="handleClass('Fire')">Fire</a>
                         </li>
                     </ul>
                 </li>
-                <li nz-submenu nzTitle="Underwriting" nzIcon="edit">
+                <li nz-submenu *ngIf="underwriting === isPresent?.role_name || admin === isPresent?.role_name" nzTitle="Underwriting" nzIcon="edit">
                     <ul>
                         <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/underwriting/policies">
@@ -113,45 +113,46 @@
                         </li>
                     </ul>
                 </li>
-                <li nz-submenu nzTitle="Claims" nzIcon="question-circle">
+                <li nz-submenu *ngIf="claim === isPresent?.role_name || admin === isPresent?.role_name" nzTitle="Claims" nzIcon="question-circle">
                     <ul>
-                        <li nz-menu-item nzMatchRouter nzDisabled>
+                        <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/claims/claim-transactions">
                                 Claims Listing
                             </a>
                         </li>
-                        <li nz-menu-item nzMatchRouter nzDisabled>
-                            <a routerLink="/flosure/claims/claimants">
-                                Payments
+
+                        <li nz-submenu nzTitle="Claims Processing">
+
+                            <ul>
+                                <li nz-menu-item nzMatchRouter>
+                                    <a routerLink="/flosure/claims/claims-processing">
+                                        Pending Claims
+                                    </a>
+                                </li>
+                                <li nz-menu-item nzMatchRouter>
+                                    <a routerLink="/flosure/claims/claims-processing/processed-claims">
+                                        Processed Claims
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/claims/claim-approval">
+                                Claims Approval
                             </a>
                         </li>
-                        <li nz-menu-item nzMatchRouter nzDisabled>
-                            <a routerLink="/flosure/claims/claimants">
-                                Reopening
-                            </a>
-                        </li>
-                        <li nz-menu-item nzMatchRouter nzDisabled>
+                        <!-- <li nz-menu-item nzMatchRouter nzDisabled>
                             <a routerLink="/flosure/claims/claimants">
                                 Salvages
                             </a>
-                        </li>
-                        <li nz-menu-item nzMatchRouter nzDisabled>
-                            <a routerLink="/flosure/claims/claimants">
-                                Editing
-                            </a>
-                        </li>
+                        </li> -->
                     </ul>
                 </li>
-                <li nz-submenu nzTitle="Client Accounts" nzIcon="dollar">
+                <li nz-submenu *ngIf="finance === isPresent?.role_name || admin === isPresent?.role_name" nzTitle="Client Accounts" nzIcon="dollar">
                     <ul>
                         <li nz-menu-item nzMatchRouter nzDisabled>
                             <a routerLink="/flosure/accounts/receipts">
                                 Accounts Listing
-                            </a>
-                        </li>
-                        <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/accounts/allocations">
-                                Allocations
                             </a>
                         </li>
                         <li nz-menu-item nzMatchRouter nzDisabled>
@@ -159,41 +160,71 @@
                                 Journals
                             </a>
                         </li>
-                        <li nz-menu-item nzMatchRouter>
+                        <li  *ngIf="allocation === isPresentPermission?.name || admin === isPresentPermission?.name" nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/accounts/allocations">
+                                Allocations
+                            </a>
+                        </li>
+
+                        <li  *ngIf="paymentPlan === isPresentPermission?.name || admin === isPresentPermission?.name" nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/accounts/payment-plan">
                                 Payment Plans
                             </a>
                         </li>
+
+                        <!--                        <li nz-menu-item nzMatchRouter>-->
+                        <!--                          <a routerLink="/flosure/accounts/commission-payment">-->
+                        <!--                              Commission Payment-->
+                        <!--                          </a>-->
+                        <!--                      </li>-->
                     </ul>
                 </li>
-                <li nz-submenu nzTitle="Finance" nzIcon="dollar">
+                <li nz-submenu *ngIf="finance === isPresent?.role_name || admin === isPresent?.role_name" nzTitle="Finance" nzIcon="dollar">
                     <ul>
-                        <li nz-menu-item nzMatchRouter>
+                        <li *ngIf="receipting === isPresentPermission?.name || admin === isPresentPermission?.name" nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/accounts/receipts">
-                                Reciepting
+                                Receipting
                             </a>
                         </li>
-                        <li nz-menu-item nzMatchRouter nzDisabled nzDisabled>
-                            <a routerLink="/flosure/accounts/receipts">
-                                Requisitions
-                            </a>
+                        <li nz-submenu nzTitle="Requisitions">
+                            <ul>
+                                <li nz-menu-item nzMatchRouter>
+                                    <a routerLink="/flosure/accounts/requisitions">
+                                        Pending Requisitions
+                                    </a>
+                                </li>
+                                <li nz-menu-item nzMatchRouter>
+                                    <a routerLink="/flosure/accounts/requisitions/approved-requisitions">
+                                        Approved Requisitions
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
-                        <li nz-menu-item nzMatchRouter nzDisabled>
-                            <a routerLink="/flosure/accounts/receipts">
-                                Payments
-                            </a>
+                        <li nz-submenu nzTitle="Payments">
+                            <ul>
+                                <li nz-menu-item nzMatchRouter>
+                                    <a routerLink="/flosure/accounts/payments">
+                                        Pending Payments
+                                    </a>
+                                </li>
+                                <li nz-menu-item nzMatchRouter>
+                                    <a routerLink="/flosure/accounts/payments/approved-payments">
+                                        Approved Payments
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </li>
                 <li nz-submenu nzTitle="Reports" nzIcon="reconciliation">
                     <ul>
 
-                        <li nz-menu-item nzMatchRouter>
+                        <li *ngIf="finance === isPresent?.role_name || admin === isPresent?.role_name" nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/reports/policies">
                                 Debtors
                             </a>
                         </li>
-                        <li nz-menu-item nzMatchRouter>
+                        <li *ngIf="claim === isPresent?.role_name || admin === isPresent?.role_name" nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/reports/claims">Claims</a>
                         </li>
 
@@ -204,36 +235,36 @@
                         </li>
                     </ul>
                 </li>
-                <li nz-submenu nzTitle="Intermediaries" nzIcon="reconciliation">
+                <li nz-submenu *ngIf="finance === isPresent?.role_name || admin === isPresent?.role_name" nzTitle="Intermediaries" nzIcon="reconciliation">
                     <ul>
-                        <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/reports/policies">
-                                Account Listing
-                            </a>
-                        </li>
-                        <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/reports/policies">
+                        <!--                        <li nz-menu-item nzMatchRouter>-->
+                        <!--                            <a routerLink="/flosure/reports/policies">-->
+                        <!--                                Account Listing-->
+                        <!--                            </a>-->
+                        <!--                        </li>-->
+                        <li *ngIf="allocation === isPresentPermission?.name || admin === isPresentPermission?.name" nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/accounts/allocations">
                                 Allocations
                             </a>
                         </li>
+                        <!--                        <li nz-menu-item nzMatchRouter>-->
+                        <!--                            <a routerLink="/flosure/reports/policies">-->
+                        <!--                                Journals-->
+                        <!--                            </a>-->
+                        <!--                        </li>-->
                         <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/reports/policies">
-                                Journals
-                            </a>
-                        </li>
-                        <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/reports/policies">
+                            <a routerLink="/flosure/accounts/commission-payment">
                                 Commission Processing
                             </a>
                         </li>
-                        <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/reports/policies">
-                                Commission Approval
-                            </a>
-                        </li>
+                        <!--                        <li nz-menu-item nzMatchRouter>-->
+                        <!--                            <a routerLink="/flosure/reports/policies">-->
+                        <!--                                Commission Approval-->
+                        <!--                            </a>-->
+                        <!--                        </li>-->
                     </ul>
                 </li>
-                <li nz-submenu nzTitle="User Managenent" nzIcon="user">
+                <li nz-submenu  nzTitle="User Managenent" nzIcon="user">
                     <ul>
                         <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/user-management/users">
@@ -242,12 +273,17 @@
                         </li>
                         <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/user-management/roles-permissions">
-                                Roles and Permisions
+                                Roles and Permissions
                             </a>
                         </li>
+                        <li nz-menu-item nzMatchRouter>
+                          <a routerLink="/flosure/user-management/users-branch">
+                              Branch and SOP
+                          </a>
+                      </li>
                     </ul>
                 </li>
-                <li nz-submenu nzTitle="Settings" nzIcon="setting" style="padding-bottom: 50px;">
+                <li nz-submenu *ngIf="admin === isPresent?.role_name" nzTitle="Settings" nzIcon="setting" style="padding-bottom: 50px;">
                     <ul>
                         <!-- <li nz-menu-item nzMatchRouter>
                             <a
@@ -262,6 +298,9 @@
                             <a routerLink="/flosure/settings/organization-setups">Organizations</a>
                         </li>
                         <li nz-menu-item nzMatchRouter>
+                          <a routerLink="/flosure/settings/organization-setups/departments">Departments</a>
+                      </li>
+                        <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/settings/rates">Rates</a>
                         </li>
                         <li nz-menu-item nzMatchRouter>
@@ -274,13 +313,19 @@
                             <a routerLink="/flosure/settings/accounts">Accounts</a>
                         </li>
                         <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/settings/accounts">Finance</a>
+                            <a routerLink="/flosure/settings/finance">Finance</a>
+                        </li>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/settings/location">Location</a>
                         </li>
                         <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/settings/warranties">Warranties & Exclusions</a>
                         </li>
                         <li nz-menu-item nzMatchRouter>
                             <a routerLink="/flosure/settings/extensions">Extensions</a>
+                        </li>
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/settings/claims">Claims</a>
                         </li>
                     </ul>
                 </li>

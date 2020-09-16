@@ -29,6 +29,7 @@ export class WarrantiesComponent implements OnInit {
     isExclusionVisible: boolean = false;
 
     selectedProductId: any;
+    productName: any;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -69,6 +70,7 @@ export class WarrantiesComponent implements OnInit {
 
     onSelectProduct(product) {
         this.selectedProductId = product.id;
+        this.productName = product.productName;
     }
 
     openWarranty(): void {

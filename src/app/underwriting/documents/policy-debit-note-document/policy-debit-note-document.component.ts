@@ -8,6 +8,8 @@ import {
     IIndividualClient,
     ICorporateClient
 } from 'src/app/clients/models/clients.model';
+import { UsersService } from '../../../users/services/users.service';
+import { UserModel } from '../../../users/models/users.model';
 
 @Component({
     selector: 'app-policy-debit-note-document',
@@ -71,6 +73,7 @@ export class PolicyDebitNoteDocumentComponent implements OnInit {
 
     @Input()
     client: IIndividualClient & ICorporateClient;
+    agent: UserModel;
 
     subTotal: number;
     coverN: CoverNote;
@@ -80,14 +83,16 @@ export class PolicyDebitNoteDocumentComponent implements OnInit {
     generatingPDF = false;
 
     ngOnInit(): void {
-        console.log('recieved debit note:');
-        console.log(this.policyDebitNote);
-        this.subTotal = this.sumArray(this.policy.risks, 'basicPremium');
+
+
+      console.log('recieved debit note:');
+      console.log(this.policyDebitNote);
+      this.subTotal = this.sumArray(this.policy.risks, 'basicPremium');
     }
 
     coverNote(value) {
-        this.coverN = this.coverNotes.filter((x)=> x.policyId === value.id)[0]
-        return this.coverN.certificateNumber;
+        this.coverN = this.coverNotes.filter(x => x.policyId === value.id)[0];
+        return this.coverN ? this.coverN.certificateNumber : null;
     }
 
     htmlToPdf(quality = 1) {
@@ -100,16 +105,16 @@ export class PolicyDebitNoteDocumentComponent implements OnInit {
         };
 
         html2canvas(div, options).then(canvas => {
-            let doc = new jsPDF({
+            const doc = new jsPDF({
                 unit: 'mm',
                 format: 'a4'
             });
-            let imgData = canvas.toDataURL('image/PNG');
+            const imgData = canvas.toDataURL('image/PNG');
             doc.addImage(imgData, 'PNG', 0, 0, 211, 298);
 
-            let pdfOutput = doc.output();
-            let buffer = new ArrayBuffer(pdfOutput.length);
-            let array = new Uint8Array(buffer);
+            const pdfOutput = doc.output();
+            const buffer = new ArrayBuffer(pdfOutput.length);
+            const array = new Uint8Array(buffer);
             for (let i = 0; i < pdfOutput.length; i++) {
                 array[i] = pdfOutput.charCodeAt(i);
             }

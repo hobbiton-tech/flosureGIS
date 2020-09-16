@@ -34,7 +34,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
 
     individualClientForm: FormGroup;
     corporateClientForm: FormGroup;
-    ploicyList: Policy[] = [];
+    policyList: Policy[] = [];
 
     // account: AccountDetails;
     id: string;
@@ -105,7 +105,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
             )[0] as IIndividualClient & ICorporateClient;
 
             this.policyService.getPolicies().subscribe((res) => {
-                this.ploicyList = res.filter((x) => x.clientCode === this.id)
+                this.policyList = res.filter((x) => x.clientCode === this.id)
             })
 
             console.log('CLIENTS', this.client);
@@ -281,13 +281,10 @@ export class ClientDetailsComponent implements OnInit, AfterViewInit {
         this.route.navigateByUrl('/flosure/claims/claim-details');
     }
 
-    getTimeStamp(client: ICorporateClient & IIndividualClient): number {
-        const date = client.dateCreated as ITimestamp;
-        return date.seconds;
-    }
-
-    getDateOfBirthTimeStamp(client: IIndividualClient): number {
-        const date = client.dateOfBirth as ITimestamp;
-        return date.seconds * 1000;
-    }
+  viewClientStatement(id): void {
+    this.route.navigateByUrl('/flosure/accounts/client-statement/'  + id );
+  }
+  viewAgeAnalysis(id): void {
+    this.route.navigateByUrl('/flosure/accounts/age-analysis/'  + id );
+  }
 }

@@ -1,0 +1,105 @@
+<nz-modal [(nzVisible)]="isRequisitionPaymentModalVisible" nzTitle="Requisition Payment" [nzFooter]="null"
+    [nzContent]="requisitionPaymentContent" (nzOnCancel)="closeRequisitionPaymentModal()"
+    (nzOnOk)="closeRequisitionPaymentModal()" nzWidth="90%">
+
+    <ng-template #requisitionPaymentContent>
+        <div>
+            <form nz-form [formGroup]="requisitionPaymentForm">
+                <div nz-row>
+                    <div nz-col nzSpan="8">
+                        <nz-form-item>
+                            <nz-form-label nzRequired nzSpan="10">PV No</nz-form-label>
+                            <nz-form-control nzSpan="10">
+                                <input nz-input formControlName="voucherNumber" />
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label nzRequired nzSpan="10">Bank Account</nz-form-label>
+                            <nz-form-control nzSpan="10">
+                                <nz-select formControlName="bankAccount" (ngModelChange)="changeChequeList()">
+                                    <div *ngFor="let bankAccount of bankAccounts">
+                                        <nz-option [nzValue]="bankAccount"
+                                            [nzLabel]="bankAccount.bank + ' ' + bankAccount.accountName + ' ' + bankAccount.accountType + ' A/C ' + bankAccount.accountNumber">
+                                        </nz-option>
+                                    </div>
+                                </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label nzRequired nzSpan="10">Narration</nz-form-label>
+                            <nz-form-control nzSpan="10">
+                                <textarea formControlName="narrative" nz-input rows="2"></textarea>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+
+                    <div nz-col nzSpan="8">
+                        <nz-form-item>
+                            <nz-form-label nzRequired nzSpan="10">Date</nz-form-label>
+                            <nz-form-control nzSpan="10">
+                                <nz-date-picker formControlName="date"></nz-date-picker>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label nzRequired nzSpan="10">Amount</nz-form-label>
+                            <nz-form-control nzSpan="10">
+                                <input nz-input formControlName="amount" />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+
+                    <div nz-col nzSpan="8">
+                        <nz-form-item>
+                            <nz-form-label nzRequired nzSpan="10">Payee</nz-form-label>
+                            <nz-form-control nzSpan="10">
+                                <input nz-input formControlName="payee" />
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label nzSpan="10" nzRequired>Payment Type</nz-form-label>
+                            <nz-form-control nzSpan="10">
+                                <nz-select formControlName="paymentType" (ngModelChange)="changeSelectedPaymentType()">
+                                    <nz-option nzValue="EFT" nzLabel="EFT"></nz-option>
+                                    <nz-option nzValue="Chaque" nzLabel="Cheque"></nz-option>
+                                    <nz-option nzValue="MobileMoney" nzLabel="Mobile Money"></nz-option>
+                                </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <div *ngIf="selectedPaymentType.value == 'Chaque'">
+                            <nz-form-item>
+                                <nz-form-label nzRequired nzSpan="10">Cheque Lot</nz-form-label>
+                                <nz-form-control nzSpan="10">
+                                    <nz-select formControlName="chequeLot" (ngModelChange)="changeChequeLot()">
+                                        <div *ngFor="let chequeLot of chequeLots">
+                                            <nz-option [nzValue]="chequeLot" [nzLabel]="chequeLot">
+                                            </nz-option>
+                                        </div>
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item>
+                                <nz-form-label nzRequired nzSpan="10">Next Cheque No</nz-form-label>
+                                <nz-form-control nzSpan="10">
+                                    <input nz-input formControlName="specialInstructions" />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 10px;margin-bottom: 10px;">
+                    <button nz-button nzType="primary" (click)="processPayment()" *ngIf="!isPaymentProcesseing">
+                        Process Payment
+                    </button>
+                    <button nz-button nzType="primary" (click)="processPayment()" *ngIf="isPaymentProcesseing"
+                        [nzLoading]="isPaymentProcesseing">
+                        Processing
+                    </button>
+                    <button style="margin-left: 15px;" nz-button nzType="default">
+                        Reset Form
+                    </button>
+                </div>
+            </form>
+        </div>
+    </ng-template>
+</nz-modal>

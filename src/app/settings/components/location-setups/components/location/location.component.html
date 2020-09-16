@@ -1,0 +1,96 @@
+<nz-spin nzSize="large" nzTip="Location Setups Loading...." [nzSpinning]="locationSetupsLoading">
+    <div style="margin: 10px;">
+        <div style="margin-bottom: 20px; background: #fff;">
+            <nz-page-header>
+                <nz-page-header-title>Location Setups</nz-page-header-title>
+            </nz-page-header>
+        </div>
+
+        <nz-card>
+            <nz-divider nzText="Provinces" nzOrientation="left"></nz-divider>
+            <div nz-row [nzGutter]="24">
+                <div nz-col nzSpan="12">
+                    <div style="margin-bottom: 10px; width: 60%;">
+                        <nz-input-group [nzSuffix]="suffixIconSearch">
+                            <input type="text" nz-input placeholder="" [(ngModel)]="searchProvinceString"
+                                placeholder="Search by name, code" (ngModelChange)="searchProvinces($event)" />
+                        </nz-input-group>
+                        <ng-template #suffixIconSearch>
+                            <i nz-icon nzType="search"></i>
+                        </ng-template>
+                    </div>
+                </div>
+
+                <div nz-col nzSpan="12">
+                    <button nz-button nzType="primary" style="float: right;" (click)="addProvince()">Add
+                        Province</button>
+                </div>
+            </div>
+
+            <nz-table #provincesTable [nzData]="displayProvincesList" [nzSize]="'small'" [nzBordered]="true">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Code</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let province of provincesTable.data" style="cursor: pointer;">
+                        <td>{{province.name}}</td>
+                        <td>{{province.code}}</td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </nz-card>
+
+        <div style="margin-top: 10px;">
+            <nz-card>
+                <nz-divider nzText="Cities" nzOrientation="left"></nz-divider>
+                <div nz-row [nzGutter]="24">
+                    <div nz-col nzSpan="12">
+                        <div style="margin-bottom: 10px; width: 60%;">
+                            <nz-input-group [nzSuffix]="suffixIconSearch">
+                                <input type="text" nz-input placeholder="" [(ngModel)]="searchCityString"
+                                    placeholder="Search by name, province, code"
+                                    (ngModelChange)="searchCities($event)" />
+                            </nz-input-group>
+                            <ng-template #suffixIconSearch>
+                                <i nz-icon nzType="search"></i>
+                            </ng-template>
+                        </div>
+                    </div>
+
+                    <div nz-col nzSpan="12">
+                        <button nz-button nzType="primary" style="float: right;" (click)="addCity()">Add City</button>
+                    </div>
+                </div>
+
+                <nz-table #citiesTable [nzData]="displayCitiesList" [nzSize]="'small'" [nzBordered]="true">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Code</th>
+                            <th>Province</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let city of citiesTable.data" style="cursor: pointer;">
+                            <td>{{city.name}}</td>
+                            <td>{{city.code}}</td>
+                            <td>{{city.province.name}}</td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </nz-card>
+        </div>
+    </div>
+
+    <app-add-province [isAddProvinceModalVisible]="isAddProvinceModalVisible"
+        (closeAddProvinceModalEmitter)="isAddProvinceModalVisible=false"
+        (closeProvinceModalEmitter)="updateProvincesTable()"></app-add-province>
+
+    <app-add-city [isAddCityModalVisible]="isAddCityModalVisible"
+        (closeAddCityModalEmitter)="isAddCityModalVisible=false" (closeAddCityModalEmitter)="updateCitiesTable()">
+    </app-add-city>
+
+</nz-spin>

@@ -1,0 +1,145 @@
+<div style="margin: 10px;">
+  <div style="margin-bottom: 10px; background: #fff;">
+
+  <nz-page-header class="site-page-header"  (nzBack)="onBack()" nzBackIcon nzTitle="Commission Payment">
+    <nz-page-header-title>Commission Payment</nz-page-header-title>
+    <nz-page-header-subtitle>Confirm payments</nz-page-header-subtitle>
+
+    <nz-page-header-extra>
+
+      <button nz-button nz-dropdown [nzDropdownMenu]="menu" >{{selectedIntermediary}}</button>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu nzSelectable>
+          <li nz-menu-item *ngFor="let int of typeOfClient" (click) ="selectInt(int)"> {{ int }}</li>
+        </ul>
+      </nz-dropdown-menu>
+
+
+
+    </nz-page-header-extra>
+
+  </nz-page-header>
+
+</div>
+
+<nz-card>
+
+  <nz-page-header-extra>
+    <button nz-button routerLink="/flosure/claims/intimate-claims" nzType="primary">Create</button>
+  </nz-page-header-extra>
+
+  <div style="margin-bottom: 10px; width: 50%;">
+
+
+    <nz-input-group [nzSuffix]="suffixIconSearch">
+      <input type="text" nz-input placeholder="Search by agent name or id" />
+  </nz-input-group>
+  <ng-template #suffixIconSearch>
+      <i nz-icon nzType="search"></i>
+  </ng-template>
+  </div>
+
+  <nz-table
+    #commissionsTable
+    [nzData]="commissionPayments"
+    [nzSize]="'small'"
+    [nzBordered]="true"
+    style="background-color: white;"
+  >
+
+    <thead>
+      <tr>
+          <th>Agent Name</th>
+          <th>Commission Amount</th>
+          <th>Status</th>
+          <th *ngIf=" raise === isPresentPermission?.name || admin === isPresentPermission?.name"></th>
+
+      </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let com of commissionsTable.data">
+
+      <td>{{ com.agent_name }}</td>
+      <td>{{ com.commission_amount }}</td>
+      <td>{{ com.status }}</td>
+      <td *ngIf=" raise === isPresentPermission?.name || admin === isPresentPermission?.name">
+        <div *ngIf="com.status === 'Not Paid'">
+          <button
+            nz-popconfirm
+            nzPopconfirmTitle="Are you sure you wish to proceed"
+            nzPopconfirmPlacement="bottom"
+            (nzOnConfirm)="raiseReq(com)"
+            (nzOnCancel)="cancelReq()" nz-button nzType="primary" nzSize="small">
+            Raise Requisition
+          </button>
+        </div>
+
+      </td>
+  </tr>
+
+  </tbody>
+
+
+  </nz-table>
+
+</nz-card>
+
+<nz-card nzTitle="Requisitions Pending Approval">
+
+  <div style="margin-top: 10px; width: 50%;">
+
+    <nz-input-group [nzSuffix]="suffixIconSearch">
+      <input type="text" nz-input placeholder="Search by requisition number or client name" />
+  </nz-input-group>
+  <ng-template #suffixIconSearch>
+      <i nz-icon nzType="search"></i>
+  </ng-template>
+  </div>
+
+  <nz-table
+    #reqsTable
+    [nzData]="displayPendingRequisitionsList"
+    [nzSize]="'small'"
+    [nzBordered]="true"
+    style="background-color: white;"
+  >
+
+    <thead>
+      <tr>
+          <th>Requisition Number</th>
+        <th>Payee</th>
+          <th>Amount</th>
+          <th>Status</th>
+        <th>Type</th>
+        <th *ngIf=" approve === isPresentPermission?.name || admin === isPresentPermission?.name"></th>
+
+
+      </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let req of reqsTable.data">
+
+      <td>{{ req.requisitionNumber }}</td>
+      <td>{{ req.payee }}</td>
+      <td>{{ req.amount }}</td>
+      <td>{{ req.approvalStatus }}</td>
+      <td>{{ req.paymentType }}</td>
+      <td *ngIf=" approve === isPresentPermission?.name || admin === isPresentPermission?.name">
+          <button nz-button nzType="primary" nzSize="small"(nzOnConfirm)="approveRequisition(req)" nz-popconfirm
+                  nzTitle="Approve Requisition?" *ngIf="!isApprovingRequisition">
+            Approve
+          </button>
+      </td>
+  </tr>
+
+  </tbody>
+  </nz-table>
+
+</nz-card>
+  </div>
+
+
+
+

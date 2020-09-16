@@ -1,20 +1,27 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { MotorQuotationModel, RiskModel } from '../models/quote.model';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import {
     AngularFirestore,
     AngularFirestoreCollection,
-    DocumentReference,
+    DocumentReference
 } from '@angular/fire/firestore';
 import { first } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { NzMessageService } from 'ng-zorro-antd';
 import { Router } from '@angular/router';
+import { VehicleDetailsModel } from '../models/vehicle-details.model';
+import { PropertyDetailsModel } from '../models/fire-class/property-details.model';
+import { InsuranceClassHandlerService } from 'src/app/underwriting/services/insurance-class-handler.service';
+import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
+import { CreateQuoteComponent } from '../components/create-quote/create-quote.component';
+import { InsuranceClassService } from './insurance-class.service';
 
-const BASE_URL = 'http://104.248.247.78:3000';
-// const BASE_URL = 'https://flosure-api.com'
-//const BASE_URL = 'https://flosure-postgres-api.herokuapp.com';
+// const BASE_URL = 'http://104.248.247.78:3000';
+// const BASE_URL = 'https://flosure-postgres-db.herokuapp.com'
 // const BASE_URL = 'https://flosure-api.azurewebsites.net';
+const BASE_URL = 'https://flosure-postgres-db.herokuapp.com';
+
 export interface IQuoteDocument {
     id: string;
     clientID: string;
@@ -42,12 +49,16 @@ interface IQuoteNumberResult {
     quoteNumber: string;
 }
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
-export class QuotesService {
+export class QuotesService implements OnDestroy {
+    classHandlerSubscription: Subscription;
+    currentClass: IClass;
+
     private motorQuoteCollection: AngularFirestoreCollection<
         MotorQuotationModel
     >;
+
     quotations: Observable<MotorQuotationModel[]>;
     quotation: Observable<MotorQuotationModel>;
     quote: MotorQuotationModel;
@@ -61,7 +72,9 @@ export class QuotesService {
         private firebase: AngularFirestore,
         private http: HttpClient,
         private msg: NzMessageService,
-        private readonly router: Router
+        private readonly router: Router,
+        private classHandler: InsuranceClassHandlerService,
+        private insuranceClassService: InsuranceClassService
     ) {
         this.motorQuoteCollection = firebase.collection<MotorQuotationModel>(
             'motor_quotations'
@@ -73,6 +86,12 @@ export class QuotesService {
             'quote-documents'
         );
         this.quoteDocuments = this.quoteDocumentsCollection.valueChanges();
+
+        this.classHandlerSubscription = this.classHandler.selectedClassChanged$.subscribe(
+            currentClass => {
+                this.currentClass = currentClass;
+            }
+        );
     }
     async addQuoteDocuments(document: IQuoteDocument): Promise<void> {
         await this.quoteDocumentsCollection.doc(`${document.id}`).set(document);
@@ -85,7 +104,7 @@ export class QuotesService {
                 .then(() => {
                     console.log(risk);
                 })
-                .catch((err) => {
+                .catch(err => {
                     console.log(err);
                 });
         });
@@ -96,12 +115,12 @@ export class QuotesService {
             .collection('risks')
             .ref.where('quoteNumber', '==', quoteNumber)
             .get()
-            .then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
+            .then(querySnapshot => {
+                querySnapshot.forEach(doc => {
                     console.log(doc.data());
                 });
             })
-            .catch((error) => {
+            .catch(error => {
                 console.log('Error getting documents: ', error);
             });
     }
@@ -119,49 +138,93 @@ export class QuotesService {
         return this.motorQuoteCollection
             .doc(`${quote.id}`)
             .update(quote)
-            .then((res) => {
+            .then(res => {
                 console.log(res);
             })
-            .catch((err) => {
+            .catch(err => {
                 console.log(err);
             });
     }
-    //postgres db
-    createMotorQuotation(motorQuotation: MotorQuotationModel, count) {
-        let insuranceType = '';
-        const productType = motorQuotation.risks[0].insuranceType;
-        if (productType == 'Comprehensive') {
-            insuranceType = '07001';
-        } else {
-            insuranceType = '07002';
-        }
+    // postgres db
+    createMotorQuotation(
+        motorQuotation: MotorQuotationModel,
+        vehicles: VehicleDetailsModel[],
+        properties: PropertyDetailsModel[]
+    ) {
+        const currentClassObj: IClass = JSON.parse(
+            localStorage.getItem('classObject')
+        );
+        // const productType = motorQuotation.risks[0].insuranceType;
+        // if (productType === 'Comprehensive') {
+        //     insuranceType = '07001';
+        // } else {
+        //     insuranceType = '07002';
+        // }
         const quotationNumberRequest: IQuoteNumberRequest = {
-            branch: motorQuotation.branch, //get from db
+            branch: motorQuotation.branch // get from db
         };
         this.http
             .get<any>(
-                `https://number-generation.flosure-api.com/savenda-quote-number/1/${insuranceType}`
+                `https://number-generation.flosure-api.com/savenda-quote-number/1/${currentClassObj.classCode}`
             )
-            .subscribe(async (res) => {
-                motorQuotation.quoteNumber = res.data.quotation_number;
-                console.log('WHAT THE >>>>', motorQuotation);
-                this.http
-                    .post<MotorQuotationModel>(
-                        'https://savenda.flosure-api.com/quotation',
-                        motorQuotation
-                    )
-                    .subscribe(
-                        async (res) => {
-                            this.msg.success('Quotation Successfully Created');
-                            this.router.navigateByUrl(
-                                '/flosure/quotes/quotes-list'
-                            );
-                        },
-                        async (err) => {
-                            this.msg.error('Quotation Creation failed');
-                        }
-                    );
+            .subscribe(
+                async res => {
+                    motorQuotation.quoteNumber = res.data.quotation_number;
+                    console.log('WHAT THE >>>>', motorQuotation);
+                    this.http
+                        .post<MotorQuotationModel>(
+                            `${BASE_URL}/quotation/${currentClassObj.id}`,
+                            motorQuotation
+                        )
+                        .subscribe(
+                            async resq => {
+                                this.msg.success(
+                                    'Quotation Successfully Created'
+                                );
+                                this.insuranceClassService.changeCreatingQuoteStatus(
+                                    false
+                                );
+                                this.router.navigateByUrl(
+                                    '/flosure/quotes/quotes-list'
+                                );
+                                this.addRiskDetails(vehicles, properties);
+                            },
+                            async err => {
+                                this.msg.error('Quotation Creation failed');
+                                this.insuranceClassService.changeCreatingQuoteStatus(
+                                    false
+                                );
+                            }
+                        );
+                },
+                async err => {
+                    console.log(err);
+                    // this.msg.error('Quotation Creation failed');
+                }
+            );
+    }
+
+    addRiskDetails(
+        vehicles: VehicleDetailsModel[],
+        properties: PropertyDetailsModel[]
+    ) {
+        let insuranceClass = 'Fire';
+
+        if (localStorage.getItem('class') == 'Fire') {
+            properties.forEach(property => {
+                this.addProperty(property.risk.id, property).subscribe(res =>
+                    console.log(res)
+                );
             });
+        }
+
+        if (localStorage.getItem('class') == 'Motor') {
+            vehicles.forEach(vehicle => {
+                this.addVehicle(vehicle.risk.id, vehicle).subscribe(res =>
+                    console.log(res)
+                );
+            });
+        }
     }
 
     postRtsa(params) {
@@ -169,24 +232,22 @@ export class QuotesService {
         this.http
             .post<any>(`https://rtsa-api.herokuapp.com/rtsa-savenda`, params)
             .subscribe(
-                async (res) => {
+                async res => {
                     console.log(res);
                 },
-                async (err) => {
+                async err => {
                     console.log(err);
                 }
             );
     }
     getMotorQuotations(): Observable<MotorQuotationModel[]> {
-        return this.http.get<MotorQuotationModel[]>(
-            'https://savenda.flosure-api.com/quotation'
-        );
+        return this.http.get<MotorQuotationModel[]>(`${BASE_URL}/quotation`);
     }
     getMotorQuotationById(
         quotationId: string
     ): Observable<MotorQuotationModel> {
         return this.http.get<MotorQuotationModel>(
-            `https://savenda.flosure-api.com/quotation/${quotationId}`
+            `${BASE_URL}/quotation/${quotationId}`
         );
     }
     updateMotorQuotation(
@@ -194,7 +255,7 @@ export class QuotesService {
         quotationId: string
     ): Observable<MotorQuotationModel> {
         return this.http.put<MotorQuotationModel>(
-            `https://savenda.flosure-api.com/quotation/${quotationId}`,
+            `${BASE_URL}/quotation/${quotationId}`,
             motorQuotation
         );
     }
@@ -219,6 +280,76 @@ export class QuotesService {
             `${BASE_URL}/policies/discount/add`,
             dto
         );
+    }
+
+    // Vehicle details (For Motor Insurance)
+    addVehicle(
+        riskId: string,
+        vehicelDetails: VehicleDetailsModel
+    ): Observable<VehicleDetailsModel> {
+        return this.http.post<VehicleDetailsModel>(
+            `${BASE_URL}/vehicle-details/${riskId}`,
+            vehicelDetails
+        );
+    }
+
+    getVehicles(): Observable<VehicleDetailsModel[]> {
+        return this.http.get<VehicleDetailsModel[]>(
+            `${BASE_URL}/vehicle-details`
+        );
+    }
+
+    getOneVehicle(vehicleId: string): Observable<VehicleDetailsModel> {
+        return this.http.get<VehicleDetailsModel>(
+            `${BASE_URL}/vehicle-details/${vehicleId}`
+        );
+    }
+
+    updateVehicle(
+        vehicleDetails: VehicleDetailsModel,
+        vehicleId: string
+    ): Observable<VehicleDetailsModel> {
+        return this.http.put<VehicleDetailsModel>(
+            `${BASE_URL}/vehicle-details/${vehicleId}`,
+            vehicleDetails
+        );
+    }
+
+    // Property Details (For Fire insurance)
+    addProperty(
+        riskId: string,
+        propertyDetails: PropertyDetailsModel
+    ): Observable<PropertyDetailsModel> {
+        return this.http.post<PropertyDetailsModel>(
+            `${BASE_URL}/property-details/${riskId}`,
+            propertyDetails
+        );
+    }
+
+    getProperties(): Observable<PropertyDetailsModel[]> {
+        return this.http.get<PropertyDetailsModel[]>(
+            `${BASE_URL}/property-details`
+        );
+    }
+
+    getOneProperty(propertyId: string): Observable<PropertyDetailsModel> {
+        return this.http.get<PropertyDetailsModel>(
+            `${BASE_URL}/propert-details/${propertyId}`
+        );
+    }
+
+    updateProperty(
+        propertyDetails: PropertyDetailsModel,
+        propertyId: string
+    ): Observable<PropertyDetailsModel> {
+        return this.http.put<PropertyDetailsModel>(
+            `${BASE_URL}/property-details/${propertyId}`,
+            propertyDetails
+        );
+    }
+
+    ngOnDestroy() {
+        this.classHandlerSubscription.unsubscribe();
     }
 }
 export class PolicyModelPG {

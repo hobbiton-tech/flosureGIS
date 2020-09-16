@@ -1,1 +1,295 @@
-<p>users-permissions works!</p>
+<div style="margin: 10px;">
+  <div style="margin-bottom: 10px; background: #fff;">
+
+    <nz-page-header class="site-page-header"  (nzBack)="onBack()" nzBackIcon nzTitle="User Permissions">
+      <nz-page-header-title>User Permissions</nz-page-header-title>
+      <nz-page-header-subtitle>User Permissions</nz-page-header-subtitle>
+
+      <nz-page-header-extra>
+
+
+
+      </nz-page-header-extra>
+
+    </nz-page-header>
+
+  </div>
+
+  <nz-card>
+
+    <div style="margin-bottom: 10px;">
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzSpan="12">
+          <div style="width: 100%;">
+            <nz-input-group [nzSuffix]="suffixIconSearch">
+              <input
+                type="text"
+                nz-input
+                placeholder="Search by Role name"
+              />
+            </nz-input-group>
+            <ng-template #suffixIconSearch>
+              <i nz-icon nzType="search"></i>
+            </ng-template>
+          </div>
+        </div>
+        <div nz-col nzSpan="12" >
+          <div style="margin-right: 10px">
+            <nz-page-header-extra>
+              <button nz-button nzType="primary" (click)="showRoleModal()">Create</button>
+            </nz-page-header-extra>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <nz-table
+      #rolesTable
+      [nzData]="displayRoles"
+      [nzSize]="'small'"
+      [nzBordered]="true"
+      style="background-color: white;"
+    >
+
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th></th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr
+        style="cursor: pointer;"
+        *ngFor="let role of rolesTable.data"
+      >
+        <td>{{role.role_name}}</td>
+        <td>{{role.description}}</td>
+        <td>
+          <button
+            nz-button
+            nzType="primary"
+            (click)="editRoleModal(role)"
+          >
+            Edit
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </nz-table>
+  </nz-card>
+
+
+  <br>
+
+  <nz-card>
+
+    <div style="margin-bottom: 10px;">
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzSpan="12">
+          <div style="width: 100%;">
+            <nz-input-group [nzSuffix]="suffixIconSearch">
+              <input
+                type="text"
+                nz-input
+                placeholder="Search by Permission name"
+              />
+            </nz-input-group>
+            <ng-template #suffixIconSearch>
+              <i nz-icon nzType="search"></i>
+            </ng-template>
+          </div>
+        </div>
+        <div nz-col nzSpan="12" >
+          <div style="margin-right: 10px">
+            <nz-page-header-extra>
+              <button nz-button nzType="primary" (click)="showPermissionModal()">Create</button>
+            </nz-page-header-extra>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <nz-table
+      #permissionsTable
+      [nzData]="displayPermissions"
+      [nzSize]="'small'"
+      [nzBordered]="true"
+      style="background-color: white;"
+    >
+
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th></th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr
+        style="cursor: pointer;"
+        *ngFor="let permission of permissionsTable.data"
+      >
+        <td>{{permission.name}}</td>
+        <td>{{permission.description}}</td>
+        <td>
+          <button
+            nz-button
+            nzType="primary"
+            (click)="editPermissionModal(permission)"
+          >
+            Edit
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </nz-table>
+
+  </nz-card>
+
+</div>
+
+
+<nz-modal [nzWidth]="900" [(nzVisible)]="isRoleVisible" nzTitle="The first Modal" (nzOnCancel)="handleRoleCancel()" (nzOnOk)="handleRoleOk()">
+  <form [formGroup]="roleForm" nz-form>
+    <div nz-row>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item>
+          <nz-form-label
+            [nzSpan]="8"
+            nzFor="role_name"
+          >Role name</nz-form-label
+          >
+          <nz-form-control
+            [nzSpan]="16"
+            nzErrorTip="Please enter Role name!"
+          >
+            <input
+              nz-input
+              formControlName="role_name"
+              name="role_name"
+              type="text"
+              id="role_name"
+              nzRequired
+              placeholder="ROle Name"
+            />
+            <span
+              class="text-danger"
+              *ngIf="(roleFormControl.role_name.touched || submittedRole) && roleFormControl.role_name.errors?.required"
+            >Please enter Role Name!</span>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item>
+          <nz-form-label
+            [nzSpan]="8"
+            nzFor="description"
+            nzRequired
+          >Description</nz-form-label
+          >
+          <nz-form-control [nzSpan]="16">
+            <input
+              formControlName="description"
+              nz-input
+              name="description"
+              type="text"
+              id="role_description"
+              placeholder="Please Enter Description"
+            />
+            <span
+              class="text-danger"
+              *ngIf="(roleFormControl.description.touched || submittedRole) && roleFormControl.description.errors?.required"
+            >Please enter Description!
+            </span>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+    </div>
+
+
+  </form>
+</nz-modal>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<nz-modal [nzWidth]="900" [(nzVisible)]="isPermissionVisible" nzTitle="The first Modal" (nzOnCancel)="handlePermissionCancel()" (nzOnOk)="handlePermissionOk()">
+  <form [formGroup]="permissionForm" nz-form>
+    <div nz-row>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item>
+          <nz-form-label
+            [nzSpan]="8"
+            nzFor="name"
+          >Permission name</nz-form-label
+          >
+          <nz-form-control
+            [nzSpan]="16"
+            nzErrorTip="Please enter Permission name!"
+          >
+            <input
+              nz-input
+              formControlName="name"
+              name="name"
+              type="text"
+              id="name"
+              nzRequired
+              placeholder="Name"
+            />
+            <span
+              class="text-danger"
+              *ngIf="(permissionFormControl.name.touched || submittedPermission) && permissionFormControl.name.errors?.required"
+            >Please enter Permission name!</span>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item>
+          <nz-form-label
+            [nzSpan]="8"
+            nzFor="description"
+            nzRequired
+          >Description</nz-form-label
+          >
+          <nz-form-control [nzSpan]="16">
+            <input
+              formControlName="description"
+              nz-input
+              name="description"
+              type="text"
+              id="description"
+              placeholder="Please Enter Description"
+            />
+            <span
+              class="text-danger"
+              *ngIf="(permissionFormControl.description.touched || submittedPermission) && permissionFormControl.description.errors?.required"
+            >Please enter Description!
+            </span>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+    </div>
+
+
+  </form>
+</nz-modal>
+
+
+
+

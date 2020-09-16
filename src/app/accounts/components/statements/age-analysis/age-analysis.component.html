@@ -1,0 +1,114 @@
+<nz-spin
+  [nzSize]="'large'"
+  [nzSpinning]="loadingStatement"
+  [nzTip]="'Loading PDF'"
+>
+  <div style="margin: 15px;">
+    <nz-breadcrumb>
+      <nz-breadcrumb-item>
+        Clients
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        Client Details
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        View Age Analysis
+      </nz-breadcrumb-item>
+    </nz-breadcrumb>
+    <nz-page-header nzBackIcon [nzTitle]="title">
+      <ng-template #title>
+        <div style="display: flex; align-items: center;">
+          <span style="margin-right: 8px;">Age Analysis </span>
+        </div>
+      </ng-template>
+      <nz-page-header-extra>
+        <button nz-button nzType="primary" [useExistingCss]="true"
+                [printSectionId]="'printSection'"
+                ngxPrint>
+          Print
+        </button>
+        <button nz-button nzType="primary">
+          Email
+        </button>
+        <button nz-button nzType="primary" (click)="generatePDF()">
+          Download
+        </button>
+      </nz-page-header-extra>
+    </nz-page-header>
+    <nz-card>
+      <!--      <div style="margin-bottom: 10px;">-->
+      <!--        <div nz-row [nzGutter]="24">-->
+      <!--          <div nz-col nzSpan="12">-->
+      <!--            <div style="width: 75%;">-->
+      <!--              <nz-range-picker [ngModel]="period" (ngModelChange)="getPeriod($event)" [nzSize]="'large'"></nz-range-picker>-->
+      <!--            </div>-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--      </div>-->
+      <div id="printSection" style="margin: 20px 20px">
+        <div id='watermark'>
+          <img id='watermarkimg' src="" />
+        </div>
+        <div id='content'>
+          <h2 style='text-transform: uppercase; color: #ffffff'><i><u> Age Analysis</u></i></h2>
+        </div>
+        <div id='head'>
+          <div id='headr'>
+            <div id='logo'>
+              <img id='logo' src="assets/images/Savenda-Logo-Final.png"/><br>
+            </div>
+            <div id='contactInfo'>
+              <fieldset style='font-size:small;margin-left:17em;border: solid #333 1px; border-radius: 7px'>
+                <i>Physical Address</i>: Plot 20849 PSC Corporate Park<br/>
+                <i>Postal Address</i>: P.O Box 30363, Lusaka, Zambia<br/>
+                <i>Lusaka Tel</i>: +260 977 893 878, +260 960 344 478 <br/>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+
+        <div id='foot'>
+          <div style='width:100%;font-size:11px; border: solid gainsboro 1px; border-bottom: solid #333 3px'>
+            <ul style='display: inline; color: #333;'>
+              <li>Date Generated: <b>{{today | date}} </b></li>
+              <li>Client Name: <b>{{ client?.clientType === 'Individual'
+                ? client?.firstName + ' ' + client?.lastName
+                : client?.companyName }}
+              </b>
+              </li>
+                    <li>Currency: <b> </b></li>
+              <!--      <li>Statement period: <b>From  {{start | date}} To {{end | date}} </b></li>-->
+            </ul>
+          </div>
+          <div style='width:100%; margin-top: 2%; font-size: 11px;'>
+            <table>
+              <tr>
+                <th>0-30</th>
+                <th>31-60</th>
+                <th>61-90</th>
+                <th>91-120</th>
+                <th>121-180</th>
+                <th>181-365</th>
+                <th>Over 365</th>
+                <th>Open Cash</th>
+                <th>Total Outstanding</th>
+              </tr>
+              <tr  *ngFor="let statement of this.transactionList">
+                <td> {{ageThirty(statement)  | number: '1.2-2'}}</td>
+                <td>{{ageSixty(statement)  | number: '1.2-2'}}</td>
+                <td>{{ageNinety(statement)  | number: '1.2-2'}}</td>
+                <td>{{ageOneTwenty(statement)  | number: '1.2-2'}}</td>
+                <td>{{ageOneEighty(statement)  | number: '1.2-2'}}</td>
+                <td>{{ageAnnual(statement)  | number: '1.2-2'}}</td>
+                <td>{{ageOverAnnual(statement)  | number: '1.2-2'}}</td>
+                <td>{{0  | number: '1.2-2'}}</td>
+                <td>{{getTotalOutstanding(statement)  | number: '1.2-2'}}</td>
+              </tr>
+            </table>
+          </div>
+          <br/>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+</nz-spin>

@@ -1,386 +1,297 @@
-<div
-    style="
+<div style="
         display: flex;
         margin-bottom: 15px;
         align-items: flex-end;
         width: 100%;
-    "
->
-    <!-- <button nz-button nzType="primary" style="margin-right: 8px;" (click)="htmlToPdf()">
-        Download
-    </button> -->
-    <button
-        nz-button
-        nzType="primary"
-        [useExistingCss]="true"
-        [printSectionId]="'draftQuotePrintSection'"
-        ngxPrint
-    >
-        Print
-    </button>
+    ">
+  <!-- <button nz-button nzType="primary" style="margin-right: 8px;" (click)="htmlToPdf()">
+      Download
+  </button> -->
+  <button nz-button nzType="primary" [useExistingCss]="true" [printSectionId]="'draftQuotePrintSection'" ngxPrint>
+    Print
+  </button>
 </div>
 
 <div id="draftQuotePrintSection">
-    <div class="invoice-box">
-        <table>
-            <tr>
-                <p>
-                    <strong style="color: red; font-size: 20px;"
-                        >Draft Quotation</strong
-                    >
-                </p>
-                <p><strong>Quote No: </strong>{{ quoteNumber }}</p>
-            </tr>
-        </table>
-        <table>
-            <tr>
-                <td>
-                    <img style="width: 100px;" src="/assets/images/Savenda-Logo-Final.png" />
-                    <span style="float: right;">
-                        <p style="font-size: 12px;">
-                            Savenda General Insurance LTD<br />
-                            Plot 20849 PSC Corporate Park, <br />
-                            P.O Box 30363, Lusaka Zambia<br />
-                            Tel: :+260 977 893 878, +260 960 344 478<br />
-                        </p>
-                    </span>
-                </td>
-            </tr>
+  <div class="invoice-box">
+    <table>
+      <tr>
+        <p><strong style="color: red; font-size: 20px;">Draft Quotation</strong></p>
+        <p><strong>Quote
+            No: </strong>{{quoteNumber}}</p>
+      </tr>
+    </table>
+    <table>
+      <tr>
+        <td>
+          <img src="/assets/images/apluslogo.png" />
+          <span style="float: right;">
+            <p style="font-size: 12px;">
+              Savenda General Insurance LTD<br />
+              Plot 20849 PSC Corporate Park, <br />
+              P.O Box 30363, Lusaka Zambia<br />
+              Tel: :+260 977 893 878, +260 960 344 478<br />
+            </p>
+          </span>
+        </td>
+      </tr>
 
-            <hr style="width: 100%; height: 2px; background-color: red;" />
+      <hr style="width:100%; height:2px; background-color: red;">
 
-            <tr class="information">
-                <td colspan="2">
-                    <p style="text-align: center;">
-                        <strong>INSURANCE QUOTATION SLIP</strong>
-                    </p>
-                </td>
-            </tr>
+      <tr class="information">
+        <td colspan="2">
+          <p style="text-align: center;"><strong>INSURANCE QUOTATION SLIP</strong></p>
 
-            <hr style="width: 100%; height: 2px; background-color: black;" />
+        </td>
+      </tr>
 
-            <table>
-                <tr>
-                    <td><strong>Date</strong></td>
-                    <td><strong>:</strong></td>
-                    <td>
-                        <span>{{ dateCreated | date }}</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td><strong>Name Of insured</strong></td>
-                    <td><strong>:</strong></td>
-                    <td>
-                        <span>{{ quoteData.client }}</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td><strong>Postal Address</strong></td>
-                    <td><strong>:</strong></td>
-                    <td><span>NIL</span></td>
-                </tr>
-                <tr>
-                    <td><strong>Period Of Insurance</strong></td>
-                    <td><strong>:</strong></td>
-                    <td><span>One year from date to be advised</span></td>
-                </tr>
-                <tr>
-                    <td><strong>Validity Period</strong></td>
-                    <td><strong>:</strong></td>
-                    <td><span>Thirty (30) days</span></td>
-                </tr>
-                <tr>
-                    <td><strong>Agency/Contact Person</strong></td>
-                    <td><strong>:</strong></td>
-                    <td>
-                        <span>{{
-                            quoteData.sourceOfBusiness == 'direct'
-                                ? 'Direct'
-                                : quoteData.intermediaryName
-                        }}</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td><strong>Prepared By:</strong></td>
-                    <td><strong>:</strong></td>
-                    <td><span></span></td>
-                </tr>
-            </table>
+      <hr style="width:100%; height:2px; background-color: black;">
 
-            <hr style="width: 100%; height: 2px; background-color: black;" />
+      <table>
+        <tr>
+          <td><strong>Date</strong></td>
+          <td><strong>:</strong></td>
+          <td><span>{{dateCreated | date}}</span></td>
+        </tr>
+        <tr>
+          <td><strong>Name Of insured</strong></td>
+          <td><strong>:</strong></td>
+          <td><span>{{quoteData.client}}</span></td>
+        </tr>
+        <tr>
+          <td><strong>Postal Address</strong></td>
+          <td><strong>:</strong></td>
+          <td><span>NIL</span></td>
+        </tr>
+        <tr>
+          <td><strong>Period Of Insurance</strong></td>
+          <td><strong>:</strong></td>
+          <td><span><strong>From: </strong> {{ quoteData?.startDate | date }} <strong>To: </strong>
+              {{quoteData?.endDate | date}}</span></td>
+        </tr>
+        <tr>
+          <td><strong>Validity Period</strong></td>
+          <td><strong>:</strong></td>
+          <td><span>Thirty (30) days</span></td>
+        </tr>
+        <tr>
+          <td><strong>Agency/Contact Person</strong></td>
+          <td><strong>:</strong></td>
+          <td><span>{{quoteData.sourceOfBusiness == 'Direct' ? 'Direct' : quoteData.intermediaryName}}</span>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Prepared By:</strong></td>
+          <td><strong>:</strong></td>
+          <td><span>{{user?.first_name}} {{user?.surname}}</span></td>
+        </tr>
+      </table>
 
-            <tr class="information">
-                <td colspan="2">
-                    We refer to the above subject and your quotation request
-                    dated
-                    <strong>{{ dateCreated | date }}</strong>
-                    and we are pleased to submit our indicative insurance terms
-                    of cover valid for 30 days as follows:
-                    <br />
-                </td>
-            </tr>
+      <hr style="width:100%; height:2px; background-color: black;">
 
-            <tr class="information">
-                <td colspan="2">
-                    <p
-                        style="
-                            text-align: center;
-                            background-color: skyblue;
-                            color: aliceblue;
-                        "
-                    >
-                        {{
-                            quoteData.risks[0].insuranceType == 'Comprehensive'
-                                ? 'COMPREHENSIVE'
-                                : 'THIRD PARTY'
-                        }}
-                    </p>
-                    <br />
-                </td>
-            </tr>
+      <tr class="information">
+        <td colspan="2">
+          We refer to the above subject and your quotation request dated
+          <strong>{{dateCreated | date}}</strong>
+          and
+          we are pleased to submit our
+          indicative insurance terms of cover valid for 30 days as follows:
+          <br />
+        </td>
+      </tr>
 
-            <table>
-                <tr class="information">
-                    <td colspan="2"><strong>Description of cover</strong></td>
-                    <td><strong>:</strong></td>
-                    <td>
-                        <span
-                            >Loss or damage to the insured vehicle (Political
-                            Riot and Strike excluded) and indemnity against all
-                            sums legally liable to pay to other parties for
-                            bodily injury, property damage arising from use of
-                            the Insured vehicle.</span
-                        >
-                    </td>
-                </tr>
+      <tr class="information">
+        <td colspan="2">
+          <p style="text-align: center; background-color: skyblue; color: aliceblue;">
+            {{quoteData?.class?.className}}
+          </p>
+          <br />
+        </td>
+      </tr>
 
-                <tr class="information">
-                    <td colspan="2"><strong>Basis of coverage</strong></td>
-                    <td><strong>:</strong></td>
-                    <td><span>Loss Occurring Basis</span></td>
-                </tr>
+      <table>
+        <tr class="information">
+          <td colspan="2"><strong>Description of cover</strong></td>
+          <td><strong>:</strong></td>
+          <td><span>Loss or damage to the insured vehicle
+              (Political Riot
+              and Strike excluded) and indemnity against all
+              sums legally liable to pay to other parties for
+              bodily injury, property damage arising from use of the Insured vehicle.</span></td>
+        </tr>
 
-                <tr class="information">
-                    <td colspan="2"><strong>Interest</strong></td>
-                    <td><strong>:</strong></td>
-                    <td><span>Motor Vehicles</span></td>
-                </tr>
-            </table>
+        <tr class="information">
+          <td colspan="2"><strong>Basis of coverage</strong></td>
+          <td><strong>:</strong></td>
+          <td><span>Loss Occurring Basis</span></td>
+        </tr>
 
-            <tr class="information">
-                <td colspan="2">
-                    <nz-table
-                        style="width: 100%;"
-                        nzSize="small"
-                        #risksTable
-                        [nzData]="risks"
-                        nzFrontPagination="false"
-                        nzShowPagination="false"
-                    >
-                        <tr style="font-size: 15;">
-                            <th style="border: 1px solid black;">MAKE</th>
-                            <th style="border: 1px solid black;">MODEL</th>
-                            <th style="border: 1px solid black;">REG NO.</th>
-                            <th style="border: 1px solid black;">
-                                SUM INSURED({{ quoteData.currency }})
-                            </th>
-                            <th style="border: 1px solid black;">RATE(%)</th>
-                            <th style="border: 1px solid black;">
-                                PREMIUM({{ quoteData.currency }})
-                            </th>
-                            <th style="border: 1px solid black;">
-                                LEVY @3%({{ quoteData.currency }})
-                            </th>
-                            <th style="border: 1px solid black;">
-                                TOTAL({{ quoteData.currency }})
-                            </th>
-                        </tr>
-                        <tr *ngFor="let risk of risksTable.data">
-                            <td style="border: 1px solid black;">
-                                {{ risk.vehicleMake }}
-                            </td>
-                            <td style="border: 1px solid black;">
-                                {{ risk.vehicleModel }}
-                            </td>
-                            <td style="border: 1px solid black;">
-                                {{ risk.regNumber }}
-                            </td>
-                            <td style="border: 1px solid black;">
-                                {{ risk.sumInsured | number: '1.2-2' }}
-                            </td>
-                            <td style="border: 1px solid black;">
-                                {{
-                                    quoteData.risks[0].insuranceType ==
-                                    'Comprehensive'
-                                        ? '5'
-                                        : '-'
-                                }}
-                            </td>
-                            <td style="border: 1px solid black;">
-                                {{ risk.basicPremium | number: '1.2-2' }}
-                            </td>
-                            <td style="border: 1px solid black;">
-                                {{ risk.premiumLevy | number: '1.2-2' }}
-                            </td>
-                            <td style="border: 1px solid black;">
-                                {{ risk.netPremium | number: '1.2-2' }}
-                            </td>
-                        </tr>
-                    </nz-table>
-                    <br />
-                </td>
-            </tr>
+        <tr class="information">
+          <td colspan="2"><strong>Interest</strong></td>
+          <td><strong>:</strong></td>
+          <td><span>Motor Vehicles</span></td>
+        </tr>
+      </table>
 
-            <table>
-                <tr>
-                    <td><strong>Total Sum Insured</strong></td>
-                    <td><strong>:</strong></td>
-                    <td>
-                        <span>
-                            {{ quoteData.currency }}
-                            {{ totalSumInsured | number: '1.2-2' }}</span
-                        >
-                    </td>
-                </tr>
+      <tr class="information">
+        <td colspan="2">
+          <nz-table style="width: 100%;" nzSize="small" #risksTable [nzData]="risks" nzFrontPagination="false"
+            nzShowPagination="false">
+      <tr style="font-size: 15;">
+        <th style="border: 1px solid black;">MAKE</th>
+        <th style="border: 1px solid black;">MODEL</th>
+        <th style="border: 1px solid black;">REG NO.</th>
+        <th style="border: 1px solid black;">SUM INSURED({{quoteData.currency}}) </th>
+        <th style="border: 1px solid black;">RATE(%)</th>
+        <th style="border: 1px solid black;">PREMIUM({{quoteData.currency}}) </th>
+        <th style="border: 1px solid black;">LEVY @3%({{quoteData.currency}}) </th>
+        <th style="border: 1px solid black;">TOTAL({{quoteData.currency}}) </th>
+      </tr>
+      <tr *ngFor="let risk of risksTable.data">
+        <td style="border: 1px solid black;">{{risk?.vehicle?.vehicleMake}}</td>
+        <td style="border: 1px solid black;">{{risk?.vehicle?.vehicleModel}}</td>
+        <td style="border: 1px solid black;">{{risk?.vehicle?.regNumber}}</td>
+        <td style="border: 1px solid black;">{{risk.sumInsured | number: '1.2-2'}}</td>
+        <td style="border: 1px solid black;">
+          {{quoteData.risks[0].insuranceType == 'Comprehensive' ? '5' : '-'}}
+        </td>
+        <td style="border: 1px solid black;">{{risk.basicPremium | number: '1.2-2'}}</td>
+        <td style="border: 1px solid black;">{{risk.premiumLevy | number: '1.2-2'}}</td>
+        <td style="border: 1px solid black;">{{risk.netPremium | number: '1.2-2'}}</td>
+      </tr>
+      </nz-table>
+      <br />
+      </td>
+      </tr>
 
-                <tr>
-                    <td><strong>Rate</strong></td>
-                    <td><strong>:</strong></td>
-                    <td>
-                        <span>{{ quoteData.risks[0].premiumRate }}</span>
-                    </td>
-                </tr>
+      <table>
+        <tr>
+          <td><strong>Total Sum Insured</strong></td>
+          <td><strong>:</strong></td>
+          <td><span> {{quoteData ? quoteData.currency : '-'}} {{totalSumInsured | number: '1.2-2'}}</span>
+          </td>
+        </tr>
 
-                <tr>
-                    <td><strong>Basic Premium</strong></td>
-                    <td><strong>:</strong></td>
-                    <td>
-                        <span>
-                            {{ quoteData.currency }}
-                            {{ totalBasicPremium | number: '1.2-2' }}</span
-                        >
-                    </td>
-                </tr>
+        <tr>
+          <td><strong>Rate</strong></td>
+          <td><strong>:</strong></td>
+          <td><span>{{quoteData.risks ? quoteData.risks[0].premiumRate : '-'}}</span></td>
+        </tr>
 
-                <tr>
-                    <td><strong>Levy @ 3%</strong></td>
-                    <td><strong>:</strong></td>
-                    <td>
-                        <span>
-                            {{ quoteData.currency }}
-                            {{ totalLevy | number: '1.2-2' }}</span
-                        >
-                    </td>
-                </tr>
+        <tr>
+          <td><strong>Basic Premium</strong></td>
+          <td><strong>:</strong></td>
+          <td><span> {{quoteData ? quoteData.currency : '-'}}
+              {{totalBasicPremium | number: '1.2-2'}}</span>
+          </td>
+        </tr>
 
-                <tr>
-                    <td><strong>Total Premium</strong></td>
-                    <td><strong>:</strong></td>
-                    <td>
-                        <span>
-                            {{ quoteData.currency }}
-                            {{ totalNetPremium | number: '1.2-2' }}</span
-                        >
-                    </td>
-                </tr>
+        <tr>
+          <td><strong>Levy @ 3%</strong></td>
+          <td><strong>:</strong></td>
+          <td><span> {{quoteData ? quoteData.currency : '-'}} {{totalLevy | number: '1.2-2'}}</span></td>
+        </tr>
 
-                <tr>
-                    <td><strong>Basic Excess</strong></td>
-                    <td><strong>:</strong></td>
-                    <!-- <td><span>10% minimum K1,000.00 each claim – all other losses (Own damage and TPPD)</span></td> -->
-                </tr>
+        <tr>
+          <td><strong>Total Premium</strong></td>
+          <td><strong>:</strong></td>
+          <td><span> {{quoteData ? quoteData.currency : '-'}} {{totalNetPremium | number: '1.2-2'}}</span>
+          </td>
+        </tr>
 
-                <tr *ngFor="let exc of excessList">
-                    <td></td>
-                    <td><strong>:</strong></td>
-                    <td>
-                        <span>{{ exc.excessType }} {{ exc.amount }}</span>
-                    </td>
-                </tr>
+        <tr>
+          <td><strong>Basic Excess</strong></td>
+          <td><strong>:</strong></td>
+          <td *ngFor="let exc of excessList"><span>{{exc.description}}
+              {{' '}}{{quoteData.currency}}{{' '}}{{exc.amount}}</span></td>
+        </tr>
 
-                <tr>
-                    <td><strong>Conditions/Warranties</strong></td>
-                    <td><strong>:</strong></td>
-                    <td><span>As per standard policy</span></td>
-                </tr>
+        <!-- <tr *ngFor="let exc of excessList">
+          <td></td>
+          <td><strong>:</strong></td>
+          <td><span>{{exc.description}} {{' '}}{{exc.amount}}</span>
+          </td>
+        </tr> -->
 
-                <tr>
-                    <td><strong>Limits of Liability</strong></td>
-                    <td><strong>:</strong></td>
-                    <td>
-                        <span>
-                            <div *ngFor="let lol of limitsOfLiabilities">
-                                {{ lol.liabilityType }} {{ quoteData.currency
-                                }}{{ lol.amount }}<br />
-                            </div>
-                        </span>
-                    </td>
-                </tr>
+        <tr>
+          <td><strong>Conditions/Warranties</strong></td>
+          <td><strong>:</strong></td>
+          <td><span>As per standard policy</span></td>
+        </tr>
 
-                <tr>
-                    <td><strong>Territorial Clause</strong></td>
-                    <td><strong>:</strong></td>
-                    <td><span>Zambia</span></td>
-                </tr>
+        <tr>
+          <td><strong>Limits of Liability</strong></td>
+          <td><strong>:</strong></td>
+          <td><span>
+              <div *ngFor="let lol of limitsOfLiabilities">
+                {{lol.liabilityType}} {{quoteData.currency}}{{lol.amount}}<br />
+              </div>
+            </span></td>
+        </tr>
 
-                <tr>
-                    <td><strong>Jurisdiction Clause</strong></td>
-                    <td><strong>:</strong></td>
-                    <td><span>Zambia</span></td>
-                </tr>
+        <tr>
+          <td><strong>Territorial Clause</strong></td>
+          <td><strong>:</strong></td>
+          <td><span>Zambia</span></td>
+        </tr>
 
-                <tr>
-                    <td><strong>Conditions</strong></td>
-                    <td><strong>:</strong></td>
-                    <td><span>As per standard policy</span></td>
-                </tr>
+        <tr>
+          <td><strong>Jurisdiction Clause</strong></td>
+          <td><strong>:</strong></td>
+          <td><span>Zambia</span></td>
+        </tr>
 
-                <tr>
-                    <td><strong>Warranties</strong></td>
-                    <td><strong>:</strong></td>
-                    <td><span>As per standard policy</span></td>
-                </tr>
+        <tr>
+          <td><strong>Conditions</strong></td>
+          <td><strong>:</strong></td>
+          <td><span>As per standard policy</span></td>
+        </tr>
 
-                <tr>
-                    <td><strong>Exclusions (Among Others)</strong></td>
-                    <td><strong>:</strong></td>
-                    <td><span>As follows</span></td>
-                </tr>
+        <tr>
+          <td><strong>Warranties</strong></td>
+          <td><strong>:</strong></td>
+          <td><span>As per standard policy</span></td>
+        </tr>
 
-                <!-- <tr>
-                    <td>
-                        <span>
-                            <ul>
-                                <li>Consequential Loss of any kind</li>
-                                <li>Unlicensed Drivers</li>
-                                <li>Driving under the influence of Alcohol/Drugs</li>
-                                <li>Damage to tires due to application of brakes</li>
-                                <li>Depreciation, Mechanical or electrical failures or breakages</li>
-                                <li>Political Risks</li>
-                                <li>Terrorism &amp; War Risks</li>
-                            </ul>
-                        </span>
-                    </td>
-                </tr> -->
-            </table>
+        <tr>
+          <td><strong>Exclusions (Among Others)</strong></td>
+          <td><strong>:</strong></td>
+          <td><span>As follows</span></td>
+        </tr>
 
-            <tr class="information">
-                <td colspan="2">
-                    <strong
-                        >We trust you will find our terms competitive and now
-                        await your placing slip. Should you have any query
-                        please feel free to contact us.</strong
-                    >
-                    <br />
-                </td>
-            </tr>
+        <!-- <tr>
+            <td>
+                <span>
+                    <ul>
+                        <li>Consequential Loss of any kind</li>
+                        <li>Unlicensed Drivers</li>
+                        <li>Driving under the influence of Alcohol/Drugs</li>
+                        <li>Damage to tires due to application of brakes</li>
+                        <li>Depreciation, Mechanical or electrical failures or breakages</li>
+                        <li>Political Risks</li>
+                        <li>Terrorism &amp; War Risks</li>
+                    </ul>
+                </span>
+            </td>
+        </tr> -->
+      </table>
 
-            <tr class="information">
-                <td colspan="2">
-                    <strong>Regards</strong>
-                    <br />
-                </td>
-            </tr>
-        </table>
-    </div>
+      <tr class="information">
+        <td colspan="2">
+          <strong>We trust you will find our terms competitive and now await your placing slip. Should you
+            have
+            any query please feel free to
+            contact us.</strong>
+          <br />
+        </td>
+      </tr>
+
+      <tr class="information">
+        <td colspan="2">
+          <strong>Regards</strong>
+          <br />
+        </td>
+      </tr>
+    </table>
+  </div>
 </div>

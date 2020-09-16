@@ -172,4 +172,5 @@
 </app-add-cover-type>
 
 <app-add-peril [isAddPerilFormDrawerVisible]="addPerilFormDrawerVisible" [selectedProductId]="clickedProductId"
-    (closeAddPerilFormDrawerVisible)="addPerilFormDrawerVisible = false"></app-add-peril>
+    [productName]="selectedProductName" (closeAddPerilFormDrawerVisible)="addPerilFormDrawerVisible = false">
+</app-add-peril>

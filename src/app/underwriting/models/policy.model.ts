@@ -1,5 +1,6 @@
 import { RiskModel } from 'src/app/quotes/models/quote.model';
-import { DebitNote } from '../documents/models/documents.model';
+import { DebitNote, CreditNote } from '../documents/models/documents.model';
+import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
 
 export class Policy {
     id: string;
@@ -14,25 +15,29 @@ export class Policy {
     branch: string;
     insuranceCompany: string;
     currency: Currency;
-    preparedBy: string;
+    preparedBy: number;
     status: PolicyStatus;
     timeOfIssue: string | ITimestamp;
     expiryDate: Date | ITimestamp;
     dateOfIssue: string | ITimestamp;
     quarter: string;
-    user: string;
+    user: number;
     town: string;
     productType: ProductType;
     risks: RiskModel[];
     debitNotes: DebitNote[];
+    creditNotes?: CreditNote[];
     netPremium: number;
     underwritingYear: Date | ITimestamp;
     receiptStatus: ReceiptStatus;
     paymentPlan: PaymentPlan;
     sourceOfBusiness: string;
     intermediaryName: string;
+    intermediaryId: string;
     remarks?: string;
     term: number;
+    requisitionStatus?: RequisitionStatus;
+    class?: IClass;
 }
 
 export interface ITimestamp {
@@ -43,10 +48,11 @@ export interface ITimestamp {
 export type Currency = 'ZMW' | 'Dollar';
 export type ProductType = 'Private' | 'Commercial' | 'Bus/Taxi';
 export type PolicyStatus = 'Lapsed' | 'Active' | 'Cancelled' | 'Expired';
-export type InsuranceType = | 'ThirdParty'
-| 'Comprehensive'
-| 'ThirdPartyFireAndTheft'
-| 'ActOnly';
+export type InsuranceType =
+    | 'ThirdParty'
+    | 'Comprehensive'
+    | 'ThirdPartyFireAndTheft'
+    | 'ActOnly';
 export type ReceiptStatus = 'Unreceipted' | 'Receipted';
 export type PaymentPlan = 'Created' | 'NotCreated';
 export type SourceOfBusinessType =
@@ -54,3 +60,5 @@ export type SourceOfBusinessType =
     | 'Broker'
     | 'Agent'
     | 'Sales Representative';
+
+export type RequisitionStatus = 'Raised' | 'UnRaised';

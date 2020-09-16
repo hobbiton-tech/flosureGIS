@@ -103,7 +103,7 @@ export class PolicyScheduleCombinedDocumentComponent implements OnInit {
     }
 
     getYearOfManufacture(risk: RiskModel) {
-        let year: string = moment(risk.yearOfManufacture)
+        let year: string = moment(risk.vehicle.yearOfManufacture)
             .year()
             .toString();
         return year;

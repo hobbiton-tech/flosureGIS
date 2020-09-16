@@ -1,55 +1,136 @@
-<div style="margin: 10px;">
-    <div style="margin-bottom: 20px; background: #fff;">
-        <nz-page-header>
-            <nz-page-header-title>Cancellation Of Cover</nz-page-header-title>
-            <!-- <nz-page-header-subtitle></nz-page-header-subtitle> -->
-        </nz-page-header>
-    </div>
-    <nz-card>
-        <div style="margin-bottom: 10px; width: 50%;">
-            <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Search by policy number" [(ngModel)]="searchString"
-                    (ngModelChange)="search($event)" />
-            </nz-input-group>
-            <ng-template #suffixIconSearch>
-                <i nz-icon nzType="search"></i>
-            </ng-template>
+<nz-spin nzSize="large" nzTip="Policies Loading...." [nzSpinning]="cancellationOfCoverIsLoading">
+    <div style="margin: 10px;">
+        <div style="margin-bottom: 20px; background: #fff;">
+            <nz-page-header>
+                <nz-page-header-title>Cancellation Of Cover</nz-page-header-title>
+                <!-- <nz-page-header-subtitle></nz-page-header-subtitle> -->
+            </nz-page-header>
         </div>
+        <nz-card>
+            <nz-divider nzText="Active Policies" nzOrientation="left"></nz-divider>
+            <div style="margin-bottom: 10px; width: 20%;">
+                <nz-input-group [nzSuffix]="suffixIconSearch">
+                    <input type="text" nz-input placeholder="Search by policy number"
+                        [(ngModel)]="activePoliciesSearchString" (ngModelChange)="searchActivePolicies($event)" />
+                </nz-input-group>
+                <ng-template #suffixIconSearch>
+                    <i nz-icon nzType="search"></i>
+                </ng-template>
+            </div>
 
-        <nz-table #policiesTable [nzData]="displayPoliciesList" [nzSize]="'small'" [nzBordered]="true">
-            <thead>
-                <tr>
-                    <th>Policy Number</th>
-                    <th>Cover From</th>
-                    <th>Cover To</th>
-                    <th>Client Name</th>
-                    <th>Approved By</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let policy of policiesTable.data" style="cursor: pointer;">
-                    <td>{{ policy.policyNumber }}</td>
-                    <td>{{ policy.startDate | date }}</td>
-                    <td>{{ policy.endDate | date }}</td>
-                    <td>{{ policy.client }}</td>
-                    <td>{{ policy.user }}</td>
-                    <td>{{ policy.status }}</td>
-                    <td>
-                        <div *ngIf="policy.status != 'Cancelled'">
-                            <button nz-button nzType="danger" nzSize="small" (click)="viewPolicyDetails(policy)">
-                                Cancel Policy
-                            </button>
-                        </div>
-                        <div *ngIf="policy.status == 'Cancelled'">
-                            <button nz-button nzType="primary" nzSize="small" (click)="viewPolicyDetails(policy)">
-                                View Policy
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </nz-table>
-    </nz-card>
-</div>
+            <nz-table #activePoliciesTable [nzData]="displayActivePoliciesList" [nzSize]="'small'" [nzBordered]="true">
+                <thead>
+                    <tr>
+                        <th [nzAlign]="columnAlignment">Policy Number</th>
+                        <th [nzAlign]="columnAlignment">Cover From</th>
+                        <th [nzAlign]="columnAlignment">Cover To</th>
+                        <th [nzAlign]="columnAlignment">Client Name</th>
+                        <th [nzAlign]="columnAlignment">Approved By</th>
+                        <th [nzAlign]="columnAlignment">Status</th>
+                        <th [nzAlign]="columnAlignment">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let policy of activePoliciesTable.data" style="cursor: pointer;">
+                        <td [nzAlign]="columnAlignment">{{ policy.policyNumber }}</td>
+                        <td [nzAlign]="columnAlignment">{{ policy.startDate | date }}</td>
+                        <td [nzAlign]="columnAlignment">{{ policy.endDate | date }}</td>
+                        <td [nzAlign]="columnAlignment">{{ policy.client }}</td>
+                        <td [nzAlign]="columnAlignment">{{ policy.user }}</td>
+                        <td [nzAlign]="columnAlignment">{{ policy.status }}</td>
+                        <td [nzAlign]="columnAlignment">
+                            <div *ngIf="policy.status == 'Active'">
+                                <button *ngIf="cancelPolicy === isPresent?.name || admin === isPresent?.name" nz-button nzType="danger" nzSize="small" (click)="viewPolicyDetails(policy)">
+                                    Cancel Policy
+                                </button>
+                            </div>
+                            <div *ngIf="policy.status == 'Cancelled'">
+                                <button *ngIf="admin === isPresent?.name || raiseRequisitionPem === isPresent.name" nz-button nzType="primary" nzSize="small" (click)="viewPolicyDetails(policy)">
+                                    Raise Requisition
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </nz-card>
+    </div>
+
+    <div style="margin: 10px;">
+        <div style="margin-bottom: 20px; background: #fff;">
+            <!-- <nz-page-header>
+                <nz-page-header-title>Cancellation Of Cover</nz-page-header-title>
+                <nz-page-header-subtitle></nz-page-header-subtitle>
+            </nz-page-header> -->
+        </div>
+        <nz-card>
+            <nz-divider nzText="Cancelled Policies" nzOrientation="left"></nz-divider>
+            <div style="margin-bottom: 10px; width: 20%;">
+                <nz-input-group [nzSuffix]="suffixIconSearch">
+                    <input type="text" nz-input placeholder="Search by policy number"
+                        [(ngModel)]="cancelledPoliciesSearchString" (ngModelChange)="searchCancelledPolicies($event)" />
+                </nz-input-group>
+                <ng-template #suffixIconSearch>
+                    <i nz-icon nzType="search"></i>
+                </ng-template>
+            </div>
+
+            <nz-table #cancelledPoliciesTable [nzData]="displayCancelledPoliciesList" [nzSize]="'small'"
+                [nzBordered]="true">
+                <thead>
+                    <tr>
+                        <th [nzAlign]="columnAlignment">Policy Number</th>
+                        <th [nzAlign]="columnAlignment">Cover From</th>
+                        <th [nzAlign]="columnAlignment">Cover To</th>
+                        <th [nzAlign]="columnAlignment">Client Name</th>
+                        <th [nzAlign]="columnAlignment">Approved By</th>
+                        <th [nzAlign]="columnAlignment">Status</th>
+                        <th [nzAlign]="columnAlignment">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let policy of cancelledPoliciesTable.data" style="cursor: pointer;">
+                        <td [nzAlign]="columnAlignment">{{ policy.policyNumber }}</td>
+                        <td [nzAlign]="columnAlignment">{{ policy.startDate | date }}</td>
+                        <td [nzAlign]="columnAlignment">{{ policy.endDate | date }}</td>
+                        <td [nzAlign]="columnAlignment">{{ policy.client }}</td>
+                        <td [nzAlign]="columnAlignment">{{ policy.user }}</td>
+                        <td [nzAlign]="columnAlignment">{{ policy.status }}</td>
+                        <td style="text-align: center;" [nzAlign]="columnAlignment">
+                            <div *ngIf="policy.status == 'Active'">
+                                <button nz-button nzType="danger" nzSize="small" (click)="viewPolicyDetails(policy)">
+                                    Cancel Policy
+                                </button>
+                            </div>
+                            <div *ngIf="policy.status == 'Cancelled'">
+                                <button nz-button nzType="primary" nzSize="small" nz-popconfirm
+                                    nzTitle="Raise Requisition?" (nzOnConfirm)="raiseRequisition(policy)"
+                                    *ngIf="policy.RequisitionStatus != 'Raised'">
+                                    Raise Requisition
+                                </button>
+                                <button n nz-button nzType="primary" style="margin-left: 2px;" nzSize="small"
+                                    (click)="viewPolicyCreditNote(policy)">
+                                    Credit Note
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </nz-card>
+    </div>
+
+    <nz-modal style="width: 100%;" nzWidth="800" nzTitle="A Plus General Insurance"
+        [(nzVisible)]="isCreditNotePDFVisible" (nzOnCancel)="isCreditNotePDFVisible = false"
+        (nzOnOk)="isCreditNotePDFVisible = false" (nzAfterOpen)="policyCancellationBalance()">
+        <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Credit Document">
+            <app-policy-credit-note-document [clientName]="clientName" [clientNumber]="clientNumber"
+                [creditNoteAmount]="creditNoteAmount" [clientEmail]="clientEmail" [agency]="agency"
+                [policyNumber]="policyNumber" [classOfBusiness]="classOfBusiness" [coverFrom]="coverForm"
+                [coverTo]="coverTo" [basicPremium]="basicPremium" [loadingAmount]="loadingAmount"
+                [discountAmount]="discountAmount" [totalAmount]="totalAmount" [risk]="policyRisk" [policy]="policyData"
+                [creditNote]="creditNotes">
+            </app-policy-credit-note-document>
+        </nz-card>
+    </nz-modal>
+</nz-spin>
