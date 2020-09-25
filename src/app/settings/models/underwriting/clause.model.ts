@@ -73,7 +73,7 @@ export interface IExccess {
     heading?: string;
     product?: IProduct;
     description: string;
-    amount: number;
+    amount: string;
     vehicleType?: string;
 }
 

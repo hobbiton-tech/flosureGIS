@@ -63,6 +63,9 @@ import { InsuranceClassService } from '../../services/insurance-class.service';
 import { PermissionsModel } from 'src/app/users/models/roles.model';
 import { UserModel } from 'src/app/users/models/users.model';
 import { UsersService } from 'src/app/users/services/users.service';
+import { AccidentClassService } from '../../services/accident-class.service';
+import { IAccidentRiskDetailsModel } from '../../models/accident-class/accident-risk-details.model';
+import { PersonalAccidentComponent } from '../accident-class/schedule-details/components/personal-accident/personal-accident.component';
 
 interface IRateResult {
     sumInsured: string;
@@ -192,6 +195,7 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
         private propertyDetailsComponent: PropertyDetailsComponent,
         private premuimComputationsComponent: PremiumComputationComponent,
         private premiumComputationDetailsComponent: PremiumComputationDetailsComponent,
+        // private personalAccidentScheduleDetailsComponents: PersonalAccidentComponent,
         private extensionsComponent: ExtensionsComponent,
         private discountsComponent: DiscountsComponent,
         private totalsComponent: TotalsViewComponent,
@@ -200,6 +204,7 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
         private excessesComponent: ExcessesComponent,
         private premiumComputationService: PremiumComputationService,
         private fireClassService: FireClassService,
+        private accidentClassService: AccidentClassService,
         private classHandler: InsuranceClassHandlerService,
         private insuranceClassService: InsuranceClassService,
         private usersService: UsersService
@@ -256,6 +261,7 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
     risks: RiskModel[] = [];
     vehicles: VehicleDetailsModel[] = [];
     properties: PropertyDetailsModel[] = [];
+    accidentProducts: IAccidentRiskDetailsModel[] = [];
 
     // excesses
     excesses: Excess[] = [];
@@ -658,7 +664,8 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
         this.quoteService.createMotorQuotation(
             quote,
             this.vehicles,
-            this.properties
+            this.properties,
+            this.accidentProducts
         );
 
         // this.isCreatingQuote = false;
@@ -673,23 +680,7 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
     }
 
     // Add risk validation
-    validateriskComprehensiveFormDetails() {
-        // if (this.riskComprehensiveForm.valid) {
-        //     if (
-        //         (this.sumInsured && this.sumInsured !== 0) ||
-        //         (this.basicPremiumAmount && this.basicPremiumAmount !== 0)
-        //     ) {
-        //         if (
-        //             (this.premiumRate && this.premiumRate !== 0) ||
-        //             (this.basicPremiumAmount && this.basicPremiumAmount !== 0)
-        //         ) {
-        //             if (this.netPremium > 0) {
-        //                 return true;
-        //             }
-        //         }
-        //     }
-        // }
-    }
+    validateriskComprehensiveFormDetails() {}
 
     onEditExtension(value) {
         this.editExtension = value;
@@ -787,8 +778,8 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
         const risk: RiskModel[] = [];
 
         const vehicleDetails = this.vehicleDetailsService.getVehicleDetails();
-        console.log('*vehicle details :=> ', vehicleDetails);
         const propertyDetails = this.fireClassService.getPropertyDetails();
+        const accidentProductDetails = this.accidentClassService.getAccidentProductDetails();
 
         const premimuComputations = this.premuimComputationsComponent.getPremiumComputations();
         const premiumComputationDetails = this.premiumComputationDetailsComponent.getPremiumComputationDetails();
@@ -829,6 +820,15 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
                 risk: risk[0]
             });
         }
+
+        // if (localStorage.getItem('class') == 'Accident') {
+        //     this.accidentProducts.push({
+        //         id: v4(),
+        //         ...accidentProductDetails,
+        //         risk: risk[0],
+        //         personalAccidentSchedule: this.personalAccidentScheduleDetailsComponents.getPersonalAccidentScheduleDetails()
+        //     });
+        // }
 
         this.risks = [...this.risks, ...risk];
 

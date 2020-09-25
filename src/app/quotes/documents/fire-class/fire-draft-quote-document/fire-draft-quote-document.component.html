@@ -24,7 +24,7 @@
         <table>
             <tr>
                 <td>
-                    <img src="/assets/images/apluslogo.png" />
+                    <img src="/assets/images/Savenda-Logo-Final.png" style="width: 100%; max-width: 100px;" />
                     <span style="float: right;">
                         <p style="font-size: 12px;">
                             Savenda General Insurance LTD<br />
@@ -138,7 +138,7 @@
                 <th style="border: 1px solid black;">PROPERTY ID</th>
                 <th style="border: 1px solid black;">DESC</th>
                 <th style="border: 1px solid black;">SUM INSURED({{quoteData.currency}}) </th>
-                <th style="border: 1px solid black;">RATE(%)</th>
+                <!-- <th style="border: 1px solid black;">RATE(%)</th> -->
                 <th style="border: 1px solid black;">PREMIUM({{quoteData.currency}}) </th>
                 <th style="border: 1px solid black;">LEVY @3%({{quoteData.currency}}) </th>
                 <th style="border: 1px solid black;">TOTAL({{quoteData.currency}}) </th>
@@ -147,9 +147,9 @@
                 <td style="border: 1px solid black;">{{risk?.property?.propertyId}}</td>
                 <td style="border: 1px solid black;">{{risk?.property?.propertyDescription}}</td>
                 <td style="border: 1px solid black;">{{risk.sumInsured | number: '1.2-2'}}</td>
-                <td style="border: 1px solid black;">
+                <!-- <td style="border: 1px solid black;">
                     {{quoteData.risks[0].insuranceType == 'Comprehensive' ? '5' : '-'}}
-                </td>
+                </td> -->
                 <td style="border: 1px solid black;">{{risk.basicPremium | number: '1.2-2'}}</td>
                 <td style="border: 1px solid black;">{{risk.premiumLevy | number: '1.2-2'}}</td>
                 <td style="border: 1px solid black;">{{risk.netPremium | number: '1.2-2'}}</td>
@@ -167,11 +167,11 @@
                     </td>
                 </tr>
 
-                <tr>
+                <!-- <tr>
                     <td><strong>Rate</strong></td>
                     <td><strong>:</strong></td>
                     <td><span>{{quoteData.risks ? quoteData.risks[0].premiumRate : '-'}}</span></td>
-                </tr>
+                </tr> -->
 
                 <tr>
                     <td><strong>Basic Premium</strong></td>
@@ -179,6 +179,26 @@
                     <td><span> {{quoteData ? quoteData.currency : '-'}}
                             {{totalBasicPremium | number: '1.2-2'}}</span>
                     </td>
+                </tr>
+
+                <tr>
+                    <td><strong>Extensions</strong></td>
+                    <td><strong>:</strong></td>
+                    <td><span>
+                            <div *ngFor="let extension of extensions">
+                                {{extension.extensionType}} {{quoteData.currency}}{{extension.amount}}<br />
+                            </div>
+                        </span></td>
+                </tr>
+
+                <tr>
+                    <td><strong>Discounts</strong></td>
+                    <td><strong>:</strong></td>
+                    <td><span>
+                            <div *ngFor="let discount of discounts">
+                                {{discount.discountType}} {{quoteData.currency}}{{discount.amount}}<br />
+                            </div>
+                        </span></td>
                 </tr>
 
                 <tr>
@@ -225,15 +245,9 @@
                 </tr> -->
 
                 <tr>
-                    <td><strong>Territorial Clause</strong></td>
+                    <td><strong>Clauses</strong></td>
                     <td><strong>:</strong></td>
-                    <td><span>Zambia</span></td>
-                </tr>
-
-                <tr>
-                    <td><strong>Jurisdiction Clause</strong></td>
-                    <td><strong>:</strong></td>
-                    <td><span>Zambia</span></td>
+                    <td *ngFor="let clause of clauses"><span>{{clause.heading}}</span></td>
                 </tr>
 
                 <tr>
@@ -251,7 +265,7 @@
                 <tr>
                     <td><strong>Exclusions (Among Others)</strong></td>
                     <td><strong>:</strong></td>
-                    <td><span>As follows</span></td>
+                    <td><span>As per standard policy</span></td>
                 </tr>
 
                 <!-- <tr>

@@ -3,7 +3,10 @@ import { Subscription } from 'rxjs';
 import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
 import { PremiumComputationService } from 'src/app/quotes/services/premium-computation.service';
 import { InsuranceClassHandlerService } from 'src/app/underwriting/services/insurance-class-handler.service';
-import { RiskCategoryOptions } from 'src/app/quotes/selection-options';
+import {
+    RiskCategoryOptions,
+    AccidentProductTypeOptions
+} from 'src/app/quotes/selection-options';
 import moment from 'moment';
 
 @Component({
@@ -40,7 +43,7 @@ export class AccidentPremiumComputationDetailsComponent
         );
         this.productTypeSubscription = this.premiumComputationService.selectedProductTypeChanged$.subscribe(
             productType => {
-                this.selectedRiskCategory = productType;
+                this.selectedProductType = productType;
             }
         );
 
@@ -86,7 +89,7 @@ export class AccidentPremiumComputationDetailsComponent
     selectedCoverType = '';
 
     // selected product type
-    selectedRiskCategory = '';
+    selectedProductType = '';
 
     // risk dates
     riskStartDate: Date;
@@ -99,7 +102,7 @@ export class AccidentPremiumComputationDetailsComponent
     coverTypeOptions;
 
     // product type options
-    riskCategoryOptions = RiskCategoryOptions;
+    productTypeOptions = AccidentProductTypeOptions;
 
     ngOnInit(): void {}
 
@@ -135,7 +138,7 @@ export class AccidentPremiumComputationDetailsComponent
 
     changeSelectedProductType() {
         this.premiumComputationService.changeProductType(
-            this.selectedRiskCategory
+            this.selectedProductType
         );
     }
 
@@ -157,7 +160,7 @@ export class AccidentPremiumComputationDetailsComponent
     }
     changeSelectedRiskCategory() {
         this.premiumComputationService.changeSelectedProductType(
-            this.selectedRiskCategory
+            this.selectedProductType
         );
     }
 

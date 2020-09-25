@@ -165,6 +165,7 @@
                             <td>{{policy?.risks[0]?.productType}}</td>
                         </tr>
 
+
                     </table>
                 </td>
                 <td>
@@ -184,7 +185,53 @@
             </tr>
         </table>
 
+        <br />
         <table>
+            <tr>
+                <td style="width: 60%;">
+                    <table>
+                        <tr>
+                            <td><strong>Extensions:</strong></td>
+                            <td>
+                                <ul style="list-style-type: none;">
+                                    <li *ngFor="let extension of extensions">
+                                        {{ extension.extensionType }}
+                                        <span
+                                            style="font-weight: bold;">{{ policy.currency }}{{ extension.amount }}</span>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Excess:</strong></td>
+                            <td>
+                                <ul style="list-style-type: none;">
+                                    <li *ngFor="let ex of excessList">
+                                        {{ ex.description }}
+                                        <span style="font-weight: bold;">{{ policy.currency }}{{ ex.amount }}</span>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Clauses:</strong></td>
+                            <td>
+                                <ul style="list-style-type: none;">
+                                    <li *ngFor="let clause of clauses">
+                                        {{ clause.heading }}
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+
+                </td>
+            </tr>
+        </table>
+
+        <!-- <table>
             <tr>
                 <td>
                     <table>
@@ -204,22 +251,47 @@
                 <td>
                     <table>
                         <tr>
-                            <!-- <td><strong>Limit Amount: </strong></td>
-                                <td>{{policy?.currency == 'ZMW' ? 'ZMW' : 'USD'}}
-                                    {{policy?.risks[0]?.sumInsured | number: '1.2-2'}}</td> -->
                         </tr>
                         <tr>
-                            <!-- <td><strong>Premium: </strong></td>
-                                <td>{{policy?.currency == 'ZMW' ? 'ZMW' : 'USD'}}
-                                    {{policy?.risks[0]?.basicPremium | number: '1.2-2'}}</td> -->
                         </tr>
                     </table>
                 </td>
             </tr>
-        </table>
+        </table> -->
 
         <br />
-        <p>This policy is issued subject to the clauses attached herein</p>
+
+        <!-- <div style="margin-left: 6px;">
+            <p>
+                <span style="font-weight: bold;"><strong>Extensions</strong></span>
+            </p>
+            <ul style="list-style-type: none;">
+                <li *ngFor="let extension of extensions">
+                    {{ extension.extensionType }}
+                    <span style="font-weight: bold;">{{ policy.currency }}{{ extension.amount }}</span>
+                </li>
+            </ul>
+
+            <p>
+                <span style="font-weight: bold;"><strong>Excess</strong></span>
+            </p>
+            <ul style="list-style-type: none;">
+                <li *ngFor="let ex of excessList">
+                    {{ ex.description }}
+                    <span style="font-weight: bold;">{{ policy.currency }}{{ ex.amount }}</span>
+                </li>
+            </ul>
+
+            <p>
+                <span style="font-weight: bold;"><strong>Clauses</strong></span>
+            </p>
+            <ul style="list-style-type: none;">
+                <li *ngFor="let clause of clauses">
+                    {{ clause.heading }}
+                </li>
+            </ul>
+        </div> -->
+
         <br />
 
         <p>

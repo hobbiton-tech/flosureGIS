@@ -5,7 +5,12 @@ import {
     LimitsOfLiability,
     Excess
 } from 'src/app/quotes/models/quote.model';
-import { IExccess } from 'src/app/settings/models/underwriting/clause.model';
+import {
+    IExccess,
+    IClause
+} from 'src/app/settings/models/underwriting/clause.model';
+import { IDiscounts } from 'src/app/quotes/models/discounts.model';
+import { IExtensions } from 'src/app/quotes/models/extensions.model';
 
 @Component({
     selector: 'app-fire-draft-quote-document',
@@ -60,6 +65,15 @@ export class FireDraftQuoteDocumentComponent implements OnInit {
 
     @Input()
     excessList: IExccess[];
+
+    @Input()
+    discounts: IDiscounts[];
+
+    @Input()
+    extensions: IExtensions[];
+
+    @Input()
+    clauses: IClause[];
 
     @Input()
     totalSumInsured: number;

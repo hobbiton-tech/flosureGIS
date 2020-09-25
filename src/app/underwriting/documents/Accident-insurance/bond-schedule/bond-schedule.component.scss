@@ -1,0 +1,52 @@
+// .debitPrintSection {
+//     font-size: 12px;
+// }
+
+.invoice-box {
+    max-width: 950px;
+    margin: auto;
+    padding: 30px;
+    border: 1px solid #eee;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    font-size: 14px;
+    line-height: 15px;
+    font-family: 'Lato', sans-serif;
+    color: black;
+}
+
+.invoice-box table {
+    width: 100%;
+    line-height: inherit;
+    text-align: left;
+    border: none;
+}
+
+#title {
+    text-align: center !important;
+    font-weight: bold;
+    font-size: xx-large;
+}
+
+table,
+th,
+// td {
+//     border: 1px solid black;
+//     border-collapse: collapse;
+// }
+th,
+td {
+    padding: 5px;
+    text-align: left;
+}
+#text {
+    text-align: center !important;
+    padding-left: 40%;
+}
+.heading {
+    text-align: center;
+    font-weight: bold;
+}
+
+.centerheading {
+    text-align: center !important;
+}

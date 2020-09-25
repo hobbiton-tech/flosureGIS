@@ -64,11 +64,23 @@ export const ProductTypeOptions = [
     { label: 'Bus/Taxi', value: 'Bus/Taxi' }
 ];
 
+export const CorporateProductTypeOptions = [
+    { label: 'Private', value: 'Private' },
+    { label: 'Business', value: 'Business' },
+    { label: 'Bus/Taxi', value: 'Bus/Taxi' }
+];
+
+// ACCIDENT PRODUCT TYPE OPTIONS
+export const AccidentProductTypeOptions = [
+    { label: 'Private', value: 'Private' },
+    { label: 'Commercial', value: 'Commercial' }
+];
+
 // RISK CATEGORY OPTIONS
 export const RiskCategoryOptions = [
-    { label: 'A (RESIDENTIAL)', value: 'A' },
-    { label: 'B (COMMERCIAL)', value: 'B' },
-    { label: 'C (MEGA RISK)', value: 'C' }
+    { label: 'A (RESIDENTIAL)', value: 'A (RESIDENTIAL)' },
+    { label: 'B (COMMERCIAL)', value: 'B (COMMERCIAL)' },
+    { label: 'C (MEGA RISK)', value: 'C (MEGA RISK)' }
 ];
 
 // RISK SUB CLASS OPTIONS
@@ -119,7 +131,7 @@ export const InsuranceTypeOptions = [
 
 // LIMITS OF LIABILITY OPTIONS
 export const LimitsOfLiabilityOptions = [
-    { label: 'Combined', value: 'combinedLimits' },
+    { label: 'Third Party Liability Combined Limit', value: 'combinedLimits' },
     { label: 'Standard', value: 'standardLimits' }
 ];
 

@@ -283,7 +283,7 @@ export class PolicyExtensionDetailsComponent implements OnInit, OnDestroy {
                 res => console.log(res);
             });
 
-        this.policiesService.updatePolicy(policy).subscribe(policy => {
+        this.policiesService.createPolicy(policy).subscribe(policy => {
             res => {
                 console.log(res);
 
@@ -296,7 +296,7 @@ export class PolicyExtensionDetailsComponent implements OnInit, OnDestroy {
 
                         this.http
                             .post<DebitNote>(
-                                `https://savenda.flosure-api.com/documents/debit-note/${this.policyData.id}`,
+                                `https://flosure-postgres-db.herokuapp.com/documents/debit-note/${this.policyData.id}`,
                                 debitNote
                             )
                             .subscribe(

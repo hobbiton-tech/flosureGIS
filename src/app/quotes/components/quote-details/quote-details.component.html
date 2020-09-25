@@ -25,18 +25,18 @@
                     <button *ngIf="!isQuoteApproved" nz-button nzType="primary" (click)="handleDraftQuotation()">
                         View Draft Quote
                     </button>
-                  <ng-container *ngIf="approveQuote === isPresent?.name || admin === isPresent?.name">
-                    <button *ngIf="!isQuoteApproved" nz-button nzType="primary" (click)="generateDocuments()">
+                    <ng-container *ngIf="approveQuote === isPresent?.name || admin === isPresent?.name">
+                        <button *ngIf="!isQuoteApproved" nz-button nzType="primary" (click)="generateDocuments()">
 
-                      Covert to Policy
-                    </button>
-                  </ng-container>
-                  <ng-container *ngIf="editQuote === isPresent?.name || admin === isPresent?.name">
-                    <button *ngIf="!isEditmode && !isQuoteApproved" nz-button nzType="primary"
-                        (click)="isEditmode = true">
-                        Edit Quote
-                    </button>
-                  </ng-container>
+                            Covert to Policy
+                        </button>
+                    </ng-container>
+                    <ng-container *ngIf="editQuote === isPresent?.name || admin === isPresent?.name">
+                        <button *ngIf="!isEditmode && !isQuoteApproved" nz-button nzType="primary"
+                            (click)="isEditmode = true">
+                            Edit Quote
+                        </button>
+                    </ng-container>
                     <button *ngIf="isEditmode" nz-button nzType="primary" (click)="isEditmode = false">
                         Save Changes
                     </button>
@@ -351,12 +351,13 @@
                                     View
                                 </button>
                                 <nz-divider nzType="vertical" *ngIf="!isQuoteApproved"></nz-divider>
-                              <ng-container *ngIf="deleteRisk === isPresent?.name || admin === isPresent?.name">
-                                <button nz-button nzType="danger" nzSize="small" nz-popconfirm nzTitle="Delete Risk?"
-                                    (nzOnConfirm)="removeRisk(risk.regNumber)" *ngIf="!isQuoteApproved">
-                                    Delete
-                                </button>
-                              </ng-container>
+                                <ng-container *ngIf="deleteRisk === isPresent?.name || admin === isPresent?.name">
+                                    <button nz-button nzType="danger" nzSize="small" nz-popconfirm
+                                        nzTitle="Delete Risk?" (nzOnConfirm)="removeRisk(risk.regNumber)"
+                                        *ngIf="!isQuoteApproved">
+                                        Delete
+                                    </button>
+                                </ng-container>
                             </td>
                         </tr>
                     </tbody>
@@ -425,7 +426,8 @@
                         [risks]="quoteData.risks" [quoteData]="quoteData" [totalSumInsured]="quoteSumInsured"
                         [totalBasicPremium]="quoteBasicPremium" [totalLevy]="quoteLevy"
                         [totalNetPremium]="quoteNetPremium" [excessList]="excessList"
-                        [limitsOfLiabilities]="limitsOfLiabilities">
+                        [limitsOfLiabilities]="limitsOfLiabilities" [discounts]="discountsList"
+                        [extensions]="extensionList" [clauses]="clauses">
                     </app-draft-quote-document>
                 </nz-card>
                 <ng-template #pdfQuoteActions>

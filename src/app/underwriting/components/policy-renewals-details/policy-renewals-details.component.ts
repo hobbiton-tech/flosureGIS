@@ -146,9 +146,7 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
 
     isEditmode = false;
 
-
     territorialExtensionCountries: number;
-
 
     // selected risk in risk table
     selectedRisk: RiskModel;
@@ -200,12 +198,12 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
     discounts: IDiscounts[] = [];
     policyID: string;
 
-  permission: PermissionsModel;
-  user: UserModel;
-  isPresent: PermissionsModel;
-  admin = 'admin';
-  renewPolicyPem = 'renew_policy';
-  loggedIn = localStorage.getItem('currentUser');
+    permission: PermissionsModel;
+    user: UserModel;
+    isPresent: PermissionsModel;
+    admin = 'admin';
+    renewPolicyPem = 'renew_policy';
+    loggedIn = localStorage.getItem('currentUser');
 
     constructor(
         private readonly router: Router,
@@ -230,7 +228,7 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
         private propertyDetailsComponent: PropertyDetailsComponent,
         private createQuoteComponent: CreateQuoteComponent,
         private classHandler: InsuranceClassHandlerService,
-        private  usersService: UsersService,
+        private usersService: UsersService
     ) {
         this.paymentPlanForm = this.formBuilder.group({
             numberOfInstallments: ['', Validators.required],
@@ -266,17 +264,22 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
         }, 3000);
 
         this.route.params.subscribe(id => {
+            const decodedJwtData = jwt_decode(this.loggedIn);
+            console.log('Decoded>>>>>>', decodedJwtData);
 
-          const decodedJwtData = jwt_decode(this.loggedIn);
-          console.log('Decoded>>>>>>', decodedJwtData);
+            this.usersService.getUsers().subscribe(users => {
+                this.user = users.filter(
+                    x => x.ID === decodedJwtData.user_id
+                )[0];
 
-          this.usersService.getUsers().subscribe((users) => {
-            this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+                this.isPresent = this.user.Permission.find(
+                    el =>
+                        el.name === this.admin ||
+                        el.name === this.renewPolicyPem
+                );
 
-            this.isPresent = this.user.Permission.find((el) => el.name === this.admin || el.name === this.renewPolicyPem);
-
-            console.log('USERS>>>', this.user, this.isPresent, this.admin);
-          });
+                console.log('USERS>>>', this.user, this.isPresent, this.admin);
+            });
             this.policiesService.getPolicyById(id.id).subscribe(policy => {
                 this.policyData = policy;
 
@@ -372,7 +375,6 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
             town: [''],
             remarks: ['', Validators.required]
         });
-
     }
 
     goToRenewPoliciesList(): void {
@@ -658,6 +660,7 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
             // convert to policy
             const policy: Policy = {
                 ...this.policyDetailsForm.value,
+                ...this.policyData,
                 receiptStatus: this.status,
                 risks: this.risks,
                 term: this.policyData.term + 1,
@@ -666,6 +669,11 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
                 paymentPlan: this.paymentPlan,
                 underwritingYear: new Date().getFullYear(),
                 user: localStorage.getItem('user')
+            };
+
+            const policyUpdate: Policy = {
+                ...this.policyData,
+                status: 'Expired'
             };
 
             const debitNote: DebitNote = {
@@ -683,6 +691,14 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
             this.policyData.id = this.policyID;
             this.policyData.policyNumber = this.policyNumber;
 
+            this.policiesService.updatePolicy(policy).subscribe(
+                res => {
+                    console.log(res);
+                },
+                err => {
+                    console.log(err);
+                }
+            );
             this.policiesService.renewPolicy(this.policyData);
 
             this.endorsementService.createEndorsement(
@@ -699,7 +715,7 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
 
                     this.http
                         .post<DebitNote>(
-                            `https://savenda.flosure-api.com/documents/debit-note/${this.policyData.id}`,
+                            `https://flosure-postgres-db.herokuapp.com/documents/debit-note/${this.policyData.id}`,
                             debitNote
                         )
                         .subscribe(

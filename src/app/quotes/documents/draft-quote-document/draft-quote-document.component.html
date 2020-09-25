@@ -24,7 +24,7 @@
     <table>
       <tr>
         <td>
-          <img src="/assets/images/apluslogo.png" />
+          <img src="/assets/images/Savenda-Logo-Final.png" style="width: 100%; max-width: 100px;" />
           <span style="float: right;">
             <p style="font-size: 12px;">
               Savenda General Insurance LTD<br />
@@ -187,6 +187,26 @@
         </tr>
 
         <tr>
+          <td><strong>Extensions</strong></td>
+          <td><strong>:</strong></td>
+          <td><span>
+              <div *ngFor="let extension of extensions">
+                {{extension.extensionType}} {{quoteData.currency}}{{extension.amount}}<br />
+              </div>
+            </span></td>
+        </tr>
+
+        <tr>
+          <td><strong>Discounts</strong></td>
+          <td><strong>:</strong></td>
+          <td><span>
+              <div *ngFor="let discount of discounts">
+                {{discount.discountType}} {{quoteData.currency}}{{discount.amount}}<br />
+              </div>
+            </span></td>
+        </tr>
+
+        <tr>
           <td><strong>Levy @ 3%</strong></td>
           <td><strong>:</strong></td>
           <td><span> {{quoteData ? quoteData.currency : '-'}} {{totalLevy | number: '1.2-2'}}</span></td>
@@ -206,12 +226,7 @@
               {{' '}}{{quoteData.currency}}{{' '}}{{exc.amount}}</span></td>
         </tr>
 
-        <!-- <tr *ngFor="let exc of excessList">
-          <td></td>
-          <td><strong>:</strong></td>
-          <td><span>{{exc.description}} {{' '}}{{exc.amount}}</span>
-          </td>
-        </tr> -->
+
 
         <tr>
           <td><strong>Conditions/Warranties</strong></td>
@@ -230,15 +245,9 @@
         </tr>
 
         <tr>
-          <td><strong>Territorial Clause</strong></td>
+          <td><strong>Clauses</strong></td>
           <td><strong>:</strong></td>
-          <td><span>Zambia</span></td>
-        </tr>
-
-        <tr>
-          <td><strong>Jurisdiction Clause</strong></td>
-          <td><strong>:</strong></td>
-          <td><span>Zambia</span></td>
+          <td *ngFor="let clause of clauses"><span>{{clause.heading}}</span></td>
         </tr>
 
         <tr>
@@ -256,7 +265,7 @@
         <tr>
           <td><strong>Exclusions (Among Others)</strong></td>
           <td><strong>:</strong></td>
-          <td><span>As follows</span></td>
+          <td><span>As per standard policy</span></td>
         </tr>
 
         <!-- <tr>

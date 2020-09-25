@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import {
     InsuranceTypeOptions,
-    ProductTypeOptions
+    ProductTypeOptions,
+    CorporateProductTypeOptions
 } from '../../selection-options';
 import moment from 'moment';
 import { ClausesService } from 'src/app/settings/components/underwriting-setups/services/clauses.service';
@@ -130,6 +131,8 @@ export class PremiumComputationDetailsComponent implements OnInit, OnDestroy {
 
     // product type options
     productTypeOptions = ProductTypeOptions;
+
+    corporateProductTypeOptions = CorporateProductTypeOptions;
 
     ngOnInit(): void {}
 

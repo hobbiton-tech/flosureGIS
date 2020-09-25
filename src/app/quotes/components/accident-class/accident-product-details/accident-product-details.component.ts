@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { InsuranceClassHandlerService } from 'src/app/underwriting/services/insurance-class-handler.service';
 import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
 import { Subscription } from 'rxjs';
+import { AccidentClassService } from 'src/app/quotes/services/accident-class.service';
 
 @Component({
     selector: 'app-accident-product-details',
@@ -14,7 +15,8 @@ export class AccidentProductDetailsComponent implements OnInit, OnDestroy {
 
     constructor(
         private formBuilder: FormBuilder,
-        private classHandler: InsuranceClassHandlerService
+        private classHandler: InsuranceClassHandlerService,
+        private accidentClassService: AccidentClassService
     ) {
         this.accidentProductDetailsForm = this.formBuilder.group({
             riskId: [
@@ -52,7 +54,13 @@ export class AccidentProductDetailsComponent implements OnInit, OnDestroy {
 
     accidentProductDetailsForm: FormGroup;
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.accidentProductDetailsForm.valueChanges.subscribe(res => {
+            this.accidentClassService.changeAccidentProductDetailsForm(
+                this.accidentProductDetailsForm.value
+            );
+        });
+    }
 
     // editable fields
     changeToEditable() {

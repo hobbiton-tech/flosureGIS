@@ -44,6 +44,9 @@ import { AccidentProductDetailsComponent } from './components/accident-class/acc
 import { FireDraftQuoteDocumentComponent } from './documents/fire-class/fire-draft-quote-document/fire-draft-quote-document.component';
 import { UsersRolesComponent } from '../users/components/users-roles/users-roles.component';
 import { AuthGuard } from '../users/helpers/auth.guard';
+import { PersonalAccidentComponent } from './components/accident-class/schedule-details/components/personal-accident/personal-accident.component';
+import { ScheduleComponent } from './components/accident-class/schedule-details/schedule/schedule.component';
+import { AccidentDraftQuotationComponent } from './documents/accident-class/accident-draft-quotation/accident-draft-quotation.component';
 const routes: Routes = [
     {
         path: 'create-quote',
@@ -58,6 +61,10 @@ const routes: Routes = [
     {
         path: 'fire-quotes-list',
         component: FireQuotationsListComponent
+    },
+    {
+        path: 'accident-quotes-list',
+        component: AccidentQuotationsListComponent
     },
     {
         path: 'quote-details/:quoteNumber',
@@ -96,7 +103,10 @@ const routes: Routes = [
         AccidentQuotationsListComponent,
         AccidentPremiumComputationDetailsComponent,
         AccidentProductDetailsComponent,
-        FireDraftQuoteDocumentComponent
+        FireDraftQuoteDocumentComponent,
+        PersonalAccidentComponent,
+        ScheduleComponent,
+        AccidentDraftQuotationComponent
     ],
     imports: [
         CommonModule,

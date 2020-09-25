@@ -17,25 +17,25 @@
                 </nz-form-control>
             </nz-form-item>
 
-            <!-- <nz-form-item>
-                <nz-form-label [nzSpan]="10" nzFor="riskCategory" nzRequired>
-                    Risk Category
+            <nz-form-item>
+                <nz-form-label [nzSpan]="10" nzFor="productType" nzRequired>
+                    Product Type
                 </nz-form-label>
                 <nz-form-control nzSpan="10">
-                    <nz-select nzSpan="10" nzShowSearch name="riskCategory" [(ngModel)]="selectedRiskCategory"
-                        nzPlaceHolder="Select a product type" (ngModelChange)="changeSelectedRiskCategory()"
-                        [nzDisabled]="isRiskEditMode" name="riskCategory" id="riskCategory">
+                    <nz-select nzSpan="10" nzShowSearch name="productType" [(ngModel)]="selectedProductType"
+                        nzPlaceHolder="Select a product type" (ngModelChange)="changeSelectedProductType()"
+                        [nzDisabled]="isRiskEditMode" name="productType" id="productType">
                         <nz-option *ngFor="
-                                        let productType of riskCategoryOptions
-                                    " [nzValue]="
-                                        productType.value
-                                    " [nzLabel]="
-                                        productType.label
-                                    ">
+                                    let productType of productTypeOptions
+                                " [nzValue]="
+                                    productType.value
+                                " [nzLabel]="
+                                    productType.label
+                                ">
                         </nz-option>
                     </nz-select>
                 </nz-form-control>
-            </nz-form-item> -->
+            </nz-form-item>
         </div>
 
         <div nz-col nzSpan="8">

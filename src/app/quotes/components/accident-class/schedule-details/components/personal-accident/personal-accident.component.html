@@ -1,0 +1,42 @@
+<div>
+    <form nz-form [formGroup]="personalAccidentScheduleDetailsForm">
+        <div nz-row nzGutter="0">
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10" nzFor="personsInsured" nzRequired>
+                        Persons Insured
+                    </nz-form-label>
+                    <nz-form-control nzSpan="10">
+                        <input nz-input formControlName="personsInsured" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10" nzFor="aggregateGroupLimit" nzRequired>
+                        Aggregate group limit
+                    </nz-form-label>
+                    <nz-form-control nzSpan="10">
+                        <input nz-input formControlName="aggregateGroupLimit" />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10" nzFor="limitPerPerson" nzRequired>
+                        Limit per person
+                    </nz-form-label>
+                    <nz-form-control nzSpan="10">
+                        <input nz-input formControlName="limitPerPerson" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10" nzFor="itemNumber" nzRequired>
+                        Item NO
+                    </nz-form-label>
+                    <nz-form-control nzSpan="10">
+                        <input nz-input formControlName="itemNumber" />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+    </form>
+</div>

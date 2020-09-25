@@ -305,6 +305,7 @@ export class PolicyCancellationDetailsComponent implements OnInit {
 
         const policy: Policy = {
             ...this.policyCancellationDetailsForm.value,
+            ...this.policyData,
             id: this.policyData.id,
             risks: this.risks,
             status: 'Cancelled'
@@ -342,7 +343,7 @@ export class PolicyCancellationDetailsComponent implements OnInit {
                 res => console.log(res);
             });
 
-        this.policiesService.updatePolicy(policy).subscribe(policy => {
+        this.policiesService.createPolicy(policy).subscribe(policy => {
             res => {
                 console.log(res);
             };

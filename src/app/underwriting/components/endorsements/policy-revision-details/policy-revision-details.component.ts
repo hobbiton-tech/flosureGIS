@@ -337,7 +337,7 @@ export class PolicyRevisionDetailsComponent implements OnInit {
 
         // this.policiesService.createBackupPolicy(policy);
 
-        this.policiesService.updatePolicy(policy).subscribe(policy => {
+        this.policiesService.createPolicy(policy).subscribe(policy => {
             res => {
                 this.http
                     .get<any>(
@@ -348,7 +348,7 @@ export class PolicyRevisionDetailsComponent implements OnInit {
 
                         this.http
                             .post<DebitNote>(
-                                `https://savenda.flosure-api.com/documents/debit-note/${this.policyData.id}`,
+                                `https://flosure-postgres-db.herokuapp.com/documents/debit-note/${this.policyData.id}`,
                                 debitNote
                             )
                             .subscribe(

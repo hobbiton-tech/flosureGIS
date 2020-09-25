@@ -38,26 +38,25 @@
                     ">
                 <tr>
                     <td>
-                        Combined
-                        Limits:
+                        Third Party Liability Combined Limit :
                         <input nz-input name="combinedLimits" formControlName="combinedLimits" type="number" min="93200"
                             id="combinedLimits" (ngModelChange)="
                                     handleCombinedLimitsPremium()
-                                " />
+                                " (change)="handleCombinedLimitsControls()" />
                     </td>
                     <td>
                         Rate:<input nz-input name="combinedLimitsRate" formControlName="combinedLimitsRate" [(ngModel)]="
                                     combinedLimitsRate
                                 " type="number" id="combinedLimitsRate" (ngModelChange)="
                                     handleCombinedLimitsPremium()
-                                " />
+                                " min="0" />
                     </td>
                     <td>
                         Premium:
                         <input nz-input name="combinedLimitsPremium" formControlName="combinedLimitsPremium"
                             [(ngModel)]="
                                     combinedLimitsPremium
-                                " type="number" id="combinedLimitsPremium" />
+                                " type="number" id="combinedLimitsPremium" min="0" />
                     </td>
                 </tr>
             </form>
@@ -88,14 +87,14 @@
                                     deathAndInjuryPerPersonRate
                                 " type="number" id="deathAndInjuryPerPersonRate" (ngModelChange)="
                                     handleDeathAndInjuryPerPersonPremium()
-                                " />
+                                " min="0" />
                     </td>
                     <td>
                         Premium:
                         <input nz-input name="deathAndInjuryPerPersonPremium"
                             formControlName="deathAndInjuryPerPersonPremium" [(ngModel)]="
                                     deathAndInjuryPerPersonPremium
-                                " type="number" id="deathAndInjuryPerPersonPremium" />
+                                " type="number" id="deathAndInjuryPerPersonPremium" min="0" />
                     </td>
                 </tr>
                 <tr>
@@ -117,14 +116,14 @@
                                     deathAndInjuryPerEventRate
                                 " type="number" id="deathAndInjuryPerEventRate" (ngModelChange)="
                                     handleDeathAndInjuryPerEventPremium()
-                                " />
+                                " min="0" />
                     </td>
                     <td>
                         Premium:
                         <input nz-input name="deathAndInjuryPerEventPremium"
                             formControlName="deathAndInjuryPerEventPremium" [(ngModel)]="
                                     deathAndInjuryPerEventPremium
-                                " type="number" id="deathAndInjuryPerEventPremium" />
+                                " type="number" id="deathAndInjuryPerEventPremium" min="0" />
                     </td>
                 </tr>
                 <tr>
@@ -143,14 +142,14 @@
                                     propertyDamageRate
                                 " type="number" id="propertyDamageRate" (ngModelChange)="
                                     handlePropertyDamagePremium()
-                                " />
+                                " min="0" />
                     </td>
                     <td>
                         Premium:
                         <input nz-input name="propertyDamagePremium" formControlName="propertyDamagePremium"
                             [(ngModel)]="
                                     propertyDamagePremium
-                                " type="number" id="propertyDamagePremium" />
+                                " type="number" id="propertyDamagePremium" min="0" />
                     </td>
                 </tr>
             </form>
