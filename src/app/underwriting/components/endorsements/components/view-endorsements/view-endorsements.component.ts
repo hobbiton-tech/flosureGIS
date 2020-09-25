@@ -39,9 +39,6 @@ export class ViewEndorsementsComponent implements OnInit {
     }
 
     viewPolicyBackup(endorsementId: string): void {
-        console.log('=====>Endorsements<========');
-        console.log('endorsement id: ' + endorsementId);
-
         this.endorsementsService
             .getEndorsementById(endorsementId)
             .subscribe(endorsement => {

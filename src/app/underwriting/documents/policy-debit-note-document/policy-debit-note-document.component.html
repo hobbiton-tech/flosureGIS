@@ -68,6 +68,15 @@
                     <span style="font-weight: bold;">Insured: {{ policy.nameOfInsured }}</span>
                 </td>
                 <td style="float: right !important;">
+                    <span style="font-weight: bold;">Policy No:
+                        {{policy?.policyNumber}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-weight: bold;">Address: {{ client ? client.address : '-' }}</span>
+                </td>
+                <td style="float: right !important;">
                     <span style="font-weight: bold;">Date:
                         {{
                             policyDebitNote
@@ -78,7 +87,7 @@
             </tr>
             <tr>
                 <td>
-                    <span style="font-weight: bold;">Address: {{ client ? client.address : '-' }}</span>
+                    <span style="font-weight: bold;">Telephone: {{ client ? client.phone : '-' }}</span>
                 </td>
                 <td style="float: right !important;">
                     <span style="font-weight: bold;">Agent:
@@ -88,12 +97,6 @@
                                 : policy.intermediaryName
                         }}</span>
                 </td>
-            </tr>
-            <tr>
-                <td>
-                    <span style="font-weight: bold;">Telephone: {{ client ? client.phone : '-' }}</span>
-                </td>
-                <!-- <td style="float: right !important"><span style="font-weight: bold;">Terms: </span></td> -->
             </tr>
         </table>
         <br />
@@ -125,20 +128,27 @@
                 <td class="td2" style="border: 1px solid black; border-collapse: collapse;">
                     {{coverNotes ? coverNote(risk) : '-'}}</td>
                 <td style="border: 1px solid black;">
-                    {{ policy.class.className }}
+                    {{ policy?.class?.className }}
                 </td>
                 <td style="border: 1px solid black;" *ngIf="policy.class.className == 'Motor'">
-                    {{ risk.insuranceType }}
+                    {{ risk?.insuranceType }}
                 </td>
                 <td style="border: 1px solid black;" *ngIf="policy.class.className == 'Fire'">
-                    {{ risk.property.subClass }}
+                    {{ risk?.property?.subClass }}
+                </td>
+                <td style="border: 1px solid black;" *ngIf="policy.class.className == 'Accident'">
+                    {{ risk?.accidentProduct?.subClass }}
                 </td>
                 <td style="border: 1px solid black;" *ngIf="policy.class.className == 'Motor'">
-                    {{ risk.vehicle.regNumber }}
+                    {{ risk?.vehicle?.regNumber }}
                 </td>
                 <td style="border: 1px solid black;" *ngIf="policy.class.className == 'Fire'">
-                    {{ risk.property.propertyId }}
+                    {{ risk?.property?.propertyId }}
                 </td>
+                <td style="border: 1px solid black;" *ngIf="policy.class.className == 'Accident'">
+                    {{ risk?.accidentProduct?.riskDescription }}
+                </td>
+
                 <td id="td3" style="border: 1px solid black; border-collapse: collapse;">
                     {{ risk.basicPremium | number: '1.2-2' }}
                 </td>
@@ -181,18 +191,25 @@
             </tr>
         </table>
 
-        <!-- <p style="text-align: right; font-weight: bold;">
-            Sub Total:
-            <span>{{policy.currency == 'ZMW' ? 'K' : '$'}}{{ subTotal | number: '1.2-2' }}</span>
-        </p>
-        <p style="text-align: right; font-weight: bold;">
-            Insurance Levy 3%:
-            <span>{{policy.currency == 'ZMW' ? 'K' : '$'}}{{ premiumLevy | number: '1.2-2' }}</span>
-        </p>
-        <p style="text-align: right; font-weight: bold;">
-            Total:
-            <span>{{policy.currency == 'ZMW' ? 'K' : '$'}}{{ policy.netPremium | number: '1.2-2' }}</span>
-        </p> -->
+        <br />
+        <table style="border:1px solid;">
+            <tr>
+                <td>
+                    <table>
+                        <tr>
+                            <td><strong>Bank Details: </strong>FIRST NATIONAL BANK</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Account Number: </strong>13545424232423 </td>
+                        </tr>
+                    </table>
+                </td>
+                <td></td>
+                <td>
+                </td>
+            </tr>
+        </table>
+        <br />
         <br />
         <p style="font-weight: bold; text-align: left;">
             Prepared By: ................................................<span style="float: right;">

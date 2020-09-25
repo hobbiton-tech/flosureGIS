@@ -1,0 +1,186 @@
+<div style="
+        display: flex;
+        margin-bottom: 15px;
+        align-items: flex-end;
+        width: 100%;
+    ">
+    <!-- <button nz-button nzType="primary" style="margin-right: 8px;" (click)="htmlToPdf()">
+        Download
+    </button> -->
+    <button nz-button nzType="primary" [useExistingCss]="true" [printSectionId]="'debitPrintSection'" ngxPrint>
+        Print
+    </button>
+</div>
+
+<div id="debitPrintSection">
+    <div class="invoice-box">
+        <table cellpadding="0" cellspacing="0">
+            <tr class="top" style="border: none;">
+                <td style="border: none;">
+                    <table>
+                        <tr style="border: none;">
+                            <td class="title" style="border: none;">
+
+                                <img src="/assets/images/Savenda-Logo-Final.png"
+                                    style="width: 100%; max-width: 100px;" />
+                            </td>
+
+                            <td style="
+                                    font-size: 11px;
+                                    float: right !important;
+                                    border: none;
+                                ">
+                                Savenda General Insurance LTD<br />
+                                Plot 20849 PSC Corporate Park, <br />
+                                P.O Box 30363, Lusaka Zambia<br />
+                                Tel: :+260 977 893 878, +260 960 344 478<br />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <hr style="width: 100%; height: 2px; background-color: black;" />
+
+        <h2 style="text-align: center; font-weight: bolder;">POLICY SCHEDULE</h2>
+        <h2 style="text-align: center; font-weight: bolder;">
+            {{policy?.risks[0]?.accidentProduct?.subClass?.toLocaleUpperCase()}}</h2>
+
+        <br />
+
+        <table>
+            <tr>
+                <td style="width: 50%;">
+                    <table>
+                        <tr>
+                            <td style="width: 36%;"><strong>Insurer:</strong></td>
+                            <td style="width: 64%;"> {{'Savenda General insurance'}}</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 36%;"><strong>Name Of Insured</strong></td>
+                            <td style="width: 6465%;"> {{ policy?.client }}</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 36%;"><strong>Address of Insured :</strong></td>
+                            <td style="width: 640%;">
+                                {{ client?.address }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 36%;"><strong>Agency :</strong></td>
+                            <td style="width: 640%;">
+                                {{policy?.sourceOfBusiness == 'direct' ? policy?.intermediaryName : 'Direct'}}
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+
+                <td style="width: 50%;">
+                    <table>
+                        <tr>
+                            <td style="width: 40%;"><strong>Policy No : </strong></td>
+                            <td style="width: 60%;">{{policy?.policyNumber}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 40%;"><strong>Policy Sign Date : </strong></td>
+                            <td style="width: 60%;">{{policy?.dateOfIssue | date}}</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 36%;"><strong>Premium : </strong></td>
+                            <td style="width: 640%;">{{policy?.currency == 'ZMW' ? 'ZMW' : 'USD'}}
+                                {{policy.risks[0]?.basicPremium | number: '1.2-2'}}</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 40%;"><strong>Insurance Levy : </strong></td>
+                            <td style="width: 60%;">{{policy?.currency == 'ZMW' ? 'ZMW' : 'USD'}} {{''}}</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 40%;"><strong>Total Premium : </strong></td>
+                            <td style="width: 60%;">{{policy?.currency == 'ZMW' ? 'ZMW' : 'USD'}}
+                                {{policy.netPremium | number: '1.2-2'}}
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+        <br />
+        <p><strong>PERIOD OF INSURANCE</strong></p>
+        <ol type="a">
+            <li><strong>From </strong>{{policy?.startDate | date}}<strong> To </strong>{{policy?.endDate | date}} both
+                dates inclusive
+            </li>
+            <li>Any subsequent period for which the the insured shall pay and the company shall accept a renewal payment
+            </li>
+        </ol>
+
+        <br />
+
+        <hr style="width: 100%; height: 2px; background-color: black;" />
+
+        <nz-table style="width: 100%;" nzSize="small" #risksTable [nzData]="policy.risks" nzFrontPagination="false"
+            nzShowPagination="false">
+            <tr style="font-size: 15;">
+                <th style="border: 1px solid black;">No.</th>
+                <th style="border: 1px solid black;">Insured</th>
+                <th style="border: 1px solid black;">Benefits</th>
+                <th style="border: 1px solid black;">Death limit per person</th>
+                <th style="border: 1px solid black;">Annual aggregate limit</th>
+                <th style="border: 1px solid black;">Accidental medical expense reimbursement</th>
+                <th style="border: 1px solid black;">Permanent Disability</th>
+            </tr>
+            <tr *ngFor="let risk of risksTable.data">
+                <td style="border: 1px solid black;">{{risk?.accidentProduct?.itemNumber}}</td>
+                <td style="border: 1px solid black;">{{risk?.accidentProduct?.personsInsured}}</td>
+                <td style="border: 1px solid black;">{{risk?.accidentProduct?.benefits}}</td>
+                <td style="border: 1px solid black;">{{risk?.accidentProduct?.limitPerPerson}}</td>
+                <td style="border: 1px solid black;">{{risk?.accidentProduct?.aggregateGroupLimit}}</td>
+                <td style="border: 1px solid black;">{{''}}</td>
+                <td style="border: 1px solid black;">{{''}}</td>
+            </tr>
+        </nz-table>
+        <br />
+
+
+        <p>
+            <span style="font-weight: bold;"><strong>Extensions</strong></span>
+        </p>
+        <ul style="list-style-type: none;">
+            <li *ngFor="let extension of extensions">
+                {{ extension.extensionType }}
+                <span style="font-weight: bold;">{{ policy.currency }}{{ extension.amount }}</span>
+            </li>
+        </ul>
+
+        <p>
+            <span style="font-weight: bold;"><strong>Excess</strong></span>
+        </p>
+        <ul style="list-style-type: none;">
+            <li *ngFor="let ex of excessList">
+                {{ ex.description }}
+                <span style="font-weight: bold;">{{ policy.currency }}{{ ex.amount }}</span>
+            </li>
+        </ul>
+
+        <p>
+            <span style="font-weight: bold;"><strong>Clauses</strong></span>
+        </p>
+        <ul style="list-style-type: none;">
+            <li *ngFor="let clause of clauses">
+                {{ clause.heading }}
+            </li>
+        </ul>
+
+        <p>
+            SIGNED AT:.............................................<span style="text-align: center;">DATE:
+                {{ policy.dateOfIssue | date }}</span><span
+                style="float: right;">....................................................</span>
+        </p>
+        <p>
+            <span style="float: center;"></span><span style="float: right;"><span style="font-weight: bold;">For Chief
+                    Executive Officer</span></span>
+        </p>
+    </div>
+</div>

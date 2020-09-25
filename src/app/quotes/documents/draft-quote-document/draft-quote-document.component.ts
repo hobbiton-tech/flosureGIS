@@ -7,10 +7,15 @@ import {
 } from '../../models/quote.model';
 import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import { IExccess } from 'src/app/settings/models/underwriting/clause.model';
+import {
+    IExccess,
+    IClause
+} from 'src/app/settings/models/underwriting/clause.model';
 import { UserModel } from '../../../users/models/users.model';
 import { UserTrackingService } from '@angular/fire/analytics';
 import { UsersService } from '../../../users/services/users.service';
+import { IDiscounts } from '../../models/discounts.model';
+import { IExtensions } from '../../models/extensions.model';
 
 @Component({
     selector: 'app-draft-quote-document',
@@ -64,6 +69,15 @@ export class DraftQuoteDocumentComponent implements OnInit {
 
     @Input()
     limitsOfLiabilities: LimitsOfLiability[];
+
+    @Input()
+    discounts: IDiscounts[];
+
+    @Input()
+    extensions: IExtensions[];
+
+    @Input()
+    clauses: IClause[];
 
     @Input()
     excessList: IExccess[];

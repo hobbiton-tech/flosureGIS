@@ -147,6 +147,47 @@
                 </nz-table>
             </div>
         </nz-card>
+
+        <nz-card>
+            <nz-divider nzText="Endorsements" nzOrientation="left"></nz-divider>
+            <div style="margin-bottom: 10px; width: 20%;">
+                <nz-input-group [nzSuffix]="suffixIconSearch">
+                    <input type="text" nz-input placeholder="Search by policy number" [(ngModel)]="searchString"
+                        (ngModelChange)="searchEndorsements($event)" />
+                </nz-input-group>
+                <ng-template #suffixIconSearch>
+                    <i nz-icon nzType="search"></i>
+                </ng-template>
+            </div>
+
+            <nz-table #endorsementsTable [nzData]="displayEndorsementsList" [nzSize]="'small'" [nzBordered]="true">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Endorsement Number</th>
+                        <th>Remarks</th>
+                        <th>Date Created</th>
+                        <th>Effective Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let endorsement of endorsementsTable.data">
+                        <td>{{ endorsement.type }}</td>
+                        <td>{{ endorsement.endorsementNumber ? endorsement.endorsementNumber : ''}}</td>
+                        <td>{{ endorsement.remark}}</td>
+                        <td>{{ endorsement.dateCreated | date }}</td>
+                        <td>{{ endorsement.effectDate | date }}</td>
+                        <td>
+                            <button nz-button nzType="primary" nzSize="small"
+                                (click)="viewPolicyBackup(endorsement.id)">
+                                View
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </nz-card>
     </div>
 </nz-spin>
 
@@ -289,7 +330,8 @@
             [deathAndInjuryPerEvent]="deathAndInjuryPerEvent" [propertyDamage]="propertyDamage"
             [combinedLimits]="combinedLimits" [excessList]="excessList" [below21Years]="below21Years"
             [over70Years]="over70Years" [noLicence]="noLicence" [careLessDriving]="careLessDriving"
-            [otherEndorsement]="otherEndorsement" [coverNot]="coverNot" [limitsOfLiablity]="limitsOfLiablity">
+            [otherEndorsement]="otherEndorsement" [coverNot]="coverNot" [limitsOfLiablity]="limitsOfLiablity"
+            [clauses]="clauses" [extensions]="extensions">
         </app-policy-schedule-document>
     </nz-card>
 </nz-modal>
@@ -297,8 +339,30 @@
 <nz-modal style="width: 150%;" nzTitle="" nzWidth="950" [(nzVisible)]="isFirePolicySchedulePDFVisible"
     (nzOnCancel)="isFirePolicySchedulePDFVisible = false" (nzOnOk)="isFirePolicySchedulePDFVisible = false">
     <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Schedule Document">
-        <app-fire-policy-schedule *ngIf="!risksLoading" [policy]="policyData" [client]="client">
+        <app-fire-policy-schedule *ngIf="!risksLoading" [policy]="policyData" [client]="client" [clauses]="clauses"
+            [excessList]="excessList" [extensions]="extensions">
         </app-fire-policy-schedule>
+    </nz-card>
+</nz-modal>
+
+<nz-modal style="width: 150%;" nzTitle="" nzWidth="950"
+    [(nzVisible)]="isAccidentPersonalAccidentPolicySchedulePDFVisible"
+    (nzOnCancel)="isAccidentPersonalAccidentPolicySchedulePDFVisible = false"
+    (nzOnOk)="isAccidentPersonalAccidentPolicySchedulePDFVisible = false">
+    <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Schedule Document">
+        <app-personal-accident-schedule *ngIf="!risksLoading" [policy]="policyData" [client]="client"
+            [excessList]="excessList" [clauses]="clauses" [extensions]="extensions">
+        </app-personal-accident-schedule>
+    </nz-card>
+</nz-modal>
+
+<nz-modal style="width: 150%;" nzTitle="" nzWidth="950" [(nzVisible)]="isGeneralAccidentPolicySchedulePDFVisible"
+    (nzOnCancel)="isGeneralAccidentPolicySchedulePDFVisible = false"
+    (nzOnOk)="isGeneralAccidentPolicySchedulePDFVisible = false">
+    <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Schedule Document">
+        <app-bond-schedule *ngIf="!risksLoading" [policy]="policyData" [client]="client" [clauses]="clauses"
+            [excessList]="excessList" [extensions]="extensions">
+        </app-bond-schedule>
     </nz-card>
 </nz-modal>
 

@@ -40,6 +40,8 @@ import { IClass } from 'src/app/settings/components/product-setups/models/produc
 import { UserModel } from '../../../users/models/users.model';
 import { UsersService } from '../../../users/services/users.service';
 import * as jwt_decode from 'jwt-decode';
+import { Endorsement } from '../../models/endorsement.model';
+import { EndorsementService } from '../../services/endorsements.service';
 
 @Component({
     selector: 'app-policy-details',
@@ -53,6 +55,11 @@ export class PolicyDetailsComponent implements OnInit, OnDestroy {
     policyDetailsForm: FormGroup;
     paymentPlanForm: FormGroup;
     policydata: Policy[] = [];
+
+    // endorsements
+    endorsementsList: Endorsement[];
+    displayEndorsementsList: Endorsement[];
+    endorsementsCount: number = 0;
 
     clauses: IPolicyClauses[];
     wordings: IPolicyWording[];
@@ -95,6 +102,8 @@ export class PolicyDetailsComponent implements OnInit, OnDestroy {
     isClausesPDFVisible = false;
     isFirePolicySchedulePDFVisible = false;
     isFireCoverNotePDFVisible = false;
+    isAccidentPersonalAccidentPolicySchedulePDFVisible = false;
+    isGeneralAccidentPolicySchedulePDFVisible = false;
 
     isNewCertificatePdfVisible = false;
     isThirdPartyCertificatePdfVisible = false;
@@ -173,7 +182,6 @@ export class PolicyDetailsComponent implements OnInit, OnDestroy {
     tExcessType = '';
     tExcessAmount = 0;
 
-
     excessList: IExccess[] = [];
     excessListCert: IExccess[] = [];
 
@@ -191,7 +199,8 @@ export class PolicyDetailsComponent implements OnInit, OnDestroy {
         private productClauseService: ClausesService,
         private clientsService: ClientsService,
         private classHandler: InsuranceClassHandlerService,
-        private usersService: UsersService
+        private usersService: UsersService,
+        private endorsementsService: EndorsementService
     ) {
         this.paymentPlanForm = this.formBuilder.group({
             numberOfInstallments: ['', Validators.required],
@@ -226,12 +235,26 @@ export class PolicyDetailsComponent implements OnInit, OnDestroy {
                     // tslint:disable-next-line: semicolon
                 });
 
+                this.endorsementsService
+                    .getEndorsements()
+                    .subscribe(endorsements => {
+                        this.endorsementsList = endorsements.filter(
+                            x =>
+                                x.policy.policyNumber ==
+                                this.policyData.policyNumber
+                        );
+                        this.endorsementsCount = this.endorsementsList.length;
+
+                        this.displayEndorsementsList = this.endorsementsList;
+                    });
 
                 const decodedJwtData = jwt_decode(this.loggedIn);
 
-                this.usersService.getUsers().subscribe((users) => {
-                this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
-              });
+                this.usersService.getUsers().subscribe(users => {
+                    this.user = users.filter(
+                        x => x.ID === decodedJwtData.user_id
+                    )[0];
+                });
 
                 this.productClauseService.getPolicyClauses().subscribe(res => {
                     this.clauses = res.filter(
@@ -319,29 +342,6 @@ export class PolicyDetailsComponent implements OnInit, OnDestroy {
                             }
                         }
                     }
-
-                    // if (ri.excesses !== []) {
-                    //     for (const ex of ri.excesses) {
-                    //         if (
-                    //             ex.excessType ===
-                    //             'Third Party Property Damage (TPPD ) 10% Minimum'
-                    //         ) {
-                    //             this.fExcessAmount = ex.amount;
-                    //             this.fExcexxType =
-                    //                 'Third Party Property Damage (TPPD ) 10% Minimum';
-                    //         }
-                    //         if (ex.excessType === 'Own Damage 10% Minimum') {
-                    //             this.sExcessAmount = ex.amount;
-                    //             this.sExcessType = 'Own Damage 10% Minimum';
-                    //         }
-                    //         if (
-                    //             ex.excessType === 'Theft Excess [15%] Minimum'
-                    //         ) {
-                    //             this.tExcessAmount = ex.amount;
-                    //             this.tExcessType = 'Theft Excess [15%] Minimum';
-                    //         }
-                    //     }
-                    // }
                 }
 
                 this.limitsOfLiablity = this.risks[0].limitsOfLiability;
@@ -427,7 +427,6 @@ export class PolicyDetailsComponent implements OnInit, OnDestroy {
             });
         });
 
-
         this.policyDetailsForm = this.formBuilder.group({
             client: ['', Validators.required],
             nameOfInsured: ['', Validators.required],
@@ -445,8 +444,6 @@ export class PolicyDetailsComponent implements OnInit, OnDestroy {
             town: ['', Validators.required]
         });
     }
-
-
 
     goToPoliciesList() {
         this.router.navigateByUrl('/flosure/underwriting/policies');
@@ -609,8 +606,6 @@ export class PolicyDetailsComponent implements OnInit, OnDestroy {
     isNewCertificateVisible(risk: RiskModel) {
         this.selectedRisk = risk;
 
-
-
         if (localStorage.getItem('class') === 'Fire') {
             this.isFireCoverNotePDFVisible = true;
         }
@@ -653,14 +648,59 @@ export class PolicyDetailsComponent implements OnInit, OnDestroy {
     }
 
     openPolicySchedule() {
-
-
         if (localStorage.getItem('class') === 'Fire') {
             this.isFirePolicySchedulePDFVisible = true;
         }
         if (localStorage.getItem('class') === 'Motor') {
             this.isSchedulePDFVisible = true;
         }
+
+        if (localStorage.getItem('class') === 'Accident') {
+            if (
+                this.policyData.risks[0].accidentProduct.subClass.toLowerCase() ===
+                'personal accident'
+            ) {
+                this.isAccidentPersonalAccidentPolicySchedulePDFVisible = true;
+                // this.isGeneralAccidentPolicySchedulePDFVisible = true;
+            } else {
+                this.isGeneralAccidentPolicySchedulePDFVisible = true;
+            }
+        }
+    }
+
+    viewPolicyBackup(endorsementId: string): void {
+        this.endorsementsService
+            .getEndorsementById(endorsementId)
+            .subscribe(endorsement => {
+                console.log(endorsement.policy);
+                this.policiesService
+                    .getPolicyById(endorsement.policy.id)
+                    .subscribe(policy => {
+                        this.router.navigateByUrl(
+                            '/flosure/underwriting/policy-endorsement-details/' +
+                                policy.id
+                        );
+                    });
+            });
+    }
+
+    searchEndorsements(value: string): void {
+        if (value === '' || !value) {
+            this.displayEndorsementsList = this.endorsementsList;
+        }
+
+        this.displayEndorsementsList = this.endorsementsList.filter(
+            endorsement => {
+                return (
+                    endorsement.type
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    endorsement.status
+                        .toLocaleLowerCase()
+                        .includes(value.toLowerCase())
+                );
+            }
+        );
     }
 
     ngOnDestroy() {

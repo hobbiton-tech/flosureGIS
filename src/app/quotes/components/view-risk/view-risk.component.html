@@ -30,6 +30,7 @@
             <!-- unique details -->
             <app-vehicle-details *ngIf="currentClassName == 'Motor'"></app-vehicle-details>
             <app-property-details *ngIf="currentClassName == 'Fire'"></app-property-details>
+            <app-accident-product-details *ngIf="currentClassName == 'Accident'"></app-accident-product-details>
 
             <div style="margin-top: 15px;">
                 <nz-divider nzText="Premium Computation" nzOrientation="left"></nz-divider>
@@ -41,6 +42,8 @@
                         </app-premium-computation-details>
                         <app-fire-premium-computation-details *ngIf="currentClassName == 'Fire'">
                         </app-fire-premium-computation-details>
+                        <app-accident-premium-computation-details *ngIf="currentClassName == 'Accident'">
+                        </app-accident-premium-computation-details>
                         <!-- end of premium computation details -->
                     </div>
 
@@ -104,21 +107,39 @@
 
             <nz-divider nzText="Schedule" nzOrientation="left"></nz-divider>
 
-            <div nz-row nzGutter="10">
-                <div nz-col nzSpan="12">
-                    <nz-card>
-                        <!-- limits of liability -->
-                        <app-limits-of-liability></app-limits-of-liability>
-                    </nz-card>
-                </div>
+            <div *ngIf="currentClassName == 'Motor'">
+                <div nz-row nzGutter="10">
+                    <div nz-col nzSpan="12">
+                        <nz-card>
+                            <!-- limits of liability -->
+                            <app-limits-of-liability></app-limits-of-liability>
+                        </nz-card>
+                    </div>
 
-                <div nz-col nzSpan="12">
-                    <nz-card>
-                        <nz-divider nzText="Excesses" nzOrientation="left"></nz-divider>
-                        <!-- excesses -->
-                        <app-excesses></app-excesses>
-                    </nz-card>
+                    <div nz-col nzSpan="12">
+                        <nz-card>
+                            <nz-divider nzText="Excesses" nzOrientation="left"></nz-divider>
+                            <!-- excesses -->
+                            <app-excesses></app-excesses>
+                        </nz-card>
+                    </div>
                 </div>
+            </div>
+
+            <div *ngIf="currentClassName == 'Fire'">
+                <nz-row>
+                    <div nz-col>
+                        <nz-card>
+                            <nz-divider nzText="Excesses" nzOrientation="left"></nz-divider>
+                            <!-- excesses -->
+                            <app-excesses></app-excesses>
+                        </nz-card>
+                    </div>
+                </nz-row>
+            </div>
+            <div *ngIf="currentClassName == 'Accident'">
+                <!-- fire class schedule -->
+                <app-schedule></app-schedule>
             </div>
         </div>
 

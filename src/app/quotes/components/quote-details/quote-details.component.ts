@@ -44,7 +44,8 @@ import {
     IPolicyClauses,
     IPolicyWording,
     IPolicyExtension,
-    IExccess
+    IExccess,
+    IExtension
 } from 'src/app/settings/models/underwriting/clause.model';
 import {
     VehicleBodyType,
@@ -88,6 +89,7 @@ import { UserModel } from '../../../users/models/users.model';
 import { UsersService } from '../../../users/services/users.service';
 import { CreateQuoteComponent } from '../create-quote/create-quote.component';
 import { TransactionModel } from '../../../clients/models/client.model';
+import { IExtensions } from '../../models/extensions.model';
 
 type AOA = any[][];
 
@@ -316,6 +318,8 @@ export class QuoteDetailsComponent implements OnInit {
     newRisks: RiskModel[];
     // Excess Variable
     excessList: IExccess[] = [];
+    extensionList: IExtensions[] = [];
+    discountsList: IDiscounts[] = [];
 
     excessTHP: IExccess[] = [];
     excessAct: IExccess[] = [];
@@ -431,6 +435,8 @@ export class QuoteDetailsComponent implements OnInit {
                 this.risks = this.quoteData.risks;
 
                 this.excessList = this.risks[0].excesses;
+                this.extensionList = this.risks[0].extensions;
+                this.discountsList = this.risks[0].discounts;
 
                 this.limitsOfLiabilities = this.risks[0].limitsOfLiability;
                 this.productClauseService.getPolicyClauses().subscribe(res => {
@@ -910,7 +916,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                             this.http
                                 .post<CoverNote>(
-                                    `https://savenda.flosure-api.com/documents/cover-note`,
+                                    `https://flosure-postgres-db.herokuapp.com/documents/cover-note`,
                                     coverNote
                                 )
                                 .subscribe(
@@ -934,7 +940,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                         this.http
                             .post<DebitNote>(
-                                `https://savenda.flosure-api.com/documents/debit-note/${this.policyId}`,
+                                `https://flosure-postgres-db.herokuapp.com/documents/debit-note/${this.policyId}`,
                                 debitNote
                             )
                             .subscribe(
@@ -1093,7 +1099,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                         this.http
                             .post<DebitNote>(
-                                `https://savenda.flosure-api.com/documents/debit-note/${this.policyId}`,
+                                `https://flosure-postgres-db.herokuapp.com/documents/debit-note/${this.policyId}`,
                                 debitNote
                             )
                             .subscribe(

@@ -3,17 +3,22 @@
             let ex of excessList
         ">
         <li>
-            {{ ex.description}} {{' - '}} {{ ex.amount }} {{' - '}} {{' '}}<a (click)="editExcess(ex)">Edit Amount</a>
+            {{ ex.description}} {{' - '}} {{ ex.amount }} {{' - '}} {{' '}}<a (click)="editExcess(ex)">Edit</a>
         </li>
     </div>
 </ul>
 
-<nz-modal [(nzVisible)]="isEditExcessAmountModalVisible" nzTitle="Edit Excess Amount"
+<nz-modal [(nzVisible)]="isEditExcessAmountModalVisible" nzTitle="Edit Excess Amount" nzWidth="50%"
     (nzOnCancel)="isEditExcessAmountModalVisible = false" (nzOnOk)="handleExcessEditOk()">
     <div nz-row>
         <div nz-col>
-            <nz-form-label [nzSpan]="7">Amount</nz-form-label>
+            <nz-form-label [nzSpan]="7">Description</nz-form-label>
             <nz-form-control [nzSpan]="12">
+                <textarea [(ngModel)]="newExcessDescription" nz-input rows="2" cols="4"></textarea>
+            </nz-form-control>
+
+            <nz-form-label [nzSpan]="7">Amount</nz-form-label>
+            <nz-form-control [nzSpan]="6">
                 <input nz-input type="number" [(ngModel)]="newExcessAmount" />
             </nz-form-control>
         </div>

@@ -51,6 +51,10 @@ import { FireCoverNoteComponent } from './documents/Fire-insurance/fire-cover-no
 import { CreateQuoteComponent } from '../quotes/components/create-quote/create-quote.component';
 import { UsersRolesComponent } from '../users/components/users-roles/users-roles.component';
 import { AuthGuard } from '../users/helpers/auth.guard';
+import { PersonalAccidentScheduleComponent } from './documents/Accident-insurance/personal-accident-schedule/personal-accident-schedule.component';
+import { BondScheduleComponent } from './documents/Accident-insurance/bond-schedule/bond-schedule.component';
+import { PolicyHistoryComponent } from './components/policy-history/policy-history.component';
+import { PolicyEndorsementDetailsComponent } from './components/policy-endorsement-details/policy-endorsement-details.component';
 // tslint:disable-next-line: max-line-length
 
 const routes: Routes = [
@@ -102,6 +106,16 @@ const routes: Routes = [
     {
         path: 'policy-details',
         component: PolicyDetailsComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'policy-history/:id',
+        component: PolicyHistoryComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'policy-endorsement-details/:id',
+        component: PolicyEndorsementDetailsComponent,
         canActivate: [AuthGuard]
     },
     {
@@ -181,7 +195,11 @@ const routes: Routes = [
         PolicyThirdpartyCertificateComponent,
         PolicyScheduleCombinedDocumentComponent,
         FirePolicyScheduleComponent,
-        FireCoverNoteComponent
+        FireCoverNoteComponent,
+        PersonalAccidentScheduleComponent,
+        BondScheduleComponent,
+        PolicyHistoryComponent,
+        PolicyEndorsementDetailsComponent
     ],
     imports: [
         CommonModule,

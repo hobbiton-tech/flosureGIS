@@ -48,8 +48,7 @@ export class LimitsOfLiabilityComponent implements OnInit, OnDestroy {
     defaultPropertyDamageMax = 30000;
     defaultCombinedLimitsMax =
         this.defaultDeathAndInjuryPerPersonMax +
-        this.defaultDeathAndInjuryPerEventMax +
-        this.defaultPropertyDamageMax;
+        this.defaultDeathAndInjuryPerEventMax;
 
     //standard limits rates
     defaultDeathAndInjuryPerPersonRate = 0;
@@ -62,17 +61,12 @@ export class LimitsOfLiabilityComponent implements OnInit, OnDestroy {
     deathAndInjuryPerEventMax = this.defaultDeathAndInjuryPerEventMax;
     propertyDamageMax = this.defaultPropertyDamageMax;
     combinedLimitsMax =
-        this.deathAndInjuryPerPersonMax +
-        this.deathAndInjuryPerEventMax +
-        this.propertyDamageMax;
+        this.deathAndInjuryPerPersonMax + this.deathAndInjuryPerEventMax;
 
     deathAndInjuryPerPerson = this.defaultDeathAndInjuryPerPersonMax;
     deathAndInjuryPerEvent = this.defaultDeathAndInjuryPerEventMax;
     propertyDamage = this.defaultPropertyDamageMax;
-    combinedLimits =
-        this.deathAndInjuryPerPerson +
-        this.deathAndInjuryPerEvent +
-        this.propertyDamage;
+    combinedLimits = this.deathAndInjuryPerPerson + this.deathAndInjuryPerEvent;
 
     deathAndInjuryPerPersonPremium = 0;
     deathAndInjuryPerEventPremium = 0;
@@ -264,6 +258,10 @@ export class LimitsOfLiabilityComponent implements OnInit, OnDestroy {
         );
     }
 
+    handleCombinedLimitsControls() {
+        console.log('combined limits controls here');
+    }
+
     getLimitsOfLiability() {
         if (this.selectedLimits.value === 'standardLimits') {
             this.limitsOfLiability.push({
@@ -295,7 +293,6 @@ export class LimitsOfLiabilityComponent implements OnInit, OnDestroy {
                 premium: this.combinedLimitsPremium
             });
         }
-
         return this.limitsOfLiability;
     }
 

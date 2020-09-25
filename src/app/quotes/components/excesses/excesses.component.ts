@@ -52,7 +52,8 @@ export class ExcessesComponent implements OnInit, OnDestroy {
     // current excess edit
     currentExcess: IExccess;
 
-    newExcessAmount: number;
+    newExcessAmount: string;
+    newExcessDescription: string;
 
     // Current class
     currentClass: IClass;
@@ -82,7 +83,20 @@ export class ExcessesComponent implements OnInit, OnDestroy {
                 const excess: IExccess = {
                     heading: extension.extensionType,
                     description: extension.extensionType,
-                    amount: extension.amount
+                    amount: extension.amount.toString()
+                };
+
+                this.tempExcessList.push(excess);
+                this.excessList = _.uniqBy(this.tempExcessList, 'heading');
+            });
+        }
+
+        if (this.currentClass.className == 'Accident') {
+            this.extensions.forEach(extension => {
+                const excess: IExccess = {
+                    heading: extension.extensionType,
+                    description: extension.extensionType,
+                    amount: extension.amount.toString()
                 };
 
                 this.tempExcessList.push(excess);
@@ -92,6 +106,9 @@ export class ExcessesComponent implements OnInit, OnDestroy {
     }
 
     editExcess(ex: IExccess) {
+        this.newExcessAmount = ex.amount;
+        this.newExcessDescription = ex.description;
+
         this.isEditExcessAmountModalVisible = true;
         this.currentExcess = ex;
     }
@@ -101,6 +118,7 @@ export class ExcessesComponent implements OnInit, OnDestroy {
             heading: this.currentExcess.heading
         });
         this.currentExcess.amount = this.newExcessAmount;
+        this.currentExcess.description = this.newExcessDescription;
 
         this.excessList.splice(index, 1, this.currentExcess);
         this.excessList = this.excessList;
@@ -114,7 +132,7 @@ export class ExcessesComponent implements OnInit, OnDestroy {
                     this.excesses.push({
                         heading: ex.heading,
                         description: ex.description,
-                        amount: Number(ex.amount)
+                        amount: ex.amount
                     });
                 }
                 return this.excesses;
@@ -123,7 +141,7 @@ export class ExcessesComponent implements OnInit, OnDestroy {
                     this.excesses.push({
                         heading: exTHP.heading,
                         description: exTHP.description,
-                        amount: Number(exTHP.amount)
+                        amount: exTHP.amount
                     });
                 }
                 return this.excesses;
@@ -134,7 +152,19 @@ export class ExcessesComponent implements OnInit, OnDestroy {
                 this.excesses.push({
                     heading: ex.heading,
                     description: ex.description,
-                    amount: Number(ex.amount)
+                    amount: ex.amount
+                });
+            }
+
+            return this.excesses;
+        }
+
+        if (this.currentClass.className == 'Accident') {
+            for (const ex of this.excessList) {
+                this.excesses.push({
+                    heading: ex.heading,
+                    description: ex.description,
+                    amount: ex.amount
                 });
             }
 

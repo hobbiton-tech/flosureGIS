@@ -41,7 +41,7 @@
         </table>
         <hr style="width: 100%; height: 2px; background-color: black;" />
 
-        <!-- <h2 class="heading">A PLUS GENERAL INSURANCE LIMITED</h2> -->
+        <h2 style="text-align: center; font-weight: bolder;">MOTOR POLICY SCHEDULE</h2>
         <P class="centerheading">Schedule attaching to and forming part of
             <strong>{{ policy.risks[0].productType }} Motor</strong> Car Policy
             No. {{ policy.policyNumber }}</P>
@@ -128,6 +128,7 @@
             <tr>
                 <th>Reg No.</th>
                 <th>Make/Model</th>
+                <th>Color</th>
                 <th>Engine No.</th>
                 <th>Chasis No.</th>
                 <th>Cubic Capacity</th>
@@ -141,10 +142,11 @@
             <tr *ngFor="let risk of policy.risks">
                 <td>{{risk.vehicle.regNumber}}</td>
                 <td>{{risk.vehicle.vehicleMake}}/{{risk.vehicle.vehicleModel}}</td>
+                <td>{{risk.vehicle.color}}</td>
                 <td>{{risk.vehicle.engineNumber}}</td>
                 <td>{{risk.vehicle.chassisNumber}}</td>
                 <td>{{risk.vehicle.cubicCapacity}}</td>
-                <td>{{getYearOfManufacture(risk)}}</td>
+                <td>{{risk.vehicle.yearOfManufacture}}</td>
                 <td>{{risk.vehicle.seatingCapacity}}</td>
                 <td>{{risk.sumInsured}}</td>
                 <td>{{risk.insuranceType}}</td>

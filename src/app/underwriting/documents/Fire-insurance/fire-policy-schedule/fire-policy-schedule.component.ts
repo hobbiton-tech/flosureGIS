@@ -4,6 +4,11 @@ import {
     IIndividualClient,
     ICorporateClient
 } from 'src/app/clients/models/clients.model';
+import { IExtensions } from 'src/app/quotes/models/extensions.model';
+import {
+    IClause,
+    IExccess
+} from 'src/app/settings/models/underwriting/clause.model';
 
 @Component({
     selector: 'app-fire-policy-schedule',
@@ -16,6 +21,15 @@ export class FirePolicyScheduleComponent implements OnInit {
 
     @Input()
     client: IIndividualClient & ICorporateClient;
+
+    @Input()
+    extensions: IExtensions[];
+
+    @Input()
+    clauses: IClause[];
+
+    @Input()
+    excessList: IExccess[];
 
     constructor() {}
 

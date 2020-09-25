@@ -15,9 +15,10 @@ import {
 } from 'src/app/clients/models/clients.model';
 import moment from 'moment';
 import { CoverNote } from '../models/documents.model';
-import { IExccess } from 'src/app/settings/models/underwriting/clause.model';
+import { IExccess, IClause } from 'src/app/settings/models/underwriting/clause.model';
 import { UsersService } from '../../../users/services/users.service';
 import { UserModel } from '../../../users/models/users.model';
+import { IExtensions } from 'src/app/quotes/models/extensions.model';
 
 @Component({
     selector: 'app-policy-schedule-document',
@@ -105,6 +106,12 @@ export class PolicyScheduleDocumentComponent implements OnInit {
 
     @Input()
     excessList: IExccess[];
+
+    @Input()
+    extensions: IExtensions[];
+
+    @Input()
+    clauses: IClause[];
 
     @Input()
     careLessDriving: number;
