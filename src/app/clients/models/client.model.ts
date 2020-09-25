@@ -150,6 +150,7 @@ export interface TransactionModel {
   credit_note_id?: string;
   client_id?: string;
   reference: string;
+  open_cash: number;
 }
 
 

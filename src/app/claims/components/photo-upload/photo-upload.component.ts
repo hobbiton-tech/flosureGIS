@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd';
 import { ClaimsProcessingServiceService } from '../../services/claims-processing-service.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
     templateUrl: './photo-upload.component.html',
     styleUrls: ['./photo-upload.component.scss']
 })
-export class PhotoUploadComponent implements OnInit {
+export class PhotoUploadComponent implements OnInit, OnDestroy {
     isPhotoUploadModalVisible: boolean = false;
 
     claimSubscription: Subscription;
@@ -54,5 +54,9 @@ export class PhotoUploadComponent implements OnInit {
         )[0];
         const link = photoUpload.storageLink;
         window.open(link);
+    }
+
+    ngOnDestroy() {
+        this.claimSubscription.unsubscribe();
     }
 }

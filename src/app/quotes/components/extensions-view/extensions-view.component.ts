@@ -15,9 +15,6 @@ export class ExtensionsViewComponent implements OnInit, OnDestroy {
     constructor(private premiumComputationService: PremiumComputationService) {
         this.extensionsListChanges = premiumComputationService.extensionsTotalChanged$.subscribe(
             extensions => {
-                console.log(
-                    'extensions changed, listening from extensions view comp'
-                );
                 this.extensions = premiumComputationService.getExtensions();
             }
         );

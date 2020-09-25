@@ -434,6 +434,7 @@ export class AgentClientComponent implements OnInit {
 
 
                     const trans: TransactionModel = {
+                      open_cash: 0,
                       balance: Number(balanceTxn),
                       client_id: this.clientCode,
                       cr: Number(resN.data.sum_in_digits * -1),

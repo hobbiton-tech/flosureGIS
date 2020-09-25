@@ -110,7 +110,7 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
     classHandlerSubscription: Subscription;
     addingQuoteStatusSubscription: Subscription;
 
-    isCreatingQuote: boolean = false;
+    isCreatingQuote = false;
 
     // view risk modal
     viewRiskModalVisible = false;
@@ -319,7 +319,7 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
             startDate: ['', Validators.required],
             policyNumberOfDays: [''],
             endDate: [''],
-            quarter: ['', Validators.required],
+            quarter: [''],
             user: [Number(this.decodedJwtData.user_id), Validators.required],
             status: ['Draft'],
             receiptStatus: ['Unreceipted'],
@@ -411,7 +411,7 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
             return false;
         }
         return submissionValue.valueOf() < moment().add(-1, 'days');
-    };
+    }
 
     handlePolicyEndDateCalculation(): void {
         if (
@@ -461,9 +461,9 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
     }
 
     handleDatesCalculation(): void {
-        let startDate = moment(this.quoteForm.get('startDate').value);
-        let endDate = moment(this.quoteForm.get('endDate').value);
-        let numberOfDays = endDate.diff(startDate, 'days');
+        const startDate = moment(this.quoteForm.get('startDate').value);
+        const endDate = moment(this.quoteForm.get('endDate').value);
+        const numberOfDays = endDate.diff(startDate, 'days');
 
         this.quoteForm.get('policyNumberOfDays').setValue(numberOfDays);
     }
@@ -571,9 +571,7 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
     deleteRow(): void {}
 
     async addQuote(): Promise<void> {
-        console.log('adding quote...', this.isCreatingQuote);
         this.isCreatingQuote = true;
-        console.log('adding quote...', this.isCreatingQuote);
 
         this.clientCode = this.quoteForm.controls.client.value.id;
         if (this.quoteForm.controls.client.value.clientType === 'Individual') {
@@ -785,10 +783,11 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
 
     // add risk to table
     addRisk() {
-        let insuranceClass = 'Fire';
+
         const risk: RiskModel[] = [];
 
         const vehicleDetails = this.vehicleDetailsService.getVehicleDetails();
+        console.log('*vehicle details :=> ', vehicleDetails);
         const propertyDetails = this.fireClassService.getPropertyDetails();
 
         const premimuComputations = this.premuimComputationsComponent.getPremiumComputations();
@@ -836,9 +835,9 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
         this.vehicleDetailsService.resetVehicleDetails();
         this.premiumComputationService.resetRiskDetails();
 
-        this.vehicleDetailsService.changeVehicleDetails(
-            this.vehicleDetailsService.getVehicleDetails()
-        );
+        // this.vehicleDetailsService.changeVehicleDetails(
+        //     this.vehicleDetailsService.getVehicleDetails()
+        // );
 
         this.isAddRiskPanelOpen = false;
     }

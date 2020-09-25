@@ -38,7 +38,7 @@ export class AgeAnalysisComponent implements OnInit {
       )[0] as IIndividualClient & ICorporateClient;
 
       this.clientsService.getTransactions().subscribe((txns: any) => {
-        this.transactionList = txns.data.filter((x) => x.client_id === this.clientId && x.balance > 0).sort().reverse();
+        this.transactionList = txns.data.filter((x) => x.client_id === this.clientId && x.balance >= 0 || x.open_balance).sort().reverse();
         console.log('Balance', this.transactionList);
       });
     });
@@ -53,7 +53,7 @@ export class AgeAnalysisComponent implements OnInit {
     const secondDate = new Date(value.transaction_date);
     const time = 30 * 60 * 60 * 24 * 1000;
     console.log('Time>>>', (todayDate.getTime() - secondDate.getTime()), time);
-    if ((todayDate.getTime() - secondDate.getTime()) <= time  && value.balance > 0) {
+    if ((todayDate.getTime() - secondDate.getTime()) <= time  && value.balance >= 0) {
       return value.balance;
     } else  {
       return 0;
@@ -67,7 +67,7 @@ export class AgeAnalysisComponent implements OnInit {
     const secondDate = new Date(value.transaction_date);
     const time = 60 * 60 * 60 * 24 * 1000;
     const time2 = 30 * 60 * 60 * 24 * 1000;
-    if ((todayDate.getTime() - secondDate.getTime()) < time  && (todayDate.getTime() - secondDate.getTime()) > time2   && value.balance > 0) {
+    if ((todayDate.getTime() - secondDate.getTime()) < time  && (todayDate.getTime() - secondDate.getTime()) > time2   && value.balance >= 0) {
       return value.balance;
     } else  {
       return 0;
@@ -82,7 +82,7 @@ export class AgeAnalysisComponent implements OnInit {
     const secondDate = new Date(value.transaction_date);
     const time = 90 * 60 * 60 * 24 * 1000;
     const time2 = 60 * 60 * 60 * 24 * 1000;
-    if ((todayDate.getTime() - secondDate.getTime()) < time  && (todayDate.getTime() - secondDate.getTime()) > time2  && value.balance > 0) {
+    if ((todayDate.getTime() - secondDate.getTime()) < time  && (todayDate.getTime() - secondDate.getTime()) > time2  && value.balance >= 0) {
       return value.balance;
     } else  {
       return 0;
@@ -97,7 +97,7 @@ export class AgeAnalysisComponent implements OnInit {
     const secondDate = new Date(value.transaction_date);
     const time = 120 * 60 * 60 * 24 * 1000;
     const time2 = 90 * 60 * 60 * 24 * 1000;
-    if ((todayDate.getTime() - secondDate.getTime()) < time  && (todayDate.getTime() - secondDate.getTime()) > time2  && value.balance > 0) {
+    if ((todayDate.getTime() - secondDate.getTime()) < time  && (todayDate.getTime() - secondDate.getTime()) > time2  && value.balance >= 0) {
       return value.balance;
     } else  {
       return 0;
@@ -112,7 +112,7 @@ export class AgeAnalysisComponent implements OnInit {
     const secondDate = new Date(value.transaction_date);
     const time = 180 * 60 * 60 * 24 * 1000;
     const time2 = 120 * 60 * 60 * 24 * 1000;
-    if ((todayDate.getTime() - secondDate.getTime()) < time  && (todayDate.getTime() - secondDate.getTime()) > time2  && value.balance > 0) {
+    if ((todayDate.getTime() - secondDate.getTime()) < time  && (todayDate.getTime() - secondDate.getTime()) > time2  && value.balance >= 0) {
       return value.balance;
     } else  {
       return 0;
@@ -127,7 +127,7 @@ export class AgeAnalysisComponent implements OnInit {
     const secondDate = new Date(value.transaction_date);
     const time = 365 * 60 * 60 * 24 * 1000;
     const time2 = 180 * 60 * 60 * 24 * 1000;
-    if ((todayDate.getTime() - secondDate.getTime()) < time  && (todayDate.getTime() - secondDate.getTime()) > time2  && value.balance > 0) {
+    if ((todayDate.getTime() - secondDate.getTime()) < time  && (todayDate.getTime() - secondDate.getTime()) > time2  && value.balance >= 0) {
       return value.balance;
     } else  {
       return 0;
@@ -141,7 +141,7 @@ export class AgeAnalysisComponent implements OnInit {
 
     const secondDate = new Date(value.transaction_date);
     const time = 365 * 60 * 60 * 24 * 1000;
-    if ((todayDate.getTime() - secondDate.getTime()) > time  && value.balance > 0) {
+    if ((todayDate.getTime() - secondDate.getTime()) > time  && value.balance >= 0) {
       return value.balance;
     } else  {
       return 0;
@@ -167,8 +167,9 @@ export class AgeAnalysisComponent implements OnInit {
       const contentDataURL = canvas.toDataURL('image/png');
       const pdf = new jspdf('p', 'mm', 'a4');
       const position = 0;
+      console.log('ID', this.client);
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
-      pdf.save( `${this.client.clientID}-Account-Statement.pdf`);
+      pdf.save( `${this.client.clientID}-Age-Analysis.pdf`);
       this.generatingPDF = false;
     });
   }

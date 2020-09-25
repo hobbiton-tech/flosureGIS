@@ -101,7 +101,7 @@
                 <td>{{ageOneEighty(statement)  | number: '1.2-2'}}</td>
                 <td>{{ageAnnual(statement)  | number: '1.2-2'}}</td>
                 <td>{{ageOverAnnual(statement)  | number: '1.2-2'}}</td>
-                <td>{{0  | number: '1.2-2'}}</td>
+                <td>{{statement.open_cash  | number: '1.2-2'}}</td>
                 <td>{{getTotalOutstanding(statement)  | number: '1.2-2'}}</td>
               </tr>
             </table>

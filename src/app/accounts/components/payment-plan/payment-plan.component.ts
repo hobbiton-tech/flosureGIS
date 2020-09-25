@@ -27,6 +27,7 @@ import { HttpClient } from '@angular/common/http';
 import { UserModel } from '../../../users/models/users.model';
 import * as jwt_decode from 'jwt-decode';
 import { UsersService } from '../../../users/services/users.service';
+import { TransactionModel } from '../../../clients/models/client.model';
 
 @Component({
     selector: 'app-payment-plan',
@@ -72,7 +73,8 @@ export class PaymentPlanComponent implements OnInit {
 
   clientDet: IIndividualClient & ICorporateClient;
   clientList: Array<IIndividualClient & ICorporateClient>;
-  displayClientList: Array<IIndividualClient & ICorporateClient>;
+  transactionList: any[] = [];
+  transactionL: any;
 
     constructor(
         private router: Router,
@@ -121,12 +123,13 @@ export class PaymentPlanComponent implements OnInit {
                 (x) => x.paymentPlan === 'NotCreated'
             );
             this.isLoading = false;
-            console.log('-------POLICIES--------');
-            console.log(this.policies);
         });
 
-      console.log('-------Value--------');
-      console.log(this.selectedValue);
+      this.clientsService.getTransactions().subscribe((txns: any) => {
+        this.transactionList = txns.data;
+
+        console.log('TANS AXN', this.transactionL);
+      });
     }
 
     refresh() {
@@ -136,7 +139,6 @@ export class PaymentPlanComponent implements OnInit {
             this.paymentPlansCount = paymentPlans.data.length;
 
             this.dispalyPaymentPlansList = this.paymentPlansList;
-            // this.changeDetectorRefs.detectChanges();
             console.log('PLANS', paymentPlans.data);
 
         });
@@ -154,13 +156,6 @@ export class PaymentPlanComponent implements OnInit {
         console.log('WHATS HAPPENINGNNNNNN>>>>>', value);
     }
 
-    clientChange(value) {
-        // this.listOfPolicies = this.policies.filter(
-        //     (x) => x.client === this.selectedValue
-        // )[0];
-        // this.listOfPolicies = this.policies.filter((x) => x.client === value);
-        console.log('Project One');
-    }
 
     // view policies of payment plan
     viewPaymentPlanDetails(paymentPlan: IPaymentModel) {
@@ -196,6 +191,9 @@ export class PaymentPlanComponent implements OnInit {
             }, (err) => {
               console.log('Update Policy error', err); });
         // }
+
+        this.transactionL = this.transactionList.filter((x) => x.client_id === this.clientId &&
+          x.type === 'Open Cash').slice(-1)[0];
 
         const plan: IPaymentModel = {
             client_id: this.clientId,
@@ -255,8 +253,13 @@ export class PaymentPlanComponent implements OnInit {
               currency: '',
             };
 
+            let balanceTxn = 0;
 
-            console.log('POlicy PAY>>>', policyPlan);
+            if (this.transactionL === null || this.transactionL === undefined || this.transactionL === 0) {
+              balanceTxn = Number(res.data.amount_paid);
+            } else {
+              balanceTxn = Number(this.transactionL.open_balance) + Number(res.data.amount_paid);
+            }
 
 
             this.planID = Number(res.data.ID);
@@ -285,6 +288,23 @@ export class PaymentPlanComponent implements OnInit {
                         planPaymentReceipt.receipt_number = this.receiptNumber;
                         this.paymentPlanService.addPlanReceipt(planPaymentReceipt).toPromise();
 
+                        const transaction: TransactionModel = {
+                          balance: 0,
+                          cr: 0,
+                          dr: 0,
+                          open_cash: Number(balanceTxn),
+                          reference: '',
+                          transaction_amount: 0,
+                          transaction_date: new Date(),
+                          type: 'Open Cash',
+                          receipt_id: resRec.data.ID,
+                          client_id: this.clientId
+                        };
+
+                        this.clientsService.createTransaction(transaction).subscribe((sucTxn) => {}, (errTxn) => {
+                          console.log(errTxn);
+                        });
+
                         this.receiptID = resRec.data.ID;
 
                     },
@@ -295,8 +315,6 @@ export class PaymentPlanComponent implements OnInit {
                 });
 
 
-                // for (const policy of this.policyNumber) {
-                    // console.log('NEW MWMWMWMW>>>>', policy, this.planID);
 
 
             policyPlan.plan_id = this.planID;
@@ -307,58 +325,12 @@ export class PaymentPlanComponent implements OnInit {
                         console.log(err);
                     });
 
-                // }
         }, (err) => {
             this.message.error('Receipt Failed');
         });
-        console.log('CHECK><><><><><>ID????', this.planID);
-
-        // for (const policy of this.policyNumber) {
-        //     console.log('NEW MWMWMWMW>>>>', policy, this.planID);
-        //     policyPlan = {
-        //         start_date: policy.startDate,
-        //         end_date: policy.endDate,
-        //         net_premium: Number(policy.netPremium),
-        //         allocation_status: 'Unallocated',
-        //         policy_number: policy.policyNumber,
-        //         allocation_amount: 0,
-        //         plan_id: Number(this.planID)
-        //     }
-
-
-        //     this.paymentPlanService.addPlanPolicy(policyPlan).subscribe((mess) =>{
-        //         console.log('WUWUWUW><><><><><', this.receiptID);
-        //     }, (err) => {
-        //         this.message.warning('Plan Policy Failed');
-        //         console.log(err);
-        //     });
-
-        // }
-
-        // this.generateID(this.receiptID);
         this.paymentPlanForm.reset();
         this.isVisible = false;
     }
-
-    // search payment plan table
-    // search(value: string) {
-    //     if (value === ' ' || !value) {
-    //         this.dispalyPaymentPlansList = this.paymentPlansList;
-    //     }
-
-    //     // this.dispalyPaymentPlansList = this.paymentPlansList.filter(
-    //     //     (paymentPlan) => {
-    //     //         return (
-    //     //             paymentPlan.clientName
-    //     //                 .toLowerCase()
-    //     //                 .includes(value.toLowerCase()) ||
-    //     //             paymentPlan.clientId
-    //     //                 .toLowerCase()
-    //     //                 .includes(value.toLowerCase())
-    //     //         );
-    //     //     }
-    //     // );
-    // }
 
     showModal(): void {
         this.isVisible = true;
