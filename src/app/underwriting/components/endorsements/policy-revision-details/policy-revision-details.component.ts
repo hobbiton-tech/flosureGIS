@@ -348,7 +348,7 @@ export class PolicyRevisionDetailsComponent implements OnInit {
 
                         this.http
                             .post<DebitNote>(
-                                `https://flosure-postgres-db.herokuapp.com/documents/debit-note/${this.policyData.id}`,
+                                `http://localhost:3001/documents/debit-note/${this.policyData.id}`,
                                 debitNote
                             )
                             .subscribe(

@@ -20,7 +20,11 @@ import { Policy } from 'src/app/underwriting/models/policy.model';
 import { RiskModel } from 'src/app/quotes/models/quote.model';
 import { IClaimant } from '../../models/claimant.model';
 import { NzMessageService } from 'ng-zorro-antd';
-import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
+import { IClass, IPeril } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
+import { Subscription } from 'rxjs';
+import { AddPerilService } from '../../../settings/components/product-setups/components/add-peril/services/add-peril.service';
+import { PremiumComputationService } from '../../../quotes/services/premium-computation.service';
+import { InsuranceClassHandlerService } from '../../../underwriting/services/insurance-class-handler.service';
 
 @Component({
     selector: 'app-intimate-claim',
@@ -28,7 +32,7 @@ import { IClass } from 'src/app/settings/components/product-setups/models/produc
     styleUrls: ['./intimate-claim.component.scss']
 })
 export class IntimateClaimComponent implements OnInit {
-    isAddClaimantModalVisible: boolean = false;
+    isAddClaimantModalVisible = false;
     claimIntimationIsLoading = false;
     intimatingClaimIsLoading = false;
 
@@ -54,7 +58,15 @@ export class IntimateClaimComponent implements OnInit {
 
     currentClass: IClass;
 
-    claimantTypeOptions = [
+  currentProductSubscription: Subscription;
+  classHandlerSubscription: Subscription;
+
+  selectedPerilValue: any[] = [];
+  perilList: IPeril[] = [];
+  perils: IPeril[] = [];
+
+
+  claimantTypeOptions = [
         { label: 'INSURED', value: 'Insured' },
         { label: 'THIRD PARTY', value: 'Third Party' }
     ];
@@ -70,6 +82,10 @@ export class IntimateClaimComponent implements OnInit {
         { label: 'INSURED', value: 'Insured' },
         { label: 'NOT INSURED', value: 'Not Insured' }
     ];
+  searchString: string;
+  columnAlignment = 'center';
+  allChecked = false;
+  indeterminate = true;
 
     constructor(
         private readonly route: Router,
@@ -79,13 +95,19 @@ export class IntimateClaimComponent implements OnInit {
         private readonly clientsService: ClientsService,
         private readonly claimsService: ClaimsService,
         private readonly policiesService: PoliciesService,
-        private msg: NzMessageService
+        private msg: NzMessageService,
+        private perilsService: AddPerilService,
+        private premiumComputationService: PremiumComputationService,
+        private classHandler: InsuranceClassHandlerService
     ) {
         this.intimateClaimForm = this.formBuilder.group({
             client: ['', Validators.required],
             lossEstimate: ['', Validators.required],
             currency: [''],
-            lossLocation: ['', Validators.required],
+          city: ['', Validators.required],
+          road: ['', Validators.required],
+          township: ['', Validators.required],
+          country: ['', Validators.required],
             thirdPartyFault: ['', Validators.required],
             causation: ['', Validators.required],
             claimant: ['', Validators.required],
@@ -93,6 +115,7 @@ export class IntimateClaimComponent implements OnInit {
             risk: ['', Validators.required],
             thirdPartyInsured: ['', Validators.required],
             lossDate: ['', Validators.required],
+          lossTime: ['', Validators.required],
             notificationDate: ['', Validators.required]
         });
     }
@@ -124,9 +147,46 @@ export class IntimateClaimComponent implements OnInit {
         this.claimService.getClaims().subscribe(claims => {
             this.claimNumber = this.claimService.generateCliamID(claims.length);
         });
+
+        this.perilsService.getPerils().subscribe((perils) => {
+          this.perils = perils;
+          this.perilList = this.perils;
+          console.log('PErils>>>', this.perilList);
+        });
     }
 
-    changeSelectedClaimant(event: string) {
+  updateAllChecked(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      this.perilList = this.perilList.map(item => {
+        return {
+          ...item,
+          checked: true
+        };
+      });
+    } else {
+      this.perilList = this.perilList.map(item => {
+        return {
+          ...item,
+          checked: false
+        };
+      });
+    }
+  }
+
+  updateSingleChecked(value: IPeril): void {
+    // if (value.che) {
+    //   this.allChecked = false;
+    //   this.indeterminate = false;
+    // } else if (this.perilList.every(item => item.checked)) {
+    //   this.allChecked = true;
+    //   this.indeterminate = false;
+    // } else {
+    //   this.indeterminate = true;
+    // }
+  }
+
+  changeSelectedClaimant(event: string) {
         console.log(event);
         this.selectedClaimantType = event;
     }
@@ -170,7 +230,7 @@ export class IntimateClaimComponent implements OnInit {
         this.selectedClient = client;
 
         this.displayPoliciesList = this.policiesList.filter(
-            x => x.clientCode == client.id
+            x => x.clientCode === client.id
         );
         const policy = this.displayPoliciesList[0];
         this.intimateClaimForm.get('policy').setValue(policy);
@@ -179,14 +239,18 @@ export class IntimateClaimComponent implements OnInit {
 
     handleClaimantChange() {}
 
-    handlePolicyChange() {
-        const policy = this.intimateClaimForm.get('policy').value;
-        this.currentClass = policy.class;
-        this.displayRisksList = policy.risks;
-        this.intimateClaimForm.get('risk').setValue(policy.risks[0]);
+    handlePolicyChange(e) {
+      console.log('Policy Target>>>', e);
+      const policy = this.intimateClaimForm.get('policy').value;
+      this.currentClass = policy.class;
+      this.displayRisksList = policy.risks;
+      this.intimateClaimForm.get('risk').setValue(policy.risks[0]);
+      this.selectedClient = this.clientList.filter((x) => x.id === policy.clientCode)[0];
 
-        console.log('policy:=>', policy);
-        console.log('class:=>', this.currentClass);
+      this.intimateClaimForm.get('client').setValue(this.selectedClient);
+
+      console.log('policy:=>', policy, this.selectedClient);
+      console.log('class:=>', this.currentClass);
     }
 
     reloadClaimants() {
@@ -203,11 +267,11 @@ export class IntimateClaimComponent implements OnInit {
 
         const InsuredClaimant: IClaimant = {
             firstName:
-                this.selectedClient.clientType == 'Individual'
+                this.selectedClient.clientType === 'Individual'
                     ? this.selectedClient.firstName
                     : this.selectedClient.companyName,
             lastName:
-                this.selectedClient.clientType == 'Individual'
+                this.selectedClient.clientType === 'Individual'
                     ? this.selectedClient.lastName
                     : '',
             type: 'Insured',
@@ -222,7 +286,7 @@ export class IntimateClaimComponent implements OnInit {
         const claim: Claim = {
             ...this.intimateClaimForm.value,
             claimant:
-                this.selectedClaimantType == 'Third Party'
+                this.selectedClaimantType === 'Third Party'
                     ? this.intimateClaimForm.get('claimant').value
                     : InsuredClaimant,
             claimNumber: this.claimNumber,
@@ -248,4 +312,28 @@ export class IntimateClaimComponent implements OnInit {
             }
         );
     }
+
+  search(value: string): void {
+    if (value === '' || !value) {
+      this.perilList = this.perils.filter(
+        x => x.name != null
+      );
+    }
+
+    this.perilList = this.perils.filter(peril => {
+      if (peril.name != null) {
+        return (
+          peril.name
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          peril.description
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          peril.type
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
+      }
+    });
+  }
 }

@@ -11,7 +11,7 @@ import { IPhotoUpload } from '../models/photo-upload.model';
 import { ILossQuantum } from '../models/loss-quantum.model';
 import { IInsuranceCompany } from '../models/insurance-company.model';
 
-const BASE_URL = 'https://flosure-postgres-db.herokuapp.com';
+const BASE_URL = 'http://localhost:3001';
 
 @Injectable({
     providedIn: 'root'

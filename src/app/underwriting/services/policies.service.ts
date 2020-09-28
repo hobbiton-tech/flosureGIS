@@ -22,9 +22,9 @@ import { AccountService } from 'src/app/accounts/services/account.service';
 import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
 import { InsuranceClassHandlerService } from './insurance-class-handler.service';
 
-const BASE_URL = 'https://flosure-postgres-db.herokuapp.com';
+const BASE_URL = 'http://localhost:3001';
 
-// const BASE_URL = 'https://flosure-postgres-db.herokuapp.com';
+// const BASE_URL = 'http://localhost:3001';
 
 interface IDebitNoteResult {
     invoiceNumber: string;
@@ -87,14 +87,14 @@ export class PoliciesService implements OnDestroy {
     }
 
     // getPolicies(): Observable<Policy[]> {
-    //     return this.http.get<Policy[]>('https://flosure-postgres-db.herokuapp.com/policy');
+    //     return this.http.get<Policy[]>('http://localhost:3001/policy');
 
     // }
 
     // getPolicyById(policyId: string): Observable<Policy> {
     //     return this.http.get<Policy>(
 
-    //         `https://flosure-postgres-db.herokuapp.com/policy/${policyId}`
+    //         `http://localhost:3001/policy/${policyId}`
 
     //     );
     //     return this.policiesCollection.doc<Policy>(policyId).valueChanges();
@@ -102,7 +102,7 @@ export class PoliciesService implements OnDestroy {
 
     updatePolicy(policy: Policy): Observable<Policy> {
         return this.http.put<Policy>(
-            `https://flosure-postgres-db.herokuapp.com/policy/${policy.id}`,
+            `http://localhost:3001/policy/${policy.id}`,
             policy
         );
     }
@@ -110,7 +110,7 @@ export class PoliciesService implements OnDestroy {
     // backup policies
     createBackupPolicy(policy: Policy): Observable<Policy> {
         return this.http.post<Policy>(
-            'https://flosure-postgres-db.herokuapp.com/policy',
+            'http://localhost:3001/policy',
             policy
         );
     }

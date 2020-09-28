@@ -48,7 +48,7 @@
                         nzTitle="Loss Estimate{{claimData.policy.currency == 'ZMW' ? ' (ZMW)' : ' ($)'}}">
                         {{claimData.lossQuantum ? claimData.lossEstimate : ''}}
                     </nz-descriptions-item>
-                    <nz-descriptions-item nzTitle="Loss Location">{{claimData ? claimData.lossLocation : ''}}
+                    <nz-descriptions-item nzTitle="Loss Location">{{claimData ? claimData.road + ', ' + claimData.township + ', ' + claimData.city+ ', ' + claimData.country : ''}}
                     </nz-descriptions-item>
                     <nz-descriptions-item nzTitle="Causation">{{claimData ? claimData.causation : ''}}
                     </nz-descriptions-item>

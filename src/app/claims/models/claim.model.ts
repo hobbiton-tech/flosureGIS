@@ -8,6 +8,7 @@ import { IDocumentUpload } from './document-upload.model';
 import { IServiceProvider } from './service-provider.model';
 import { IServiceProviderQuote } from './service-provider-quote.model';
 import { ILossQuantum } from './loss-quantum.model';
+import { Peril } from './peril.model';
 
 export class Claim {
     id: string;
@@ -20,8 +21,12 @@ export class Claim {
     photoUploads?: IPhotoUpload[];
     documentUploads?: IDocumentUpload[];
     serviceProviderRepairsQuotations?: IServiceProviderQuote[];
-    lossLocation: string;
+    road: string;
+    township: string;
+    city: string;
+    country: string;
     lossDate: Date;
+    lossTime: string;
     lossEstimate: number;
     currency?: Currency;
     thirdPartyFault: ThirdPartyFault;
@@ -31,6 +36,7 @@ export class Claim {
     causation: string;
     claimStatus: ClaimStatus;
     isRequisitionRaised?: boolean;
+    claimPerils: Peril[];
 }
 
 export type ClaimStatus =

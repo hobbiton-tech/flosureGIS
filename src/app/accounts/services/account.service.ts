@@ -16,7 +16,7 @@ import { IRequisitionModel } from '../components/models/requisition.model';
 import { PoliciesService } from 'src/app/underwriting/services/policies.service';
 import { Router } from '@angular/router';
 
-const BASE_URL = 'https://flosure-postgres-db.herokuapp.com';
+const BASE_URL = 'http://localhost:3001';
 
 interface IReceiptNumberResult {
     receiptNumber: string;

@@ -44,4 +44,5 @@ export interface IPeril {
     name: string;
     description: string;
     type: string;
+    checked?: boolean;
 }

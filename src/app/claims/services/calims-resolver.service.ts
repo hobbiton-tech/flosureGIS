@@ -9,7 +9,7 @@ import { ClaimsService } from './claims-service.service';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
-const BASE_URL = 'https://flosure-postgres-db.herokuapp.com';
+const BASE_URL = 'http://localhost:3001';
 
 @Injectable({
     providedIn: 'root'
