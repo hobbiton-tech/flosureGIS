@@ -38,7 +38,7 @@ export class IntimateClaimComponent implements OnInit {
 
     intimateClaimForm: FormGroup;
 
-    perilsList: any[] = [];
+    perilsL: IPeril[] = [];
     serviceProvidersList: any[] = [];
     clientList: Array<IIndividualClient & ICorporateClient>;
     displayClientList: Array<IIndividualClient & ICorporateClient>;
@@ -155,36 +155,32 @@ export class IntimateClaimComponent implements OnInit {
         });
     }
 
-  updateAllChecked(): void {
-    this.indeterminate = false;
-    if (this.allChecked) {
-      this.perilList = this.perilList.map(item => {
-        return {
-          ...item,
-          checked: true
-        };
-      });
-    } else {
-      this.perilList = this.perilList.map(item => {
-        return {
-          ...item,
-          checked: false
-        };
-      });
+  checkAll(ev) {
+    this.perilList.forEach(x => x.checked = ev.target.checked);
+
+    if (ev.target.checked) {
+      this.perilsL = [...this.perilList];
+    } else if (!ev.target.checked) {
+      this.perilsL = [];
     }
+
+    console.log('ALL CHECKED>>>>', this.perilsL, ev.target.checked);
   }
 
-  updateSingleChecked(value: IPeril): void {
-    // if (value.che) {
-    //   this.allChecked = false;
-    //   this.indeterminate = false;
-    // } else if (this.perilList.every(item => item.checked)) {
-    //   this.allChecked = true;
-    //   this.indeterminate = false;
-    // } else {
-    //   this.indeterminate = true;
-    // }
+  isAllChecked() {
+    return this.perilList.every(_ => _.checked);
   }
+
+  updateChecked(e: IPeril, c): void {
+
+      if (c) {
+        this.perilsL = [...this.perilsL, ...[e]];
+      } else if (!c) {
+        this.perilsL = this.perilsL.filter((el) => el !== e);
+      }
+      console.log('WEWE>>>', this.perilsL);
+  }
+
 
   changeSelectedClaimant(event: string) {
         console.log(event);
@@ -295,8 +291,12 @@ export class IntimateClaimComponent implements OnInit {
             serviceProviderRepairsQuotations: [],
             photoUploads: [],
             documentUploads: [],
-            isRequisitionRaised: false
+            isRequisitionRaised: false,
+          claimPerils: this.perilsL
         };
+
+
+        console.log('Payload>>>>', claim);
 
         this.claimService.createClaim(claim).subscribe(
             res => {

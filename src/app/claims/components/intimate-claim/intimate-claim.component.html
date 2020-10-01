@@ -197,9 +197,10 @@
                       <tr>
                         <th>
                           <div style="border-bottom: 1px solid rgb(233, 233, 233);">
-                            <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()" [nzIndeterminate]="indeterminate">
-                              Check all
-                            </label>
+                            <input type="checkbox" name="all" [checked]="isAllChecked()" (change)="checkAll($event)"/>
+<!--                            <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()" [nzIndeterminate]="indeterminate">-->
+<!--                              Check all-->
+<!--                            </label>-->
                           </div>
                         </th>
                         <th [nzAlign]="columnAlignment">Name</th>
@@ -209,12 +210,13 @@
                       </thead>
                       <tbody>
                       <tr *ngFor="let peril of perilsTable.data" style="cursor: pointer;">
-                        <td [nzChecked]="peril.has(peril.id)"
-                            [nzDisabled]="peril.disabled">
-<!--                          <nz-checkbox-group (change)="updateSingleChecked(peril)"></nz-checkbox-group>-->
+<!--                        <td [nzChecked]="peril.has(peril.id)"-->
+<!--                            [nzDisabled]="peril.disabled">-->
+<!--&lt;!&ndash;                          <nz-checkbox-group (change)="updateSingleChecked(peril)"></nz-checkbox-group>&ndash;&gt;-->
 
 
-                        </td>
+<!--                        </td>-->
+                        <td><input type="checkbox" name="perilList[]" value="{{peril.id}}" (ngModelChange)="updateChecked(peril, $event)" [(ngModel)]="peril.checked"/></td>
                         <td [nzAlign]="columnAlignment">{{peril.name}}</td>
                         <td [nzAlign]="columnAlignment">{{peril.description}}</td>
                         <td [nzAlign]="columnAlignment">{{peril.type}}</td>
