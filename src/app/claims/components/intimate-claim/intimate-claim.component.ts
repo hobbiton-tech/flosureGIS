@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ClaimsService } from '../../services/claims-service.service';
 import {
-    FormGroup,
-    FormControl,
-    FormBuilder,
-    ReactiveFormsModule,
-    Validators
+  FormGroup,
+  FormControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  Validators, ValidationErrors
 } from '@angular/forms';
 import { Claim } from '../../models/claim.model';
 import {
@@ -21,7 +21,7 @@ import { RiskModel } from 'src/app/quotes/models/quote.model';
 import { IClaimant } from '../../models/claimant.model';
 import { NzMessageService } from 'ng-zorro-antd';
 import { IClass, IPeril } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
-import { Subscription } from 'rxjs';
+import { Observable, Observer, Subscription } from 'rxjs';
 import { AddPerilService } from '../../../settings/components/product-setups/components/add-peril/services/add-peril.service';
 import { PremiumComputationService } from '../../../quotes/services/premium-computation.service';
 import { InsuranceClassHandlerService } from '../../../underwriting/services/insurance-class-handler.service';
@@ -107,14 +107,14 @@ export class IntimateClaimComponent implements OnInit {
           city: ['', Validators.required],
           road: ['', Validators.required],
           township: ['', Validators.required],
-          country: ['', Validators.required],
+          country: ['', Validators.required, [this.territoryAsyncValidator]],
             thirdPartyFault: ['', Validators.required],
             causation: ['', Validators.required],
             claimant: ['', Validators.required],
             policy: ['', Validators.required],
             risk: ['', Validators.required],
             thirdPartyInsured: ['', Validators.required],
-            lossDate: ['', Validators.required],
+            lossDate: ['', Validators.required, [this.dateAsyncValidator]],
           lossTime: ['', Validators.required],
             notificationDate: ['', Validators.required]
         });
@@ -129,7 +129,7 @@ export class IntimateClaimComponent implements OnInit {
         this.policiesService.getPolicies().subscribe(policies => {
             this.policiesList = policies;
             this.displayPoliciesList = this.policiesList;
-            console.log(this.policiesList);
+            console.log('What About You>>>',this.policiesList);
         });
 
         this.claimService.getClaimants().subscribe(claimants => {
@@ -154,6 +154,62 @@ export class IntimateClaimComponent implements OnInit {
           console.log('PErils>>>', this.perilList);
         });
     }
+
+
+  dateAsyncValidator = (control: FormControl) =>
+    new Observable((observer: Observer<ValidationErrors | null>) => {
+      setTimeout(() => {
+
+
+
+              if (new Date(control.value).getTime() > new Date(this.intimateClaimForm.controls.policy.value.endDate).getTime()) {
+                // you have to return `{error: true}` to mark it as an error event
+                console.log('VALIDATOR>>>>', control.value, this.intimateClaimForm.controls.policy.value.endDate);
+                observer.next({
+                  error: true,
+                  duplicated: true,
+                });
+              } else {
+                observer.next(null);
+              }
+          observer.complete();
+      }, 1000);
+    });
+
+
+  territoryAsyncValidator = (control: FormControl) =>
+    new Observable((observer: Observer<ValidationErrors | null>) => {
+      setTimeout(() => {
+
+
+
+        if (this.capitalize(control.value) !== 'Zambia') {
+          // you have to return `{error: true}` to mark it as an error event
+          const teritorialExt = this.intimateClaimForm.controls.risk.value.extensions.find((el) => el.extensionType === 'Territorial Extension');
+
+          if (this.intimateClaimForm.controls.risk.value.extensions.length != 0 && teritorialExt !== undefined) {
+
+            // if(teritorialExt != undefined || teritorialExt != null && teritorialExt.extensionType === 'Territorial Extension') {
+              console.log('VALIDATOR EXT>>>>', teritorialExt);
+            // }
+          }
+          console.log('VALIDATOR>>>>', this.intimateClaimForm.controls.risk.value);
+
+          observer.next({
+            error: true,
+            duplicated: true,
+          });
+        } else {
+          observer.next(null);
+        }
+        observer.complete();
+      }, 1000);
+    });
+
+
+  capitalize(s){
+    return s.toLowerCase().replace( /\b./g, function(a){ return a.toUpperCase(); } );
+  };
 
   checkAll(ev) {
     this.perilList.forEach(x => x.checked = ev.target.checked);
@@ -235,18 +291,27 @@ export class IntimateClaimComponent implements OnInit {
 
     handleClaimantChange() {}
 
-    handlePolicyChange(e) {
-      console.log('Policy Target>>>', e);
+    // handlePolicyChange() {
+    //
+    //   const policy = this.intimateClaimForm.get('policy').value;
+    //   this.currentClass = policy.class;
+    //   this.displayRisksList = this.intimateClaimForm.controls.policy.value.risks;
+    //   this.intimateClaimForm.get('risk').setValue(this.displayRisksList[0]);
+    //   this.selectedClient = this.clientList.filter((x) => x.id === policy.clientCode)[0];
+    //
+    //   this.intimateClaimForm.get('client').setValue(this.selectedClient);
+    //
+    //   console.log('policy:=>', policy, this.selectedClient, this.displayRisksList[0]);
+    //   console.log('class:=>', this.currentClass);
+    // }
+    onPolicyChange() {
       const policy = this.intimateClaimForm.get('policy').value;
       this.currentClass = policy.class;
       this.displayRisksList = policy.risks;
-      this.intimateClaimForm.get('risk').setValue(policy.risks[0]);
-      this.selectedClient = this.clientList.filter((x) => x.id === policy.clientCode)[0];
-
-      this.intimateClaimForm.get('client').setValue(this.selectedClient);
-
-      console.log('policy:=>', policy, this.selectedClient);
-      console.log('class:=>', this.currentClass);
+      this.intimateClaimForm.get('risk').setValue(this.intimateClaimForm.controls.policy.value.risks[0]);
+      this.selectedClient = this.clientList.find((x) => x.id === policy.clientCode);
+      console.log('class:=>', this.selectedClient, policy);
+      // this.intimateClaimForm.get('client').setValue(this.selectedClient);
     }
 
     reloadClaimants() {
@@ -303,7 +368,7 @@ export class IntimateClaimComponent implements OnInit {
                 console.log(res);
                 this.msg.success('Claim Intimated');
                 this.intimatingClaimIsLoading = false;
-                this.route.navigateByUrl('/flosure/claims/claim-transactions');
+                // this.route.navigateByUrl('/flosure/claims/claim-transactions');
             },
             err => {
                 console.log(err);
