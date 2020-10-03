@@ -12,14 +12,19 @@
 
             <div style="margin: 10px; background: #fff;">
                 <nz-page-header (nzBack)="backToTransactions()" nzBackIcon nzTitle="Claim Intimation">
-                    <nz-page-header-extra>
+                    <nz-page-header-extra style="margin-left: 10px">
                         <button nz-button routerLink="/flosure/claims/intimate-claims" nzType="primary"
                             *ngIf="selectedClaimantType == 'Third Party'" (click)="isAddClaimantModalVisible=true">Add
                             Claimant</button>
                     </nz-page-header-extra>
+                  <nz-page-header-extra style="margin-left: 10px">
+                    <button nz-button routerLink="/flosure/claims/intimate-claims" nzType="primary"
+                            *ngIf="thirdPartyDetailsState" (click)="isAddThirdPartyDetailsModalVisible=true">Add Third Party Details</button>
+                  </nz-page-header-extra>
                 </nz-page-header>
 
             </div>
+
 
 
             <div style="margin: 10px;">
@@ -82,18 +87,18 @@
                                   <input nz-input formControlName="country"/>
                                   <ng-template #territoryErrorTpl let-control>
                                     <ng-container *ngIf="control.hasError('required')">
-                                      Please input your Loss Date!
+                                      Please input your Country Date!
                                     </ng-container>
                                     <ng-container *ngIf="control.hasError('duplicated')">
-                                      The Loss Date is greater than the Policy duration!
+                                      The Policy does not cover loss outside the country!
                                     </ng-container>
                                   </ng-template>
                                 </nz-form-control>
                               </nz-form-item>
                                 <nz-form-item>
-                                    <nz-form-label nzRequired nzSpan="8">Third Party Fault</nz-form-label>
+                                    <nz-form-label nzRequired nzSpan="8">Party to Blame</nz-form-label>
                                     <nz-form-control nzSpan="15">
-                                        <nz-select nzPlaceHolder="" formControlName="thirdPartyFault">
+                                        <nz-select nzPlaceHolder="" formControlName="thirdPartyFault" (ngModelChange)="handlePartyToBlame($event)">
                                             <nz-option *ngFor="let fault of thirdPartyFaultOptions"
                                                 [nzValue]="fault.value" [nzLabel]="fault.label"></nz-option>
                                         </nz-select>
@@ -267,3 +272,4 @@
 <app-add-claimant-modal [isAddClaimantModalVisible]="isAddClaimantModalVisible"
     (closeAddClaimantModalEmitter)="isAddClaimantModalVisible=false" (closeAddClaimantModalEmitter)="reloadClaimants()">
 </app-add-claimant-modal>
+<app-add-third-party-details [isAddThirdPartyDetailsModalVisible]="isAddThirdPartyDetailsModalVisible" (closeAddThirdPartyDetailsEmitter)="isAddThirdPartyDetailsModalVisible=false" (thirdPartyDetails)="getThirdPartyDetails($event)"></app-add-third-party-details>

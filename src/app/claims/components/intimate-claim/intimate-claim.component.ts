@@ -7,7 +7,7 @@ import {
   ReactiveFormsModule,
   Validators, ValidationErrors
 } from '@angular/forms';
-import { Claim } from '../../models/claim.model';
+import { Claim, Subrogation, ThirdPartyDetails } from '../../models/claim.model';
 import {
     ICorporateClient,
     IIndividualClient
@@ -25,6 +25,7 @@ import { Observable, Observer, Subscription } from 'rxjs';
 import { AddPerilService } from '../../../settings/components/product-setups/components/add-peril/services/add-peril.service';
 import { PremiumComputationService } from '../../../quotes/services/premium-computation.service';
 import { InsuranceClassHandlerService } from '../../../underwriting/services/insurance-class-handler.service';
+import { AddThirdPartyDetailsComponent } from '../add-third-party-details/add-third-party-details.component';
 
 @Component({
     selector: 'app-intimate-claim',
@@ -35,8 +36,13 @@ export class IntimateClaimComponent implements OnInit {
     isAddClaimantModalVisible = false;
     claimIntimationIsLoading = false;
     intimatingClaimIsLoading = false;
+   isAddThirdPartyDetailsModalVisible = false;
+
+  thirdPartyDetailsState = false;
 
     intimateClaimForm: FormGroup;
+  thirdPartyDetails: ThirdPartyDetails;
+
 
     perilsL: IPeril[] = [];
     serviceProvidersList: any[] = [];
@@ -74,8 +80,9 @@ export class IntimateClaimComponent implements OnInit {
     selectedClaimantType = 'Insured';
 
     thirdPartyFaultOptions = [
-        { label: 'AT FAULT', value: 'At Fault' },
-        { label: 'NOT AT FAULT', value: 'Not At Fault' }
+        { label: 'NONE', value: 'None' },
+        { label: 'INSURED', value: 'Insured' },
+       { label: 'THIRD PARTY', value: 'Third Party' }
     ];
 
     thirdPartyInsuredOptions = [
@@ -98,7 +105,7 @@ export class IntimateClaimComponent implements OnInit {
         private msg: NzMessageService,
         private perilsService: AddPerilService,
         private premiumComputationService: PremiumComputationService,
-        private classHandler: InsuranceClassHandlerService
+        private classHandler: InsuranceClassHandlerService,
     ) {
         this.intimateClaimForm = this.formBuilder.group({
             client: ['', Validators.required],
@@ -129,7 +136,7 @@ export class IntimateClaimComponent implements OnInit {
         this.policiesService.getPolicies().subscribe(policies => {
             this.policiesList = policies;
             this.displayPoliciesList = this.policiesList;
-            console.log('What About You>>>',this.policiesList);
+            console.log('What About You>>>', this.policiesList);
         });
 
         this.claimService.getClaimants().subscribe(claimants => {
@@ -172,9 +179,9 @@ export class IntimateClaimComponent implements OnInit {
               } else {
                 observer.next(null);
               }
-          observer.complete();
+              observer.complete();
       }, 1000);
-    });
+    })
 
 
   territoryAsyncValidator = (control: FormControl) =>
@@ -187,30 +194,29 @@ export class IntimateClaimComponent implements OnInit {
           // you have to return `{error: true}` to mark it as an error event
           const teritorialExt = this.intimateClaimForm.controls.risk.value.extensions.find((el) => el.extensionType === 'Territorial Extension');
 
-          if (this.intimateClaimForm.controls.risk.value.extensions.length != 0 && teritorialExt !== undefined) {
-
-            // if(teritorialExt != undefined || teritorialExt != null && teritorialExt.extensionType === 'Territorial Extension') {
-              console.log('VALIDATOR EXT>>>>', teritorialExt);
-            // }
+          if (this.intimateClaimForm.controls.risk.value.extensions.length !== 0 && teritorialExt !== undefined) {
+            observer.next(null);
+          } else {
+            observer.next({
+              error: true,
+              duplicated: true,
+            });
           }
-          console.log('VALIDATOR>>>>', this.intimateClaimForm.controls.risk.value);
-
-          observer.next({
-            error: true,
-            duplicated: true,
-          });
         } else {
           observer.next(null);
         }
         observer.complete();
       }, 1000);
-    });
+    })
 
 
-  capitalize(s){
-    return s.toLowerCase().replace( /\b./g, function(a){ return a.toUpperCase(); } );
-  };
+  capitalize(s) {
+    return s.toLowerCase().replace( /\b./g, function(a) { return a.toUpperCase(); } );
+  }
 
+  getThirdPartyDetails(e) {
+    this.thirdPartyDetails = {...e};
+  }
   checkAll(ev) {
     this.perilList.forEach(x => x.checked = ev.target.checked);
 
@@ -235,6 +241,16 @@ export class IntimateClaimComponent implements OnInit {
         this.perilsL = this.perilsL.filter((el) => el !== e);
       }
       console.log('WEWE>>>', this.perilsL);
+  }
+
+
+  handlePartyToBlame(e) {
+    window.scroll(0, 0);
+    if (e === 'Insured' || e === 'Third Party') {
+      this.thirdPartyDetailsState = true;
+    } else {
+      this.thirdPartyDetailsState = false;
+    }
   }
 
 
@@ -325,6 +341,13 @@ export class IntimateClaimComponent implements OnInit {
 
     intimateClaim() {
         this.intimatingClaimIsLoading = true;
+        let subrogationState: Subrogation;
+
+        if ( this.intimateClaimForm.controls.thirdPartyFault.value === 'Third Party') {
+          subrogationState = 'Required';
+        } else {
+          subrogationState = 'NA';
+        }
 
         const InsuredClaimant: IClaimant = {
             firstName:
@@ -357,18 +380,19 @@ export class IntimateClaimComponent implements OnInit {
             photoUploads: [],
             documentUploads: [],
             isRequisitionRaised: false,
-          claimPerils: this.perilsL
+          claimPerils: this.perilsL,
+          thirdPartyDetails: this.thirdPartyDetails,
+          subrogation: subrogationState
         };
 
 
-        console.log('Payload>>>>', claim);
 
         this.claimService.createClaim(claim).subscribe(
             res => {
                 console.log(res);
                 this.msg.success('Claim Intimated');
                 this.intimatingClaimIsLoading = false;
-                // this.route.navigateByUrl('/flosure/claims/claim-transactions');
+                this.route.navigateByUrl('/flosure/claims/claim-transactions');
             },
             err => {
                 console.log(err);

@@ -35,13 +35,7 @@ export class UsersComponent implements OnInit {
     departments: DepartmentModel[] = [];
     branches: BranchModel[] = [];
   multipleValue = [];
-    // role values
-    listOfOption = ['Admin', 'Agent', 'Broker'];
-    // listOfSelectedValue: string[] = [];
-    //
-    // isNotSelected(value: string): boolean {
-    //     return this.listOfSelectedValue.indexOf(value) === -1;
-    // }
+
 
     constructor(
         private formBuilder: FormBuilder,

@@ -1,0 +1,119 @@
+<nz-modal [(nzVisible)]="isAddThirdPartyDetailsModalVisible" nzTitle="Add Third Party Details" [nzContent]="thirdPartyDetailsContent"
+          [nzFooter]="null" (nzOnCancel)="closeAddThirdPartyDetailsModal()" (nzOnOk)="addThirdPartyDetails()" nzWidth="85%">
+
+  <ng-template #thirdPartyDetailsContent>
+    <nz-spin nzSize="large" nzTip="Adding Third Party Details...." [nzSpinning]="isAddThirdPartyDetailsSpinning">
+      <form nz-form [formGroup]="thirdPartyDetailsForm">
+        <div nz-row>
+          <div nz-col nzSpan="8">
+            <nz-form-item>
+              <nz-form-label nzSpan="8" nzRequired>First Name</nz-form-label>
+              <nz-form-control nzSpan="15">
+                <nz-input-group>
+                  <input nz-input formControlName="firstName" />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label nzSpan="8" nzRequired>Phone</nz-form-label>
+              <nz-form-control nzSpan="15">
+                <nz-input-group>
+                  <input nz-input formControlName="phone" />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label nzSpan="8">Email</nz-form-label>
+              <nz-form-control nzSpan="15">
+                <nz-input-group>
+                  <input nz-input formControlName="email" />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="8">
+            <nz-form-item>
+              <nz-form-label nzSpan="8" nzRequired>Last Name</nz-form-label>
+              <nz-form-control nzSpan="15">
+                <nz-input-group>
+                  <input nz-input formControlName="lastName" />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label nzSpan="8">ID Type</nz-form-label>
+              <nz-form-control nzSpan="15">
+                <nz-select nzPlaceHolder="Select ID type" formControlName="idType">
+                  <nz-option *ngFor="let idType of idTypeOptions" [nzValue]="idType.value"
+                             [nzLabel]="idType.label">
+                  </nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label nzSpan="8" nzRequired>Address</nz-form-label>
+              <nz-form-control nzSpan="15">
+                <textarea nz-input formControlName="address"></textarea>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="8">
+            <nz-form-item>
+              <nz-form-label nzSpan="8">ID Number</nz-form-label>
+              <nz-form-control nzSpan="15">
+                <nz-input-group>
+                  <input nz-input formControlName="idNumber" />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label nzSpan="8">Vehicle Reg No.</nz-form-label>
+              <nz-form-control nzSpan="15">
+                <nz-input-group>
+                  <input nz-input formControlName="vehicleRegNumber" />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label nzSpan="8">Engine Number</nz-form-label>
+              <nz-form-control nzSpan="15">
+                <nz-input-group>
+                  <input nz-input formControlName="engineNumber" />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="8">
+            <nz-form-item>
+              <nz-form-label nzSpan="8">Vehicle Color</nz-form-label>
+              <nz-form-control nzSpan="15">
+                <nz-input-group>
+                  <input nz-input formControlName="color" />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label nzSpan="8">Vehicle Type</nz-form-label>
+              <nz-form-control nzSpan="15">
+                <nz-input-group>
+                  <input nz-input formControlName="vehicleType" />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+
+        <nz-form-item>
+          <nz-form-control>
+            <div style="text-align: center; margin-top: 10px">
+
+              <button nz-button nzType="primary" style="margin-right: 8px" (click)="addThirdPartyDetails()">Submit</button>
+              <button nz-button nzType="default">Reset Form</button>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </nz-spin>
+  </ng-template>
+</nz-modal>

@@ -38,6 +38,24 @@ export class Claim {
     claimStatus: ClaimStatus;
     isRequisitionRaised?: boolean;
     claimPerils: IPeril[];
+    thirdPartyDetails: ThirdPartyDetails;
+    subrogation?: Subrogation;
+}
+
+
+export class ThirdPartyDetails {
+  id?: string;
+  firstName: string;
+  lastName: string;
+  idType: string;
+  idNumber: string;
+  phone: string;
+  email: string;
+  address: string;
+  vehicleRegNumber: string;
+  engineNumber: string;
+  color: string;
+  vehicleType: string;
 }
 
 export type ClaimStatus =
@@ -46,6 +64,8 @@ export type ClaimStatus =
     | 'Cancelled'
     | 'Processed'
     | 'Approved';
-export type ThirdPartyFault = 'At Fault' | 'Not At Fault';
+export type ThirdPartyFault = 'Insured' | 'None' | 'Third Party';
 
 export type ThirdPartyInsured = 'Insured' | 'Not Insured';
+
+export type Subrogation = 'NA' | 'Required' | 'Invoiced' | 'Settled';

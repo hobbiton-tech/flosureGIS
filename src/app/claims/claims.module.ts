@@ -27,6 +27,7 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { ProcessedClaimsComponent } from './components/processed-claims/processed-claims.component';
 import { UsersRolesComponent } from '../users/components/users-roles/users-roles.component';
 import { AuthGuard } from '../users/helpers/auth.guard';
+import { AddThirdPartyDetailsComponent } from './components/add-third-party-details/add-third-party-details.component';
 
 const routes: Routes = [
     {
@@ -93,7 +94,8 @@ const routes: Routes = [
         LossQuantumModalComponent,
         ClaimApprovalModalComponent,
         AddClaimantModalComponent,
-        ProcessedClaimsComponent
+        ProcessedClaimsComponent,
+        AddThirdPartyDetailsComponent
     ],
     providers: [ClaimsService],
     imports: [

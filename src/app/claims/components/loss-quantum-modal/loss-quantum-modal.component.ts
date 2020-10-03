@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs';
 import { Claim } from '../../models/claim.model';
 import { ClaimsProcessingServiceService } from '../../services/claims-processing-service.service';
 import { NzMessageService } from 'ng-zorro-antd';
+import { IServiceProviderQuote } from '../../models/service-provider-quote.model';
 
 @Component({
     selector: 'app-loss-quantum-modal',
@@ -36,8 +37,9 @@ export class LossQuantumModalComponent implements OnInit, OnDestroy {
 
     insuranceCompanies: IInsuranceCompany[] = [];
     selectedInsuranceCompanies: IInsuranceCompany[] = [];
+    selectedRepairers: IServiceProviderQuote;
 
-    documentTitle: string = 'Loss Quantum Processing';
+    documentTitle = 'Loss Quantum Processing';
 
     lossQuantumForm: FormGroup;
 
@@ -46,9 +48,17 @@ export class LossQuantumModalComponent implements OnInit, OnDestroy {
         { label: 'Partial Loss', value: 'Partial Loss' }
     ];
 
+
+  settlementTypeOptions = [
+    { label: 'Repair', value: 'Repair' },
+    { label: 'Reimbursement', value: 'Reimbursement' }
+  ];
+
+
     selectedLossType = '';
 
     currentClaim: Claim;
+    selectedSettlementType: any;
 
     constructor(
         private msg: NzMessageService,
@@ -61,17 +71,21 @@ export class LossQuantumModalComponent implements OnInit, OnDestroy {
                 this.currentClaim = claim;
             }
         );
+
+        this.lossQuantumForm = this.formBuilder.group({
+        lossType: [''],
+        lossEstimate: ['', Validators.required],
+        adjustedQuantum: ['', Validators.required],
+        recommendation: ['', Validators.required],
+        salvageReserve: [''],
+        settlementType: ['', Validators.required],
+        dischargeAmount: ['', Validators.required],
+          selectedRepairer: [''],
+      });
     }
 
     ngOnInit(): void {
-        this.lossQuantumForm = this.formBuilder.group({
-            lossType: [''],
-            lossEstimate: ['', Validators.required],
-            adjustedQuantum: ['', Validators.required],
-            recommendation: ['', Validators.required],
-            salvageReserve: ['']
-        });
-
+      console.log('CLAIM><><><>', this.currentClaim);
         this.lossQuantumForm
             .get('lossEstimate')
             .setValue(this.currentClaim.lossEstimate);
@@ -103,7 +117,7 @@ export class LossQuantumModalComponent implements OnInit, OnDestroy {
             ...this.lossQuantumForm.value,
             insuranceCompanies: this.insuranceCompanies,
             salvageReserve:
-                this.lossQuantumForm.get('lossType').value == 'Total Loss'
+                this.lossQuantumForm.get('lossType').value === 'Total Loss'
                     ? this.lossQuantumForm.get('salvageReserve').value
                     : 0
         };
@@ -134,6 +148,11 @@ export class LossQuantumModalComponent implements OnInit, OnDestroy {
                 }
             );
     }
+
+
+  changeSelectedSettlementType(e) {
+      this.selectedSettlementType = e;
+  }
 
     ngOnDestroy() {
         this.claimSubscription.unsubscribe();
