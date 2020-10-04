@@ -15,6 +15,7 @@ import { Claim } from '../../models/claim.model';
 import { ClaimsProcessingServiceService } from '../../services/claims-processing-service.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { IServiceProviderQuote } from '../../models/service-provider-quote.model';
+import { ISalvage } from '../../models/salvage.model';
 
 @Component({
     selector: 'app-loss-quantum-modal',
@@ -59,6 +60,7 @@ export class LossQuantumModalComponent implements OnInit, OnDestroy {
 
     currentClaim: Claim;
     selectedSettlementType: any;
+    salvage: ISalvage;
 
     constructor(
         private msg: NzMessageService,
@@ -113,13 +115,29 @@ export class LossQuantumModalComponent implements OnInit, OnDestroy {
     processClaim() {
         this.isProcessing = true;
 
+        if (this.lossQuantumForm.get('lossType').value === 'Total Loss') {
+          this.salvage = {
+            bidStatus: 'Not Open',
+            reserve: this.lossQuantumForm.controls.salvageReserve.value,
+            salvageName: '',
+            salvageNumber:  'etertre'
+          };
+        }
+
         const lossQuantum: ILossQuantum = {
             ...this.lossQuantumForm.value,
             insuranceCompanies: this.insuranceCompanies,
             salvageReserve:
                 this.lossQuantumForm.get('lossType').value === 'Total Loss'
                     ? this.lossQuantumForm.get('salvageReserve').value
-                    : 0
+                    : 0,
+           selectedRepairer: this.lossQuantumForm.get('settlementType').value === 'Repair'
+             ? this.lossQuantumForm.get('selectedRepairer').value
+             : [],
+          salvage:
+            this.lossQuantumForm.get('lossType').value === 'Total Loss'
+              ? this.salvage
+              : {},
         };
 
         console.log('LQ:', lossQuantum);

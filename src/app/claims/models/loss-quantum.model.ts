@@ -1,5 +1,6 @@
 import { IInsuranceCompany } from './insurance-company.model';
 import { IServiceProviderQuote } from './service-provider-quote.model';
+import { ISalvage } from './salvage.model';
 
 export interface ILossQuantum {
     id: string;
@@ -9,9 +10,10 @@ export interface ILossQuantum {
     recommendation: string;
     salvageReserve?: number;
     insuranceCompanies?: IInsuranceCompany[];
-    settlementType: SettlementType;
+    settlementType?: SettlementType;
     dischargeAmount: number;
     selectedRepairer?: IServiceProviderQuote[];
+    salvage?: ISalvage;
 }
 
 export type LossType = 'Total Loss' | 'Partial Loss';
