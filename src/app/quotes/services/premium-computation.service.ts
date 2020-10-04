@@ -259,6 +259,7 @@ export class PremiumComputationService implements OnDestroy {
     }
 
     changeSelectedInsuranceType(value: string) {
+        console.log('CURRENT INSURANCE TYPE');
         this.selectedInsuranceType.next(value);
     }
 
