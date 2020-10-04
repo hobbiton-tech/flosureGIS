@@ -19,10 +19,14 @@ export class AccidentClassService {
         null
     );
 
+    accidentForm = new BehaviorSubject<IAccidentRiskDetailsModel>(null);
+
     // observable streams
     selectedSubClassChanged$ = this.selectedSubClass.asObservable();
     selectedCoverTypeChanged$ = this.selectedCoverType.asObservable();
     accidentProductDetailsChanged$ = this.accidentProductDetailsForm.asObservable();
+
+    accidentFormChanged$ = this.accidentForm.asObservable();
 
     // methods to change above observables
     changeSelectedSubClass(value: string) {
@@ -37,7 +41,15 @@ export class AccidentClassService {
         this.accidentProductDetailsForm.next(value);
     }
 
+    changeAccidentForm(value: IAccidentRiskDetailsModel) {
+        this.accidentForm.next(value);
+    }
+
     getAccidentProductDetails() {
         return this.accidentProductDetailsForm.value;
+    }
+
+    getAccidentFormDetails() {
+        return this.accidentForm.value;
     }
 }

@@ -56,9 +56,10 @@ export class QuotesComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.isOkLoading = true;
-        setTimeout(() => {
-            this.isOkLoading = false;
-        }, 3000);
+
+        // setTimeout(() => {
+        //     this.isOkLoading = false;
+        // }, 3000);
 
         this.quoteServise.getMotorQuotations().subscribe(quotes => {
             this.quotesList = quotes;
@@ -68,18 +69,21 @@ export class QuotesComponent implements OnInit, OnDestroy {
                 x => x.class.className == localStorage.getItem('class')
             );
             this.quotesCount = this.displayQuotesList.length;
+            this.isOkLoading = false;
         });
 
         const decodedJwtData = jwt_decode(this.loggedIn);
         console.log('Decoded>>>>>>', decodedJwtData);
 
-      this.usersService.getUsers().subscribe((users) => {
-        this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+        this.usersService.getUsers().subscribe(users => {
+            this.user = users.filter(x => x.ID === decodedJwtData.user_id)[0];
 
-        this.isPresent = this.user.Permission.find((el) => el.name === this.admin || el.name === this.createQuote);
+            this.isPresent = this.user.Permission.find(
+                el => el.name === this.admin || el.name === this.createQuote
+            );
 
-        console.log('USERS>>>', this.user, this.isPresent, this.admin);
-      });
+            console.log('USERS>>>', this.user, this.isPresent, this.admin);
+        });
     }
 
     viewDetails(quotation: MotorQuotationModel): void {
@@ -90,7 +94,9 @@ export class QuotesComponent implements OnInit, OnDestroy {
     }
 
     search(value: string): void {
-        if (value === ' ' || !value) { } {
+        if (value === ' ' || !value) {
+        }
+        {
             this.displayQuotesList = this.quotesList;
         }
 

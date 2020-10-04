@@ -56,19 +56,19 @@ export class RequisitionsComponent implements OnInit {
 
     ngOnInit(): void {
         this.requisitionsIsLoading = true;
-        setTimeout(() => {
-            this.requisitionsIsLoading = false;
-        }, 3000);
+        // setTimeout(() => {
+        //     this.requisitionsIsLoading = false;
+        // }, 3000);
 
-      const decodedJwtData = jwt_decode(this.loggedIn);
+        const decodedJwtData = jwt_decode(this.loggedIn);
 
-      this.usersService.getUsers().subscribe((users) => {
-        this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+        this.usersService.getUsers().subscribe(users => {
+            this.user = users.filter(x => x.ID === decodedJwtData.user_id)[0];
 
-        this.isPresentPermission = this.user.Permission.find((el) => el.name === this.approve ||
-          el.name === this.admin );
-
-      });
+            this.isPresentPermission = this.user.Permission.find(
+                el => el.name === this.approve || el.name === this.admin
+            );
+        });
 
         this.accountsService.getRequisitions().subscribe(requisitions => {
             this.requisitionsList = requisitions;
@@ -83,6 +83,8 @@ export class RequisitionsComponent implements OnInit {
                 x => x.approvalStatus === 'Approved'
             );
             this.displayApprovedRequisitionsList = this.approvedRequisitionsList;
+
+            this.requisitionsIsLoading = false;
         });
 
         this.requisitionApprovalUpdate.subscribe(update => {

@@ -149,15 +149,11 @@ export class ExtensionsComponent implements OnInit, OnDestroy {
 
         if (this.singleProduct) {
             this.productClauseService.getExtensions().subscribe(ext => {
-                console.log('exts:=> ', ext);
                 this.extensionList = ext.filter(
                     x => x.productId == this.singleProduct.id
                 );
-                console.log('extList:=> ', this.extensionList);
             });
         }
-
-        console.log('over there:=> ', this.extensionList);
     }
 
     computeIncreasedThirdPartyLimit() {}

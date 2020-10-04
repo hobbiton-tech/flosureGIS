@@ -44,9 +44,9 @@ export class FireQuotationsListComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.isOkLoading = true;
-        setTimeout(() => {
-            this.isOkLoading = false;
-        }, 3000);
+        // setTimeout(() => {
+        //     this.isOkLoading = false;
+        // }, 3000);
 
         this.quoteServise.getMotorQuotations().subscribe(quotes => {
             this.quotesList = quotes;
@@ -56,6 +56,8 @@ export class FireQuotationsListComponent implements OnInit, OnDestroy {
                 x => x.class.className == localStorage.getItem('class')
             );
             this.quotesCount = this.displayQuotesList.length;
+
+            this.isOkLoading = false;
         });
     }
 

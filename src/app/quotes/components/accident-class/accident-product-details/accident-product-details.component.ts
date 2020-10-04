@@ -4,6 +4,8 @@ import { InsuranceClassHandlerService } from 'src/app/underwriting/services/insu
 import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
 import { Subscription } from 'rxjs';
 import { AccidentClassService } from 'src/app/quotes/services/accident-class.service';
+import { IAccidentRiskDetailsModel } from 'src/app/quotes/models/accident-class/accident-risk-details.model';
+import { PremiumComputationService } from 'src/app/quotes/services/premium-computation.service';
 
 @Component({
     selector: 'app-accident-product-details',
@@ -12,25 +14,19 @@ import { AccidentClassService } from 'src/app/quotes/services/accident-class.ser
 })
 export class AccidentProductDetailsComponent implements OnInit, OnDestroy {
     classHandlerSubscription: Subscription;
+    accidentProductDetailsSubscription: Subscription;
+    riskEditModeSubscription: Subscription;
 
     constructor(
         private formBuilder: FormBuilder,
         private classHandler: InsuranceClassHandlerService,
-        private accidentClassService: AccidentClassService
+        private accidentClassService: AccidentClassService,
+        private premiumComputationService: PremiumComputationService
     ) {
         this.accidentProductDetailsForm = this.formBuilder.group({
-            riskId: [
-                { value: '', disabled: !this.isRiskEditMode },
-                Validators.required
-            ],
-            riskDescription: [
-                { value: '', disabled: !this.isRiskEditMode },
-                Validators.required
-            ],
-            subClass: [
-                { value: '', disabled: !this.isRiskEditMode },
-                Validators.required
-            ]
+            riskProductId: ['', Validators.required],
+            riskDescription: ['', Validators.required],
+            subClass: ['', Validators.required]
         });
 
         this.classHandlerSubscription = this.classHandler.selectedClassChanged$.subscribe(
@@ -40,6 +36,20 @@ export class AccidentProductDetailsComponent implements OnInit, OnDestroy {
                     localStorage.getItem('classObject')
                 );
                 this.productOptions = this.currentClass.products;
+            }
+        );
+
+        this.riskEditModeSubscription = this.premiumComputationService.riskEditModeChanged$.subscribe(
+            riskEditMode => {
+                this.isRiskEditMode = riskEditMode;
+            }
+        );
+
+        this.accidentProductDetailsSubscription = this.accidentClassService.accidentProductDetailsChanged$.subscribe(
+            details => {
+                if (details) {
+                    this.accidentProductDetailsForm.patchValue(details);
+                }
             }
         );
     }
@@ -56,10 +66,18 @@ export class AccidentProductDetailsComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.accidentProductDetailsForm.valueChanges.subscribe(res => {
-            this.accidentClassService.changeAccidentProductDetailsForm(
+            this.accidentClassService.changeAccidentForm(
                 this.accidentProductDetailsForm.value
             );
         });
+    }
+
+    setAccidentProductDetails(productDetails: IAccidentRiskDetailsModel) {
+        // console.log('RECIEVED PRODUCT:=>', productDetails);
+        this.accidentClassService.changeAccidentProductDetailsForm(
+            productDetails
+        );
+        this.accidentProductDetailsForm.patchValue(productDetails);
     }
 
     // editable fields
@@ -77,5 +95,7 @@ export class AccidentProductDetailsComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.classHandlerSubscription.unsubscribe();
+        this.accidentProductDetailsSubscription.unsubscribe();
+        this.riskEditModeSubscription.unsubscribe();
     }
 }

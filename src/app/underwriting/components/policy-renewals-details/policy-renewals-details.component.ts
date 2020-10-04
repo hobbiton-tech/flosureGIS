@@ -259,9 +259,9 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
     };
     ngOnInit(): void {
         this.policyRenewalDetailsIsLoading = true;
-        setTimeout(() => {
-            this.policyRenewalDetailsIsLoading = false;
-        }, 3000);
+        // setTimeout(() => {
+        //     this.policyRenewalDetailsIsLoading = false;
+        // }, 3000);
 
         this.route.params.subscribe(id => {
             const decodedJwtData = jwt_decode(this.loggedIn);
@@ -345,6 +345,8 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
                     .setValue(this.policyData.remarks);
 
                 this.risksLoading = false;
+
+                this.policyRenewalDetailsIsLoading = false;
             });
 
             this.policyRenewalUpdates.subscribe(update => {
@@ -582,29 +584,29 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
 
     async renewPolicy(): Promise<void> {
         this.loadingPolicy = true;
-        const debitNote: IDebitNoteDTO = {
-            companyTelephone: 'Joshua Silwembe',
-            companyEmail: 'joshua.silwembe@hobbiton.co.zm',
-            vat: '5%',
-            pin: '4849304930',
-            todayDate: new Date(),
-            agency: 'string',
-            nameOfInsured: 'Joshua Silwembe',
-            addressOfInsured: 'string',
-            ref: 'string',
-            policyNumber: 'string',
-            endorsementNumber: 'string',
-            regarding: 'string',
-            classOfBusiness: 'string',
-            brokerRef: 'string',
-            fromDate: new Date(),
-            toDate: new Date(),
-            currency: 'string',
-            basicPremium: 0,
-            insuredPremiumLevy: 0,
-            netPremium: 0,
-            processedBy: 'string'
-        };
+        // const debitNote: IDebitNoteDTO = {
+        //     companyTelephone: 'Joshua Silwembe',
+        //     companyEmail: 'joshua.silwembe@hobbiton.co.zm',
+        //     vat: '5%',
+        //     pin: '4849304930',
+        //     todayDate: new Date(),
+        //     agency: 'string',
+        //     nameOfInsured: 'Joshua Silwembe',
+        //     addressOfInsured: 'string',
+        //     ref: 'string',
+        //     policyNumber: 'string',
+        //     endorsementNumber: 'string',
+        //     regarding: 'string',
+        //     classOfBusiness: 'string',
+        //     brokerRef: 'string',
+        //     fromDate: new Date(),
+        //     toDate: new Date(),
+        //     currency: 'string',
+        //     basicPremium: 0,
+        //     insuredPremiumLevy: 0,
+        //     netPremium: 0,
+        //     processedBy: 'string'
+        // };
 
         const certificate: ICertificateDTO = {
             certificateNumber: 'string',
@@ -636,102 +638,105 @@ export class PolicyRenewalsDetailsComponent implements OnInit {
         const debit$ = '';
         const cert$ = '';
 
-        combineLatest([debit$, cert$]).subscribe(async ([debit, cert]) => {
-            // this.debitNoteURL = debit.Location;
-            // this.policyCertificateURl = cert.Location;
+        const currentClassObj: IClass = JSON.parse(
+            localStorage.getItem('classObject')
+        );
 
-            // console.log('DEBIT', debit.Location);
-            // console.log('CERT', cert.Location);
+        const endorsement: Endorsement = {
+            ...this.endorsementForm.value,
+            type: 'Cancellation Of Cover',
+            dateCreated: new Date(),
+            dateUpdated: new Date(),
+            id: this.policyData.id,
+            status: 'Pending'
+        };
 
-            // await this.quotesService.addQuoteDocuments()
-            const currentClassObj: IClass = JSON.parse(
-                localStorage.getItem('classObject')
-            );
+        // convert to policy
+        const policy: Policy = {
+            ...this.policyDetailsForm.value,
+            ...this.policyData,
+            timeOfIssue: new Date(),
+            dateOfIssue: new Date(),
+            expiryDate: this.policyDetailsForm.get('endDate').value,
+            receiptStatus: this.status,
+            risks: this.risks,
+            term: Number(this.policyData.term) + 1,
+            sumInsured: this.sumArray(this.risks, 'sumInsured'),
+            netPremium: this.sumArray(this.risks, 'netPremium'),
+            paymentPlan: this.paymentPlan,
+            underwritingYear: new Date(),
+            user: localStorage.getItem('user'),
+            id: v4()
+        };
 
-            const endorsement: Endorsement = {
-                ...this.endorsementForm.value,
-                type: 'Cancellation Of Cover',
-                dateCreated: new Date(),
-                dateUpdated: new Date(),
-                id: this.policyData.id,
-                status: 'Pending'
-            };
+        const policyUpdate: Policy = {
+            ...this.policyData,
+            status: 'Expired'
+        };
 
-            // convert to policy
-            const policy: Policy = {
-                ...this.policyDetailsForm.value,
-                ...this.policyData,
-                receiptStatus: this.status,
-                risks: this.risks,
-                term: this.policyData.term + 1,
-                sumInsured: this.sumArray(this.risks, 'sumInsured'),
-                netPremium: this.sumArray(this.risks, 'netPremium'),
-                paymentPlan: this.paymentPlan,
-                underwritingYear: new Date().getFullYear(),
-                user: localStorage.getItem('user')
-            };
+        const debitNote: DebitNote = {
+            remarks: 'Policy renewal',
+            status: 'Pending',
+            debitNoteAmount: Number(this.sumArray(this.risks, 'netPremium')),
+            dateCreated: new Date(),
+            dateUpdated: new Date()
+        };
 
-            const policyUpdate: Policy = {
-                ...this.policyData,
-                status: 'Expired'
-            };
+        this.policyData = policy;
 
-            const debitNote: DebitNote = {
-                remarks: 'Policy renewal',
-                status: 'Pending',
-                debitNoteAmount: Number(
-                    this.sumArray(this.risks, 'netPremium')
-                ),
-                dateCreated: new Date(),
-                dateUpdated: new Date()
-            };
+        this.policyData.id = this.policyID;
+        this.policyData.policyNumber = this.policyNumber;
 
-            this.policyData = policy;
+        this.policiesService.updatePolicy(policyUpdate).subscribe(
+            res => {
+                console.log(res);
 
-            this.policyData.id = this.policyID;
-            this.policyData.policyNumber = this.policyNumber;
+                // this.policiesService.renewPolicy(this.policyData);
+                this.policiesService.createPolicy(policy).subscribe(
+                    res => {
+                        this.msg.success('Policy Renewed Successfully');
+                        console.log(res);
+                        this.loadingPolicy = false;
+                    },
+                    err => {
+                        console.log(err);
+                        this.msg.error('Failed to renew policy');
+                        this.loadingPolicy = false;
+                    }
+                );
 
-            this.policiesService.updatePolicy(policy).subscribe(
-                res => {
-                    console.log(res);
-                },
-                err => {
-                    console.log(err);
-                }
-            );
-            this.policiesService.renewPolicy(this.policyData);
+                this.endorsementService.createEndorsement(
+                    this.policyData.id,
+                    endorsement
+                );
 
-            this.endorsementService.createEndorsement(
-                this.policyData.id,
-                endorsement
-            );
+                this.http
+                    .get<any>(
+                        `https://number-generation.flosure-api.com/savenda-invoice-number/1/${currentClassObj.classCode}`
+                    )
+                    .subscribe(async resd => {
+                        debitNote.debitNoteNumber = resd.data.invoice_number;
 
-            this.http
-                .get<any>(
-                    `https://number-generation.flosure-api.com/savenda-invoice-number/1/${currentClassObj.classCode}`
-                )
-                .subscribe(async resd => {
-                    debitNote.debitNoteNumber = resd.data.invoice_number;
-
-                    this.http
-                        .post<DebitNote>(
-                            `https://flosure-postgres-db.herokuapp.com/documents/debit-note/${this.policyData.id}`,
-                            debitNote
-                        )
-                        .subscribe(
-                            async resh => {
-                                console.log(resh);
-                            },
-                            async err => {
-                                console.log(err);
-                            }
-                        );
-                });
-
-            setTimeout(() => {
+                        this.http
+                            .post<DebitNote>(
+                                `https://flosure-postgres-db.herokuapp.com/documents/debit-note/${this.policyData.id}`,
+                                debitNote
+                            )
+                            .subscribe(
+                                async resh => {
+                                    console.log(resh);
+                                },
+                                async err => {
+                                    console.log(err);
+                                }
+                            );
+                    });
+            },
+            err => {
+                console.log(err);
                 this.loadingPolicy = false;
-            }, 3000);
-        });
+            }
+        );
     }
 
     showModal(): void {

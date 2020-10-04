@@ -34,12 +34,12 @@ export class ClaimApprovalComponent implements OnInit {
 
     claimsTableUpdate = new BehaviorSubject<boolean>(false);
 
-  permission: PermissionsModel;
-  user: UserModel;
-  isPresent: PermissionsModel;
-  admin = 'admin';
-  raiseRequisitionPem = 'raise_requisition';
-  loggedIn = localStorage.getItem('currentUser');
+    permission: PermissionsModel;
+    user: UserModel;
+    isPresent: PermissionsModel;
+    admin = 'admin';
+    raiseRequisitionPem = 'raise_requisition';
+    loggedIn = localStorage.getItem('currentUser');
 
     constructor(
         private readonly claimsService: ClaimsService,
@@ -48,26 +48,29 @@ export class ClaimApprovalComponent implements OnInit {
         private msg: NzMessageService,
         private readonly router: Router,
         private http: HttpClient,
-        private  usersService: UsersService,
+        private usersService: UsersService
     ) {}
 
     ngOnInit(): void {
         this.claimApprovalIsLoading = true;
-        setTimeout(() => {
-            this.claimApprovalIsLoading = false;
-        }, 3000);
+        // setTimeout(() => {
+        //     this.claimApprovalIsLoading = false;
+        // }, 3000);
 
+        const decodedJwtData = jwt_decode(this.loggedIn);
+        console.log('Decoded>>>>>>', decodedJwtData);
 
-      const decodedJwtData = jwt_decode(this.loggedIn);
-      console.log('Decoded>>>>>>', decodedJwtData);
+        this.usersService.getUsers().subscribe(users => {
+            this.user = users.filter(x => x.ID === decodedJwtData.user_id)[0];
 
-      this.usersService.getUsers().subscribe((users) => {
-        this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+            this.isPresent = this.user.Permission.find(
+                el =>
+                    el.name === this.admin ||
+                    el.name === this.raiseRequisitionPem
+            );
 
-        this.isPresent = this.user.Permission.find((el) => el.name === this.admin || el.name === this.raiseRequisitionPem);
-
-        console.log('USERS>>>', this.user, this.isPresent, this.admin);
-      });
+            console.log('USERS>>>', this.user, this.isPresent, this.admin);
+        });
 
         this.claimsService.getClaims().subscribe(claims => {
             this.claimsList = claims;
@@ -78,6 +81,8 @@ export class ClaimApprovalComponent implements OnInit {
             this.displayApprovedClaimsList = this.approvedClaimsList.filter(
                 x => x.claimNumber != null && x.isRequisitionRaised == false
             );
+
+            this.claimApprovalIsLoading = false;
         });
 
         this.claimsTableUpdate.subscribe(update => {

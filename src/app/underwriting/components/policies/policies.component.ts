@@ -5,6 +5,7 @@ import { Policy } from '../../models/policy.model';
 import { PoliciesService } from '../../services/policies.service';
 import { UsersService } from '../../../users/services/users.service';
 import { UserModel } from '../../../users/models/users.model';
+import _ from 'lodash';
 
 @Component({
     selector: 'app-policies',
@@ -14,6 +15,7 @@ import { UserModel } from '../../../users/models/users.model';
 export class PoliciesComponent implements OnInit {
     policiesList: Policy[];
     displayPoliciesList: Policy[];
+    filteredUniquePoliciesList: Policy[];
     policiesCount = 0;
     isOkLoading = false;
     user: UserModel;
@@ -30,12 +32,12 @@ export class PoliciesComponent implements OnInit {
 
     ngOnInit(): void {
         this.isOkLoading = true;
-        setTimeout(() => {
-            this.isOkLoading = false;
-        }, 3000);
+        // setTimeout(() => {
+        //     this.isOkLoading = false;
+        // }, 3000);
         this.policiesService.getPolicies().subscribe(policies => {
             this.policiesList = policies;
-            this.policiesCount = policies.length;
+
             for (const p of this.policiesList) {
                 this.usersService.getUsers().subscribe(users => {
                     this.user = users.filter(x => x.ID === p.preparedBy)[0];
@@ -46,7 +48,15 @@ export class PoliciesComponent implements OnInit {
                 a.policyNumber.localeCompare(b.policyNumber)
             );
 
-            this.displayPoliciesList = this.policiesList;
+            this.filteredUniquePoliciesList = _.uniqBy(
+                this.policiesList,
+                'policyNumber'
+            );
+
+            this.policiesCount = this.filteredUniquePoliciesList.length;
+            this.displayPoliciesList = this.filteredUniquePoliciesList;
+
+            this.isOkLoading = false;
         });
     }
 
@@ -64,18 +74,22 @@ export class PoliciesComponent implements OnInit {
 
     search(value: string): void {
         if (value === '' || !value) {
-            this.displayPoliciesList = this.policiesList;
+            this.displayPoliciesList = this.filteredUniquePoliciesList;
         }
-        this.displayPoliciesList = this.policiesList.filter(policy => {
-            return (
-                policy.policyNumber
-                    .toLowerCase()
-                    .includes(value.toLowerCase()) ||
-                policy.client
-                    .toLocaleLowerCase()
-                    .includes(value.toLowerCase()) ||
-                policy.status.toLocaleLowerCase().includes(value.toLowerCase())
-            );
-        });
+        this.displayPoliciesList = this.filteredUniquePoliciesList.filter(
+            policy => {
+                return (
+                    policy.policyNumber
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    policy.client
+                        .toLocaleLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    policy.status
+                        .toLocaleLowerCase()
+                        .includes(value.toLowerCase())
+                );
+            }
+        );
     }
 }

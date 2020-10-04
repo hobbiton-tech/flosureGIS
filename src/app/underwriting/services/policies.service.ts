@@ -31,7 +31,6 @@ interface IDebitNoteResult {
 }
 
 interface ICreditNoteResult {
-    2;
     invoiceNumber: string;
 }
 
@@ -145,13 +144,7 @@ export class PoliciesService implements OnDestroy {
             policy.timeOfIssue = today.getHours() + ':' + today.getMinutes();
             policy.expiryDate = policy.endDate;
             policy.status = 'Active';
-            // policy.policyNumber = this.generatePolicyNumber(
-            //     'BR202000030',
-            //     policies.length
-            // );
             policy.id = v4();
-            // This is the easiest way I found to track the policy number / client Id
-            // for the PDFs generation.
             localStorage.removeItem('policyNumber');
             localStorage.setItem('policyNumber', policy.policyNumber);
 

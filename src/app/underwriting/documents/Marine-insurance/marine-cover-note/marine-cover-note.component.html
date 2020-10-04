@@ -1,0 +1,272 @@
+<div style="
+        display: flex;
+        margin-bottom: 15px;
+        align-items: flex-end;
+        width: 100%;
+    ">
+    <!-- <button nz-button nzType="primary" style="margin-right: 8px;" (click)="htmlToPdf()">
+        Download
+    </button> -->
+    <button nz-button nzType="primary" [useExistingCss]="true" [printSectionId]="'debitPrintSection'" ngxPrint>
+        Print
+    </button>
+</div>
+
+<div id="debitPrintSection">
+    <div class="invoice-box">
+        <table cellpadding="0" cellspacing="0">
+            <tr class="top" style="border: none;">
+                <td style="border: none;">
+                    <table>
+                        <tr style="border: none;">
+                            <td class="title" style="border: none;">
+
+                                <img src="/assets/images/Savenda-Logo-Final.png"
+                                    style="width: 100%; max-width: 100px;" />
+                            </td>
+
+                            <td style="
+                                    font-size: 11px;
+                                    float: right !important;
+                                    border: none;
+                                ">
+                                Savenda General Insurance LTD<br />
+                                Plot 20849 PSC Corporate Park, <br />
+                                P.O Box 30363, Lusaka Zambia<br />
+                                Tel: :+260 977 893 878, +260 960 344 478<br />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <td>
+                    <table>
+                        <tr>
+                            <td><strong>VAT Reg No: {{'TBA'}}</strong></td>
+                            <!-- <td>{{'TBA'}}</td> -->
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <table>
+                        <tr>
+                            <td><strong>TPIN No: {{''}}</strong></td>
+                            <!-- <td>{{''}}</td> -->
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <hr style="width: 100%; height: 2px; background-color: black;" />
+        <br />
+
+        <h2 style="text-align: center; color: darkblue;">CERTIFICATE OF MARINE INSURANCE/ AIR CARGO INSURANCE</h2>
+        <br />
+
+        <table>
+            <tr>
+                <td>
+                    <table>
+                        <tr>
+                            <td><strong>Policy No: </strong>{{policy.policyNumber}}</td>
+                            <!-- <td>{{''}}</td> -->
+                        </tr>
+                    </table>
+                </td>
+                <td style="width: 30%;"></td>
+                <td>
+                    <table>
+                        <tr>
+                            <td><strong>Cover Note No: </strong>{{''}}</td>
+                            <!-- <td>{{''}}</td> -->
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <br />
+
+        <table>
+            <p>The insured having proposed for insurance the risk is hereby held for the period mentioned below in terms
+                of
+                the company's usual policy fOR this class of business subject to any conditions endorsed hereon</p>
+
+            <br />
+            <p>Cover may be cancelled by the company giving seven (7) days notice to that effect</p>
+        </table>
+
+        <table>
+            <tr>
+                <td style="width: 60%;">
+                    <table>
+                        <tr>
+                            <td style="width: 36%;"><strong>Insured:</strong></td>
+                            <td style="width: 64%;"> {{policy?.client}}</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 36%;"><strong>Insured Address</strong></td>
+                            <td style="width: 6465%;"> {{ client?.address }}</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 36%;"><strong>Class of Business :</strong></td>
+                            <td style="width: 640%;">
+                                {{ policy?.class?.className }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 36%;"><strong>Period Of Insurance :</strong></td>
+                            <td style="width: 640%;"> <strong>From </strong>{{policyRisk?.riskStartDate | date}}
+                                <strong> To
+                                </strong>
+                                {{policyRisk?.riskEndDate | date}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 36%;"><strong>Packing marks and numbers :</strong></td>
+                            <td style="width: 640%;">
+                                {{ ''}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 36%;"><strong>Vessel :</strong></td>
+                            <td style="width: 640%;">
+                                {{ ''}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 36%;"><strong>Voyage :</strong></td>
+                            <td style="width: 640%;">
+                                {{'From: '}} {{ ''}} {{'To'}} {{''}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 36%;"><strong>The Risk :</strong></td>
+                            <td style="width: 640%;">
+                                {{ policyRisk?.property?.subClass }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 36%;"><strong>Description Of Risk :</strong></td>
+                            <td style="width: 640%;">
+                                {{ policyRisk?.property?.propertyDescription }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 36%;"><strong>SumInsured :</strong></td>
+                            <td style="width: 640%;">
+                                {{policy?.currency == 'ZMW' ? 'ZMW' : 'USD'}} {{ policyRisk?.sumInsured }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 36%;"><strong>Premium :</strong></td>
+                            <td style="width: 640%;">
+                                {{policy?.currency == 'ZMW' ? 'ZMW' : 'USD'}}
+                                {{ policyRisk?.basicPremium | number: '1.2-2' }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 36%;"><strong>Insurance Levy :</strong></td>
+                            <td style="width: 640%;">
+                                {{policy?.currency == 'ZMW' ? 'ZMW' : 'USD'}}
+                                {{ policyRisk?.premiumLevy | number: '1.2-2' }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 36%;"><strong>Net Premium :</strong></td>
+                            <td style="width: 640%;">
+                                {{policy?.currency == 'ZMW' ? 'ZMW' : 'USD'}}
+                                {{ policyRisk?.netPremium | number: '1.2-2' }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 36%;"><strong>Excess :</strong></td>
+                            <td style="width: 640%;">
+                                <ul style="list-style-type: none;">
+                                    <li *ngFor="let ex of policyRisk.excesses">
+                                        {{ ex.description }}
+                                        <span style="font-weight: bold;">{{ policy.currency }}{{ ex.amount }}</span>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 36%;"><strong>Special Conditions :</strong></td>
+                            <td style="width: 640%;">
+                                {{ 'As per policy' }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 36%;"><strong>Agency :</strong></td>
+                            <td style="width: 640%;">
+                                {{ policy?.sourceOfBusiness }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 36%;"><strong>Date :</strong></td>
+                            <td style="width: 640%;">
+                                {{ policy.startDate | date }}
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+
+                <td style="width: 40%;">
+                    <!-- <table>
+                        <tr>
+                            <td style="width: 40%;"><strong>Policy No :</strong></td>
+                            <td style="width: 60%;">{{policy?.policyNumber}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 40%;"><strong>Policy Sign Date :</strong></td>
+                            <td style="width: 60%;">{{policy?.dateOfIssue}}</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 36%;"><strong>Premium :</strong></td>
+                            <td style="width: 640%;"> {{'-'}}</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 40%;"><strong>Insurance Levy :</strong></td>
+                            <td style="width: 60%;">{{'-'}}</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 40%;"><strong>Total Premium :</strong></td>
+                            <td style="width: 60%;">{{'-'}}</td>
+                        </tr>
+                    </table> -->
+                </td>
+            </tr>
+        </table>
+
+        <table>
+            <td style="width: 70%;"></td>
+            <td style="width: 30%;">
+                <p><strong><i>For and on behalf of the company</i></strong></p>
+                <p><strong>SAVENDA GENERAL INSURANCE</strong></p>
+                <br />
+                <p>...................................................</p>
+                <p>Authorised Representative</p>
+            </td>
+        </table>
+
+        <br />
+    </div>
+</div>
+
+
+<div style="
+        display: flex;
+        margin-bottom: 15px;
+        align-items: flex-end;
+        width: 100%;
+    ">
+    <!-- <button nz-button nzType="primary" style="margin-right: 8px;" (click)="htmlToPdf()">
+        Download
+    </button> -->
+    <button nz-button nzType="primary" [useExistingCss]="true" [printSectionId]="'debitPrintSection'" ngxPrint>
+        Print
+    </button>
+</div>

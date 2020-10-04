@@ -99,14 +99,15 @@ export class IntimateClaimComponent implements OnInit {
 
     ngOnInit(): void {
         this.claimIntimationIsLoading = true;
-        setTimeout(() => {
-            this.claimIntimationIsLoading = false;
-        }, 3000);
+        // setTimeout(() => {
+        //     this.claimIntimationIsLoading = false;
+        // }, 3000);
 
         this.policiesService.getPolicies().subscribe(policies => {
             this.policiesList = policies;
             this.displayPoliciesList = this.policiesList;
             console.log(this.policiesList);
+            this.claimIntimationIsLoading = false;
         });
 
         this.claimService.getClaimants().subscribe(claimants => {

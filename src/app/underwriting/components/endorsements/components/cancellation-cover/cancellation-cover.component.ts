@@ -17,6 +17,7 @@ import * as jwt_decode from 'jwt-decode';
 import { PermissionsModel } from '../../../../../users/models/roles.model';
 import { UserModel } from '../../../../../users/models/users.model';
 import { UsersService } from '../../../../../users/services/users.service';
+import _ from 'lodash';
 
 @Component({
     selector: 'app-cancellation-cover',
@@ -28,6 +29,7 @@ export class CancellationCoverComponent implements OnInit {
 
     policiesList: Policy[];
     displayPoliciesList: Policy[];
+    filteredUniquePoliciesList: Policy[];
     activePoliciesList: Policy[];
     displayActivePoliciesList: Policy[];
     cancelledPoliciesList: Policy[];
@@ -79,13 +81,13 @@ export class CancellationCoverComponent implements OnInit {
     reqNumber: string;
 
     policy: Policy;
-  permission: PermissionsModel;
-  user: UserModel;
-  isPresent: PermissionsModel;
-  admin = 'admin';
-  cancelPolicy = 'cancel_policy';
-  raiseRequisitionPem = 'raise_requisition';
-  loggedIn = localStorage.getItem('currentUser');
+    permission: PermissionsModel;
+    user: UserModel;
+    isPresent: PermissionsModel;
+    admin = 'admin';
+    cancelPolicy = 'cancel_policy';
+    raiseRequisitionPem = 'raise_requisition';
+    loggedIn = localStorage.getItem('currentUser');
 
     constructor(
         private readonly router: Router,
@@ -93,38 +95,46 @@ export class CancellationCoverComponent implements OnInit {
         private accountsService: AccountService,
         private msg: NzMessageService,
         private http: HttpClient,
-        private  usersService: UsersService,
+        private usersService: UsersService
     ) {}
 
     ngOnInit(): void {
         this.cancellationOfCoverIsLoading = true;
-        setTimeout(() => {
-            this.cancellationOfCoverIsLoading = false;
-        }, 3000);
+        // setTimeout(() => {
+        //     this.cancellationOfCoverIsLoading = false;
+        // }, 3000);
 
-      const decodedJwtData = jwt_decode(this.loggedIn);
-      console.log('Decoded>>>>>>', decodedJwtData);
+        const decodedJwtData = jwt_decode(this.loggedIn);
+        console.log('Decoded>>>>>>', decodedJwtData);
 
-      this.usersService.getUsers().subscribe((users) => {
-        this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+        this.usersService.getUsers().subscribe(users => {
+            this.user = users.filter(x => x.ID === decodedJwtData.user_id)[0];
 
-        this.isPresent = this.user.Permission.find((el) => el.name === this.admin ||
-          el.name === this.cancelPolicy || el.name === this.raiseRequisitionPem);
+            this.isPresent = this.user.Permission.find(
+                el =>
+                    el.name === this.admin ||
+                    el.name === this.cancelPolicy ||
+                    el.name === this.raiseRequisitionPem
+            );
 
-        console.log('USERS>>>', this.user, this.isPresent, this.admin);
-      });
+            console.log('USERS>>>', this.user, this.isPresent, this.admin);
+        });
 
         this.policiesService.getPolicies().subscribe(policies => {
             this.policiesList = policies;
-            this.displayPoliciesList = this.policiesList;
+            this.filteredUniquePoliciesList = _.uniqBy(
+                this.policiesList,
+                'policyNumber'
+            );
+            this.displayPoliciesList = this.filteredUniquePoliciesList;
 
-            this.activePoliciesList = this.policiesList.filter(
+            this.activePoliciesList = this.filteredUniquePoliciesList.filter(
                 x => x.status === 'Active'
             );
             this.displayActivePoliciesList = this.activePoliciesList;
             console.log('active policies: ', this.displayActivePoliciesList);
 
-            this.cancelledPoliciesList = this.policiesList.filter(
+            this.cancelledPoliciesList = this.filteredUniquePoliciesList.filter(
                 x => x.status === 'Cancelled'
             );
             this.displayCancelledPoliciesList = this.cancelledPoliciesList;
@@ -132,6 +142,8 @@ export class CancellationCoverComponent implements OnInit {
                 'cancelled policies: ',
                 this.displayCancelledPoliciesList
             );
+
+            this.cancellationOfCoverIsLoading = false;
         });
 
         this.policiesService.getCreditNotes().subscribe(creditNotes => {

@@ -417,7 +417,7 @@
             </nz-modal>
 
             <nz-modal [(nzVisible)]="isViewDraftQuotePDFVisible" (nzOnCancel)="isViewDraftQuotePDFVisible = false"
-                (nzOnOk)="isViewDraftQuotePDFVisible = false" nzWidth="800">
+                (nzOnOk)="isViewDraftQuotePDFVisible = false" nzWidth="950">
                 <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Motor Quote Document">
                     <app-draft-quote-document [quoteNumber]="quoteNumber" [clientName]="quoteData.client"
                         [dateCreated]="quoteData.dateCreated" [basicPremium]="quoteBasicPremium"
@@ -448,7 +448,7 @@
 
             <nz-modal [(nzVisible)]="isViewFireDraftQuotePDFVisible"
                 (nzOnCancel)="isViewFireDraftQuotePDFVisible = false" (nzOnOk)="isViewFireDraftQuotePDFVisible = false"
-                nzWidth="800">
+                nzWidth="900">
                 <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Fire Quote Document">
                     <app-fire-draft-quote-document [quoteNumber]="quoteNumber" [clientName]="quoteData.client"
                         [dateCreated]="quoteData.dateCreated" [basicPremium]="quoteBasicPremium"
@@ -457,8 +457,102 @@
                         [risks]="quoteData.risks" [quoteData]="quoteData" [totalSumInsured]="quoteSumInsured"
                         [totalBasicPremium]="quoteBasicPremium" [totalLevy]="quoteLevy"
                         [totalNetPremium]="quoteNetPremium" [excessList]="excessList"
-                        [limitsOfLiabilities]="limitsOfLiabilities">
+                        [limitsOfLiabilities]="limitsOfLiabilities" [discounts]="discountsList"
+                        [extensions]="extensionList" [clauses]="clauses">
                     </app-fire-draft-quote-document>
+                </nz-card>
+                <ng-template #pdfQuoteActions>
+                    <div style="display: flex;">
+                        <div style="margin-right: 8px;">
+                            <button nz-button nzSize="medium" nzType="primary">
+                                Print
+                            </button>
+                        </div>
+                        <div>
+                            <button nz-button nzSize="medium" nzType="primary">
+                                Email
+                            </button>
+                        </div>
+                    </div>
+                </ng-template>
+            </nz-modal>
+
+            <nz-modal [(nzVisible)]="isViewAccidentDraftQuotePDFVisible"
+                (nzOnCancel)="isViewAccidentDraftQuotePDFVisible = false"
+                (nzOnOk)="isViewAccidentDraftQuotePDFVisible = false" nzWidth="900">
+                <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Accident Quote Document">
+                    <app-accident-draft-quotation [quoteNumber]="quoteNumber" [clientName]="quoteData.client"
+                        [dateCreated]="quoteData.dateCreated" [basicPremium]="quoteBasicPremium"
+                        [loadingAmount]="premiumLoadingTotal" [discountAmount]="quoteDiscountTotal"
+                        [totalAmount]="quoteNetPremium" [premiumLevy]="quoteLevy" [numberOfRisks]="numberOfRisks"
+                        [risks]="quoteData.risks" [quoteData]="quoteData" [totalSumInsured]="quoteSumInsured"
+                        [totalBasicPremium]="quoteBasicPremium" [totalLevy]="quoteLevy"
+                        [totalNetPremium]="quoteNetPremium" [excessList]="excessList"
+                        [limitsOfLiabilities]="limitsOfLiabilities" [discounts]="discountsList"
+                        [extensions]="extensionList" [clauses]="clauses">
+                    </app-accident-draft-quotation>
+                </nz-card>
+                <ng-template #pdfQuoteActions>
+                    <div style="display: flex;">
+                        <div style="margin-right: 8px;">
+                            <button nz-button nzSize="medium" nzType="primary">
+                                Print
+                            </button>
+                        </div>
+                        <div>
+                            <button nz-button nzSize="medium" nzType="primary">
+                                Email
+                            </button>
+                        </div>
+                    </div>
+                </ng-template>
+            </nz-modal>
+
+            <nz-modal [(nzVisible)]="isViewMarineDraftQuotePDFVisible"
+                (nzOnCancel)="isViewMarineDraftQuotePDFVisible = false"
+                (nzOnOk)="isViewMarineDraftQuotePDFVisible = false" nzWidth="900">
+                <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Accident Quote Document">
+                    <app-marine-draft-quotation [quoteNumber]="quoteNumber" [clientName]="quoteData.client"
+                        [dateCreated]="quoteData.dateCreated" [basicPremium]="quoteBasicPremium"
+                        [loadingAmount]="premiumLoadingTotal" [discountAmount]="quoteDiscountTotal"
+                        [totalAmount]="quoteNetPremium" [premiumLevy]="quoteLevy" [numberOfRisks]="numberOfRisks"
+                        [risks]="quoteData.risks" [quoteData]="quoteData" [totalSumInsured]="quoteSumInsured"
+                        [totalBasicPremium]="quoteBasicPremium" [totalLevy]="quoteLevy"
+                        [totalNetPremium]="quoteNetPremium" [excessList]="excessList"
+                        [limitsOfLiabilities]="limitsOfLiabilities" [discounts]="discountsList"
+                        [extensions]="extensionList" [clauses]="clauses">
+                    </app-marine-draft-quotation>
+                </nz-card>
+                <ng-template #pdfQuoteActions>
+                    <div style="display: flex;">
+                        <div style="margin-right: 8px;">
+                            <button nz-button nzSize="medium" nzType="primary">
+                                Print
+                            </button>
+                        </div>
+                        <div>
+                            <button nz-button nzSize="medium" nzType="primary">
+                                Email
+                            </button>
+                        </div>
+                    </div>
+                </ng-template>
+            </nz-modal>
+
+            <nz-modal [(nzVisible)]="isViewEngineeringDraftQuotePDFVisible"
+                (nzOnCancel)="isViewEngineeringDraftQuotePDFVisible = false"
+                (nzOnOk)="isViewEngineeringDraftQuotePDFVisible = false" nzWidth="900">
+                <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Accident Quote Document">
+                    <app-engineering-draft-quotation [quoteNumber]="quoteNumber" [clientName]="quoteData.client"
+                        [dateCreated]="quoteData.dateCreated" [basicPremium]="quoteBasicPremium"
+                        [loadingAmount]="premiumLoadingTotal" [discountAmount]="quoteDiscountTotal"
+                        [totalAmount]="quoteNetPremium" [premiumLevy]="quoteLevy" [numberOfRisks]="numberOfRisks"
+                        [risks]="quoteData.risks" [quoteData]="quoteData" [totalSumInsured]="quoteSumInsured"
+                        [totalBasicPremium]="quoteBasicPremium" [totalLevy]="quoteLevy"
+                        [totalNetPremium]="quoteNetPremium" [excessList]="excessList"
+                        [limitsOfLiabilities]="limitsOfLiabilities" [discounts]="discountsList"
+                        [extensions]="extensionList" [clauses]="clauses">
+                    </app-engineering-draft-quotation>
                 </nz-card>
                 <ng-template #pdfQuoteActions>
                     <div style="display: flex;">

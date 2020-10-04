@@ -139,6 +139,12 @@
                 <td style="border: 1px solid black;" *ngIf="policy.class.className == 'Accident'">
                     {{ risk?.accidentProduct?.subClass }}
                 </td>
+                <td style="border: 1px solid black;" *ngIf="policy.class.className == 'Marine'">
+                    {{ risk?.marineProduct?.subClass }}
+                </td>
+                <td style="border: 1px solid black;" *ngIf="policy.class.className == 'Engineering'">
+                    {{ risk?.engineeringProduct?.subClass }}
+                </td>
                 <td style="border: 1px solid black;" *ngIf="policy.class.className == 'Motor'">
                     {{ risk?.vehicle?.regNumber }}
                 </td>
@@ -147,6 +153,12 @@
                 </td>
                 <td style="border: 1px solid black;" *ngIf="policy.class.className == 'Accident'">
                     {{ risk?.accidentProduct?.riskDescription }}
+                </td>
+                <td style="border: 1px solid black;" *ngIf="policy.class.className == 'Marine'">
+                    {{ risk?.marineProduct?.riskDescription }}
+                </td>
+                <td style="border: 1px solid black;" *ngIf="policy.class.className == 'Engineering'">
+                    {{ risk?.engineeringProduct?.riskDescription }}
                 </td>
 
                 <td id="td3" style="border: 1px solid black; border-collapse: collapse;">

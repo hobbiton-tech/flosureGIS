@@ -222,8 +222,10 @@
         <tr>
           <td><strong>Basic Excess</strong></td>
           <td><strong>:</strong></td>
-          <td *ngFor="let exc of excessList"><span>{{exc.description}}
-              {{' '}}{{quoteData.currency}}{{' '}}{{exc.amount}}</span></td>
+          <div *ngFor="let exc of excessList">
+            <td><span>{{exc.description}}{{' '}}{{quoteData.currency}}{{' '}}{{exc.amount}}</span></td>
+          </div>
+
         </tr>
 
 

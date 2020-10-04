@@ -103,6 +103,32 @@ export class ExcessesComponent implements OnInit, OnDestroy {
                 this.excessList = _.uniqBy(this.tempExcessList, 'heading');
             });
         }
+
+        if (this.currentClass.className == 'Marine') {
+            this.extensions.forEach(extension => {
+                const excess: IExccess = {
+                    heading: extension.extensionType,
+                    description: extension.extensionType,
+                    amount: extension.amount.toString()
+                };
+
+                this.tempExcessList.push(excess);
+                this.excessList = _.uniqBy(this.tempExcessList, 'heading');
+            });
+        }
+
+        if (this.currentClass.className == 'Engineering') {
+            this.extensions.forEach(extension => {
+                const excess: IExccess = {
+                    heading: extension.extensionType,
+                    description: extension.extensionType,
+                    amount: extension.amount.toString()
+                };
+
+                this.tempExcessList.push(excess);
+                this.excessList = _.uniqBy(this.tempExcessList, 'heading');
+            });
+        }
     }
 
     editExcess(ex: IExccess) {
@@ -170,6 +196,35 @@ export class ExcessesComponent implements OnInit, OnDestroy {
 
             return this.excesses;
         }
+
+        if (this.currentClass.className == 'Marine') {
+            for (const ex of this.excessList) {
+                this.excesses.push({
+                    heading: ex.heading,
+                    description: ex.description,
+                    amount: ex.amount
+                });
+            }
+
+            return this.excesses;
+        }
+
+        if (this.currentClass.className == 'Engineering') {
+            for (const ex of this.excessList) {
+                this.excesses.push({
+                    heading: ex.heading,
+                    description: ex.description,
+                    amount: ex.amount
+                });
+            }
+
+            return this.excesses;
+        }
+    }
+
+    setExcesses(excesses: IExccess[]) {
+        this.excessList = excesses;
+        console.log('EXCESSES', this.excessList);
     }
 
     ngOnDestroy() {

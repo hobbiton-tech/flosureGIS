@@ -42,6 +42,7 @@ import { CreateQuoteComponent } from 'src/app/quotes/components/create-quote/cre
 import { InsuranceClassHandlerService } from 'src/app/underwriting/services/insurance-class-handler.service';
 import { HttpClient } from '@angular/common/http';
 import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
+import { v4 } from 'uuid';
 
 @Component({
     selector: 'app-policy-revision-details',
@@ -100,6 +101,8 @@ export class PolicyRevisionDetailsComponent implements OnInit {
     // debit note amount
     debitNoteAmount: number = 0;
 
+    loggedIn = localStorage.getItem('currentUser');
+
     constructor(
         private route: ActivatedRoute,
         private formBuilder: FormBuilder,
@@ -125,51 +128,24 @@ export class PolicyRevisionDetailsComponent implements OnInit {
 
     ngOnInit(): void {
         this.policyRevisionDetailsIsLoading = true;
-        setTimeout(() => {
-            this.policyRevisionDetailsIsLoading = false;
-        }, 3000);
+        // setTimeout(() => {
+        //     this.policyRevisionDetailsIsLoading = false;
+        // }, 3000);
 
         this.policyRevisionDetailsForm = this.formBuilder.group({
             client: ['', Validators.required],
             nameOfInsured: ['', Validators.required],
-            startDate: [
-                { value: '', disabled: !this.isEditmode },
-                Validators.required
-            ],
-            endDate: [
-                { value: '', disabled: !this.isEditmode },
-                Validators.required
-            ],
+            startDate: ['', Validators.required],
+            endDate: ['', Validators.required],
             product: ['', Validators.required],
-            sumInsured: [
-                { value: '', disabled: !this.isEditmode },
-                Validators.required
-            ],
-            netPremium: [
-                { value: '', disabled: !this.isEditmode },
-                Validators.required
-            ],
-            currency: [
-                { value: '', disabled: !this.isEditmode },
-                Validators.required
-            ],
+            sumInsured: ['', Validators.required],
+            netPremium: ['', Validators.required],
+            currency: ['', Validators.required],
             branch: ['', Validators.required],
-            timeOfIssue: [
-                { value: '', disabled: !this.isEditmode },
-                Validators.required
-            ],
-            dateOfIssue: [
-                { value: '', disabled: !this.isEditmode },
-                Validators.required
-            ],
-            expiryDate: [
-                { value: '', disabled: !this.isEditmode },
-                Validators.required
-            ],
-            quarter: [
-                { value: '', disabled: !this.isEditmode },
-                Validators.required
-            ],
+            timeOfIssue: ['', Validators.required],
+            dateOfIssue: ['', Validators.required],
+            expiryDate: ['', Validators.required],
+            quarter: ['', Validators.required],
             town: ['', Validators.required]
         });
 
@@ -179,11 +155,14 @@ export class PolicyRevisionDetailsComponent implements OnInit {
         });
 
         this.route.params.subscribe(id => {
-            this.policiesService.getPolicyById(id['id']).subscribe(policy => {
+            this.policiesService.getPolicyById(id.id).subscribe(policy => {
                 this.policyData = policy;
+                console.log('POLICY:=>', policy);
                 this.currentPremium = this.policyData.netPremium;
                 this.classHandler.changeSelectedClass(this.policyData.class);
                 this.risks = policy.risks;
+
+                console.log('RISKS:=> ', this.risks);
                 this.displayRisks = this.risks;
 
                 //set values of  fields
@@ -220,6 +199,8 @@ export class PolicyRevisionDetailsComponent implements OnInit {
                 this.policyRevisionDetailsForm
                     .get('quarter')
                     .setValue(this.policyData.quarter);
+
+                this.policyRevisionDetailsIsLoading = false;
             });
         });
 
@@ -289,6 +270,8 @@ export class PolicyRevisionDetailsComponent implements OnInit {
     endorsePolicy() {
         this.updatingPolicy = true;
 
+        // console.log('logged in user:=>', this.loggedIn);
+
         const currentClassObj: IClass = JSON.parse(
             localStorage.getItem('classObject')
         );
@@ -298,9 +281,14 @@ export class PolicyRevisionDetailsComponent implements OnInit {
             type: 'Revision_Of_Cover',
             dateCreated: new Date(),
             dateUpdated: new Date(),
-            status: 'Pending'
+            status: 'Pending',
+            endorsementNumber: 'EN00001'
         };
 
+        console.log(
+            'Policy form details',
+            this.policyRevisionDetailsForm.value
+        );
         const policy: Policy = {
             ...this.policyRevisionDetailsForm.value,
             policyNumber: this.policyData.policyNumber,
@@ -317,15 +305,12 @@ export class PolicyRevisionDetailsComponent implements OnInit {
             underwritingYear: this.policyData.underwritingYear,
             receiptStatus: this.policyData.receiptStatus,
             paymentPlan: this.policyData.paymentPlan,
-            id: this.policyData.id,
-            risks: this.risks
+            sourceOfBusiness: this.policyData.sourceOfBusiness,
+            risks: this.risks,
+            id: v4()
         };
 
-        this.endorsementService
-            .createEndorsement(this.policyData.id, endorsement)
-            .subscribe(endorsement => {
-                res => console.log(res);
-            });
+        console.log('POLICY :=>', policy);
 
         const debitNote: DebitNote = {
             remarks: 'Policy Revision',
@@ -338,29 +323,35 @@ export class PolicyRevisionDetailsComponent implements OnInit {
         // this.policiesService.createBackupPolicy(policy);
 
         this.policiesService.createPolicy(policy).subscribe(policy => {
-            res => {
-                this.http
-                    .get<any>(
-                        `https://number-generation.flosure-api.com/savenda-invoice-number/1/${currentClassObj.classCode}`
-                    )
-                    .subscribe(async resd => {
-                        debitNote.debitNoteNumber = resd.data.invoice_number;
+            console.log('Returned policy:=> ', policy);
 
-                        this.http
-                            .post<DebitNote>(
-                                `https://flosure-postgres-db.herokuapp.com/documents/debit-note/${this.policyData.id}`,
-                                debitNote
-                            )
-                            .subscribe(
-                                async resh => {
-                                    console.log(resh);
-                                },
-                                async err => {
-                                    console.log(err);
-                                }
-                            );
-                    });
-            };
+            this.endorsementService
+                .createEndorsement(this.policyData.id, endorsement)
+                .subscribe(res => {
+                    console.log(res);
+                });
+
+            this.http
+                .get<any>(
+                    `https://number-generation.flosure-api.com/savenda-invoice-number/1/${currentClassObj.classCode}`
+                )
+                .subscribe(async resd => {
+                    debitNote.debitNoteNumber = resd.data.invoice_number;
+
+                    this.http
+                        .post<DebitNote>(
+                            `https://flosure-postgres-db.herokuapp.com/documents/debit-note/${policy.id}`,
+                            debitNote
+                        )
+                        .subscribe(
+                            async resh => {
+                                console.log(resh);
+                            },
+                            async err => {
+                                console.log(err);
+                            }
+                        );
+                });
 
             this.msg.success('Endorsement Successful');
             this.updatingPolicy = false;

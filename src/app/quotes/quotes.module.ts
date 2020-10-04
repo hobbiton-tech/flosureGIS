@@ -47,6 +47,18 @@ import { AuthGuard } from '../users/helpers/auth.guard';
 import { PersonalAccidentComponent } from './components/accident-class/schedule-details/components/personal-accident/personal-accident.component';
 import { ScheduleComponent } from './components/accident-class/schedule-details/schedule/schedule.component';
 import { AccidentDraftQuotationComponent } from './documents/accident-class/accident-draft-quotation/accident-draft-quotation.component';
+import { MarinePremiumComputationDetailsComponent } from './components/marine-class/marine-premium-computation-details/marine-premium-computation-details.component';
+import { MarineProductDetailsComponent } from './components/marine-class/marine-product-details/marine-product-details.component';
+import { MarineQuotationsListComponent } from './components/marine-class/marine-quotations-list/marine-quotations-list.component';
+import { MarineScheduleComponent } from './components/marine-class/marine-schedule-details/marine-schedule/marine-schedule.component';
+import { MarineCargoComponent } from './components/marine-class/marine-schedule-details/components/marine-cargo/marine-cargo.component';
+import { EngineeringPremiumComputationDetailsComponent } from './components/engineering-class/engineering-premium-computation-details/engineering-premium-computation-details.component';
+import { EngineeringProductDetailsComponent } from './components/engineering-class/engineering-product-details/engineering-product-details.component';
+import { EngineeringQuotationsListComponent } from './components/engineering-class/engineering-quotations-list/engineering-quotations-list.component';
+import { EngineeringScheduleDetailsComponent } from './components/engineering-class/engineering-schedule-details/engineering-schedule-details.component';
+import { EngineeringItemComponent } from './components/engineering-class/engineering-schedule-details/components/engineering-item/engineering-item.component';
+import { EngineeringDraftQuotationComponent } from './documents/engineering-class/engineering-draft-quotation/engineering-draft-quotation.component';
+import { MarineDraftQuotationComponent } from './documents/marine-class/marine-draft-quotation/marine-draft-quotation.component';
 const routes: Routes = [
     {
         path: 'create-quote',
@@ -61,6 +73,14 @@ const routes: Routes = [
     {
         path: 'fire-quotes-list',
         component: FireQuotationsListComponent
+    },
+    {
+        path: 'marine-quotes-list',
+        component: MarineQuotationsListComponent
+    },
+    {
+        path: 'engineering-quotes-list',
+        component: EngineeringQuotationsListComponent
     },
     {
         path: 'accident-quotes-list',
@@ -106,7 +126,19 @@ const routes: Routes = [
         FireDraftQuoteDocumentComponent,
         PersonalAccidentComponent,
         ScheduleComponent,
-        AccidentDraftQuotationComponent
+        AccidentDraftQuotationComponent,
+        MarinePremiumComputationDetailsComponent,
+        MarineProductDetailsComponent,
+        MarineQuotationsListComponent,
+        MarineScheduleComponent,
+        MarineCargoComponent,
+        EngineeringPremiumComputationDetailsComponent,
+        EngineeringProductDetailsComponent,
+        EngineeringQuotationsListComponent,
+        EngineeringScheduleDetailsComponent,
+        EngineeringItemComponent,
+        EngineeringDraftQuotationComponent,
+        MarineDraftQuotationComponent
     ],
     imports: [
         CommonModule,
@@ -149,7 +181,11 @@ const routes: Routes = [
         PremiumComputationService,
         VehicleDetailsServiceService,
         FireClassService,
-        CreateQuoteComponent
+        CreateQuoteComponent,
+        PersonalAccidentComponent,
+        AccidentProductDetailsComponent,
+        MarineProductDetailsComponent,
+        EngineeringProductDetailsComponent
     ]
 })
 export class QuotesModule {}

@@ -37,16 +37,18 @@ export class AccidentQuotationsListComponent implements OnInit, OnDestroy {
                 );
                 this.currentClassName = localStorage.getItem('class');
 
-                this.currentClassDisplay = currentClass.className;
+                if (currentClass) {
+                    this.currentClassDisplay = currentClass.className;
+                }
             }
         );
     }
 
     ngOnInit(): void {
         this.isOkLoading = true;
-        setTimeout(() => {
-            this.isOkLoading = false;
-        }, 3000);
+        // setTimeout(() => {
+        //     this.isOkLoading = false;
+        // }, 3000);
 
         this.quoteService.getMotorQuotations().subscribe(quotes => {
             this.quotesList = quotes;
@@ -56,6 +58,8 @@ export class AccidentQuotationsListComponent implements OnInit, OnDestroy {
                 x => x.class.className == localStorage.getItem('class')
             );
             this.quotesCount = this.displayQuotesList.length;
+
+            this.isOkLoading = false;
         });
     }
 

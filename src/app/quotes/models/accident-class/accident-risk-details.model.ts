@@ -3,7 +3,7 @@ import { IPersonalAccidentProductModel } from './personal-accident-product.model
 
 export interface IAccidentRiskDetailsModel {
     id?: string;
-    riskId?: string;
+    riskProductId?: string;
     riskDescription?: string;
     subClass?: string;
     risk?: RiskModel;

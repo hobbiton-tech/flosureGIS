@@ -30,13 +30,15 @@ export class ClaimsSetupsComponent implements OnInit {
 
     ngOnInit(): void {
         this.ClaimsSetupsIsLoading = true;
-        setTimeout(() => {
-            this.ClaimsSetupsIsLoading = false;
-        }, 3000);
+        // setTimeout(() => {
+        //     this.ClaimsSetupsIsLoading = false;
+        // }, 3000);
 
         this.claimsService.getServiceProviders().subscribe(serviceProviders => {
             this.serviceProvidersList = serviceProviders;
             this.displayServiceProvidersList = this.serviceProvidersList;
+
+            this.ClaimsSetupsIsLoading = false;
         });
 
         this.claimsService
