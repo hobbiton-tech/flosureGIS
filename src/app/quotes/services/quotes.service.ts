@@ -19,9 +19,9 @@ import { InsuranceClassService } from './insurance-class.service';
 import { IAccidentRiskDetailsModel } from '../models/accident-class/accident-risk-details.model';
 
 // const BASE_URL = 'http://104.248.247.78:3000';
-// const BASE_URL = 'http://localhost:3001'
-// const BASE_URL = 'http://localhost:3001';
-const BASE_URL = 'http://localhost:3001';
+// const BASE_URL = 'https://savenda.flosure-api.com'
+// const BASE_URL = 'https://savenda.flosure-api.com';
+const BASE_URL = 'https://savenda.flosure-api.com';
 
 export interface IQuoteDocument {
     id: string;

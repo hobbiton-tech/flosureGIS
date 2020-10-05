@@ -30,6 +30,8 @@ import { AuthGuard } from '../users/helpers/auth.guard';
 import { AddThirdPartyDetailsComponent } from './components/add-third-party-details/add-third-party-details.component';
 import { SalvagesComponent } from './components/salvages/salvages.component';
 import { SalvageInvoiceComponent } from './components/salvage-invoice/salvage-invoice.component';
+import { SubrogationsComponent } from './components/subrogations/subrogations.component';
+import { SubrogateInvoiceComponent } from './components/subrogate-invoice/subrogate-invoice.component';
 
 const routes: Routes = [
     {
@@ -84,6 +86,16 @@ const routes: Routes = [
     path: 'salvage-invoices',
     component: SalvageInvoiceComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'subrogation',
+    component: SubrogationsComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'subrogation-invoice',
+    component: SubrogateInvoiceComponent,
+    canActivate: [AuthGuard]
   }
 ];
 
@@ -109,7 +121,9 @@ const routes: Routes = [
         ProcessedClaimsComponent,
         AddThirdPartyDetailsComponent,
         SalvagesComponent,
-        SalvageInvoiceComponent
+        SalvageInvoiceComponent,
+        SubrogationsComponent,
+        SubrogateInvoiceComponent
     ],
     providers: [ClaimsService],
     imports: [

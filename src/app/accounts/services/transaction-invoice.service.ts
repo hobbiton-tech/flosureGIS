@@ -10,8 +10,8 @@ import { Observable } from 'rxjs';
 })
 export class TransactionInvoiceService {
 
-  // BASEURL = 'https://payment-api.savenda-flosure.com';
-  BASEURL = 'http://localhost:8022';
+  BASEURL = 'https://payment-api.savenda-flosure.com';
+  // BASEURL = 'https://savenda.flosure-api.com';
 
   constructor(private http: HttpClient,
               private message: NzMessageService,

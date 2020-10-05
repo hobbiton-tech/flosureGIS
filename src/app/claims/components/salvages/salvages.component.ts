@@ -42,10 +42,10 @@ export class SalvagesComponent implements OnInit {
     // })
 
     this.claimService.getSalvages().subscribe((salvages) => {
-      this.salvages = salvages;
+      this.salvages = salvages.filter((x) => x.salvages.bidStatus !== null);
       this.salvagesList = this.salvages;
       this.salvagesLoading = false;
-    })
+    });
   }
 
 

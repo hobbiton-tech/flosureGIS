@@ -348,7 +348,7 @@ export class PolicyRevisionDetailsComponent implements OnInit {
 
                         this.http
                             .post<DebitNote>(
-                                `http://localhost:3001/documents/debit-note/${this.policyData.id}`,
+                                `https://savenda.flosure-api.com/documents/debit-note/${this.policyData.id}`,
                                 debitNote
                             )
                             .subscribe(

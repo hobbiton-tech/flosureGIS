@@ -1,53 +1,53 @@
 import { Component, OnInit } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd';
 import { TransactionInvoiceService } from '../../../accounts/services/transaction-invoice.service';
-import { ILossQuantum } from '../../models/loss-quantum.model';
 
 @Component({
-  selector: 'app-salvage-invoice',
-  templateUrl: './salvage-invoice.component.html',
-  styleUrls: ['./salvage-invoice.component.scss']
+  selector: 'app-subrogate-invoice',
+  templateUrl: './subrogate-invoice.component.html',
+  styleUrls: ['./subrogate-invoice.component.scss']
 })
-export class SalvageInvoiceComponent implements OnInit {
-  salvageInvoices: any[] = [];
-  salvageInvoiceList: any[] = [];
-  salvageInvoice: any;
-  salvageInvoiceLoading = false;
-  isUpdatingSalvageInvoiceStatus = false;
-  searchSalvageInvoiceString: string;
+export class SubrogateInvoiceComponent implements OnInit {
+
+  subrogationInvoices: any[] = [];
+  subrogationInvoiceList: any[] = [];
+  subrogationInvoice: any;
+  subrogationInvoiceLoading = false;
+  isUpdatingSubrogationInvoiceStatus = false;
+  searchSubrogationInvoiceString: string;
   columnAlignment = 'center';
 
-  constructor( private msg: NzMessageService,
-               private transactionInvoiceService: TransactionInvoiceService) { }
+  constructor(private msg: NzMessageService,
+              private transactionInvoiceService: TransactionInvoiceService) { }
 
   ngOnInit(): void {
-    this.salvageInvoiceLoading = true;
+    this.subrogationInvoiceLoading = true;
     this.refresh();
   }
+
 
   refresh(): void {
     this.transactionInvoiceService.getTransactiont().subscribe((invoices) => {
       if (invoices.data.length !== 0 || true || true) {
-        this.salvageInvoices = invoices.data.filter((x) => x.status === 'Raised' && x.type === 'Salvage');
-        this.salvageInvoiceList = this.salvageInvoices;
+        this.subrogationInvoices = invoices.data.filter((x) => x.type === 'Subrogation');
+        this.subrogationInvoiceList = this.subrogationInvoices;
       } else {
-        this.salvageInvoices = [];
+        this.subrogationInvoices = [];
       }
-      this.salvageInvoiceList = this.salvageInvoices;
-      this.salvageInvoiceLoading = false;
+      this.subrogationInvoiceList = this.subrogationInvoices;
+      this.subrogationInvoiceLoading = false;
     });
   }
 
 
-
   searchInvoices(value: string) {
     if (value === '' || !value) {
-      this.salvageInvoiceList = this.salvageInvoices.filter(
+      this.subrogationInvoiceList = this.subrogationInvoices.filter(
         x => x.invoice_number != null
       );
     }
 
-    this.salvageInvoiceList = this.salvageInvoices.filter(
+    this.subrogationInvoiceList = this.subrogationInvoices.filter(
       invoice => {
         if (invoice.invoice_number != null) {
           return (
@@ -74,16 +74,16 @@ export class SalvageInvoiceComponent implements OnInit {
 
   updateStatus(e) {
     e.status = 'Approved';
-    this.isUpdatingSalvageInvoiceStatus = true;
+    this.isUpdatingSubrogationInvoiceStatus = true;
 
     this.transactionInvoiceService.updateTransaction(e).subscribe((salvageRes) => {
         this.msg.success("Invoice Approved")
         this.refresh();
-        this.isUpdatingSalvageInvoiceStatus = false;
+        this.isUpdatingSubrogationInvoiceStatus = false;
       },
       (invoiceError) => {
         this.msg.error(invoiceError);
-        this.isUpdatingSalvageInvoiceStatus = false;
+        this.isUpdatingSubrogationInvoiceStatus = false;
       });
   }
 
