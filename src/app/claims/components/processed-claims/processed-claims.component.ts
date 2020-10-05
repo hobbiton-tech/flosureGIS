@@ -66,9 +66,9 @@ export class ProcessedClaimsComponent implements OnInit {
 
     ngOnInit(): void {
         this.claimProcessingIsLoading = true;
-        setTimeout(() => {
-            this.claimProcessingIsLoading = false;
-        }, 3000);
+        // setTimeout(() => {
+        //     this.claimProcessingIsLoading = false;
+        // }, 3000);
 
         const decodedJwtData = jwt_decode(this.loggedIn);
         console.log('Decoded>>>>>>', decodedJwtData);
@@ -96,6 +96,8 @@ export class ProcessedClaimsComponent implements OnInit {
                 x => x.claimStatus == 'Processed'
             );
             this.displayProcessedClaimsList = this.processedClaimsList;
+
+            this.claimProcessingIsLoading = false;
         });
 
         this.claimsTableUpdate.subscribe(update => {

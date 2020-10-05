@@ -35,11 +35,14 @@ export class ExtensionsComponent implements OnInit, OnDestroy {
         this.extensionsTotalSubscription = this.premiumComputationService.extensionsTotalChanged$.subscribe(
             extensionsTotal => {
                 this.extensionsTotal = extensionsTotal;
+                this.ngOnInit();
             }
         );
         this.extensionsListChanges = this.premiumComputationService.extensionsTotalChanged$.subscribe(
             extensions => {
                 this.extensionList = this.premiumComputationService.getExtensions();
+
+                this.ngOnInit();
             }
         );
         this.riskEditModeSubscription = this.premiumComputationService.riskEditModeChanged$.subscribe(
@@ -54,6 +57,8 @@ export class ExtensionsComponent implements OnInit, OnDestroy {
                     localStorage.getItem('classObject')
                 );
                 this.currentProducts = this.currentClass.products;
+
+                this.ngOnInit();
             }
         );
 
@@ -149,15 +154,11 @@ export class ExtensionsComponent implements OnInit, OnDestroy {
 
         if (this.singleProduct) {
             this.productClauseService.getExtensions().subscribe(ext => {
-                console.log('exts:=> ', ext);
                 this.extensionList = ext.filter(
                     x => x.productId == this.singleProduct.id
                 );
-                console.log('extList:=> ', this.extensionList);
             });
         }
-
-        console.log('over there:=> ', this.extensionList);
     }
 
     computeIncreasedThirdPartyLimit() {}

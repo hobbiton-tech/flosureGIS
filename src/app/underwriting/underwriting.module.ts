@@ -55,6 +55,9 @@ import { PersonalAccidentScheduleComponent } from './documents/Accident-insuranc
 import { BondScheduleComponent } from './documents/Accident-insurance/bond-schedule/bond-schedule.component';
 import { PolicyHistoryComponent } from './components/policy-history/policy-history.component';
 import { PolicyEndorsementDetailsComponent } from './components/policy-endorsement-details/policy-endorsement-details.component';
+import { EngineeringPolicyScheduleComponent } from './documents/Engineering-insurance/engineering-policy-schedule/engineering-policy-schedule.component';
+import { MarinePolicyScheduleComponent } from './documents/Marine-insurance/marine-policy-schedule/marine-policy-schedule.component';
+import { MarineCoverNoteComponent } from './documents/Marine-insurance/marine-cover-note/marine-cover-note.component';
 // tslint:disable-next-line: max-line-length
 
 const routes: Routes = [
@@ -199,7 +202,10 @@ const routes: Routes = [
         PersonalAccidentScheduleComponent,
         BondScheduleComponent,
         PolicyHistoryComponent,
-        PolicyEndorsementDetailsComponent
+        PolicyEndorsementDetailsComponent,
+        EngineeringPolicyScheduleComponent,
+        MarinePolicyScheduleComponent,
+        MarineCoverNoteComponent
     ],
     imports: [
         CommonModule,

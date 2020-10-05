@@ -34,13 +34,15 @@ export class LocationComponent implements OnInit {
 
     ngOnInit(): void {
         this.locationSetupsLoading = true;
-        setTimeout(() => {
-            this.locationSetupsLoading = false;
-        }, 3000);
+        // setTimeout(() => {
+        //     this.locationSetupsLoading = false;
+        // }, 3000);
 
         this.locationService.getProvinces().subscribe(provinces => {
             this.provincesList = provinces;
             this.displayProvincesList = this.provincesList;
+
+            this.locationSetupsLoading = false;
         });
 
         this.locationService.getCities().subscribe(cities => {

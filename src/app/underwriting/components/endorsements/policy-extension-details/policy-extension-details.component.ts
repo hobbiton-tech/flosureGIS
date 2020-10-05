@@ -31,6 +31,7 @@ import { InsuranceClassHandlerService } from 'src/app/underwriting/services/insu
 import { DebitNote } from 'src/app/underwriting/documents/models/documents.model';
 import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
 import { HttpClient } from '@angular/common/http';
+import { v4 } from 'uuid';
 
 @Component({
     selector: 'app-policy-extension-details',
@@ -131,19 +132,19 @@ export class PolicyExtensionDetailsComponent implements OnInit, OnDestroy {
         //         this.riskEndDate = riskEndDate;
         //     }
         // );
-        // this.netPremiumSubscription = this.premiumComputationService.netPremiumChanged$.subscribe(
-        //     netPremium => {
-        //         this.newPremium = netPremium;
-        //         this.calculateDebitNoteAmount();
-        //     }
-        // );
+        this.netPremiumSubscription = this.premiumComputationService.netPremiumChanged$.subscribe(
+            netPremium => {
+                this.newPremium = netPremium;
+                this.calculateDebitNoteAmount();
+            }
+        );
     }
 
     ngOnInit(): void {
         this.policyExtensionDetailsIsLoading = true;
-        setTimeout(() => {
-            this.policyExtensionDetailsIsLoading = false;
-        }, 3000);
+        // setTimeout(() => {
+        //     this.policyExtensionDetailsIsLoading = false;
+        // }, 3000);
 
         this.policyExtensionDetailsForm = this.formBuilder.group({
             client: ['', Validators.required],
@@ -172,6 +173,8 @@ export class PolicyExtensionDetailsComponent implements OnInit, OnDestroy {
                 this.policyData = policy;
                 this.currentPremium = this.policyData.netPremium;
                 this.classHandler.changeSelectedClass(this.policyData.class);
+
+                console.log('policy class:=> ', this.policyData.class);
                 this.risks = policy.risks;
                 this.displayRisks = this.risks;
 
@@ -209,6 +212,8 @@ export class PolicyExtensionDetailsComponent implements OnInit, OnDestroy {
                 this.policyExtensionDetailsForm
                     .get('quarter')
                     .setValue(this.policyData.quarter);
+
+                this.policyExtensionDetailsIsLoading = false;
             });
         });
 
@@ -224,6 +229,7 @@ export class PolicyExtensionDetailsComponent implements OnInit, OnDestroy {
         this.premiumComputationService.changeExtensionMode(true);
 
         this.createQuoteComponent.viewRiskDetails(risk);
+        this.viewRiskModalVisible = true;
     }
 
     recieveEditedRisk(risk: RiskModel) {
@@ -265,8 +271,25 @@ export class PolicyExtensionDetailsComponent implements OnInit, OnDestroy {
 
         const policy: Policy = {
             ...this.policyExtensionDetailsForm.value,
-            id: this.policyData.id,
-            risks: this.risks
+            policyNumber: this.policyData.policyNumber,
+            product: this.policyData.product,
+            client: this.policyData.client,
+            clientCode: this.policyData.clientCode,
+            branch: this.policyData.branch,
+            insuranceCompany: this.policyData.insuranceCompany,
+            preparedBy: this.policyData.preparedBy,
+            status: this.policyData.status,
+            user: this.policyData.user,
+            town: this.policyData.town,
+            productType: this.policyData.productType,
+            underwritingYear: this.policyData.underwritingYear,
+            receiptStatus: this.policyData.receiptStatus,
+            paymentPlan: this.policyData.paymentPlan,
+            sourceOfBusiness: this.policyData.sourceOfBusiness,
+            risks: this.risks,
+            sumInsured: this.sumArray(this.risks, 'sumInsured'),
+            netPremium: this.sumArray(this.risks, 'netPremium'),
+            id: v4()
         };
 
         const debitNote: DebitNote = {
@@ -277,41 +300,40 @@ export class PolicyExtensionDetailsComponent implements OnInit, OnDestroy {
             dateUpdated: new Date()
         };
 
-        this.endorsementService
-            .createEndorsement(this.policyData.id, endorsement)
-            .subscribe(endorsement => {
-                res => console.log(res);
-            });
-
         this.policiesService.createPolicy(policy).subscribe(policy => {
-            res => {
-                console.log(res);
+            console.log(policy);
 
-                this.http
-                    .get<any>(
-                        `https://number-generation.flosure-api.com/savenda-invoice-number/1/${currentClassObj.classCode}`
-                    )
-                    .subscribe(async resd => {
-                        debitNote.debitNoteNumber = resd.data.invoice_number;
+            this.endorsementService
+                .createEndorsement(this.policyData.id, endorsement)
+                .subscribe(endorsement => {
+                    console.log(endorsement);
+                });
 
-                        this.http
-                            .post<DebitNote>(
-                                `https://savenda.flosure-api.com/documents/debit-note/${this.policyData.id}`,
-                                debitNote
-                            )
-                            .subscribe(
-                                async resh => {
-                                    console.log(resh);
-                                },
-                                async err => {
-                                    console.log(err);
-                                }
-                            );
-                    });
+            this.http
+                .get<any>(
+                    `https://number-generation.flosure-api.com/savenda-invoice-number/1/${currentClassObj.classCode}`
+                )
+                .subscribe(async resd => {
+                    debitNote.debitNoteNumber = resd.data.invoice_number;
 
-                this.msg.success('Endorsement Successful');
-                this.updatingPolicy = false;
-            };
+                    this.http
+                        .post<DebitNote>(
+                            `https://flosure-postgres-db.herokuapp.com/documents/debit-note/${policy.id}`,
+                            debitNote
+                        )
+                        .subscribe(
+                            async resh => {
+                                console.log(resh);
+                            },
+                            async err => {
+                                console.log(err);
+                            }
+                        );
+                });
+
+            this.msg.success('Endorsement Successful');
+            this.updatingPolicy = false;
+
         });
     }
 
@@ -324,6 +346,12 @@ export class PolicyExtensionDetailsComponent implements OnInit, OnDestroy {
         this.displayRisks = this.risks;
 
         this.newPremium = this.sumArray(this.risks, 'netPremium');
+        this.policyExtensionDetailsForm
+            .get('netPremium')
+            .setValue(this.sumArray(this.risks, 'netPremium'));
+        this.policyExtensionDetailsForm
+            .get('sumInsured')
+            .setValue(this.sumArray(this.risks, 'sumInsured'));
         this.calculateDebitNoteAmount();
     }
 

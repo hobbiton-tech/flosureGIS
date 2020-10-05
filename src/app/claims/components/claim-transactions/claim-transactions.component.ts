@@ -27,18 +27,18 @@ export class ClaimTransactionsComponent implements OnInit {
 
     //spin feedback when loading figures
     claimsLoading: boolean = true;
-  permission: PermissionsModel;
-  user: UserModel;
-  isPresent: PermissionsModel;
-  admin = 'admin';
-  intimateCliam = 'intimate_claim';
-  loggedIn = localStorage.getItem('currentUser');
+    permission: PermissionsModel;
+    user: UserModel;
+    isPresent: PermissionsModel;
+    admin = 'admin';
+    intimateCliam = 'intimate_claim';
+    loggedIn = localStorage.getItem('currentUser');
 
     constructor(
         private readonly route: Router,
         private readonly claimsService: ClaimsService,
         private readonly claimsProcessingService: ClaimsProcessingServiceService,
-        private  usersService: UsersService,
+        private usersService: UsersService
     ) {}
 
     viewClaimDetails(claim: Claim): void {
@@ -51,23 +51,24 @@ export class ClaimTransactionsComponent implements OnInit {
 
     ngOnInit(): void {
         this.claimsListIsLoading = true;
-        setTimeout(() => {
-            this.claimsListIsLoading = false;
-        }, 3000);
+        // setTimeout(() => {
+        //     this.claimsListIsLoading = false;
+        // }, 3000);
 
-      const decodedJwtData = jwt_decode(this.loggedIn);
-      console.log('Decoded>>>>>>', decodedJwtData);
+        const decodedJwtData = jwt_decode(this.loggedIn);
+        console.log('Decoded>>>>>>', decodedJwtData);
 
-      this.usersService.getUsers().subscribe((users) => {
-        this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+        this.usersService.getUsers().subscribe(users => {
+            this.user = users.filter(x => x.ID === decodedJwtData.user_id)[0];
 
-        this.isPresent = this.user.Permission.find((el) => el.name === this.admin || el.name === this.intimateCliam);
+            this.isPresent = this.user.Permission.find(
+                el => el.name === this.admin || el.name === this.intimateCliam
+            );
 
-        console.log('USERS>>>', this.user, this.isPresent, this.admin);
-      });
+            console.log('USERS>>>', this.user, this.isPresent, this.admin);
+        });
 
-
-      this.claimsService.getClaims().subscribe(claims => {
+        this.claimsService.getClaims().subscribe(claims => {
             this.claimsCount = claims.length;
             this.claimsLoading = false;
             this.claimsList = claims;
@@ -76,6 +77,8 @@ export class ClaimTransactionsComponent implements OnInit {
             this.displayClaimsList = this.claimsList.filter(
                 x => x.claimNumber != null
             );
+
+            this.claimsListIsLoading = false;
         });
     }
 

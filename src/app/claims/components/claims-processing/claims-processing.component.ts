@@ -68,9 +68,9 @@ export class ClaimsProcessingComponent implements OnInit {
 
     ngOnInit(): void {
         this.claimProcessingIsLoading = true;
-        setTimeout(() => {
-            this.claimProcessingIsLoading = false;
-        }, 3000);
+        // setTimeout(() => {
+        //     this.claimProcessingIsLoading = false;
+        // }, 3000);
 
         const decodedJwtData = jwt_decode(this.loggedIn);
         console.log('Decoded>>>>>>', decodedJwtData);
@@ -100,6 +100,8 @@ export class ClaimsProcessingComponent implements OnInit {
                 x => x.claimStatus == 'Processed'
             );
             this.displayProcessedClaimsList = this.processedClaimsList;
+
+            this.claimProcessingIsLoading = false;
         });
 
         this.claimsTableUpdate.subscribe(update => {
@@ -185,7 +187,31 @@ export class ClaimsProcessingComponent implements OnInit {
         if (claim.policy.class.className.toLowerCase() == 'accident') {
             if (
                 policyRisksRegNumbers.includes(
-                    claim.risk.accidentProduct.riskId
+                    claim.risk.accidentProduct.riskProductId
+                )
+            ) {
+                this.isClaimRiskUnderPolicy = true;
+            } else {
+                this.isClaimRiskUnderPolicy = false;
+            }
+        }
+
+        if (claim.policy.class.className.toLowerCase() == 'marine') {
+            if (
+                policyRisksRegNumbers.includes(
+                    claim.risk.accidentProduct.riskProductId
+                )
+            ) {
+                this.isClaimRiskUnderPolicy = true;
+            } else {
+                this.isClaimRiskUnderPolicy = false;
+            }
+        }
+
+        if (claim.policy.class.className.toLowerCase() == 'engineering') {
+            if (
+                policyRisksRegNumbers.includes(
+                    claim.risk.accidentProduct.riskProductId
                 )
             ) {
                 this.isClaimRiskUnderPolicy = true;

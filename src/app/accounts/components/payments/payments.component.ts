@@ -44,12 +44,12 @@ export class PaymentsComponent implements OnInit {
 
     paymentApprovalUpdate = new BehaviorSubject<boolean>(false);
 
-  loggedIn = localStorage.getItem('currentUser');
-  user: UserModel;
-  permission: PermissionsModel;
-  isPresentPermission: PermissionsModel;
-  approve = 'approve_payment';
-  admin = 'admin';
+    loggedIn = localStorage.getItem('currentUser');
+    user: UserModel;
+    permission: PermissionsModel;
+    isPresentPermission: PermissionsModel;
+    approve = 'approve_payment';
+    admin = 'admin';
 
     constructor(
         private paymentsService: PaymentService,
@@ -60,20 +60,19 @@ export class PaymentsComponent implements OnInit {
 
     ngOnInit(): void {
         this.paymentsIsLoading = true;
-        setTimeout(() => {
-            this.paymentsIsLoading = false;
-        }, 3000);
+        // setTimeout(() => {
+        //     this.paymentsIsLoading = false;
+        // }, 3000);
 
+        const decodedJwtData = jwt_decode(this.loggedIn);
 
-      const decodedJwtData = jwt_decode(this.loggedIn);
+        this.usersService.getUsers().subscribe(users => {
+            this.user = users.filter(x => x.ID === decodedJwtData.user_id)[0];
 
-      this.usersService.getUsers().subscribe((users) => {
-        this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
-
-        this.isPresentPermission = this.user.Permission.find((el) => el.name === this.approve ||
-          el.name === this.admin );
-
-      });
+            this.isPresentPermission = this.user.Permission.find(
+                el => el.name === this.approve || el.name === this.admin
+            );
+        });
 
         this.paymentsService.getRequisitionPayments().subscribe(payments => {
             this.paymentsList = payments;
@@ -86,6 +85,8 @@ export class PaymentsComponent implements OnInit {
                 x => x.approvalSatus == 'Approved'
             );
             this.displayApprovedPaymentsList = this.approvedPaymentsList;
+
+            this.paymentsIsLoading = false;
         });
 
         this.paymentApprovalUpdate.subscribe(update => {

@@ -103,7 +103,7 @@ export class PremiumComputationDetailsComponent implements OnInit, OnDestroy {
     isRiskEditMode: boolean = true;
 
     // if is risk extension
-    isExtensionMode: boolean = true;
+    isExtensionMode: boolean = false;
 
     riskComprehensiveForm: FormGroup;
 

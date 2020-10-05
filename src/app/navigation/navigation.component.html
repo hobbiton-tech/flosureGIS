@@ -43,14 +43,19 @@
                             </a>
                         </li>
                         <li nz-menu-item>
+                            <a routerLink="/flosure/quotes/fire-quotes-list" (click)="handleClass('Fire')">Fire</a>
+                        </li>
+                        <li nz-menu-item>
                             <a routerLink="/flosure/quotes/accident-quotes-list"
                                 (click)="handleClass('Accident')">Accident</a>
                         </li>
-                        <li nz-menu-item nzDisabled>
-                            <a routerLink="/flosure/quotes/quotes-list" (click)="handleClass('Marine')">Marine</a>
+                        <li nz-menu-item>
+                            <a routerLink="/flosure/quotes/marine-quotes-list"
+                                (click)="handleClass('Marine')">Marine</a>
                         </li>
                         <li nz-menu-item>
-                            <a routerLink="/flosure/quotes/fire-quotes-list" (click)="handleClass('Fire')">Fire</a>
+                            <a routerLink="/flosure/quotes/engineering-quotes-list"
+                                (click)="handleClass('Engineering')">Engineering</a>
                         </li>
                     </ul>
                 </li>

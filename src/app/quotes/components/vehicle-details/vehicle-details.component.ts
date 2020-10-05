@@ -23,6 +23,7 @@ import { PremiumComputationService } from '../../services/premium-computation.se
 })
 export class VehicleDetailsComponent implements OnInit, OnDestroy {
 
+
   constructor(
     private http: HttpClient,
     private formBuilder: FormBuilder,
@@ -237,6 +238,7 @@ export class VehicleDetailsComponent implements OnInit, OnDestroy {
   regIDAsyncValidator = (control: FormControl) =>
     new Observable((observer: Observer<ValidationErrors | null>) => {
       setTimeout(() => {
+
         this.policyService.getPolicies().subscribe(res => {
           const activePolicy = res.filter(x => x.status === 'Active');
 
@@ -390,6 +392,7 @@ export class VehicleDetailsComponent implements OnInit, OnDestroy {
 
       this.premiumComputationService.changeVehicleDetailsReset(false);
     }
+
   }
 
   ngOnDestroy() {
@@ -397,4 +400,5 @@ export class VehicleDetailsComponent implements OnInit, OnDestroy {
     this.riskEditModeSubscription.unsubscribe();
     this.resetVehicleDetailsSubscription.unsubscribe();
   }
+
 }

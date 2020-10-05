@@ -1,0 +1,102 @@
+<div>
+    <div nz-row nzGutter="0">
+        <div nz-col nzSpan="8">
+            <nz-form-item>
+                <nz-form-label [nzSpan]="10" nzFor="coverType" nzRequired>
+                    Cover Type
+                </nz-form-label>
+                <nz-form-control nzSpan="10">
+                    <nz-select name="coverType" [(ngModel)]="
+                                selectedCoverType
+                            " [ngModelOptions]="{
+                                standalone: true
+                            }" (ngModelChange)="changeSelectedCoverType()" nzPlaceHolder="Select cover type"
+                        [nzDisabled]="isRiskEditMode" width="200px">
+                        <nz-option nzValue="STANDARD COVER" nzLabel="STANDARD COVER"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSpan]="10" nzFor="productType" nzRequired>
+                    Product Type
+                </nz-form-label>
+                <nz-form-control nzSpan="10">
+                    <nz-select nzSpan="10" nzShowSearch name="productType" [(ngModel)]="selectedProductType"
+                        nzPlaceHolder="Select a product type" (ngModelChange)="changeSelectedProductType()"
+                        [nzDisabled]="isRiskEditMode" name="productType" id="productType">
+                        <nz-option *ngFor="
+                                    let productType of productTypeOptions
+                                " [nzValue]="
+                                    productType.value
+                                " [nzLabel]="
+                                    productType.label
+                                ">
+                        </nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+
+        <div nz-col nzSpan="8">
+            <nz-form-item>
+                <nz-form-label nzRequired nzSpan="10">Start
+                    Date</nz-form-label>
+                <nz-form-control nzSpan="10">
+                    <nz-date-picker name="riskStartDate" [(ngModel)]="riskStartDate" [nzDisabled]="isRiskEditMode"
+                        (ngModelChange)="handleDatesCalculation()" [nzDisabledDate]="
+                                disabledSubmissionDate
+                            " nzFormat="dd-MM-yyyy" nzPlaceHolder="Start">
+                    </nz-date-picker>
+                </nz-form-control>
+            </nz-form-item>
+            <!-- <nz-form-item>
+                    <nz-form-label nzSpan="10" nzRequired>Quarters
+                    </nz-form-label>
+                    <nz-form-control nzSpan="10">
+                        <nz-select nzPlaceHolder="Select quarter" name="riskQuarter" [(ngModel)]="riskQuarter"
+                            [nzDisabled]="isRiskEditMode" (ngModelChange)="
+                                handleEndDateCalculation()
+                            ">
+                            <nz-option nzValue="1" nzLabel="1"></nz-option>
+                            <nz-option nzValue="2" nzLabel="2"></nz-option>
+                            <nz-option nzValue="3" nzLabel="3"></nz-option>
+                            <nz-option nzValue="4" nzLabel="4"></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item> -->
+            <nz-form-item>
+                <nz-form-label nzRequired nzSpan="10">End Date
+                </nz-form-label>
+                <nz-form-control nzSpan="10">
+                    <nz-date-picker name="riskEndDate" [(ngModel)]="riskEndDate" nzFormat="dd-MM-yyyy"
+                        [nzDisabled]="isRiskEditMode && !isExtensionMode" nzPlaceHolder="End"
+                        (ngModelChange)="handleDatesCalculation()">
+                    </nz-date-picker>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+
+        <div nz-col nzSpan="8">
+            <nz-form-item>
+                <nz-form-label [nzSpan]="10" nzFor="numberOfDays">
+                    Number Of Days
+                </nz-form-label>
+                <nz-form-control nzSpan="10">
+                    <input nz-input name="numberOfDays" [(ngModel)]="numberOfDays" type="text" id="numberOfDays"
+                        (ngModelChange)="changeNumberOfDays()" disabled="true" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <!-- <nz-form-item>
+                    <nz-form-label [nzSpan]="10" nzFor="expiryQuarter">
+                        Expiry Quarter
+                    </nz-form-label>
+                    <nz-form-control nzSpan="10">
+                        <input nz-input name="expiryQuarter" [(ngModel)]="expiryQuarter" type="text" id="expiryQuarter"
+                            disabled="true" />
+                    </nz-form-control>
+                </nz-form-item> -->
+        </div>
+    </div>
+</div>

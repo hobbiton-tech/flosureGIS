@@ -31,6 +31,9 @@
             <app-vehicle-details *ngIf="currentClassName == 'Motor'"></app-vehicle-details>
             <app-property-details *ngIf="currentClassName == 'Fire'"></app-property-details>
             <app-accident-product-details *ngIf="currentClassName == 'Accident'"></app-accident-product-details>
+            <app-marine-product-details *ngIf="currentClassName == 'Marine'"></app-marine-product-details>
+            <app-engineering-product-details *ngIf="currentClassName == 'Engineering'">
+            </app-engineering-product-details>
 
             <div style="margin-top: 15px;">
                 <nz-divider nzText="Premium Computation" nzOrientation="left"></nz-divider>
@@ -44,6 +47,10 @@
                         </app-fire-premium-computation-details>
                         <app-accident-premium-computation-details *ngIf="currentClassName == 'Accident'">
                         </app-accident-premium-computation-details>
+                        <app-marine-premium-computation-details *ngIf="currentClassName == 'Marine'">
+                        </app-marine-premium-computation-details>
+                        <app-engineering-premium-computation-details *ngIf="currentClassName == 'Engineering'">
+                        </app-engineering-premium-computation-details>
                         <!-- end of premium computation details -->
                     </div>
 
@@ -140,6 +147,15 @@
             <div *ngIf="currentClassName == 'Accident'">
                 <!-- fire class schedule -->
                 <app-schedule></app-schedule>
+            </div>
+            <div *ngIf="currentClassName == 'Marine'">
+                <!-- marine class schedule -->
+                <app-marine-schedule></app-marine-schedule>
+            </div>
+
+            <div *ngIf="currentClassName == 'Engineering'">
+                <!-- engineering class schedule -->
+                <app-engineering-schedule-details></app-engineering-schedule-details>
             </div>
         </div>
 

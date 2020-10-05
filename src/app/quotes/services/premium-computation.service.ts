@@ -15,6 +15,7 @@ import { VehicleDetailsModel } from '../models/vehicle-details.model';
 import { VehicleDetailsServiceService } from './vehicle-details-service.service';
 import { InsuranceClassHandlerService } from 'src/app/underwriting/services/insurance-class-handler.service';
 import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
+import { IExccess } from 'src/app/settings/models/underwriting/clause.model';
 
 interface IRateResult {
     sumInsured: string;
@@ -112,6 +113,9 @@ export class PremiumComputationService implements OnDestroy {
 
     // discounts
     discounts: IDiscounts[] = [];
+
+    // excesses
+    excesses: IExccess[] = [];
 
     // combined limits premium
     combinedLimitsPremium = new BehaviorSubject(0);
@@ -255,6 +259,7 @@ export class PremiumComputationService implements OnDestroy {
     }
 
     changeSelectedInsuranceType(value: string) {
+        console.log('CURRENT INSURANCE TYPE');
         this.selectedInsuranceType.next(value);
     }
 
@@ -387,6 +392,13 @@ export class PremiumComputationService implements OnDestroy {
         }
 
         if (localStorage.getItem('class') == 'Accident') {
+            this.computeFirePremium();
+        }
+
+        if (localStorage.getItem('class') == 'Marine') {
+            this.computeFirePremium();
+        }
+        if (localStorage.getItem('class') == 'Engineering') {
             this.computeFirePremium();
         }
 

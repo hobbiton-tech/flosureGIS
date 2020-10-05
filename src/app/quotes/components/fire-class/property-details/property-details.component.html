@@ -8,7 +8,8 @@
                     <nz-form-label [nzSpan]="10" nzFor="subClass" nzRequired>Sub Class
                     </nz-form-label>
                     <nz-form-control nzSpan="10">
-                        <nz-select formControlName="subClass" nzRequired (ngModelChange)="handleProductChange()">
+                        <nz-select formControlName="subClass" nzRequired (ngModelChange)="handleProductChange()"
+                            [nzDisabled]="isRiskEditMode">
                             <nz-option *ngFor="
                                             let subClass of productOptions
                                         " [nzValue]="
@@ -24,7 +25,7 @@
                         Risk Description
                     </nz-form-label>
                     <nz-form-control nzSpan="10">
-                        <input nz-input formControlName="propertyDescription" />
+                        <input nz-input formControlName="propertyDescription" [disabled]="isRiskEditMode" />
                     </nz-form-control>
                 </nz-form-item>
                 <div *ngIf="currentProduct?.toLocaleLowerCase() == 'house owners'">
@@ -32,7 +33,7 @@
                         <nz-form-label [nzSpan]="10" nzFor="roofType" nzRequired>Roof Type
                         </nz-form-label>
                         <nz-form-control nzSpan="10">
-                            <nz-select formControlName="roofType">
+                            <nz-select formControlName="roofType" [nzDisabled]="isRiskEditMode">
                                 <nz-option *ngFor="
                                     let roofType of roofTypes
                                 " [nzValue]="
@@ -51,7 +52,7 @@
                         Risk ID
                     </nz-form-label>
                     <nz-form-control nzSpan="10">
-                        <input nz-input formControlName="propertyId" />
+                        <input nz-input formControlName="propertyId" [disabled]="isRiskEditMode" />
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
@@ -59,13 +60,14 @@
                         Address
                     </nz-form-label>
                     <nz-form-control nzSpan="10">
-                        <input nz-input name="address" formControlName="address" type="text" id="address" />
+                        <input nz-input name="address" formControlName="address" type="text" id="address"
+                            [disabled]="isRiskEditMode" />
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
                     <nz-form-label nzRequired nzSpan="10">City</nz-form-label>
                     <nz-form-control nzSpan="10">
-                        <nz-select formControlName="city">
+                        <nz-select formControlName="city" [nzDisabled]="isRiskEditMode">
                             <div *ngFor="let city of cities">
                                 <nz-option [nzValue]="city" [nzLabel]="city.name">
                                 </nz-option>
@@ -80,13 +82,15 @@
                         Use of Property
                     </nz-form-label>
                     <nz-form-control nzSpan="10">
-                        <input nz-input name="propertyUse" formControlName="propertyUse" type="text" id="propertyUse" />
+                        <input nz-input name="propertyUse" formControlName="propertyUse" type="text" id="propertyUse"
+                            [disabled]="isRiskEditMode" />
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
                     <nz-form-label nzRequired nzSpan="10">Province</nz-form-label>
                     <nz-form-control nzSpan="10">
-                        <nz-select formControlName="province" (ngModelChange)="changeCities()">
+                        <nz-select formControlName="province" (ngModelChange)="changeCities()"
+                            [nzDisabled]="isRiskEditMode">
                             <div *ngFor="let province of provinces">
                                 <nz-option [nzValue]="province" [nzLabel]="province.name">
                                 </nz-option>

@@ -31,9 +31,9 @@ export class PolicyHistoryComponent implements OnInit {
 
     ngOnInit(): void {
         this.isOkLoading = true;
-        setTimeout(() => {
-            this.isOkLoading = false;
-        }, 3000);
+        // setTimeout(() => {
+        //     this.isOkLoading = false;
+        // }, 3000);
 
         this.route.params.subscribe(id => {
             this.policiesService.getPolicies().subscribe(policies => {
@@ -57,6 +57,8 @@ export class PolicyHistoryComponent implements OnInit {
                 );
 
                 this.displayPoliciesList = this.policiesList;
+
+                this.isOkLoading = false;
             });
         });
     }

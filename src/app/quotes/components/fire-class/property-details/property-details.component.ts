@@ -41,38 +41,14 @@ export class PropertyDetailsComponent implements OnInit, OnDestroy {
         private productClausesService: ClausesService
     ) {
         this.propertyDetailsForm = this.formBuilder.group({
-            propertyId: [
-                { value: '', disabled: !this.isRiskEditMode },
-                Validators.required
-            ],
-            propertyDescription: [
-                { value: '', disabled: !this.isRiskEditMode },
-                Validators.required
-            ],
-            subClass: [
-                { value: '', disabled: !this.isRiskEditMode },
-                Validators.required
-            ],
-            roofType: [
-                { value: '', disabled: !this.isRiskEditMode },
-                Validators.required
-            ],
-            city: [
-                { value: '', disabled: !this.isRiskEditMode },
-                Validators.required
-            ],
-            province: [
-                { value: '', disabled: !this.isRiskEditMode },
-                Validators.required
-            ],
-            address: [
-                { value: '', disabled: !this.isRiskEditMode },
-                Validators.required
-            ],
-            propertyUse: [
-                { value: '', disabled: !this.isRiskEditMode },
-                Validators.required
-            ]
+            propertyId: ['', Validators.required],
+            propertyDescription: ['', Validators.required],
+            subClass: ['', Validators.required],
+            roofType: ['', Validators.required],
+            city: ['', Validators.required],
+            province: ['', Validators.required],
+            address: ['', Validators.required],
+            propertyUse: ['', Validators.required]
         });
 
         this.classHandlerSubscription = this.classHandler.selectedClassChanged$.subscribe(
@@ -82,22 +58,23 @@ export class PropertyDetailsComponent implements OnInit, OnDestroy {
                     localStorage.getItem('classObject')
                 );
                 this.productOptions = this.currentClass.products;
+
+                console.log('CURRENT CLASS:=> ', this.currentClass.products);
             }
         );
 
-        // this.propertyDetailsSubscription = this.fireClassService.propertyDetailsChanged$.subscribe(
-        //     property => {
-        //         if (property) {
-        //             this.propertyDetials = property;
-        //             this.propertyDetailsForm.patchValue(property);
-        //         }
-        //     }
-        // );
+        this.propertyDetailsSubscription = this.fireClassService.propertyDetailsChanged$.subscribe(
+            property => {
+                if (property) {
+                    this.propertyDetials = property;
+                    this.propertyDetailsForm.patchValue(property);
+                }
+            }
+        );
 
         this.riskEditModeSubscription = this.premiumComputationService.riskEditModeChanged$.subscribe(
             riskEditMode => {
                 this.isRiskEditMode = riskEditMode;
-                this.changeToEditable();
             }
         );
     }
@@ -126,13 +103,14 @@ export class PropertyDetailsComponent implements OnInit, OnDestroy {
         this.propertyDetailsForm.valueChanges.subscribe(res => {
             // console.log('form :=> ', this.propertyDetailsForm.value);
             // this.propertyDetailsForm.patchValue(this.propertyDetials);
-            this.fireClassService.changePropertyDetails(
+            this.fireClassService.changePropertyForm(
                 this.propertyDetailsForm.value
             );
         });
 
         this.locationService.getProvinces().subscribe(provinces => {
             this.provinces = provinces;
+            console.log('PROVINCES:=> ', provinces);
         });
 
         this.productClausesService.getExtensions().subscribe(extensions => {
@@ -183,7 +161,7 @@ export class PropertyDetailsComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.classHandlerSubscription.unsubscribe();
-        // this.propertyDetailsSubscription.unsubscribe();
+        this.propertyDetailsSubscription.unsubscribe();
         this.riskEditModeSubscription.unsubscribe();
     }
 }

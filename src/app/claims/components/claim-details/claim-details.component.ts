@@ -53,9 +53,9 @@ export class ClaimDetailsComponent implements OnInit {
 
     ngOnInit(): void {
         this.isClaimDetailLoading = true;
-        setTimeout(() => {
-            this.isClaimDetailLoading = false;
-        }, 3000);
+        // setTimeout(() => {
+        //     this.isClaimDetailLoading = false;
+        // }, 3000);
 
         // get claimId from parameters
         this.router.params.subscribe(param => {
@@ -65,6 +65,7 @@ export class ClaimDetailsComponent implements OnInit {
         this.router.data.subscribe(data => {
             this.claimData = data.claim;
             console.log(this.claimData);
+            this.isClaimDetailLoading = false;
         });
 
         this.claimDetailsForm = this.formBuilder.group({

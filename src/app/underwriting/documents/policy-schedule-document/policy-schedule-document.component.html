@@ -42,9 +42,9 @@
         </table>
         <hr style="width: 100%; height: 2px; background-color: black;" />
 
-        <!-- <h2 class="heading">A PLUS GENERAL INSURANCE LIMITED</h2> -->
+        <h2 style="text-align: center; font-weight: bolder;">MOTOR POLICY SCHEDULE</h2>
         <P class="centerheading">SCHEDULE ATTACHING TO AND FORMING PART OF
-            <strong>{{ policy.risks[0].productType }} MOTOR</strong> CAR POLICY
+            <strong>{{ policy?.risks[0]?.productType }} MOTOR</strong> CAR POLICY
             NO. {{ policy.policyNumber }}</P>
 
         <p>
@@ -56,8 +56,8 @@
 
         <div>
             <p>
-                Name Of Insured:
-                <span style="font-weight: bold;">{{
+                Name of Insured:
+                <span>{{
                     policy.nameOfInsured
                 }}</span><span style="float: right;">Agency:
                     {{
@@ -85,7 +85,7 @@
             </p>
 
             <p>
-                Period Of Insurance:
+                Period of Insurance:
             </p>
 
             <ol type="A">

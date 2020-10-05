@@ -47,9 +47,9 @@ export class ApprovedPaymentsComponent implements OnInit {
 
     ngOnInit(): void {
         this.paymentsIsLoading = true;
-        setTimeout(() => {
-            this.paymentsIsLoading = false;
-        }, 3000);
+        // setTimeout(() => {
+        //     this.paymentsIsLoading = false;
+        // }, 3000);
 
         this.paymentsService.getRequisitionPayments().subscribe(payments => {
             this.paymentsList = payments;
@@ -62,6 +62,8 @@ export class ApprovedPaymentsComponent implements OnInit {
                 x => x.approvalSatus == 'Approved'
             );
             this.displayApprovedPaymentsList = this.approvedPaymentsList;
+
+            this.paymentsIsLoading = false;
         });
 
         this.paymentApprovalUpdate.subscribe(update => {

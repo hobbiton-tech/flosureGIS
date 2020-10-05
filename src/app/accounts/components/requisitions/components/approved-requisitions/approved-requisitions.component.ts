@@ -40,12 +40,12 @@ export class ApprovedRequisitionsComponent implements OnInit {
     // requisition payment modal
     isRequisitionPaymentModalVisible = false;
 
-  loggedIn = localStorage.getItem('currentUser');
-  user: UserModel;
-  permission: PermissionsModel;
-  isPresentPermission: PermissionsModel;
-  process = 'process';
-  admin = 'admin';
+    loggedIn = localStorage.getItem('currentUser');
+    user: UserModel;
+    permission: PermissionsModel;
+    isPresentPermission: PermissionsModel;
+    process = 'process';
+    admin = 'admin';
 
     constructor(
         private accountsService: AccountService,
@@ -56,18 +56,18 @@ export class ApprovedRequisitionsComponent implements OnInit {
 
     ngOnInit(): void {
         this.requisitionsIsLoading = true;
-        setTimeout(() => {
-            this.requisitionsIsLoading = false;
-        }, 3000);
+        // setTimeout(() => {
+        //     this.requisitionsIsLoading = false;
+        // }, 3000);
 
-      const decodedJwtData = jwt_decode(this.loggedIn);
-      this.usersService.getUsers().subscribe((users) => {
-        this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+        const decodedJwtData = jwt_decode(this.loggedIn);
+        this.usersService.getUsers().subscribe(users => {
+            this.user = users.filter(x => x.ID === decodedJwtData.user_id)[0];
 
-        this.isPresentPermission = this.user.Permission.find((el) => el.name === this.process ||
-          el.name === this.admin );
-
-      });
+            this.isPresentPermission = this.user.Permission.find(
+                el => el.name === this.process || el.name === this.admin
+            );
+        });
 
         this.accountsService.getRequisitions().subscribe(requisitions => {
             this.requisitionsList = requisitions;
@@ -84,6 +84,8 @@ export class ApprovedRequisitionsComponent implements OnInit {
                     x.paymentStatus === 'UnProcessed'
             );
             this.displayApprovedRequisitionsList = this.approvedRequisitionsList;
+
+            this.requisitionsIsLoading = false;
         });
 
         this.requisitionApprovalUpdate.subscribe(update => {
