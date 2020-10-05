@@ -35,14 +35,14 @@ export class ExtensionsComponent implements OnInit, OnDestroy {
         this.extensionsTotalSubscription = this.premiumComputationService.extensionsTotalChanged$.subscribe(
             extensionsTotal => {
                 this.extensionsTotal = extensionsTotal;
-                this.ngOnInit();
+                // this.ngOnInit();
             }
         );
         this.extensionsListChanges = this.premiumComputationService.extensionsTotalChanged$.subscribe(
             extensions => {
                 this.extensionList = this.premiumComputationService.getExtensions();
 
-                this.ngOnInit();
+                // this.ngOnInit();
             }
         );
         this.riskEditModeSubscription = this.premiumComputationService.riskEditModeChanged$.subscribe(
