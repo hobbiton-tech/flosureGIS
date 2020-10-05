@@ -16,6 +16,8 @@ import { AllocationsService } from '../../../../services/allocations.service';
 import { HttpClient } from '@angular/common/http';
 import { CommissionPaymentService } from '../../../../services/commission-payment.service';
 import { CPaymentModel } from '../../../models/commission-payment.model';
+import { TransactionModel } from '../../../../../clients/models/client.model';
+import { ClientsService } from '../../../../../clients/services/clients.service';
 
 @Component({
     selector: 'app-agent-client',
@@ -105,6 +107,8 @@ export class AgentClientComponent implements OnInit {
   commissionPayments: any[] = [];
   commissionPayment: CPaymentModel;
   comPayments: any[] = [];
+  clientCode: any;
+  transaction: any;
 
     constructor(
         private receiptService: AccountService,
@@ -116,6 +120,7 @@ export class AgentClientComponent implements OnInit {
         private allocationsService: AllocationsService,
         private http: HttpClient,
         private commissionPaymentService: CommissionPaymentService,
+        private  clientsService: ClientsService,
     ) {
         this.receiptForm = this.formBuilder.group({
             received_from: ['', Validators.required],
@@ -237,6 +242,7 @@ export class AgentClientComponent implements OnInit {
         this.currency = unreceipted.currency;
         this.sourceOfBusiness = unreceipted.sourceOfBusiness;
         this.intermediaryName = unreceipted.intermediaryName;
+        this.clientCode = unreceipted.clientCode;
         this.allocationPolicy = this.allocationPolicies.filter((x) => x.policy_number === unreceipted.policyNumber)[0];
         console.log(this.policyAmount);
     }
@@ -408,6 +414,42 @@ export class AgentClientComponent implements OnInit {
 
                   this.policeServices.updatePolicy(this.policy).subscribe((resP) => {}, (err) => {
                     console.log('Update Policy Error', err);
+                  });
+
+
+                  this.clientsService.getTransactions().subscribe((txns: any) => {
+                    let balanceTxn = 0;
+                    console.log('DEDEDE', txns);
+                    const filterTxn = txns.data.filter((x) => x.client_id === this.clientCode);
+
+                    if (filterTxn === null || filterTxn === undefined || filterTxn === [] || filterTxn.length === 0) {
+                      balanceTxn = Number(resN.data.sum_in_digits) * -1;
+                    } else {
+                      this.transaction = filterTxn.slice(-1)[0];
+
+                      console.log('DEDEDE', this.transaction);
+
+                      balanceTxn = Number(this.transaction.balance) + Number(resN.data.sum_in_digits * -1);
+                    }
+
+
+                    const trans: TransactionModel = {
+                      open_cash: 0,
+                      balance: Number(balanceTxn),
+                      client_id: this.clientCode,
+                      cr: Number(resN.data.sum_in_digits * -1),
+                      receipt_id: resN.data.ID,
+                      dr: 0,
+                      transaction_amount: Number(resN.data.sum_in_digits * -1),
+                      transaction_date: new Date(),
+                      type: 'Receipt',
+                      reference: resN.data.receipt_number
+
+                    };
+
+                    this.clientsService.createTransaction(trans).subscribe((sucTxn) => {}, (errTxn) => {
+                      this.message.error(errTxn);
+                    });
                   });
 
                   this.generateID(resN.data.ID);

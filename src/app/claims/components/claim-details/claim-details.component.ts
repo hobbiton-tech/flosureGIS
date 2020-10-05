@@ -25,19 +25,19 @@ export class ClaimDetailsComponent implements OnInit {
 
     claimsList: Claim[];
 
-    //hide peril form drawer
+    // hide peril form drawer
     addPerilFormDrawerVisible = false;
 
     isEditmode = false;
 
-    //claim id
+    // claim id
     claimId: string;
     claimData: Claim = new Claim();
 
-    //selected file upload
+    // selected file upload
     selectedFile: any = null;
 
-    //file upload url
+    // file upload url
     url: string;
 
     constructor(
@@ -57,7 +57,7 @@ export class ClaimDetailsComponent implements OnInit {
         //     this.isClaimDetailLoading = false;
         // }, 3000);
 
-        //get claimId from parameters
+        // get claimId from parameters
         this.router.params.subscribe(param => {
             this.claimId = param.id;
         });
@@ -89,7 +89,7 @@ export class ClaimDetailsComponent implements OnInit {
         //     console.log(this.claimData);
         // });
 
-        //populate perils list
+        // populate perils list
         // this.perilService.getPerils().subscribe(perils => {
         //     this.perilsList = perils.filter(
         //         x => x.claimId === this.claimData.id
@@ -97,7 +97,7 @@ export class ClaimDetailsComponent implements OnInit {
         // });
     }
 
-    //cliam details form submission
+    // cliam details form submission
     onSubmit() {
         const name = this.selectedFile.name;
         const fileRef = this.storage.ref(name);
@@ -121,12 +121,12 @@ export class ClaimDetailsComponent implements OnInit {
             .subscribe();
     }
 
-    //show document preview
+    // show document preview
     showPreview(event: any) {
         this.selectedFile = event.target.files[0];
     }
 
-    //open add peril form drawer
+    // open add peril form drawer
     openAddPerilFormDrawer() {
         this.addPerilFormDrawerVisible = true;
     }

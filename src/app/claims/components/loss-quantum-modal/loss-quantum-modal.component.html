@@ -19,12 +19,12 @@
                         </nz-form-item>
                     </div>
                     <div nz-col nzSpan="12">
-                        <div *ngIf="selectedLossType == 'Total Loss'">
+                        <div >
                             <nz-form-item>
-                                <nz-form-label nzSpan="8" nzRequired>Salvage Reserve</nz-form-label>
+                                <nz-form-label nzSpan="8" nzRequired>Discharge Amount</nz-form-label>
                                 <nz-form-control nzSpan="15">
                                     <nz-input-group nzPrefix="{{currentClaim.policy.currency == 'ZMW' ? 'K' : '$'}}">
-                                        <input type="number" nz-input formControlName="salvageReserve" />
+                                        <input type="number" nz-input formControlName="dischargeAmount" />
                                     </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
@@ -35,19 +35,19 @@
                 <div nz-row>
                     <div nz-col nzSpan="12">
                         <nz-form-item>
-                            <nz-form-label nzSpan="8" nzRequired>Loss Estimate</nz-form-label>
+                            <nz-form-label nzSpan="8" nzRequired>Loss Estimate (Reserve)</nz-form-label>
                             <nz-form-control nzSpan="15">
                                 <nz-input-group nzPrefix="{{currentClaim.policy.currency == 'ZMW' ? 'K' : '$'}}">
                                     <input type="number" nz-input formControlName="lossEstimate" />
                                 </nz-input-group>
                             </nz-form-control>
                         </nz-form-item>
-                        <nz-form-item>
-                            <nz-form-label nzSpan="8" nzRequired>Recommendation</nz-form-label>
-                            <nz-form-control nzSpan="15">
-                                <textarea nz-input formControlName="recommendation"></textarea>
-                            </nz-form-control>
-                        </nz-form-item>
+<!--                        <nz-form-item>-->
+<!--                            <nz-form-label nzSpan="8" nzRequired>Recommendation</nz-form-label>-->
+<!--                            <nz-form-control nzSpan="15">-->
+<!--                                <textarea nz-input formControlName="recommendation"></textarea>-->
+<!--                            </nz-form-control>-->
+<!--                        </nz-form-item>-->
                     </div>
                     <div nz-col nzSpan="12">
                         <nz-form-item>
@@ -58,20 +58,79 @@
                                 </nz-input-group>
                             </nz-form-control>
                         </nz-form-item>
-                        <nz-form-item>
-                            <nz-form-label nzSpan="8">Other Insurances</nz-form-label>
-                            <nz-form-control nzSpan="15">
-                                <nz-select [nzMaxTagCount]="3" nzMode="multiple"
-                                    nzPlaceHolder="Select Other insurance Companies"
-                                    [(ngModel)]="selectedInsuranceCompanies" [ngModelOptions]="{standalone: true}"
-                                    (ngModelChange)="changeSelectedCompaniesList()">
-                                    <nz-option *ngFor="let company of insuranceCompanies"
-                                        [nzLabel]="company.companyName" [nzValue]="company"></nz-option>
-                                </nz-select>
-                            </nz-form-control>
-                        </nz-form-item>
+
                     </div>
                 </div>
+              <div nz-row>
+                <div nz-col nzSpan="12">
+                  <nz-form-item>
+                    <nz-form-label nzSpan="8">Other Insurances</nz-form-label>
+                    <nz-form-control nzSpan="15">
+                      <nz-select [nzMaxTagCount]="3" nzMode="multiple"
+                                 nzPlaceHolder="Select Other insurance Companies"
+                                 [(ngModel)]="selectedInsuranceCompanies" [ngModelOptions]="{standalone: true}"
+                                 (ngModelChange)="changeSelectedCompaniesList()">
+                        <nz-option *ngFor="let company of insuranceCompanies"
+                                   [nzLabel]="company.companyName" [nzValue]="company"></nz-option>
+                      </nz-select>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col nzSpan="12" *ngIf="selectedLossType == 'Total Loss'">
+                  <div >
+                    <nz-form-item>
+                      <nz-form-label nzSpan="8" nzRequired>Salvage Reserve</nz-form-label>
+                      <nz-form-control nzSpan="15">
+                        <nz-input-group nzPrefix="{{currentClaim.policy.currency == 'ZMW' ? 'K' : '$'}}">
+                          <input type="number" nz-input formControlName="salvageReserve" />
+                        </nz-input-group>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                </div>
+              </div>
+              <div nz-row>
+                <div nz-col nzSpan="12" *ngIf="selectedLossType === 'Partial Loss'">
+                  <nz-form-item>
+                    <nz-form-label nzSpan="8" nzRequired>Settlement Type</nz-form-label>
+                    <nz-form-control nzSpan="15">
+                      <nz-select nzPlaceHolder="Select Loss Type" formControlName="settlementType"
+                                 (ngModelChange)="changeSelectedSettlementType($event)">
+                        <nz-option *ngFor="let Settlement of settlementTypeOptions" [nzValue]="Settlement.value"
+                                   [nzLabel]="Settlement.label">
+                        </nz-option>
+                      </nz-select>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col nzSpan="12" *ngIf="selectedSettlementType === 'Repair'">
+                  <nz-form-item>
+                    <nz-form-label nzSpan="8">Repairer(s)</nz-form-label>
+                    <nz-form-control nzSpan="15">
+                      <nz-select [nzMaxTagCount]="3" nzMode="multiple"
+                                 nzPlaceHolder="Select Repairer(s)"
+                                 formControlName="selectedRepairer"
+                                 [(ngModel)]="selectedRepairers"
+                      >
+
+                        <nz-option *ngFor="let repairer of currentClaim.serviceProviderRepairsQuotations"
+                                   [nzLabel]="repairer.serviceProvider[0].name" [nzValue]="repairer"></nz-option>
+                      </nz-select>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+
+              </div>
+              <div nz-row>
+                <div nz-col nzSpan="12">
+                  <nz-form-item>
+                    <nz-form-label nzSpan="8" nzRequired>Recommendation</nz-form-label>
+                    <nz-form-control nzSpan="15">
+                      <textarea nz-input formControlName="recommendation"></textarea>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+              </div>
                 <nz-form-item>
                     <nz-form-control>
                         <div style="text-align: center; margin-top: 10px">

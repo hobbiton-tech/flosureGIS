@@ -17,6 +17,7 @@ export class IReceiptModel {
     cheq_number?: string;
     invoice_number?: string;
     currency?: string;
+    client_id?: string;
 }
 
 

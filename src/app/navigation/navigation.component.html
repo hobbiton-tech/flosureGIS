@@ -150,11 +150,32 @@
                                 Claims Approval
                             </a>
                         </li>
-                        <!-- <li nz-menu-item nzMatchRouter nzDisabled>
-                            <a routerLink="/flosure/claims/claimants">
+                        <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/claims/salvages">
                                 Salvages
                             </a>
-                        </li> -->
+                        </li>
+
+                      <li nz-menu-item nzMatchRouter>
+                        <a routerLink="/flosure/claims/subrogation">
+                          Subrogation
+                        </a>
+                      </li>
+                      <li nz-submenu nzTitle="Invoices">
+
+                        <ul>
+                          <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/claims/salvage-invoices">
+                              Salvage Invoice List
+                            </a>
+                          </li>
+                          <li nz-menu-item nzMatchRouter>
+                            <a routerLink="/flosure/claims/subrogation-invoice">
+                              Subrogation Invoice List
+                            </a>
+                          </li>
+                        </ul>
+                      </li>
                     </ul>
                 </li>
                 <li nz-submenu *ngIf="finance === isPresent?.role_name || admin === isPresent?.role_name"

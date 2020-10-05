@@ -345,6 +345,7 @@ export class PolicyExtensionDetailsComponent implements OnInit, OnDestroy {
                 '/flosure/underwriting/endorsements/extension-cover'
             );
             this.updatingPolicy = false;
+
         });
     }
 
