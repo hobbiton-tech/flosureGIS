@@ -7,4 +7,5 @@ export interface ISalvage {
     salvageName: string;
     reserve: number;
     bidStatus: string;
+  saleAmount?: number;
 }

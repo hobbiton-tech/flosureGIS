@@ -40,6 +40,7 @@ export class Claim {
     claimPerils: IPeril[];
     thirdPartyDetails: ThirdPartyDetails;
     subrogation?: Subrogation;
+    subrogations?: Subrogations;
 }
 
 
@@ -56,6 +57,12 @@ export class ThirdPartyDetails {
   engineNumber: string;
   color: string;
   vehicleType: string;
+}
+
+export class Subrogations {
+  status: string;
+  amount: number;
+
 }
 
 export type ClaimStatus =

@@ -32,6 +32,8 @@ import { UsersRolesComponent } from '../users/components/users-roles/users-roles
 import { AuthGuard } from '../users/helpers/auth.guard';
 import { ClientStatementsComponent } from './components/statements/client-statements/client-statements.component';
 import { AgeAnalysisComponent } from './components/statements/age-analysis/age-analysis.component';
+import { TransactionInvoiceService } from './services/transaction-invoice.service';
+import { SalvageReceiptComponent } from './components/receipts/components/salvage-receipt/salvage-receipt.component';
 
 const routes: Routes = [
     {
@@ -124,6 +126,11 @@ const routes: Routes = [
     component: AgeAnalysisComponent,
     canActivate: [AuthGuard],
   },
+  {
+    path: 'salvage-receipt',
+    component: SalvageReceiptComponent,
+    canActivate: [AuthGuard],
+  },
 ];
 
 @NgModule({
@@ -148,7 +155,8 @@ const routes: Routes = [
         ApprovedRequisitionsComponent,
         ApprovedPaymentsComponent,
         ClientStatementsComponent,
-        AgeAnalysisComponent
+        AgeAnalysisComponent,
+        SalvageReceiptComponent,
     ],
     imports: [
         CommonModule,
@@ -163,7 +171,8 @@ const routes: Routes = [
         AccountService,
         PaymentPlanService,
         CommissionPaymentService,
-        AllocationsService
+        AllocationsService,
+      TransactionInvoiceService
     ]
 })
 export class AccountsModule {}

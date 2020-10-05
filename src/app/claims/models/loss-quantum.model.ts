@@ -13,7 +13,7 @@ export interface ILossQuantum {
     settlementType?: SettlementType;
     dischargeAmount: number;
     selectedRepairer?: IServiceProviderQuote[];
-    salvage?: ISalvage;
+    salvages?: ISalvage;
 }
 
 export type LossType = 'Total Loss' | 'Partial Loss';

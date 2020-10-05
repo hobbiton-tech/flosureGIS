@@ -11,7 +11,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ClaimsService } from '../../services/claims-service.service';
 import { ILossQuantum } from '../../models/loss-quantum.model';
 import { Subscription } from 'rxjs';
-import { Claim } from '../../models/claim.model';
+import { Claim, Subrogations } from '../../models/claim.model';
 import { ClaimsProcessingServiceService } from '../../services/claims-processing-service.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { IServiceProviderQuote } from '../../models/service-provider-quote.model';
@@ -39,6 +39,7 @@ export class LossQuantumModalComponent implements OnInit, OnDestroy {
     insuranceCompanies: IInsuranceCompany[] = [];
     selectedInsuranceCompanies: IInsuranceCompany[] = [];
     selectedRepairers: IServiceProviderQuote;
+    subrogations: Subrogations;
 
     documentTitle = 'Loss Quantum Processing';
 
@@ -61,6 +62,7 @@ export class LossQuantumModalComponent implements OnInit, OnDestroy {
     currentClaim: Claim;
     selectedSettlementType: any;
     salvage: ISalvage;
+  claimUpdate: Claim;
 
     constructor(
         private msg: NzMessageService,
@@ -124,6 +126,13 @@ export class LossQuantumModalComponent implements OnInit, OnDestroy {
           };
         }
 
+        if( this.currentClaim.subrogation ===  'Required') {
+          this.subrogations = {
+            status: 'Pending Invoice',
+            amount: this.lossQuantumForm.get('dischargeAmount').value
+          }
+        }
+
         const lossQuantum: ILossQuantum = {
             ...this.lossQuantumForm.value,
             insuranceCompanies: this.insuranceCompanies,
@@ -134,7 +143,7 @@ export class LossQuantumModalComponent implements OnInit, OnDestroy {
            selectedRepairer: this.lossQuantumForm.get('settlementType').value === 'Repair'
              ? this.lossQuantumForm.get('selectedRepairer').value
              : [],
-          salvage:
+          salvages:
             this.lossQuantumForm.get('lossType').value === 'Total Loss'
               ? this.salvage
               : {},
@@ -142,14 +151,35 @@ export class LossQuantumModalComponent implements OnInit, OnDestroy {
 
         console.log('LQ:', lossQuantum);
 
-        const claimUpdate: Claim = {
-            ...this.currentClaim,
-            claimStatus: 'Processed',
-            lossQuantum: lossQuantum
+      if( this.currentClaim.subrogation ===  'Required') {
+        this.subrogations = {
+          status: 'Pending Invoice',
+          amount: this.lossQuantumForm.get('dischargeAmount').value
+        }
+
+        this.claimUpdate = {
+          ...this.currentClaim,
+          claimStatus: 'Processed',
+          lossQuantum: lossQuantum,
+          subrogations: this.subrogations
         };
+      } else {
+        this.claimUpdate = {
+          ...this.currentClaim,
+          claimStatus: 'Processed',
+          lossQuantum: lossQuantum,
+        };
+      }
+
+        // const claimUpdate: Claim = {
+        //     ...this.currentClaim,
+        //     claimStatus: 'Processed',
+        //     lossQuantum: lossQuantum,
+        //   subrogations: this.subrogations
+        // };
 
         this.claimsService
-            .updateClaim(this.currentClaim.id, claimUpdate)
+            .updateClaim(this.currentClaim.id, this.claimUpdate)
             .subscribe(
                 res => {
                     console.log('res:', res);

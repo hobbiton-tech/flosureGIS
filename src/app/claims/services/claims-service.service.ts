@@ -270,4 +270,13 @@ export class ClaimsService {
 
         return 'CL' + dateString + count;
     }
+
+
+  getSalvages(): Observable<ILossQuantum[]> {
+    return this.http.get<ILossQuantum[]>(`${BASE_URL}/loss-quantum`);
+  }
+
+  updateSalvages(lossQuantum: ILossQuantum): Observable<ILossQuantum> {
+    return this.http.put<ILossQuantum>(`${BASE_URL}/loss-quantum/${lossQuantum.id}`, lossQuantum);
+  }
 }

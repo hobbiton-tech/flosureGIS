@@ -28,6 +28,8 @@ import { ProcessedClaimsComponent } from './components/processed-claims/processe
 import { UsersRolesComponent } from '../users/components/users-roles/users-roles.component';
 import { AuthGuard } from '../users/helpers/auth.guard';
 import { AddThirdPartyDetailsComponent } from './components/add-third-party-details/add-third-party-details.component';
+import { SalvagesComponent } from './components/salvages/salvages.component';
+import { SalvageInvoiceComponent } from './components/salvage-invoice/salvage-invoice.component';
 
 const routes: Routes = [
     {
@@ -72,7 +74,17 @@ const routes: Routes = [
         path: 'claims-processing/processed-claims',
         component: ProcessedClaimsComponent,
         canActivate: [AuthGuard]
-    }
+    },
+    {
+      path: 'salvages',
+      component: SalvagesComponent,
+      canActivate: [AuthGuard]
+    },
+  {
+    path: 'salvage-invoices',
+    component: SalvageInvoiceComponent,
+    canActivate: [AuthGuard]
+  }
 ];
 
 @NgModule({
@@ -95,7 +107,9 @@ const routes: Routes = [
         ClaimApprovalModalComponent,
         AddClaimantModalComponent,
         ProcessedClaimsComponent,
-        AddThirdPartyDetailsComponent
+        AddThirdPartyDetailsComponent,
+        SalvagesComponent,
+        SalvageInvoiceComponent
     ],
     providers: [ClaimsService],
     imports: [

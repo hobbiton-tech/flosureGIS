@@ -1,0 +1,106 @@
+<nz-spin nzSize="large" nzTip="Salvages Loading...." [nzSpinning]="salvagesLoading">
+  <nz-spin nzSize="large" nzTip="Updating Salvage Status...." [nzSpinning]="isUpdatingSalvageStatus">
+    <div style="margin: 10px;">
+      <div style="margin-bottom: 20px; background: #fff;">
+        <nz-page-header>
+          <nz-page-header-title>Salvages</nz-page-header-title>
+        </nz-page-header>
+      </div>
+
+      <div style="margin-top: 10px;">
+        <nz-card>
+          <!-- <nz-divider nzOrientation="left"></nz-divider> -->
+          <div style="margin-bottom: 10px; width: 20%;">
+            <nz-input-group [nzSuffix]="suffixIconSearch">
+              <input type="text" nz-input placeholder="Search by claim number, client"
+                     [(ngModel)]="searchSalvagesString"
+                     (ngModelChange)="searchSalvages($event)" />
+            </nz-input-group>
+            <ng-template #suffixIconSearch>
+              <i nz-icon nzType="search"></i>
+            </ng-template>
+          </div>
+
+          <nz-table #salvageTable [nzData]="salvagesList" [nzSize]="'small'"
+                    [nzBordered]="true">
+            <thead>
+            <tr>
+              <th [nzAlign]="columnAlignment">Salvage Number</th>
+              <th [nzAlign]="columnAlignment">Reserve</th>
+              <th [nzAlign]="columnAlignment">Bid(s) Status</th>
+              <th [nzAlign]="columnAlignment" >Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let salvage of salvagesList">
+              <td [nzAlign]="columnAlignment">{{salvage?.salvages?.salvageNumber}}</td>
+              <td [nzAlign]="columnAlignment">
+                {{salvage.salvages?.reserve | number:'1.2-2'}}
+              </td>
+              <td [nzAlign]="columnAlignment">
+                <div [ngSwitch]="salvage?.salvages?.bidStatus">
+                  <nz-badge nzColor='yellow' *ngSwitchCase="'Not Open'" nzText="Pending">
+                  </nz-badge>
+                  <nz-badge nzColor='green' *ngSwitchCase="'Closed'" nzText="Resolved">
+                  </nz-badge>
+<!--                  <nz-badge nzColor='red' *ngSwitchCase="'Cancelled'" nzText="Cancelled">-->
+<!--                  </nz-badge>-->
+                  <nz-badge nzColor='blue' *ngSwitchCase="'Opened'" nzText="Processed">
+                  </nz-badge>
+                </div>
+              </td>
+              <td [nzAlign]="columnAlignment" >
+                <button  nz-button nzType="primary" style="margin-left: 2px;" nzSize="small"
+                         *ngIf="salvage?.salvages?.bidStatus === 'Not Open'"
+                         nz-popconfirm
+                         nzPopconfirmTitle="Are you sure you want to Open?"
+                         nzPopconfirmPlacement="bottom"
+                         (nzOnConfirm)="updateStatus(salvage, 'Opened')"
+                         (nzOnCancel)="cancel()">
+                  Open Bid
+                </button>
+                <button  nz-button nzType="primary" style="margin-left: 2px;" nzSize="small"
+                         *ngIf="salvage?.salvages?.bidStatus === 'Opened'"
+                         (click)="showModal(salvage, 'Closed')">
+                  Close Bid
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </nz-table>
+        </nz-card>
+      </div>
+    </div>
+
+    <nz-modal [(nzVisible)]="isVisible" nzTitle="Close Bidding" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+      <div nz-row>
+      <div nz-col nzSpan="24">
+        <div >
+          <nz-form-item>
+            <nz-form-label nzSpan="9" nzRequired>Bidder Name</nz-form-label>
+            <nz-form-control nzSpan="15">
+              <nz-input-group>
+                <input type="text" nz-input [(ngModel)]="bidderName" />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      </div>
+      <div nz-row>
+        <div nz-col nzSpan="24">
+          <div >
+            <nz-form-item>
+              <nz-form-label nzSpan="9" nzRequired>Sale Amount</nz-form-label>
+              <nz-form-control nzSpan="15">
+                <nz-input-group nzPrefix="{{ 'K'}}">
+                  <input type="number" nz-input [(ngModel)]="saleAmount" />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      </div>
+    </nz-modal>
+  </nz-spin>
+</nz-spin>
