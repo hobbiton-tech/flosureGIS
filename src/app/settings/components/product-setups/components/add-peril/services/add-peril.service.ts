@@ -6,8 +6,9 @@ import {
 import { IPeril } from '../../../models/product-setups-models.model';
 import { Observable } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd';
+import { HttpClient } from '@angular/common/http';
 
-const BASE_URL = 'https://flosure-api.azurewebsites.net';
+const BASE_URL = 'https://savenda.flosure-api.com';
 @Injectable({
     providedIn: 'root',
 })
@@ -17,39 +18,43 @@ export class AddPerilService {
 
     constructor(
         private firebase: AngularFirestore,
-        private message: NzMessageService
+        private message: NzMessageService,
+        private http: HttpClient
     ) {
         this.perilCollection = firebase.collection<IPeril>('perils');
         this.perils = this.perilCollection.valueChanges();
     }
 
-    async addPeril(peril: IPeril): Promise<void> {
-        await this.perilCollection
-            .doc(peril.id)
-            .set(peril)
-            .then((mess) => {
-                this.message.success('Peril Successfuly Created');
-            })
-            .catch((err) => {
-                this.message.warning('Peril Failed to Create');
-                console.log(err);
-            });
+    addPeril(peril: IPeril): Observable<IPeril> {
+      return this.http.post<IPeril>(`${BASE_URL}/perils/${peril.productId}`, peril);
+        // await this.perilCollection
+        //     .doc(peril.id)
+        //     .set(peril)
+        //     .then((mess) => {
+        //         this.message.success('Peril Successfuly Created');
+        //     })
+        //     .catch((err) => {
+        //         this.message.warning('Peril Failed to Create');
+        //         console.log(err);
+        //     });
     }
 
-    async updatePeril(peril: IPeril): Promise<void> {
-        return this.perilCollection
-            .doc(`${peril.id}`)
-            .update(peril)
-            .then((res) => {
-                console.log(res);
-            })
-            .catch((err) => {
-                this.message.warning('Update Failed');
-                console.log(err);
-            });
+    updatePeril(peril: IPeril): Observable<IPeril> {
+        return this.http.put<IPeril>(`${BASE_URL}/perils/${peril.id}`, peril);
+      // this.perilCollection
+      //       .doc(`${peril.id}`)
+      //       .update(peril)
+      //       .then((res) => {
+      //           console.log(res);
+      //       })
+      //       .catch((err) => {
+      //           this.message.warning('Update Failed');
+      //           console.log(err);
+      //       });
     }
 
     getPerils(): Observable<IPeril[]> {
-        return this.perils;
+        return this.http.get<IPeril[]>(`${BASE_URL}/perils`);
+      // this.perils;
     }
 }

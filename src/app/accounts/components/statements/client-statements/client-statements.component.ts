@@ -51,8 +51,6 @@ export class ClientStatementsComponent implements OnInit {
     private paymentPlanService: PaymentPlanService,
     private clientsService: ClientsService,
     private policyService: PoliciesService,
-    private receiptService: AccountService,
-    private cdref: ChangeDetectorRef
   ) { }
 
 
@@ -80,7 +78,7 @@ export class ClientStatementsComponent implements OnInit {
 
 
       this.clientsService.getTransactions().subscribe((txns: any) => {
-        this.transactionList = txns.data.filter((x) => x.client_id === this.clientId);
+        this.transactionList = txns.data.filter((x) => x.client_id === this.clientId && x.type !== 'Open Cash').sort();
       });
     });
 
@@ -146,103 +144,11 @@ export class ClientStatementsComponent implements OnInit {
     });
 
     this.resultList = [...this.policyList, ...this.creditNotes, ...this.receiptList].sort().reverse();
-    this.remainingBalance(value);
-  }
-
-  policyType(value) {
-    if (value.receiptStatus === 'Unreceipted') {
-      this.statementType = 'Debit';
-    } else if (value.receiptStatus ) {
-
-    }
-    return this.statementType;
-  }
-
-  txnDate(value) {
-    if (value.policyNumber) {
-      return value.startDate;
-    } else if (value.creditNoteNumber) {
-      return value.dateCreated;
-    } else  if (value.receipt_number) {
-      return value.date_received;
-    }
-  }
-
-  type(value) {
-    if (value.policyNumber) {
-      return 'Debit';
-    } else if (value.creditNoteNumber) {
-      return 'Cancelled';
-    } else  if (value.receipt_number) {
-      return 'Receipt';
-    }
-  }
-
-  txnAmount(value) {
-    if (value.policyNumber) {
-      return value.netPremium;
-    } else if (value.dateCreated) {
-      return value.creditNoteAmount;
-    } else  if (value.receipt_number) {
-      return value.sum_in_digits;
-    }
-  }
-
-  crDRBalance(value) {
-    let cr = 0;
-    let dr = 0;
-
-    console.log('Values>>>>>', value);
-
-    if (value.policyNumber) {
-      dr = value.netPremium;
-    }
-    if (value.receipt_number) {
-      cr = value.sum_in_digits * -1;
-    }
-    if (value.creditNoteNumber) {
-      cr = value.creditNoteAmount * -1;
-    }
-
-    this.resDetails = {
-      dr,
-      cr
-    };
-
-    return this.resDetails;
+    // this.remainingBalance(value);
   }
 
 
-  dr(value) {
-    if (value.policyNumber) {
-      return value.netPremium;
-    }
-  }
 
-
-  // ref(value) {
-  //   if (value.type === Debit) {
-  //     return value.policyNumber;
-  //   } else if (value.creditNoteNumber) {
-  //     return value.creditNoteNumber;
-  //   } else  if (value.receipt_number) {
-  //     return value.receipt_number;
-  //   }
-  // }
-
-
-  cr(value) {
-    if (value.creditNoteNumber) {
-      return value.creditNoteAmount * -1;
-    } else  if (value.receipt_number) {
-      return value.sum_in_digits * -1;
-    }
-  }
-
-  remainingBalance(value) {
-    this.balance = Number(this.balance) + Number(this.crDRBalance(value).dr) + Number(this.crDRBalance(value).cr);
-    return this.balance;
-  }
 
   parseDate(input) {
     const parts = input.match(/(\d+)/g);

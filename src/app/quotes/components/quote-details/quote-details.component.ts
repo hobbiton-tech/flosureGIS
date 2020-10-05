@@ -926,7 +926,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                             this.http
                                 .post<CoverNote>(
-                                    `https://flosure-postgres-db.herokuapp.com/documents/cover-note`,
+                                    `https://savenda.flosure-api.com/documents/cover-note`,
                                     coverNote
                                 )
                                 .subscribe(
@@ -950,7 +950,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                         this.http
                             .post<DebitNote>(
-                                `https://flosure-postgres-db.herokuapp.com/documents/debit-note/${this.policyId}`,
+                                `https://savenda.flosure-api.com/documents/debit-note/${this.policyId}`,
                                 debitNote
                             )
                             .subscribe(
@@ -975,6 +975,7 @@ export class QuoteDetailsComponent implements OnInit {
 
 
                                     const trans: TransactionModel = {
+                                      open_cash: 0,
                                       balance: Number(balanceTxn),
                                       client_id: this.quoteData.clientCode,
                                       cr: 0,
@@ -1109,7 +1110,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                         this.http
                             .post<DebitNote>(
-                                `https://flosure-postgres-db.herokuapp.com/documents/debit-note/${this.policyId}`,
+                                `https://savenda.flosure-api.com/documents/debit-note/${this.policyId}`,
                                 debitNote
                             )
                             .subscribe(
@@ -1136,6 +1137,7 @@ export class QuoteDetailsComponent implements OnInit {
 
 
                                     const trans: TransactionModel = {
+                                      open_cash: 0,
                                       balance: Number(balanceTxn),
                                       client_id: this.quoteData.clientCode,
                                       cr: 0,

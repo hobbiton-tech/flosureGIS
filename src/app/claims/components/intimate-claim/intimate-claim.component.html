@@ -12,14 +12,19 @@
 
             <div style="margin: 10px; background: #fff;">
                 <nz-page-header (nzBack)="backToTransactions()" nzBackIcon nzTitle="Claim Intimation">
-                    <nz-page-header-extra>
+                    <nz-page-header-extra style="margin-left: 10px">
                         <button nz-button routerLink="/flosure/claims/intimate-claims" nzType="primary"
                             *ngIf="selectedClaimantType == 'Third Party'" (click)="isAddClaimantModalVisible=true">Add
                             Claimant</button>
                     </nz-page-header-extra>
+                  <nz-page-header-extra style="margin-left: 10px">
+                    <button nz-button routerLink="/flosure/claims/intimate-claims" nzType="primary"
+                            *ngIf="thirdPartyDetailsState" (click)="isAddThirdPartyDetailsModalVisible=true">Add Third Party Details</button>
+                  </nz-page-header-extra>
                 </nz-page-header>
 
             </div>
+
 
 
             <div style="margin: 10px;">
@@ -47,40 +52,58 @@
                                         <nz-select nzShowSearch nzPlaceHolder="Select Client"
                                             (ngModelChange)="handleClientChange()" formControlName="client">
                                             <nz-option *ngFor="let client of displayClientList" [nzValue]="client"
-                                                [nzLabel]="client.clientType == 'Individual' ? (client.firstName + ' ' + client.lastName) : client.companyName ">
+                                                [nzLabel]="client.clientType == 'Individual' ? (client.firstName + ' ' + client.lastName + '(' + client.idNumber +')') : client.companyName ">
                                             </nz-option>
                                         </nz-select>
                                     </nz-form-control>
                                 </nz-form-item>
                                 <nz-form-item>
-                                    <nz-form-label nzSpan="8" nzRequired>Loss Estimate</nz-form-label>
+                                    <nz-form-label nzSpan="8" nzRequired>Loss Estimate (Reserve)</nz-form-label>
                                     <nz-form-control nzSpan="15">
                                         <input nz-input formControlName="lossEstimate" type="number" />
                                     </nz-form-control>
                                 </nz-form-item>
                                 <nz-form-item>
-                                    <nz-form-label nzSpan="8" nzRequired>Loss Location</nz-form-label>
+                                    <nz-form-label nzSpan="8" nzRequired>Loss Road</nz-form-label>
                                     <nz-form-control nzSpan="15">
-                                        <input nz-input formControlName="lossLocation" />
+                                        <input nz-input formControlName="road"/>
                                     </nz-form-control>
                                 </nz-form-item>
+                              <nz-form-item>
+                                <nz-form-label nzSpan="8" nzRequired>Loss Township</nz-form-label>
+                                <nz-form-control nzSpan="15">
+                                  <input nz-input formControlName="township"/>
+                                </nz-form-control>
+                              </nz-form-item>
+                              <nz-form-item>
+                                <nz-form-label nzSpan="8" nzRequired>Loss City</nz-form-label>
+                                <nz-form-control nzSpan="15">
+                                  <input nz-input formControlName="city"/>
+                                </nz-form-control>
+                              </nz-form-item>
+                              <nz-form-item>
+                                <nz-form-label nzSpan="8" nzRequired>Loss Country</nz-form-label>
+                                <nz-form-control nzSpan="15" nzHasFeedback  [nzErrorTip]="territoryErrorTpl">
+                                  <input nz-input formControlName="country"/>
+                                  <ng-template #territoryErrorTpl let-control>
+                                    <ng-container *ngIf="control.hasError('required')">
+                                      Please input your Country Date!
+                                    </ng-container>
+                                    <ng-container *ngIf="control.hasError('duplicated')">
+                                      The Policy does not cover loss outside the country!
+                                    </ng-container>
+                                  </ng-template>
+                                </nz-form-control>
+                              </nz-form-item>
                                 <nz-form-item>
-                                    <nz-form-label nzRequired nzSpan="8">Third Party Fault</nz-form-label>
+                                    <nz-form-label nzRequired nzSpan="8">Party to Blame</nz-form-label>
                                     <nz-form-control nzSpan="15">
-                                        <nz-select nzPlaceHolder="" formControlName="thirdPartyFault">
+                                        <nz-select nzPlaceHolder="" formControlName="thirdPartyFault" (ngModelChange)="handlePartyToBlame($event)">
                                             <nz-option *ngFor="let fault of thirdPartyFaultOptions"
                                                 [nzValue]="fault.value" [nzLabel]="fault.label"></nz-option>
                                         </nz-select>
                                     </nz-form-control>
                                 </nz-form-item>
-
-                                <nz-form-item>
-                                    <nz-form-label nzSpan="8" nzRequired>Causation</nz-form-label>
-                                    <nz-form-control nzSpan="15">
-                                        <textarea nz-input formControlName="causation"></textarea>
-                                    </nz-form-control>
-                                </nz-form-item>
-
                             </div>
                             <div nz-col nzSpan="12">
                                 <div *ngIf="selectedClaimantType == 'Third Party'">
@@ -102,7 +125,7 @@
                                         <nz-form-label nzSpan="7" nzRequired>Policy number</nz-form-label>
                                         <nz-form-control nzSpan="16">
                                             <nz-select nzPlaceHolder="Select Policy" formControlName="policy"
-                                                nzShowSearch (ngModelChange)="handlePolicyChange()">
+                                                nzShowSearch (ngModelChange)="onPolicyChange()">
                                                 <nz-option *ngFor="let policy of displayPoliciesList" [nzValue]="policy"
                                                     [nzLabel]="policy.policyNumber"></nz-option>
                                             </nz-select>
@@ -143,11 +166,25 @@
                                 </nz-form-item>
                                 <nz-form-item>
                                     <nz-form-label nzRequired nzSpan="7">Loss Date</nz-form-label>
-                                    <nz-form-control nzSpan="16">
+                                    <nz-form-control nzSpan="16" nzHasFeedback  [nzErrorTip]="lossDateErrorTpl">
                                         <nz-date-picker formControlName="lossDate" nzFormat="dd-MM-yyyy">
                                         </nz-date-picker>
+                                      <ng-template #lossDateErrorTpl let-control>
+                                        <ng-container *ngIf="control.hasError('required')">
+                                          Please input your Loss Date!
+                                        </ng-container>
+                                        <ng-container *ngIf="control.hasError('duplicated')">
+                                          The Loss Date is greater than the Policy duration!
+                                        </ng-container>
+                                      </ng-template>
                                     </nz-form-control>
                                 </nz-form-item>
+                              <nz-form-item>
+                                <nz-form-label nzRequired nzSpan="7">Loss Time</nz-form-label>
+                                <nz-form-control nzSpan="16">
+                                  <input nz-input type="time" formControlName="lossTime"/>
+                                </nz-form-control>
+                              </nz-form-item>
                                 <nz-form-item>
                                     <nz-form-label nzRequired nzSpan="7">Notification Date</nz-form-label>
                                     <nz-form-control nzSpan="16">
@@ -155,19 +192,74 @@
                                         </nz-date-picker>
                                     </nz-form-control>
                                 </nz-form-item>
+                              <nz-form-item>
+                                <nz-form-label nzSpan="8" nzRequired>Causation</nz-form-label>
+                                <nz-form-control nzSpan="15">
+                                  <textarea nz-input formControlName="causation"></textarea>
+                                </nz-form-control>
+                              </nz-form-item>
                             </div>
                         </div>
-                        <nz-form-item>
-                            <nz-form-control>
-                                <div style="text-align: center; margin-top: 10px">
-
-                                    <button nz-button nzType="primary" style="margin-right: 8px"
-                                        (click)="intimateClaim()">Intimate Claim</button>
-                                    <button nz-button nzType="default" (click)="resetForm($event)">Reset Form</button>
-                                </div>
-                            </nz-form-control>
-                        </nz-form-item>
                     </form>
+
+
+                  <nz-card>
+                    <div style="margin-bottom: 10px; width: 25%">
+                      <nz-input-group [nzSuffix]="suffixIconSearch">
+                        <input type="text" nz-input placeholder="Search by Claim Number, Client, Policy Number, Status"
+                               [(ngModel)]="searchString" (ngModelChange)="search($event)" />
+                      </nz-input-group>
+                      <ng-template #suffixIconSearch>
+                        <i nz-icon nzType="search"></i>
+                      </ng-template>
+                    </div>
+                    <nz-table #perilsTable [nzData]="perilList" nzSize="small">
+                      <thead>
+                      <tr>
+                        <th>
+                          <div style="border-bottom: 1px solid rgb(233, 233, 233);">
+                            <input type="checkbox" name="all" [checked]="isAllChecked()" (change)="checkAll($event)"/>
+<!--                            <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()" [nzIndeterminate]="indeterminate">-->
+<!--                              Check all-->
+<!--                            </label>-->
+                          </div>
+                        </th>
+                        <th [nzAlign]="columnAlignment">Name</th>
+                        <th [nzAlign]="columnAlignment">Description</th>
+                        <th [nzAlign]="columnAlignment">Type</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr *ngFor="let peril of perilsTable.data" style="cursor: pointer;">
+<!--                        <td [nzChecked]="peril.has(peril.id)"-->
+<!--                            [nzDisabled]="peril.disabled">-->
+<!--&lt;!&ndash;                          <nz-checkbox-group (change)="updateSingleChecked(peril)"></nz-checkbox-group>&ndash;&gt;-->
+
+
+<!--                        </td>-->
+                        <td><input type="checkbox" name="perilList[]" value="{{peril.id}}" (ngModelChange)="updateChecked(peril, $event)" [(ngModel)]="peril.checked"/></td>
+                        <td [nzAlign]="columnAlignment">{{peril.name}}</td>
+                        <td [nzAlign]="columnAlignment">{{peril.description}}</td>
+                        <td [nzAlign]="columnAlignment">{{peril.type}}</td>
+                      </tr>
+                      </tbody>
+                    </nz-table>
+                  </nz-card>
+
+
+
+
+
+                  <nz-form-item>
+                    <nz-form-control>
+                      <div style="text-align: center; margin-top: 10px">
+
+                        <button nz-button nzType="primary" style="margin-right: 8px"
+                                (click)="intimateClaim()">Intimate Claim</button>
+                        <button nz-button nzType="default" (click)="resetForm($event)">Reset Form</button>
+                      </div>
+                    </nz-form-control>
+                  </nz-form-item>
                 </nz-card>
             </div>
 
@@ -180,3 +272,4 @@
 <app-add-claimant-modal [isAddClaimantModalVisible]="isAddClaimantModalVisible"
     (closeAddClaimantModalEmitter)="isAddClaimantModalVisible=false" (closeAddClaimantModalEmitter)="reloadClaimants()">
 </app-add-claimant-modal>
+<app-add-third-party-details [isAddThirdPartyDetailsModalVisible]="isAddThirdPartyDetailsModalVisible" (closeAddThirdPartyDetailsEmitter)="isAddThirdPartyDetailsModalVisible=false" (thirdPartyDetails)="getThirdPartyDetails($event)"></app-add-third-party-details>

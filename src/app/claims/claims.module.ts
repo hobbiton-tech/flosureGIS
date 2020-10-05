@@ -27,6 +27,11 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { ProcessedClaimsComponent } from './components/processed-claims/processed-claims.component';
 import { UsersRolesComponent } from '../users/components/users-roles/users-roles.component';
 import { AuthGuard } from '../users/helpers/auth.guard';
+import { AddThirdPartyDetailsComponent } from './components/add-third-party-details/add-third-party-details.component';
+import { SalvagesComponent } from './components/salvages/salvages.component';
+import { SalvageInvoiceComponent } from './components/salvage-invoice/salvage-invoice.component';
+import { SubrogationsComponent } from './components/subrogations/subrogations.component';
+import { SubrogateInvoiceComponent } from './components/subrogate-invoice/subrogate-invoice.component';
 
 const routes: Routes = [
     {
@@ -71,7 +76,27 @@ const routes: Routes = [
         path: 'claims-processing/processed-claims',
         component: ProcessedClaimsComponent,
         canActivate: [AuthGuard]
-    }
+    },
+    {
+      path: 'salvages',
+      component: SalvagesComponent,
+      canActivate: [AuthGuard]
+    },
+  {
+    path: 'salvage-invoices',
+    component: SalvageInvoiceComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'subrogation',
+    component: SubrogationsComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'subrogation-invoice',
+    component: SubrogateInvoiceComponent,
+    canActivate: [AuthGuard]
+  }
 ];
 
 @NgModule({
@@ -93,7 +118,12 @@ const routes: Routes = [
         LossQuantumModalComponent,
         ClaimApprovalModalComponent,
         AddClaimantModalComponent,
-        ProcessedClaimsComponent
+        ProcessedClaimsComponent,
+        AddThirdPartyDetailsComponent,
+        SalvagesComponent,
+        SalvageInvoiceComponent,
+        SubrogationsComponent,
+        SubrogateInvoiceComponent
     ],
     providers: [ClaimsService],
     imports: [

@@ -39,9 +39,10 @@ export interface IProduct {
 export interface ICoverType {}
 
 export interface IPeril {
-    id: string;
+    id?: string;
     productId: string;
     name: string;
     description: string;
     type: string;
+    checked?: boolean;
 }

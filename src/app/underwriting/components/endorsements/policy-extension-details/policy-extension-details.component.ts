@@ -333,6 +333,7 @@ export class PolicyExtensionDetailsComponent implements OnInit, OnDestroy {
 
             this.msg.success('Endorsement Successful');
             this.updatingPolicy = false;
+
         });
     }
 

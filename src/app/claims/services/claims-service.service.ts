@@ -11,7 +11,7 @@ import { IPhotoUpload } from '../models/photo-upload.model';
 import { ILossQuantum } from '../models/loss-quantum.model';
 import { IInsuranceCompany } from '../models/insurance-company.model';
 
-const BASE_URL = 'https://flosure-postgres-db.herokuapp.com';
+const BASE_URL = 'https://savenda.flosure-api.com';
 
 @Injectable({
     providedIn: 'root'
@@ -270,4 +270,13 @@ export class ClaimsService {
 
         return 'CL' + dateString + count;
     }
+
+
+  getSalvages(): Observable<ILossQuantum[]> {
+    return this.http.get<ILossQuantum[]>(`${BASE_URL}/loss-quantum`);
+  }
+
+  updateSalvages(lossQuantum: ILossQuantum): Observable<ILossQuantum> {
+    return this.http.put<ILossQuantum>(`${BASE_URL}/loss-quantum/${lossQuantum.id}`, lossQuantum);
+  }
 }
