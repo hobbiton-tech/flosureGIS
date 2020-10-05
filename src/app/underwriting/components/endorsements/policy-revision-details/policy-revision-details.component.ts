@@ -270,6 +270,13 @@ export class PolicyRevisionDetailsComponent implements OnInit {
     endorsePolicy() {
         this.updatingPolicy = true;
 
+        // TODO: generate endorsement numbers from api
+        const endorsementNumber = this.endorsementService.generateEndorsementID(
+            this.policyData.endorsements.length
+        );
+
+        console.log('ENDORSMENT NUMBER:=> ', endorsementNumber);
+
         // console.log('logged in user:=>', this.loggedIn);
 
         const currentClassObj: IClass = JSON.parse(
@@ -282,7 +289,7 @@ export class PolicyRevisionDetailsComponent implements OnInit {
             dateCreated: new Date(),
             dateUpdated: new Date(),
             status: 'Pending',
-            endorsementNumber: 'EN00001'
+            endorsementNumber: endorsementNumber
         };
 
         console.log(
@@ -307,6 +314,7 @@ export class PolicyRevisionDetailsComponent implements OnInit {
             paymentPlan: this.policyData.paymentPlan,
             sourceOfBusiness: this.policyData.sourceOfBusiness,
             risks: this.risks,
+            term: this.policyData.term,
             id: v4()
         };
 
@@ -354,6 +362,9 @@ export class PolicyRevisionDetailsComponent implements OnInit {
                 });
 
             this.msg.success('Endorsement Successful');
+            this.router.navigateByUrl(
+                '/flosure/underwriting/endorsements/revision-cover'
+            );
             this.updatingPolicy = false;
         });
     }

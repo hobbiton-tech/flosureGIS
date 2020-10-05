@@ -440,6 +440,15 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
     };
 
     handlePolicyEndDateCalculation(): void {
+        if (this.currentClassName.toLowerCase() != 'motor') {
+            const startDate: Date = this.quoteForm.get('startDate').value;
+            const endDate: Date = moment(startDate)
+                .add('365', 'days')
+                .toDate();
+
+            this.quoteForm.get('endDate').setValue(endDate);
+        }
+
         if (
             this.quoteForm.get('startDate').value !== '' &&
             this.quoteForm.get('quarter').value !== ''

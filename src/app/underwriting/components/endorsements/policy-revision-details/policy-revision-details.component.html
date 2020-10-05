@@ -23,13 +23,13 @@
                             <nz-form-item>
                                 <nz-form-label nzSpan="7">Currency</nz-form-label>
                                 <nz-form-control nzSpan="17">
-                                    <input nz-input formControlName="currency" [disabled]="!this.isEditmode" />
+                                    <input nz-input formControlName="currency" />
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
                                 <nz-form-label nzSpan="7">Sum Insured</nz-form-label>
                                 <nz-form-control nzSpan="17">
-                                    <input nz-input formControlName="sumInsured" [disabled]="!this.isEditmode" />
+                                    <input nz-input formControlName="sumInsured" />
                                 </nz-form-control>
                             </nz-form-item>
 
@@ -175,7 +175,8 @@
                             margin-top: 10px;
                             margin-bottom: 10px;
                         ">
-                                <button nz-button nzType="primary" (click)="endorsePolicy()">
+                                <button nz-button nzType="primary" (click)="endorsePolicy()"
+                                    [disabled]="!endorsementForm.valid">
                                     Endorse Policy
                                 </button>
                                 <button nz-button nzType="default" style="margin-left: 15px;">
