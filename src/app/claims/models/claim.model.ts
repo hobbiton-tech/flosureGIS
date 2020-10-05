@@ -8,6 +8,8 @@ import { IDocumentUpload } from './document-upload.model';
 import { IServiceProvider } from './service-provider.model';
 import { IServiceProviderQuote } from './service-provider-quote.model';
 import { ILossQuantum } from './loss-quantum.model';
+import { Peril } from './peril.model';
+import { IPeril } from '../../settings/components/product-setups/models/product-setups-models.model';
 
 export class Claim {
     id: string;
@@ -20,8 +22,12 @@ export class Claim {
     photoUploads?: IPhotoUpload[];
     documentUploads?: IDocumentUpload[];
     serviceProviderRepairsQuotations?: IServiceProviderQuote[];
-    lossLocation: string;
+    road: string;
+    township: string;
+    city: string;
+    country: string;
     lossDate: Date;
+    lossTime: string;
     lossEstimate: number;
     currency?: Currency;
     thirdPartyFault: ThirdPartyFault;
@@ -31,6 +37,32 @@ export class Claim {
     causation: string;
     claimStatus: ClaimStatus;
     isRequisitionRaised?: boolean;
+    claimPerils: IPeril[];
+    thirdPartyDetails: ThirdPartyDetails;
+    subrogation?: Subrogation;
+    subrogations?: Subrogations;
+}
+
+
+export class ThirdPartyDetails {
+  id?: string;
+  firstName: string;
+  lastName: string;
+  idType: string;
+  idNumber: string;
+  phone: string;
+  email: string;
+  address: string;
+  vehicleRegNumber: string;
+  engineNumber: string;
+  color: string;
+  vehicleType: string;
+}
+
+export class Subrogations {
+  status: string;
+  amount: number;
+
 }
 
 export type ClaimStatus =
@@ -39,6 +71,8 @@ export type ClaimStatus =
     | 'Cancelled'
     | 'Processed'
     | 'Approved';
-export type ThirdPartyFault = 'At Fault' | 'Not At Fault';
+export type ThirdPartyFault = 'Insured' | 'None' | 'Third Party';
 
 export type ThirdPartyInsured = 'Insured' | 'Not Insured';
+
+export type Subrogation = 'NA' | 'Required' | 'Invoiced' | 'Settled';

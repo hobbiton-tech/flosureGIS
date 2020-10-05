@@ -40,11 +40,15 @@
                         <nz-descriptions-item nzTitle="Risk">{{claimData ? claimData.risk.property.propertyId : ''}}
                         </nz-descriptions-item>
                     </div>
+                    <div *ngIf="claimData?.policy?.class?.className?.toLocaleLowerCase() == 'accident'">
+                        <nz-descriptions-item nzTitle="Risk">{{claimData ? claimData.risk.accidentProduct.riskId : ''}}
+                        </nz-descriptions-item>
+                    </div>
                     <nz-descriptions-item
                         nzTitle="Loss Estimate{{claimData.policy.currency == 'ZMW' ? ' (ZMW)' : ' ($)'}}">
                         {{claimData.lossQuantum ? claimData.lossEstimate : ''}}
                     </nz-descriptions-item>
-                    <nz-descriptions-item nzTitle="Loss Location">{{claimData ? claimData.lossLocation : ''}}
+                    <nz-descriptions-item nzTitle="Loss Location">{{claimData ? claimData.road + ', ' + claimData.township + ', ' + claimData.city+ ', ' + claimData.country : ''}}
                     </nz-descriptions-item>
                     <nz-descriptions-item nzTitle="Causation">{{claimData ? claimData.causation : ''}}
                     </nz-descriptions-item>

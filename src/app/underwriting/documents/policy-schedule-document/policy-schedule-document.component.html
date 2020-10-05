@@ -122,6 +122,7 @@
             <tr>
                 <th>Reg No.</th>
                 <th>Make/Model</th>
+                <th>Color</th>
                 <th>Engine No.</th>
                 <th>Chasis No.</th>
                 <th>Cubic Capacity</th>
@@ -135,24 +136,14 @@
             <tr *ngFor="let risk of policy.risks">
                 <td>{{ risk.vehicle?.regNumber }}</td>
                 <td>{{ risk.vehicle?.vehicleMake }}/{{ risk.vehicle?.vehicleModel }}</td>
+                <td>{{ risk.vehicle?.color }}</td>
                 <td>{{ risk.vehicle?.engineNumber }}</td>
                 <td>{{ risk.vehicle?.chassisNumber }}</td>
                 <td>{{ risk.vehicle?.cubicCapacity }}</td>
-                <td>{{ risk.vehicle?.yearOfManufacture | date }}</td>
+                <td>{{ risk.vehicle?.yearOfManufacture}}</td>
                 <td>{{ risk.vehicle?.seatingCapacity }}</td>
                 <td>{{ policyRisk.sumInsured | number: '1.2-2' }}</td>
                 <td>{{ risk.insuranceType }}</td>
-                <!-- <td>
-                    {{
-                        risk.insuranceType == 'ThirdParty'
-                            ? 'Third Party'
-                            : risk.insuranceType == 'ActOnly'
-                            ? 'Act Only'
-                            : risk.insuranceType == 'ThirdPartyFireAndTheft'
-                            ? 'Fire and Theft'
-                            : 'Comprehensive'
-                    }}
-                </td> -->
             </tr>
         </table>
         <br />
@@ -270,21 +261,16 @@
                 Zambia
             </li>
         </ol>
-        <!-- <p>
-            <span style="font-weight: bold;">COMPULSORY Excesses to apply on each and every claim as
-                follows:</span>
+
+        <p>
+            <span style="font-weight: bold;"><strong>Extensions</strong></span>
         </p>
-        <ol type="a">
-            <li>Collision &amp; Fire: 10% minimum: <span
-                    style="font-weight: bold;">K{{collisionAndFire | number: '1.2-2'}}</span></li>
-            <li>Theft of vehicle with anti theft device: 10% minimum: <span
-                    style="font-weight: bold;">K{{theftOfVehicleWithAntiTheftDevice | number: '1.2-2'}}</span></li>
-            <li>Theft of vehicle without anti theft device: 15% minimum: <span
-                    style="font-weight: bold;">K{{theftOfVehicleWithoutAntiTheftDevice | number: '1.2-2'}}</span>
+        <ul style="list-style-type: none;">
+            <li *ngFor="let extension of extensions">
+                {{ extension.extensionType }}
+                <span style="font-weight: bold;">{{ policy.currency }}{{ extension.amount }}</span>
             </li>
-            <li>Third Party Property damage: 10% minimum: <span
-                    style="font-weight: bold;">K{{thirdPartyPropertyDamage | number: '1.2-2'}}</span></li>
-        </ol> -->
+        </ul>
 
         <p>
             <span style="font-weight: bold;"><strong>Excess</strong></span>
@@ -293,6 +279,15 @@
             <li *ngFor="let ex of excessList">
                 {{ ex.description }}
                 <span style="font-weight: bold;">{{ policy.currency }}{{ ex.amount }}</span>
+            </li>
+        </ul>
+
+        <p>
+            <span style="font-weight: bold;"><strong>Clauses</strong></span>
+        </p>
+        <ul style="list-style-type: none;">
+            <li *ngFor="let clause of clauses">
+                {{ clause.heading }}
             </li>
         </ul>
         <p><span style="font-weight: bold;">Limitations as to Use</span>:</p>

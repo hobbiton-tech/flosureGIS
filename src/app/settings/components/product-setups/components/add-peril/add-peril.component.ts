@@ -3,6 +3,7 @@ import { IPeril } from '../../models/product-setups-models.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AddPerilService } from './services/add-peril.service';
 import { v4 } from 'uuid';
+import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({
     selector: 'app-add-peril',
@@ -25,7 +26,8 @@ export class AddPerilComponent implements OnInit {
 
     constructor(
         private formBuilder: FormBuilder,
-        private perilsService: AddPerilService
+        private perilsService: AddPerilService,
+        private message: NzMessageService,
     ) {
         this.perilForm = formBuilder.group({
             name: ['', Validators.required],
@@ -46,7 +48,14 @@ export class AddPerilComponent implements OnInit {
             id: v4(),
             productId: this.selectedProductId,
         };
-        this.perilsService.addPeril(peril);
+        this.perilsService.addPeril(peril).subscribe((mess) => {
+          this.message.success('Peril Successfuly Created');
+        },
+          (err) => {
+            this.message.warning('Peril Failed to Create');
+            console.log(err);
+          });
+
         this.closeAddPerilFormDrawerVisible.emit();
         this.perilForm.reset();
     }

@@ -45,7 +45,7 @@ export interface ITimestamp {
     milliseconds: number;
 }
 
-export type Currency = 'ZMW' | 'Dollar';
+export type Currency = 'ZMW' | 'USD';
 export type ProductType = 'Private' | 'Commercial' | 'Bus/Taxi';
 export type PolicyStatus = 'Lapsed' | 'Active' | 'Cancelled' | 'Expired';
 export type InsuranceType =

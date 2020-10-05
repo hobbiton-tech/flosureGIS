@@ -50,12 +50,12 @@ export class ClaimsProcessingComponent implements OnInit {
 
     claimsTableUpdate = new BehaviorSubject<boolean>(false);
 
-  permission: PermissionsModel;
-  user: UserModel;
-  isPresent: PermissionsModel;
-  admin = 'admin';
-  processClaimPem = 'process_claim';
-  loggedIn = localStorage.getItem('currentUser');
+    permission: PermissionsModel;
+    user: UserModel;
+    isPresent: PermissionsModel;
+    admin = 'admin';
+    processClaimPem = 'process_claim';
+    loggedIn = localStorage.getItem('currentUser');
 
     constructor(
         private readonly claimsService: ClaimsService,
@@ -63,7 +63,7 @@ export class ClaimsProcessingComponent implements OnInit {
         private accountsService: AccountService,
         private msg: NzMessageService,
         private readonly router: Router,
-        private  usersService: UsersService,
+        private usersService: UsersService
     ) {}
 
     ngOnInit(): void {
@@ -72,16 +72,18 @@ export class ClaimsProcessingComponent implements OnInit {
             this.claimProcessingIsLoading = false;
         }, 3000);
 
-      const decodedJwtData = jwt_decode(this.loggedIn);
-      console.log('Decoded>>>>>>', decodedJwtData);
+        const decodedJwtData = jwt_decode(this.loggedIn);
+        console.log('Decoded>>>>>>', decodedJwtData);
 
-      this.usersService.getUsers().subscribe((users) => {
-        this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+        this.usersService.getUsers().subscribe(users => {
+            this.user = users.filter(x => x.ID === decodedJwtData.user_id)[0];
 
-        this.isPresent = this.user.Permission.find((el) => el.name === this.admin || el.name === this.processClaimPem);
+            this.isPresent = this.user.Permission.find(
+                el => el.name === this.admin || el.name === this.processClaimPem
+            );
 
-        console.log('USERS>>>', this.user, this.isPresent, this.admin);
-      });
+            console.log('USERS>>>', this.user, this.isPresent, this.admin);
+        });
 
         this.claimsService.getClaims().subscribe(claims => {
             this.claimsList = claims;
@@ -173,6 +175,18 @@ export class ClaimsProcessingComponent implements OnInit {
         if (claim.policy.class.className.toLowerCase() == 'fire') {
             if (
                 policyRisksRegNumbers.includes(claim.risk.property.propertyId)
+            ) {
+                this.isClaimRiskUnderPolicy = true;
+            } else {
+                this.isClaimRiskUnderPolicy = false;
+            }
+        }
+
+        if (claim.policy.class.className.toLowerCase() == 'accident') {
+            if (
+                policyRisksRegNumbers.includes(
+                    claim.risk.accidentProduct.riskId
+                )
             ) {
                 this.isClaimRiskUnderPolicy = true;
             } else {

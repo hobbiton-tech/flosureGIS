@@ -31,6 +31,7 @@ interface IDebitNoteResult {
 }
 
 interface ICreditNoteResult {
+    2;
     invoiceNumber: string;
 }
 
@@ -178,24 +179,29 @@ export class PoliciesService implements OnDestroy {
             localStorage.setItem('policyNumber', policy.policyNumber);
             localStorage.removeItem('clientId');
             localStorage.setItem('clientId', policy.nameOfInsured); // TODO: Need to change to client code.
-            this.http.put<Policy>(`${BASE_URL}/${policy.id}`, policy).subscribe(
-                data => {
-                    this.msg.success('Policy Successfully Updated');
-                },
-                error => {
-                    this.msg.error('Failed');
-                }
-            );
 
-            // this.policiesCollection
-            //     .doc(policy.id)
-            //     .update(policy)
-            //     .then((res) => {
+            // this.http.put<Policy>(`${BASE_URL}/${policy.id}`, policy).subscribe(
+            //     data => {
             //         this.msg.success('Policy Successfully Updated');
-            //     })
-            //     .catch(() => {
+            //     },
+            //     error => {
             //         this.msg.error('Failed');
-            //     });
+            //     }
+            // );
+
+            this.http
+                .post<Policy>(
+                    `${BASE_URL}/policy/${this.currentClass.id}`,
+                    policy
+                )
+                .subscribe(
+                    data => {
+                        this.msg.success('Policy Successfully Updated');
+                    },
+                    error => {
+                        this.msg.error('Failed');
+                    }
+                );
         });
     }
 

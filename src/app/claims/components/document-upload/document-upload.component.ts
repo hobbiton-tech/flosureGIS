@@ -67,6 +67,9 @@ export class DocumentUploadComponent implements OnInit, OnDestroy {
             if (this.currentClass.className == 'Fire') {
                 this.data = this.fireClassdocuments;
             }
+            if (this.currentClass.className == 'Accident') {
+                this.data = this.fireClassdocuments;
+            }
         });
         this.documentUploads = this.claim.documentUploads.map(
             x => x.documentType

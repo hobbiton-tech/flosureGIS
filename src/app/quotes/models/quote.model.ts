@@ -8,6 +8,7 @@ import { VehicleDetailsModel } from './vehicle-details.model';
 import { PropertyDetailsModel } from './fire-class/property-details.model';
 import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
 import { IExccess } from 'src/app/settings/models/underwriting/clause.model';
+import { IAccidentRiskDetailsModel } from './accident-class/accident-risk-details.model';
 
 export class MotorQuotationModel {
     id?: string;
@@ -63,6 +64,7 @@ export class RiskModel {
     LiabilityType?: string;
     vehicle?: VehicleDetailsModel;
     property?: PropertyDetailsModel;
+    accidentProduct?: IAccidentRiskDetailsModel;
 }
 
 export class MessageModel {

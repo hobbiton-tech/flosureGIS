@@ -21,7 +21,7 @@ export class ClaimTransactionsComponent implements OnInit {
 
     claimsList: Claim[];
     displayClaimsList: Claim[];
-    claimsCount: number = 0;
+    claimsCount = 0;
 
     searchString: string;
 

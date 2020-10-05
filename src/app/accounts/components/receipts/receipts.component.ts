@@ -85,7 +85,7 @@ export class ReceiptsComponent implements OnInit {
         { label: 'Bank Transfer', value: 'bank transfer' },
     ];
 
-    typeOfClient = ['Direct', 'Agent', 'Broker', 'Sales Representatives', 'Plan Receipt'];
+    typeOfClient = ['Direct', 'Agent', 'Broker', 'Sales Representatives', 'Plan Receipt', 'Salvage Invoice'];
 
     selectedType = 'Direct';
     selectedAgent = '';

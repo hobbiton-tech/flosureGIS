@@ -37,9 +37,9 @@ export class PoliciesComponent implements OnInit {
             this.policiesList = policies;
             this.policiesCount = policies.length;
             for (const p of this.policiesList) {
-              this.usersService.getUsers().subscribe((users) => {
-                this.user = users.filter((x) => x.ID === p.preparedBy)[0];
-              });
+                this.usersService.getUsers().subscribe(users => {
+                    this.user = users.filter(x => x.ID === p.preparedBy)[0];
+                });
             }
 
             this.policiesList.sort((a, b) =>
@@ -53,6 +53,12 @@ export class PoliciesComponent implements OnInit {
     viewPolicyDetails(policy: Policy): void {
         this.route.navigateByUrl(
             '/flosure/underwriting/policy-details/' + policy.id
+        );
+    }
+
+    viewPolicyHistory(policy: Policy): void {
+        this.route.navigateByUrl(
+            '/flosure/underwriting/policy-history/' + policy.id
         );
     }
 

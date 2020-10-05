@@ -124,7 +124,7 @@ export class PropertyDetailsComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.propertyDetailsForm.valueChanges.subscribe(res => {
-            console.log('form :=> ', this.propertyDetailsForm.value);
+            // console.log('form :=> ', this.propertyDetailsForm.value);
             // this.propertyDetailsForm.patchValue(this.propertyDetials);
             this.fireClassService.changePropertyDetails(
                 this.propertyDetailsForm.value

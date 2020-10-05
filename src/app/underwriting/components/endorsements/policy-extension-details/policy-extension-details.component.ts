@@ -283,7 +283,7 @@ export class PolicyExtensionDetailsComponent implements OnInit, OnDestroy {
                 res => console.log(res);
             });
 
-        this.policiesService.updatePolicy(policy).subscribe(policy => {
+        this.policiesService.createPolicy(policy).subscribe(policy => {
             res => {
                 console.log(res);
 

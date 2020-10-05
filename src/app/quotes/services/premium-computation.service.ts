@@ -231,18 +231,22 @@ export class PremiumComputationService implements OnDestroy {
     changeCombinedLimitsPremium(value: number) {
         this.combinedLimitsPremium.next(value);
         this.computePremium();
+        this.computeTotals();
     }
     changeDeathAndInjuryPerPersonPremium(value: number) {
         this.deathAndInjuryPerPersonPremium.next(value);
         this.computePremium();
+        this.computeTotals();
     }
     changeDeathAndInjuryPerEventPremium(value: number) {
         this.deathAndInjuryPerEventPremium.next(value);
         this.computePremium();
+        this.computeTotals();
     }
     changePropertyDamagePremium(value: number) {
         this.propertyDamagePremium.next(value);
         this.computePremium();
+        this.computeTotals();
     }
 
     changeProductType(value: string) {
@@ -379,6 +383,10 @@ export class PremiumComputationService implements OnDestroy {
         // check class
 
         if (localStorage.getItem('class') == 'Fire') {
+            this.computeFirePremium();
+        }
+
+        if (localStorage.getItem('class') == 'Accident') {
             this.computeFirePremium();
         }
 

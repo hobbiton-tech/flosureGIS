@@ -16,10 +16,11 @@ import { InsuranceClassHandlerService } from 'src/app/underwriting/services/insu
 import { IClass } from 'src/app/settings/components/product-setups/models/product-setups-models.model';
 import { CreateQuoteComponent } from '../components/create-quote/create-quote.component';
 import { InsuranceClassService } from './insurance-class.service';
+import { IAccidentRiskDetailsModel } from '../models/accident-class/accident-risk-details.model';
 
 // const BASE_URL = 'http://104.248.247.78:3000';
 // const BASE_URL = 'https://savenda.flosure-api.com'
-// const BASE_URL = 'https://flosure-api.azurewebsites.net';
+// const BASE_URL = 'https://savenda.flosure-api.com';
 const BASE_URL = 'https://savenda.flosure-api.com';
 
 export interface IQuoteDocument {
@@ -149,17 +150,13 @@ export class QuotesService implements OnDestroy {
     createMotorQuotation(
         motorQuotation: MotorQuotationModel,
         vehicles: VehicleDetailsModel[],
-        properties: PropertyDetailsModel[]
+        properties: PropertyDetailsModel[],
+        accidentProducts: IAccidentRiskDetailsModel[]
     ) {
         const currentClassObj: IClass = JSON.parse(
             localStorage.getItem('classObject')
         );
-        // const productType = motorQuotation.risks[0].insuranceType;
-        // if (productType === 'Comprehensive') {
-        //     insuranceType = '07001';
-        // } else {
-        //     insuranceType = '07002';
-        // }
+
         const quotationNumberRequest: IQuoteNumberRequest = {
             branch: motorQuotation.branch // get from db
         };
@@ -187,7 +184,11 @@ export class QuotesService implements OnDestroy {
                                 this.router.navigateByUrl(
                                     '/flosure/quotes/quotes-list'
                                 );
-                                this.addRiskDetails(vehicles, properties);
+                                this.addRiskDetails(
+                                    vehicles,
+                                    properties,
+                                    accidentProducts
+                                );
                             },
                             async err => {
                                 this.msg.error('Quotation Creation failed');
@@ -206,10 +207,9 @@ export class QuotesService implements OnDestroy {
 
     addRiskDetails(
         vehicles: VehicleDetailsModel[],
-        properties: PropertyDetailsModel[]
+        properties: PropertyDetailsModel[],
+        accidentProducts: IAccidentRiskDetailsModel[]
     ) {
-        let insuranceClass = 'Fire';
-
         if (localStorage.getItem('class') == 'Fire') {
             properties.forEach(property => {
                 this.addProperty(property.risk.id, property).subscribe(res =>
@@ -223,6 +223,15 @@ export class QuotesService implements OnDestroy {
                 this.addVehicle(vehicle.risk.id, vehicle).subscribe(res =>
                     console.log(res)
                 );
+            });
+        }
+
+        if (localStorage.getItem('class') == 'Accident') {
+            accidentProducts.forEach(product => {
+                this.addAccidentProduct(
+                    product.risk.id,
+                    product
+                ).subscribe(res => console.log(res));
             });
         }
     }
@@ -345,6 +354,41 @@ export class QuotesService implements OnDestroy {
         return this.http.put<PropertyDetailsModel>(
             `${BASE_URL}/property-details/${propertyId}`,
             propertyDetails
+        );
+    }
+
+    // accident product details (Accident class)
+    addAccidentProduct(
+        riskId: string,
+        accidentProductDetails: IAccidentRiskDetailsModel
+    ): Observable<IAccidentRiskDetailsModel> {
+        return this.http.post<IAccidentRiskDetailsModel>(
+            `${BASE_URL}/accident-product-details/${riskId}`,
+            accidentProductDetails
+        );
+    }
+
+    getAccidentProducts(): Observable<IAccidentRiskDetailsModel[]> {
+        return this.http.get<IAccidentRiskDetailsModel[]>(
+            `${BASE_URL}/accident-product-details`
+        );
+    }
+
+    getOneAccidentProduct(
+        accidentProductId: string
+    ): Observable<IAccidentRiskDetailsModel> {
+        return this.http.get<IAccidentRiskDetailsModel>(
+            `${BASE_URL}/accident-product-details/${accidentProductId}`
+        );
+    }
+
+    updateAccidentProduct(
+        accidentProductDetails: IAccidentRiskDetailsModel,
+        accidentProductId: string
+    ): Observable<IAccidentRiskDetailsModel> {
+        return this.http.put<IAccidentRiskDetailsModel>(
+            `${BASE_URL}/accident-product-details/${accidentProductId}`,
+            accidentProductDetails
         );
     }
 

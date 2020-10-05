@@ -14,6 +14,7 @@ export class InsuranceClassHandlerService {
 
     changeSelectedClass(value: IClass) {
         this.selectedClass.next(value);
+        console.log('current class:=>', value);
         localStorage.setItem('class', value.className);
         localStorage.setItem('classObject', JSON.stringify(value));
     }
