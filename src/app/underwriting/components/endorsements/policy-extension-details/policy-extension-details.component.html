@@ -158,7 +158,8 @@
                     <div nz-row>
                         <div nz-col>
                             <div style="text-align: center; margin-top: 10px; margin-bottom: 10px; ">
-                                <button nz-button nzType="primary" (click)="endorsePolicy()">
+                                <button nz-button nzType="primary" (click)="endorsePolicy()"
+                                    [disabled]="!endorsementForm.valid">
                                     Endorse Policy
                                 </button>
                                 <button nz-button nzType="default" style="margin-left: 15px;">

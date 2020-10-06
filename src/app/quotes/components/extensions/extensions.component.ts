@@ -161,6 +161,16 @@ export class ExtensionsComponent implements OnInit, OnDestroy {
         }
     }
 
+    loadExtensions() {
+        if (this.singleProduct) {
+            this.productClauseService.getExtensions().subscribe(ext => {
+                this.extensionList = ext.filter(
+                    x => x.productId == this.singleProduct.id
+                );
+            });
+        }
+    }
+
     computeIncreasedThirdPartyLimit() {}
 
     computeIncreasedThirdPartyLimitThirdParty() {}

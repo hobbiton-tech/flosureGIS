@@ -257,12 +257,20 @@ export class PolicyExtensionDetailsComponent implements OnInit, OnDestroy {
         this.updatingPolicy = true;
         console.log('endorse policy clicked!!');
 
+        // TODO: generate endorsement numbers from api
+        const endorsementNumber = this.endorsementService.generateEndorsementID(
+            this.policyData.endorsements.length
+        );
+
+        console.log('ENDORSMENT NUMBER:=> ', endorsementNumber);
+
         const currentClassObj: IClass = JSON.parse(
             localStorage.getItem('classObject')
         );
 
         const endorsement: Endorsement = {
             ...this.endorsementForm.value,
+            endorsementNumber: endorsementNumber,
             type: 'Extension_Of_Cover',
             dateCreated: new Date(),
             dateUpdated: new Date(),
@@ -289,6 +297,7 @@ export class PolicyExtensionDetailsComponent implements OnInit, OnDestroy {
             risks: this.risks,
             sumInsured: this.sumArray(this.risks, 'sumInsured'),
             netPremium: this.sumArray(this.risks, 'netPremium'),
+            term: this.policyData.term,
             id: v4()
         };
 
@@ -332,6 +341,9 @@ export class PolicyExtensionDetailsComponent implements OnInit, OnDestroy {
                 });
 
             this.msg.success('Endorsement Successful');
+            this.router.navigateByUrl(
+                '/flosure/underwriting/endorsements/extension-cover'
+            );
             this.updatingPolicy = false;
 
         });

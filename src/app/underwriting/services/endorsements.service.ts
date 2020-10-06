@@ -11,8 +11,7 @@ import { v4 } from 'uuid';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-
-const BASE_URL = 'https://savenda.flosure-api.com';
+const BASE_URL = 'https://flosure-postgres-db.herokuapp.com';
 
 @Injectable({
     providedIn: 'root'
@@ -65,5 +64,27 @@ export class EndorsementService {
 
             endorsement
         );
+    }
+
+    countGenerator(number) {
+        if (number <= 9999) {
+            number = ('0000' + number).slice(-5);
+        }
+        return number;
+    }
+
+    // generate cliam ID
+    generateEndorsementID(totalEndorsements: number): string {
+        const count = this.countGenerator(totalEndorsements);
+        const today = new Date();
+        const dateString: string =
+            today
+                .getFullYear()
+                .toString()
+                .substr(-2) +
+            ('0' + (today.getMonth() + 1)).slice(-2) +
+            ('0' + today.getDate()).slice(-2);
+
+        return 'EN' + dateString + count;
     }
 }

@@ -298,8 +298,14 @@ export class PolicyCancellationDetailsComponent implements OnInit {
     endorsePolicy() {
         this.cancellingPolicy = true;
 
+        // TODO: generate endorsement numbers from api
+        const endorsementNumber = this.endorsementService.generateEndorsementID(
+            this.policyData.endorsements.length
+        );
+
         const endorsement: Endorsement = {
             ...this.endorsementForm.value,
+            endorsementNumber: endorsementNumber,
             type: 'Cancellation_Of_Cover',
             dateCreated: new Date(),
             dateUpdated: new Date(),

@@ -247,7 +247,9 @@
                 <tr>
                     <td><strong>Clauses</strong></td>
                     <td><strong>:</strong></td>
-                    <td *ngFor="let clause of clauses"><span>{{clause.heading}}</span></td>
+                    <div *ngFor="let clause of clauses">
+                        <td><span>{{clause.heading}}</span></td>
+                    </div>
                 </tr>
 
                 <tr>
