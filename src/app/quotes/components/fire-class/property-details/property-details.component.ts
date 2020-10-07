@@ -139,29 +139,31 @@ export class PropertyDetailsComponent implements OnInit, OnDestroy {
       this.propertyDetailsForm.get('address').enable();
       this.propertyDetailsForm.get('propertyUse').enable();
     }
-  }
 
-  handleProductChange() {
-    this.currentProduct = this.propertyDetailsForm.get('subClass').value;
-    this.premiumComputationService.changeCurrentProduct(
-      this.propertyDetailsForm.get('subClass').value
-    );
-  }
+    handleProductChange() {
+        this.currentProduct = this.propertyDetailsForm.get('subClass').value;
+        this.premiumComputationService.changeCurrentProduct(
+            this.propertyDetailsForm.get('subClass').value
+        );
+    }
 
-  changeCities() {
-    this.currentProvince = this.propertyDetailsForm.get('province').value;
-    this.cities = this.currentProvince.cities;
-    this.propertyDetailsForm.get('city').setValue(this.cities[0]);
-  }
+    changeCities() {
+        this.currentProvince = this.propertyDetailsForm.get('province').value;
+        this.cities = this.currentProvince.cities;
+        this.propertyDetailsForm.get('city').setValue(this.cities[0]);
+    }
 
-  setPropertyDetails(propertyDetails: PropertyDetailsModel) {
-    this.fireClassService.changePropertyDetails(propertyDetails);
-    this.propertyDetailsForm.patchValue(propertyDetails);
-  }
+    // TODO: add province and city to 'getProperties' from back end.
+    setPropertyDetails(propertyDetails: PropertyDetailsModel) {
+        console.log('PROPERTY DETAILS:=> ', propertyDetails);
+        this.fireClassService.changePropertyDetails(propertyDetails);
+        this.propertyDetailsForm.patchValue(propertyDetails);
+    }
 
-  ngOnDestroy() {
-    this.classHandlerSubscription.unsubscribe();
-    this.propertyDetailsSubscription.unsubscribe();
-    this.riskEditModeSubscription.unsubscribe();
-  }
+    ngOnDestroy() {
+        this.classHandlerSubscription.unsubscribe();
+        this.propertyDetailsSubscription.unsubscribe();
+        this.riskEditModeSubscription.unsubscribe();
+    }
+
 }
