@@ -22,7 +22,9 @@ import { PremiumComputationService } from '../../services/premium-computation.se
   styleUrls: ['./vehicle-details.component.scss']
 })
 export class VehicleDetailsComponent implements OnInit, OnDestroy {
-
+  vehicleDetailsSubscription: Subscription;
+  riskEditModeSubscription: Subscription;
+  resetVehicleDetailsSubscription: Subscription;
 
   constructor(
     private http: HttpClient,
@@ -32,85 +34,60 @@ export class VehicleDetailsComponent implements OnInit, OnDestroy {
     private premiumComputationService: PremiumComputationService
   ) {
     this.vehicleDetailsForm = this.formBuilder.group({
-      vehicleMake: [
-        { value: '', disabled: !this.isRiskEditMode },
-        Validators.required
-      ],
-      vehicleModel: [
-        { value: '', disabled: !this.isRiskEditMode },
-        Validators.required
-      ],
-      yearOfManufacture: [
-        { value: '', disabled: !this.isRiskEditMode },
-        Validators.required
-      ],
-      regNumber: [
-        { value: '', disabled: !this.isRiskEditMode },
-        Validators.required,
-        [this.regIDAsyncValidator]
-      ],
+      vehicleMake: [' ', Validators.required],
+      vehicleModel: [' ', Validators.required],
+      yearOfManufacture: [' ', Validators.required],
+      regNumber: [' ', Validators.required, [this.regIDAsyncValidator]],
       engineNumber: [
-        { value: '', disabled: !this.isRiskEditMode },
+        ' ',
         Validators.required,
         [this.engineIDAsyncValidator]
       ],
       chassisNumber: [
-        { value: '', disabled: !this.isRiskEditMode },
+        ' ',
         Validators.required,
         [this.chassisIDAsyncValidator]
       ],
-      color: [
-        { value: '', disabled: !this.isRiskEditMode },
-        Validators.required
-      ],
-      cubicCapacity: [
-        { value: '', disabled: !this.isRiskEditMode },
-        Validators.required
-      ],
-      seatingCapacity: [
-        { value: '', disabled: !this.isRiskEditMode },
-        Validators.required
-      ],
-      bodyType: [
-        { value: '', disabled: !this.isRiskEditMode },
-        Validators.required
-      ]
+      color: [' ', Validators.required],
+      cubicCapacity: [' ', Validators.required],
+      seatingCapacity: [' ', Validators.required],
+      bodyType: [' ', Validators.required]
     });
 
-    // this.vehicleDetailsSubscription = this.vehicleDetailsService.vehicleDetailsFormChanged$.subscribe(
-    //     vehicleDetails => {
-    //         console.log('*vehicle details :=> ', vehicleDetails);
-    //         if (vehicleDetails) {
-    //             this.vehicleDetails = vehicleDetails;
-    //             this.vehicleDetailsForm.patchValue(vehicleDetails);
-    //         }
-    //     }
-    // );
+    this.vehicleDetailsSubscription = this.vehicleDetailsService.vehicleDetailsFormChanged$.subscribe(
+      vehicleDetails => {
+        if (vehicleDetails) {
+          console.log('VD:=>', vehicleDetails);
+          this.vehicleDetails = vehicleDetails;
+          this.vehicleDetailsForm.patchValue(vehicleDetails);
+// this.vehicleDetailsService.changeVehicleDetails(
+// this.vehicleDetailsForm.value
+// );
+        }
+      }
+    );
 
     this.riskEditModeSubscription = this.premiumComputationService.riskEditModeChanged$.subscribe(
       riskEditMode => {
         this.isRiskEditMode = riskEditMode;
-        this.changeToEditable();
+// this.changeToEditable();
       }
     );
 
-    this.resetVehicleDetailsSubscription = this.premiumComputationService.resetVehicleDetailsChanged$.subscribe(
-      vehicleDetailsReset => {
-        this.resetVehicleDetails = vehicleDetailsReset;
-        this.resetVehicleDetailsForm();
-      }
-    );
+// this.resetVehicleDetailsSubscription = this.premiumComputationService.resetVehicleDetailsChanged$.subscribe(
+// vehicleDetailsReset => {
+// this.resetVehicleDetails = vehicleDetailsReset;
+// this.resetVehicleDetailsForm();
+// }
+// );
   }
-  vehicleDetailsSubscription: Subscription;
-  riskEditModeSubscription: Subscription;
-  resetVehicleDetailsSubscription: Subscription;
-  // vehicle details reset
-  resetVehicleDetails = false;
+// vehicle details reset
+  resetVehicleDetails: boolean = false;
 
-  // editing mode
-  isRiskEditMode = true;
+// editing mode
+  isRiskEditMode: boolean = true;
 
-  // vehicle details
+// vehicle details
   vehicleMake: string;
   vehicleModel: string;
   yearOfManufacture: string;
@@ -122,46 +99,37 @@ export class VehicleDetailsComponent implements OnInit, OnDestroy {
   seatingCapacity: string;
   bodyType: BodyType;
 
-  // Vehicle body type
+// Vehicle body type
   vehicleBodyType = VehicleBodyType;
 
-  // vehicle details form
+//vehicle details form
   vehicleDetailsForm: FormGroup;
 
-  // vehicle detail
+// vehicle detail
   vehicleDetails: VehicleDetailsModel;
 
-  // for vehicle details validation
+//for vehicle details validation
   concRisks: any[] = [];
 
-  // vehicle make drop down
+// vehicle make drop down
   vehicleMakeUrl = 'https://api.randomuser.me/?results=5';
   searchChange$ = new BehaviorSubject('');
   vehicleMakeOptionList: string[] = [];
   selectedVehicleMake: string;
   isVehicleMakeLoading = false;
 
-  // vehicle model drop down
+// vehicle model drop down
   vehicleModelUrl = 'https://api.randomuser.me/?results=5';
-  // searchChange$ = new BehaviorSubject('');
+// searchChange$ = new BehaviorSubject('');
   vehicleModelOptionList: string[] = [];
   selectedVehicleModel: string;
   isVehicleModelLoading = false;
 
-  // vehicleMakeOptionList$: Observable<string[]> = this.searchChange$
-  //   .asObservable()
-  //   .pipe(debounceTime(500))
-  //   .pipe(switchMap(this.getVehicleMakeList));
-
-  // vehicleModelOptionList$: Observable<string[]> = this.searchChange$
-  //   .asObservable()
-  //   .pipe(debounceTime(500))
-  //   .pipe(switchMap(this.getVehicleModelList));
-
   ngOnInit(): void {
     this.vehicleDetailsForm.valueChanges.subscribe(res => {
-      // this.vehicleDetailsForm.patchValue(this.vehicleDetailsForm.value);
-      this.vehicleDetailsService.changeVehicleDetails(
+      console.log('VDF.V:=>', this.vehicleDetailsForm.value);
+// this.vehicleDetailsForm.patchValue(res);
+      this.vehicleDetailsService.changeVehicleForm(
         this.vehicleDetailsForm.value
       );
     });
@@ -173,7 +141,7 @@ export class VehicleDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  // editable fields
+// editable fields
   changeToEditable() {
     if (this.isRiskEditMode) {
       this.vehicleDetailsForm.get('vehicleMake').disable();
@@ -200,7 +168,7 @@ export class VehicleDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  // vehicle make loading
+// vehicle make loading
   getVehicleMakeList = (name: string) =>
     this.http
       .get(`${this.vehicleMakeUrl}`)
@@ -209,9 +177,14 @@ export class VehicleDetailsComponent implements OnInit, OnDestroy {
         map((list: any) => {
           return list.map(() => `${name}`);
         })
-      )
+      );
 
-  // vehicle model loading
+  vehicleMakeOptionList$: Observable<string[]> = this.searchChange$
+    .asObservable()
+    .pipe(debounceTime(500))
+    .pipe(switchMap(this.getVehicleMakeList));
+
+// vehicle model loading
   getVehicleModelList = (name: string) =>
     this.http
       .get(`${this.vehicleModelUrl}`)
@@ -220,25 +193,29 @@ export class VehicleDetailsComponent implements OnInit, OnDestroy {
         map((list: any) => {
           return list.map(() => `${name}`);
         })
-      )
+      );
 
-  // vehicle make loading
+  vehicleModelOptionList$: Observable<string[]> = this.searchChange$
+    .asObservable()
+    .pipe(debounceTime(500))
+    .pipe(switchMap(this.getVehicleModelList));
+
+// vehicle make loading
   onVehicleMakeSearch(value: string): void {
     this.isVehicleMakeLoading = true;
     this.searchChange$.next(value);
   }
 
-  // vehicle model loading
+// vehicle model loading
   onVehicleModelSearch(value: string): void {
     this.isVehicleModelLoading = true;
     this.searchChange$.next(value);
   }
 
-  // Validate registration Number
+// Validate registration Number
   regIDAsyncValidator = (control: FormControl) =>
     new Observable((observer: Observer<ValidationErrors | null>) => {
       setTimeout(() => {
-
         this.policyService.getPolicies().subscribe(res => {
           const activePolicy = res.filter(x => x.status === 'Active');
 
@@ -264,9 +241,9 @@ export class VehicleDetailsComponent implements OnInit, OnDestroy {
           observer.complete();
         });
       }, 1000);
-    })
+    });
 
-  // Validate Chassis Number
+// Validate Chassis Number
   chassisIDAsyncValidator = (control: FormControl) =>
     new Observable((observer: Observer<ValidationErrors | null>) => {
       setTimeout(() => {
@@ -295,9 +272,9 @@ export class VehicleDetailsComponent implements OnInit, OnDestroy {
           observer.complete();
         });
       }, 1000);
-    })
+    });
 
-  // Validate Engine Number
+// Validate Engine Number
   engineIDAsyncValidator = (control: FormControl) =>
     new Observable((observer: Observer<ValidationErrors | null>) => {
       setTimeout(() => {
@@ -326,7 +303,7 @@ export class VehicleDetailsComponent implements OnInit, OnDestroy {
           observer.complete();
         });
       }, 1000);
-    })
+    });
 
   changeVehicleMake() {
     this.vehicleDetailsService.changeVehicleMake(this.vehicleMake);
@@ -361,20 +338,27 @@ export class VehicleDetailsComponent implements OnInit, OnDestroy {
     this.vehicleDetailsService.changeBodyType(this.bodyType);
   }
 
-  // changeVehicleDetails() {
-  //     this.vehicleDetailsService.changeVehicleDetails(
-  //         this.vehicleDetailsForm.value
-  //     );
-  // }
+  changeVehicleDetails() {
+    this.vehicleDetailsService.changeVehicleDetails(
+      this.vehicleDetailsForm.value
+    );
+  }
 
   setVehicleDetails(vehicleDetails: VehicleDetailsModel) {
-    // console.log('set vehicle details:=> ', vehicleDetails);
-    // // this.vehicleDetailsService.changeVehicleDetails(vehicleDetails);
-    // this.vehicleDetailsForm.patchValue(vehicleDetails);
+    this.vehicleDetailsService.changeVehicleDetails(vehicleDetails);
+    this.vehicleDetailsForm.patchValue(vehicleDetails);
   }
 
   getVehicleDetailFormValidity() {
     return this.vehicleDetailsForm.valid;
+  }
+
+// gets vehicle details
+  getVehicleDetails() {
+    const vehicle: VehicleDetailsModel = {
+      vehicleMake: this.vehicleDetailsForm.get('vehicleMake').value
+    };
+    return vehicle;
   }
 
   resetVehicleDetailsForm() {
@@ -392,13 +376,11 @@ export class VehicleDetailsComponent implements OnInit, OnDestroy {
 
       this.premiumComputationService.changeVehicleDetailsReset(false);
     }
-
   }
 
   ngOnDestroy() {
-    // this.vehicleDetailsSubscription.unsubscribe();
+    this.vehicleDetailsSubscription.unsubscribe();
     this.riskEditModeSubscription.unsubscribe();
-    this.resetVehicleDetailsSubscription.unsubscribe();
+// this.resetVehicleDetailsSubscription.unsubscribe();
   }
-
 }
