@@ -38,201 +38,278 @@
             </tr>
         </table>
 
-        <hr style="width: 100%; height: 2px; background-color: black;" />
+        <hr style="width: 100%; height: 1px; background-color: black;" />
 
         <table>
             <tr class="information">
                 <td colspan="6">
-                    <p id="title">DEBIT NOTE</p>
+                    <p id="title" style="font-weight: bold; color: rgb(56, 25, 101);">TAX INVOICE</p>
                 </td>
             </tr>
             <tr class="subTitle">
                 <td>
                     <p style="float: right !important;">
-                        <span style="font-weight: bold;">No:</span>
-                        {{
-                            policyDebitNote
-                                ? policyDebitNote.debitNoteNumber
-                                : '-'
-                        }}
+                        <span style="font-weight: bold;">TPIN No</span>: 1003035014
                     </p>
-                    <span style="font-weight: bold;">TPIN:</span><span style="font-weight: bold; color: red;"></span>
+                    <span style="font-weight: bold;">VAT REGISTRATION No: </span>{{' '}}{{' TBA'}}
                 </td>
             </tr>
         </table>
+
+        <hr style="width: 100%; height: 1px; background-color: black;" />
+
+        <br />
+
+        <table>
+            <tr class="information">
+                <td colspan="6">
+                    <span style="font-weight: bold;">Invoice
+                        No:</span>{{' '}}{{policyDebitNote ? policyDebitNote.debitNoteNumber : '-'}}
+                </td>
+                <td colspan="6">
+                    <span
+                        style="font-weight: bold;">Date:</span>{{' '}}{{policyDebitNote ? (policyDebitNote.dateCreated | date) : '-' }}
+                </td>
+                <td>
+                    <span style="font-weight: bold;">Policy No:</span>{{' '}}{{policy?.policyNumber}}
+                </td>
+            </tr>
+        </table>
+
+        <hr style="width: 100%; height: 1px; background-color: black;" />
 
         <br />
         <table>
             <tr>
                 <td>
-                    <span style="font-weight: bold;">Insured: {{ policy.nameOfInsured }}</span>
-                </td>
-                <td style="float: right !important;">
-                    <span style="font-weight: bold;">Policy No:
-                        {{policy?.policyNumber}}</span>
+                    <span style="font-weight: bold;">Insured</span>:{{' '}} {{ policy.nameOfInsured }}
                 </td>
             </tr>
             <tr>
                 <td>
-                    <span style="font-weight: bold;">Address: {{ client ? client.address : '-' }}</span>
-                </td>
-                <td style="float: right !important;">
-                    <span style="font-weight: bold;">Date:
-                        {{
-                            policyDebitNote
-                                ? (policyDebitNote.dateCreated | date)
-                                : '-'
-                        }}</span>
+                    <span style="font-weight: bold;">Address</span>:{{' '}} {{ client ? client.address : '-' }}
                 </td>
             </tr>
             <tr>
                 <td>
-                    <span style="font-weight: bold;">Telephone: {{ client ? client.phone : '-' }}</span>
+                    <span style="font-weight: bold;">Telephone</span>:{{' '}} {{ client ? client.phone : '-' }}
                 </td>
-                <td style="float: right !important;">
+                <!-- <td style="float: right !important;">
                     <span style="font-weight: bold;">Agent:
                         {{
                             policy.sourceOfBusiness.toLocaleLowerCase() == 'direct'
                                 ? 'Direct'
                                 : policy.intermediaryName
                         }}</span>
+                </td> -->
+            </tr>
+        </table>
+
+        <br />
+
+        <hr style="width: 100%; height: 1px; background-color: black;" />
+        <table>
+            <tr class="information">
+                <td colspan="6">
+                    <span style="font-weight: bold;">
+                        <p>Period of insurance</p>
+                    </span>
+                    <table>
+                        <tr>
+                            <td><span style="font-weight: bold;">
+                                    From
+                                </span></td>
+                            <td>{{policy.startDate | date:'hh:mm:ss'}}</td>
+                            <td>{{policy.startDate | date:'dd/MM/yyyy'}}</td>
+                        </tr>
+                        <tr>
+                            <td><span style="font-weight: bold;">
+                                    To
+                                </span></td>
+                            <td>{{policy.endDate | date:'hh:mm:ss'}}</td>
+                            <td>{{policy.endDate | date:'dd/MM/yyyy'}}</td>
+                        </tr>
+                    </table>
+
+                </td>
+                <td colspan="6">
+                    <span style="font-weight: bold;">ENDORSEMENT-ADDITIONS</span>
+                </td>
+                <td>
+                    <span style="font-weight: bold;">Endorsement No:</span>{{' '}}{{''}}
                 </td>
             </tr>
         </table>
+        <hr style="width: 100%; height: 1px; background-color: black;" />
+        <br />
+        <table>
+            <tr>
+                <td><span style="font-weight: bold;">Class:</span>{{' '}}{{policy.class.className}}</td>
+                <td *ngIf="policy.class.className == 'Motor'"><span style="font-weight: bold;">Sub
+                        Class:</span>{{' '}}{{policy?.risks[0]?.insuranceType}}</td>
+                <td *ngIf="policy.class.className == 'Fire'"><span style="font-weight: bold;">Sub
+                        Class:</span>{{' '}}{{policy?.risks[0]?.property?.subClass}}</td>
+                <td *ngIf="policy.class.className == 'Accident'"><span style="font-weight: bold;">Sub
+                        Class:</span>{{' '}}{{policy?.risks[0]?.accidentProduct?.subClass}}</td>
+                <td *ngIf="policy.class.className == 'Marine'"><span style="font-weight: bold;">Sub
+                        Class:</span>{{' '}}{{policy?.risks[0]?.marineProduct?.subClass}}</td>
+                <td *ngIf="policy.class.className == 'Engineering'"><span style="font-weight: bold;">Sub
+                        Class:</span>{{' '}}{{policy?.risks[0]?.engineeringProduct?.subClass}}</td>
+                <td></td>
+            </tr>
+        </table>
+
+        <br />
+        <p><span style="font-weight: bold;">Invoice Totals</span></p>
+        <table>
+            <tr>
+                <td>
+                    <span style="font-weight: bold;">Total Sum Insured</span>:
+                    {{' '}}{{ policy.currency == 'ZMW' ? 'ZMW' : 'USD' }}{{' '}}{{ policy.sumInsured }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-weight: bold;">Total Premium</span>:
+                    {{' '}}{{ policy.currency == 'ZMW' ? 'ZMW' : 'USD' }}{{' '}}{{ basicPremium }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-weight: bold;">Total Levy</span>:
+                    {{' '}}{{ policy.currency == 'ZMW' ? 'ZMW' : 'USD' }}{{' '}}{{ premiumLevy }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-weight: bold;">Total Payable</span>:
+                    {{' '}}{{ policy.currency == 'ZMW' ? 'ZMW' : 'USD' }}{{' '}}{{ policy.netPremium }}
+                </td>
+            </tr>
+        </table>
+
+        <hr style="width: 100%; height: 1px; background-color: black;" />
+        <br />
+
+        <span style="font-weight: bold;">Remarks: </span>
+        <br />
+
+        <br>
+        <span style="font-weight: bold;">Insured risks</span>
+        <hr style="width: 100%; height: 1px; background-color: black;" />
         <br />
 
         <table style="width: 100%; font-size: 12px;" #risksTable nzFrontPagination="false" nzShowPagination="false">
             <tr class="heading">
-                <th style="border: 1px solid black; border-collapse: collapse;">
-                    Binder No.
+                <th>
+                    No.
                 </th>
-                <th class="td2" style="border: 1px solid black; border-collapse: collapse;">
+                <th>
                     Cover No.
                 </th>
-                <th style="border: 1px solid black; border-collapse: collapse;">
-                    Class
+                <th *ngIf="policy.class.className == 'Motor'">
+                    Reg No.
                 </th>
-                <th style="border: 1px solid black; border-collapse: collapse;">
-                    Product
+                <th *ngIf="policy.class.className == 'Motor'">
+                    Make
                 </th>
-                <th style="border: 1px solid black; border-collapse: collapse;">
-                    Risk Desc
+                <th *ngIf="policy.class.className == 'Fire'">
+                    Risk ID.
                 </th>
-                <th id="td3" style="border: 1px solid black;">
-                    Premium ({{ policy.currency == 'ZMW' ? 'ZMW' : 'USD' }})
+                <th *ngIf="policy.class.className == 'Fire'">
+                    Risk Description
+                </th>
+                <th *ngIf="policy.class.className == 'Accident'">
+                    Risk ID.
+                </th>
+                <th *ngIf="policy.class.className == 'Accident'">
+                    Risk Description
+                </th>
+                <th *ngIf="policy.class.className == 'Marine'">
+                    Risk ID.
+                </th>
+                <th *ngIf="policy.class.className == 'Marine'">
+                    Risk Description
+                </th>
+                <th *ngIf="policy.class.className == 'Engineering'">
+                    Risk ID.
+                </th>
+                <th *ngIf="policy.class.className == 'Engineering'">
+                    Risk Description
+                </th>
+                <th>
+                    Sum Insured
+                </th>
+                <th>
+                    Premium
+                </th>
+                <th>
+                    Levy
+                </th>
+                <th>
+                    Premium Due
                 </th>
             </tr>
 
             <tr *ngFor="let risk of policy.risks" class="details">
-                <td style="border: 1px solid black; border-collapse: collapse;"></td>
-                <td class="td2" style="border: 1px solid black; border-collapse: collapse;">
+                <td></td>
+                <td>
                     {{coverNotes ? coverNote(risk) : '-'}}</td>
-                <td style="border: 1px solid black;">
-                    {{ policy?.class?.className }}
+                <td *ngIf="policy.class.className == 'Motor'">
+                    {{risk?.vehicle?.regNumber}}
                 </td>
-                <td style="border: 1px solid black;" *ngIf="policy.class.className == 'Motor'">
-                    {{ risk?.insuranceType }}
+                <td *ngIf="policy.class.className == 'Motor'">
+                    {{risk?.vehicle?.vehicleMake}}
                 </td>
-                <td style="border: 1px solid black;" *ngIf="policy.class.className == 'Fire'">
-                    {{ risk?.property?.subClass }}
+                <td *ngIf="policy.class.className == 'Fire'">
+                    {{risk?.property?.propertyId}}
                 </td>
-                <td style="border: 1px solid black;" *ngIf="policy.class.className == 'Accident'">
-                    {{ risk?.accidentProduct?.subClass }}
+                <td *ngIf="policy.class.className == 'Fire'">
+                    {{risk?.property?.propertyDescription}}
                 </td>
-                <td style="border: 1px solid black;" *ngIf="policy.class.className == 'Marine'">
-                    {{ risk?.marineProduct?.subClass }}
+                <td *ngIf="policy.class.className == 'Accident'">
+                    {{risk?.accidentProduct?.riskProductId}}
                 </td>
-                <td style="border: 1px solid black;" *ngIf="policy.class.className == 'Engineering'">
-                    {{ risk?.engineeringProduct?.subClass }}
+                <td *ngIf="policy.class.className == 'Accident'">
+                    {{risk?.accidentProduct?.riskDescription}}
                 </td>
-                <td style="border: 1px solid black;" *ngIf="policy.class.className == 'Motor'">
-                    {{ risk?.vehicle?.regNumber }}
+                <td *ngIf="policy.class.className == 'Marine'">
+                    {{risk?.marineProduct?.riskProductId}}
                 </td>
-                <td style="border: 1px solid black;" *ngIf="policy.class.className == 'Fire'">
-                    {{ risk?.property?.propertyId }}
+                <td *ngIf="policy.class.className == 'Marine'">
+                    {{risk?.marineProduct?.riskDescription}}
                 </td>
-                <td style="border: 1px solid black;" *ngIf="policy.class.className == 'Accident'">
-                    {{ risk?.accidentProduct?.riskDescription }}
+                <td *ngIf="policy.class.className == 'Engineering'">
+                    {{risk?.engineeringProduct?.riskProductId}}
                 </td>
-                <td style="border: 1px solid black;" *ngIf="policy.class.className == 'Marine'">
-                    {{ risk?.marineProduct?.riskDescription }}
+                <td *ngIf="policy.class.className == 'Engineering'">
+                    {{risk?.engineeringProduct?.riskDescription}}
                 </td>
-                <td style="border: 1px solid black;" *ngIf="policy.class.className == 'Engineering'">
-                    {{ risk?.engineeringProduct?.riskDescription }}
+                <td>
+                    {{policy.currency == 'ZMW' ? 'ZMW' : 'USD' }}{{' '}}{{ risk?.sumInsured}}
                 </td>
-
-                <td id="td3" style="border: 1px solid black; border-collapse: collapse;">
-                    {{ risk.basicPremium | number: '1.2-2' }}
+                <td>
+                    {{policy.currency == 'ZMW' ? 'ZMW' : 'USD' }}{{' '}}{{ risk?.basicPremium}}
                 </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td style="float: right !important; font-weight: bold;">
-                    Sub Total:
+                <td>
+                    {{policy.currency == 'ZMW' ? 'ZMW' : 'USD' }}{{' '}}{{ risk?.premiumLevy}}
                 </td>
-                <td style="border: 1px solid black; border-collapse: collapse;">
-                    <span>{{ subTotal | number: '1.2-2' }}</span>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td style="float: right !important; font-weight: bold;">
-                    Insurance Levy 3%:
-                </td>
-                <td style="border: 1px solid black; border-collapse: collapse;">
-                    <span>{{ premiumLevy | number: '1.2-2' }}</span>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td style="float: right !important; font-weight: bold;">
-                    Total:
-                </td>
-                <td style="border: 1px solid black; border-collapse: collapse;">
-                    <span>{{ policy.netPremium | number: '1.2-2' }}</span>
+                <td>
+                    {{policy.currency == 'ZMW' ? 'ZMW' : 'USD' }}{{' '}}{{ risk?.netPremium }}
                 </td>
             </tr>
         </table>
 
+        <hr style="width: 100%; height: 1px; background-color: black;" />
         <br />
-        <table style="border:1px solid;">
-            <tr>
-                <td>
-                    <table>
-                        <tr>
-                            <td><strong>Bank Details: </strong>FIRST NATIONAL BANK</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Account Number: </strong>13545424232423 </td>
-                        </tr>
-                    </table>
-                </td>
-                <td></td>
-                <td>
-                </td>
-            </tr>
-        </table>
         <br />
         <br />
         <p style="font-weight: bold; text-align: left;">
             Prepared By: ................................................<span style="float: right;">
-                Sign:...............................................</span>
+                Approved By: ................................................</span>
         </p>
 
         <br />
 
-        <p style="font-weight: bold; text-align: left;">
-            Approved By: ................................................<span style="float: right;">
-                Sign:...............................................</span>
-        </p>
     </div>
 </div>
