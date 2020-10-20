@@ -129,9 +129,8 @@
                 <th>Year of Manf.</th>
                 <th>Seating Capacity including Driver</th>
                 <th>
-                    Insured's estimated value including Accessories and Spares
+                    Sum Insured
                 </th>
-                <th>Insurance Provided</th>
             </tr>
             <tr *ngFor="let risk of policy.risks">
                 <td>{{ risk.vehicle?.regNumber }}</td>
@@ -143,7 +142,6 @@
                 <td>{{ risk.vehicle?.yearOfManufacture}}</td>
                 <td>{{ risk.vehicle?.seatingCapacity }}</td>
                 <td>{{ policyRisk.sumInsured | number: '1.2-2' }}</td>
-                <td>{{ risk.insuranceType }}</td>
             </tr>
         </table>
         <br />

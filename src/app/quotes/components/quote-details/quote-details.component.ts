@@ -418,7 +418,7 @@ export class QuoteDetailsComponent implements OnInit {
                 console.log('USERS>>>', this.user, this.isPresent, this.admin);
               });
                 this.currentClass = this.quoteData.class;
-                
+
                 this.classHandler.changeSelectedClass(this.quoteData.class);
 
                 this.commisionSetupsService
@@ -926,7 +926,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                             this.http
                                 .post<CoverNote>(
-                                    `https://savenda.flosure-api.com/documents/cover-note`,
+                                    `http://localhost:3001/documents/cover-note`,
                                     coverNote
                                 )
                                 .subscribe(
@@ -950,7 +950,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                         this.http
                             .post<DebitNote>(
-                                `https://savenda.flosure-api.com/documents/debit-note/${this.policyId}`,
+                                `http://localhost:3001/documents/debit-note/${this.policyId}`,
                                 debitNote
                             )
                             .subscribe(
@@ -1110,7 +1110,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                         this.http
                             .post<DebitNote>(
-                                `https://savenda.flosure-api.com/documents/debit-note/${this.policyId}`,
+                                `http://localhost:3001/documents/debit-note/${this.policyId}`,
                                 debitNote
                             )
                             .subscribe(

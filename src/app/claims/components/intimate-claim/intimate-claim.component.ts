@@ -54,6 +54,7 @@ export class IntimateClaimComponent implements OnInit {
     displayRisksList: RiskModel[];
     claimantsList: IClaimant[];
     displayClaimantsList: IClaimant[];
+    displayThirdPartyDetails: ThirdPartyDetails[] = [];
 
     selectedClient: IIndividualClient & ICorporateClient;
 
@@ -78,6 +79,7 @@ export class IntimateClaimComponent implements OnInit {
     ];
 
     selectedClaimantType = 'Insured';
+    selectedPartyToBlame = 'Insured'
 
     thirdPartyFaultOptions = [
         { label: 'NONE', value: 'None' },
@@ -155,6 +157,10 @@ export class IntimateClaimComponent implements OnInit {
 
         this.claimService.getClaims().subscribe(claims => {
             this.claimNumber = this.claimService.generateCliamID(claims.length);
+            for (let c of claims) {
+              this.displayThirdPartyDetails = [...this.displayThirdPartyDetails, ...[c.thirdPartyDetails]]
+            }
+
         });
 
         this.perilsService.getPerils().subscribe((perils) => {
@@ -248,8 +254,10 @@ export class IntimateClaimComponent implements OnInit {
 
   handlePartyToBlame(e) {
     window.scroll(0, 0);
-    if (e === 'Insured' || e === 'Third Party') {
+    console.log('PTB>>>>', e);
+    if (e === 'None' || e === 'Third Party') {
       this.thirdPartyDetailsState = true;
+      this.selectedPartyToBlame = e;
     } else {
       this.thirdPartyDetailsState = false;
     }

@@ -154,7 +154,9 @@ export class PropertyDetailsComponent implements OnInit, OnDestroy {
     this.propertyDetailsForm.get('city').setValue(this.cities[0]);
   }
 
+// TODO: add province and city to 'getProperties' from back end.
   setPropertyDetails(propertyDetails: PropertyDetailsModel) {
+    console.log('PROPERTY DETAILS:=> ', propertyDetails);
     this.fireClassService.changePropertyDetails(propertyDetails);
     this.propertyDetailsForm.patchValue(propertyDetails);
   }

@@ -111,11 +111,11 @@
                 </li>
             </ol>
             <span style="float: right; text-align: left;">
-                Premium: {{ policy.currency == 'ZMW' ? 'K' : '$'
+                Premium: {{ policy.currency == 'ZMW' ? 'ZMW' : 'USD'
                 }}{{ basicPremium | number: '1.2-2' }}<br />
-                3% Levy: {{ policy.currency == 'ZMW' ? 'K' : '$'
+                3% Levy: {{ policy.currency == 'ZMW' ? 'ZMW' : 'USD'
                 }}{{ premiumLevy | number: '1.2-2' }}<br />
-                Total Premium: {{ policy.currency == 'ZMW' ? 'K' : '$'
+                Total Premium: {{ policy.currency == 'ZMW' ? 'ZMW' : 'USD'
                 }}{{ totalAmount | number: '1.2-2' }}<br />
             </span>
 
@@ -135,9 +135,8 @@
                 <th>Year of Manf.</th>
                 <th>Seating Capacity including Driver</th>
                 <th>
-                    Insured's estimated value including Accessories and Spares
+                    Sum insured
                 </th>
-                <th>Insurance Provided</th>
             </tr>
             <tr *ngFor="let risk of policy.risks">
                 <td>{{risk.vehicle.regNumber}}</td>
@@ -149,7 +148,6 @@
                 <td>{{risk.vehicle.yearOfManufacture}}</td>
                 <td>{{risk.vehicle.seatingCapacity}}</td>
                 <td>{{risk.sumInsured}}</td>
-                <td>{{risk.insuranceType}}</td>
                 <!-- <td>{{risk.insuranceType == 'ThirdParty' ? 'Third Party' : (risk.insuranceType == 'ActOnly' ? 'Act Only' : (risk.insuranceType == 'ThirdPartyFireAndTheft' ? 'Fire and Theft' : 'Comprehensive'))}}
                 </td> -->
             </tr>
