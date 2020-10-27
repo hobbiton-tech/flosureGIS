@@ -16,7 +16,7 @@
         "lib": ["es2018", "dom", "esnext.asynciterable"]
     },
     "angularCompilerOptions": {
-        "enableIvy": true,
+        "enableIvy": false,
         "fullTemplateTypeCheck": true,
         "strictInjectionParameters": true
     }
