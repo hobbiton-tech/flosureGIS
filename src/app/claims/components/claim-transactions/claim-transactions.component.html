@@ -46,8 +46,8 @@
           <tr>
             <th [nzAlign]="columnAlignment">Claim Number</th>
             <th [nzAlign]="columnAlignment">Client</th>
-            <th [nzAlign]="columnAlignment">Claimant</th>
-            <th [nzAlign]="columnAlignment">Claimant Type</th>
+            <th [nzAlign]="columnAlignment">Third Party</th>
+            <th [nzAlign]="columnAlignment">Claim Type</th>
             <th [nzAlign]="columnAlignment">Policy Number</th>
             <th [nzAlign]="columnAlignment">Loss Date</th>
             <th [nzAlign]="columnAlignment">Notification Date</th>
@@ -60,9 +60,9 @@
             <td [nzAlign]="columnAlignment">
               {{claim.client.clientType == 'Individual' ? (claim.client.firstName + ' ' + claim.client.lastName) : claim.client.companyName}}
             </td>
-            <td [nzAlign]="columnAlignment">{{claim.claimant.firstName + ' ' + claim.claimant.lastName}}
+            <td [nzAlign]="columnAlignment">{{claim.thirdPartyDetails.firstName + ' ' + claim.thirdPartyDetails.lastName}}
             </td>
-            <td [nzAlign]="columnAlignment">{{claim.claimant.type}}</td>
+            <td [nzAlign]="columnAlignment">{{claim.claimType}}</td>
             <td [nzAlign]="columnAlignment">{{claim.policy.policyNumber}}</td>
             <td [nzAlign]="columnAlignment">{{claim.lossDate | date}}</td>
             <td [nzAlign]="columnAlignment">{{claim.notificationDate | date}}</td>

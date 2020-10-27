@@ -106,11 +106,11 @@
                                 </nz-form-item>
                             </div>
                             <div nz-col nzSpan="12">
-                                <div *ngIf="selectedPartyToBlame === 'Third Party' || 'None'">
+                                <div *ngIf="selectedPartyToBlame !== 'Insured'">
                                     <nz-form-item>
                                         <nz-form-label nzSpan="7" nzRequired>Third Party Details</nz-form-label>
                                         <nz-form-control nzSpan="16">
-                                            <nz-select formControlName="claimant" nzShowSearch
+                                            <nz-select formControlName="thirdPartyDetails" nzShowSearch
                                                 (ngModelChange)="handleClaimantChange()">
                                                 <nz-option *ngFor="let claimant of displayThirdPartyDetails"
                                                     [nzValue]="claimant"

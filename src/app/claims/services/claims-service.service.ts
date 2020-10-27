@@ -13,7 +13,7 @@ import { IInsuranceCompany } from '../models/insurance-company.model';
 
 // const BASE_URL = 'https://savenda.flosure-api.com';
 
-const BASE_URL = 'http://localhost:3001';
+const BASE_URL = 'https://savenda.flosure-api.com';
 
 @Injectable({
     providedIn: 'root'
