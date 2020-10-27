@@ -69,7 +69,7 @@ export class AgentClientComponent implements OnInit {
     isReinstateVisible = false;
     isOkLoading = false;
     policyNumber = '';
-    user: UserModel = 0;
+    user: UserModel;
     _id = '';
     isVisibleClientType = false;
     isOkClientTypeLoading = false;
