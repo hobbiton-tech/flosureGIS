@@ -125,7 +125,8 @@ export class IntimateClaimComponent implements OnInit {
             thirdPartyInsured: ['', Validators.required],
             lossDate: ['', Validators.required, [this.dateAsyncValidator]],
           lossTime: ['', Validators.required],
-            notificationDate: ['', Validators.required]
+            notificationDate: ['', Validators.required],
+          thirdPartyDetails:  ['', Validators.required],
         });
     }
 
@@ -157,8 +158,8 @@ export class IntimateClaimComponent implements OnInit {
 
         this.claimService.getClaims().subscribe(claims => {
             this.claimNumber = this.claimService.generateCliamID(claims.length);
-            for (let c of claims) {
-              this.displayThirdPartyDetails = [...this.displayThirdPartyDetails, ...[c.thirdPartyDetails]]
+            for (const c of claims) {
+              this.displayThirdPartyDetails = [...this.displayThirdPartyDetails, ...[c.thirdPartyDetails]];
             }
 
         });
@@ -219,7 +220,7 @@ export class IntimateClaimComponent implements OnInit {
 
 
   capitalize(s) {
-    return s.toLowerCase().replace( /\b./g, function(a) { return a.toUpperCase(); } );
+    return s.toLowerCase().replace( /\b./g, (a) => a.toUpperCase() );
   }
 
   getThirdPartyDetails(e) {
@@ -421,10 +422,25 @@ export class IntimateClaimComponent implements OnInit {
       // } else {
         this.claimService.createClaim(claim).subscribe(
             res => {
-                console.log(res);
-                this.msg.success('Claim Intimated');
-                this.intimatingClaimIsLoading = false;
-                this.route.navigateByUrl('/flosure/claims/claim-transactions');
+              console.log(res);
+              // this.msg.success('Claim Intimated');
+              // this.intimatingClaimIsLoading = false;
+              // this.route.navigateByUrl('/flosure/claims/claim-transactions');
+              claim.claimType = 'Third Party';
+              claim.thirdPartyDetails = this.thirdPartyDetails;
+              this.claimService.createClaim(claim).subscribe(
+                resClaim => {
+                  console.log('ssddssd', resClaim);
+                  this.msg.success('Claim Intimated');
+                  this.intimatingClaimIsLoading = false;
+                  this.route.navigateByUrl('/flosure/claims/claim-transactions');
+                },
+                err => {
+                  console.log(err);
+                  this.msg.error('Failed to intimate claim');
+                  this.intimatingClaimIsLoading = false;
+                }
+              );
             },
             err => {
                 console.log(err);
@@ -433,7 +449,6 @@ export class IntimateClaimComponent implements OnInit {
             }
         );
       // }
-
 
 
 

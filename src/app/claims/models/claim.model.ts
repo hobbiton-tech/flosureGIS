@@ -2,7 +2,7 @@ import { IIndividualClient } from 'src/app/clients/models/clients.model';
 import { ICorporateClient } from 'src/app/clients/models/client.model';
 import { Policy, Currency } from 'src/app/underwriting/models/policy.model';
 import { RiskModel } from 'src/app/quotes/models/quote.model';
-import { IClaimant } from './claimant.model';
+import { ClaimantType, IClaimant } from './claimant.model';
 import { IPhotoUpload } from './photo-upload.model';
 import { IDocumentUpload } from './document-upload.model';
 import { IServiceProvider } from './service-provider.model';
