@@ -41,6 +41,7 @@ export class Claim {
     thirdPartyDetails: ThirdPartyDetails;
     subrogation?: Subrogation;
     subrogations?: Subrogations;
+  claimType: ClaimType;
 }
 
 
@@ -76,3 +77,5 @@ export type ThirdPartyFault = 'Insured' | 'None' | 'Third Party';
 export type ThirdPartyInsured = 'Insured' | 'Not Insured';
 
 export type Subrogation = 'NA' | 'Required' | 'Invoiced' | 'Settled';
+
+export type ClaimType = 'Own Damage' | 'Third Party';

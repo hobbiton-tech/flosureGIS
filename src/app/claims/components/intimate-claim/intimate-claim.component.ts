@@ -79,12 +79,12 @@ export class IntimateClaimComponent implements OnInit {
     ];
 
     selectedClaimantType = 'Insured';
-    selectedPartyToBlame = 'Insured'
+    selectedPartyToBlame = 0;
 
     thirdPartyFaultOptions = [
-        { label: 'NONE', value: 'None' },
-        { label: 'INSURED', value: 'Insured' },
-       { label: 'THIRD PARTY', value: 'Third Party' }
+        { label: 'NONE', value: 0 },
+        { label: 'INSURED', value: 1 },
+       { label: 'THIRD PARTY', value: 2 }
     ];
 
     thirdPartyInsuredOptions = [
@@ -119,7 +119,7 @@ export class IntimateClaimComponent implements OnInit {
           country: ['', Validators.required, [this.territoryAsyncValidator]],
             thirdPartyFault: ['', Validators.required],
             causation: ['', Validators.required],
-            claimant: ['', Validators.required],
+          claimant: [''],
             policy: ['', Validators.required],
             risk: ['', Validators.required],
             thirdPartyInsured: ['', Validators.required],
@@ -223,7 +223,9 @@ export class IntimateClaimComponent implements OnInit {
   }
 
   getThirdPartyDetails(e) {
-    this.thirdPartyDetails = {...e};
+    // this.thirdPartyDetails = {...e};
+    console.log('THird >>>',e);
+    this.displayClaimantsList = [...this.displayClaimantsList, ...[e]]
   }
   checkAll(ev) {
     this.perilList.forEach(x => x.checked = ev.target.checked);
@@ -255,9 +257,9 @@ export class IntimateClaimComponent implements OnInit {
   handlePartyToBlame(e) {
     window.scroll(0, 0);
     console.log('PTB>>>>', e);
-    if (e === 'None' || e === 'Third Party') {
+    this.selectedPartyToBlame = e;
+    if (e === 0 || e === 2 || e === 1) {
       this.thirdPartyDetailsState = true;
-      this.selectedPartyToBlame = e;
     } else {
       this.thirdPartyDetailsState = false;
     }
@@ -359,30 +361,28 @@ export class IntimateClaimComponent implements OnInit {
           subrogationState = 'NA';
         }
 
-        const InsuredClaimant: IClaimant = {
-            firstName:
-                this.selectedClient.clientType === 'Individual'
-                    ? this.selectedClient.firstName
-                    : this.selectedClient.companyName,
-            lastName:
-                this.selectedClient.clientType === 'Individual'
-                    ? this.selectedClient.lastName
-                    : '',
-            type: 'Insured',
-            idNumber: this.selectedClient.idNumber,
-            idType: this.selectedClient.idType,
-            physicalAddress: this.selectedClient.address,
-            phone: this.selectedClient.phone,
-            email: this.selectedClient.email,
-            gender: this.selectedClient.gender
-        };
+      console.log('Claim Dtails>>>>', this.intimateClaimForm.value);
+
+        // const InsuredClaimant: IClaimant = {
+        //     firstName:
+        //         this.selectedClient.clientType === 'Individual'
+        //             ? this.selectedClient.firstName
+        //             : this.selectedClient.companyName,
+        //     lastName:
+        //         this.selectedClient.clientType === 'Individual'
+        //             ? this.selectedClient.lastName
+        //             : '',
+        //     type: 'Insured',
+        //     idNumber: this.selectedClient.idNumber,
+        //     idType: this.selectedClient.idType,
+        //     physicalAddress: this.selectedClient.address,
+        //     phone: this.selectedClient.phone,
+        //     email: this.selectedClient.email,
+        //     gender: this.selectedClient.gender
+        // };
 
         const claim: Claim = {
             ...this.intimateClaimForm.value,
-            claimant:
-                this.selectedClaimantType === 'Third Party'
-                    ? this.intimateClaimForm.get('claimant').value
-                    : InsuredClaimant,
             claimNumber: this.claimNumber,
             claimStatus: 'Pending',
             claimDescription: '---',
@@ -391,12 +391,34 @@ export class IntimateClaimComponent implements OnInit {
             documentUploads: [],
             isRequisitionRaised: false,
           claimPerils: this.perilsL,
-          thirdPartyDetails: this.thirdPartyDetails,
-          subrogation: subrogationState
+          subrogation: subrogationState,
+          claimType: 'Own Damage'
         };
+      // thirdPartyDetails: this.intimateClaimForm.get('thirdPartyDetails').value,
 
 
-
+      // if(this.intimateClaimForm.controls.claimant.value) {
+      //
+      //   this.claimService.createClaim(claim).subscribe(
+      //     res => {
+      //       console.log(res);
+      //       claim.claimant = this.intimateClaimForm.controls.claimant.value;
+      //       claim.claimType = 'Third Party';
+      //       // delete claim.client;
+      //       this.claimService.createClaim(claim).subscribe(claimThirdParty =>{
+      //         this.msg.success('Claim Intimated');
+      //         this.intimatingClaimIsLoading = false;
+      //         this.route.navigateByUrl('/flosure/claims/claim-transactions');
+      //       })
+      //
+      //     },
+      //     err => {
+      //       console.log(err);
+      //       this.msg.error('Failed to intimate claim', err);
+      //       this.intimatingClaimIsLoading = false;
+      //     }
+      //   );
+      // } else {
         this.claimService.createClaim(claim).subscribe(
             res => {
                 console.log(res);
@@ -406,10 +428,15 @@ export class IntimateClaimComponent implements OnInit {
             },
             err => {
                 console.log(err);
-                this.msg.error('Failed to intimate claim');
+                this.msg.error('Failed to intimate claim', err);
                 this.intimatingClaimIsLoading = false;
             }
         );
+      // }
+
+
+
+
     }
 
   search(value: string): void {

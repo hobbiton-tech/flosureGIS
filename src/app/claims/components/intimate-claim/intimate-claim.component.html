@@ -19,7 +19,7 @@
 <!--                    </nz-page-header-extra>-->
                   <nz-page-header-extra style="margin-left: 10px">
                     <button nz-button routerLink="/flosure/claims/intimate-claims" nzType="primary"
-                            *ngIf="thirdPartyDetailsState" (click)="isAddThirdPartyDetailsModalVisible=true">Add Third Party Details</button>
+                        (click)="isAddThirdPartyDetailsModalVisible=true">Add Third Party Details</button>
                   </nz-page-header-extra>
                 </nz-page-header>
 
@@ -106,13 +106,13 @@
                                 </nz-form-item>
                             </div>
                             <div nz-col nzSpan="12">
-                                <div *ngIf="selectedPartyToBlame === 'Third Party' || 'None'">
+                                <div *ngIf="selectedPartyToBlame === 2 || 0 || 1">
                                     <nz-form-item>
                                         <nz-form-label nzSpan="7" nzRequired>Third Party Details</nz-form-label>
                                         <nz-form-control nzSpan="16">
                                             <nz-select formControlName="claimant" nzShowSearch
                                                 (ngModelChange)="handleClaimantChange()">
-                                                <nz-option *ngFor="let claimant of displayThirdPartyDetails"
+                                                <nz-option *ngFor="let claimant of displayClaimantsList"
                                                     [nzValue]="claimant"
                                                     [nzLabel]="claimant.firstName + ' ' + claimant.lastName">
                                                 </nz-option>
