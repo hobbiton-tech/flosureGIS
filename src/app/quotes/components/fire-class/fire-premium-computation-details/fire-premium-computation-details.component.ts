@@ -107,6 +107,13 @@ export class FirePremiumComputationDetailsComponent
     ngOnInit(): void {}
 
     handleDatesCalculation(): void {
+        const startDate: Date = this.riskStartDate;
+        const endDate: Date = moment(startDate)
+            .add('365', 'days')
+            .toDate();
+
+        this.riskEndDate = endDate;
+
         if (this.riskStartDate && this.riskEndDate) {
             let startDate = moment(this.riskStartDate);
             let endDate = moment(this.riskEndDate);

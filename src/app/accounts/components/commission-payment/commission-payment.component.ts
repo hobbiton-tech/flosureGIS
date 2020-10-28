@@ -141,6 +141,7 @@ export class CommissionPaymentComponent implements OnInit {
       ),
       approvalStatus: 'Approved',
       authorizationDate: new Date(),
+      paymentStatus: 'UnProcessed',
       authorizedBy: localStorage.getItem('user')
     };
 

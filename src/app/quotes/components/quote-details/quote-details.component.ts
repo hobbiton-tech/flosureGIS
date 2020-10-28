@@ -278,6 +278,9 @@ export class QuoteDetailsComponent implements OnInit {
     isViewQuotePDFVisible = false;
     isViewDraftQuotePDFVisible = false;
     isViewFireDraftQuotePDFVisible = false;
+    isViewAccidentDraftQuotePDFVisible = false;
+    isViewMarineDraftQuotePDFVisible = false;
+    isViewEngineeringDraftQuotePDFVisible = false;
 
     searchString: string;
 
@@ -393,10 +396,10 @@ export class QuoteDetailsComponent implements OnInit {
         this.userToken = localStorage.getItem('currentUser');
         this.decodedJwtData = jwt_decode(this.userToken);
         this.isQuoteDetailsLoading = true;
-        setTimeout(() => {
 
-            this.isQuoteDetailsLoading = false;
-        }, 4000);
+        // setTimeout(() => {
+        //     this.isQuoteDetailsLoading = false;
+        // }, 4000);
 
         this.route.params.subscribe(param => {
             this.quoteNumber = param.quoteNumber;
@@ -415,6 +418,7 @@ export class QuoteDetailsComponent implements OnInit {
                 console.log('USERS>>>', this.user, this.isPresent, this.admin);
               });
                 this.currentClass = this.quoteData.class;
+
                 this.classHandler.changeSelectedClass(this.quoteData.class);
 
                 this.commisionSetupsService
@@ -435,8 +439,10 @@ export class QuoteDetailsComponent implements OnInit {
                 this.risks = this.quoteData.risks;
 
                 this.excessList = this.risks[0].excesses;
-                this.extensionList = this.risks[0].extensions;
+                this.extensionList = this.quoteData.risks[0].extensions;
                 this.discountsList = this.risks[0].discounts;
+
+                console.log('extensions :=> ', this.extensionList)
 
                 this.limitsOfLiabilities = this.risks[0].limitsOfLiability;
                 this.productClauseService.getPolicyClauses().subscribe(res => {
@@ -445,13 +451,13 @@ export class QuoteDetailsComponent implements OnInit {
                     );
                 });
 
-                this.productClauseService
-                    .getPolicyExtensions()
-                    .subscribe(res => {
-                        this.extensions = res.filter(
-                            x => x.policyId === this.risks[0].id
-                        );
-                    });
+                // this.productClauseService
+                //     .getPolicyExtensions()
+                //     .subscribe(res => {
+                //         this.extensions = res.filter(
+                //             x => x.policyId === this.risks[0].id
+                //         );
+                //     });
 
                 this.productClauseService.getPolicyWordings().subscribe(res => {
                     this.wordings = res.filter(
@@ -511,6 +517,9 @@ export class QuoteDetailsComponent implements OnInit {
 
                 this.numberOfRisks = this.risks.length;
                 this.premiumLoadingTotal = 0;
+
+
+                this.isQuoteDetailsLoading = false;
             });
 
             this.clientsService.getAllClients().subscribe(clients => {
@@ -804,7 +813,8 @@ export class QuoteDetailsComponent implements OnInit {
             user: Number(this.decodedJwtData.user_id),
             sourceOfBusiness: this.quoteData.sourceOfBusiness,
             intermediaryName: this.quoteData.intermediaryName,
-            intermediaryId: this.quoteData.intermediaryId
+            intermediaryId: this.quoteData.intermediaryId,
+            term: 0
         };
 
         if (this.quoteData.sourceOfBusiness !== 'Direct') {
@@ -1304,6 +1314,15 @@ export class QuoteDetailsComponent implements OnInit {
         }
         if (localStorage.getItem('class') == 'Fire') {
             this.isViewFireDraftQuotePDFVisible = true;
+        }
+        if (localStorage.getItem('class') == 'Accident') {
+            this.isViewAccidentDraftQuotePDFVisible = true;
+        }
+        if (localStorage.getItem('class') == 'Marine') {
+            this.isViewMarineDraftQuotePDFVisible = true;
+        }
+        if (localStorage.getItem('class') == 'Engineering') {
+            this.isViewEngineeringDraftQuotePDFVisible = true;
         }
     }
 

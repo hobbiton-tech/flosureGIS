@@ -2,7 +2,7 @@ import { IIndividualClient } from 'src/app/clients/models/clients.model';
 import { ICorporateClient } from 'src/app/clients/models/client.model';
 import { Policy, Currency } from 'src/app/underwriting/models/policy.model';
 import { RiskModel } from 'src/app/quotes/models/quote.model';
-import { IClaimant } from './claimant.model';
+import { ClaimantType, IClaimant } from './claimant.model';
 import { IPhotoUpload } from './photo-upload.model';
 import { IDocumentUpload } from './document-upload.model';
 import { IServiceProvider } from './service-provider.model';
@@ -41,6 +41,7 @@ export class Claim {
     thirdPartyDetails: ThirdPartyDetails;
     subrogation?: Subrogation;
     subrogations?: Subrogations;
+  claimType: ClaimType;
 }
 
 
@@ -76,3 +77,5 @@ export type ThirdPartyFault = 'Insured' | 'None' | 'Third Party';
 export type ThirdPartyInsured = 'Insured' | 'Not Insured';
 
 export type Subrogation = 'NA' | 'Required' | 'Invoiced' | 'Settled';
+
+export type ClaimType = 'Own Damage' | 'Third Party';

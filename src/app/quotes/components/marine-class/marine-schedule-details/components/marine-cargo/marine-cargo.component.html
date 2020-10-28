@@ -1,0 +1,50 @@
+<div>
+    <form nz-form [formGroup]="marineCargoScheduleDetailsForm">
+        <div nz-row nzGutter="0">
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10" nzFor="conveyance" nzRequired>
+                        Conveyance
+                    </nz-form-label>
+                    <nz-form-control nzSpan="10">
+                        <input nz-input formControlName="conveyance" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10" nzFor="subjectMatter" nzRequired>
+                        Subject matter
+                    </nz-form-label>
+                    <nz-form-control nzSpan="10">
+                        <input nz-input formControlName="subjectMatter" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10" nzFor="rate" nzRequired>
+                        Rates
+                    </nz-form-label>
+                    <nz-form-control nzSpan="10">
+                        <input nz-input formControlName="rate" type="number" />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10" nzFor="voyages" nzRequired>
+                        Voyages
+                    </nz-form-label>
+                    <nz-form-control nzSpan="10">
+                        <input nz-input formControlName="voyages" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10" nzFor="interestValue" nzRequired>
+                        Interest value
+                    </nz-form-label>
+                    <nz-form-control nzSpan="10">
+                        <input nz-input formControlName="interestValue" type="number" />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+    </form>
+</div>

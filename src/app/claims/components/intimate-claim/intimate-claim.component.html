@@ -12,14 +12,14 @@
 
             <div style="margin: 10px; background: #fff;">
                 <nz-page-header (nzBack)="backToTransactions()" nzBackIcon nzTitle="Claim Intimation">
-                    <nz-page-header-extra style="margin-left: 10px">
-                        <button nz-button routerLink="/flosure/claims/intimate-claims" nzType="primary"
-                            *ngIf="selectedClaimantType == 'Third Party'" (click)="isAddClaimantModalVisible=true">Add
-                            Claimant</button>
-                    </nz-page-header-extra>
+<!--                    <nz-page-header-extra style="margin-left: 10px">-->
+<!--                        <button nz-button routerLink="/flosure/claims/intimate-claims" nzType="primary"-->
+<!--                            *ngIf="selectedClaimantType == 'Third Party'" (click)="isAddClaimantModalVisible=true">Add-->
+<!--                            Third Party Details</button>-->
+<!--                    </nz-page-header-extra>-->
                   <nz-page-header-extra style="margin-left: 10px">
                     <button nz-button routerLink="/flosure/claims/intimate-claims" nzType="primary"
-                            *ngIf="thirdPartyDetailsState" (click)="isAddThirdPartyDetailsModalVisible=true">Add Third Party Details</button>
+                        (click)="isAddThirdPartyDetailsModalVisible=true">Add Third Party Details</button>
                   </nz-page-header-extra>
                 </nz-page-header>
 
@@ -33,19 +33,19 @@
                         <nz-divider nzText="Claim Details" nzOrientation="left"></nz-divider>
                         <div nz-row nzGutter="0">
                             <div nz-col nzSpan="12">
-                                <nz-form-item>
-                                    <nz-form-label nzSpan="8" nzRequired>Claimant Type</nz-form-label>
-                                    <nz-form-control nzSpan="15">
-                                        <nz-select nzPlaceHolder="Select Claimant Type"
-                                            [(ngModel)]="selectedClaimantType"
-                                            (ngModelChange)="changeSelectedClaimant($event)"
-                                            [ngModelOptions]="{standalone: true}">
-                                            <nz-option *ngFor="let claimantType of claimantTypeOptions"
-                                                [nzValue]="claimantType.value" [nzLabel]="claimantType.label">
-                                            </nz-option>
-                                        </nz-select>
-                                    </nz-form-control>
-                                </nz-form-item>
+<!--                                <nz-form-item>-->
+<!--                                    <nz-form-label nzSpan="8" nzRequired>Claimant Type</nz-form-label>-->
+<!--                                    <nz-form-control nzSpan="15">-->
+<!--                                        <nz-select nzPlaceHolder="Select Claimant Type"-->
+<!--                                            [(ngModel)]="selectedClaimantType"-->
+<!--                                            (ngModelChange)="changeSelectedClaimant($event)"-->
+<!--                                            [ngModelOptions]="{standalone: true}">-->
+<!--                                            <nz-option *ngFor="let claimantType of claimantTypeOptions"-->
+<!--                                                [nzValue]="claimantType.value" [nzLabel]="claimantType.label">-->
+<!--                                            </nz-option>-->
+<!--                                        </nz-select>-->
+<!--                                    </nz-form-control>-->
+<!--                                </nz-form-item>-->
                                 <nz-form-item>
                                     <nz-form-label nzSpan="8" nzRequired>Client</nz-form-label>
                                     <nz-form-control nzSpan="15">
@@ -106,11 +106,11 @@
                                 </nz-form-item>
                             </div>
                             <div nz-col nzSpan="12">
-                                <div *ngIf="selectedClaimantType == 'Third Party'">
+                                <div *ngIf="selectedPartyToBlame === 2 || 0 || 1">
                                     <nz-form-item>
-                                        <nz-form-label nzSpan="7" nzRequired>Claimant</nz-form-label>
+                                        <nz-form-label nzSpan="7" nzRequired>Third Party Details</nz-form-label>
                                         <nz-form-control nzSpan="16">
-                                            <nz-select formControlName="claimant" nzShowSearch
+                                            <nz-select formControlName="thirdPartyDetails" nzShowSearch
                                                 (ngModelChange)="handleClaimantChange()">
                                                 <nz-option *ngFor="let claimant of displayClaimantsList"
                                                     [nzValue]="claimant"

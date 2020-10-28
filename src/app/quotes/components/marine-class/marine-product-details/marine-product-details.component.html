@@ -1,0 +1,45 @@
+<div>
+    <nz-divider nzText="Risk Details" nzOrientation="left">
+    </nz-divider>
+    <form nz-form [formGroup]="marineProductDetailsForm">
+        <div nz-row nzGutter="0">
+            <div nz-col nzSpan="8">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10" nzFor="subClass">Sub Class
+                    </nz-form-label>
+                    <nz-form-control nzSpan="10">
+                        <nz-select formControlName="subClass" nzRequired [nzDisabled]="isRiskEditMode">
+                            <nz-option *ngFor="
+                                            let subClass of productOptions
+                                        " [nzValue]="
+                                            subClass.productName
+                                        " [nzLabel]="
+                                        subClass.productName
+                                        "></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10" nzFor="riskProductId" nzRequired>
+                        Risk ID
+                    </nz-form-label>
+                    <nz-form-control nzSpan="10">
+                        <input nz-input formControlName="riskProductId" [disabled]="isRiskEditMode" />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10" nzFor="riskDescription" nzRequired>
+                        Risk Description
+                    </nz-form-label>
+                    <nz-form-control nzSpan="10">
+                        <input nz-input formControlName="riskDescription" [disabled]="isRiskEditMode" />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+    </form>
+</div>

@@ -18,6 +18,9 @@ import { CommissionPaymentService } from '../../../../services/commission-paymen
 import { CPaymentModel } from '../../../models/commission-payment.model';
 import { TransactionModel } from '../../../../../clients/models/client.model';
 import { ClientsService } from '../../../../../clients/services/clients.service';
+import * as jwt_decode from 'jwt-decode';
+import { UsersService } from '../../../../../users/services/users.service';
+import { UserModel } from '../../../../../users/models/users.model';
 
 @Component({
     selector: 'app-agent-client',
@@ -66,7 +69,7 @@ export class AgentClientComponent implements OnInit {
     isReinstateVisible = false;
     isOkLoading = false;
     policyNumber = '';
-    user = 0;
+    user: UserModel;
     _id = '';
     isVisibleClientType = false;
     isOkClientTypeLoading = false;
@@ -109,6 +112,7 @@ export class AgentClientComponent implements OnInit {
   comPayments: any[] = [];
   clientCode: any;
   transaction: any;
+  loggedIn = localStorage.getItem('currentUser');
 
     constructor(
         private receiptService: AccountService,
@@ -121,6 +125,7 @@ export class AgentClientComponent implements OnInit {
         private http: HttpClient,
         private commissionPaymentService: CommissionPaymentService,
         private  clientsService: ClientsService,
+        private usersService: UsersService,
     ) {
         this.receiptForm = this.formBuilder.group({
             received_from: ['', Validators.required],
@@ -163,6 +168,12 @@ export class AgentClientComponent implements OnInit {
             x.sourceOfBusiness === 'Agent' && x.paymentPlan === 'NotCreated'
         );
         this.displayedListOfUnreceiptedReceipts = this.listofUnreceiptedReceipts;
+
+        const decodedJwtData = jwt_decode(this.loggedIn);
+
+        this.usersService.getUsers().subscribe((users) => {
+          this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+        });
 
 
         this.receiptsCount = _.filter(
@@ -233,7 +244,7 @@ export class AgentClientComponent implements OnInit {
         this.isVisible = true;
         this.clientName = unreceipted.client;
         this.policyNumber = unreceipted.policyNumber;
-        this.user = unreceipted.user;
+        // this.user = unreceipted.user;
         this.policy = unreceipted;
         this.debitnote = this.debitnoteList.filter(
             (x) => x.policy.id === unreceipted.id
@@ -265,7 +276,7 @@ export class AgentClientComponent implements OnInit {
                 remarks: this.receiptForm.controls.remarks.value,
                 cheq_number: this.receiptForm.controls.cheq_number.value,
                 on_behalf_of: this.clientName,
-                captured_by: this.user,
+                captured_by: this.user.ID,
                 receipt_status: this.recStatus,
                 sum_in_digits: Number(this.policyAmount),
                 today_date: new Date(),

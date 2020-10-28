@@ -34,13 +34,15 @@ export class FinanceComponent implements OnInit {
 
     ngOnInit(): void {
         this.financeSetupsIsLoading = true;
-        setTimeout(() => {
-            this.financeSetupsIsLoading = false;
-        }, 3000);
+        // setTimeout(() => {
+        //     this.financeSetupsIsLoading = false;
+        // }, 3000);
 
         this.bankAccountsService.getBankAccounts().subscribe(bankAccounts => {
             this.bankAccountsList = bankAccounts;
             this.displayBankAccountsList = this.bankAccountsList;
+
+            this.financeSetupsIsLoading = false;
         });
 
         this.bankAccountsService.getChequeRanges().subscribe(chaqueRanges => {

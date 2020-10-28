@@ -66,6 +66,13 @@ import { UsersService } from 'src/app/users/services/users.service';
 import { AccidentClassService } from '../../services/accident-class.service';
 import { IAccidentRiskDetailsModel } from '../../models/accident-class/accident-risk-details.model';
 import { PersonalAccidentComponent } from '../accident-class/schedule-details/components/personal-accident/personal-accident.component';
+import { IMarineRiskDetailsModel } from '../../models/marine-class/marine-risk-details.model';
+import { AccidentProductDetailsComponent } from '../accident-class/accident-product-details/accident-product-details.component';
+import { MarineProductDetailsComponent } from '../marine-class/marine-product-details/marine-product-details.component';
+import { EngineeringProductDetailsComponent } from '../engineering-class/engineering-product-details/engineering-product-details.component';
+import { IEngineeringRiskDetailsModel } from '../../models/engineering-class/engineering-risk-details.model';
+import { MarineClassService } from '../../services/marine-class.service';
+import { EngineeringClassService } from '../../services/engineering-class.service';
 
 interface IRateResult {
     sumInsured: string;
@@ -195,7 +202,7 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
         private propertyDetailsComponent: PropertyDetailsComponent,
         private premuimComputationsComponent: PremiumComputationComponent,
         private premiumComputationDetailsComponent: PremiumComputationDetailsComponent,
-        // private personalAccidentScheduleDetailsComponents: PersonalAccidentComponent,
+        private personalAccidentScheduleDetailsComponents: PersonalAccidentComponent,
         private extensionsComponent: ExtensionsComponent,
         private discountsComponent: DiscountsComponent,
         private totalsComponent: TotalsViewComponent,
@@ -205,9 +212,14 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
         private premiumComputationService: PremiumComputationService,
         private fireClassService: FireClassService,
         private accidentClassService: AccidentClassService,
+        private marineClassService: MarineClassService,
+        private engineeringClassService: EngineeringClassService,
         private classHandler: InsuranceClassHandlerService,
         private insuranceClassService: InsuranceClassService,
-        private usersService: UsersService
+        private usersService: UsersService,
+        private accidentProductDetailsComponent: AccidentProductDetailsComponent,
+        private marineProductDetailsComponent: MarineProductDetailsComponent,
+        private engineeringProductDetailsComponent: EngineeringProductDetailsComponent
     ) {
         // this.clauseForm = formBuilder.group({
         //     heading: ['', Validators.required],
@@ -262,6 +274,8 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
     vehicles: VehicleDetailsModel[] = [];
     properties: PropertyDetailsModel[] = [];
     accidentProducts: IAccidentRiskDetailsModel[] = [];
+    marineProducts: IMarineRiskDetailsModel[] = [];
+    engineeringProducts: IEngineeringRiskDetailsModel[] = [];
 
     // excesses
     excesses: Excess[] = [];
@@ -349,13 +363,19 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
         });
 
         this.quoteService.getVehicles().subscribe(vehicles => {
-            console.log(vehicles);
             this.vehicles.push(...vehicles);
         });
 
         this.quoteService.getProperties().subscribe(properties => {
-            console.log(properties);
             this.properties.push(...properties);
+        });
+
+        this.quoteService.getAccidentProducts().subscribe(products => {
+            this.accidentProducts.push(...products);
+        });
+
+        this.quoteService.getMarineProducts().subscribe(products => {
+            this.marineProducts.push(...products);
         });
 
         this.clientsService.getAllClients().subscribe(clients => {
@@ -420,6 +440,15 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
     }
 
     handlePolicyEndDateCalculation(): void {
+        if (this.currentClassName.toLowerCase() != 'motor') {
+            const startDate: Date = this.quoteForm.get('startDate').value;
+            const endDate: Date = moment(startDate)
+                .add('365', 'days')
+                .toDate();
+
+            this.quoteForm.get('endDate').setValue(endDate);
+        }
+
         if (
             this.quoteForm.get('startDate').value !== '' &&
             this.quoteForm.get('quarter').value !== ''
@@ -480,6 +509,7 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
 
     // view details of the risk
     viewRiskDetails(risk: RiskModel) {
+        console.log('RISK', risk);
         this.viewRiskModalVisible = true;
 
         this.quoteService.getVehicles().subscribe(vehicles => {
@@ -488,6 +518,8 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
             const vehicle: VehicleDetailsModel = this.vehicles.filter(
                 x => x.risk.id == risk.id
             )[0];
+
+            console.log('VEHICLE:=> ', vehicle);
 
             if (localStorage.getItem('class') == 'Motor') {
                 this.vehicleDetailsComponent.setVehicleDetails(vehicle);
@@ -505,6 +537,51 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
                 this.propertyDetailsComponent.setPropertyDetails(property);
             }
         });
+
+        this.quoteService.getAccidentProducts().subscribe(products => {
+            this.accidentProducts.push(...products);
+
+            const product: IAccidentRiskDetailsModel = this.accidentProducts.filter(
+                x => x.risk.id == risk.id
+            )[0];
+
+            console.log('PRODUCT :=> ', product);
+
+            if (localStorage.getItem('class') == 'Accident') {
+                this.accidentProductDetailsComponent.setAccidentProductDetails(
+                    product
+                );
+            }
+        });
+
+        this.quoteService.getMarineProducts().subscribe(products => {
+            this.marineProducts.push(...products);
+
+            const product: IMarineRiskDetailsModel = this.marineProducts.filter(
+                x => x.risk.id == risk.id
+            )[0];
+
+            if (localStorage.getItem('class') == 'Marine') {
+                this.marineProductDetailsComponent.setMarineProductDetails(
+                    product
+                );
+            }
+        });
+
+        this.quoteService.getEngineeringProducts().subscribe(products => {
+            this.engineeringProducts.push(...products);
+
+            const product: IEngineeringRiskDetailsModel = this.engineeringProducts.filter(
+                x => x.risk.id == risk.id
+            )[0];
+
+            if (localStorage.getItem('class') == 'Engineering') {
+                this.engineeringProductDetailsComponent.setEngineeringProductDetails(
+                    product
+                );
+            }
+        });
+
         this.selectedRisk = risk;
 
         const premiumComputationDetails: PremiumComputationDetails = {
@@ -535,6 +612,22 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
             premimuComputations
         );
         this.totalsComponent.setTotals(totals);
+
+        this.excessesComponent.setExcesses(risk.excesses);
+
+        risk.extensions.forEach(extension => {
+            this.premiumComputationService.addExtension(
+                extension.extensionType,
+                extension.amount
+            );
+        });
+
+        risk.discounts.forEach(discount => {
+            this.premiumComputationService.addDiscount(
+                discount.discountType,
+                discount.amount
+            );
+        });
     }
 
     // remove risk from risks table
@@ -665,7 +758,9 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
             quote,
             this.vehicles,
             this.properties,
-            this.accidentProducts
+            this.accidentProducts,
+            this.marineProducts,
+            this.engineeringProducts
         );
 
         // this.isCreatingQuote = false;
@@ -777,9 +872,20 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
 
         const risk: RiskModel[] = [];
 
-        const vehicleDetails = this.vehicleDetailsService.getVehicleDetails();
-        const propertyDetails = this.fireClassService.getPropertyDetails();
-        const accidentProductDetails = this.accidentClassService.getAccidentProductDetails();
+        const vehicleDetails = this.vehicleDetailsService.getVehicleFormDetails();
+        console.log('add vehicle:=> ', vehicleDetails);
+
+        const propertyDetails = this.fireClassService.getPropertyFormDetails();
+        console.log('add property:=> ', propertyDetails);
+
+        const accidentProductDetails = this.accidentClassService.getAccidentFormDetails();
+        console.log('add accident:=> ', accidentProductDetails);
+
+        const marineProductDetails = this.marineClassService.getMarineFormDetails();
+        console.log('add marine:=> ', marineProductDetails);
+
+        const engineeringProductDetails = this.engineeringClassService.getEngineeringFormDetails();
+        console.log('add engineering:=> ', engineeringProductDetails);
 
         const premimuComputations = this.premuimComputationsComponent.getPremiumComputations();
         const premiumComputationDetails = this.premiumComputationDetailsComponent.getPremiumComputationDetails();
@@ -821,14 +927,30 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
             });
         }
 
-        // if (localStorage.getItem('class') == 'Accident') {
-        //     this.accidentProducts.push({
-        //         id: v4(),
-        //         ...accidentProductDetails,
-        //         risk: risk[0],
-        //         personalAccidentSchedule: this.personalAccidentScheduleDetailsComponents.getPersonalAccidentScheduleDetails()
-        //     });
-        // }
+        if (localStorage.getItem('class') == 'Accident') {
+            this.accidentProducts.push({
+                id: v4(),
+                ...accidentProductDetails,
+                risk: risk[0],
+                personalAccidentSchedule: this.personalAccidentScheduleDetailsComponents.getPersonalAccidentScheduleDetails()
+            });
+        }
+
+        if (localStorage.getItem('class') == 'Marine') {
+            this.marineProducts.push({
+                id: v4(),
+                ...marineProductDetails,
+                risk: risk[0]
+            });
+        }
+
+        if (localStorage.getItem('class') == 'Engineering') {
+            this.engineeringProducts.push({
+                id: v4(),
+                ...engineeringProductDetails,
+                risk: risk[0]
+            });
+        }
 
         this.risks = [...this.risks, ...risk];
 
@@ -843,7 +965,7 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
     }
 
     resetRiskDetails() {
-        this.vehicleDetailsService.resetVehicleDetails();
+        // this.vehicleDetailsService.resetVehicleDetails();
         this.premiumComputationService.resetRiskDetails();
     }
 

@@ -6,6 +6,7 @@ import * as jwt_decode from 'jwt-decode';
 import { PermissionsModel } from '../../../../../users/models/roles.model';
 import { UserModel } from '../../../../../users/models/users.model';
 import { UsersService } from '../../../../../users/services/users.service';
+import _ from 'lodash';
 
 @Component({
     selector: 'app-extension-cover',
@@ -15,43 +16,52 @@ import { UsersService } from '../../../../../users/services/users.service';
 export class ExtensionCoverComponent implements OnInit {
     policiesList: Policy[];
     displayPoliciesList: Policy[];
+    filteredUniquePoliciesList: Policy[];
 
     extensionOfCoverListIsLoading = false;
 
     searchString: string;
-  permission: PermissionsModel;
-  user: UserModel;
-  isPresent: PermissionsModel;
-  admin = 'admin';
-  viewPolicy = 'view_policy';
-  loggedIn = localStorage.getItem('currentUser');
+    permission: PermissionsModel;
+    user: UserModel;
+    isPresent: PermissionsModel;
+    admin = 'admin';
+    viewPolicy = 'view_policy';
+    loggedIn = localStorage.getItem('currentUser');
 
     constructor(
         private readonly router: Router,
         private readonly policiesService: PoliciesService,
-        private  usersService: UsersService,
+        private usersService: UsersService
     ) {}
 
     ngOnInit(): void {
         this.extensionOfCoverListIsLoading = true;
-        setTimeout(() => {
-            this.extensionOfCoverListIsLoading = false;
-        }, 3000);
+        // setTimeout(() => {
+        //     this.extensionOfCoverListIsLoading = false;
+        // }, 3000);
 
-      const decodedJwtData = jwt_decode(this.loggedIn);
-      console.log('Decoded>>>>>>', decodedJwtData);
+        const decodedJwtData = jwt_decode(this.loggedIn);
+        console.log('Decoded>>>>>>', decodedJwtData);
 
-      this.usersService.getUsers().subscribe((users) => {
-        this.user = users.filter((x) => x.ID === decodedJwtData.user_id)[0];
+        this.usersService.getUsers().subscribe(users => {
+            this.user = users.filter(x => x.ID === decodedJwtData.user_id)[0];
 
-        this.isPresent = this.user.Permission.find((el) => el.name === this.admin || el.name === this.viewPolicy);
+            this.isPresent = this.user.Permission.find(
+                el => el.name === this.admin || el.name === this.viewPolicy
+            );
 
-        console.log('USERS>>>', this.user, this.isPresent, this.admin);
-      });
+            console.log('USERS>>>', this.user, this.isPresent, this.admin);
+        });
 
         this.policiesService.getPolicies().subscribe(policies => {
             this.policiesList = policies;
-            this.displayPoliciesList = this.policiesList;
+            this.filteredUniquePoliciesList = _.uniqBy(
+                this.policiesList,
+                'policyNumber'
+            );
+            this.displayPoliciesList = this.filteredUniquePoliciesList;
+
+            this.extensionOfCoverListIsLoading = false;
         });
     }
 
@@ -63,16 +73,18 @@ export class ExtensionCoverComponent implements OnInit {
 
     search(value: string): void {
         if (value === '' || !value) {
-            this.displayPoliciesList = this.policiesList;
+            this.displayPoliciesList = this.filteredUniquePoliciesList;
         }
 
-        this.displayPoliciesList = this.policiesList.filter(policy => {
-            return (
-                policy.policyNumber
-                    .toLowerCase()
-                    .includes(value.toLowerCase()) ||
-                policy.client.toLowerCase().includes(value.toLowerCase())
-            );
-        });
+        this.displayPoliciesList = this.filteredUniquePoliciesList.filter(
+            policy => {
+                return (
+                    policy.policyNumber
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    policy.client.toLowerCase().includes(value.toLowerCase())
+                );
+            }
+        );
     }
 }

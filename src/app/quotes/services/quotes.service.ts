@@ -17,6 +17,8 @@ import { IClass } from 'src/app/settings/components/product-setups/models/produc
 import { CreateQuoteComponent } from '../components/create-quote/create-quote.component';
 import { InsuranceClassService } from './insurance-class.service';
 import { IAccidentRiskDetailsModel } from '../models/accident-class/accident-risk-details.model';
+import { IMarineRiskDetailsModel } from '../models/marine-class/marine-risk-details.model';
+import { IEngineeringRiskDetailsModel } from '../models/engineering-class/engineering-risk-details.model';
 
 // const BASE_URL = 'http://104.248.247.78:3000';
 // const BASE_URL = 'https://savenda.flosure-api.com'
@@ -151,7 +153,9 @@ export class QuotesService implements OnDestroy {
         motorQuotation: MotorQuotationModel,
         vehicles: VehicleDetailsModel[],
         properties: PropertyDetailsModel[],
-        accidentProducts: IAccidentRiskDetailsModel[]
+        accidentProducts: IAccidentRiskDetailsModel[],
+        marineProducts: IMarineRiskDetailsModel[],
+        engineeringProducts: IEngineeringRiskDetailsModel[]
     ) {
         const currentClassObj: IClass = JSON.parse(
             localStorage.getItem('classObject')
@@ -187,7 +191,9 @@ export class QuotesService implements OnDestroy {
                                 this.addRiskDetails(
                                     vehicles,
                                     properties,
-                                    accidentProducts
+                                    accidentProducts,
+                                    marineProducts,
+                                    engineeringProducts
                                 );
                             },
                             async err => {
@@ -208,7 +214,9 @@ export class QuotesService implements OnDestroy {
     addRiskDetails(
         vehicles: VehicleDetailsModel[],
         properties: PropertyDetailsModel[],
-        accidentProducts: IAccidentRiskDetailsModel[]
+        accidentProducts: IAccidentRiskDetailsModel[],
+        marineProducts: IMarineRiskDetailsModel[],
+        engineeringProducts: IEngineeringRiskDetailsModel[]
     ) {
         if (localStorage.getItem('class') == 'Fire') {
             properties.forEach(property => {
@@ -229,6 +237,23 @@ export class QuotesService implements OnDestroy {
         if (localStorage.getItem('class') == 'Accident') {
             accidentProducts.forEach(product => {
                 this.addAccidentProduct(
+                    product.risk.id,
+                    product
+                ).subscribe(res => console.log(res));
+            });
+        }
+
+        if (localStorage.getItem('class') == 'Marine') {
+            marineProducts.forEach(product => {
+                this.addMarineProduct(product.risk.id, product).subscribe(res =>
+                    console.log(res)
+                );
+            });
+        }
+
+        if (localStorage.getItem('class') == 'Engineering') {
+            engineeringProducts.forEach(product => {
+                this.addEngineeringProduct(
                     product.risk.id,
                     product
                 ).subscribe(res => console.log(res));
@@ -389,6 +414,76 @@ export class QuotesService implements OnDestroy {
         return this.http.put<IAccidentRiskDetailsModel>(
             `${BASE_URL}/accident-product-details/${accidentProductId}`,
             accidentProductDetails
+        );
+    }
+
+    // marine product details (Marine class)
+    addMarineProduct(
+        riskId: string,
+        marineProductDetails: IMarineRiskDetailsModel
+    ): Observable<IMarineRiskDetailsModel> {
+        return this.http.post<IMarineRiskDetailsModel>(
+            `${BASE_URL}/marine-product-details/${riskId}`,
+            marineProductDetails
+        );
+    }
+
+    getMarineProducts(): Observable<IMarineRiskDetailsModel[]> {
+        return this.http.get<IMarineRiskDetailsModel[]>(
+            `${BASE_URL}/marine-product-details`
+        );
+    }
+
+    getOneMarineProduct(
+        marineProductId: string
+    ): Observable<IMarineRiskDetailsModel> {
+        return this.http.get<IMarineRiskDetailsModel>(
+            `${BASE_URL}/marine-product-details/${marineProductId}`
+        );
+    }
+
+    updateMarineProduct(
+        marineProductDetails: IMarineRiskDetailsModel,
+        marineProductId: string
+    ): Observable<IMarineRiskDetailsModel> {
+        return this.http.put<IMarineRiskDetailsModel>(
+            `${BASE_URL}/marine-product-details/${marineProductId}`,
+            marineProductDetails
+        );
+    }
+
+    // engineering product details (Marine class)
+    addEngineeringProduct(
+        riskId: string,
+        engineeringProductDetails: IEngineeringRiskDetailsModel
+    ): Observable<IEngineeringRiskDetailsModel> {
+        return this.http.post<IEngineeringRiskDetailsModel>(
+            `${BASE_URL}/engineering-product-details/${riskId}`,
+            engineeringProductDetails
+        );
+    }
+
+    getEngineeringProducts(): Observable<IEngineeringRiskDetailsModel[]> {
+        return this.http.get<IEngineeringRiskDetailsModel[]>(
+            `${BASE_URL}/engineering-product-details`
+        );
+    }
+
+    getOneEngineeringProduct(
+        engineeringProductId: string
+    ): Observable<IEngineeringRiskDetailsModel> {
+        return this.http.get<IEngineeringRiskDetailsModel>(
+            `${BASE_URL}/engineering-product-details/${engineeringProductId}`
+        );
+    }
+
+    updateEngineeringProduct(
+        engineeringProductDetails: IEngineeringRiskDetailsModel,
+        engineeringProductId: string
+    ): Observable<IEngineeringRiskDetailsModel> {
+        return this.http.put<IEngineeringRiskDetailsModel>(
+            `${BASE_URL}/engineering-product-details/${engineeringProductId}`,
+            engineeringProductDetails
         );
     }
 

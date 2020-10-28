@@ -9,7 +9,7 @@
                         Vehicle Make
                     </nz-form-label>
                     <nz-form-control nzSpan="10">
-                        <input nz-input formControlName="vehicleMake" />
+                        <input nz-input formControlName="vehicleMake" [disabled]="isRiskEditMode" />
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
@@ -17,13 +17,14 @@
                         Vehicle Model
                     </nz-form-label>
                     <nz-form-control nzSpan="10">
-                        <input nz-input formControlName="vehicleModel" />
+                        <input nz-input formControlName="vehicleModel" [disabled]="isRiskEditMode" />
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
                     <nz-form-label nzRequired nzSpan="10">Year Of Manf</nz-form-label>
                     <nz-form-control nzSpan="10">
-                        <input nz-input formControlName="yearOfManufacture" type="number" maxlength="4" />
+                        <input nz-input formControlName="yearOfManufacture" type="number" maxlength="4"
+                            [disabled]="isRiskEditMode" />
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
@@ -32,7 +33,8 @@
                     <nz-form-control nzSpan="10" nzHasFeedback [nzErrorTip]="
                             compRegNumberErrorTp
                         ">
-                        <input nz-input name="regNumber" formControlName="regNumber" type="text" id="regNumber" />
+                        <input nz-input name="regNumber" formControlName="regNumber" type="text" id="regNumber"
+                            [disabled]="isRiskEditMode" />
                         <ng-template #compRegNumberErrorTp let-control>
                             <ng-container *ngIf="
                                     control.hasError(
@@ -63,8 +65,8 @@
                     <nz-form-control nzSpan="10" nzHasFeedback [nzErrorTip]="
                             compEngineNumberErrorTp
                         ">
-                        <input nz-input name="engineNumber" formControlName="engineNumber" type="text"
-                            id="engineNumber" />
+                        <input nz-input name="engineNumber" formControlName="engineNumber" type="text" id="engineNumber"
+                            [disabled]="isRiskEditMode" />
                         <ng-template #compEngineNumberErrorTp let-control>
                             <!-- <ng-container *ngIf="
                                     control.hasError(
@@ -94,7 +96,7 @@
                             compChassisNumberErrorTp
                         ">
                         <input nz-input name="chassisNumber" formControlName="chassisNumber" type="text"
-                            id="chassisNumber" />
+                            id="chassisNumber" [disabled]="isRiskEditMode" />
                         <ng-template #compChassisNumberErrorTp let-control>
                             <ng-container *ngIf="
                                     control.hasError(
@@ -120,7 +122,8 @@
                     <nz-form-label [nzSpan]="10" nzFor="color" nzRequired>Color
                     </nz-form-label>
                     <nz-form-control nzSpan="10">
-                        <input nz-input name="color" formControlName="color" type="text" id="color" />
+                        <input nz-input name="color" formControlName="color" type="text" id="color"
+                            [disabled]="isRiskEditMode" />
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -131,7 +134,7 @@
                     </nz-form-label>
                     <nz-form-control nzSpan="10">
                         <input nz-input name="cubicCapacity" formControlName="cubicCapacity" type="number"
-                            id="cubicCapacity" />
+                            id="cubicCapacity" [disabled]="isRiskEditMode" />
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
@@ -140,13 +143,13 @@
                     </nz-form-label>
                     <nz-form-control nzSpan="10">
                         <input nz-input name="seatingCapacity" formControlName="seatingCapacity" type="number"
-                            id="seatingCapacity" />
+                            id="seatingCapacity" [disabled]="isRiskEditMode" />
                     </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
                     <nz-form-label nzSpan="10" nzRequired>Body Type</nz-form-label>
                     <nz-form-control nzSpan="10">
-                        <nz-select formControlName="bodyType">
+                        <nz-select formControlName="bodyType" [nzDisabled]="isRiskEditMode">
                             <nz-option *ngFor="
                                     let bodyType of vehicleBodyType
                                 " [nzValue]="

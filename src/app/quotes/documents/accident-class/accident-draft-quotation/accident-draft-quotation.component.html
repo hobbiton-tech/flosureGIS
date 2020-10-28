@@ -61,7 +61,7 @@
                 <tr>
                     <td><strong>Postal Address</strong></td>
                     <td><strong>:</strong></td>
-                    <td><span>NIL</span></td>
+                    <td><span>TBA</span></td>
                 </tr>
                 <tr>
                     <td><strong>Period Of Insurance</strong></td>
@@ -103,7 +103,7 @@
             <tr class="information">
                 <td colspan="2">
                     <p style="text-align: center; background-color: skyblue; color: aliceblue;">
-                        {{quoteData?.class?.className?.toLocaleUpperCase()}}
+                        {{quoteData?.class?.className?.toLocaleUpperCase()}}{{' - '}}{{quoteData?.risks[0]?.accidentProduct?.subClass.toLocaleUpperCase()}}
                     </p>
                     <br />
                 </td>
@@ -144,7 +144,7 @@
                 <th style="border: 1px solid black;">TOTAL({{quoteData.currency}}) </th>
             </tr>
             <tr *ngFor="let risk of risksTable.data">
-                <td style="border: 1px solid black;">{{risk?.accidentProduct?.riskId}}</td>
+                <td style="border: 1px solid black;">{{risk?.accidentProduct?.riskProductId}}</td>
                 <td style="border: 1px solid black;">{{risk?.accidentProduct?.riskDescription}}</td>
                 <td style="border: 1px solid black;">{{risk.sumInsured | number: '1.2-2'}}</td>
                 <!-- <td style="border: 1px solid black;">
@@ -216,8 +216,9 @@
                 <tr>
                     <td><strong>Basic Excess</strong></td>
                     <td><strong>:</strong></td>
-                    <td *ngFor="let exc of excessList"><span>{{exc.description}}
-                            {{' '}}{{quoteData.currency}}{{' '}}{{exc.amount}}</span></td>
+                    <div *ngFor="let exc of excessList">
+                        <td><span>{{exc.description}}{{' '}}{{quoteData.currency}}{{' '}}{{exc.amount}}</span></td>
+                    </div>
                 </tr>
 
                 <!-- <tr *ngFor="let exc of excessList">
@@ -246,7 +247,9 @@
                 <tr>
                     <td><strong>Clauses</strong></td>
                     <td><strong>:</strong></td>
-                    <td *ngFor="let clause of clauses"><span>{{clause.heading}}</span></td>
+                    <div *ngFor="let clause of clauses">
+                        <td><span>{{clause.heading}}</span></td>
+                    </div>
                 </tr>
 
                 <tr>

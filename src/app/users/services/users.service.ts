@@ -28,7 +28,7 @@ export class UsersService {
         public afAuth: AngularFireAuth, // Inject Firebase auth service
         public router: Router,
         public ngZone: NgZone, // NgZone service to remove outside scope warning
-        private usersService: UsersService,
+        // private usersService: UsersService,
         private msg: NzMessageService
     ) {}
 

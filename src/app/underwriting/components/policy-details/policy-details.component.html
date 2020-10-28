@@ -22,7 +22,7 @@
                         Debit Note
                     </button>
                     <button nz-button nzType="default" (click)="isClausesPDFVisible = true">
-                        Clauses
+                        Policy Wording
                     </button>
                     <button nz-button nzType="default" (click)="openPolicySchedule()">
                         Policy Schedule
@@ -149,6 +149,71 @@
         </nz-card>
 
         <nz-card>
+            <div nz-row nzGutter="0">
+                <div nz-col nzSpan="24">
+                    <nz-card>
+                        <nz-divider nzText="Debit notes" nzOrientation="left"></nz-divider>
+                        <div style="margin-top: 20px;">
+                            <nz-table #debitNoteTable [nzData]="policyDebitNotes" nzSize="small">
+                                <thead>
+                                    <tr>
+                                        <th>Debit Note No</th>
+                                        <th>Transaction Type</th>
+                                        <th>Date Created</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let debitNote of debitNoteTable.data">
+                                        <td>{{ debitNote.debitNoteNumber }}</td>
+                                        <td>{{ debitNote.remarks }}</td>
+                                        <td>{{ debitNote.dateCreated | date}}</td>
+                                        <td>
+                                            <button nz-button nzType="default" (click)="handleDebitNote(debitNote)">
+                                                View
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </nz-table>
+                        </div>
+                    </nz-card>
+                </div>
+
+                <!-- <div nz-col nzSpan="12">
+                    <nz-card>
+                        <nz-divider nzText="Receipts" nzOrientation="left"></nz-divider>
+                        <div style="margin-top: 20px;">
+                            <nz-table #receiptsTable [nzData]="" nzSize="small">
+                                <thead>
+                                    <tr>
+                                        <th>Receipt No</th>
+                                        <th>Transaction Type</th>
+                                        <th>Date Created</th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let receipt of receiptsTable.data">
+                                        <td>{{ receipt.receipt_number }}</td>
+                                        <td>{{ receipt.receipt_type }}</td>
+                                        <td>{{ receipt.today_date | date}}</td>
+                                        <td>
+                                            <button nz-button nzType="default" (click)="viewReceipt(receipt)">
+                                                view
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </nz-table>
+                        </div>
+                    </nz-card>
+                </div> -->
+            </div>
+        </nz-card>
+
+        <nz-card>
             <nz-divider nzText="Endorsements" nzOrientation="left"></nz-divider>
             <div style="margin-bottom: 10px; width: 20%;">
                 <nz-input-group [nzSuffix]="suffixIconSearch">
@@ -262,7 +327,6 @@
             [deathPPInfo]="deathPPInfo" [deathPPAmount]="deathPPAmount" [fExcexxType]="fExcexxType"
             [fExcessAmount]="fExcessAmount" [sExcessType]="sExcessType" [sExcessAmount]="sExcessAmount"
             [tExcessType]="tExcessType" [tExcessAmount]="tExcessAmount">
-            >
         </app-policy-comprehensive-certificate>
     </nz-card>
 </nz-modal>
@@ -305,8 +369,17 @@
     </nz-card>
 </nz-modal>
 
+<nz-modal style="width: 100%;" nzWidth="900" nzTitle="" [(nzVisible)]="isMarineCoverNotePDFVisible"
+    (nzOnCancel)="isMarineCoverNotePDFVisible = false" (nzOnOk)="isMarineCoverNotePDFVisible = false">
+    <nz-card [nzBordered]="true" nzTitle="Cover Note Document">
+        <app-marine-cover-note *ngIf="!risksLoading" [policyRisk]="selectedRisk" [policy]="policyData"
+            [client]="client">
+        </app-marine-cover-note>
+    </nz-card>
+</nz-modal>
+
 <nz-modal style="width: 100%;" nzWidth="900" nzTitle="" [(nzVisible)]="isDebitNotePDFVisible"
-    (nzOnCancel)="isDebitNotePDFVisible = false" (nzOnOk)="isDebitNotePDFVisible = false">
+    (nzOnCancel)="closeDebitNotePDF()" (nzOnOk)="closeDebitNotePDF()">
     <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Debit Document">
         <app-policy-debit-note-document *ngIf="!risksLoading" [clientName]="clientName" [clientNumber]="clientNumber"
             [clientEmail]="clientEmail" [agency]="agency" [policyNumber]="policyNumber"
@@ -342,6 +415,25 @@
         <app-fire-policy-schedule *ngIf="!risksLoading" [policy]="policyData" [client]="client" [clauses]="clauses"
             [excessList]="excessList" [extensions]="extensions">
         </app-fire-policy-schedule>
+    </nz-card>
+</nz-modal>
+
+<nz-modal style="width: 150%;" nzTitle="" nzWidth="950" [(nzVisible)]="isMarinePolicySchedulePDFVisible"
+    (nzOnCancel)="isMarinePolicySchedulePDFVisible = false" (nzOnOk)="isMarinePolicySchedulePDFVisible = false">
+    <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Schedule Document">
+        <app-marine-policy-schedule *ngIf="!risksLoading" [policy]="policyData" [client]="client" [clauses]="clauses"
+            [excessList]="excessList" [extensions]="extensions">
+        </app-marine-policy-schedule>
+    </nz-card>
+</nz-modal>
+
+<nz-modal style="width: 150%;" nzTitle="" nzWidth="950" [(nzVisible)]="isEngineeringPolicySchedulePDFVisible"
+    (nzOnCancel)="isEngineeringPolicySchedulePDFVisible = false"
+    (nzOnOk)="isEngineeringPolicySchedulePDFVisible = false">
+    <nz-card style="width: 100%;" [nzBordered]="true" nzTitle="Schedule Document">
+        <app-engineering-policy-schedule *ngIf="!risksLoading" [policy]="policyData" [client]="client"
+            [clauses]="clauses" [excessList]="excessList" [extensions]="extensions">
+        </app-engineering-policy-schedule>
     </nz-card>
 </nz-modal>
 

@@ -29,6 +29,8 @@ export class FireClassService {
     // property details form
     propertyDetailsForm = new BehaviorSubject<PropertyDetailsModel>(null);
 
+    propertyForm = new BehaviorSubject<PropertyDetailsModel>(null);
+
     // observable streams
     selectedSubClassChanged$ = this.selectedSubClass.asObservable();
     selectedLocationChanged$ = this.selectedLocation.asObservable();
@@ -38,6 +40,8 @@ export class FireClassService {
     selectedRiskCategoryChanged$ = this.selectedRiskCategory.asObservable();
 
     propertyDetailsChanged$ = this.propertyDetailsForm.asObservable();
+
+    propertyFormChanged$ = this.propertyForm.asObservable();
 
     // method to change selected values
     changeSelectedSubClass(value: string) {
@@ -69,7 +73,15 @@ export class FireClassService {
         this.propertyDetailsForm.next(value);
     }
 
+    changePropertyForm(value: PropertyDetailsModel) {
+        this.propertyForm.next(value);
+    }
+
     getPropertyDetails() {
         return this.propertyDetailsForm.value;
+    }
+
+    getPropertyFormDetails() {
+        return this.propertyForm.value;
     }
 }

@@ -15,6 +15,7 @@ export class PolicyRenewalsComponent implements OnInit {
 
     policiesList: Policy[];
     displayPoliciesList: Policy[];
+    filteredUniquePoliciesList: Policy[];
     policiesCount = 0;
 
     issuedBy = localStorage.getItem('user');
@@ -28,9 +29,9 @@ export class PolicyRenewalsComponent implements OnInit {
 
     ngOnInit(): void {
         this.policyRenewalsDetailsIsLoading = true;
-        setTimeout(() => {
-            this.policyRenewalsDetailsIsLoading = false;
-        }, 3000);
+        // setTimeout(() => {
+        //     this.policyRenewalsDetailsIsLoading = false;
+        // }, 3000);
 
         this.policiesService.getPolicies().subscribe(policies => {
             this.policiesList = _.filter(
@@ -47,7 +48,13 @@ export class PolicyRenewalsComponent implements OnInit {
                     x.paymentPlan === 'Created'
             ).length;
 
-            this.displayPoliciesList = this.policiesList;
+            this.filteredUniquePoliciesList = _.uniqBy(
+                this.policiesList,
+                'policyNumber'
+            );
+            this.displayPoliciesList = this.filteredUniquePoliciesList;
+
+            this.policyRenewalsDetailsIsLoading = false;
         });
     }
 
@@ -59,18 +66,22 @@ export class PolicyRenewalsComponent implements OnInit {
 
     search(value: string): void {
         if (value === '' || !value) {
-            this.displayPoliciesList = this.policiesList;
+            this.displayPoliciesList = this.filteredUniquePoliciesList;
         }
-        this.displayPoliciesList = this.policiesList.filter(policy => {
-            return (
-                policy.policyNumber
-                    .toLowerCase()
-                    .includes(value.toLowerCase()) ||
-                policy.client
-                    .toLocaleLowerCase()
-                    .includes(value.toLowerCase()) ||
-                policy.status.toLocaleLowerCase().includes(value.toLowerCase())
-            );
-        });
+        this.displayPoliciesList = this.filteredUniquePoliciesList.filter(
+            policy => {
+                return (
+                    policy.policyNumber
+                        .toLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    policy.client
+                        .toLocaleLowerCase()
+                        .includes(value.toLowerCase()) ||
+                    policy.status
+                        .toLocaleLowerCase()
+                        .includes(value.toLowerCase())
+                );
+            }
+        );
     }
 }

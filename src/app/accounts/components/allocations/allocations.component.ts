@@ -39,11 +39,11 @@ export class AllocationsComponent implements OnInit {
   inAllocationPoliciesList: any[] = [];
   amount: number;
   selectedRole: any;
-   brokers: IBroker[] = [];
-   agents: IAgent[] = [];
-   salesReps: ISalesRepresentative[] = [];
-   selectedInt = '';
-   policyTableActive = true;
+  brokers: IBroker[] = [];
+  agents: IAgent[] = [];
+  salesReps: ISalesRepresentative[] = [];
+  selectedInt = '';
+  policyTableActive = true;
   isAllocateVisible = false;
   allocationForm: FormGroup;
   checked = false;
@@ -56,7 +56,7 @@ export class AllocationsComponent implements OnInit {
               private formBuilder: FormBuilder,
               private commissionPaymentService: CommissionPaymentService,
               private policeServices: PoliciesService,
-              ) {
+  ) {
     this.allocationForm = this.formBuilder.group({
       policy: ['', Validators.required],
       amount: ['', Validators.required],
@@ -65,7 +65,7 @@ export class AllocationsComponent implements OnInit {
 
   ngOnInit(): void {
 
-  this.refresh();
+    this.refresh();
   }
 
   refresh() {
@@ -255,9 +255,9 @@ export class AllocationsComponent implements OnInit {
   }
 
 
-log(value) {
-  console.log('What is There>>>', value);
-  this.checked = value;
-}
+  log(value) {
+    console.log('What is There>>>', value);
+    this.checked = value;
+  }
 
 }

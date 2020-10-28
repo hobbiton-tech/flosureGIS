@@ -26,6 +26,8 @@ export class VehicleDetailsServiceService {
 
     VehicleDetailsForm = new BehaviorSubject<VehicleDetailsModel>({});
 
+    vehicleForm = new BehaviorSubject<VehicleDetailsModel>({});
+
     // Observable streams
     vehicleMakeChanged$ = this.vehicleMake.asObservable();
     vehicleModelChanged$ = this.vehicleModel.asObservable();
@@ -39,6 +41,7 @@ export class VehicleDetailsServiceService {
     bodyTypeChanged$ = this.bodyType.asObservable();
 
     vehicleDetailsFormChanged$ = this.VehicleDetailsForm.asObservable();
+    vehicleFormChanged$ = this.vehicleForm.asObservable();
 
     riskEditModeChanged$ = this.isRiskEditMode.asObservable();
 
@@ -74,8 +77,11 @@ export class VehicleDetailsServiceService {
     }
 
     changeVehicleDetails(value: VehicleDetailsModel) {
-        console.log('*change vehicle details :=> ', value);
         this.VehicleDetailsForm.next(value);
+    }
+
+    changeVehicleForm(value: VehicleDetailsModel) {
+        this.vehicleForm.next(value);
     }
 
     changeRiskEditMode(value: boolean) {
@@ -84,12 +90,12 @@ export class VehicleDetailsServiceService {
 
     // gets vehicle details
     getVehicleDetails() {
-
-        console.log(
-            '*vehicle details form (get v dets:=> ',
-            this.VehicleDetailsForm.value
-        );
         return this.VehicleDetailsForm.value;
+    }
+
+    getVehicleFormDetails() {
+        console.log('new imp:=> ', this.vehicleForm.value);
+        return this.vehicleForm.value;
     }
 
     resetVehicleDetails() {

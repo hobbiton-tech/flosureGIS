@@ -135,9 +135,9 @@ export class PolicyCancellationDetailsComponent implements OnInit {
 
     ngOnInit(): void {
         this.policyCancellationDetailsIsLoading = true;
-        setTimeout(() => {
-            this.policyCancellationDetailsIsLoading = false;
-        }, 3000);
+        // setTimeout(() => {
+        //     this.policyCancellationDetailsIsLoading = false;
+        // }, 3000);
 
         this.policyCancellationDetailsForm = this.formBuilder.group({
             client: ['', Validators.required],
@@ -234,6 +234,8 @@ export class PolicyCancellationDetailsComponent implements OnInit {
                 this.policyCancellationDetailsForm
                     .get('quarter')
                     .setValue(this.policyData.quarter);
+
+                this.policyCancellationDetailsIsLoading = false;
             });
         });
     }
@@ -250,6 +252,8 @@ export class PolicyCancellationDetailsComponent implements OnInit {
         this.selectedRisk = risk;
 
         this.createQuoteComponent.viewRiskDetails(risk);
+
+        this.viewRiskModalVisible = true;
     }
 
     handleCreditNotePremium() {
@@ -294,8 +298,14 @@ export class PolicyCancellationDetailsComponent implements OnInit {
     endorsePolicy() {
         this.cancellingPolicy = true;
 
+        // TODO: generate endorsement numbers from api
+        const endorsementNumber = this.endorsementService.generateEndorsementID(
+            this.policyData.endorsements.length
+        );
+
         const endorsement: Endorsement = {
             ...this.endorsementForm.value,
+            endorsementNumber: endorsementNumber,
             type: 'Cancellation_Of_Cover',
             dateCreated: new Date(),
             dateUpdated: new Date(),
@@ -306,7 +316,7 @@ export class PolicyCancellationDetailsComponent implements OnInit {
         const policy: Policy = {
             ...this.policyCancellationDetailsForm.value,
             ...this.policyData,
-            id: this.policyData.id,
+            id: v4(),
             risks: this.risks,
             status: 'Cancelled'
         };
@@ -337,16 +347,14 @@ export class PolicyCancellationDetailsComponent implements OnInit {
             creditNote
         };
 
-        this.endorsementService
-            .createEndorsement(this.policyData.id, endorsement)
-            .subscribe(endorsement => {
-                res => console.log(res);
-            });
+        this.policiesService.updatePolicy(policy).subscribe(policy => {
+            console.log(policy);
+            this.endorsementService
+                .createEndorsement(this.policyData.id, endorsement)
+                .subscribe(endorsement => {
+                    console.log(endorsement);
+                });
 
-        this.policiesService.createPolicy(policy).subscribe(policy => {
-            res => {
-                console.log(res);
-            };
             this.policiesService.createCreditNote(
                 this.policyData.id,
                 creditNote,

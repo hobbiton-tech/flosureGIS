@@ -36,13 +36,13 @@
                             <nz-form-item>
                                 <nz-form-label nzSpan="7">Premium</nz-form-label>
                                 <nz-form-control nzSpan="17">
-                                    <input nz-input formControlName="netPremium" />
+                                    <input nz-input formControlName="netPremium" [disabled]="!this.isEditmode" />
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
                                 <nz-form-label nzSpan="7">Quarter</nz-form-label>
                                 <nz-form-control nzSpan="17">
-                                    <input nz-input formControlName="quarter" />
+                                    <input nz-input formControlName="quarter" [disabled]="!this.isEditmode" />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -50,13 +50,15 @@
                             <nz-form-item>
                                 <nz-form-label nzSpan="7">Start Date</nz-form-label>
                                 <nz-form-control nzSpan="17">
-                                    <nz-date-picker nzFormat="dd-MM-yyyy" formControlName="startDate"></nz-date-picker>
+                                    <nz-date-picker nzFormat="dd-MM-yyyy" formControlName="startDate"
+                                        [nzDisabled]="!this.isEditmode"></nz-date-picker>
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
                                 <nz-form-label nzSpan="7">End Date</nz-form-label>
                                 <nz-form-control nzSpan="17">
-                                    <nz-date-picker nzFormat="dd-MM-yyyy" formControlName="endDate">
+                                    <nz-date-picker nzFormat="dd-MM-yyyy" formControlName="endDate"
+                                        [nzDisabled]="!this.isEditmode">
                                     </nz-date-picker>
                                 </nz-form-control>
                             </nz-form-item>
@@ -64,21 +66,23 @@
                             <nz-form-item>
                                 <nz-form-label nzSpan="7">Date Of Issue</nz-form-label>
                                 <nz-form-control nzSpan="17">
-                                    <nz-date-picker nzFormat="dd-MM-yyyy" formControlName="dateOfIssue">
+                                    <nz-date-picker nzFormat="dd-MM-yyyy" formControlName="dateOfIssue"
+                                        [nzDisabled]="!this.isEditmode">
                                     </nz-date-picker>
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
                                 <nz-form-label nzSpan="7">Time Of Issue</nz-form-label>
                                 <nz-form-control nzSpan="17">
-                                    <nz-time-picker formControlName="timeOfIssue">
+                                    <nz-time-picker formControlName="timeOfIssue" [nzDisabled]="!this.isEditmode">
                                     </nz-time-picker>
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
                                 <nz-form-label nzSpan="7">Expiry Date</nz-form-label>
                                 <nz-form-control nzSpan="17">
-                                    <nz-date-picker nzFormat="dd-MM-yyyy" formControlName="expiryDate">
+                                    <nz-date-picker nzFormat="dd-MM-yyyy" formControlName="expiryDate"
+                                        [nzDisabled]="!this.isEditmode">
                                     </nz-date-picker>
                                 </nz-form-control>
                             </nz-form-item>
@@ -171,7 +175,8 @@
                             margin-top: 10px;
                             margin-bottom: 10px;
                         ">
-                                <button nz-button nzType="primary" (click)="endorsePolicy()">
+                                <button nz-button nzType="primary" (click)="endorsePolicy()"
+                                    [disabled]="!endorsementForm.valid">
                                     Endorse Policy
                                 </button>
                                 <button nz-button nzType="default" style="margin-left: 15px;">

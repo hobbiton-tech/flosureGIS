@@ -92,7 +92,8 @@
                         </tr>
                         <tr>
                             <td style="width: 40%;"><strong>Insurance Levy : </strong></td>
-                            <td style="width: 60%;">{{policy?.currency == 'ZMW' ? 'ZMW' : 'USD'}} {{''}}</td>
+                            <td style="width: 60%;">{{policy?.currency == 'ZMW' ? 'ZMW' : 'USD'}}
+                                {{policy?.risks[0]?.premiumLevy}}</td>
                         </tr>
                         <tr>
                             <td style="width: 40%;"><strong>Total Premium : </strong></td>

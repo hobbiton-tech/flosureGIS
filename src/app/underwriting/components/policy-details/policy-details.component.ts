@@ -24,7 +24,8 @@ import {
     IPolicyClauses,
     IPolicyWording,
     IPolicyExtension,
-    IExccess
+    IExccess,
+    IExtension
 } from 'src/app/settings/models/underwriting/clause.model';
 import { DebitNote, CoverNote } from '../../documents/models/documents.model';
 import { ClientsService } from 'src/app/clients/services/clients.service';
@@ -42,6 +43,8 @@ import { UsersService } from '../../../users/services/users.service';
 import * as jwt_decode from 'jwt-decode';
 import { Endorsement } from '../../models/endorsement.model';
 import { EndorsementService } from '../../services/endorsements.service';
+import { IExtensions } from 'src/app/quotes/models/extensions.model';
+import _ from 'lodash';
 
 @Component({
     selector: 'app-policy-details',
@@ -63,11 +66,16 @@ export class PolicyDetailsComponent implements OnInit, OnDestroy {
 
     clauses: IPolicyClauses[];
     wordings: IPolicyWording[];
-    extensions: IPolicyExtension[];
+    // extensions: IPolicyExtension[];
+    extensions: IExtensions[] = [];
 
     debitNotes: DebitNote[];
     singleDebitNote: DebitNote;
     latestDebitNote: DebitNote;
+    policyDebitNotes: DebitNote[];
+
+    // policy receipts
+    policyReceipts: IReceiptModel[];
 
     // client details
     client: IIndividualClient & ICorporateClient;
@@ -104,6 +112,9 @@ export class PolicyDetailsComponent implements OnInit, OnDestroy {
     isFireCoverNotePDFVisible = false;
     isAccidentPersonalAccidentPolicySchedulePDFVisible = false;
     isGeneralAccidentPolicySchedulePDFVisible = false;
+    isMarinePolicySchedulePDFVisible = false;
+    isMarineCoverNotePDFVisible = false;
+    isEngineeringPolicySchedulePDFVisible = false;
 
     isNewCertificatePdfVisible = false;
     isThirdPartyCertificatePdfVisible = false;
@@ -217,9 +228,9 @@ export class PolicyDetailsComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.isOkLoading = true;
-        setTimeout(() => {
-            this.isOkLoading = false;
-        }, 3000);
+        // setTimeout(() => {
+        //     this.isOkLoading = false;
+        // }, 3000);
 
         this.route.params.subscribe(id => {
             this.policiesService.getPolicyById(id.id).subscribe(policy => {
@@ -227,6 +238,8 @@ export class PolicyDetailsComponent implements OnInit, OnDestroy {
                 console.log('policy data:=> ', this.policyData);
 
                 this.classHandler.changeSelectedClass(this.policyData.class);
+
+                // this.policyDebitNotes = this.policyData.debitNotes;
 
                 this.policiesService.getCoverNotes().subscribe(res => {
                     console.log('RESULT COVER>>>>', res);
@@ -262,13 +275,21 @@ export class PolicyDetailsComponent implements OnInit, OnDestroy {
                     );
                 });
 
-                this.productClauseService
-                    .getPolicyExtensions()
-                    .subscribe(res => {
-                        this.extensions = res.filter(
-                            x => x.policyId === this.policyData.id
-                        );
+                this.policyData.risks.forEach(risk => {
+                    risk.extensions.forEach(extension => {
+                        this.extensions.push(extension);
                     });
+                    // this.extensions.push(risk.extensions);
+                });
+                // this.extensions = this.policyData.risks[0].extensions
+
+                // this.productClauseService
+                //     .getPolicyExtensions()
+                //     .subscribe(res => {
+                //         this.extensions = res.filter(
+                //             x => x.policyId === this.policyData.id
+                //         );
+                //     });
 
                 this.productClauseService.getPolicyWordings().subscribe(res => {
                     this.wordings = res.filter(
@@ -276,20 +297,33 @@ export class PolicyDetailsComponent implements OnInit, OnDestroy {
                     );
                 });
 
+                this.receiptService.getReciepts().subscribe(receipts => {
+                    this.policyReceipts = _.filter(
+                        receipts.data,
+                        x => x.receipt_status === 'Receipted'
+                    );
+                });
+
                 this.policiesService.getDebitNotes().subscribe(debitNotes => {
                     this.debitNotes = debitNotes;
+
+                    this.policyDebitNotes = debitNotes.filter(
+                        x =>
+                            x.policy.policyNumber ==
+                            this.policyData.policyNumber
+                    );
 
                     this.singleDebitNote = debitNotes.filter(
                         x => x.policy.id === this.policyData.id
                     )[0];
 
-                    this.receiptService.getReciepts().subscribe(receipts => {
-                        this.receipt = receipts.filter(
-                            x =>
-                                x.invoice_number ===
-                                this.singleDebitNote.debitNoteNumber
-                        )[0];
-                    });
+                    // this.receiptService.getReciepts().subscribe(receipts => {
+                    //     this.receipt = receipts.filter(
+                    //         x =>
+                    //             x.invoice_number ===
+                    //             this.singleDebitNote.debitNoteNumber
+                    //     )[0];
+                    // });
                 });
 
                 this.clientsService.getAllClients().subscribe(clients => {
@@ -424,6 +458,7 @@ export class PolicyDetailsComponent implements OnInit, OnDestroy {
                     .setValue(this.policyData.quarter);
 
                 this.risksLoading = false;
+                this.isOkLoading = false;
             });
         });
 
@@ -610,6 +645,10 @@ export class PolicyDetailsComponent implements OnInit, OnDestroy {
             this.isFireCoverNotePDFVisible = true;
         }
 
+        if (localStorage.getItem('class') === 'Marine') {
+            this.isMarineCoverNotePDFVisible = true;
+        }
+
         if (localStorage.getItem('class') === 'Motor') {
             if (this.selectedRisk.insuranceType === 'Comprehensive') {
                 this.cnd = risk.discounts.filter(
@@ -653,6 +692,14 @@ export class PolicyDetailsComponent implements OnInit, OnDestroy {
         }
         if (localStorage.getItem('class') === 'Motor') {
             this.isSchedulePDFVisible = true;
+        }
+
+        if (localStorage.getItem('class') === 'Marine') {
+            this.isMarinePolicySchedulePDFVisible = true;
+        }
+
+        if (localStorage.getItem('class') === 'Engineering') {
+            this.isEngineeringPolicySchedulePDFVisible = true;
         }
 
         if (localStorage.getItem('class') === 'Accident') {
@@ -702,6 +749,28 @@ export class PolicyDetailsComponent implements OnInit, OnDestroy {
             }
         );
     }
+
+    handleDebitNote(debitNote: DebitNote) {
+        console.log('DEBIT NOTE:=> ', debitNote);
+        console.log('POLICY RISK:=> ', this.policyRisk);
+        this.basicPremium = this.sumArray(
+            debitNote.policy.risks,
+            'basicPremium'
+        );
+        this.premiumLevy = this.sumArray(debitNote.policy.risks, 'premiumLevy');
+        this.policyData = debitNote.policy;
+
+        this.isDebitNotePDFVisible = true;
+    }
+
+    closeDebitNotePDF() {
+        this.ngOnInit();
+        this.isDebitNotePDFVisible = false;
+    }
+
+    viewDebitNote(debitNote: DebitNote) {}
+
+    viewReceipt(receipt: IReceiptModel) {}
 
     ngOnDestroy() {
         this.classHandlerSubscription.unsubscribe();

@@ -10,7 +10,7 @@
                                     width: 100%;
                                 " [ngModelOptions]="{
                             standalone: true
-                        }">
+                        }" (nzOpenChange)="loadExtensions()">
                     <div *ngFor="
                                 let option of extensionList
                             ">
