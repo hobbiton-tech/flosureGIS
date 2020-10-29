@@ -20,8 +20,8 @@
                             <nz-form-control nzSpan="17">
                                 <nz-select nzShowSearch nzAllowClear formControlName="client"
                                     nzPlaceHolder="Select or create client">
-                                    <div *ngFor="let client of clients">
-                                        <nz-option [nzValue]="
+<!--                                    <div >-->
+                                        <nz-option *ngFor="let client of clients" [nzValue]="
                                                 client.clientType ===
                                                 'Individual'
                                                     ? client
@@ -34,7 +34,7 @@
                                                       client.lastName + ' ' + '(' + client.idNumber + ')'
                                                     : client.companyName + ' ' + '(' + client.registrationNumber + ')'
                                             "></nz-option>
-                                    </div>
+<!--                                    </div>-->
                                 </nz-select>
                             </nz-form-control>
                         </nz-form-item>

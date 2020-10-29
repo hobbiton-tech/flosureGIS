@@ -155,7 +155,7 @@ export class ExtensionsComponent implements OnInit, OnDestroy {
         if (this.singleProduct) {
             this.productClauseService.getExtensions().subscribe(ext => {
                 this.extensionList = ext.filter(
-                    x => x.productId == this.singleProduct.id
+                    x => x.productId === this.singleProduct.id
                 );
             });
         }
@@ -165,9 +165,10 @@ export class ExtensionsComponent implements OnInit, OnDestroy {
         if (this.singleProduct) {
             this.productClauseService.getExtensions().subscribe(ext => {
                 this.extensionList = ext.filter(
-                    x => x.productId == this.singleProduct.id
+                    x => x.productId === this.singleProduct.id
                 );
             });
+           console.log('AKAK',  this.extensionList);
         }
     }
 
