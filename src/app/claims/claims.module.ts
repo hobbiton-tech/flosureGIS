@@ -32,7 +32,7 @@ import { SubrogationsComponent } from './components/subrogations/subrogations.co
 import { SubrogateInvoiceComponent } from './components/subrogate-invoice/subrogate-invoice.component';
 import {
   NzBadgeModule,
-  NzBreadCrumbModule,
+  NzBreadCrumbModule, NzButtonModule,
   NzCardModule, NzDescriptionsModule, NzDividerModule, NzDrawerModule,
   NzFormModule, NzGridModule, NzIconModule,
   NzInputModule, NzMessageModule,
@@ -160,7 +160,8 @@ const routes: Routes = [
     NzDividerModule,
     NzIconModule,
     NzDrawerModule,
-    NzMessageModule
+    NzMessageModule,
+    NzButtonModule
   ]
 })
 export class ClaimsModule {}
