@@ -382,6 +382,8 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
             this.clients = [...clients[0], ...clients[1]] as Array<
                 IIndividualClient & ICorporateClient
             >;
+
+          console.log(this.clients);
         });
 
         this.agentsService.getAgents().subscribe(agents => {

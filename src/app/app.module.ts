@@ -34,6 +34,7 @@ import {
   NzMessageModule,
   NzSpinModule
 } from 'ng-zorro-antd';
+import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
 
 registerLocaleData(en);
 
@@ -96,6 +97,7 @@ const firebaseConfig = {
       SlackService,
       { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
       { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+      { provide: NZ_I18N, useValue: en_US }
     ],
     bootstrap: [AppComponent]
 })
