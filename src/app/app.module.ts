@@ -6,7 +6,6 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -25,6 +24,16 @@ import { SlackService } from './slack.service';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { JwtInterceptor } from './users/helpers/jwt.interceptor';
 import { ErrorInterceptor } from './users/helpers/error.interceptor';
+import {
+  NzButtonModule,
+  NzFormModule,
+  NzIconModule,
+  NzInputModule,
+  NzLayoutModule,
+  NzMenuModule,
+  NzMessageModule,
+  NzSpinModule
+} from 'ng-zorro-antd';
 
 registerLocaleData(en);
 
@@ -63,20 +72,27 @@ const firebaseConfig = {
 
 @NgModule({
     declarations: [AppComponent, NavigationComponent, LoginComponent],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        NgZorroAntdModule,
-        FormsModule,
-        HttpClientModule,
-        BrowserAnimationsModule,
-        ReactiveFormsModule,
-        AngularFireModule.initializeApp(firebaseConfig),
-        AngularFireDatabaseModule,
-        AngularFireStorageModule,
-        NzListModule
-    ],
-    providers: [{ provide: NZ_I18N, useValue: en_US },
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    ReactiveFormsModule,
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireDatabaseModule,
+    AngularFireStorageModule,
+    NzListModule,
+    NzLayoutModule,
+    NzSpinModule,
+    NzFormModule,
+    NzInputModule,
+    NzButtonModule,
+    NzMessageModule,
+    NzMenuModule,
+    NzIconModule
+  ],
+    providers: [
       SlackService,
       { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
       { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

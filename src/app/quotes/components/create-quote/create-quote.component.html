@@ -115,8 +115,8 @@
                         <nz-form-item>
                             <nz-form-label nzRequired nzSpan="7">Start Date</nz-form-label>
                             <nz-form-control nzSpan="17">
-                                <nz-date-picker formControlName="startDate" [nzDisabledDate]="disabledSubmissionDate"
-                                    min="" nzFormat="dd-MM-yyyy" (ngModelChange)="
+                                <nz-date-picker formControlName="startDate"
+                                                min="" nzFormat="dd-MM-yyyy" (ngModelChange)="
                                         handlePolicyEndDateCalculation()
                                     ">
                                 </nz-date-picker>

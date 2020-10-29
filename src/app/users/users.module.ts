@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UsersComponent } from './users.component';
-import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { UsersRolesComponent } from './components/users-roles/users-roles.component';
@@ -9,6 +8,16 @@ import { UsersPermissionsComponent } from './components/users-permissions/users-
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { UsersBranchComponent } from './components/users-branch/users-branch.component';
 import { AuthGuard } from './helpers/auth.guard';
+import {
+  NzCardModule, NzDescriptionsModule,
+  NzFormModule,
+  NzGridModule,
+  NzInputModule, NzMessageModule,
+  NzModalModule,
+  NzPageHeaderModule,
+  NzSelectModule,
+  NzTableModule
+} from 'ng-zorro-antd';
 
 const routes: Routes = [
     {
@@ -41,10 +50,19 @@ const routes: Routes = [
   declarations: [UsersComponent, UsersRolesComponent, UsersPermissionsComponent, ForgotPasswordComponent, UsersBranchComponent],
   imports: [
     CommonModule,
-    NgZorroAntdModule,
     RouterModule.forChild(routes),
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NzCardModule,
+    NzGridModule,
+    NzInputModule,
+    NzPageHeaderModule,
+    NzTableModule,
+    NzModalModule,
+    NzFormModule,
+    NzSelectModule,
+    NzDescriptionsModule,
+    NzMessageModule
   ]
 })
 export class UsersModule {}

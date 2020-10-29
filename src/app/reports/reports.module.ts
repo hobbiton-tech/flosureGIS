@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
-import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { ClaimsComponent } from './components/claims/claims.component';
 import { PoliciesComponent } from './components/policies/policies.component';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
@@ -9,6 +8,17 @@ import { UnderwritingComponent } from './components/underwriting/underwriting.co
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UsersRolesComponent } from '../users/components/users-roles/users-roles.component';
 import { AuthGuard } from '../users/helpers/auth.guard';
+import {
+  NzBadgeModule,
+  NzButtonModule,
+  NzCardModule, NzDatePickerModule,
+  NzFormModule,
+  NzGridModule,
+  NzInputModule,
+  NzModalModule,
+  NzSelectModule,
+  NzTableModule
+} from 'ng-zorro-antd';
 
 const routes: Routes = [
     {
@@ -30,13 +40,22 @@ const routes: Routes = [
 
 @NgModule({
     declarations: [ClaimsComponent, PoliciesComponent, UnderwritingComponent],
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        FormsModule,
-        NgZorroAntdModule,
-        PdfViewerModule,
-        RouterModule.forChild(routes),
-    ],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    PdfViewerModule,
+    RouterModule.forChild(routes),
+    NzGridModule,
+    NzButtonModule,
+    NzCardModule,
+    NzTableModule,
+    NzFormModule,
+    NzModalModule,
+    NzInputModule,
+    NzSelectModule,
+    NzDatePickerModule,
+    NzBadgeModule
+  ]
 })
 export class ReportsModule {}

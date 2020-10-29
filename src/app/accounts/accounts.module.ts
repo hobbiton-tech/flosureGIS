@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
-import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { ReceiptsGenerationComponent } from './components/receipts-generation/receipts-generation.component';
 import { ViewReceiptsComponent } from './components/view-receipts/view-receipts.component';
 import { PaymentsComponent } from './components/payments/payments.component';
@@ -34,6 +33,17 @@ import { ClientStatementsComponent } from './components/statements/client-statem
 import { AgeAnalysisComponent } from './components/statements/age-analysis/age-analysis.component';
 import { TransactionInvoiceService } from './services/transaction-invoice.service';
 import { SalvageReceiptComponent } from './components/receipts/components/salvage-receipt/salvage-receipt.component';
+import {
+  NzBadgeModule,
+  NzBreadCrumbModule, NzButtonModule,
+  NzCardModule, NzCollapseModule, NzDescriptionsModule, NzDividerModule,
+  NzDropDownModule, NzFormModule,
+  NzGridModule,
+  NzInputModule, NzMessageModule, NzModalModule,
+  NzPageHeaderModule,
+  NzSelectModule, NzSpinModule,
+  NzTableModule, NzTabsModule
+} from 'ng-zorro-antd';
 
 const routes: Routes = [
     {
@@ -158,15 +168,32 @@ const routes: Routes = [
         AgeAnalysisComponent,
         SalvageReceiptComponent,
     ],
-    imports: [
-        CommonModule,
-        NgZorroAntdModule,
-        RouterModule.forChild(routes),
-        PdfViewerModule,
-        FormsModule,
-        ReactiveFormsModule,
-        NgxPrintModule
-    ],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes),
+    PdfViewerModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgxPrintModule,
+    NzPageHeaderModule,
+    NzDropDownModule,
+    NzCardModule,
+    NzGridModule,
+    NzInputModule,
+    NzSelectModule,
+    NzTableModule,
+    NzModalModule,
+    NzFormModule,
+    NzSpinModule,
+    NzDescriptionsModule,
+    NzBreadCrumbModule,
+    NzButtonModule,
+    NzBadgeModule,
+    NzTabsModule,
+    NzCollapseModule,
+    NzDividerModule,
+    NzMessageModule
+  ],
     providers: [
         AccountService,
         PaymentPlanService,

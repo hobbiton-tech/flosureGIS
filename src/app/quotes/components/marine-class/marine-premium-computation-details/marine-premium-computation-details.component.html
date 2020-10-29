@@ -43,10 +43,8 @@
                 <nz-form-label nzRequired nzSpan="10">Start
                     Date</nz-form-label>
                 <nz-form-control nzSpan="10">
-                    <nz-date-picker name="riskStartDate" [(ngModel)]="riskStartDate" [nzDisabled]="isRiskEditMode"
-                        (ngModelChange)="handleDatesCalculation()" [nzDisabledDate]="
-                                disabledSubmissionDate
-                            " nzFormat="dd-MM-yyyy" nzPlaceHolder="Start">
+                    <nz-date-picker name="riskStartDate" [(ngModel)]="riskStartDate"
+                                    (ngModelChange)="handleDatesCalculation()" nzFormat="dd-MM-yyyy" nzPlaceHolder="Start">
                     </nz-date-picker>
                 </nz-form-control>
             </nz-form-item>
@@ -70,7 +68,7 @@
                 </nz-form-label>
                 <nz-form-control nzSpan="10">
                     <nz-date-picker name="riskEndDate" [(ngModel)]="riskEndDate" nzFormat="dd-MM-yyyy"
-                        [nzDisabled]="isRiskEditMode && !isExtensionMode" nzPlaceHolder="End"
+                                    nzPlaceHolder="End"
                         (ngModelChange)="handleDatesCalculation()">
                     </nz-date-picker>
                 </nz-form-control>

@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { QuotesComponent } from './quotes.component';
-import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { CreateQuoteComponent } from './components/create-quote/create-quote.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
@@ -59,6 +58,18 @@ import { EngineeringScheduleDetailsComponent } from './components/engineering-cl
 import { EngineeringItemComponent } from './components/engineering-class/engineering-schedule-details/components/engineering-item/engineering-item.component';
 import { EngineeringDraftQuotationComponent } from './documents/engineering-class/engineering-draft-quotation/engineering-draft-quotation.component';
 import { MarineDraftQuotationComponent } from './documents/marine-class/marine-draft-quotation/marine-draft-quotation.component';
+import {
+  NzBadgeModule,
+  NzBreadCrumbModule, NzButtonModule,
+  NzCardModule, NzCollapseModule, NzDescriptionsModule,
+  NzDividerModule,
+  NzFormModule,
+  NzGridModule,
+  NzInputModule, NzMessageModule,
+  NzModalModule, NzPageHeaderModule,
+  NzSelectModule, NzSpinModule,
+  NzTableModule, NzTagModule, NzUploadModule
+} from 'ng-zorro-antd';
 const routes: Routes = [
     {
         path: 'create-quote',
@@ -142,14 +153,31 @@ const routes: Routes = [
     ],
     imports: [
         CommonModule,
-        NgZorroAntdModule,
         FormsModule,
         ReactiveFormsModule,
         PdfViewerModule,
         HttpClientModule,
         RouterModule.forChild(routes),
         NgxPrintModule,
-        NzDatePickerModule
+        NzDatePickerModule,
+        NzFormModule,
+        NzSelectModule,
+        NzDividerModule,
+        NzGridModule,
+        NzCardModule,
+        NzTableModule,
+        NzModalModule,
+        NzInputModule,
+        NzCollapseModule,
+        NzBreadCrumbModule,
+        NzSpinModule,
+        NzButtonModule,
+        NzUploadModule,
+        NzTagModule,
+        NzPageHeaderModule,
+        NzDescriptionsModule,
+        NzBadgeModule,
+      NzMessageModule
     ],
     exports: [
         QuotesComponent,

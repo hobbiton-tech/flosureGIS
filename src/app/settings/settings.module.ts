@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OrganizationalSetupsComponent } from './components/organizational-setups/organizational-setups.component';
 import { UnderwritingSetupsComponent } from './components/underwriting-setups/underwriting-setups.component';
-import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { CreateAccountTypeComponent } from './components/organizational-setups/organizational-components/create-account-type/create-account-type.component';
 import { CreateAccountComponent } from './components/organizational-setups/organizational-components/create-account/create-account.component';
 import { CreateClientTypeComponent } from './components/organizational-setups/organizational-components/create-client-type/create-client-type.component';
@@ -14,7 +13,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { AccountsComponent } from './components/accounts/accounts.component';
 import { InsuranceCompaniesComponent } from './components/insurance-companies/insurance-companies.component';
-// import { AddInsuranceCompanyComponent } from './components/insurance-companies/components/add-insurance-company/add-insurance-company.component';
 import { RatesComponent } from './components/rates/rates.component';
 import { AddRateComponent } from './components/rates/components/add-rate/add-rate.component';
 import { AgentsComponent } from './components/agents/agents.component';
@@ -51,6 +49,18 @@ import { AddCityComponent } from './components/location-setups/components/add-ci
 import { DepartmentsComponent } from './components/organizational-setups/departments/departments.component';
 import { UsersRolesComponent } from '../users/components/users-roles/users-roles.component';
 import { AuthGuard } from '../users/helpers/auth.guard';
+import {
+  NzAlertModule, NzBadgeModule,
+  NzBreadCrumbModule, NzButtonModule,
+  NzCardModule, NzCollapseModule, NzDescriptionsModule,
+  NzDividerModule,
+  NzDrawerModule,
+  NzFormModule,
+  NzGridModule, NzIconModule, NzInputModule, NzMessageModule, NzModalModule,
+  NzPageHeaderModule,
+  NzSelectModule,
+  NzSpinModule, NzTableModule, NzTabsModule
+} from 'ng-zorro-antd';
 
 const routes: Routes = [
     {
@@ -195,13 +205,32 @@ const routes: Routes = [
         AddCityComponent,
         DepartmentsComponent
     ],
-    imports: [
-        CommonModule,
-        NgZorroAntdModule,
-        FormsModule,
-        ReactiveFormsModule,
-        RouterModule.forChild(routes)
-    ],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule.forChild(routes),
+    NzDrawerModule,
+    NzGridModule,
+    NzFormModule,
+    NzSelectModule,
+    NzDividerModule,
+    NzSpinModule,
+    NzPageHeaderModule,
+    NzCardModule,
+    NzInputModule,
+    NzTableModule,
+    NzModalModule,
+    NzBreadCrumbModule,
+    NzAlertModule,
+    NzButtonModule,
+    NzTabsModule,
+    NzCollapseModule,
+    NzIconModule,
+    NzDescriptionsModule,
+    NzBadgeModule,
+    NzMessageModule
+  ],
     providers: [AgentsService, ClausesService]
 })
 export class SettingsModule {}

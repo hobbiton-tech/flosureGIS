@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
-import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { IntimateClaimComponent } from './components/intimate-claim/intimate-claim.component';
 import { ClaimTransactionsComponent } from './components/claim-transactions/claim-transactions.component';
 import { ClaimantsComponent } from './components/claimants/claimants.component';
@@ -23,7 +22,6 @@ import { LossQuantumModalComponent } from './components/loss-quantum-modal/loss-
 import { CalimsResolverService } from './services/calims-resolver.service';
 import { ClaimApprovalModalComponent } from './components/claim-approval-modal/claim-approval-modal.component';
 import { AddClaimantModalComponent } from './components/add-claimant-modal/add-claimant-modal.component';
-import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { ProcessedClaimsComponent } from './components/processed-claims/processed-claims.component';
 import { UsersRolesComponent } from '../users/components/users-roles/users-roles.component';
 import { AuthGuard } from '../users/helpers/auth.guard';
@@ -32,6 +30,18 @@ import { SalvagesComponent } from './components/salvages/salvages.component';
 import { SalvageInvoiceComponent } from './components/salvage-invoice/salvage-invoice.component';
 import { SubrogationsComponent } from './components/subrogations/subrogations.component';
 import { SubrogateInvoiceComponent } from './components/subrogate-invoice/subrogate-invoice.component';
+import {
+  NzBadgeModule,
+  NzBreadCrumbModule,
+  NzCardModule, NzDescriptionsModule, NzDividerModule, NzDrawerModule,
+  NzFormModule, NzGridModule, NzIconModule,
+  NzInputModule, NzMessageModule,
+  NzModalModule,
+  NzPageHeaderModule,
+  NzSelectModule,
+  NzSpinModule, NzStatisticModule, NzTableModule, NzTagModule,
+  NzUploadModule
+} from 'ng-zorro-antd';
 
 const routes: Routes = [
     {
@@ -126,14 +136,31 @@ const routes: Routes = [
         SubrogateInvoiceComponent
     ],
     providers: [ClaimsService],
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        NgZorroAntdModule,
-        FormsModule,
-        RouterModule.forChild(routes),
-        NzListModule,
-        NzBadgeModule
-    ]
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    RouterModule.forChild(routes),
+    NzListModule,
+    NzModalModule,
+    NzSpinModule,
+    NzFormModule,
+    NzInputModule,
+    NzSelectModule,
+    NzUploadModule,
+    NzPageHeaderModule,
+    NzCardModule,
+    NzTableModule,
+    NzDescriptionsModule,
+    NzTagModule,
+    NzBreadCrumbModule,
+    NzGridModule,
+    NzStatisticModule,
+    NzBadgeModule,
+    NzDividerModule,
+    NzIconModule,
+    NzDrawerModule,
+    NzMessageModule
+  ]
 })
 export class ClaimsModule {}

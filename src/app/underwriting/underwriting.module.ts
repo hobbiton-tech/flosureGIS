@@ -2,7 +2,6 @@ import { PolicyScheduleCombinedDocumentComponent } from './documents/policy-sche
 import { NgModule, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PoliciesComponent } from './components/policies/policies.component';
-import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { Routes, RouterModule } from '@angular/router';
 import { EndorsementsComponent } from './components/endorsements/endorsements.component';
 import { PolicyDetailsComponent } from './components/policy-details/policy-details.component';
@@ -58,6 +57,17 @@ import { PolicyEndorsementDetailsComponent } from './components/policy-endorseme
 import { EngineeringPolicyScheduleComponent } from './documents/Engineering-insurance/engineering-policy-schedule/engineering-policy-schedule.component';
 import { MarinePolicyScheduleComponent } from './documents/Marine-insurance/marine-policy-schedule/marine-policy-schedule.component';
 import { MarineCoverNoteComponent } from './documents/Marine-insurance/marine-cover-note/marine-cover-note.component';
+import {
+  NzBreadCrumbModule, NzButtonModule,
+  NzCardModule, NzDatePickerModule, NzDescriptionsModule,
+  NzDividerModule,
+  NzFormModule,
+  NzGridModule, NzIconModule,
+  NzInputModule, NzMessageModule, NzModalModule,
+  NzPageHeaderModule, NzPopconfirmModule, NzPopoverModule, NzSelectModule,
+  NzSpinModule,
+  NzTableModule, NzTagModule, NzTimePickerModule
+} from 'ng-zorro-antd';
 // tslint:disable-next-line: max-line-length
 
 const routes: Routes = [
@@ -207,16 +217,35 @@ const routes: Routes = [
         MarinePolicyScheduleComponent,
         MarineCoverNoteComponent
     ],
-    imports: [
-        CommonModule,
-        NgZorroAntdModule,
-        FormsModule,
-        ReactiveFormsModule,
-        RouterModule.forChild(routes),
-        PdfViewerModule,
-        NgxPrintModule,
-        QuotesModule
-    ],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule.forChild(routes),
+    PdfViewerModule,
+    NgxPrintModule,
+    QuotesModule,
+    NzSpinModule,
+    NzCardModule,
+    NzFormModule,
+    NzDividerModule,
+    NzInputModule,
+    NzGridModule,
+    NzTableModule,
+    NzPageHeaderModule,
+    NzDescriptionsModule,
+    NzBreadCrumbModule,
+    NzSelectModule,
+    NzModalModule,
+    NzDatePickerModule,
+    NzTagModule,
+    NzTimePickerModule,
+    NzPopconfirmModule,
+    NzButtonModule,
+    NzIconModule,
+    NzPopoverModule,
+    NzMessageModule
+  ],
     providers: [
         PolicyDetailsResolver,
         PoliciesService,
