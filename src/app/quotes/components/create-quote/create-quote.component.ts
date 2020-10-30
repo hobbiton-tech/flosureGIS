@@ -516,12 +516,12 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
             this.vehicles.push(...vehicles);
 
             const vehicle: VehicleDetailsModel = this.vehicles.filter(
-                x => x.risk.id == risk.id
+                x => x.risk.id === risk.id
             )[0];
 
             console.log('VEHICLE:=> ', vehicle);
 
-            if (localStorage.getItem('class') == 'Motor') {
+            if (localStorage.getItem('class') === 'Motor') {
                 this.vehicleDetailsComponent.setVehicleDetails(vehicle);
             }
         });
@@ -530,10 +530,10 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
             this.properties.push(...properties);
 
             const property: PropertyDetailsModel = this.properties.filter(
-                x => x.risk.id == risk.id
+                x => x.risk.id === risk.id
             )[0];
 
-            if (localStorage.getItem('class') == 'Fire') {
+            if (localStorage.getItem('class') === 'Fire') {
                 this.propertyDetailsComponent.setPropertyDetails(property);
             }
         });
@@ -542,12 +542,12 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
             this.accidentProducts.push(...products);
 
             const product: IAccidentRiskDetailsModel = this.accidentProducts.filter(
-                x => x.risk.id == risk.id
+                x => x.risk.id === risk.id
             )[0];
 
             console.log('PRODUCT :=> ', product);
 
-            if (localStorage.getItem('class') == 'Accident') {
+            if (localStorage.getItem('class') === 'Accident') {
                 this.accidentProductDetailsComponent.setAccidentProductDetails(
                     product
                 );
@@ -558,10 +558,10 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
             this.marineProducts.push(...products);
 
             const product: IMarineRiskDetailsModel = this.marineProducts.filter(
-                x => x.risk.id == risk.id
+                x => x.risk.id === risk.id
             )[0];
 
-            if (localStorage.getItem('class') == 'Marine') {
+            if (localStorage.getItem('class') === 'Marine') {
                 this.marineProductDetailsComponent.setMarineProductDetails(
                     product
                 );
@@ -572,10 +572,10 @@ export class CreateQuoteComponent implements OnInit, OnDestroy {
             this.engineeringProducts.push(...products);
 
             const product: IEngineeringRiskDetailsModel = this.engineeringProducts.filter(
-                x => x.risk.id == risk.id
+                x => x.risk.id === risk.id
             )[0];
 
-            if (localStorage.getItem('class') == 'Engineering') {
+            if (localStorage.getItem('class') === 'Engineering') {
                 this.engineeringProductDetailsComponent.setEngineeringProductDetails(
                     product
                 );

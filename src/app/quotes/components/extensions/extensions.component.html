@@ -11,15 +11,15 @@
                                 " [ngModelOptions]="{
                             standalone: true
                         }" (nzOpenChange)="loadExtensions()">
-                    <div *ngFor="
+<!--                    <div >-->
+                        <nz-option *ngFor="
                                 let option of extensionList
-                            ">
-                        <nz-option [nzValue]="
+                            " [nzValue]="
                                     option
                                 " [nzLabel]="
                                     option.heading
                                 "></nz-option>
-                    </div>
+<!--                    </div>-->
                 </nz-select>
             </nz-form-control>
         </nz-form-item>

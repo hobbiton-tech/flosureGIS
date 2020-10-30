@@ -9,9 +9,10 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
 import { UsersBranchComponent } from './components/users-branch/users-branch.component';
 import { AuthGuard } from './helpers/auth.guard';
 import {
+  NzButtonModule,
   NzCardModule, NzDescriptionsModule,
   NzFormModule,
-  NzGridModule,
+  NzGridModule, NzIconModule,
   NzInputModule, NzMessageModule,
   NzModalModule,
   NzPageHeaderModule,
@@ -62,7 +63,9 @@ const routes: Routes = [
     NzFormModule,
     NzSelectModule,
     NzDescriptionsModule,
-    NzMessageModule
+    NzMessageModule,
+    NzButtonModule,
+    NzIconModule
   ]
 })
 export class UsersModule {}
