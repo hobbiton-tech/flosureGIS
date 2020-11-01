@@ -13,11 +13,9 @@ import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { NavigationComponent } from './navigation/navigation.component';
 import { AngularFireModule } from '@angular/fire';
-import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { LoginComponent } from './login/login.component';
-import { AngularFireStorageModule, BUCKET } from '@angular/fire/storage';
-import { environment } from '../environments/environment';
+import { AngularFireStorageModule} from '@angular/fire/storage';
 import 'firebase/storage';
 
 import { SlackService } from './slack.service';
