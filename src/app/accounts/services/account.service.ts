@@ -39,17 +39,17 @@ export class AccountService {
     receiptN: any;
 
     constructor(
-        private firebase: AngularFirestore,
+        // private firebase: AngularFirestore,
         private http: HttpClient,
         private message: NzMessageService,
         // private policeServices: PoliciesService,
         private router: Router
     ) {
-        this.policyCollection = firebase.collection<Policy>('policies');
-
-        this.policies = this.policyCollection.valueChanges();
-
-        this.receiptCollection = firebase.collection<IReceiptModel>('receipts');
+        // this.policyCollection = firebase.collection<Policy>('policies');
+        //
+        // this.policies = this.policyCollection.valueChanges();
+        //
+        // this.receiptCollection = firebase.collection<IReceiptModel>('receipts');
 
         // this.receipts = this.receiptCollection.valueChanges();
     }
@@ -139,17 +139,17 @@ export class AccountService {
         return of(this.receiptN);
     }
 
-    async updatePolicy(policy: Policy): Promise<void> {
-        return this.policyCollection
-            .doc(`${policy.id}`)
-            .update(policy)
-            .then(res => {
-                console.log(res);
-            })
-            .catch(err => {
-                console.log(err);
-            });
-    }
+    // async updatePolicy(policy: Policy): Promise<void> {
+    //     return this.policyCollection
+    //         .doc(`${policy.id}`)
+    //         .update(policy)
+    //         .then(res => {
+    //             console.log(res);
+    //         })
+    //         .catch(err => {
+    //             console.log(err);
+    //         });
+    // }
 
     updateReceipt(receipt: IReceiptModel): Observable<any> {
         return this.http.put(
