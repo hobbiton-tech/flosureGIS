@@ -6,6 +6,13 @@
           "flosure-backend"
         ]
       }
+    },
+    "savenda-insurance": {
+      "hosting": {
+        "flosure-broker-ui": [
+          "savenda-insurance"
+        ]
+      }
     }
   }
 }

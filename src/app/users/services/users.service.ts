@@ -4,7 +4,7 @@ import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { UserModel, UserRolePermissionModel } from '../models/users.model';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { auth } from 'firebase';
+// import { auth } from 'firebase';
 import {
     AngularFirestore,
     AngularFirestoreDocument
