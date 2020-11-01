@@ -121,7 +121,7 @@
                         </li>
                     </ul>
                 </li>
-                <li nz-submenu *ngIf="claim === isPresent?.role_name || admin === isPresent?.role_name" nzTitle="Claims"
+                <li nz-submenu *ngIf="claim === isPresent?.role_name || admin === isPresent?.role_name" nzTitle="Claims" [nzDisabled]="'true'"
                     nzIcon="question-circle">
                     <ul>
                         <li nz-menu-item nzMatchRouter>
