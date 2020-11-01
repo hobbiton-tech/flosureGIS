@@ -15,7 +15,7 @@
     "@angular/common": "~10.2.0",
     "@angular/compiler": "~10.2.0",
     "@angular/core": "~10.2.0",
-    "@angular/fire": "^6.0.3",
+    "@angular/fire": "^6.0.4",
     "@angular/forms": "~10.2.0",
     "@angular/platform-browser": "~10.2.0",
     "@angular/platform-browser-dynamic": "~10.2.0",
@@ -35,7 +35,6 @@
     "exceljs": "1.12.0",
     "faker": "^4.1.0",
     "file-saver": "^2.0.2",
-    "firebase": "^7.8.0",
     "graphql": "^14.6.0",
     "graphql-tag": "^2.10.0",
     "html2canvas": "^1.0.0-rc.5",
@@ -55,7 +54,8 @@
     "tslib": "^2.0.0",
     "uuid": "^7.0.2",
     "xlsx": "^0.15.6",
-    "zone.js": "~0.10.3"
+    "zone.js": "~0.10.3",
+    "firebase": "^7.0.0 || ^8.0.0"
   },
   "devDependencies": {
     "@angular-devkit/architect": "^0.900.0-0 || ^0.900.0",
@@ -67,7 +67,6 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.11.1",
     "codelyzer": "^5.1.2",
-    "firebase-tools": "^7.12.1",
     "fuzzy": "^0.1.3",
     "inquirer": "^6.2.2",
     "inquirer-autocomplete-prompt": "^1.0.1",
@@ -81,6 +80,8 @@
     "protractor": "~7.0.0",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
-    "typescript": "~4.0.5"
+    "typescript": "~4.0.5",
+    "firebase-tools": "^8.0.0",
+    "open": "^7.0.3"
   }
 }
