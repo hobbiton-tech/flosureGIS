@@ -264,7 +264,7 @@ export class QuotesService implements OnDestroy {
     postRtsa(params) {
         console.log('PARAMS>>>>>>>', params);
         this.http
-            .post<any>(`https://rtsa-api.herokuapp.com/rtsa-savenda`, params)
+            .post<any>(`https://rtsa.flosure-api.com/rtsa-golden-lotus`, params)
             .subscribe(
                 async res => {
                     console.log(res);
