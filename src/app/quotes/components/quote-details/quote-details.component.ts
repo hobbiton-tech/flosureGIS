@@ -926,7 +926,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                             this.http
                                 .post<CoverNote>(
-                                    `https://savenda.flosure-api.com/documents/cover-note`,
+                                    `https://api.goldenlotusinsurance.com/documents/cover-note`,
                                     coverNote
                                 )
                                 .subscribe(
@@ -942,7 +942,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                 this.http
                     .get<any>(
-                        `https://number-generation.flosure-api.com/savenda-invoice-number/1/${currentClassObj.classCode}`
+                        `https://number-generation.flosure-api.com/golden-lotus-invoice-number`
                     )
                     .subscribe(async resd => {
                         debitNote.debitNoteNumber = resd.data.invoice_number;
@@ -950,7 +950,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                         this.http
                             .post<DebitNote>(
-                                `https://savenda.flosure-api.com/documents/debit-note/${this.policyId}`,
+                                `https://api.goldenlotusinsurance.com/documents/debit-note/${this.policyId}`,
                                 debitNote
                             )
                             .subscribe(
@@ -1101,7 +1101,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                 this.http
                     .get<any>(
-                        `https://number-generation.flosure-api.com/savenda-invoice-number/1/${currentClassObj.classCode}`
+                        `https://number-generation.flosure-api.com/golden-lotus-invoice-number`
                     )
                     .subscribe(async resj => {
                         debitNote.debitNoteNumber = resj.data.invoice_number;
@@ -1110,7 +1110,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                         this.http
                             .post<DebitNote>(
-                                `https://savenda.flosure-api.com/documents/debit-note/${this.policyId}`,
+                                `https://api.goldenlotusinsurance.com/documents/debit-note/${this.policyId}`,
                                 debitNote
                             )
                             .subscribe(

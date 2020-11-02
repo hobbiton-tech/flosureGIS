@@ -13,7 +13,7 @@ import {
 import { Observable, combineLatest } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd';
 
-const BASE_URL = 'https://savenda.flosure-api.com';
+const BASE_URL = 'https://api.goldenlotusinsurance.com';
 @Injectable({
     providedIn: 'root',
 })

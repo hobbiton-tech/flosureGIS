@@ -386,13 +386,13 @@ export class SalesRepresentativeClientComponent implements OnInit {
 
 
             this.http.get<any>(
-            `https://number-generation.flosure-api.com/savenda-receipt-number/1`
+            `https://number-generation.flosure-api.com/golden-lotus-receipt-number`
           )
             .subscribe(async (res) => {
               receipt.receipt_number = res.data.receipt_number;
               console.log(res.data.receipt_number);
 
-              this.http.post('https://payment-api.savenda-flosure.com/receipt', receipt).subscribe((resN: any) => {
+              this.http.post('https://pay-api.goldenlotusinsurance.com/receipt', receipt).subscribe((resN: any) => {
                   this.message.success('Receipt Successfully created');
                   console.log('RECEIPT NUMBER<><><><>', resN);
 

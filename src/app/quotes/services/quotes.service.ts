@@ -21,9 +21,9 @@ import { IMarineRiskDetailsModel } from '../models/marine-class/marine-risk-deta
 import { IEngineeringRiskDetailsModel } from '../models/engineering-class/engineering-risk-details.model';
 
 // const BASE_URL = 'http://104.248.247.78:3000';
-// const BASE_URL = 'https://savenda.flosure-api.com'
-// const BASE_URL = 'https://savenda.flosure-api.com';
-const BASE_URL = 'https://savenda.flosure-api.com';
+// const BASE_URL = 'https://api.goldenlotusinsurance.com'
+// const BASE_URL = 'https://api.goldenlotusinsurance.com';
+const BASE_URL = 'https://api.goldenlotusinsurance.com';
 
 export interface IQuoteDocument {
     id: string;
@@ -166,7 +166,7 @@ export class QuotesService implements OnDestroy {
         };
         this.http
             .get<any>(
-                `https://number-generation.flosure-api.com/savenda-quote-number/1/${currentClassObj.classCode}`
+                `https://number-generation.flosure-api.com/golden-lotus-quote-number`
             )
             .subscribe(
                 async res => {

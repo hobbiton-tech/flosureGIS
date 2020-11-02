@@ -16,7 +16,7 @@ import { IRequisitionModel } from '../components/models/requisition.model';
 import { PoliciesService } from 'src/app/underwriting/services/policies.service';
 import { Router } from '@angular/router';
 
-const BASE_URL = 'https://savenda.flosure-api.com';
+const BASE_URL = 'https://api.goldenlotusinsurance.com';
 
 interface IReceiptNumberResult {
     receiptNumber: string;
@@ -105,7 +105,7 @@ export class AccountService {
 
         this.http
             .get<any>(
-                `https://number-generation.flosure-api.com/savenda-receipt-number/1`
+                `https://number-generation.flosure-api.com/golden-lotus-receipt-number`
             )
             .subscribe(async res => {
                 receipt.receipt_number = res.data.receipt_number;
@@ -115,7 +115,7 @@ export class AccountService {
 
                 this.http
                     .post(
-                        'https://payment-api.savenda-flosure.com/receipt',
+                        'https://pay-api.goldenlotusinsurance.com/receipt',
                         receipt
                     )
                     .subscribe(
@@ -153,20 +153,20 @@ export class AccountService {
 
     updateReceipt(receipt: IReceiptModel): Observable<any> {
         return this.http.put(
-            `https://payment-api.savenda-flosure.com/receipt/${receipt.ID}`,
+            `https://pay-api.goldenlotusinsurance.com/receipt/${receipt.ID}`,
             receipt
         );
     }
 
     getReciepts(): Observable<any> {
         return this.http.get<any>(
-            'https://payment-api.savenda-flosure.com/receipt'
+            'https://pay-api.goldenlotusinsurance.com/receipt'
         );
     }
 
     getReciept(id): Observable<any> {
         return this.http.get<any>(
-            `https://payment-api.savenda-flosure.com/receipt/${id}`
+            `https://pay-api.goldenlotusinsurance.com/receipt/${id}`
         );
     }
 
@@ -245,7 +245,7 @@ export class AccountService {
 
     generateReqNumber() {
         return this.http.get(
-            'https://number-generation.flosure-api.com/savenda-requisition-number'
+            'https://number-generation.flosure-api.com/golden-lotus-receipt-number'
         );
     }
 }
