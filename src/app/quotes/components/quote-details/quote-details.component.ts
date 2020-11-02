@@ -1030,10 +1030,14 @@ export class QuoteDetailsComponent implements OnInit {
                             dateFrom: risk.riskStartDate,
                             dateTo: risk.riskEndDate,
                             insurancePolicyNo: policy.policyNumber,
-                            chassisNumber: risk.vehicle.chassisNumber
+                            chassisNumber: risk.vehicle.chassisNumber,
+                          insuranceCompany: 'Savenda General Insurance',
+                          insuranceCompanyId: 0,
+                          quarter: Number(risk.expiryQuarter.split('/')[0])
+
                         };
 
-                        // this.quotesService.postRtsa(params);
+                        this.quotesService.postRtsa(params);
                     } else if (risk.insuranceType === 'Comprehensive') {
                         const params = {
                             insuranceType: 2,
@@ -1042,13 +1046,16 @@ export class QuoteDetailsComponent implements OnInit {
                                 /\s/g,
                                 ''
                             ),
-                            dateFrom: risk.riskStartDate,
-                            dateTo: risk.riskEndDate,
-                            insurancePolicyNo: policy.policyNumber,
-                            chassisNumber: risk.vehicle.chassisNumber
+                          dateFrom: risk.riskStartDate,
+                          dateTo: risk.riskEndDate,
+                          insurancePolicyNo: policy.policyNumber,
+                          chassisNumber: risk.vehicle.chassisNumber,
+                          insuranceCompany: 'Savenda General Insurance',
+                          insuranceCompanyId: 0,
+                          quarter: Number(risk.expiryQuarter.split('/')[0])
                         };
 
-                        // this.quotesService.postRtsa(params);
+                        this.quotesService.postRtsa(params);
                     }
                 }
             });
@@ -1208,7 +1215,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                         console.log('PARAMS>>>>>>', params);
 
-                        // this.quotesService.postRtsa(params);
+                        this.quotesService.postRtsa(params);
                     } else if (risk.insuranceType === 'Comprehensive') {
                         const params = {
                             insuranceType: 2,
@@ -1219,12 +1226,15 @@ export class QuoteDetailsComponent implements OnInit {
                             ),
                             dateFrom: risk.riskStartDate,
                             dateTo: risk.riskEndDate,
-                            insurancePolicyNo: policy.policyNumber,
-                            chassisNumber: risk.vehicle.chassisNumber
+                          insurancePolicyNo: policy.policyNumber,
+                          chassisNumber: risk.vehicle.chassisNumber,
+                          insuranceCompany: 'Savenda General Insurance',
+                          insuranceCompanyId: 0,
+                          quarter: Number(risk.expiryQuarter.split('/')[0])
                         };
                         console.log('PARAMS>>>>>>', params);
 
-                        // this.quotesService.postRtsa(params);
+                        this.quotesService.postRtsa(params);
 
                         console.log(
                             'Risk Type>>>>',
