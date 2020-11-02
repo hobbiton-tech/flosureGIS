@@ -57,12 +57,13 @@
                                                     "
                                                     nzAllowClear
                                                 >
-                                                    <div
-                                                        *ngFor="
+<!--                                                    <div-->
+<!--                                                        -->
+<!--                                                    >-->
+                                                        <nz-option
+                                                          *ngFor="
                                                             let client of clients
                                                         "
-                                                    >
-                                                        <nz-option
                                                             [nzValue]="
                                                                 client.clientType ===
                                                                 'Individual'
@@ -80,7 +81,7 @@
                                                                     : client.companyName
                                                             "
                                                         ></nz-option>
-                                                    </div>
+<!--                                                    </div>-->
                                                 </nz-select>
                                             </nz-form-control>
                                         </nz-form-item>

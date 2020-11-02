@@ -36,7 +36,7 @@ import { SalvageReceiptComponent } from './components/receipts/components/salvag
 import {
     NzBadgeModule,
     NzBreadCrumbModule, NzButtonModule,
-    NzCardModule, NzCollapseModule, NzDescriptionsModule, NzDividerModule,
+    NzCardModule, NzCollapseModule, NzDatePickerModule, NzDescriptionsModule, NzDividerModule,
     NzDropDownModule, NzFormModule,
     NzGridModule,
     NzInputModule, NzMessageModule, NzModalModule,
@@ -193,7 +193,8 @@ const routes: Routes = [
         NzCollapseModule,
         NzDividerModule,
         NzMessageModule,
-        NzPopconfirmModule
+        NzPopconfirmModule,
+        NzDatePickerModule
     ],
     providers: [
         AccountService,
