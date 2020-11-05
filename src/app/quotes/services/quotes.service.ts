@@ -251,7 +251,7 @@ export class QuotesService implements OnDestroy {
             });
         }
 
-        if (localStorage.getItem('class') == 'Engineering') {
+        if (localStorage.getItem('class') === 'Engineering') {
             engineeringProducts.forEach(product => {
                 this.addEngineeringProduct(
                     product.risk.id,
