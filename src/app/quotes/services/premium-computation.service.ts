@@ -416,7 +416,7 @@ export class PremiumComputationService implements OnDestroy {
         let returnedBasicPremium =
             (this.numberOfDays.value / 365) *
             (Number(this.premiumRate.value) / 100) *
-            Number(this.sumInsured.value);
+            Number(this.sumInsured.value) + Number(this.basicPremiumAmount.value);
 
         this.basicPremium.next(
             returnedBasicPremium + this.extendedBasicPremium
@@ -454,7 +454,7 @@ export class PremiumComputationService implements OnDestroy {
                 let returnedBasicPremium =
                     (this.numberOfDays.value / 365) *
                     (Number(this.premiumRate.value) / 100) *
-                    Number(this.sumInsured.value);
+                    Number(this.sumInsured.value) Number(this.basicPremiumAmount.value);
 
                 this.basicPremium.next(
                     returnedBasicPremium + this.extendedBasicPremium
