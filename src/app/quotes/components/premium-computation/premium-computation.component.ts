@@ -67,7 +67,7 @@ export class PremiumComputationComponent implements OnInit, OnDestroy {
     handleBasicPremiumCalculation(): void {}
 
     changeBasicPremiumAmount() {
-        this.premiumComputationService.changeBasicPremium(
+        this.premiumComputationService.changeBasicPremiumAmount(
             this.basicPremiumAmount
         );
     }
