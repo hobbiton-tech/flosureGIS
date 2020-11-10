@@ -87,6 +87,9 @@ export class PremiumComputationService implements OnDestroy {
 
     // vehicle detials reset
     resetVehicleDetails = new BehaviorSubject<boolean>(false);
+  
+  //selected basic premium input type
+  selectedBasicPremiumInputType = new BahaviorSubject<string>(null);
 
     // values to return
     endDateToReturn: Date;
@@ -178,6 +181,7 @@ export class PremiumComputationService implements OnDestroy {
     netPremiumChanged$ = this.netPremium.asObservable();
     selectedInsuranceTypeChanged$ = this.selectedInsuranceType.asObservable();
     selectedProductTypeChanged$ = this.selectedProductType.asObservable();
+    selectedBasicPremiumInputTypeChanged$ = this.selectedBasicPremiumInputType.asObservable();
 
     riskEditModeChanged$ = this.isRiskEditMode.asObservable();
 
@@ -261,6 +265,10 @@ export class PremiumComputationService implements OnDestroy {
     changeSelectedInsuranceType(value: string) {
         console.log('CURRENT INSURANCE TYPE');
         this.selectedInsuranceType.next(value);
+    }
+  
+    changeSelectedBasicPremiunInputType(value: string) {
+      this.selectedBasicPremiumInputType.next(value);
     }
 
     changeSelectedProductType(value: string) {
@@ -523,6 +531,9 @@ export class PremiumComputationService implements OnDestroy {
 
     // handle overall computations(basic premium + extension + limits premium - discounts + levy) add return net premium
     computeTotals() {
+        let netPremium;
+        let levyAmount;
+      
         let extensionsSum = this.sumArray(this.extensions, 'amount');
         let discountsSum = this.sumArray(this.discounts, 'amount');
 
@@ -538,6 +549,17 @@ export class PremiumComputationService implements OnDestroy {
         let levyAmount = premiumWithoutLevy * (this.levyRate / 100);
 
         let netPremiumAmount = premiumWithoutLevy + levyAmount;
+      
+        if (this.selectedBaiscPremiumInputType == 'rate') {
+          levyAmount = premiumWithoutLevy + levyAmount;
+          
+          netPremium = premiumWithoutLevy + levyAmount;
+        }
+      
+        if (this.selectedBaiscPremiumInputType == 'rate') {
+          levyAmount = 0;
+          netPremium = premiumWithoutLevy;
+        }
 
         this.extensionsTotal.next(extensionsSum);
         this.discountsTotal.next(discountsSum);
