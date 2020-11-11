@@ -556,7 +556,7 @@ export class PremiumComputationService implements OnDestroy {
           netPremium = premiumWithoutLevy + levyAmount;
         }
       
-        if (this.selectedBaiscPremiumInputType == 'rate') {
+        if (this.selectedBaiscPremiumInputType == 'amount') {
           levyAmount = 0;
           netPremium = premiumWithoutLevy;
         }
