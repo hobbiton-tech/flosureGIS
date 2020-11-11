@@ -87,7 +87,7 @@ export class PremiumComputationService implements OnDestroy {
 
     // vehicle detials reset
     resetVehicleDetails = new BehaviorSubject<boolean>(false);
-  
+
   //selected basic premium input type
   selectedBasicPremiumInputType = new BehaviorSubject<string>(null);
 
@@ -266,7 +266,7 @@ export class PremiumComputationService implements OnDestroy {
         console.log('CURRENT INSURANCE TYPE');
         this.selectedInsuranceType.next(value);
     }
-  
+
     changeSelectedBasicPremiunInputType(value: string) {
       this.selectedBasicPremiumInputType.next(value);
     }
@@ -533,7 +533,7 @@ export class PremiumComputationService implements OnDestroy {
     computeTotals() {
         let netPremium;
         let levyAmount;
-      
+
         let extensionsSum = this.sumArray(this.extensions, 'amount');
         let discountsSum = this.sumArray(this.discounts, 'amount');
 
@@ -545,14 +545,14 @@ export class PremiumComputationService implements OnDestroy {
             this.deathAndInjuryPerEventPremium.value +
             this.propertyDamagePremium.value +
             this.combinedLimitsPremium.value;
-      
-        if (this.selectedBasicPremiumInputType == 'rate') {
+
+        if (this.selectedBasicPremiumInputType.value == 'rate') {
           levyAmount = premiumWithoutLevy + levyAmount;
-          
+
           netPremium = premiumWithoutLevy + levyAmount;
         }
-      
-        if (this.selectedBasicPremiumInputType == 'amount') {
+
+        if (this.selectedBasicPremiumInputType.value == 'amount') {
           levyAmount = 0;
           netPremium = premiumWithoutLevy;
         }
@@ -560,7 +560,7 @@ export class PremiumComputationService implements OnDestroy {
         this.extensionsTotal.next(extensionsSum);
         this.discountsTotal.next(discountsSum);
         this.premiumLevy.next(levyAmount);
-        this.netPremium.next(netPremiumAmount);
+        this.netPremium.next(netPremium);
     }
 
     // risk end date calculation
