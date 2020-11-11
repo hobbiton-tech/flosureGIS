@@ -89,7 +89,7 @@ export class PremiumComputationService implements OnDestroy {
     resetVehicleDetails = new BehaviorSubject<boolean>(false);
   
   //selected basic premium input type
-  selectedBasicPremiumInputType = new BahaviorSubject<string>(null);
+  selectedBasicPremiumInputType = new BehaviorSubject<string>(null);
 
     // values to return
     endDateToReturn: Date;
@@ -545,18 +545,14 @@ export class PremiumComputationService implements OnDestroy {
             this.deathAndInjuryPerEventPremium.value +
             this.propertyDamagePremium.value +
             this.combinedLimitsPremium.value;
-
-        let levyAmount = premiumWithoutLevy * (this.levyRate / 100);
-
-        let netPremiumAmount = premiumWithoutLevy + levyAmount;
       
-        if (this.selectedBaiscPremiumInputType == 'rate') {
+        if (this.selectedBasicPremiumInputType == 'rate') {
           levyAmount = premiumWithoutLevy + levyAmount;
           
           netPremium = premiumWithoutLevy + levyAmount;
         }
       
-        if (this.selectedBaiscPremiumInputType == 'amount') {
+        if (this.selectedBasicPremiumInputType == 'amount') {
           levyAmount = 0;
           netPremium = premiumWithoutLevy;
         }
