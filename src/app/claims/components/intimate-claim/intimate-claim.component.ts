@@ -362,7 +362,7 @@ export class IntimateClaimComponent implements OnInit {
           subrogationState = 'NA';
         }
 
-      console.log('Claim Dtails>>>>', this.intimateClaimForm.value);
+        console.log('Claim Dtails>>>>', this.intimateClaimForm.value);
 
         // const InsuredClaimant: IClaimant = {
         //     firstName:
@@ -395,7 +395,13 @@ export class IntimateClaimComponent implements OnInit {
           subrogation: subrogationState,
           claimType: 'Own Damage'
         };
-      // thirdPartyDetails: this.intimateClaimForm.get('thirdPartyDetails').value,
+      //  8: this.intimateClaimForm.get('thirdPartyDetails').value,
+
+        if (this.intimateClaimForm.controls.thirdPartyFault.value) {
+          console.log('Third Party');
+        } else {
+          console.log('Not Third Party');
+        }
 
 
       // if(this.intimateClaimForm.controls.claimant.value) {
@@ -420,34 +426,19 @@ export class IntimateClaimComponent implements OnInit {
       //     }
       //   );
       // } else {
-        this.claimService.createClaim(claim).subscribe(
-            res => {
-              console.log(res);
-              // this.msg.success('Claim Intimated');
-              // this.intimatingClaimIsLoading = false;
-              // this.route.navigateByUrl('/flosure/claims/claim-transactions');
-              claim.claimType = 'Third Party';
-              claim.thirdPartyDetails = this.thirdPartyDetails;
-              this.claimService.createClaim(claim).subscribe(
-                resClaim => {
-                  console.log('ssddssd', resClaim);
-                  this.msg.success('Claim Intimated');
-                  this.intimatingClaimIsLoading = false;
-                  this.route.navigateByUrl('/flosure/claims/claim-transactions');
-                },
-                err => {
-                  console.log(err);
-                  this.msg.error('Failed to intimate claim');
-                  this.intimatingClaimIsLoading = false;
-                }
-              );
-            },
-            err => {
-                console.log(err);
-                this.msg.error('Failed to intimate claim', err);
-                this.intimatingClaimIsLoading = false;
-            }
-        );
+      //   this.claimService.createClaim(claim).subscribe(
+      //           resClaim => {
+      //             console.log('ssddssd', resClaim);
+      //             this.msg.success('Claim Intimated');
+      //             this.intimatingClaimIsLoading = false;
+      //             this.route.navigateByUrl('/flosure/claims/claim-transactions');
+      //           },
+      //           err => {
+      //             console.log(err);
+      //             this.msg.error('Failed to intimate claim');
+      //             this.intimatingClaimIsLoading = false;
+      //           }
+      //         );
       // }
 
 

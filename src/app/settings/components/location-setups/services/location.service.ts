@@ -4,7 +4,7 @@ import { IProvince } from '../models/province.model';
 import { ICity } from '../models/city.model';
 import { Observable } from 'rxjs';
 
-const BASE_URL = 'https://savenda.flosure-api.com';
+const BASE_URL = 'http://localhost:3001';
 
 @Injectable({
     providedIn: 'root'

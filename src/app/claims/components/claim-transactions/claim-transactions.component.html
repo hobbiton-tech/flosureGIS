@@ -60,7 +60,7 @@
             <td [nzAlign]="columnAlignment">
               {{claim.client.clientType == 'Individual' ? (claim.client.firstName + ' ' + claim.client.lastName) : claim.client.companyName}}
             </td>
-            <td [nzAlign]="columnAlignment">{{claim.thirdPartyDetails.firstName + ' ' + claim.thirdPartyDetails.lastName}}
+            <td [nzAlign]="columnAlignment">{{claim?.thirdPartyDetails?.firstName + ' ' + claim?.thirdPartyDetails?.lastName}}
             </td>
             <td [nzAlign]="columnAlignment">{{claim.claimType}}</td>
             <td [nzAlign]="columnAlignment">{{claim.policy.policyNumber}}</td>

@@ -135,14 +135,14 @@
                                     <nz-form-control nzSpan="16">
                                         <nz-select nzPlaceHolder="Select risk" formControlName="risk" nzShowSearch
                                             (ngModelChange)="handleRiskChange()">
-                                            <div *ngIf="currentClass?.className?.toLocaleLowerCase() == 'motor'">
+                                            <ng-container *ngIf="currentClass?.className?.toLocaleLowerCase() == 'motor'">
                                                 <nz-option *ngFor="let risk of displayRisksList" [nzValue]="risk"
                                                     [nzLabel]="risk.vehicle.regNumber"></nz-option>
-                                            </div>
-                                            <div *ngIf="currentClass?.className?.toLocaleLowerCase() == 'fire'">
+                                            </ng-container>
+                                            <ng-container *ngIf="currentClass?.className?.toLocaleLowerCase() == 'fire'">
                                                 <nz-option *ngFor="let risk of displayRisksList" [nzValue]="risk"
                                                     [nzLabel]="risk.property.propertyId"></nz-option>
-                                            </div>
+                                            </ng-container>
                                         </nz-select>
                                     </nz-form-control>
                                 </nz-form-item>
@@ -167,8 +167,9 @@
                                 <nz-form-item>
                                     <nz-form-label nzRequired nzSpan="7">Loss Date</nz-form-label>
                                     <nz-form-control nzSpan="16" nzHasFeedback  [nzErrorTip]="lossDateErrorTpl">
-                                        <nz-date-picker formControlName="lossDate" nzFormat="dd-MM-yyyy">
-                                        </nz-date-picker>
+<!--                                        <nz-date-picker  nzFormat="dd-MM-yyyy">-->
+<!--                                        </nz-date-picker>-->
+                                      <nz-date-picker formControlName="lossDate"></nz-date-picker>
                                       <ng-template #lossDateErrorTpl let-control>
                                         <ng-container *ngIf="control.hasError('required')">
                                           Please input your Loss Date!
