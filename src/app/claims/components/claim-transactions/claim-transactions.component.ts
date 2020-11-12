@@ -47,6 +47,12 @@ export class ClaimTransactionsComponent implements OnInit {
         this.route.navigateByUrl('/flosure/claims/claim-details/' + claim.id);
     }
 
+  viewDamageType(claim: Claim): void {
+    this.claimsProcessingService.changeClaim(claim);
+
+    this.route.navigateByUrl('/flosure/claims/claim-damage-type/' + claim.claimNumber);
+  }
+
     async addClaim(claim: Claim): Promise<void> {}
 
     ngOnInit(): void {
@@ -69,9 +75,9 @@ export class ClaimTransactionsComponent implements OnInit {
         });
 
         this.claimsService.getClaims().subscribe(claims => {
-            this.claimsCount = claims.length;
+            this.claimsCount = claims.filter((x) => x.claimType === 'Own Damage').length;
             this.claimsLoading = false;
-            this.claimsList = claims;
+            this.claimsList = claims.filter((x) => x.claimType === 'Own Damage');
             console.log(claims);
 
             this.displayClaimsList = this.claimsList.filter(

@@ -8,7 +8,7 @@
             </div>
 
             <div style="margin-top: 10px;">
-                <nz-card>
+                <nz-card nzTitle="Own Damage">
                     <!-- <nz-divider nzOrientation="left"></nz-divider> -->
                     <div style="margin-bottom: 10px; width: 20%;">
                         <nz-input-group [nzSuffix]="suffixIconSearch">
@@ -27,8 +27,6 @@
                             <tr>
                                 <th [nzAlign]="columnAlignment">Claim Number</th>
                                 <th [nzAlign]="columnAlignment">Client</th>
-                                <th [nzAlign]="columnAlignment">Claimant</th>
-                                <th [nzAlign]="columnAlignment">Claimant Type</th>
                                 <th [nzAlign]="columnAlignment">Policy Number</th>
                                 <th [nzAlign]="columnAlignment">Loss Date</th>
                                 <th [nzAlign]="columnAlignment">Notification Date</th>
@@ -42,10 +40,6 @@
                                 <td [nzAlign]="columnAlignment">
                                     {{claim.client ? (claim.client.clientType == 'Individual' ? (claim.client.firstName + ' ' + claim.client.lastName) : claim.client.companyName): ''}}
                                 </td>
-                                <td [nzAlign]="columnAlignment">
-                                    {{claim.claimant ?  (claim.claimant.firstName + ' ' + claim.claimant.lastName) : ''}}
-                                </td>
-                                <td [nzAlign]="columnAlignment">{{claim.claimant ? (claim.claimant.type) : ''}}</td>
                                 <td [nzAlign]="columnAlignment">{{claim.policy? (claim.policy.policyNumber) : ''}}</td>
                                 <td [nzAlign]="columnAlignment">{{claim.lossDate | date}}</td>
                                 <td [nzAlign]="columnAlignment">{{claim.notificationDate | date}}</td>
@@ -74,6 +68,68 @@
                     </nz-table>
                 </nz-card>
             </div>
+
+          <div style="margin-top: 10px;">
+            <nz-card nzTitle="Third Party">
+              <!-- <nz-divider nzOrientation="left"></nz-divider> -->
+              <div style="margin-bottom: 10px; width: 20%;">
+                <nz-input-group [nzSuffix]="suffixIconSearch">
+                  <input type="text" nz-input placeholder="Search by claim number, client"
+                         [(ngModel)]="searchApprovedThirdPartyClaimsString"
+                         (ngModelChange)="searchApprovedThirdPartyClaims($event)" />
+                </nz-input-group>
+                <ng-template #suffixIconSearch>
+                  <i nz-icon nzType="search"></i>
+                </ng-template>
+              </div>
+
+              <nz-table #processedThirdPartyClaimsTable [nzData]="displayThirdPartyProcessedClaimsList" [nzSize]="'small'"
+                        [nzBordered]="true">
+                <thead>
+                <tr>
+                  <th [nzAlign]="columnAlignment">Claim Number</th>
+                  <th [nzAlign]="columnAlignment">Client</th>
+                  <th [nzAlign]="columnAlignment">Policy Number</th>
+                  <th [nzAlign]="columnAlignment">Loss Date</th>
+                  <th [nzAlign]="columnAlignment">Notification Date</th>
+                  <th [nzAlign]="columnAlignment">Status</th>
+                  <th [nzAlign]="columnAlignment" *ngIf="approveClaimPem === isPresent?.name || admin === isPresent?.name" >Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let thirdPartyClaim of displayThirdPartyProcessedClaimsList">
+                  <td [nzAlign]="columnAlignment">{{thirdPartyClaim.claimNumber}}</td>
+                  <td [nzAlign]="columnAlignment">
+                    {{thirdPartyClaim.thirdPartyDetails.firstName + ' ' + thirdPartyClaim.thirdPartyDetails.lastName}}
+                  </td>
+                  <td [nzAlign]="columnAlignment">{{thirdPartyClaim.policy? (thirdPartyClaim.policy.policyNumber) : ''}}</td>
+                  <td [nzAlign]="columnAlignment">{{thirdPartyClaim.lossDate | date}}</td>
+                  <td [nzAlign]="columnAlignment">{{thirdPartyClaim.notificationDate | date}}</td>
+                  <td [nzAlign]="columnAlignment">
+                    <div [ngSwitch]="thirdPartyClaim.claimStatus">
+                      <nz-badge nzColor='yellow' *ngSwitchCase="'Pending'" nzText="Pending">
+                      </nz-badge>
+                      <nz-badge nzColor='green' *ngSwitchCase="'Resolved'" nzText="Resolved">
+                      </nz-badge>
+                      <nz-badge nzColor='red' *ngSwitchCase="'Cancelled'" nzText="Cancelled">
+                      </nz-badge>
+                      <nz-badge nzColor='blue' *ngSwitchCase="'Processed'" nzText="Processed">
+                      </nz-badge>
+                      <nz-badge nzColor='purple' *ngSwitchCase="'Approved'" nzText="Approved">
+                      </nz-badge>
+                    </div>
+                  </td>
+                  <td [nzAlign]="columnAlignment" *ngIf="approveClaimPem === isPresent?.name || admin === isPresent?.name">
+                    <button  nz-button nzType="primary" style="margin-left: 2px;" nzSize="small"
+                             *ngIf="thirdPartyClaim.claimStatus == 'Processed'" (click)="openClaimApproval(thirdPartyClaim)">
+                      Claim Approval
+                    </button>
+                  </td>
+                </tr>
+                </tbody>
+              </nz-table>
+            </nz-card>
+          </div>
         </div>
 
         <app-loss-quantum-modal [isLossQuantumModalVisible]="isLossQuantumModalVisible"
@@ -83,7 +139,7 @@
 
         <app-claim-approval-modal [isClaimApprovalModalVisible]="isClaimApprovalModalVisible"
             (closeClaimApprovalModalEmitter)="isClaimApprovalModalVisible=false"
-            (closeClaimApprovalModalEmitter)="claimsTableUpdate.next(true)"
+            (closeClaimApprovalModalEmitter)="refresh()"
             [isClaimFullyDocumented]="isClaimFullyDocumented"
             [isClaimLossDateUnderPolicyPeriod]="isClaimLossDateUnderPolicyPeriod"
             [isClaimPolicyPremiumFullyPaid]="isClaimPolicyPremiumFullyPaid"

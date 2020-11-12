@@ -110,11 +110,11 @@
                                     <nz-form-item>
                                         <nz-form-label nzSpan="7" nzRequired>Third Party Details</nz-form-label>
                                         <nz-form-control nzSpan="16">
-                                            <nz-select formControlName="thirdPartyDetails" nzShowSearch
+                                            <nz-select [(ngModel)]="thirdPartyDetails" [ngModelOptions]="{standalone: true}" nzShowSearch
                                                 (ngModelChange)="handleClaimantChange()">
-                                                <nz-option *ngFor="let claimant of displayClaimantsList"
+                                                <nz-option *ngFor="let claimant of displayThirdPartyDetails"
                                                     [nzValue]="claimant"
-                                                    [nzLabel]="claimant.firstName + ' ' + claimant.lastName">
+                                                    [nzLabel]="claimant?.firstName + ' ' + claimant?.lastName">
                                                 </nz-option>
                                             </nz-select>
                                         </nz-form-control>

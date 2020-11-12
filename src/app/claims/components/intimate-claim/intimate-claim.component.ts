@@ -44,6 +44,7 @@ export class IntimateClaimComponent implements OnInit {
   thirdPartyDetails: ThirdPartyDetails;
 
 
+
     perilsL: IPeril[] = [];
     serviceProvidersList: any[] = [];
     clientList: Array<IIndividualClient & ICorporateClient>;
@@ -125,8 +126,7 @@ export class IntimateClaimComponent implements OnInit {
             thirdPartyInsured: ['', Validators.required],
             lossDate: ['', Validators.required, [this.dateAsyncValidator]],
           lossTime: ['', Validators.required],
-            notificationDate: ['', Validators.required],
-          thirdPartyDetails:  ['', Validators.required],
+            notificationDate: ['', Validators.required]
         });
     }
 
@@ -161,6 +161,10 @@ export class IntimateClaimComponent implements OnInit {
             for (const c of claims) {
               this.displayThirdPartyDetails = [...this.displayThirdPartyDetails, ...[c.thirdPartyDetails]];
             }
+
+            this.displayThirdPartyDetails = this.displayThirdPartyDetails.filter(function (el) {
+              return el.firstName != null;
+            });
 
         });
 
@@ -226,7 +230,7 @@ export class IntimateClaimComponent implements OnInit {
   getThirdPartyDetails(e) {
     // this.thirdPartyDetails = {...e};
     console.log('THird >>>',e);
-    this.displayClaimantsList = [...this.displayClaimantsList, ...[e]]
+    this.displayThirdPartyDetails = [...this.displayThirdPartyDetails, ...[e]]
   }
   checkAll(ev) {
     this.perilList.forEach(x => x.checked = ev.target.checked);
@@ -318,7 +322,9 @@ export class IntimateClaimComponent implements OnInit {
         this.intimateClaimForm.get('risk').setValue(policy.risks[0]);
     }
 
-    handleClaimantChange() {}
+    handleClaimantChange() {
+
+    }
 
     // handlePolicyChange() {
     //
@@ -382,7 +388,12 @@ export class IntimateClaimComponent implements OnInit {
         //     gender: this.selectedClient.gender
         // };
 
-        const claim: Claim = {
+
+      //  8: this.intimateClaimForm.get('thirdPartyDetails').value,
+
+        if (this.thirdPartyDetails) {
+
+          const claim: Claim = {
             ...this.intimateClaimForm.value,
             claimNumber: this.claimNumber,
             claimStatus: 'Pending',
@@ -391,16 +402,61 @@ export class IntimateClaimComponent implements OnInit {
             photoUploads: [],
             documentUploads: [],
             isRequisitionRaised: false,
-          claimPerils: this.perilsL,
-          subrogation: subrogationState,
-          claimType: 'Own Damage'
-        };
-      //  8: this.intimateClaimForm.get('thirdPartyDetails').value,
+            claimPerils: this.perilsL,
+            subrogation: subrogationState,
+            claimType: 'Own Damage'
+          };
 
-        if (this.intimateClaimForm.controls.thirdPartyFault.value) {
-          console.log('Third Party');
+            this.claimService.createClaim(claim).subscribe(
+              res => {
+                console.log('Own Damage', res);
+                // claim.claimant = this.intimateClaimForm.controls.claimant.value;
+                claim.claimType = 'Third Party';
+                claim.thirdPartyDetails = this.thirdPartyDetails;
+                // delete claim.client;
+                this.claimService.createClaim(claim).subscribe(claimThirdParty =>{
+                  this.msg.success('Claim Intimated');
+                  console.log('Third Party', claimThirdParty);
+                  this.intimatingClaimIsLoading = false;
+                  this.route.navigateByUrl('/flosure/claims/claim-transactions');
+                })
+
+              },
+              err => {
+                console.log(err);
+                this.msg.error('Failed to intimate claim', err);
+                this.intimatingClaimIsLoading = false;
+              }
+            );
+
+
         } else {
-          console.log('Not Third Party');
+          const claim: Claim = {
+            ...this.intimateClaimForm.value,
+            claimNumber: this.claimNumber,
+            claimStatus: 'Pending',
+            claimDescription: '---',
+            serviceProviderRepairsQuotations: [],
+            photoUploads: [],
+            documentUploads: [],
+            isRequisitionRaised: false,
+            claimPerils: this.perilsL,
+            subrogation: subrogationState,
+            claimType: 'Own Damage'
+          };
+            this.claimService.createClaim(claim).subscribe(
+                    resClaim => {
+                      console.log('Not Third Party', resClaim);
+                      this.msg.success('Claim Intimated');
+                      this.intimatingClaimIsLoading = false;
+                      this.route.navigateByUrl('/flosure/claims/claim-transactions');
+                    },
+                    err => {
+                      console.log(err);
+                      this.msg.error('Failed to intimate claim');
+                      this.intimatingClaimIsLoading = false;
+                    }
+                  );
         }
 
 
