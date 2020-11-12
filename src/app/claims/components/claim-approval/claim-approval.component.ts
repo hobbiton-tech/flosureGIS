@@ -4,7 +4,7 @@ import { ClaimsService } from '../../services/claims-service.service';
 import { ClaimsProcessingServiceService } from '../../services/claims-processing-service.service';
 import { AccountService } from 'src/app/accounts/services/account.service';
 import { NzMessageService } from 'ng-zorro-antd';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IRequisitionModel } from 'src/app/accounts/components/models/requisition.model';
 import { v4 } from 'uuid';
 import { BehaviorSubject } from 'rxjs';
@@ -29,8 +29,14 @@ export class ClaimApprovalComponent implements OnInit {
     approvedClaimsList: Claim[];
     displayApprovedClaimsList: Claim[];
 
+  approvedThirdPartyClaimsList: Claim[];
+  displayApprovedThirdPartyClaimsList: Claim[];
+
     searchPendingClaimsString: string;
     searchApprovedClaimsString: string;
+  searchThirdPartyApprovedClaimsString: string;
+
+  paramId: any;
 
     claimsTableUpdate = new BehaviorSubject<boolean>(false);
 
@@ -48,11 +54,15 @@ export class ClaimApprovalComponent implements OnInit {
         private msg: NzMessageService,
         private readonly router: Router,
         private http: HttpClient,
-        private usersService: UsersService
+        private usersService: UsersService,
+        private activateRoute: ActivatedRoute
     ) {}
 
     ngOnInit(): void {
         this.claimApprovalIsLoading = true;
+        this.activateRoute.params.subscribe(param => {
+
+        this.paramId = param.id;
         // setTimeout(() => {
         //     this.claimApprovalIsLoading = false;
         // }, 3000);
@@ -61,33 +71,49 @@ export class ClaimApprovalComponent implements OnInit {
         console.log('Decoded>>>>>>', decodedJwtData);
 
         this.usersService.getUsers().subscribe(users => {
-            this.user = users.filter(x => x.ID === decodedJwtData.user_id)[0];
+          this.user = users.filter(x => x.ID === decodedJwtData.user_id)[0];
 
-            this.isPresent = this.user.Permission.find(
-                el =>
-                    el.name === this.admin ||
-                    el.name === this.raiseRequisitionPem
-            );
+          this.isPresent = this.user.Permission.find(
+            el =>
+              el.name === this.admin ||
+              el.name === this.raiseRequisitionPem
+          );
 
-            console.log('USERS>>>', this.user, this.isPresent, this.admin);
+          console.log('USERS>>>', this.user, this.isPresent, this.admin);
         });
 
-        this.claimsService.getClaims().subscribe(claims => {
-            this.claimsList = claims;
-
-            this.approvedClaimsList = this.claimsList.filter(
-                x => x.claimStatus == 'Approved'
-            );
-            this.displayApprovedClaimsList = this.approvedClaimsList.filter(
-                x => x.claimNumber != null && x.isRequisitionRaised == false
-            );
-
-            this.claimApprovalIsLoading = false;
-        });
+        this.refresh();
 
         this.claimsTableUpdate.subscribe(update => {
-            update === true ? this.updateClaimsTables() : '';
+          update === true ? this.updateClaimsTables() : '';
         });
+      });
+    }
+
+
+    refresh() {
+      this.claimsService.getClaims().subscribe(claims => {
+        this.claimsList = claims;
+
+        this.approvedClaimsList = this.claimsList.filter(
+          x => x.claimStatus === 'Approved' && x.claimType === 'Own Damage' && x.claimNumber === this.paramId
+        );
+        this.displayApprovedClaimsList = this.approvedClaimsList.filter(
+          x => x.claimNumber != null && x.isRequisitionRaised === false
+        );
+
+
+        this.approvedThirdPartyClaimsList = this.claimsList.filter(
+          x => x.claimStatus === 'Approved' && x.claimType === 'Third Party' && x.claimNumber === this.paramId
+        );
+
+        this.displayApprovedThirdPartyClaimsList = this.approvedClaimsList.filter(
+          x => x.claimNumber != null && x.isRequisitionRaised === false
+        );
+
+        this.claimApprovalIsLoading = false;
+      });
+
     }
 
     viewClaimDetails(claim: Claim): void {
@@ -101,10 +127,10 @@ export class ClaimApprovalComponent implements OnInit {
             this.claimsList = claims;
 
             this.approvedClaimsList = this.claimsList.filter(
-                x => x.claimStatus == 'Approved'
+                x => x.claimStatus === 'Approved'
             );
             this.displayApprovedClaimsList = this.approvedClaimsList.filter(
-                x => x.claimNumber != null && x.isRequisitionRaised == false
+                x => x.claimNumber != null && x.isRequisitionRaised === false
             );
         });
     }
@@ -112,7 +138,7 @@ export class ClaimApprovalComponent implements OnInit {
     searchApprovedClaims(value: string) {
         if (value === '' || !value) {
             this.displayApprovedClaimsList = this.approvedClaimsList.filter(
-                x => x.claimNumber != null && x.isRequisitionRaised == false
+                x => x.claimNumber != null && x.isRequisitionRaised === false
             );
         }
 
@@ -120,7 +146,7 @@ export class ClaimApprovalComponent implements OnInit {
             claim => {
                 if (
                     claim.claimNumber != null &&
-                    claim.isRequisitionRaised == false
+                    claim.isRequisitionRaised === false
                 ) {
                     return (
                         claim.claimNumber
@@ -140,6 +166,38 @@ export class ClaimApprovalComponent implements OnInit {
             }
         );
     }
+
+  searchApprovedThirdPartyClaims(value: string) {
+    if (value === '' || !value) {
+      this.displayApprovedClaimsList = this.approvedClaimsList.filter(
+        x => x.claimNumber != null && x.isRequisitionRaised === false
+      );
+    }
+
+    this.displayApprovedClaimsList = this.approvedClaimsList.filter(
+      claim => {
+        if (
+          claim.claimNumber != null &&
+          claim.isRequisitionRaised === false
+        ) {
+          return (
+            claim.claimNumber
+              .toLowerCase()
+              .includes(value.toLowerCase()) ||
+            claim.policy.policyNumber
+              .toLowerCase()
+              .includes(value.toLowerCase()) ||
+            claim.claimStatus
+              .toLowerCase()
+              .includes(value.toLowerCase()) ||
+            claim.claimant.firstName
+              .toLowerCase()
+              .includes(value.toLowerCase())
+          );
+        }
+      }
+    );
+  }
 
     raiseRequisition(claim: Claim) {
         this.isRaisingRequisition = true;
@@ -195,6 +253,7 @@ export class ClaimApprovalComponent implements OnInit {
                                         console.log(res);
                                         this.claimsTableUpdate.next(true);
                                     });
+                                this.refresh();
                             },
 
                             err => {

@@ -36,9 +36,11 @@ export class ViewApprovedClaimsComponent implements OnInit {
       this.approvedClaimsList = this.claimsList.filter(
         x => x.claimType === 'Own Damage'
       );
-      this.displayApprovedClaimsList = this.approvedClaimsList.filter(
-        x => x.claimNumber != null && x.isRequisitionRaised == false
-      );
+      this.displayApprovedClaimsList = this.approvedClaimsList
+
+      // this.displayApprovedClaimsList = this.approvedClaimsList.filter(
+      //   x => x.claimNumber != null && x.isRequisitionRaised === false
+      // );
       this.claimApprovalIsLoading = false;
     });
   }
@@ -46,7 +48,7 @@ export class ViewApprovedClaimsComponent implements OnInit {
   searchApprovedClaims(value: string) {
     if (value === '' || !value) {
       this.displayApprovedClaimsList = this.approvedClaimsList.filter(
-        x => x.claimNumber != null && x.isRequisitionRaised == false
+        x => x.claimNumber != null && x.isRequisitionRaised === false
       );
     }
 
@@ -54,7 +56,7 @@ export class ViewApprovedClaimsComponent implements OnInit {
       claim => {
         if (
           claim.claimNumber != null &&
-          claim.isRequisitionRaised == false
+          claim.isRequisitionRaised === false
         ) {
           return (
             claim.claimNumber

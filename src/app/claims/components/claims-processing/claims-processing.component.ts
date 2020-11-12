@@ -79,7 +79,7 @@ export class ClaimsProcessingComponent implements OnInit {
 
     ngOnInit(): void {
         this.claimProcessingIsLoading = true;
-      this.activateRoute.params.subscribe(param => {
+        this.activateRoute.params.subscribe(param => {
         // setTimeout(() => {
         //     this.claimProcessingIsLoading = false;
         // }, 3000);

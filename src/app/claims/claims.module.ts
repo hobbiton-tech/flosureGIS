@@ -31,16 +31,16 @@ import { SalvageInvoiceComponent } from './components/salvage-invoice/salvage-in
 import { SubrogationsComponent } from './components/subrogations/subrogations.component';
 import { SubrogateInvoiceComponent } from './components/subrogate-invoice/subrogate-invoice.component';
 import {
-    NzBadgeModule,
-    NzBreadCrumbModule, NzButtonModule,
-    NzCardModule, NzDatePickerModule, NzDescriptionsModule, NzDividerModule, NzDrawerModule,
-    NzFormModule, NzGridModule, NzIconModule,
-    NzInputModule, NzMessageModule,
-    NzModalModule,
-    NzPageHeaderModule,
-    NzSelectModule,
-    NzSpinModule, NzStatisticModule, NzTableModule, NzTagModule,
-    NzUploadModule
+  NzBadgeModule,
+  NzBreadCrumbModule, NzButtonModule,
+  NzCardModule, NzDatePickerModule, NzDescriptionsModule, NzDividerModule, NzDrawerModule,
+  NzFormModule, NzGridModule, NzIconModule,
+  NzInputModule, NzMessageModule,
+  NzModalModule,
+  NzPageHeaderModule, NzPopconfirmModule,
+  NzSelectModule,
+  NzSpinModule, NzStatisticModule, NzTableModule, NzTagModule,
+  NzUploadModule
 } from 'ng-zorro-antd';
 import { DamageTypeComponent } from './components/damage-type/damage-type.component';
 import { PendingProcessingComponent } from './components/pending-processing/pending-processing.component';
@@ -164,33 +164,34 @@ const routes: Routes = [
         ViewApprovedClaimsComponent
     ],
     providers: [ClaimsService],
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        FormsModule,
-        RouterModule.forChild(routes),
-        NzListModule,
-        NzModalModule,
-        NzSpinModule,
-        NzFormModule,
-        NzInputModule,
-        NzSelectModule,
-        NzUploadModule,
-        NzPageHeaderModule,
-        NzCardModule,
-        NzTableModule,
-        NzDescriptionsModule,
-        NzTagModule,
-        NzBreadCrumbModule,
-        NzGridModule,
-        NzStatisticModule,
-        NzBadgeModule,
-        NzDividerModule,
-        NzIconModule,
-        NzDrawerModule,
-        NzMessageModule,
-        NzButtonModule,
-      NzDatePickerModule
-    ]
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    RouterModule.forChild(routes),
+    NzListModule,
+    NzModalModule,
+    NzSpinModule,
+    NzFormModule,
+    NzInputModule,
+    NzSelectModule,
+    NzUploadModule,
+    NzPageHeaderModule,
+    NzCardModule,
+    NzTableModule,
+    NzDescriptionsModule,
+    NzTagModule,
+    NzBreadCrumbModule,
+    NzGridModule,
+    NzStatisticModule,
+    NzBadgeModule,
+    NzDividerModule,
+    NzIconModule,
+    NzDrawerModule,
+    NzMessageModule,
+    NzButtonModule,
+    NzDatePickerModule,
+    NzPopconfirmModule
+  ]
 })
 export class ClaimsModule {}

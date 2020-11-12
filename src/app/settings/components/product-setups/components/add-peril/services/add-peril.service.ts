@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd';
 import { HttpClient } from '@angular/common/http';
 
-const BASE_URL = 'http://localhost:3001';
+const BASE_URL = 'https://savenda.flosure-api.com/';
 @Injectable({
     providedIn: 'root',
 })
