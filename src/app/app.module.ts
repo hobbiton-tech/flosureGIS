@@ -48,14 +48,14 @@ registerLocaleData(en);
 // };
 
 const firebaseConfig = {
-    apiKey: 'AIzaSyCIwedzdF9Og67CsT8oChO8UkMBk1OVQPE',
-    authDomain: 'savenda-insurance.firebaseapp.com',
-    databaseURL: 'https://savenda-insurance.firebaseio.com',
-    projectId: 'savenda-insurance',
-    storageBucket: 'savenda-insurance.appspot.com',
-    messagingSenderId: '795733102142',
-    appId: '1:795733102142:web:62eaa45624e4473e35cb6f',
-    measurementId: 'G-SCN3RMBTB7',
+    apiKey: "AIzaSyChAmlEMnEYeFe-s8gGE-tJcxN439XDPFU",
+    authDomain: "golden-lotus-a6afc.firebaseapp.com",
+    databaseURL: "https://golden-lotus-a6afc.firebaseio.com",
+    projectId: "golden-lotus-a6afc",
+    storageBucket: "golden-lotus-a6afc.appspot.com",
+    messagingSenderId: "190302342488",
+    appId: "1:190302342488:web:c7b69cdf194dfa439ce92d",
+    measurementId: "G-1X9LY72JCD"
 };
 
 // const firebaseConfig = {

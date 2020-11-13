@@ -942,7 +942,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                 this.http
                     .get<any>(
-                        `https://number-generation.flosure-api.com/savenda-invoice-number/1/${currentClassObj.classCode}`
+                        `https://number-generation.flosure-api.com/golden-lotus-invoice-number`
                     )
                     .subscribe(async resd => {
                         debitNote.debitNoteNumber = resd.data.invoice_number;
@@ -1029,9 +1029,10 @@ export class QuoteDetailsComponent implements OnInit {
                             ),
                             dateFrom: risk.riskStartDate,
                             dateTo: risk.riskEndDate,
-                            insurancePolicyNo: policy.policyNumber,
-                            chassisNumber: risk.vehicle.chassisNumber,
-                          insuranceCompany: 'Savenda General Insurance',
+
+                          insurancePolicyNo: policy.policyNumber,
+                          chassisNumber: risk.vehicle.chassisNumber,
+                          insuranceCompany: 'Golden Lotus General Insurance',
                           insuranceCompanyId: 0,
                           quarter: Number(risk.expiryQuarter.split('/')[0])
 
@@ -1046,11 +1047,12 @@ export class QuoteDetailsComponent implements OnInit {
                                 /\s/g,
                                 ''
                             ),
-                          dateFrom: risk.riskStartDate,
-                          dateTo: risk.riskEndDate,
+
+                            dateFrom: risk.riskStartDate,
+                            dateTo: risk.riskEndDate,
                           insurancePolicyNo: policy.policyNumber,
                           chassisNumber: risk.vehicle.chassisNumber,
-                          insuranceCompany: 'Savenda General Insurance',
+                          insuranceCompany: 'Golden Lotus General Insurance',
                           insuranceCompanyId: 0,
                           quarter: Number(risk.expiryQuarter.split('/')[0])
                         };
@@ -1108,7 +1110,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                 this.http
                     .get<any>(
-                        `https://number-generation.flosure-api.com/savenda-invoice-number/1/${currentClassObj.classCode}`
+                        `https://number-generation.flosure-api.com/golden-lotus-invoice-number`
                     )
                     .subscribe(async resj => {
                         debitNote.debitNoteNumber = resj.data.invoice_number;
@@ -1228,7 +1230,8 @@ export class QuoteDetailsComponent implements OnInit {
                             dateTo: risk.riskEndDate,
                           insurancePolicyNo: policy.policyNumber,
                           chassisNumber: risk.vehicle.chassisNumber,
-                          insuranceCompany: 'Savenda General Insurance',
+                          insuranceCompany: 'Golden Lotus General Insurance',
+
                           insuranceCompanyId: 0,
                           quarter: Number(risk.expiryQuarter.split('/')[0])
                         };

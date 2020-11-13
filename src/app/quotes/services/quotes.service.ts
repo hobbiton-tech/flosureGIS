@@ -166,7 +166,7 @@ export class QuotesService implements OnDestroy {
         };
         this.http
             .get<any>(
-                `https://number-generation.flosure-api.com/savenda-quote-number/1/${currentClassObj.classCode}`
+                `https://number-generation.flosure-api.com/golden-lotus-quote-number`
             )
             .subscribe(
                 async res => {
@@ -264,7 +264,7 @@ export class QuotesService implements OnDestroy {
     postRtsa(params) {
         console.log('PARAMS>>>>>>>', params);
         this.http
-            .post<any>(`https://rtsa.flosure-api.com/rtsa-savenda`, params)
+            .post<any>(`https://rtsa.flosure-api.com/rtsa-golden-lotus`, params)
             .subscribe(
                 async res => {
                     console.log(res);

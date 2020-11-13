@@ -149,7 +149,7 @@ export class UsersComponent implements OnInit {
           username: details.email,
           text: 'Dear ' + details.first_name + ' ' + details.surname + ', ' + ' your username is '
             + details.email + ' and your password is ' +
-            details.password + ' for https://savenda-flosure.com/ (flosure General Insurance System)',
+            details.password + ' for https://goldenlotusinsurance.com/ (flosure General Insurance System)',
           subject: 'Flosure General insurance System Credentials',
           receiver: details.email,
           sender: 'Flosure General Insurance System',
