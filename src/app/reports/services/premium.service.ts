@@ -19,7 +19,7 @@ import { Policy } from 'src/app/underwriting/models/policy.model';
 const httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
 };
-const BASE_URL = 'https://savenda.flosure-api.com';
+const BASE_URL = 'https://api.goldenlotusinsurance.com';
 // const BASE_URL = 'https://flosure-postgres-api.herokuapp.com';
 @Injectable({
     providedIn: 'root',
