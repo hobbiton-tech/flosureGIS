@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 export class TransactionInvoiceService {
 
   BASEURL = 'https://payment-api.savenda-flosure.com';
-  // BASEURL = 'https://api.goldenlotusinsurance.com';
+  // BASEURL = 'http://test-main.flosure-api.com';
 
   constructor(private http: HttpClient,
               private message: NzMessageService,

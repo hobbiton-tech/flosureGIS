@@ -26,7 +26,7 @@ import {
     IExtensions
 } from 'src/app/quotes/models/extensions.model';
 
-const BASE_URL = 'https://api.goldenlotusinsurance.com';
+const BASE_URL = 'http://test-main.flosure-api.com';
 @Injectable({
     providedIn: 'root'
 })

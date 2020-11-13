@@ -12,7 +12,7 @@ import { ILossQuantum } from '../models/loss-quantum.model';
 import { IInsuranceCompany } from '../models/insurance-company.model';
 
 
-const BASE_URL = 'https://api.goldenlotusinsurance.com';
+const BASE_URL = 'http://test-main.flosure-api.com';
 
 @Injectable({
     providedIn: 'root'

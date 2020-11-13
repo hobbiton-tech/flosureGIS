@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
-const BASE_URL = 'https://api.goldenlotusinsurance.com';
+const BASE_URL = 'http://test-main.flosure-api.com';
 
 @Injectable({
     providedIn: 'root'

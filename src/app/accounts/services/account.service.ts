@@ -16,7 +16,7 @@ import { IRequisitionModel } from '../components/models/requisition.model';
 import { PoliciesService } from 'src/app/underwriting/services/policies.service';
 import { Router } from '@angular/router';
 
-const BASE_URL = 'https://api.goldenlotusinsurance.com';
+const BASE_URL = 'http://test-main.flosure-api.com';
 
 interface IReceiptNumberResult {
     receiptNumber: string;
