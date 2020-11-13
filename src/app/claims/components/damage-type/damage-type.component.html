@@ -1,0 +1,131 @@
+<nz-spin nzSize="large" nzTip="Quotation Details Loading...." [nzSpinning]="ownDamageListIsLoading">
+<div style="margin: 20px;">
+  <nz-breadcrumb>
+    <nz-breadcrumb-item>
+      Claims
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      Claims Processes
+    </nz-breadcrumb-item>
+  </nz-breadcrumb>
+  <div style="margin-bottom: 20px; margin-top: 20px; background: #fff;">
+    <nz-page-header>
+      <nz-page-header-title>Claims Processes</nz-page-header-title>
+      <nz-page-header-content>
+        <nz-row [nzGutter]="1">
+          <!--<nz-col [nzSpan]="9">
+            <nz-statistic [nzValueTemplate]="claimsStats" [nzTitle]="'Total Claims'"></nz-statistic>
+          </nz-col>
+          &lt;!&ndash; <nz-col [nzSpan]="6">
+              <nz-statistic [nzValue]="2019 | number " [nzTitle]="'Individual Clients'"></nz-statistic>
+            </nz-col> &ndash;&gt;
+          <nz-col [nzSpan]="9">
+            <nz-statistic [nzValueTemplate]="claimsStats" [nzTitle]="'Claimants'"></nz-statistic>
+          </nz-col>-->
+        </nz-row>
+      </nz-page-header-content>
+    </nz-page-header>
+  </div>
+
+  <nz-card>
+    <nz-card nzTitle="Own Damage">
+      <div style="margin-bottom: 10px; width: 25%">
+        <nz-input-group [nzSuffix]="suffixIconSearch">
+          <input type="text" nz-input placeholder="Search by Claim Number, Client, Policy Number, Status"
+                 [(ngModel)]="searchStringOwnDamage" (ngModelChange)="searchOwnDamage($event)" />
+        </nz-input-group>
+        <ng-template #suffixIconSearch>
+          <i nz-icon nzType="search"></i>
+        </ng-template>
+      </div>
+      <nz-table #claimsTable [nzData]="displayOwnDamageList" nzSize="small">
+        <thead>
+        <tr>
+          <th [nzAlign]="columnAlignment">Claim Number</th>
+          <th [nzAlign]="columnAlignment">Client</th>
+          <!--            <th [nzAlign]="columnAlignment">Third Party</th>-->
+          <th [nzAlign]="columnAlignment">Claim Type</th>
+          <th [nzAlign]="columnAlignment">Policy Number</th>
+          <th [nzAlign]="columnAlignment">Loss Date</th>
+          <th [nzAlign]="columnAlignment">Notification Date</th>
+          <th [nzAlign]="columnAlignment">Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let claim of claimsTable.data" (click)="viewClaimDetails(claim)" style="cursor: pointer;">
+          <td [nzAlign]="columnAlignment">{{claim.claimNumber}}</td>
+          <td [nzAlign]="columnAlignment">
+            {{claim.client.clientType == 'Individual' ? (claim.client.firstName + ' ' + claim.client.lastName) : claim.client.companyName}}
+          </td>
+          <!--            <td [nzAlign]="columnAlignment">{{claim?.thirdPartyDetails?.firstName + ' ' + claim?.thirdPartyDetails?.lastName}}-->
+          <!--            </td>-->
+          <td [nzAlign]="columnAlignment">{{claim.claimType}}</td>
+          <td [nzAlign]="columnAlignment">{{claim.policy.policyNumber}}</td>
+          <td [nzAlign]="columnAlignment">{{claim.lossDate | date}}</td>
+          <td [nzAlign]="columnAlignment">{{claim.notificationDate | date}}</td>
+          <td [nzAlign]="columnAlignment">
+            <div [ngSwitch]="claim.claimStatus">
+              <nz-badge nzColor='yellow' *ngSwitchCase="'Pending'" nzText="Pending"></nz-badge>
+              <nz-badge nzColor='green' *ngSwitchCase="'Resolved'" nzText="Resolved"></nz-badge>
+              <nz-badge nzColor='red' *ngSwitchCase="'Cancelled'" nzText="Cancelled"></nz-badge>
+              <nz-badge nzColor='blue' *ngSwitchCase="'Processed'" nzText="Processed"></nz-badge>
+              <nz-badge nzColor='purple' *ngSwitchCase="'Approved'" nzText="Approved"></nz-badge>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </nz-table>
+    </nz-card>
+    <div style="margin-top: 25px">
+      <nz-card nzTitle="Third Party">
+        <div style="margin-bottom: 10px; width: 25%">
+          <nz-input-group [nzSuffix]="suffixIconSearch">
+            <input type="text" nz-input placeholder="Search by Claim Number, Client, Policy Number, Status"
+                   [(ngModel)]="searchStringThirdParty" (ngModelChange)="searchThirdParty($event)" />
+          </nz-input-group>
+          <ng-template #suffixIconSearch>
+            <i nz-icon nzType="search"></i>
+          </ng-template>
+        </div>
+        <nz-table #claimsThirdPartyTable [nzData]="displaythirdPartyList" nzSize="small">
+          <thead>
+          <tr>
+            <th [nzAlign]="columnAlignment">Claim Number</th>
+            <th [nzAlign]="columnAlignment">Client</th>
+            <!--            <th [nzAlign]="columnAlignment">Third Party</th>-->
+            <th [nzAlign]="columnAlignment">Claim Type</th>
+            <th [nzAlign]="columnAlignment">Policy Number</th>
+            <th [nzAlign]="columnAlignment">Loss Date</th>
+            <th [nzAlign]="columnAlignment">Notification Date</th>
+            <th [nzAlign]="columnAlignment">Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let claimThirdParty of claimsThirdPartyTable.data" (click)="viewClaimDetails(claimThirdParty)" style="cursor: pointer;">
+            <td [nzAlign]="columnAlignment">{{claimThirdParty.claimNumber}}</td>
+            <td [nzAlign]="columnAlignment">
+              {{claimThirdParty.thirdPartyDetails.firstName + ' ' + claimThirdParty.thirdPartyDetails.lastName}}
+            </td>
+            <!--            <td [nzAlign]="columnAlignment">{{claim?.thirdPartyDetails?.firstName + ' ' + claim?.thirdPartyDetails?.lastName}}-->
+            <!--            </td>-->
+            <td [nzAlign]="columnAlignment">{{claimThirdParty.claimType}}</td>
+            <td [nzAlign]="columnAlignment">{{claimThirdParty.policy.policyNumber}}</td>
+            <td [nzAlign]="columnAlignment">{{claimThirdParty.lossDate | date}}</td>
+            <td [nzAlign]="columnAlignment">{{claimThirdParty.notificationDate | date}}</td>
+            <td [nzAlign]="columnAlignment">
+              <div [ngSwitch]="claimThirdParty.claimStatus">
+                <nz-badge nzColor='yellow' *ngSwitchCase="'Pending'" nzText="Pending"></nz-badge>
+                <nz-badge nzColor='green' *ngSwitchCase="'Resolved'" nzText="Resolved"></nz-badge>
+                <nz-badge nzColor='red' *ngSwitchCase="'Cancelled'" nzText="Cancelled"></nz-badge>
+                <nz-badge nzColor='blue' *ngSwitchCase="'Processed'" nzText="Processed"></nz-badge>
+                <nz-badge nzColor='purple' *ngSwitchCase="'Approved'" nzText="Approved"></nz-badge>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </nz-table>
+      </nz-card>
+    </div>
+  </nz-card>
+</div>
+</nz-spin>

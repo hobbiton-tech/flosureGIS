@@ -22,7 +22,9 @@ import { IAccount } from 'src/app/settings/models/organizational/account.model';
 const BASE_URL = 'https://api.goldenlotusinsurance.com';
 
 // const BASE__STATEMENT_URL = 'https://api.goldenlotusinsurance.com/transaction';
+
 const BASE__STATEMENT_URL = 'https://pay-api.goldenlotusinsurance.com/transaction';
+
 
 @Injectable({
     providedIn: 'root'

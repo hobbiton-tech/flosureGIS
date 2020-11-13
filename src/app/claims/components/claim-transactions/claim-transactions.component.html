@@ -46,8 +46,8 @@
           <tr>
             <th [nzAlign]="columnAlignment">Claim Number</th>
             <th [nzAlign]="columnAlignment">Client</th>
-            <th [nzAlign]="columnAlignment">Third Party</th>
-            <th [nzAlign]="columnAlignment">Claim Type</th>
+<!--            <th [nzAlign]="columnAlignment">Third Party</th>-->
+<!--            <th [nzAlign]="columnAlignment">Claim Type</th>-->
             <th [nzAlign]="columnAlignment">Policy Number</th>
             <th [nzAlign]="columnAlignment">Loss Date</th>
             <th [nzAlign]="columnAlignment">Notification Date</th>
@@ -55,14 +55,14 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let claim of claimsTable.data" (click)="viewClaimDetails(claim)" style="cursor: pointer;">
+          <tr *ngFor="let claim of claimsTable.data" (click)="viewDamageType(claim)" style="cursor: pointer;">
             <td [nzAlign]="columnAlignment">{{claim.claimNumber}}</td>
             <td [nzAlign]="columnAlignment">
               {{claim.client.clientType == 'Individual' ? (claim.client.firstName + ' ' + claim.client.lastName) : claim.client.companyName}}
             </td>
-            <td [nzAlign]="columnAlignment">{{claim.thirdPartyDetails.firstName + ' ' + claim.thirdPartyDetails.lastName}}
-            </td>
-            <td [nzAlign]="columnAlignment">{{claim.claimType}}</td>
+<!--            <td [nzAlign]="columnAlignment">{{claim?.thirdPartyDetails?.firstName + ' ' + claim?.thirdPartyDetails?.lastName}}-->
+<!--            </td>-->
+<!--            <td [nzAlign]="columnAlignment">{{claim.claimType}}</td>-->
             <td [nzAlign]="columnAlignment">{{claim.policy.policyNumber}}</td>
             <td [nzAlign]="columnAlignment">{{claim.lossDate | date}}</td>
             <td [nzAlign]="columnAlignment">{{claim.notificationDate | date}}</td>

@@ -1029,11 +1029,13 @@ export class QuoteDetailsComponent implements OnInit {
                             ),
                             dateFrom: risk.riskStartDate,
                             dateTo: risk.riskEndDate,
+
                           insurancePolicyNo: policy.policyNumber,
                           chassisNumber: risk.vehicle.chassisNumber,
                           insuranceCompany: 'Golden Lotus General Insurance',
                           insuranceCompanyId: 0,
                           quarter: Number(risk.expiryQuarter.split('/')[0])
+
                         };
 
                         this.quotesService.postRtsa(params);
@@ -1045,6 +1047,7 @@ export class QuoteDetailsComponent implements OnInit {
                                 /\s/g,
                                 ''
                             ),
+
                             dateFrom: risk.riskStartDate,
                             dateTo: risk.riskEndDate,
                           insurancePolicyNo: policy.policyNumber,
@@ -1228,6 +1231,7 @@ export class QuoteDetailsComponent implements OnInit {
                           insurancePolicyNo: policy.policyNumber,
                           chassisNumber: risk.vehicle.chassisNumber,
                           insuranceCompany: 'Golden Lotus General Insurance',
+
                           insuranceCompanyId: 0,
                           quarter: Number(risk.expiryQuarter.split('/')[0])
                         };

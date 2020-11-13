@@ -23,12 +23,19 @@
             <nz-card>
                 <nz-divider nzText="Claim Details" nzOrientation="left"></nz-divider>
                 <nz-descriptions nzBordered>
+                  <ng-container *ngIf="claimData.claimType === 'Own Damage'">
                     <nz-descriptions-item nzTitle="Client">
                         {{ claimData.client ? claimData.client.clientType == 'Individual' ? claimData.client.firstName + ' ' + claimData.client.lastName : claimData.client.companyName : ''}}
                     </nz-descriptions-item>
-                    <nz-descriptions-item nzTitle="Claimant">
-                        {{claimData ? (claimData.claimant.firstName + ' ' + claimData.claimant.lastName) : '-'}}
+                  </ng-container>
+                  <ng-container *ngIf="claimData.claimType === 'Third Party'">
+                    <nz-descriptions-item nzTitle="Client">
+                      {{ claimData.thirdPartyDetails.firstName + ' ' + claimData.thirdPartyDetails.lastName}}
                     </nz-descriptions-item>
+                  </ng-container>
+<!--                    <nz-descriptions-item nzTitle="Claimant">-->
+<!--                        {{claimData ? (claimData.claimant.firstName + ' ' + claimData.claimant.lastName) : '-'}}-->
+<!--                    </nz-descriptions-item>-->
                     <nz-descriptions-item nzTitle="Policy No">{{claimData ? claimData.policy.policyNumber : ''}}
                     </nz-descriptions-item>
 
@@ -63,8 +70,10 @@
                     </nz-descriptions-item>
                     <nz-descriptions-item nzTitle="Causation">{{claimData ? claimData.causation : ''}}
                     </nz-descriptions-item>
+                  <ng-container *ngIf="claimData.claimType === 'Own Damage'">
                     <nz-descriptions-item nzTitle="Third Party">{{claimData ? claimData.thirdPartyInsured : ''}}
                     </nz-descriptions-item>
+                  </ng-container>
                     <nz-descriptions-item nzTitle="Description">{{claimData ? claimData.claimDescription : ''}}
                     </nz-descriptions-item>
                 </nz-descriptions>

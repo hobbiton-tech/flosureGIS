@@ -38,7 +38,7 @@ export class Claim {
     claimStatus: ClaimStatus;
     isRequisitionRaised?: boolean;
     claimPerils: IPeril[];
-    thirdPartyDetails: ThirdPartyDetails;
+    thirdPartyDetails?: ThirdPartyDetails;
     subrogation?: Subrogation;
     subrogations?: Subrogations;
   claimType: ClaimType;

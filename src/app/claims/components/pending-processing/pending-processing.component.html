@@ -1,0 +1,61 @@
+<nz-spin nzSize="large" nzTip="Claims Loading...." [nzSpinning]="pendingProcessingIsLoading">
+  <div style="margin: 10px;">
+    <div style="margin-bottom: 20px; background: #fff;">
+      <nz-page-header>
+        <nz-page-header-title>Pending Claims</nz-page-header-title>
+      </nz-page-header>
+    </div>
+
+    <nz-card>
+      <!-- <nz-divider nzOrientation="left"></nz-divider> -->
+      <div style="margin-bottom: 10px; width: 20%;">
+        <nz-input-group [nzSuffix]="suffixIconSearch">
+          <input type="text" nz-input placeholder="Search by claim number, client"
+                 [(ngModel)]="searchString" (ngModelChange)="search($event)" />
+        </nz-input-group>
+        <ng-template #suffixIconSearch>
+          <i nz-icon nzType="search"></i>
+        </ng-template>
+      </div>
+
+      <nz-table #pendingClaimsTable [nzData]="displayPendingClaimList" [nzSize]="'small'" [nzBordered]="true">
+        <thead>
+        <tr>
+          <th [nzAlign]="columnAlignment">Claim Number</th>
+          <th [nzAlign]="columnAlignment">Client</th>
+          <th [nzAlign]="columnAlignment">Policy Number</th>
+          <th [nzAlign]="columnAlignment">Loss Date</th>
+          <th [nzAlign]="columnAlignment">Notification Date</th>
+<!--          <th [nzAlign]="columnAlignment">Status</th>-->
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let claim of displayPendingClaimList" (click)="viewPendingProcessingClaims(claim)" style="cursor: pointer;">
+          <td [nzAlign]="columnAlignment">{{claim.claimNumber}}</td>
+          <td [nzAlign]="columnAlignment">
+            {{claim.client ? (claim.client.clientType == 'Individual' ? (claim.client.firstName + ' ' + claim.client.lastName) : claim.client.companyName): ''}}
+          </td>
+          <td [nzAlign]="columnAlignment">{{claim.policy? (claim.policy.policyNumber) : ''}}</td>
+          <td [nzAlign]="columnAlignment">{{claim.lossDate | date}}</td>
+          <td [nzAlign]="columnAlignment">{{claim.notificationDate | date}}</td>
+<!--          <td [nzAlign]="columnAlignment">-->
+<!--            <div [ngSwitch]="claim.claimStatus">-->
+<!--              <nz-badge nzColor='yellow' *ngSwitchCase="'Pending'" nzText="Pending"></nz-badge>-->
+<!--              <nz-badge nzColor='green' *ngSwitchCase="'Resolved'" nzText="Resolved"></nz-badge>-->
+<!--              <nz-badge nzColor='red' *ngSwitchCase="'Cancelled'" nzText="Cancelled"></nz-badge>-->
+<!--              <nz-badge nzColor='blue' *ngSwitchCase="'Processed'" nzText="Processed"></nz-badge>-->
+<!--              <nz-badge nzColor='purple' *ngSwitchCase="'Approved'" nzText="Approved"></nz-badge>-->
+<!--            </div>-->
+<!--          </td>-->
+<!--          <td [nzAlign]="columnAlignment">-->
+<!--            <button *ngIf="processClaimPem === isPresent.name || admin === isPresent.name" nz-button nzType="primary" style="margin-left: 2px;" nzSize="small"-->
+<!--                    (click)="processClaim(claim)">-->
+<!--              Process-->
+<!--            </button>-->
+<!--          </td>-->
+        </tr>
+        </tbody>
+      </nz-table>
+    </nz-card>
+  </div>
+</nz-spin>
