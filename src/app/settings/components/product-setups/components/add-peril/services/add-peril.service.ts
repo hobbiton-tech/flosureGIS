@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd';
 import { HttpClient } from '@angular/common/http';
 
-const BASE_URL = 'https://savenda.flosure-api.com/';
+const BASE_URL = 'https://api.goldenlotusinsurance.com';
 @Injectable({
     providedIn: 'root',
 })
