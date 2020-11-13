@@ -24,6 +24,7 @@ const BASE_URL = 'http://test-main.flosure-api.com';
 // const BASE__STATEMENT_URL = 'http://test-main.flosure-api.com/transaction';
 const BASE__STATEMENT_URL = 'https://payment-api.savenda-flosure.com/transaction';
 
+
 @Injectable({
     providedIn: 'root'
 })

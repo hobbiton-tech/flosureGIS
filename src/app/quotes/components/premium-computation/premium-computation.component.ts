@@ -56,6 +56,7 @@ export class PremiumComputationComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.selectedBasicPremiunTypeValue = 'rate';
+        this.premiumComputationService.changeSelectedBasicPremiunInputType(this.selectedBasicPremiunTypeValue);
         this.premiumRate = this.premiumComputationService.getPremiumRate();
     }
 
@@ -67,7 +68,9 @@ export class PremiumComputationComponent implements OnInit, OnDestroy {
     handleBasicPremiumCalculation(): void {}
 
     changeBasicPremiumAmount() {
-        this.premiumComputationService.changeBasicPremium(
+        this.premiumComputationService.changeSelectedBasicPremiunInputType(this.selectedBasicPremiunTypeValue);
+
+        this.premiumComputationService.changeBasicPremiumAmount(
             this.basicPremiumAmount
         );
     }

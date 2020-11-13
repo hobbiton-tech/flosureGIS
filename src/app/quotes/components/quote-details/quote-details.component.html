@@ -52,7 +52,7 @@
                                 <nz-form-control nzSpan="17">
                                     <nz-select formControlName="client" nzPlaceHolder="Select or create client"
                                         [nzDisabled]="!isEditmode">
-                                        <div *ngFor="let client of clients">
+                                        <ng-container *ngFor="let client of clients">
                                             <nz-option [nzValue]="
                                                 client.clientType ===
                                                 'Individual'
@@ -68,7 +68,7 @@
                                                       client.lastName
                                                     : client.companyName
                                             "></nz-option>
-                                        </div>
+                                        </ng-container>
 
                                     </nz-select>
                                 </nz-form-control>

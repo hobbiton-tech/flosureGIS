@@ -11,7 +11,7 @@ import { NzMessageService } from 'ng-zorro-antd';
 export class AuthenticationService {
     private currentUserSubject: BehaviorSubject<UserModel>;
     public currentUser: Observable<UserModel>;
-    BaseURL = 'https://user-management.savenda-flosure.com';
+    BaseURL = 'https://user-api.goldenlotusinsurance.com';
 
     constructor(private http: HttpClient, private msg: NzMessageService) {
         this.currentUserSubject = new BehaviorSubject<UserModel>(

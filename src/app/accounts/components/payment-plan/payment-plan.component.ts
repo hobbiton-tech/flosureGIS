@@ -274,14 +274,14 @@ export class PaymentPlanComponent implements OnInit {
 
             this.http
                 .get<any>(
-                    `https://number-generation.flosure-api.com/savenda-receipt-number/1`
+                    `https://number-generation.flosure-api.com/golden-lotus-receipt-number`
                 )
                 .subscribe(async (resNum) => {
                     receipt.receipt_number = resNum.data.receipt_number;
                     this.receiptNumber = resNum.data.receipt_number;
                     console.log(resNum.data.receipt_number);
 
-                    this.http.post('https://payment-api.savenda-flosure.com/receipt', receipt).subscribe((resRec: any) => {
+                    this.http.post('https://pay-api.goldenlotusinsurance.com/receipt', receipt).subscribe((resRec: any) => {
                         this.message.success('Receipt Successfully created');
                         console.log('RECEIPT NUMBER<><><><>', resRec);
 
