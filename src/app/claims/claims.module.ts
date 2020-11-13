@@ -33,15 +33,19 @@ import { SubrogateInvoiceComponent } from './components/subrogate-invoice/subrog
 import {
   NzBadgeModule,
   NzBreadCrumbModule, NzButtonModule,
-  NzCardModule, NzDescriptionsModule, NzDividerModule, NzDrawerModule,
+  NzCardModule, NzDatePickerModule, NzDescriptionsModule, NzDividerModule, NzDrawerModule,
   NzFormModule, NzGridModule, NzIconModule,
   NzInputModule, NzMessageModule,
   NzModalModule,
-  NzPageHeaderModule,
+  NzPageHeaderModule, NzPopconfirmModule,
   NzSelectModule,
   NzSpinModule, NzStatisticModule, NzTableModule, NzTagModule,
   NzUploadModule
 } from 'ng-zorro-antd';
+import { DamageTypeComponent } from './components/damage-type/damage-type.component';
+import { PendingProcessingComponent } from './components/pending-processing/pending-processing.component';
+import { ViewProcessedClaimsComponent } from './components/view-processed-claims/view-processed-claims.component';
+import { ViewApprovedClaimsComponent } from './components/view-approved-claims/view-approved-claims.component';
 
 const routes: Routes = [
     {
@@ -73,17 +77,17 @@ const routes: Routes = [
       canActivate: [AuthGuard]
     },
     {
-        path: 'claim-approval',
+        path: 'claim-approval/:id',
         component: ClaimApprovalComponent,
       canActivate: [AuthGuard]
     },
     {
-        path: 'claims-processing',
+        path: 'claims-processing/:id',
         component: ClaimsProcessingComponent,
         canActivate: [AuthGuard]
     },
     {
-        path: 'claims-processing/processed-claims',
+        path: 'processed-claims/:id',
         component: ProcessedClaimsComponent,
         canActivate: [AuthGuard]
     },
@@ -105,6 +109,26 @@ const routes: Routes = [
   {
     path: 'subrogation-invoice',
     component: SubrogateInvoiceComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'claim-damage-type/:id',
+    component: DamageTypeComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'claims-pending-processing',
+    component: PendingProcessingComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'view-processed-claims',
+    component: ViewProcessedClaimsComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'view-approved-claims',
+    component: ViewApprovedClaimsComponent,
     canActivate: [AuthGuard]
   }
 ];
@@ -133,7 +157,11 @@ const routes: Routes = [
         SalvagesComponent,
         SalvageInvoiceComponent,
         SubrogationsComponent,
-        SubrogateInvoiceComponent
+        SubrogateInvoiceComponent,
+        DamageTypeComponent,
+        PendingProcessingComponent,
+        ViewProcessedClaimsComponent,
+        ViewApprovedClaimsComponent
     ],
     providers: [ClaimsService],
   imports: [
@@ -161,7 +189,9 @@ const routes: Routes = [
     NzIconModule,
     NzDrawerModule,
     NzMessageModule,
-    NzButtonModule
+    NzButtonModule,
+    NzDatePickerModule,
+    NzPopconfirmModule
   ]
 })
 export class ClaimsModule {}

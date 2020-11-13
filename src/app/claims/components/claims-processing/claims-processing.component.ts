@@ -6,7 +6,7 @@ import { IRequisitionModel } from 'src/app/accounts/components/models/requisitio
 import { v4 } from 'uuid';
 import { AccountService } from 'src/app/accounts/services/account.service';
 import { NzMessageService } from 'ng-zorro-antd';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import moment from 'moment';
 import * as jwt_decode from 'jwt-decode';
@@ -31,13 +31,21 @@ export class ClaimsProcessingComponent implements OnInit {
     searchPendingClaimsString: string;
     searchApprovedClaimsString: string;
 
-    claimsList: Claim[];
+  searchPendingThirdPartyClaimsString: string;
+  searchApprovedThirdPartyClaimsString: string;
 
-    processedClaimsList: Claim[];
-    displayProcessedClaimsList: Claim[];
+    claimsList: Claim[] = [];
+    thirdPartyClaimList: Claim[] = [];
+
+    processedClaimsList: Claim[] = [];
+  processedThirdPartyClaimsList: Claim[] = [];
+    displayProcessedClaimsList: Claim[] = [];
+  displayProcessedThirdPatyClaimsList: Claim[] = [];
 
     pendingClaimsList: Claim[];
-    displayPendingClaimList: Claim[];
+  pendingThirdPartyClaimsList: Claim[];
+    displayPendingClaimList: Claim[] = [];
+    displayPendingThirdPartyClaimList: Claim[] = [];
 
     // Claim Approval
     isClaimRiskUnderPolicy: boolean = false;
@@ -56,6 +64,8 @@ export class ClaimsProcessingComponent implements OnInit {
     admin = 'admin';
     processClaimPem = 'process_claim';
     loggedIn = localStorage.getItem('currentUser');
+    claim: Claim;
+     paramID: any;
 
     constructor(
         private readonly claimsService: ClaimsService,
@@ -63,17 +73,21 @@ export class ClaimsProcessingComponent implements OnInit {
         private accountsService: AccountService,
         private msg: NzMessageService,
         private readonly router: Router,
-        private usersService: UsersService
+        private usersService: UsersService,
+        private activateRoute: ActivatedRoute
     ) {}
 
     ngOnInit(): void {
         this.claimProcessingIsLoading = true;
+        this.activateRoute.params.subscribe(param => {
         // setTimeout(() => {
         //     this.claimProcessingIsLoading = false;
         // }, 3000);
 
         const decodedJwtData = jwt_decode(this.loggedIn);
         console.log('Decoded>>>>>>', decodedJwtData);
+
+        this.paramID = param.id
 
         this.usersService.getUsers().subscribe(users => {
             this.user = users.filter(x => x.ID === decodedJwtData.user_id)[0];
@@ -85,33 +99,49 @@ export class ClaimsProcessingComponent implements OnInit {
             console.log('USERS>>>', this.user, this.isPresent, this.admin);
         });
 
-        this.claimsService.getClaims().subscribe(claims => {
-            this.claimsList = claims;
-
-            console.log(this.claimsList);
-
-            this.pendingClaimsList = this.claimsList.filter(
-                x => x.claimStatus == 'Pending'
-            );
-            console.log(this.pendingClaimsList);
-            this.displayPendingClaimList = this.pendingClaimsList;
-
-            this.processedClaimsList = this.claimsList.filter(
-                x => x.claimStatus == 'Processed'
-            );
-            this.displayProcessedClaimsList = this.processedClaimsList;
-
-            this.claimProcessingIsLoading = false;
-        });
+       this.refresh();
 
         this.claimsTableUpdate.subscribe(update => {
             update === true ? this.updateClaimsTables() : '';
         });
+
+     });
     }
 
-    openLossQuantumModal() {
-        this.isLossQuantumModalVisible = true;
+    refresh() {
+      this.claimsService.getClaims().subscribe(claims => {
+        this.claimsList = claims.filter((x) => x.claimNumber === this.paramID && x.claimType === 'Own Damage');
+
+        this.thirdPartyClaimList = claims.filter((x) => x.claimNumber === this.paramID && x.claimType === 'Third Party');
+
+        console.log('Check>>>', this.claimsList);
+
+        this.pendingClaimsList = this.claimsList.filter(
+          x => x.claimStatus == 'Pending'
+        );
+
+        this.pendingThirdPartyClaimsList = this.thirdPartyClaimList.filter(
+          x => x.claimStatus == 'Pending'
+        );
+        console.log(this.pendingClaimsList);
+        this.displayPendingClaimList = this.pendingClaimsList;
+
+        this.displayPendingThirdPartyClaimList = this.pendingThirdPartyClaimsList;
+
+        this.processedClaimsList = this.claimsList.filter(
+          x => x.claimStatus == 'Processed'
+        );
+        this.displayProcessedClaimsList = this.processedClaimsList;
+
+        this.displayProcessedThirdPatyClaimsList = this.processedThirdPartyClaimsList;
+
+        this.claimProcessingIsLoading = false;
+      });
     }
+
+    // openLossQuantumModal() {
+    //     this.isLossQuantumModalVisible = true;
+    // }
 
     openClaimApprovalModal() {
         this.isClaimApprovalModalVisible = true;
@@ -119,7 +149,10 @@ export class ClaimsProcessingComponent implements OnInit {
 
     processClaim(claim: Claim) {
         this.claimProcessingService.changeClaim(claim);
-        this.openLossQuantumModal();
+        this.claim = claim;
+      console.log("WHATATATATAT>>>>", this.claim);
+      this.isLossQuantumModalVisible = true;
+        // this.openLossQuantumModal();
     }
 
     openClaimApproval(claim: Claim) {
@@ -140,9 +173,9 @@ export class ClaimsProcessingComponent implements OnInit {
 
             console.log(this.claimsList);
 
-            this.pendingClaimsList = this.claimsList.filter(
-                x => x.claimStatus == 'Pending'
-            );
+            // this.pendingClaimsList = this.claimsList.filter(
+            //     x => x.claimStatus == 'Pending'
+            // );
             console.log(this.pendingClaimsList);
             this.displayPendingClaimList = this.pendingClaimsList.filter(
                 x => x.claimant != null
@@ -271,13 +304,46 @@ export class ClaimsProcessingComponent implements OnInit {
                     claim.claimStatus
                         .toLowerCase()
                         .includes(value.toLowerCase()) ||
-                    claim.claimant.firstName
+                    claim.client.firstName
                         .toLowerCase()
-                        .includes(value.toLowerCase())
+                        .includes(value.toLowerCase()) ||
+                    claim.client.lastName
+                      .toLowerCase()
+                      .includes(value.toLowerCase())
                 );
             }
         });
     }
+
+  searchPendingThirdPartyClaims(value: string) {
+    if (value === '' || !value) {
+      this.displayPendingThirdPartyClaimList = this.pendingThirdPartyClaimsList.filter(
+        x => x.claimNumber != null
+      );
+    }
+
+    this.displayPendingThirdPartyClaimList = this.pendingThirdPartyClaimsList.filter(claim => {
+      if (claim.claimNumber != null) {
+        return (
+          claim.claimNumber
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          claim.policy.policyNumber
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          claim.claimStatus
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          claim.thirdPartyDetails.firstName
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          claim.thirdPartyDetails.lastName
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
+      }
+    });
+  }
 
     searchApprovedClaims(value: string) {
         if (value === '' || !value) {

@@ -4,7 +4,7 @@ import { IBankAccount } from 'src/app/settings/models/bank-account.model';
 import { Observable } from 'rxjs';
 import { IChequeModel } from 'src/app/settings/models/cheque.model';
 
-const BASE_URL = 'https://savenda.flosure-api.com';
+const BASE_URL = 'https://savenda.flosure-api.com/';
 
 @Injectable({
     providedIn: 'root'

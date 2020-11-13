@@ -1,10 +1,10 @@
 import {
-    Component,
-    OnInit,
-    Input,
-    Output,
-    EventEmitter,
-    OnDestroy
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  OnDestroy, OnChanges
 } from '@angular/core';
 import { IInsuranceCompany } from '../../models/insurance-company.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -22,13 +22,16 @@ import { ISalvage } from '../../models/salvage.model';
     templateUrl: './loss-quantum-modal.component.html',
     styleUrls: ['./loss-quantum-modal.component.scss']
 })
-export class LossQuantumModalComponent implements OnInit, OnDestroy {
+export class LossQuantumModalComponent implements OnInit, OnDestroy, OnChanges {
     isProcessing: boolean = false;
 
     claimSubscription: Subscription;
 
     @Input()
     isLossQuantumModalVisible: boolean;
+
+    @Input()
+    claim: Claim;
 
     @Input()
     lossEstimate: number;
@@ -89,10 +92,7 @@ export class LossQuantumModalComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-      console.log('CLAIM><><><>', this.currentClaim);
-        this.lossQuantumForm
-            .get('lossEstimate')
-            .setValue(this.currentClaim.lossEstimate);
+      console.log('CLAIM><><><>', this.claim);
 
         this.claimsService
             .getInsuranceCompanies()
@@ -100,6 +100,14 @@ export class LossQuantumModalComponent implements OnInit, OnDestroy {
                 this.insuranceCompanies = insuranceCompanies;
             });
     }
+
+
+  ngOnChanges() {
+      console.log('childData', this.claim);
+    this.lossQuantumForm
+      .get('lossEstimate')
+      .setValue(this.claim.lossEstimate);
+  }
 
     changeSelectedLossType(value) {
         console.log(value);
@@ -184,6 +192,10 @@ export class LossQuantumModalComponent implements OnInit, OnDestroy {
                 res => {
                     console.log('res:', res);
                     this.isProcessing = false;
+                  this.lossQuantumForm.reset();
+                  this.lossQuantumForm
+                    .get('lossEstimate')
+                    .setValue(this.claim.lossEstimate);
                     this.closeLossQuantumModal();
                     this.isLossQuantumModalVisible = false;
                     this.msg.success('Claim Processed');

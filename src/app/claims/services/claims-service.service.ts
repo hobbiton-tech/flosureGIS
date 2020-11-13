@@ -12,7 +12,7 @@ import { ILossQuantum } from '../models/loss-quantum.model';
 import { IInsuranceCompany } from '../models/insurance-company.model';
 
 
-const BASE_URL = 'https://savenda.flosure-api.com';
+const BASE_URL = 'https://savenda.flosure-api.com/';
 
 @Injectable({
     providedIn: 'root'

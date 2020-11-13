@@ -121,7 +121,7 @@
                         </li>
                     </ul>
                 </li>
-                <li nz-submenu *ngIf="claim === isPresent?.role_name || admin === isPresent?.role_name" nzTitle="Claims" [nzDisabled]="'true'"
+                <li nz-submenu *ngIf="claim === isPresent?.role_name || admin === isPresent?.role_name" nzTitle="Claims" [nzDisabled]="'false'"
                     nzIcon="question-circle">
                     <ul>
                         <li nz-menu-item nzMatchRouter>
@@ -134,19 +134,19 @@
 
                             <ul>
                                 <li nz-menu-item nzMatchRouter>
-                                    <a routerLink="/flosure/claims/claims-processing">
+                                    <a routerLink="/flosure/claims/claims-pending-processing">
                                         Pending Claims
                                     </a>
                                 </li>
                                 <li nz-menu-item nzMatchRouter>
-                                    <a routerLink="/flosure/claims/claims-processing/processed-claims">
+                                    <a routerLink="/flosure/claims/view-processed-claims">
                                         Processed Claims
                                     </a>
                                 </li>
                             </ul>
                         </li>
                         <li nz-menu-item nzMatchRouter>
-                            <a routerLink="/flosure/claims/claim-approval">
+                            <a routerLink="/flosure/claims/view-approved-claims">
                                 Claims Approval
                             </a>
                         </li>
