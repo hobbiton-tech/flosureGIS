@@ -3,7 +3,12 @@ export const VehicleBodyType = [
     { label: 'SEDAN', value: 'SEDAN' },
     { label: 'VAN', value: 'VAN' },
     { label: 'TRUCK', value: 'TRUCK' },
-    { label: 'SUV', value: 'SUV' }
+    { label: 'SUV', value: 'SUV' },
+    { label: 'SUV', value: 'SUV' },
+    { label: 'Trailer', value: 'Trailer' },
+    { label: 'Pickup', value: 'Pickup' },
+    { label: 'Bus', value: 'Bus' }
+
 ];
 
 // MOTOR COMPREHENSIVE LOADING OPTIONS
