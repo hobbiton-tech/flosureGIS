@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 export class BranchService {
     branchModel: BranchModel;
     branchesModel: BranchModel[] = [];
-    BASEURLBranch = 'https://user-api.goldenlotusinsurance.com';
+    BASEURLBranch = 'https://test-user.flosure-api.com';
 
     constructor(
         private http: HttpClient,

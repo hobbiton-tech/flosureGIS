@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 export class RolesService {
     roleModel: RolesModel;
     rolesModel: RolesModel[] = [];
-    BASEURLRolePermission = 'https://user-api.goldenlotusinsurance.com';
+    BASEURLRolePermission = 'https://test-user.flosure-api.com';
 
     constructor(
         private http: HttpClient,

@@ -22,7 +22,7 @@ import { IAccount } from 'src/app/settings/models/organizational/account.model';
 const BASE_URL = 'http://test-main.flosure-api.com';
 
 // const BASE__STATEMENT_URL = 'http://test-main.flosure-api.com/transaction';
-const BASE__STATEMENT_URL = 'https://payment-api.savenda-flosure.com/transaction';
+const BASE__STATEMENT_URL = 'https://test-pay.flosure-api.com/transaction';
 
 
 @Injectable({

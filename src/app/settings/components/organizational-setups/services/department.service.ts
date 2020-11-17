@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 export class DepartmentService {
     departmentModel: DepartmentModel;
     departmentsModel: DepartmentModel[] = [];
-    BASEURLDepartment = 'https://user-api.goldenlotusinsurance.com';
+    BASEURLDepartment = 'https://test-user.flosure-api.com';
 
     constructor(
         private http: HttpClient,

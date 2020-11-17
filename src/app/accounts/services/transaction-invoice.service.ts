@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 })
 export class TransactionInvoiceService {
 
-  BASEURL = 'https://payment-api.savenda-flosure.com';
+  BASEURL = 'https://test-pay.flosure-api.com';
 
 
   constructor(private http: HttpClient,

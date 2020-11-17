@@ -14,7 +14,7 @@ import { NzMessageService } from 'ng-zorro-antd';
 import { PermissionsModel } from '../models/roles.model';
 
 
-const BASE_URL = 'https://user-api.goldenlotusinsurance.com';
+const BASE_URL = 'https://test-user.flosure-api.com';
 
 @Injectable({
     providedIn: 'root'

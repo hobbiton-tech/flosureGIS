@@ -35,8 +35,8 @@ export class PaymentPlanService implements Resolve<any> {
     rcptNumber: any;
     _id: any;
 
-    basePaymentPlanUrl: 'https://pay-api.goldenlotusinsurance.com/payment-plan';
-    baseInstallmentUrl: 'https://pay-api.goldenlotusinsurance.com/payment-plan/installment';
+    basePaymentPlanUrl: 'https://test-pay.flosure-api.com';
+    baseInstallmentUrl: 'https://test-pay.flosure-api.com/installment';
     receiptN: IReceiptModel;
 
     constructor(
@@ -100,18 +100,18 @@ export class PaymentPlanService implements Resolve<any> {
     createPaymentPlan(
         paymentPlan: IPaymentModel
     ): Observable<any> {
-        return this.http.post<IPaymentModel>('https://pay-api.goldenlotusinsurance.com/payment-plan', paymentPlan);
+        return this.http.post<IPaymentModel>('https://test-pay.flosure-api.com', paymentPlan);
     }
 
 
   updatePaymentPlan(policyPaymentPlan: PlanPolicy) {
 
-    return this.http.put(`https://pay-api.goldenlotusinsurance.com/payment-plan/${policyPaymentPlan.ID}`, policyPaymentPlan);
+    return this.http.put(`https://test-pay.flosure-api.com/${policyPaymentPlan.ID}`, policyPaymentPlan);
 
   }
 
     getPaymentPlan(): Observable<any> {
-        return this.http.get<any>('https://pay-api.goldenlotusinsurance.com/payment-plan');
+        return this.http.get<any>('https://test-pay.flosure-api.com');
     }
 
 
