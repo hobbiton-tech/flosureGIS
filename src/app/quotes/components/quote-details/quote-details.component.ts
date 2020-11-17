@@ -1037,7 +1037,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                         };
 
-                        this.quotesService.postRtsa(params);
+                        // this.quotesService.postRtsa(params);
                     } else if (risk.insuranceType === 'Comprehensive') {
                         const params = {
                             insuranceType: 2,
@@ -1055,7 +1055,7 @@ export class QuoteDetailsComponent implements OnInit {
                           quarter: Number(risk.expiryQuarter.split('/')[0])
                         };
 
-                        this.quotesService.postRtsa(params);
+                        // this.quotesService.postRtsa(params);
                     }
                 }
             });
@@ -1215,7 +1215,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                         console.log('PARAMS>>>>>>', params);
 
-                        this.quotesService.postRtsa(params);
+                        // this.quotesService.postRtsa(params);
                     } else if (risk.insuranceType === 'Comprehensive') {
                         const params = {
                             insuranceType: 2,
@@ -1234,7 +1234,7 @@ export class QuoteDetailsComponent implements OnInit {
                         };
                         console.log('PARAMS>>>>>>', params);
 
-                        this.quotesService.postRtsa(params);
+                        // this.quotesService.postRtsa(params);
 
                         console.log(
                             'Risk Type>>>>',
