@@ -16,8 +16,8 @@ export interface IExtensionValueModel {
 }
 
 export interface IExtensions {
-    extensionType: string;
-    amount: number;
+    extensionType?: string;
+    amount?: number;
     productId?: string;
 }
 

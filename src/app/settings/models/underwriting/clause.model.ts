@@ -30,9 +30,9 @@ export interface IExclusion {
 
 export interface IExtension {
     id?: string;
-    heading: string;
+    heading?: string;
     productId?: string;
-    description: string;
+    description?: string;
     value?: string;
 }
 
