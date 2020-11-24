@@ -531,7 +531,7 @@ export class PremiumComputationService implements OnDestroy {
 
     // handle overall computations(basic premium + extension + limits premium - discounts + levy) add return net premium
     computeTotals() {
-        let netPremium;
+        let netPremiumAmount;
         let levyAmount;
 
         let extensionsSum = this.sumArray(this.extensions, 'amount');
@@ -547,20 +547,20 @@ export class PremiumComputationService implements OnDestroy {
             this.combinedLimitsPremium.value;
 
         if (this.selectedBasicPremiumInputType.value == 'rate') {
-          levyAmount = premiumWithoutLevy + levyAmount;
+            levyAmount = premiumWithoutLevy * (this.levyRate / 100);
 
-          netPremium = premiumWithoutLevy + levyAmount;
+            netPremiumAmount = premiumWithoutLevy + levyAmount;
         }
 
         if (this.selectedBasicPremiumInputType.value == 'amount') {
-          levyAmount = 0;
-          netPremium = premiumWithoutLevy;
+            levyAmount = 0;
+            netPremiumAmount = premiumWithoutLevy;
         }
 
         this.extensionsTotal.next(extensionsSum);
         this.discountsTotal.next(discountsSum);
         this.premiumLevy.next(levyAmount);
-        this.netPremium.next(netPremium);
+        this.netPremium.next(netPremiumAmount);
     }
 
     // risk end date calculation
