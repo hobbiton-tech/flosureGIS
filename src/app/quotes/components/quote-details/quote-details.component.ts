@@ -926,7 +926,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                             this.http
                                 .post<CoverNote>(
-                                    `https://api.goldenlotusinsurance.com/documents/cover-note`,
+                                    `https://savenda.flosure-api.com/documents/cover-note`,
                                     coverNote
                                 )
                                 .subscribe(
@@ -950,7 +950,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                         this.http
                             .post<DebitNote>(
-                                `https://api.goldenlotusinsurance.com/documents/debit-note/${this.policyId}`,
+                                `https://savenda.flosure-api.com/documents/debit-note/${this.policyId}`,
                                 debitNote
                             )
                             .subscribe(
@@ -1117,7 +1117,7 @@ export class QuoteDetailsComponent implements OnInit {
 
                         this.http
                             .post<DebitNote>(
-                                `https://api.goldenlotusinsurance.com/documents/debit-note/${this.policyId}`,
+                                `https://savenda.flosure-api.com/documents/debit-note/${this.policyId}`,
                                 debitNote
                             )
                             .subscribe(
