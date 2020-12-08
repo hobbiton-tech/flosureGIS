@@ -115,7 +115,7 @@ export class AccountService {
 
                 this.http
                     .post(
-                        'https://pay-api.goldenlotusinsurance.com/receipt',
+                        'https://test-pay.flosure-api.com/receipt',
                         receipt
                     )
                     .subscribe(
@@ -153,20 +153,20 @@ export class AccountService {
 
     updateReceipt(receipt: IReceiptModel): Observable<any> {
         return this.http.put(
-            `https://pay-api.goldenlotusinsurance.com/receipt/${receipt.ID}`,
+            `https://test-pay.flosure-api.com/receipt/${receipt.ID}`,
             receipt
         );
     }
 
     getReciepts(): Observable<any> {
         return this.http.get<any>(
-            'https://pay-api.goldenlotusinsurance.com/receipt'
+            'https://test-pay.flosure-api.com/receipt'
         );
     }
 
     getReciept(id): Observable<any> {
         return this.http.get<any>(
-            `https://pay-api.goldenlotusinsurance.com/receipt/${id}`
+            `https://test-pay.flosure-api.com/receipt/${id}`
         );
     }
 

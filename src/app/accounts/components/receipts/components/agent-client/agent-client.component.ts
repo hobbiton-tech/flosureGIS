@@ -187,6 +187,7 @@ export class AgentClientComponent implements OnInit {
       });
 
       this.allocationsService.getAllocationPolicy().subscribe((allocationPolicies) => {
+        console.log('TETETETETETSWGSTWGS>>>>', allocationPolicies);
         this.allocationPolicies = allocationPolicies.data;
       });
 
@@ -406,7 +407,7 @@ export class AgentClientComponent implements OnInit {
               receipt.receipt_number = res.data.receipt_number;
               console.log(res.data.receipt_number);
 
-              this.http.post('https://pay-api.goldenlotusinsurance.com/receipt', receipt).subscribe((resN: any) => {
+              this.http.post('https://test-pay.flosure-api.com/receipt', receipt).subscribe((resN: any) => {
                   this.message.success('Receipt Successfully created');
                   console.log('RECEIPT NUMBER<><><><>', resN);
 

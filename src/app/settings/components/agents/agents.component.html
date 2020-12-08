@@ -266,17 +266,15 @@
                                         formControlName="intermediaryType"
                                         [nzDisabled]="!isEditmode"
                                     >
-                                        <div
-                                            *ngFor="
+
+                                            <nz-option
+                                              *ngFor="
                                                 let option of sourceOfBusinessOptions
                                             "
-                                        >
-                                            <nz-option
                                                 [nzValue]="option.value"
                                                 [nzLabel]="option.label"
                                             >
                                             </nz-option>
-                                        </div>
                                     </nz-select>
                                 </nz-form-control>
                             </nz-form-item>
@@ -295,13 +293,13 @@
                                         formControlName="productClass"
                                         [nzDisabled]="!isEditmode"
                                     >
-                                        <div *ngFor="let class of classesList">
+
                                             <nz-option
-                                                [nzValue]="class.className"
-                                                [nzLabel]="class.className"
+                                              *ngFor="let classForProduct of classesList"
+                                                [nzValue]="classForProduct.className"
+                                                [nzLabel]="classForProduct.className"
                                             >
                                             </nz-option>
-                                        </div>
                                     </nz-select>
                                 </nz-form-control>
                             </nz-form-item>
@@ -319,15 +317,13 @@
                                         formControlName="productName"
                                         [nzDisabled]="!isEditmode"
                                     >
-                                        <div
-                                            *ngFor="let product of productsList"
-                                        >
+
                                             <nz-option
+                                              *ngFor="let product of productsList"
                                                 [nzValue]="product.productName"
                                                 [nzLabel]="product.productName"
                                             >
                                             </nz-option>
-                                        </div>
                                     </nz-select>
                                 </nz-form-control>
                             </nz-form-item>

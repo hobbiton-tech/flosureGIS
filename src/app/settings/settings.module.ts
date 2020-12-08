@@ -50,16 +50,16 @@ import { DepartmentsComponent } from './components/organizational-setups/departm
 import { UsersRolesComponent } from '../users/components/users-roles/users-roles.component';
 import { AuthGuard } from '../users/helpers/auth.guard';
 import {
-  NzAlertModule, NzBadgeModule,
-  NzBreadCrumbModule, NzButtonModule,
-  NzCardModule, NzCollapseModule, NzDescriptionsModule,
-  NzDividerModule,
-  NzDrawerModule,
-  NzFormModule,
-  NzGridModule, NzIconModule, NzInputModule, NzMessageModule, NzModalModule,
-  NzPageHeaderModule,
-  NzSelectModule,
-  NzSpinModule, NzTableModule, NzTabsModule
+    NzAlertModule, NzBadgeModule,
+    NzBreadCrumbModule, NzButtonModule,
+    NzCardModule, NzCollapseModule, NzDescriptionsModule,
+    NzDividerModule,
+    NzDrawerModule,
+    NzFormModule,
+    NzGridModule, NzIconModule, NzInputModule, NzMessageModule, NzModalModule,
+    NzPageHeaderModule,
+    NzSelectModule,
+    NzSpinModule, NzTableModule, NzTabsModule, NzToolTipModule
 } from 'ng-zorro-antd';
 
 const routes: Routes = [
@@ -205,32 +205,33 @@ const routes: Routes = [
         AddCityComponent,
         DepartmentsComponent
     ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    RouterModule.forChild(routes),
-    NzDrawerModule,
-    NzGridModule,
-    NzFormModule,
-    NzSelectModule,
-    NzDividerModule,
-    NzSpinModule,
-    NzPageHeaderModule,
-    NzCardModule,
-    NzInputModule,
-    NzTableModule,
-    NzModalModule,
-    NzBreadCrumbModule,
-    NzAlertModule,
-    NzButtonModule,
-    NzTabsModule,
-    NzCollapseModule,
-    NzIconModule,
-    NzDescriptionsModule,
-    NzBadgeModule,
-    NzMessageModule
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterModule.forChild(routes),
+        NzDrawerModule,
+        NzGridModule,
+        NzFormModule,
+        NzSelectModule,
+        NzDividerModule,
+        NzSpinModule,
+        NzPageHeaderModule,
+        NzCardModule,
+        NzInputModule,
+        NzTableModule,
+        NzModalModule,
+        NzBreadCrumbModule,
+        NzAlertModule,
+        NzButtonModule,
+        NzTabsModule,
+        NzCollapseModule,
+        NzIconModule,
+        NzDescriptionsModule,
+        NzBadgeModule,
+        NzMessageModule,
+        NzToolTipModule
+    ],
     providers: [AgentsService, ClausesService]
 })
 export class SettingsModule {}

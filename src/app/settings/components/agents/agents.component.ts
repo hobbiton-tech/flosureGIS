@@ -145,14 +145,8 @@ export class AgentsComponent implements OnInit {
                           this.commissionsList = commissions;
                           this.displayCommissionList = this.commissionsList.filter(
                               x =>
-                                  x.intermediaryName ==
-                                      this.selectedIntermediary.companyName ||
-                                  x.intermediaryName ==
-                                      this.selectedIntermediary
-                                          .contactFirstName +
-                                          ' ' +
-                                          this.selectedIntermediary
-                                              .contactLastName
+                                  x.intermediaryId ===
+                                      this.selectedIntermediary.id
                           );
                       })
                 : ''
@@ -217,12 +211,8 @@ export class AgentsComponent implements OnInit {
             .subscribe(commissions => {
                 this.displayCommissionList = commissions.filter(
                     x =>
-                        x.intermediaryName ==
-                            this.selectedIntermediary.companyName ||
-                        x.intermediaryName ==
-                            this.selectedIntermediary.contactFirstName +
-                                ' ' +
-                                this.selectedIntermediary.contactLastName
+                        x.intermediaryId ===
+                            this.selectedIntermediary.id
                 );
 
                 console.log(this.displayCommissionList);

@@ -281,7 +281,7 @@ export class PaymentPlanComponent implements OnInit {
                     this.receiptNumber = resNum.data.receipt_number;
                     console.log(resNum.data.receipt_number);
 
-                    this.http.post('https://pay-api.goldenlotusinsurance.com/receipt', receipt).subscribe((resRec: any) => {
+                    this.http.post('https://test-pay.flosure-api.com/receipt', receipt).subscribe((resRec: any) => {
                         this.message.success('Receipt Successfully created');
                         console.log('RECEIPT NUMBER<><><><>', resRec);
 

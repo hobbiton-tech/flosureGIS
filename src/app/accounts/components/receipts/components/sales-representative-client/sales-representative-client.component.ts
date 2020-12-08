@@ -199,6 +199,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
 
       this.commissionPaymentService.getCPayment().subscribe((commissionPayments) => {
         this.commissionPayments = commissionPayments.data;
+        console.log('ATATATTA', this.commissionPayments);
       });
 
       this.receiptService.getReciepts().subscribe((receipts) => {
@@ -258,7 +259,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
         this.sourceOfBusiness = unreceipted.sourceOfBusiness;
         this.intermediaryName = unreceipted.intermediaryName;
         this.allocationPolicy = this.allocationPolicies.filter((x) => x.policy_number === unreceipted.policyNumber)[0];
-        console.log(this.policyAmount);
+        console.log('ALALALLA', this.policy);
     }
 
     get receiptFormControl() {
@@ -303,7 +304,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
             amount: Number(this.policy.netPremium),
             intermediary_id: this.policy.intermediaryId,
             intermediary_name: this.policy.intermediaryName,
-            intermediary_type: 'Agent',
+            intermediary_type: 'Sales Representatives',
             receipt_number: '',
             remaining_amount: 0,
             status: 'Allocated'
@@ -324,13 +325,28 @@ export class SalesRepresentativeClientComponent implements OnInit {
               paid_amount: 0,
               remaining_amount: 0,
               status: 'Not Paid',
-              agent_type: 'Agent'
+              agent_type: 'Sales Representatives'
             };
 
             this.commissionPaymentService.createCPayment(this.commissionPayment).subscribe((comm) => {}, (commErr) => {
               this.message.error(commErr);
             });
-          } else {
+          } else if (!this.commissionPayments.includes((x) => x.agent_id === this.policy.intermediaryId)) {
+              this.commissionPayment = {
+                agent_id: this.policy.intermediaryId,
+                agent_name: this.policy.intermediaryName,
+                commission_amount: this.allocationPolicy.commission_due,
+                paid_amount: 0,
+                remaining_amount: 0,
+                status: 'Not Paid',
+                agent_type: 'Sales Representatives'
+              };
+
+              this.commissionPaymentService.createCPayment(this.commissionPayment).subscribe((comm) => {}, (commErr) => {
+                this.message.error(commErr);
+              });
+            }
+            else {
             this.comPayments = this.commissionPayments.filter((x) => x.agent_id === this.policy.intermediaryId);
             const newIndex = this.comPayments.length - 1;
             console.log('LAST ARRAY>>>', this.comPayments, this.comPayments[0], newIndex, this.allocationPolicy.intermediary_id);
@@ -371,7 +387,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
                 paid_amount: 0,
                 remaining_amount: 0,
                 status: 'Not Paid',
-                agent_type: 'Agent'
+                agent_type: 'Sales Representatives'
               };
 
               this.commissionPaymentService.createCPayment(this.commissionPayment).subscribe((comm) => {
@@ -392,7 +408,7 @@ export class SalesRepresentativeClientComponent implements OnInit {
               receipt.receipt_number = res.data.receipt_number;
               console.log(res.data.receipt_number);
 
-              this.http.post('https://pay-api.goldenlotusinsurance.com/receipt', receipt).subscribe((resN: any) => {
+              this.http.post('https://test-pay.flosure-api.com/receipt', receipt).subscribe((resN: any) => {
                   this.message.success('Receipt Successfully created');
                   console.log('RECEIPT NUMBER<><><><>', resN);
 

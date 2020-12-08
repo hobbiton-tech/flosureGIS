@@ -48,56 +48,56 @@ export class LoginComponent implements OnInit {
             remember: [true],
         });
 
-        await this.slackServie.sendToSlack({
-            event: 'Portal Access Event',
-            title: 'Flosure portal has been accessed',
-            text: `The location of access is currently unknown`,
-        });
+        // await this.slackServie.sendToSlack({
+        //     event: 'Portal Access Event',
+        //     title: 'Flosure portal has been accessed',
+        //     text: `The location of access is currently unknown`,
+        // });
 
-        if (window.navigator && window.navigator.geolocation) {
-            window.navigator.geolocation.getCurrentPosition(
-                async (position) => {
-                    (this.geolocationPosition = position),
-                        console.log(position);
-                    this.http
-                        .get(
-                            `https://api.opencagedata.com/geocode/v1/json?q=${position.coords.latitude}+${position.coords.longitude}&key=7840d4e63aa84c7d95ff24c9b431a8fc`
-                        )
-                        .subscribe(async (res) => {
-                            await this.slackServie.sendToSlack({
-                                event: 'Portal Access Event',
-                                title: 'Flosure portal has been accessed',
-                                text: `The location of access is ${res['results'][0]['formatted']}`,
-                            });
-                        });
-                },
-                async (error) => {
-                    switch (error.code) {
-                        case 1:
-                            await this.slackServie.sendToSlack({
-                                event: 'Portal Access Event',
-                                title: 'Flosure portal has been accessed',
-                                text: `Location access has been denied`,
-                            });
-                            break;
-                        case 2:
-                            await this.slackServie.sendToSlack({
-                                event: 'Portal Access Event',
-                                title: 'Flosure portal has been accessed',
-                                text: `User location is not available`,
-                            });
-                            break;
-                        case 3:
-                            await this.slackServie.sendToSlack({
-                                event: 'Portal Access Event',
-                                title: 'Flosure portal has been accessed',
-                                text: `The location of access is has timeout`,
-                            });
-                            break;
-                    }
-                }
-            );
-        }
+        // if (window.navigator && window.navigator.geolocation) {
+        //     window.navigator.geolocation.getCurrentPosition(
+        //         async (position) => {
+        //             (this.geolocationPosition = position),
+        //                 console.log(position);
+        //             this.http
+        //                 .get(
+        //                     `https://api.opencagedata.com/geocode/v1/json?q=${position.coords.latitude}+${position.coords.longitude}&key=7840d4e63aa84c7d95ff24c9b431a8fc`
+        //                 )
+        //                 .subscribe(async (res) => {
+        //                     await this.slackServie.sendToSlack({
+        //                         event: 'Portal Access Event',
+        //                         title: 'Flosure portal has been accessed',
+        //                         text: `The location of access is ${res['results'][0]['formatted']}`,
+        //                     });
+        //                 });
+        //         },
+        //         async (error) => {
+        //             switch (error.code) {
+        //                 case 1:
+        //                     await this.slackServie.sendToSlack({
+        //                         event: 'Portal Access Event',
+        //                         title: 'Flosure portal has been accessed',
+        //                         text: `Location access has been denied`,
+        //                     });
+        //                     break;
+        //                 case 2:
+        //                     await this.slackServie.sendToSlack({
+        //                         event: 'Portal Access Event',
+        //                         title: 'Flosure portal has been accessed',
+        //                         text: `User location is not available`,
+        //                     });
+        //                     break;
+        //                 case 3:
+        //                     await this.slackServie.sendToSlack({
+        //                         event: 'Portal Access Event',
+        //                         title: 'Flosure portal has been accessed',
+        //                         text: `The location of access is has timeout`,
+        //                     });
+        //                     break;
+        //             }
+        //         }
+        //     );
+        // }
 
       // get return url from route parameters or default to '/'
       this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/flosure/dashboard';

@@ -75,15 +75,20 @@ export class AllocationsComponent implements OnInit {
     });
 
     this.agentsService.getAgents().subscribe((agents) => {
+
       this.agents = agents;
     });
 
     this.agentsService.getSalesRepresentatives().subscribe((salesReps) => {
       this.salesReps = salesReps;
+      console.log('IWIWIW', this.salesReps);
     });
     this.allocationsService.getAllocationReceipt().subscribe((res) => {
       this.inAllocationReceiptsList = res.data.filter((x) => x.intermediary_type === this.selectedIntermediaryType);
       this.allocationReceiptsList = this.inAllocationReceiptsList;
+
+
+      console.log('QQQQQQQ', this.allocationReceiptsList);
     });
 
 
@@ -105,6 +110,7 @@ export class AllocationsComponent implements OnInit {
 
   selectIntermediaryType(value) {
     this.selectedIntermediaryType = value;
+
 
     this.refresh();
   }

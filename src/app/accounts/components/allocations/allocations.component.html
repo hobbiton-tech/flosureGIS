@@ -46,16 +46,16 @@
           </div>
           <div nz-col nzSpan="12">
             <div style="width: 75%;">
-              <nz-select [(ngModel)]="selectedInt" (ngModelChange)="selectInt($event)" nzAllowClear nzPlaceHolder="Select a person" nzShowSearch>
-                <div *ngIf="this.selectedIntermediaryType === 'Broker'">
+              <nz-select [(ngModel)]="selectedInt" (ngModelChange)="selectInt($event)" nzAllowClear [nzPlaceHolder]="'Select a person'" nzShowSearch>
+                <ng-container *ngIf="this.selectedIntermediaryType === 'Broker'">
                   <nz-option *ngFor="let broker of brokers" [nzLabel]="broker.companyName" [nzValue]="broker.id"></nz-option>
-                </div>
-                <div *ngIf="this.selectedIntermediaryType === 'Agent'">
+                </ng-container>
+                <ng-container *ngIf="this.selectedIntermediaryType === 'Agent'">
                   <nz-option *ngFor="let agent of agents" [nzLabel]="agent.companyName" [nzValue]="agent.id"></nz-option>
-                </div>
-                <div *ngIf="this.selectedIntermediaryType === 'SalesRepresentative'">
+                </ng-container>
+                <ng-container *ngIf="this.selectedIntermediaryType === 'Sales Representatives'">
                   <nz-option *ngFor="let salesRep of salesReps" [nzValue]="salesRep.id" [nzLabel]="salesRep.contactFirstName + ' ' + salesRep.contactLastName"></nz-option>
-                </div>
+                </ng-container>
               </nz-select>
             </div>
           </div>

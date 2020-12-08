@@ -86,7 +86,7 @@ export class PaymentPlanService implements Resolve<any> {
 
                     this.receiptN = receipt;
 
-                    this.http.post('https://pay-api.goldenlotusinsurance.com/receipt', receipt).toPromise();
+                    this.http.post('https://test-pay.flosure-api.com', receipt).toPromise();
                 });
 
         // });
@@ -119,23 +119,23 @@ export class PaymentPlanService implements Resolve<any> {
     getInstallments(): Observable<any> {
         return this.http
             .get<any>(
-                'https://pay-api.goldenlotusinsurance.com/installment'
+                'https://test-pay.flosure-api.com/installment'
             );
     }
 
 
     addPlanReceipt( planReceipt: PlanReceipt): Observable<any> {
-        return this.http.post<PlanReceipt>('https://pay-api.goldenlotusinsurance.com/plan-receipt', planReceipt);
+        return this.http.post<PlanReceipt>('https://test-pay.flosure-api.com/plan-receipt', planReceipt);
     }
 
     getReceiptPlan(): Observable<any> {
-        return this.http.get<any>('https://pay-api.goldenlotusinsurance.com/plan-receipt');
+        return this.http.get<any>('https://test-pay.flosure-api.com/plan-receipt');
     }
 
 
     updatePlanReceipt(planReceipt: PlanReceipt) {
 
-        this.http.put(`https://pay-api.goldenlotusinsurance.com/plan-receipt/${planReceipt.ID}`, planReceipt).subscribe((res) => {
+        this.http.put(`https://test-pay.flosure-api.com/plan-receipt/${planReceipt.ID}`, planReceipt).subscribe((res) => {
             this.message.success(
                         'Plan Receipt Successfully Updated'
                     );
@@ -149,17 +149,17 @@ export class PaymentPlanService implements Resolve<any> {
 
 
     addPlanPolicy( policyPaymentPlan: PlanPolicy): Observable<PlanPolicy> {
-        return this.http.post<PlanPolicy>('https://pay-api.goldenlotusinsurance.com/plan-policy', policyPaymentPlan);
+        return this.http.post<PlanPolicy>('https://test-pay.flosure-api.com/plan-policy', policyPaymentPlan);
     }
 
     getPlanPolicy(): Observable<any> {
-        return this.http.get<any>('https://pay-api.goldenlotusinsurance.com/plan-policy');
+        return this.http.get<any>('https://test-pay.flosure-api.com/plan-policy');
     }
 
 
     updatePlanPolicy(policyPaymentPlan: PlanPolicy) {
 
-        this.http.put(`https://pay-api.goldenlotusinsurance.com/plan-policy/${policyPaymentPlan.ID}`, policyPaymentPlan).subscribe((res) => {
+        this.http.put(`https://test-pay.flosure-api.com/plan-policy/${policyPaymentPlan.ID}`, policyPaymentPlan).subscribe((res) => {
             this.message.success(
                         'Plan Receipt Successfully Updated'
                     );
@@ -179,7 +179,7 @@ export class PaymentPlanService implements Resolve<any> {
         header.set('Access-Control-Allow-Origin', '*');
 
         this.http
-          .put(`https://pay-api.goldenlotusinsurance.com/installment`, policyPaymentInstallment, { headers: header })
+          .put(`https://test-pay.flosure-api.com/installment`, policyPaymentInstallment, { headers: header })
           .subscribe((res) => {
             // this.message.success(
             //             'Plan Receipt Successfully Updated'

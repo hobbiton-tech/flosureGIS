@@ -108,7 +108,7 @@
                     <tr class="information">
                       <td colspan="6">
                     <span style="font-weight: bold;">Receipt
-                        No:</span>{{' '}}{{receipt ? receipt.receipt_number : '-'}}
+                        No:</span>{{' '}}{{receipt ? receipt?.receipt_number : '-'}}
                       </td>
                       <td colspan="6">
                     <span
@@ -136,14 +136,14 @@
                     </tr>
                     <tr>
                       <td>
-                        <span style="font-weight: bold;">Date Issued</span>:{{' '}} {{ receipt.today_date | date }}
+                        <span style="font-weight: bold;">Date Issued</span>:{{' '}} {{ receipt?.today_date | date }}
                       </td>
                        <td style="float: right !important;">
                           <span style="font-weight: bold;">Source of Business:
                               {{
-                            receipt.source_of_business.toLocaleLowerCase() == 'direct'
+                            receipt?.source_of_business.toLocaleLowerCase() == 'direct'
                                       ? 'Direct'
-                                      : receipt.intermediary_name
+                                      : receipt?.intermediary_name
                               }}</span>
                       </td>
 <!--                      <td style="float: right !important;">-->
@@ -169,7 +169,7 @@
                             <td><span style="font-weight: bold;">
                                     Payment Method
                                 </span></td>
-                            <td>{{receipt.payment_method}}</td>
+                            <td>{{receipt?.payment_method}}</td>
                           </tr>
                           <tr>
                             <td><span style="font-weight: bold;">
@@ -177,7 +177,7 @@
                                 </span></td>
                             <td>{{
                               toWords(
-                                receipt.sum_in_digits
+                                receipt?.sum_in_digits
                                   | number: '1.2-2'
                               )
                               }}</td>
@@ -248,11 +248,11 @@
                   <hr style="width: 100%; height: 1px; background-color: black;" />
                   <br />
 
-                  <span style="font-weight: bold;">Remarks: {{ receipt.remarks }}</span>
+                  <span style="font-weight: bold;">Remarks: {{ receipt?.remarks }}</span>
                   <br />
 
                   <br>
-                  <span style="font-weight: bold;">Narration:  {{ receipt.narration }}</span>
+                  <span style="font-weight: bold;">Narration:  {{ receipt?.narration }}</span>
                   <hr style="width: 100%; height: 1px; background-color: black;" />
                   <br />
 
@@ -357,7 +357,7 @@
 <!--                      </td>-->
                       <td>
                         {{
-                        receipt.sum_in_digits
+                        receipt?.sum_in_digits
                           | number: '1.2-2'
                         }}
                       </td>
@@ -368,9 +368,9 @@
                                     <br />
                                     <table>
                                       <tr>
-                                        <td><span style="font-weight: bold;">Total:</span>{{ receipt.currency }}
+                                        <td><span style="font-weight: bold;">Total:</span>{{ receipt?.currency }}
                                           {{
-                                          receipt.sum_in_digits
+                                          receipt?.sum_in_digits
                                             | number: '1.2-2'
                                           }}</td>
 
