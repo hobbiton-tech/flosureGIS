@@ -42,7 +42,7 @@
     "graphql-tag": "^2.10.0",
     "html2canvas": "^1.0.0-rc.5",
     "jspdf": "^1.5.3",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "moment": "^2.25.3",
     "ng-zorro-antd": "^8.5.2",
     "ng2-pdf-viewer": "^6.1.2",
